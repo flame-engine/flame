@@ -133,7 +133,7 @@ Flame's Example app contains a more in-depth example, featuring how to parse coo
 selector. The
 [source code](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/isometric_tile_map_example.dart)
 is available on GitHub, and a
-[live version](https://examples.flame-engine.org/#/Rendering_Isometric_Tile_Map)
+[live version](https://examples.flame-engine.org/#/?path=rendering/isometric-tile-map)
 can be viewed in the browser.
 
 

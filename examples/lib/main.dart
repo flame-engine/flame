@@ -1,4 +1,4 @@
-import 'package:dashbook/dashbook.dart';
+import 'package:examples/commons/example_app.dart';
 import 'package:examples/platform/stub_provider.dart'
     if (dart.library.html) 'platform/web_provider.dart';
 import 'package:examples/stories/animations/animations.dart';
@@ -37,7 +37,8 @@ import 'package:examples/stories/tiled/tiled.dart';
 import 'package:examples/stories/utils/utils.dart';
 import 'package:examples/stories/widgets/widgets.dart';
 import 'package:flame/game.dart';
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/widgets.dart';
+import 'package:widgetbook/widgetbook.dart';
 
 void main() {
   final page = PageProviderImpl().getPage();
@@ -56,49 +57,72 @@ void main() {
   if (game != null) {
     runApp(GameWidget(game: game));
   } else {
-    runAsDashbook();
+    runAsWidgetbook();
   }
 }
 
-void runAsDashbook() {
-  final dashbook = Dashbook(
-    title: 'Flame Examples',
+void runAsWidgetbook() {
+  runApp(
+    Widgetbook(
+      appBuilder: (_, child) => ExampleApp(child: child),
+      addons: [ViewportAddon(Viewports.all)],
+      header: FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: Alignment.centerLeft,
+        child: Row(
+          children: [
+            Image.asset('assets/images/flame.png', height: 28),
+            const SizedBox(width: 12),
+            const Text(
+              'Flame Examples',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+      ),
+      home: const ExampleApp(
+        child: Center(
+          child: Text('Select an example in the navigation to try it out.'),
+        ),
+      ),
+      enableLeafComponents: false,
+      directories: [
+        // Some small sample games
+        gameStories(),
+
+        // Show some different ways of structuring games
+        structureStories(),
+
+        // Feature examples
+        audioStories(),
+        animationStories(),
+        cameraAndViewportStories(),
+        collisionDetectionStories(),
+        componentsStories(),
+        decoratorStories(),
+        effectsStories(),
+        experimentalStories(),
+        inputStories(),
+        layoutStories(),
+        parallaxStories(),
+        renderingStories(),
+        routerStories(),
+        tiledStories(),
+        spritesStories(),
+        svgStories(),
+        systemStories(),
+        utilsStories(),
+        widgetsStories(),
+        imageStories(),
+
+        // Bridge package examples
+        forge2DStories(),
+        jointsStories(),
+        flameIsolateStories(),
+        flameJennyStories(),
+        flameLottieStories(),
+        flameSpineStories(),
+      ],
+    ),
   );
-
-  // Some small sample games
-  addGameStories(dashbook);
-
-  // Show some different ways of structuring games
-  addStructureStories(dashbook);
-
-  // Feature examples
-  addAudioStories(dashbook);
-  addAnimationStories(dashbook);
-  addCameraAndViewportStories(dashbook);
-  addCollisionDetectionStories(dashbook);
-  addComponentsStories(dashbook);
-  addDecoratorStories(dashbook);
-  addEffectsStories(dashbook);
-  addExperimentalStories(dashbook);
-  addInputStories(dashbook);
-  addLayoutStories(dashbook);
-  addParallaxStories(dashbook);
-  addRenderingStories(dashbook);
-  addRouterStories(dashbook);
-  addTiledStories(dashbook);
-  addSpritesStories(dashbook);
-  addSvgStories(dashbook);
-  addSystemStories(dashbook);
-  addUtilsStories(dashbook);
-  addWidgetsStories(dashbook);
-  addImageStories(dashbook);
-
-  // Bridge package examples
-  addForge2DStories(dashbook);
-  addFlameIsolateExample(dashbook);
-  addFlameJennyExample(dashbook);
-  addFlameLottieExample(dashbook);
-  addFlameSpineExamples(dashbook);
-
-  runApp(dashbook);
 }

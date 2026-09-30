@@ -1,4 +1,3 @@
-import 'package:dashbook/dashbook.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -28,37 +27,42 @@ class CustomPainterExample extends FlameGame with TapCallbacks {
   }
 }
 
-Widget customPainterBuilder(DashbookContext ctx) {
-  return GameWidget(
-    game: CustomPainterExample(),
-    overlayBuilderMap: {
-      'Smiley': (context, game) {
-        return Center(
-          child: Container(
-            color: Colors.transparent,
-            width: 200,
-            height: 200,
-            child: Column(
-              children: [
-                const Text(
-                  'Hey, I can be a widget too!',
-                  style: TextStyle(
-                    color: Colors.white70,
+class CustomPainterExampleWidget extends StatelessWidget {
+  const CustomPainterExampleWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GameWidget.managed(
+      gameFactory: CustomPainterExample.new,
+      overlayBuilderMap: {
+        'Smiley': (context, game) {
+          return Center(
+            child: Container(
+              color: Colors.transparent,
+              width: 200,
+              height: 200,
+              child: Column(
+                children: [
+                  const Text(
+                    'Hey, I can be a widget too!',
+                    style: TextStyle(
+                      color: Colors.white70,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 32),
-                SizedBox(
-                  height: 132,
-                  width: 132,
-                  child: CustomPaint(painter: PlayerCustomPainter()),
-                ),
-              ],
+                  const SizedBox(height: 32),
+                  SizedBox(
+                    height: 132,
+                    width: 132,
+                    child: CustomPaint(painter: PlayerCustomPainter()),
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
+          );
+        },
       },
-    },
-  );
+    );
+  }
 }
 
 class PlayerCustomPainter extends CustomPainter {

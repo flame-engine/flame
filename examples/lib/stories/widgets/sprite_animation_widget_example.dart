@@ -1,61 +1,70 @@
-import 'package:dashbook/dashbook.dart';
-import 'package:examples/stories/widgets/paints.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/widgets.dart';
 import 'package:flutter/widgets.dart';
 
-final anchorOptions = Anchor.values.map((e) => e.name).toList();
+class SpriteAnimationWidgetExample extends StatelessWidget {
+  const SpriteAnimationWidgetExample({
+    required this.width,
+    required this.height,
+    required this.playing,
+    required this.anchor,
+    required this.paint,
+    super.key,
+  });
 
-Widget spriteAnimationWidgetBuilder(DashbookContext ctx) {
-  return SizedBox(
-    width: ctx.numberProperty('container width', 400),
-    height: ctx.numberProperty('container height', 200),
-    child: SpriteAnimationWidget.asset(
+  final double width;
+  final double height;
+  final bool playing;
+  final Anchor anchor;
+  final Paint? paint;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      height: height,
+      child: SpriteAnimationWidget.asset(
+        path: 'assets/images/bomb_ptero.png',
+        data: SpriteAnimationData.sequenced(
+          amount: 4,
+          stepTime: 0.2,
+          textureSize: Vector2(48, 32),
+        ),
+        playing: playing,
+        anchor: anchor,
+        paint: paint,
+      ),
+    );
+  }
+}
+
+class SizedSpriteAnimationWidgetExample extends StatelessWidget {
+  const SizedSpriteAnimationWidgetExample({
+    required this.size,
+    required this.playing,
+    required this.anchor,
+    required this.paint,
+    super.key,
+  });
+
+  final Size size;
+  final bool playing;
+  final Anchor anchor;
+  final Paint? paint;
+
+  @override
+  Widget build(BuildContext context) {
+    return SpriteAnimationWidget.asset(
+      size: size,
       path: 'assets/images/bomb_ptero.png',
       data: SpriteAnimationData.sequenced(
         amount: 4,
         stepTime: 0.2,
         textureSize: Vector2(48, 32),
       ),
-      playing: ctx.boolProperty('playing', true),
-      anchor: Anchor.valueOf(
-        ctx.listProperty('anchor', 'center', anchorOptions),
-      ),
-      paint:
-          paintList[paintChoices.indexOf(
-            ctx.listProperty(
-              'paint',
-              'none',
-              paintChoices,
-            ),
-          )],
-    ),
-  );
-}
-
-Widget spriteAnimationWithSizeWidgetBuilder(DashbookContext ctx) {
-  return SpriteAnimationWidget.asset(
-    size: Size(
-      ctx.numberProperty('width', 400),
-      ctx.numberProperty('height', 200),
-    ),
-    path: 'assets/images/bomb_ptero.png',
-    data: SpriteAnimationData.sequenced(
-      amount: 4,
-      stepTime: 0.2,
-      textureSize: Vector2(48, 32),
-    ),
-    playing: ctx.boolProperty('playing', true),
-    anchor: Anchor.valueOf(
-      ctx.listProperty('anchor', 'center', anchorOptions),
-    ),
-    paint:
-        paintList[paintChoices.indexOf(
-          ctx.listProperty(
-            'paint',
-            'none',
-            paintChoices,
-          ),
-        )],
-  );
+      playing: playing,
+      anchor: anchor,
+      paint: paint,
+    );
+  }
 }

@@ -57,8 +57,6 @@ class ParticlesExample extends FlameGame {
       );
     }
 
-    // Top-center, so it does not collide with the Dashbook menu button that
-    // overlays the top-left corner.
     add(
       _StatsText(
         position: Vector2(size.x / 2, 8),
