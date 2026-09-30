@@ -1127,6 +1127,49 @@ void main() {
     }
   });
 
+  // These maps use a reference layer of cell-sized tiles below a layer of tiles
+  // that are larger than the map's tile size. In Tiled, oversized tiles are
+  // anchored at the bottom-left of their cell and grow up and to the right, so
+  // the red area of the big tiles should sit exactly on top of the grey cells.
+  // The maps can be opened in Tiled to cross-check the goldens. The goldens
+  // include padding around the map since the tiles overflow its bounds.
+  group('oversized tile anchoring', () {
+    for (final mapType in [
+      'orthogonal',
+      'isometric',
+      'staggered',
+      'hexagonal',
+    ]) {
+      test('renders like Tiled ($mapType)', () async {
+        final bundle = TestAssetBundle(
+          imageNames: [
+            'oversized_demo_cell_$mapType.png',
+            'oversized_demo_tile_$mapType.png',
+          ],
+          stringNames: ['oversized_demo_$mapType.tmx'],
+        );
+        final component = await TiledComponent.load(
+          'assets/tiles/oversized_demo_$mapType.tmx',
+          Vector2(
+            mapType == 'orthogonal' || mapType == 'hexagonal' ? 32 : 64,
+            32,
+          ),
+          bundle: bundle,
+          images: Images(bundle: bundle),
+        );
+        final size = component.size;
+        final pngData = await renderMapRegionToPng(
+          component.tileMap,
+          Rect.fromLTRB(-64, -96, size.x + 64, size.y + 32),
+        );
+        await expectLater(
+          pngData,
+          matchesGoldenFile('goldens/oversized_demo_$mapType.png'),
+        );
+      });
+    }
+  });
+
   group('RenderableTiledMap.TileData', () {
     late RenderableTiledMap renderableTiledMap;
 
