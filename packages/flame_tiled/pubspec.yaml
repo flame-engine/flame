@@ -22,8 +22,7 @@ dependencies:
   flutter:
     sdk: flutter
   meta: ^1.12.0
-  tiled: ^0.11.0
-  xml: ^6.3.0
+  tiled: ^0.12.0
 
 dev_dependencies:
   dartdoc: ^9.0.0
