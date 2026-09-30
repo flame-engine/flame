@@ -4,6 +4,7 @@ import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/commands/flame_command.dart';
 import 'package:flame_cli/src/commands/run_command.dart';
+import 'package:flame_cli/src/devtools_options.dart';
 import 'package:flame_cli/src/flame_connection.dart';
 
 /// Opens the Flutter DevTools for the running game with `dart devtools`,
@@ -11,7 +12,9 @@ import 'package:flame_cli/src/flame_connection.dart';
 ///
 /// The game is found the same way as by the commands that talk to it, through
 /// the `--uri` option or the file that `flame run` writes the URI to, and it
-/// is checked to be reachable before the DevTools are started.
+/// is checked to be reachable before the DevTools are started. The Flame
+/// extension is enabled in the `devtools_options.yaml` of the project, so
+/// that the DevTools show the Flame tab without asking.
 class DevToolsCommand extends Command<int> {
   DevToolsCommand(
     this.workingDirectory, {
@@ -70,6 +73,13 @@ class DevToolsCommand extends Command<int> {
     );
     final uri = connection.uri;
     await connection.dispose();
+
+    final optionsFile = devToolsOptionsFile(workingDirectory);
+    if (enableFlameExtension(optionsFile)) {
+      (out ?? stdout).writeln(
+        'Enabled the Flame DevTools extension in ${optionsFile.path}.',
+      );
+    }
 
     final process = await startDart(
       _startProcess,

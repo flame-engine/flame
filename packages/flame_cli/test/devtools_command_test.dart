@@ -113,6 +113,36 @@ void main() {
     expect(connections.single.disposed, isTrue);
   });
 
+  test('enables the extension in the root of the project', () async {
+    File(p.join(directory.path, 'pubspec.yaml')).createSync();
+    final lib = Directory(p.join(directory.path, 'lib'))..createSync();
+    final runner = createRunner(
+      _starter((_, _, _) => FakeProcess(exitCode: 0)),
+      workingDirectory: lib,
+      connect: connect,
+    );
+
+    await runner.run(['devtools', '--uri', _uri]);
+
+    final optionsFile = File(p.join(directory.path, devToolsOptionsFileName));
+    expect(optionsFile.readAsStringSync(), contains('- flame: true'));
+    expect(out.toString(), contains('Enabled the Flame DevTools extension'));
+  });
+
+  test('does not touch an options file that enables the extension', () async {
+    final optionsFile = File(p.join(directory.path, devToolsOptionsFileName))
+      ..writeAsStringSync('extensions:\n  - flame: true\n');
+    final runner = createRunner(
+      _starter((_, _, _) => FakeProcess(exitCode: 0)),
+      connect: connect,
+    );
+
+    await runner.run(['devtools', '--uri', _uri]);
+
+    expect(optionsFile.readAsStringSync(), 'extensions:\n  - flame: true\n');
+    expect(out.toString(), isNot(contains('Enabled')));
+  });
+
   test('opens the devtools for the given uri', () async {
     late List<String> usedArguments;
     final runner = createRunner(
@@ -158,7 +188,10 @@ void main() {
       ..exit(3);
 
     expect(await running, 3);
-    expect(out.toString(), 'Serving DevTools at http://127.0.0.1:9100.\n');
+    expect(
+      out.toString(),
+      endsWith('Serving DevTools at http://127.0.0.1:9100.\n'),
+    );
     expect(err.toString(), 'Something went wrong\n');
   });
 

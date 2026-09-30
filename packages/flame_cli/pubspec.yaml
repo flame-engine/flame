@@ -21,6 +21,8 @@ dependencies:
   io: ^1.1.0
   path: ^1.9.0
   vm_service: ^15.0.0
+  yaml: ^3.1.2
+  yaml_edit: ^2.2.4
 
 dev_dependencies:
   flame_lint: ^1.4.4-dev.0

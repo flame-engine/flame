@@ -247,8 +247,11 @@ other commands, so `--uri` (`-u`) reaches a game that was not started with `flam
 `--no-launch-browser` only the URL of the DevTools is printed, to open it in a browser of your
 choice or to hand it to someone else.
 
-The DevTools open on their overview page, select the Flame tab to get to the extension. The first
-time, the DevTools ask whether to enable the extension for the game.
+The DevTools only show the tab of an extension that is enabled in the `devtools_options.yaml` of
+the project, and ask whether to enable it otherwise. The command enables the Flame extension in
+that file before it starts the DevTools, creating the file if the project has none and keeping the
+other settings in it, so the Flame tab is there right away. The DevTools open on their overview
+page, select the Flame tab to get to the extension.
 
 
 ### snapshot
