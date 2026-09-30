@@ -1230,4 +1230,148 @@ void main() {
       expect(renderableTiledMap.getLayerOpacity(3), equals(0.2));
     });
   });
+
+  group('infinite maps', () {
+    test('empty infinite map loads without tiles', () async {
+      final bundle = TestAssetBundle(
+        imageNames: const [],
+        stringNames: ['empty-infinite-map.tmx'],
+      );
+      final component = await TiledComponent.load(
+        'assets/tiles/empty-infinite-map.tmx',
+        Vector2.all(16),
+        bundle: bundle,
+        images: Images(bundle: bundle),
+      );
+
+      expect(component.tileMap.map.infinite, isTrue);
+      expect(component.size, Vector2(120 * 16, 68 * 16));
+      expect(
+        component.tileMap.getTileData(layerId: 1, x: 0, y: 0),
+        isNull,
+      );
+    });
+
+    test('loads chunks and reads Tiled world coordinates', () async {
+      final bundle = TestAssetBundle(
+        imageNames: ['0x72_DungeonTilesetII_v1.4.png'],
+        stringNames: ['infinite-map.tmx'],
+      );
+      final map = await RenderableTiledMap.fromFile(
+        'assets/tiles/infinite-map.tmx',
+        Vector2.all(16),
+        bundle: bundle,
+        images: Images(bundle: bundle),
+      );
+
+      expect(map.map.infinite, isTrue);
+
+      final floorTile = map.getTileData(layerId: 2, x: -16, y: -7);
+      expect(floorTile, isNotNull);
+      expect(floorTile!.tile, 132);
+
+      expect(map.getTileData(layerId: 2, x: 1000, y: 1000), isNull);
+
+      map.setTileData(
+        layerId: 2,
+        x: -16,
+        y: -7,
+        gid: const Gid(1, Flips.defaults()),
+      );
+      expect(map.getTileData(layerId: 2, x: -16, y: -7)!.tile, 1);
+
+      final stack = map.tileStack(-16, -7, all: true);
+      expect(stack.length, greaterThan(0));
+      // Tiles at negative indices are placed at negative world positions,
+      // like in the Tiled editor.
+      expect(stack.position, Vector2((-16 + 0.5) * 16, (-7 + 0.5) * 16));
+    });
+
+    test('TiledComponent size uses map width and height', () async {
+      final bundle = TestAssetBundle(
+        imageNames: ['0x72_DungeonTilesetII_v1.4.png'],
+        stringNames: ['infinite-map.tmx'],
+      );
+      final component = await TiledComponent.load(
+        'assets/tiles/infinite-map.tmx',
+        Vector2.all(16),
+        bundle: bundle,
+        images: Images(bundle: bundle),
+      );
+
+      expect(component.size, Vector2(120 * 16, 68 * 16));
+    });
+
+    test('renders all chunks', () async {
+      final bundle = TestAssetBundle(
+        imageNames: ['0x72_DungeonTilesetII_v1.4.png'],
+        stringNames: ['infinite-map.tmx'],
+      );
+      final map = await RenderableTiledMap.fromFile(
+        'assets/tiles/infinite-map.tmx',
+        Vector2.all(16),
+        bundle: bundle,
+        images: Images(bundle: bundle),
+      );
+
+      // The chunks cover tiles (-32, -16) to (16, 16).
+      final pngData = await renderMapRegionToPng(
+        map,
+        const Rect.fromLTWH(-32 * 16, -16 * 16, 48 * 16, 32 * 16),
+      );
+      await expectLater(
+        pngData,
+        matchesGoldenFile('goldens/infinite_map.png'),
+      );
+    });
+
+    // The room straddles the border between two chunks. Its door is a 32x32
+    // tile standing on the floor in front of the top wall, so it overlaps wall
+    // tiles of both chunks. Painting chunk by chunk instead of row by row
+    // would draw the wall of the right chunk over the door.
+    test('paints oversized tiles across chunks in row order', () async {
+      final bundle = TestAssetBundle(
+        imageNames: ['0x72_DungeonTilesetII_v1.4.png'],
+        stringNames: ['infinite_oversized_tiles_orthogonal.tmx'],
+      );
+      final map = await RenderableTiledMap.fromFile(
+        'assets/tiles/infinite_oversized_tiles_orthogonal.tmx',
+        Vector2.all(16),
+        bundle: bundle,
+        images: Images(bundle: bundle),
+      );
+
+      // The room covers tiles (-8, 0) to (7, 10).
+      final pngData = await renderMapRegionToPng(
+        map,
+        const Rect.fromLTWH(-8 * 16, 0, 16 * 16, 11 * 16),
+      );
+      await expectLater(
+        pngData,
+        matchesGoldenFile('goldens/infinite_oversized_tiles_orthogonal.png'),
+      );
+    });
+
+    test('renders isometric chunks around the origin', () async {
+      final bundle = TestAssetBundle(
+        imageNames: ['isometric_spritesheet.png'],
+        stringNames: ['infinite_oversized_tiles_isometric.tmx'],
+      );
+      final map = await RenderableTiledMap.fromFile(
+        'assets/tiles/infinite_oversized_tiles_isometric.tmx',
+        Vector2(64, 32),
+        bundle: bundle,
+        images: Images(bundle: bundle),
+      );
+
+      final pngData = await renderMapRegionToPng(
+        map,
+        const Rect.fromLTWH(0, -144, 384, 240),
+      );
+      await expectLater(
+        pngData,
+        matchesGoldenFile('goldens/infinite_oversized_tiles_isometric.png'),
+      );
+    });
+  });
 }

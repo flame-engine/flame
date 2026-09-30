@@ -26,6 +26,15 @@ The [dart] package provides a simple `Tiled` class and [flame_tiled] provides a 
 `TiledComponent`, for the map rendering, which renders the tiles on the screen and supports
 rotations and flips.
 
+Infinite maps from the Tiled editor are supported. Tile positions, `getTileData`, and object
+coordinates match the editor (including negative tile indices if you painted left or above the
+origin). All chunks present in the file are cached at load time; very large infinite maps may
+therefore be expensive. Chunk streaming based on the camera is not implemented yet.
+
+Keep in mind that the size of a `TiledComponent` still comes from the map's `width` and `height`,
+so tiles outside of that area (for example at negative indices) are rendered outside of the
+component's bounds. `setTileData` only changes cells inside chunks that already exist in the map.
+
 
 ## Tiled Editor
 
