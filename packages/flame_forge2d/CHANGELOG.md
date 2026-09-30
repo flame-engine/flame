@@ -1,3 +1,10 @@
+## 0.21.0-dev.0
+
+> Note: This release has breaking changes.
+
+ - **FIX**: Remove material_ui dependency where unnecesarry ([#4070](https://github.com/flame-engine/flame/issues/4070)). ([e682aba9](https://github.com/flame-engine/flame/commit/e682aba96290260ea7eac605f069594c26802bd4))
+ - **BREAKING** **FIX**: Wait for the whole component tree to load before starting the game ([#3998](https://github.com/flame-engine/flame/issues/3998)). ([34dcedc4](https://github.com/flame-engine/flame/commit/34dcedc427534a7372226f9f3a93a988a95798ba))
+
 ## 0.20.0
 
 > Note: This release has breaking changes.

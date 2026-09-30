@@ -3,6 +3,330 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-09-30
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame` - `v2.0.0-dev.0`](#flame---v200-dev0)
+ - [`flame_3d` - `v0.4.0-dev.0`](#flame_3d---v040-dev0)
+ - [`flame_behavior_tree` - `v0.2.0-dev.0+6`](#flame_behavior_tree---v020-dev06)
+ - [`flame_behaviors` - `v2.0.0-dev.0`](#flame_behaviors---v200-dev0)
+ - [`flame_bloc` - `v2.0.0-dev.0`](#flame_bloc---v200-dev0)
+ - [`flame_console` - `v0.2.0-dev.0`](#flame_console---v020-dev0)
+ - [`flame_forge2d` - `v0.21.0-dev.0`](#flame_forge2d---v0210-dev0)
+ - [`flame_isolate` - `v0.7.0-dev.0+24`](#flame_isolate---v070-dev024)
+ - [`flame_kenney_xml` - `v0.2.0-dev.0+3`](#flame_kenney_xml---v020-dev03)
+ - [`flame_lottie` - `v0.5.0-dev.0+24`](#flame_lottie---v050-dev024)
+ - [`flame_markdown` - `v0.3.0-dev.0+17`](#flame_markdown---v030-dev017)
+ - [`flame_network_assets` - `v0.4.0-dev.0+24`](#flame_network_assets---v040-dev024)
+ - [`flame_rive` - `v2.0.0-dev.0`](#flame_rive---v200-dev0)
+ - [`flame_spine` - `v0.4.0-dev.0+7`](#flame_spine---v040-dev07)
+ - [`flame_sprite_fusion` - `v0.3.0-dev.0+3`](#flame_sprite_fusion---v030-dev03)
+ - [`flame_steering_behaviors` - `v0.3.0-dev.0+7`](#flame_steering_behaviors---v030-dev07)
+ - [`flame_svg` - `v3.0.0-dev.0`](#flame_svg---v300-dev0)
+ - [`flame_test` - `v3.0.0-dev.0`](#flame_test---v300-dev0)
+ - [`flame_tiled` - `v4.0.0-dev.0`](#flame_tiled---v400-dev0)
+ - [`flame_typled` - `v0.2.0-dev.0`](#flame_typled---v020-dev0)
+
+Packages with other changes:
+
+ - [`behavior_tree` - `v0.1.6-dev.0+2`](#behavior_tree---v016-dev02)
+ - [`flame_audio` - `v2.13.0-dev.0`](#flame_audio---v2130-dev0)
+ - [`flame_cli` - `v0.1.1-dev.0`](#flame_cli---v011-dev0)
+ - [`flame_fire_atlas` - `v1.9.0-dev.0`](#flame_fire_atlas---v190-dev0)
+ - [`flame_gamepads` - `v0.1.3-dev.0`](#flame_gamepads---v013-dev0)
+ - [`flame_lint` - `v1.4.4-dev.0`](#flame_lint---v144-dev0)
+ - [`flame_noise` - `v0.3.4-dev.0+24`](#flame_noise---v034-dev024)
+ - [`flame_riverpod` - `v5.5.6-dev.0`](#flame_riverpod---v556-dev0)
+ - [`flame_splash_screen` - `v0.3.2-dev.0+4`](#flame_splash_screen---v032-dev04)
+ - [`flame_texturepacker` - `v5.2.0-dev.0`](#flame_texturepacker---v520-dev0)
+ - [`jenny` - `v1.5.2-dev.0`](#jenny---v152-dev0)
+
+---
+
+#### `flame` - `v2.0.0-dev.0`
+
+ - **REFACTOR**: Update _TestBlock on collision_callback_benchmark_test to use named parameters ([#3975](https://github.com/flame-engine/flame/issues/3975)). ([9601dd71](https://github.com/flame-engine/flame/commit/9601dd71c492a878ea6f4fba77ce32b4e7ca6984))
+ - **PERF**: Skip lifecycle processing work when the queue is empty ([#3978](https://github.com/flame-engine/flame/issues/3978)). ([e2fe2006](https://github.com/flame-engine/flame/commit/e2fe20065e576faa321fe4f570266554afa8ca61))
+ - **PERF**: Compose one transform for polygon global vertices and hoist the circle center out of the edge loop ([#4046](https://github.com/flame-engine/flame/issues/4046)). ([0bd4ba81](https://github.com/flame-engine/flame/commit/0bd4ba81b8c3531cf1ef1b4d995f9d6a9d27350a))
+ - **PERF**: Cache camera render closures instead of allocating per frame ([#3979](https://github.com/flame-engine/flame/issues/3979)). ([f212fbca](https://github.com/flame-engine/flame/commit/f212fbca95221c275d49c546461ac25a783200c7))
+ - **PERF**: Only test polygon edges inside the hitbox overlap and drop allocations from segment intersection ([#4045](https://github.com/flame-engine/flame/issues/4045)). ([a9a3dd92](https://github.com/flame-engine/flame/commit/a9a3dd92fd65136834a3845597e0e67c4ac4157c))
+ - **PERF**: Cache the rotation and skip redundant work in Transform2D ([#4024](https://github.com/flame-engine/flame/issues/4024)). ([569b1737](https://github.com/flame-engine/flame/commit/569b1737d081c4c52b22764f14fd0cab35f77e96))
+ - **PERF**: Insertion-sort the sweep broadphase and swap-remove its active list ([#3983](https://github.com/flame-engine/flame/issues/3983)). ([55eaec4d](https://github.com/flame-engine/flame/commit/55eaec4d4ed1cf6558266990bd2edc8f491e02d1))
+ - **PERF**: Replace generator-based tree teardown and propagation with an explicit collection pass ([#3981](https://github.com/flame-engine/flame/issues/3981)). ([f7246c10](https://github.com/flame-engine/flame/commit/f7246c10c8b380c08fe18f051fdf3a175fd8994d))
+ - **PERF**: Make render contexts and debug caches lazily allocated ([#3980](https://github.com/flame-engine/flame/issues/3980)). ([8f6bb045](https://github.com/flame-engine/flame/commit/8f6bb045b60c2b34b5dd672fa1e7b619678ff863))
+ - **FIX**: Unwind the context trace consistently after event delivery ([#4037](https://github.com/flame-engine/flame/issues/4037)). ([f219f7f6](https://github.com/flame-engine/flame/commit/f219f7f6d3ec2ac653bee75a1f332cd2105a3c30))
+ - **FIX**: Recognize every input callbacks mixin when hit testing ([#3994](https://github.com/flame-engine/flame/issues/3994)). ([58247cbb](https://github.com/flame-engine/flame/commit/58247cbbaf00c9be6346ec37dad91b6b07aa3a7c))
+ - **FIX**: Reset AdvancedButtonComponent state when a tap is cancelled ([#4049](https://github.com/flame-engine/flame/issues/4049)). ([04358b21](https://github.com/flame-engine/flame/commit/04358b21d2233a2f84f6b03ebe2d91fd528adb77))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **FIX**: Keep TextComponent glyphs in place when its paint changes ([#4041](https://github.com/flame-engine/flame/issues/4041)). ([5390a7db](https://github.com/flame-engine/flame/commit/5390a7db0e315cbce9cea863063cfb6fe114a7f6))
+ - **FIX**: Scan the lifecycle queue without its iterator in dequeueAdd/dequeueRemove ([#4021](https://github.com/flame-engine/flame/issues/4021)). ([b4578fc6](https://github.com/flame-engine/flame/commit/b4578fc6a4f4087463cedf485f1a7079f9369b2e))
+ - **FIX**: Clear removing state on the moved child instead of its new parent ([#3958](https://github.com/flame-engine/flame/issues/3958)). ([8bd84750](https://github.com/flame-engine/flame/commit/8bd847508a6936504f5b90a7a858be9425059cdf))
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Correct parent context lookup on LocationContextEvent ([#4036](https://github.com/flame-engine/flame/issues/4036)). ([5b5c6063](https://github.com/flame-engine/flame/commit/5b5c60632de5eafecca08e9a9bb3762d86afa6ac))
+ - **FIX**: Keep currentCameras balanced when componentsAtPoint is not fully iterated ([#3971](https://github.com/flame-engine/flame/issues/3971)). ([783f4041](https://github.com/flame-engine/flame/commit/783f404140da931e2d4225352ff23d7fd4e297ce))
+ - **FIX**: Require touch slop before DragCallbacks accepts a drag ([#4017](https://github.com/flame-engine/flame/issues/4017)). ([a4c39877](https://github.com/flame-engine/flame/commit/a4c39877011d1a44f0794d2c26a314fefc083423))
+ - **FIX**: Prevent text layouting to break punctuation on adjacent spans ([#4060](https://github.com/flame-engine/flame/issues/4060)). ([ba16cf80](https://github.com/flame-engine/flame/commit/ba16cf801742f6d29fca3046f091517d0dcf541d))
+ - **FEAT**: Add support to use convex/concave Path shapes in PolygonComponent, PolygonHitbox and Polygon ([#4048](https://github.com/flame-engine/flame/issues/4048)). ([95bc6120](https://github.com/flame-engine/flame/commit/95bc61201dc8303e09a61adf46d1a5ab52bb290b))
+ - **FEAT**: Add inspect, set, pause, resume, step, debug and overlay commands to flame_cli ([#4055](https://github.com/flame-engine/flame/issues/4055)). ([8bbd6b3a](https://github.com/flame-engine/flame/commit/8bbd6b3aae67c621985fda91a44d37614f6a1540))
+ - **FEAT**: Add game snapshots and a new flame_cli package to take them from the terminal ([#4054](https://github.com/flame-engine/flame/issues/4054)). ([1d17085f](https://github.com/flame-engine/flame/commit/1d17085ffc37a6923d6a3f6a866329a20c50c802))
+ - **FEAT**: Add input, world snapshot and diff commands to flame_cli ([#4057](https://github.com/flame-engine/flame/issues/4057)). ([60996d95](https://github.com/flame-engine/flame/commit/60996d95175d56861a328bd1faef65ad55128b38))
+ - **FEAT**: Add WidgetComponent to render Flutter widgets in the component tree ([#4053](https://github.com/flame-engine/flame/issues/4053)). ([e2d8edc3](https://github.com/flame-engine/flame/commit/e2d8edc3976076a434211e11e6882a1d918523e9))
+ - **FEAT**: Lock random seeds in the flutter/tests customer testing run ([#4052](https://github.com/flame-engine/flame/issues/4052)). ([c35f9d80](https://github.com/flame-engine/flame/commit/c35f9d803e9297561f53c4bad3f54182b644e0cf))
+ - **FEAT**: Adding the package attribute to widgets missing it ([#4034](https://github.com/flame-engine/flame/issues/4034)). ([fa41947b](https://github.com/flame-engine/flame/commit/fa41947bcc4361bef6a181390ce3f13e05036731))
+ - **FEAT**: Promote PathComponent to a standard component ([#4050](https://github.com/flame-engine/flame/issues/4050)). ([e98199fb](https://github.com/flame-engine/flame/commit/e98199fb72f0f2f76cdeb2480872c35d40b66fcd))
+ - **FEAT**: Removing prefix from asset loaders ([#4015](https://github.com/flame-engine/flame/issues/4015)). ([11972dfb](https://github.com/flame-engine/flame/commit/11972dfbaee484bcf1a99ed91aa325823560f837))
+ - **FEAT**: Support allowsMultiPointerDrag on DragCallbacks ([#4033](https://github.com/flame-engine/flame/issues/4033)). ([0b608950](https://github.com/flame-engine/flame/commit/0b6089503f85a0dbf8f90a5616874a55ffaa81f9))
+ - **DOCS**: Correct docs about drag/scale events on pointer leave ([#4035](https://github.com/flame-engine/flame/issues/4035)). ([00ab4c57](https://github.com/flame-engine/flame/commit/00ab4c57e14177725c4dcdd85871788ab9dded9b))
+ - **BREAKING** **REFACTOR**: Kill old gesture listener shared interfaces ([#4038](https://github.com/flame-engine/flame/issues/4038)). ([4fec3774](https://github.com/flame-engine/flame/commit/4fec3774aa5a8ccbf6a7bb5dafa1c83859bd8ff4))
+ - **BREAKING** **REFACTOR**: Remove events handled property ([#3976](https://github.com/flame-engine/flame/issues/3976)). ([98e65544](https://github.com/flame-engine/flame/commit/98e65544152253a3facaae04e4a48780fa73f8a0))
+ - **BREAKING** **REFACTOR**: Clean up deprecated MultiDragDispatcher / MultiDragDispatcher aliases ([#3977](https://github.com/flame-engine/flame/issues/3977)). ([9196241b](https://github.com/flame-engine/flame/commit/9196241b61d399e854f896ebec597fa7852c356e))
+ - **BREAKING** **PERF**: Flatten the update traversal behind a CustomTraversal seam ([#3960](https://github.com/flame-engine/flame/issues/3960)). ([9510e09f](https://github.com/flame-engine/flame/commit/9510e09f9a3d30ff5dfbb82f4d43b017987e974e))
+ - **BREAKING** **PERF**: Replace the OrderedSet children container with a flat sorted-array ComponentList ([#4019](https://github.com/flame-engine/flame/issues/4019)). ([ab6ef3e3](https://github.com/flame-engine/flame/commit/ab6ef3e3e38fadb92bebe233f375d6d64d9039b1))
+ - **BREAKING** **FIX**: Remove middle intersection point on shared line segments in collision detection ([#4004](https://github.com/flame-engine/flame/issues/4004)). ([e7daba34](https://github.com/flame-engine/flame/commit/e7daba34dd7b99f3fa79bf0dfd0b23be5386e67b))
+ - **BREAKING** **FIX**: Do not delegate onDragCancel to onDragEnd by default ([#3934](https://github.com/flame-engine/flame/issues/3934)). ([d5be1122](https://github.com/flame-engine/flame/commit/d5be1122f6334115acdeafa96bd54c689d59832a))
+ - **BREAKING** **FIX**: Wait for the whole component tree to load before starting the game ([#3998](https://github.com/flame-engine/flame/issues/3998)). ([34dcedc4](https://github.com/flame-engine/flame/commit/34dcedc427534a7372226f9f3a93a988a95798ba))
+ - **BREAKING** **FIX**: Wait for children added in onLoad before marking a component as loaded ([#3999](https://github.com/flame-engine/flame/issues/3999)). ([6f2e2b78](https://github.com/flame-engine/flame/commit/6f2e2b780a5bebdfc4acff818c16e967f258f6ec))
+ - **BREAKING** **FEAT**: Kill MouseMovementDetector and rename PointerMove* to MouseMove* ([#4011](https://github.com/flame-engine/flame/issues/4011)). ([7fd33dee](https://github.com/flame-engine/flame/commit/7fd33dee9b822bef7b3fbf0621d0f3ebdab39a5d))
+ - **BREAKING** **FEAT**: Return a list instead of a set from the collision detection methods ([#4003](https://github.com/flame-engine/flame/issues/4003)). ([698f2619](https://github.com/flame-engine/flame/commit/698f2619ed741276898c8dd71d58c109cd347c5c))
+ - **BREAKING** **FEAT**: Make `Timer` and `TimerComponent` APIs consistent ([#4076](https://github.com/flame-engine/flame/issues/4076)). ([87a0265a](https://github.com/flame-engine/flame/commit/87a0265afb7288a5a5995bbbe118bc0cbaeb23ca))
+ - **BREAKING** **FEAT**: Kill ScrollDetector in favour of ScrollCallbacks ([#4005](https://github.com/flame-engine/flame/issues/4005)). ([d415867b](https://github.com/flame-engine/flame/commit/d415867b0bd4970aba580a5476180f438d3f5239))
+ - **BREAKING** **FEAT**: Rename GameWidget.controlled to GameWidget.managed ([#3961](https://github.com/flame-engine/flame/issues/3961)). ([d99224e5](https://github.com/flame-engine/flame/commit/d99224e5e23c16c86d6d26bf8a807d31c4b4bbc4))
+ - **BREAKING** **FEAT**: Kill MultiTouchTapDetector and MultiTouchDragDetector ([#4000](https://github.com/flame-engine/flame/issues/4000)). ([167da17d](https://github.com/flame-engine/flame/commit/167da17dba3d2e602f91e84a0359de22665eb22e))
+ - **BREAKING** **FEAT**: Replace the particle system with a data-oriented particle system ([#3948](https://github.com/flame-engine/flame/issues/3948)). ([2e7a11dd](https://github.com/flame-engine/flame/commit/2e7a11dde8cbd281736e926f008c1f586ffd184e))
+ - **BREAKING** **FEAT**: Kill ScaleDetector in favour of ScaleCallbacks ([#3996](https://github.com/flame-engine/flame/issues/3996)). ([4dd8782f](https://github.com/flame-engine/flame/commit/4dd8782f71def563e37fceeab80fde39d4331656))
+ - **BREAKING** **FEAT**: Migrate flame_forge2d to the Box2D v3 based forge2d ([#3952](https://github.com/flame-engine/flame/issues/3952)). ([9081a0f9](https://github.com/flame-engine/flame/commit/9081a0f92af5339f3fb17c4895e0d4ebf7012c6f))
+ - **BREAKING** **FEAT**: Making add,addAll sync methods ([#3968](https://github.com/flame-engine/flame/issues/3968)). ([52710ca6](https://github.com/flame-engine/flame/commit/52710ca67ff2b6e6094e9814f2e869314e2b79e8))
+ - **BREAKING** **FEAT**: Rename Game.paused to Game.isPaused ([#3992](https://github.com/flame-engine/flame/issues/3992)). ([b261be32](https://github.com/flame-engine/flame/commit/b261be3205499cf6d30abdf35668509ffe3d5027))
+ - **BREAKING** **FEAT**: Make transparent hit-test opt-in via DeferHitTestToComponents ([#4062](https://github.com/flame-engine/flame/issues/4062)). ([94f692f6](https://github.com/flame-engine/flame/commit/94f692f673e04200bd69daefe2c270d06b9a50ae))
+ - **BREAKING** **CHORE**: Kill legacy Force Press event API ([#3989](https://github.com/flame-engine/flame/issues/3989)). ([d6d4bfa2](https://github.com/flame-engine/flame/commit/d6d4bfa2aa035befee8239983e344e02dbd3d4c8))
+ - **BREAKING** **CHORE**: Kill legacy Vertical/Horizontal drag detectors ([#3993](https://github.com/flame-engine/flame/issues/3993)). ([e291f1cf](https://github.com/flame-engine/flame/commit/e291f1cf8e60a7e19974402cb98d0cbe69e57df1))
+ - **BREAKING** **CHORE**: Kill HasGameReference ([#4030](https://github.com/flame-engine/flame/issues/4030)). ([0f5ca11d](https://github.com/flame-engine/flame/commit/0f5ca11d9aa93698f8b6376c3b0dd5fda3a5ec93))
+ - **BREAKING** **CHORE**: Kill PanDetector and the old event system ([#4031](https://github.com/flame-engine/flame/issues/4031)). ([4e9e50f4](https://github.com/flame-engine/flame/commit/4e9e50f41955907d75f0cf865ae8614d55043b1f))
+ - **BREAKING** **CHORE**: Rename HasWorldReference to HasWorldRef for consistency with HasGameRef ([#4039](https://github.com/flame-engine/flame/issues/4039)). ([cced5ccd](https://github.com/flame-engine/flame/commit/cced5ccd6fd241deb5f097c77181964d4307e3b8))
+ - **BREAKING** **CHORE**: Remove deprecated old event classes with replacements ([#3987](https://github.com/flame-engine/flame/issues/3987)). ([619d7b5d](https://github.com/flame-engine/flame/commit/619d7b5d26343c89b970e3849e74b2b3b48a3a8d))
+
+#### `flame_3d` - `v0.4.0-dev.0`
+
+ - **FIX**: Use full asset paths in the remaining examples and docs ([#4027](https://github.com/flame-engine/flame/issues/4027)). ([1f8bf379](https://github.com/flame-engine/flame/commit/1f8bf379c01910fd684fc8ede186db9be445e673))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **BREAKING** **PERF**: Replace the OrderedSet children container with a flat sorted-array ComponentList ([#4019](https://github.com/flame-engine/flame/issues/4019)). ([ab6ef3e3](https://github.com/flame-engine/flame/commit/ab6ef3e3e38fadb92bebe233f375d6d64d9039b1))
+ - **BREAKING** **FEAT**: Kill ScrollDetector in favour of ScrollCallbacks ([#4005](https://github.com/flame-engine/flame/issues/4005)). ([d415867b](https://github.com/flame-engine/flame/commit/d415867b0bd4970aba580a5476180f438d3f5239))
+ - **BREAKING** **FEAT**: Rename GameWidget.controlled to GameWidget.managed ([#3961](https://github.com/flame-engine/flame/issues/3961)). ([d99224e5](https://github.com/flame-engine/flame/commit/d99224e5e23c16c86d6d26bf8a807d31c4b4bbc4))
+ - **BREAKING** **CHORE**: Rename HasWorldReference to HasWorldRef for consistency with HasGameRef ([#4039](https://github.com/flame-engine/flame/issues/4039)). ([cced5ccd](https://github.com/flame-engine/flame/commit/cced5ccd6fd241deb5f097c77181964d4307e3b8))
+
+#### `flame_behavior_tree` - `v0.2.0-dev.0+6`
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **BREAKING** **FEAT**: Make `Timer` and `TimerComponent` APIs consistent ([#4076](https://github.com/flame-engine/flame/issues/4076)). ([87a0265a](https://github.com/flame-engine/flame/commit/87a0265afb7288a5a5995bbbe118bc0cbaeb23ca))
+ - **BREAKING** **FEAT**: Making add,addAll sync methods ([#3968](https://github.com/flame-engine/flame/issues/3968)). ([52710ca6](https://github.com/flame-engine/flame/commit/52710ca67ff2b6e6094e9814f2e869314e2b79e8))
+ - **BREAKING** **FEAT**: Rename GameWidget.controlled to GameWidget.managed ([#3961](https://github.com/flame-engine/flame/issues/3961)). ([d99224e5](https://github.com/flame-engine/flame/commit/d99224e5e23c16c86d6d26bf8a807d31c4b4bbc4))
+
+#### `flame_behaviors` - `v2.0.0-dev.0`
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Remove material_ui dependency where unnecesarry ([#4070](https://github.com/flame-engine/flame/issues/4070)). ([e682aba9](https://github.com/flame-engine/flame/commit/e682aba96290260ea7eac605f069594c26802bd4))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **BREAKING** **REFACTOR**: Remove events handled property ([#3976](https://github.com/flame-engine/flame/issues/3976)). ([98e65544](https://github.com/flame-engine/flame/commit/98e65544152253a3facaae04e4a48780fa73f8a0))
+ - **BREAKING** **FEAT**: Kill MouseMovementDetector and rename PointerMove* to MouseMove* ([#4011](https://github.com/flame-engine/flame/issues/4011)). ([7fd33dee](https://github.com/flame-engine/flame/commit/7fd33dee9b822bef7b3fbf0621d0f3ebdab39a5d))
+ - **BREAKING** **FEAT**: Return a list instead of a set from the collision detection methods ([#4003](https://github.com/flame-engine/flame/issues/4003)). ([698f2619](https://github.com/flame-engine/flame/commit/698f2619ed741276898c8dd71d58c109cd347c5c))
+ - **BREAKING** **FEAT**: Making add,addAll sync methods ([#3968](https://github.com/flame-engine/flame/issues/3968)). ([52710ca6](https://github.com/flame-engine/flame/commit/52710ca67ff2b6e6094e9814f2e869314e2b79e8))
+
+#### `flame_bloc` - `v2.0.0-dev.0`
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Remove material_ui dependency where unnecesarry ([#4070](https://github.com/flame-engine/flame/issues/4070)). ([e682aba9](https://github.com/flame-engine/flame/commit/e682aba96290260ea7eac605f069594c26802bd4))
+ - **FIX**: Use full asset paths in the remaining examples and docs ([#4027](https://github.com/flame-engine/flame/issues/4027)). ([1f8bf379](https://github.com/flame-engine/flame/commit/1f8bf379c01910fd684fc8ede186db9be445e673))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **FEAT**: Support allowsMultiPointerDrag on DragCallbacks ([#4033](https://github.com/flame-engine/flame/issues/4033)). ([0b608950](https://github.com/flame-engine/flame/commit/0b6089503f85a0dbf8f90a5616874a55ffaa81f9))
+ - **FEAT**: Removing prefix from asset loaders ([#4015](https://github.com/flame-engine/flame/issues/4015)). ([11972dfb](https://github.com/flame-engine/flame/commit/11972dfbaee484bcf1a99ed91aa325823560f837))
+ - **BREAKING** **FEAT**: Make `Timer` and `TimerComponent` APIs consistent ([#4076](https://github.com/flame-engine/flame/issues/4076)). ([87a0265a](https://github.com/flame-engine/flame/commit/87a0265afb7288a5a5995bbbe118bc0cbaeb23ca))
+ - **BREAKING** **FEAT**: Return a list instead of a set from the collision detection methods ([#4003](https://github.com/flame-engine/flame/issues/4003)). ([698f2619](https://github.com/flame-engine/flame/commit/698f2619ed741276898c8dd71d58c109cd347c5c))
+ - **BREAKING** **FEAT**: Making add,addAll sync methods ([#3968](https://github.com/flame-engine/flame/issues/3968)). ([52710ca6](https://github.com/flame-engine/flame/commit/52710ca67ff2b6e6094e9814f2e869314e2b79e8))
+
+#### `flame_console` - `v0.2.0-dev.0`
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Remove material_ui dependency ([#4072](https://github.com/flame-engine/flame/issues/4072)). ([0a4be9c0](https://github.com/flame-engine/flame/commit/0a4be9c0c151b79a816bbc51813f8a0fbd9cb8b1))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **BREAKING** **FEAT**: Making add,addAll sync methods ([#3968](https://github.com/flame-engine/flame/issues/3968)). ([52710ca6](https://github.com/flame-engine/flame/commit/52710ca67ff2b6e6094e9814f2e869314e2b79e8))
+ - **BREAKING** **FEAT**: Rename Game.paused to Game.isPaused ([#3992](https://github.com/flame-engine/flame/issues/3992)). ([b261be32](https://github.com/flame-engine/flame/commit/b261be3205499cf6d30abdf35668509ffe3d5027))
+
+#### `flame_forge2d` - `v0.21.0-dev.0`
+
+ - **FIX**: Remove material_ui dependency where unnecesarry ([#4070](https://github.com/flame-engine/flame/issues/4070)). ([e682aba9](https://github.com/flame-engine/flame/commit/e682aba96290260ea7eac605f069594c26802bd4))
+ - **BREAKING** **FIX**: Wait for the whole component tree to load before starting the game ([#3998](https://github.com/flame-engine/flame/issues/3998)). ([34dcedc4](https://github.com/flame-engine/flame/commit/34dcedc427534a7372226f9f3a93a988a95798ba))
+
+#### `flame_isolate` - `v0.7.0-dev.0+24`
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **FEAT**: Removing prefix from asset loaders ([#4015](https://github.com/flame-engine/flame/issues/4015)). ([11972dfb](https://github.com/flame-engine/flame/commit/11972dfbaee484bcf1a99ed91aa325823560f837))
+ - **BREAKING** **FEAT**: Make `Timer` and `TimerComponent` APIs consistent ([#4076](https://github.com/flame-engine/flame/issues/4076)). ([87a0265a](https://github.com/flame-engine/flame/commit/87a0265afb7288a5a5995bbbe118bc0cbaeb23ca))
+ - **BREAKING** **FEAT**: Making add,addAll sync methods ([#3968](https://github.com/flame-engine/flame/issues/3968)). ([52710ca6](https://github.com/flame-engine/flame/commit/52710ca67ff2b6e6094e9814f2e869314e2b79e8))
+
+#### `flame_kenney_xml` - `v0.2.0-dev.0+3`
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Use full asset paths in the remaining examples and docs ([#4027](https://github.com/flame-engine/flame/issues/4027)). ([1f8bf379](https://github.com/flame-engine/flame/commit/1f8bf379c01910fd684fc8ede186db9be445e673))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **FEAT**: Removing prefix from asset loaders ([#4015](https://github.com/flame-engine/flame/issues/4015)). ([11972dfb](https://github.com/flame-engine/flame/commit/11972dfbaee484bcf1a99ed91aa325823560f837))
+ - **DOCS**: Fix two code snippets that do not compile ([#3955](https://github.com/flame-engine/flame/issues/3955)). ([6f4c27c9](https://github.com/flame-engine/flame/commit/6f4c27c9d71cfaace7b8006ea8762baf840c8e49))
+ - **BREAKING** **FEAT**: Upgrade flame_tiled to tiled 0.12.0 ([#4073](https://github.com/flame-engine/flame/issues/4073)). ([7109f155](https://github.com/flame-engine/flame/commit/7109f1553de4abb9435587f32d9b812dfa30a525))
+ - **BREAKING** **FEAT**: Rename GameWidget.controlled to GameWidget.managed ([#3961](https://github.com/flame-engine/flame/issues/3961)). ([d99224e5](https://github.com/flame-engine/flame/commit/d99224e5e23c16c86d6d26bf8a807d31c4b4bbc4))
+
+#### `flame_lottie` - `v0.5.0-dev.0+24`
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Remove material_ui dependency where unnecesarry ([#4070](https://github.com/flame-engine/flame/issues/4070)). ([e682aba9](https://github.com/flame-engine/flame/commit/e682aba96290260ea7eac605f069594c26802bd4))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **BREAKING** **FEAT**: Making add,addAll sync methods ([#3968](https://github.com/flame-engine/flame/issues/3968)). ([52710ca6](https://github.com/flame-engine/flame/commit/52710ca67ff2b6e6094e9814f2e869314e2b79e8))
+
+#### `flame_markdown` - `v0.3.0-dev.0+17`
+
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **FEAT**: Removing prefix from asset loaders ([#4015](https://github.com/flame-engine/flame/issues/4015)). ([11972dfb](https://github.com/flame-engine/flame/commit/11972dfbaee484bcf1a99ed91aa325823560f837))
+ - **BREAKING** **FEAT**: Making add,addAll sync methods ([#3968](https://github.com/flame-engine/flame/issues/3968)). ([52710ca6](https://github.com/flame-engine/flame/commit/52710ca67ff2b6e6094e9814f2e869314e2b79e8))
+
+#### `flame_network_assets` - `v0.4.0-dev.0+24`
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **BREAKING** **FEAT**: Rename GameWidget.controlled to GameWidget.managed ([#3961](https://github.com/flame-engine/flame/issues/3961)). ([d99224e5](https://github.com/flame-engine/flame/commit/d99224e5e23c16c86d6d26bf8a807d31c4b4bbc4))
+
+#### `flame_rive` - `v2.0.0-dev.0`
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **BREAKING** **FEAT**: Rename GameWidget.controlled to GameWidget.managed ([#3961](https://github.com/flame-engine/flame/issues/3961)). ([d99224e5](https://github.com/flame-engine/flame/commit/d99224e5e23c16c86d6d26bf8a807d31c4b4bbc4))
+
+#### `flame_spine` - `v0.4.0-dev.0+7`
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **BREAKING** **FEAT**: Making add,addAll sync methods ([#3968](https://github.com/flame-engine/flame/issues/3968)). ([52710ca6](https://github.com/flame-engine/flame/commit/52710ca67ff2b6e6094e9814f2e869314e2b79e8))
+ - **BREAKING** **FEAT**: Rename GameWidget.controlled to GameWidget.managed ([#3961](https://github.com/flame-engine/flame/issues/3961)). ([d99224e5](https://github.com/flame-engine/flame/commit/d99224e5e23c16c86d6d26bf8a807d31c4b4bbc4))
+
+#### `flame_sprite_fusion` - `v0.3.0-dev.0+3`
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Use full asset paths in the remaining examples and docs ([#4027](https://github.com/flame-engine/flame/issues/4027)). ([1f8bf379](https://github.com/flame-engine/flame/commit/1f8bf379c01910fd684fc8ede186db9be445e673))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **FEAT**: Removing prefix from asset loaders ([#4015](https://github.com/flame-engine/flame/issues/4015)). ([11972dfb](https://github.com/flame-engine/flame/commit/11972dfbaee484bcf1a99ed91aa325823560f837))
+ - **BREAKING** **FEAT**: Making add,addAll sync methods ([#3968](https://github.com/flame-engine/flame/issues/3968)). ([52710ca6](https://github.com/flame-engine/flame/commit/52710ca67ff2b6e6094e9814f2e869314e2b79e8))
+ - **BREAKING** **FEAT**: Rename GameWidget.controlled to GameWidget.managed ([#3961](https://github.com/flame-engine/flame/issues/3961)). ([d99224e5](https://github.com/flame-engine/flame/commit/d99224e5e23c16c86d6d26bf8a807d31c4b4bbc4))
+
+#### `flame_steering_behaviors` - `v0.3.0-dev.0+7`
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Remove material_ui dependency where unnecesarry ([#4070](https://github.com/flame-engine/flame/issues/4070)). ([e682aba9](https://github.com/flame-engine/flame/commit/e682aba96290260ea7eac605f069594c26802bd4))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **BREAKING** **FEAT**: Making add,addAll sync methods ([#3968](https://github.com/flame-engine/flame/issues/3968)). ([52710ca6](https://github.com/flame-engine/flame/commit/52710ca67ff2b6e6094e9814f2e869314e2b79e8))
+
+#### `flame_svg` - `v3.0.0-dev.0`
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([3bf30496](https://github.com/flame-engine/flame/commit/3bf304968867101cdb17aa02927b205bf46f664f))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **FEAT**: Prevent cache thrashing in class Svg by adding cache parameters/properties. ([#3956](https://github.com/flame-engine/flame/issues/3956)). ([7d8e0012](https://github.com/flame-engine/flame/commit/7d8e0012b20340079a604eba9b762a7994a3838d))
+ - **FEAT**: Removing prefix from asset loaders ([#4015](https://github.com/flame-engine/flame/issues/4015)). ([11972dfb](https://github.com/flame-engine/flame/commit/11972dfbaee484bcf1a99ed91aa325823560f837))
+ - **FEAT**: Prevent cache thrashing in class Svg by adding cache parameters/properties. ([#3956](https://github.com/flame-engine/flame/issues/3956)). ([cc47ed41](https://github.com/flame-engine/flame/commit/cc47ed41e39a40a6f5965399fed420192cb207c1))
+ - **BREAKING** **FEAT**: Remove integralSize property from class Svg, enforcing 'always true' behaviour ([#3969](https://github.com/flame-engine/flame/issues/3969)). ([9668c6db](https://github.com/flame-engine/flame/commit/9668c6db19ef9aece920c74bea5e37837005a189))
+ - **BREAKING** **FEAT**: Remove integralSize property from class Svg, enforcing 'always true' behaviour ([#3969](https://github.com/flame-engine/flame/issues/3969)). ([fa788209](https://github.com/flame-engine/flame/commit/fa788209db5f77072a76263853c4171203e65728))
+
+#### `flame_test` - `v3.0.0-dev.0`
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **FEAT**: Lock random seeds in the flutter/tests customer testing run ([#4052](https://github.com/flame-engine/flame/issues/4052)). ([c35f9d80](https://github.com/flame-engine/flame/commit/c35f9d803e9297561f53c4bad3f54182b644e0cf))
+ - **FEAT**: Add support to use convex/concave Path shapes in PolygonComponent, PolygonHitbox and Polygon ([#4048](https://github.com/flame-engine/flame/issues/4048)). ([95bc6120](https://github.com/flame-engine/flame/commit/95bc61201dc8303e09a61adf46d1a5ab52bb290b))
+ - **FEAT**: Removing prefix from asset loaders ([#4015](https://github.com/flame-engine/flame/issues/4015)). ([11972dfb](https://github.com/flame-engine/flame/commit/11972dfbaee484bcf1a99ed91aa325823560f837))
+ - **BREAKING** **FIX**: Wait for the whole component tree to load before starting the game ([#3998](https://github.com/flame-engine/flame/issues/3998)). ([34dcedc4](https://github.com/flame-engine/flame/commit/34dcedc427534a7372226f9f3a93a988a95798ba))
+ - **BREAKING** **FEAT**: Kill MouseMovementDetector and rename PointerMove* to MouseMove* ([#4011](https://github.com/flame-engine/flame/issues/4011)). ([7fd33dee](https://github.com/flame-engine/flame/commit/7fd33dee9b822bef7b3fbf0621d0f3ebdab39a5d))
+ - **BREAKING** **FEAT**: Making add,addAll sync methods ([#3968](https://github.com/flame-engine/flame/issues/3968)). ([52710ca6](https://github.com/flame-engine/flame/commit/52710ca67ff2b6e6094e9814f2e869314e2b79e8))
+
+#### `flame_tiled` - `v4.0.0-dev.0`
+
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **FEAT**: Support infinite maps in flame_tiled ([#4074](https://github.com/flame-engine/flame/issues/4074)). ([72901b4c](https://github.com/flame-engine/flame/commit/72901b4ce7f0d1e50f960cddb15de223632bfd5d))
+ - **FEAT**: Removing prefix from asset loaders ([#4015](https://github.com/flame-engine/flame/issues/4015)). ([11972dfb](https://github.com/flame-engine/flame/commit/11972dfbaee484bcf1a99ed91aa325823560f837))
+ - **BREAKING** **FEAT**: Make flame_tiled layers components so that components can be added between them ([#3653](https://github.com/flame-engine/flame/issues/3653)). ([6b93c663](https://github.com/flame-engine/flame/commit/6b93c663c7242330f0f4446e9881ea58dc31b8b8))
+ - **BREAKING** **FEAT**: Upgrade flame_tiled to tiled 0.12.0 ([#4073](https://github.com/flame-engine/flame/issues/4073)). ([7109f155](https://github.com/flame-engine/flame/commit/7109f1553de4abb9435587f32d9b812dfa30a525))
+
+#### `flame_typled` - `v0.2.0-dev.0`
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **BREAKING** **FEAT**: Rename GameWidget.controlled to GameWidget.managed ([#3961](https://github.com/flame-engine/flame/issues/3961)). ([d99224e5](https://github.com/flame-engine/flame/commit/d99224e5e23c16c86d6d26bf8a807d31c4b4bbc4))
+
+#### `behavior_tree` - `v0.1.6-dev.0+2`
+
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+
+#### `flame_audio` - `v2.13.0-dev.0`
+
+ - **FIX**: Use full asset paths in the remaining examples and docs ([#4027](https://github.com/flame-engine/flame/issues/4027)). ([1f8bf379](https://github.com/flame-engine/flame/commit/1f8bf379c01910fd684fc8ede186db9be445e673))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **FEAT**: Removing prefix from asset loaders ([#4015](https://github.com/flame-engine/flame/issues/4015)). ([11972dfb](https://github.com/flame-engine/flame/commit/11972dfbaee484bcf1a99ed91aa325823560f837))
+
+#### `flame_cli` - `v0.1.1-dev.0`
+
+ - **FEAT**: Add flame create, the ignite_cli scaffolding as a flutter create style command ([#4059](https://github.com/flame-engine/flame/issues/4059)). ([fe9922e8](https://github.com/flame-engine/flame/commit/fe9922e8fcab36364f15ae4b2a7c36e1a44dd66b))
+ - **FEAT**: Add input, world snapshot and diff commands to flame_cli ([#4057](https://github.com/flame-engine/flame/issues/4057)). ([60996d95](https://github.com/flame-engine/flame/commit/60996d95175d56861a328bd1faef65ad55128b38))
+ - **FEAT**: Add reload, restart and logs commands to flame_cli ([#4056](https://github.com/flame-engine/flame/issues/4056)). ([17c35203](https://github.com/flame-engine/flame/commit/17c352034b28b03523d2b73ad27c9253a0b3b65d))
+ - **FEAT**: Add inspect, set, pause, resume, step, debug and overlay commands to flame_cli ([#4055](https://github.com/flame-engine/flame/issues/4055)). ([8bbd6b3a](https://github.com/flame-engine/flame/commit/8bbd6b3aae67c621985fda91a44d37614f6a1540))
+ - **FEAT**: Add game snapshots and a new flame_cli package to take them from the terminal ([#4054](https://github.com/flame-engine/flame/issues/4054)). ([1d17085f](https://github.com/flame-engine/flame/commit/1d17085ffc37a6923d6a3f6a866329a20c50c802))
+
+#### `flame_fire_atlas` - `v1.9.0-dev.0`
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Use full asset paths in the remaining examples and docs ([#4027](https://github.com/flame-engine/flame/issues/4027)). ([1f8bf379](https://github.com/flame-engine/flame/commit/1f8bf379c01910fd684fc8ede186db9be445e673))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **FEAT**: Removing prefix from asset loaders ([#4015](https://github.com/flame-engine/flame/issues/4015)). ([11972dfb](https://github.com/flame-engine/flame/commit/11972dfbaee484bcf1a99ed91aa325823560f837))
+
+#### `flame_gamepads` - `v0.1.3-dev.0`
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Remove material_ui dependency where unnecesarry ([#4070](https://github.com/flame-engine/flame/issues/4070)). ([e682aba9](https://github.com/flame-engine/flame/commit/e682aba96290260ea7eac605f069594c26802bd4))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+
+#### `flame_lint` - `v1.4.4-dev.0`
+
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+
+#### `flame_noise` - `v0.3.4-dev.0+24`
+
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+
+#### `flame_riverpod` - `v5.5.6-dev.0`
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Remove material_ui dependency where unnecesarry ([#4070](https://github.com/flame-engine/flame/issues/4070)). ([e682aba9](https://github.com/flame-engine/flame/commit/e682aba96290260ea7eac605f069594c26802bd4))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+
+#### `flame_splash_screen` - `v0.3.2-dev.0+4`
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+
+#### `flame_texturepacker` - `v5.2.0-dev.0`
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Stop stripping trailing digits from sprite names in flame_texturepacker ([#3869](https://github.com/flame-engine/flame/issues/3869)). ([ff55a0ea](https://github.com/flame-engine/flame/commit/ff55a0ea146527ce560300cd98b4f96f7940bdea))
+ - **FIX**: Use full asset paths in the remaining examples and docs ([#4027](https://github.com/flame-engine/flame/issues/4027)). ([1f8bf379](https://github.com/flame-engine/flame/commit/1f8bf379c01910fd684fc8ede186db9be445e673))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **FEAT**: Removing prefix from asset loaders ([#4015](https://github.com/flame-engine/flame/issues/4015)). ([11972dfb](https://github.com/flame-engine/flame/commit/11972dfbaee484bcf1a99ed91aa325823560f837))
+
+#### `jenny` - `v1.5.2-dev.0`
+
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+
+
 ## 2026-08-30
 
 ### Changes

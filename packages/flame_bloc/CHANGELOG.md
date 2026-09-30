@@ -1,3 +1,17 @@
+## 2.0.0-dev.0
+
+> Note: This release has breaking changes.
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Remove material_ui dependency where unnecesarry ([#4070](https://github.com/flame-engine/flame/issues/4070)). ([e682aba9](https://github.com/flame-engine/flame/commit/e682aba96290260ea7eac605f069594c26802bd4))
+ - **FIX**: Use full asset paths in the remaining examples and docs ([#4027](https://github.com/flame-engine/flame/issues/4027)). ([1f8bf379](https://github.com/flame-engine/flame/commit/1f8bf379c01910fd684fc8ede186db9be445e673))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **FEAT**: Support allowsMultiPointerDrag on DragCallbacks ([#4033](https://github.com/flame-engine/flame/issues/4033)). ([0b608950](https://github.com/flame-engine/flame/commit/0b6089503f85a0dbf8f90a5616874a55ffaa81f9))
+ - **FEAT**: Removing prefix from asset loaders ([#4015](https://github.com/flame-engine/flame/issues/4015)). ([11972dfb](https://github.com/flame-engine/flame/commit/11972dfbaee484bcf1a99ed91aa325823560f837))
+ - **BREAKING** **FEAT**: Make `Timer` and `TimerComponent` APIs consistent ([#4076](https://github.com/flame-engine/flame/issues/4076)). ([87a0265a](https://github.com/flame-engine/flame/commit/87a0265afb7288a5a5995bbbe118bc0cbaeb23ca))
+ - **BREAKING** **FEAT**: Return a list instead of a set from the collision detection methods ([#4003](https://github.com/flame-engine/flame/issues/4003)). ([698f2619](https://github.com/flame-engine/flame/commit/698f2619ed741276898c8dd71d58c109cd347c5c))
+ - **BREAKING** **FEAT**: Making add,addAll sync methods ([#3968](https://github.com/flame-engine/flame/issues/3968)). ([52710ca6](https://github.com/flame-engine/flame/commit/52710ca67ff2b6e6094e9814f2e869314e2b79e8))
+
 ## 1.12.24
 
  - **FIX**: Bloc instance was null on initial state ([#3921](https://github.com/flame-engine/flame/issues/3921)). ([8adeea69](https://github.com/flame-engine/flame/commit/8adeea69764002e763a4a9236945c2b8f57a8a3b))

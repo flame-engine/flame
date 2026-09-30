@@ -1,3 +1,13 @@
+## 0.7.0-dev.0+24
+
+> Note: This release has breaking changes.
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **FEAT**: Removing prefix from asset loaders ([#4015](https://github.com/flame-engine/flame/issues/4015)). ([11972dfb](https://github.com/flame-engine/flame/commit/11972dfbaee484bcf1a99ed91aa325823560f837))
+ - **BREAKING** **FEAT**: Make `Timer` and `TimerComponent` APIs consistent ([#4076](https://github.com/flame-engine/flame/issues/4076)). ([87a0265a](https://github.com/flame-engine/flame/commit/87a0265afb7288a5a5995bbbe118bc0cbaeb23ca))
+ - **BREAKING** **FEAT**: Making add,addAll sync methods ([#3968](https://github.com/flame-engine/flame/issues/3968)). ([52710ca6](https://github.com/flame-engine/flame/commit/52710ca67ff2b6e6094e9814f2e869314e2b79e8))
+
 ## 0.6.3+23
 
  - Update a dependency to the latest release.

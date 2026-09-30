@@ -1,3 +1,16 @@
+## 3.0.0-dev.0
+
+> Note: This release has breaking changes.
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **FEAT**: Lock random seeds in the flutter/tests customer testing run ([#4052](https://github.com/flame-engine/flame/issues/4052)). ([c35f9d80](https://github.com/flame-engine/flame/commit/c35f9d803e9297561f53c4bad3f54182b644e0cf))
+ - **FEAT**: Add support to use convex/concave Path shapes in PolygonComponent, PolygonHitbox and Polygon ([#4048](https://github.com/flame-engine/flame/issues/4048)). ([95bc6120](https://github.com/flame-engine/flame/commit/95bc61201dc8303e09a61adf46d1a5ab52bb290b))
+ - **FEAT**: Removing prefix from asset loaders ([#4015](https://github.com/flame-engine/flame/issues/4015)). ([11972dfb](https://github.com/flame-engine/flame/commit/11972dfbaee484bcf1a99ed91aa325823560f837))
+ - **BREAKING** **FIX**: Wait for the whole component tree to load before starting the game ([#3998](https://github.com/flame-engine/flame/issues/3998)). ([34dcedc4](https://github.com/flame-engine/flame/commit/34dcedc427534a7372226f9f3a93a988a95798ba))
+ - **BREAKING** **FEAT**: Kill MouseMovementDetector and rename PointerMove* to MouseMove* ([#4011](https://github.com/flame-engine/flame/issues/4011)). ([7fd33dee](https://github.com/flame-engine/flame/commit/7fd33dee9b822bef7b3fbf0621d0f3ebdab39a5d))
+ - **BREAKING** **FEAT**: Making add,addAll sync methods ([#3968](https://github.com/flame-engine/flame/issues/3968)). ([52710ca6](https://github.com/flame-engine/flame/commit/52710ca67ff2b6e6094e9814f2e869314e2b79e8))
+
 ## 2.3.0
 
  - **FEAT**: OpacityEffect support on text components ([#3940](https://github.com/flame-engine/flame/issues/3940)). ([749c73a4](https://github.com/flame-engine/flame/commit/749c73a45be5978cca53ce3737fe2d2382289306))
