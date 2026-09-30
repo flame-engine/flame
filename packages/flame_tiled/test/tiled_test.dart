@@ -79,9 +79,13 @@ void main() {
         expect(tiled.size, Vector2(512.0, 2048.0));
       });
 
-      test('from constructor', () {
+      test('from constructor', () async {
+        final tileMap = await RenderableTiledMap.fromFile(
+          'assets/tiles/map.tmx',
+          Vector2.all(16),
+        );
         final map = TiledComponent(
-          tiled.tileMap,
+          tileMap,
           position: Vector2(10, 20),
           anchor: Anchor.bottomCenter,
           children: [tiled],
@@ -91,11 +95,21 @@ void main() {
         );
 
         expect(tiled.parent, map);
+        expect(tileMap.parent, map);
         expect(map.anchor, Anchor.bottomCenter);
         expect(map.angle, 1.4);
         expect(map.priority, 2);
         expect(map.position, Vector2(10, 20));
         expect(map.scale, Vector2(1.5, 2.0));
+      });
+
+      test('a map can only belong to one component', () {
+        expect(
+          () => TiledComponent(tiled.tileMap),
+          failsAssert(
+            'A RenderableTiledMap can only belong to one TiledComponent',
+          ),
+        );
       });
     });
   });
@@ -1375,6 +1389,17 @@ void main() {
         boxes.absolutePosition.y,
         closeTo(6 + 10 + 160 * (1 - 3.8 * 1.1), 1e-4),
       );
+    });
+
+    test('a map outside of the world uses the camera of the game', () async {
+      component.removeFromParent();
+      game.add(component);
+      await game.ready();
+      game.camera.viewfinder.position = Vector2(400, 160);
+      await renderGameToPng(game);
+
+      final middle = component.tileMap.getRenderableLayer('Middle')!;
+      expect(middle.position, Vector2(-200, 0));
     });
 
     test('a scaled map is displaced in its own coordinate space', () async {

@@ -19,6 +19,9 @@ import 'package:tiled/tiled.dart';
 class TiledComponent<T extends FlameGame> extends PositionComponent
     with HasGameRef<T> {
   /// The map that this component renders, which is a child of this component.
+  ///
+  /// A map holds the state of its layers, so it can only belong to one
+  /// [TiledComponent] at a time.
   final RenderableTiledMap tileMap;
 
   /// This property **cannot** be reassigned at runtime. To make the
@@ -52,7 +55,11 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     Iterable<Component>? children,
     super.priority,
     super.key,
-  }) : super(size: tileMap.size) {
+  }) : assert(
+         tileMap.parent == null,
+         'A RenderableTiledMap can only belong to one TiledComponent',
+       ),
+       super(size: tileMap.size) {
     add(tileMap);
     if (children != null) {
       addAll(children);

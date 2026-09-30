@@ -981,6 +981,9 @@ As a consequence of this, a few things changed:
   available through `absolutePosition`.
 - The parallax scrolling reference point is now the center of the view, the same as in Tiled, so
   layers with a parallax factor may render at a slightly different position than before.
-- The camera for the parallax calculation is the camera that the map is rendered through, so
+- The camera for the parallax calculation is the camera that the map is rendered through, falling
+  back to the camera of the game for a map that is not rendered through a camera, so
   `TiledComponent` no longer looks up the first camera of the game in `onLoad`. Set
-  `RenderableTiledMap.camera` only when the map is rendered outside of a camera.
+  `RenderableTiledMap.camera` only when the map is rendered outside of a game.
+- A `RenderableTiledMap` can only belong to one `TiledComponent`, since it is a child of the
+  component. Constructing a second `TiledComponent` with the same map fails an assertion.

@@ -45,7 +45,13 @@ Paint _defaultLayerPaintFactory(double opacity) =>
 ///  - [Layer.parallaxY]
 ///
 /// The parallax factors are applied against the [CameraComponent] that the map
-/// is rendered through, or against [camera] when it is set.
+/// is rendered through, or against [camera] when it is set. A map that is not
+/// rendered through a camera, for example one added directly to the game,
+/// uses the camera of the game.
+///
+/// The map draws its layers as children, so when it is rendered outside of a
+/// component tree, call [renderTree] and [updateTree] rather than [render]
+/// and [update].
 ///
 /// {@endtemplate}
 class RenderableTiledMap extends Component {
@@ -76,8 +82,9 @@ class RenderableTiledMap extends Component {
   /// against.
   ///
   /// When this is null, which is the default, the camera that is currently
-  /// rendering the map is used, so it only needs to be set when the map is
-  /// rendered outside of a [CameraComponent].
+  /// rendering the map is used, falling back to the camera of the game when
+  /// the map is not rendered through a camera. It only needs to be set when
+  /// the map is rendered outside of a game.
   CameraComponent? camera;
 
   /// Paint for the map's background color, if there is one
@@ -522,7 +529,8 @@ class RenderableTiledMap extends Component {
   /// Positions the layers for the view of the camera before rendering them.
   @override
   void renderTree(Canvas canvas) {
-    final camera = this.camera ?? CameraComponent.currentCamera;
+    final camera =
+        this.camera ?? CameraComponent.currentCamera ?? findGame()?.camera;
     final Rect visibleRect;
     if (camera == null) {
       _viewCenter.setZero();
@@ -563,8 +571,9 @@ class RenderableTiledMap extends Component {
     return Rect.fromLTRB(minX, minY, maxX, maxY);
   }
 
-  /// Renders the background color of the map, the layers are rendered as
-  /// children of this component.
+  /// Renders the background color of the map. The layers are rendered as
+  /// children of this component, so use [renderTree] to draw the whole map
+  /// onto a canvas.
   @override
   void render(Canvas canvas) {
     if (_backgroundPaint != null) {
