@@ -15,8 +15,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_riverpod: ^3.0.3
-
   material_ui: any
+
 dev_dependencies:
   flame_lint: ^1.4.3
 

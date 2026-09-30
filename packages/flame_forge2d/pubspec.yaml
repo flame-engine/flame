@@ -28,6 +28,5 @@ dev_dependencies:
   flame_test: ^2.3.0
   flutter_test:
     sdk: flutter
-  material_ui: any
   mocktail: ^1.0.4
   test: any
