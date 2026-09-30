@@ -10,6 +10,7 @@ read the PNG image:
 
 ```shell
 flame run -d macos
+flame pause
 flame snapshot --output snapshot.png
 ```
 
@@ -119,20 +120,127 @@ flame snapshot --component 220731871
 
 ### tree
 
-Prints the component tree of the game, together with the id of every component:
+Prints the component tree of the game, together with the id and the attributes of every
+component:
 
 ```shell
 $ flame tree
 MyGame (id: 6126309)
-  World (id: 729356887)
-    Player (id: 220731871)
+  World (id: 729356887) priority -2147483647
+    Player (id: 220731871) position 100,200, size 32,32, anchor center
+    Enemy (id: 220731872) position 300,200, size 32,32, angle 1.57, anchor center
   CameraComponent (id: 167418721)
     Viewfinder (id: 429571719)
-    MaxViewport (id: 703047016)
+    MaxViewport (id: 703047016) size 800,600
 ```
 
-It takes the same `--uri` option as `snapshot`. The id of a component is its `hashCode`, so it
-stays the same for as long as the component exists, but it changes when the game is restarted.
+Attributes with their default value, such as an angle of `0` or the `topLeft` anchor, are left
+out. The id of a component is its `hashCode`, so it stays the same for as long as the component
+exists, but it changes when the game is restarted.
+
+These are the options, in addition to `--uri`:
+
+- `--filter` (`-f`): A regular expression, matched case insensitively against the type of the
+  components. Only the matching components are shown, together with their ancestors and their
+  children. For example `flame tree --filter enemy` shows all the enemies and where they are in
+  the tree.
+- `--depth` (`-d`): The number of levels below the game to show, for example `1` shows only the
+  direct children of the game.
+- `--json`: Prints the tree as JSON instead of text. Every node has an `id`, a `name`, the
+  `toString` of the component, its `attributes` and its `children`.
+
+
+### inspect
+
+Prints the details of a single component:
+
+```shell
+$ flame inspect 220731871
+type: Player
+id: 220731871
+parent: 729356887
+children: 2
+debugMode: false
+priority: 0
+position: 100.0, 200.0
+size: 32.0, 32.0
+angle: 0.0
+scale: 1.0, 1.0
+anchor: center
+toString: Player()
+```
+
+The position, size, angle, scale and anchor are only shown for a `PositionComponent`. Pass
+`--json` to get the same information as JSON.
+
+
+### set
+
+Changes the attributes of a component and prints its details afterwards:
+
+```shell
+flame set 220731871 --position 150,200 --angle 0.5
+```
+
+These are the attributes that can be changed:
+
+- `--position`: The position, as `x,y`.
+- `--size`: The size, as `width,height`.
+- `--angle`: The angle in radians.
+- `--scale`: The scale, as `x,y` or as a single number that is used for both.
+- `--anchor`: The anchor, as a name like `center` or `bottomRight`, or as `x,y` between 0 and 1.
+- `--priority`: The render priority.
+
+The priority can be changed on any component, the other attributes only on a `PositionComponent`.
+
+
+### pause, resume and step
+
+The game loop can be paused and resumed, and a paused game can be advanced frame by frame:
+
+```shell
+flame pause
+flame step --frames 60
+flame snapshot
+flame resume
+```
+
+`step` takes `--frames` (`-n`) for the number of frames to advance, and `--time` (`-t`) for the
+time in seconds that passes in each frame, which is a sixtieth of a second by default. It pauses
+the game first if it is running.
+
+Pausing the game before taking a snapshot makes the snapshot stable, and stepping a fixed number of
+frames between snapshots makes the comparison repeatable.
+
+
+### debug
+
+Shows or changes the debug mode, which renders hitboxes, bounds and other debug information on top
+of the components:
+
+```shell
+flame debug on
+flame snapshot
+flame debug off
+```
+
+Without `on` or `off` it prints the current state. Pass `--component <id>` to change the debug
+mode of a single component instead of the whole game.
+
+
+### overlays and overlay
+
+`overlays` lists the registered overlays of the game and which of them are shown:
+
+```shell
+$ flame overlays
+PauseMenu (shown)
+Settings
+```
+
+`overlay show <name>` and `overlay hide <name>` show or hide a single overlay without affecting
+the others, and `overlay only <name>` shows one overlay and hides all the others. Overlays are
+Flutter widgets, so they are not part of the images that `snapshot` takes.
 
 
 ## Exit codes

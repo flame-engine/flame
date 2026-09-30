@@ -50,11 +50,23 @@ Then render the whole game to a PNG image:
 flame snapshot --output snapshot.png
 ```
 
-List the components together with their ids, and render a single component:
+List the components together with their ids and attributes, and render a single component:
 
 ```shell
 flame tree
 flame snapshot --component 220731871
+```
+
+Pause the game, step it forward a number of frames, inspect and change components, turn on the
+debug rendering and show or hide overlays:
+
+```shell
+flame pause
+flame step --frames 60
+flame inspect 220731871
+flame set 220731871 --position 100,200
+flame debug on
+flame overlay show PauseMenu
 ```
 
 If the game was started in another way, pass the Dart VM Service URI that `flutter run` prints to
