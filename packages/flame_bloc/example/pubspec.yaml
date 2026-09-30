@@ -17,8 +17,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.2
-
   material_ui: any
+
 dev_dependencies:
   flame_lint: ^1.4.3
   flutter_test:

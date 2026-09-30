@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/foundation.dart';
 
 /// {@template steerable}
 /// Mixin that makes an [Entity] steerable.
