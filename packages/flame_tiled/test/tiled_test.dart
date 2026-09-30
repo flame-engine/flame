@@ -1168,6 +1168,44 @@ void main() {
         );
       });
     }
+
+    // Every flip and rotation combination of the oversized tile, from left to
+    // right: none, H, V, H+V, D, D+H, D+V and D+H+V (D is the diagonal flip).
+    // The black corner marker shows how each tile is oriented.
+    for (final mapType in [
+      'orthogonal',
+      'isometric',
+      'staggered',
+      'hexagonal',
+    ]) {
+      test('renders flipped tiles like Tiled ($mapType)', () async {
+        final bundle = TestAssetBundle(
+          imageNames: [
+            'oversized_demo_cell_$mapType.png',
+            'oversized_demo_tile_$mapType.png',
+          ],
+          stringNames: ['oversized_demo_flips_$mapType.tmx'],
+        );
+        final component = await TiledComponent.load(
+          'assets/tiles/oversized_demo_flips_$mapType.tmx',
+          Vector2(
+            mapType == 'orthogonal' || mapType == 'hexagonal' ? 32 : 64,
+            32,
+          ),
+          bundle: bundle,
+          images: Images(bundle: bundle),
+        );
+        final size = component.size;
+        final pngData = await renderMapRegionToPng(
+          component.tileMap,
+          Rect.fromLTRB(-96, -128, size.x + 96, size.y + 32),
+        );
+        await expectLater(
+          pngData,
+          matchesGoldenFile('goldens/oversized_demo_flips_$mapType.png'),
+        );
+      });
+    }
   });
 
   group('RenderableTiledMap.TileData', () {
