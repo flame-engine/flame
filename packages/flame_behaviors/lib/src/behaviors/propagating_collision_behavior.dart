@@ -1,7 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/foundation.dart';
 
 /// {@template collision_behavior}
 /// This behavior is used for collision between entities. The

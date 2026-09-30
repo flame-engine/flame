@@ -1,7 +1,7 @@
 import 'package:flame/extensions.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flame_steering_behaviors/flame_steering_behaviors.dart';
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/foundation.dart';
 
 /// {@template steering}
 /// Mixin that turns a [Behavior] into a steering behavior for a [Steerable].
