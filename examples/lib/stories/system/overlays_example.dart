@@ -1,4 +1,3 @@
-import 'package:dashbook/dashbook.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -95,17 +94,22 @@ Widget _secondaryMenuBuilder(BuildContext buildContext, OverlaysExample game) {
   );
 }
 
-Widget overlayBuilder(DashbookContext ctx) {
-  return GameWidget<OverlaysExample>(
-    game: OverlaysExample()..isPaused = true,
-    overlayBuilderMap: {
-      'PauseMenu': (context, game) => _pauseMenuBuilder(
-        context,
-        game,
-        () => game.toggleMenu(),
-      ),
-      'SecondaryMenu': _secondaryMenuBuilder,
-    },
-    initialActiveOverlays: const ['PauseMenu'],
-  );
+class OverlaysExampleWidget extends StatelessWidget {
+  const OverlaysExampleWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GameWidget<OverlaysExample>.managed(
+      gameFactory: () => OverlaysExample()..isPaused = true,
+      overlayBuilderMap: {
+        'PauseMenu': (context, game) => _pauseMenuBuilder(
+          context,
+          game,
+          () => game.toggleMenu(),
+        ),
+        'SecondaryMenu': _secondaryMenuBuilder,
+      },
+      initialActiveOverlays: const ['PauseMenu'],
+    );
+  }
 }

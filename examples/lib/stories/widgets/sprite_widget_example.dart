@@ -1,56 +1,63 @@
-import 'dart:math';
-
-import 'package:dashbook/dashbook.dart';
-import 'package:examples/stories/widgets/paints.dart';
 import 'package:flame/widgets.dart';
 import 'package:material_ui/material_ui.dart';
 
-final anchorOptions = Anchor.values.map((e) => e.name).toList();
+class SpriteWidgetExample extends StatelessWidget {
+  const SpriteWidgetExample({
+    required this.width,
+    required this.height,
+    required this.angle,
+    required this.anchor,
+    required this.paint,
+    super.key,
+  });
 
-Widget spriteWidgetBuilder(DashbookContext ctx) {
-  return Container(
-    width: ctx.numberProperty('container width', 400),
-    height: ctx.numberProperty('container height', 200),
-    decoration: BoxDecoration(border: Border.all(color: Colors.amber)),
-    child: SpriteWidget.asset(
-      path: 'assets/images/shield.png',
-      angle: pi / 180 * ctx.numberProperty('angle (deg)', 0),
-      anchor: Anchor.valueOf(
-        ctx.listProperty('anchor', 'center', anchorOptions),
+  final double width;
+  final double height;
+  final double angle;
+  final Anchor anchor;
+  final Paint? paint;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(border: Border.all(color: Colors.amber)),
+      child: SpriteWidget.asset(
+        path: 'assets/images/shield.png',
+        angle: angle,
+        anchor: anchor,
+        paint: paint,
       ),
-      paint:
-          paintList[paintChoices.indexOf(
-            ctx.listProperty(
-              'paint',
-              'none',
-              paintChoices,
-            ),
-          )],
-    ),
-  );
+    );
+  }
 }
 
-Widget spriteWidgetWithSizeBuilder(DashbookContext ctx) {
-  return DecoratedBox(
-    decoration: BoxDecoration(border: Border.all(color: Colors.amber)),
-    child: SpriteWidget.asset(
-      size: Size(
-        ctx.numberProperty('width', 400),
-        ctx.numberProperty('height', 200),
+class SizedSpriteWidgetExample extends StatelessWidget {
+  const SizedSpriteWidgetExample({
+    required this.size,
+    required this.angle,
+    required this.anchor,
+    required this.paint,
+    super.key,
+  });
+
+  final Size size;
+  final double angle;
+  final Anchor anchor;
+  final Paint? paint;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(border: Border.all(color: Colors.amber)),
+      child: SpriteWidget.asset(
+        size: size,
+        path: 'assets/images/shield.png',
+        angle: angle,
+        anchor: anchor,
+        paint: paint,
       ),
-      path: 'assets/images/shield.png',
-      angle: pi / 180 * ctx.numberProperty('angle (deg)', 0),
-      anchor: Anchor.valueOf(
-        ctx.listProperty('anchor', 'center', anchorOptions),
-      ),
-      paint:
-          paintList[paintChoices.indexOf(
-            ctx.listProperty(
-              'paint',
-              'none',
-              paintChoices,
-            ),
-          )],
-    ),
-  );
+    );
+  }
 }

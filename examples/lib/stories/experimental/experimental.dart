@@ -1,5 +1,5 @@
-import 'package:dashbook/dashbook.dart';
 import 'package:examples/commons/commons.dart';
+import 'package:examples/commons/example_use_case.dart';
 import 'package:examples/stories/experimental/layout_component_example_1.dart';
 import 'package:examples/stories/experimental/layout_component_example_2.dart';
 import 'package:examples/stories/experimental/layout_component_example_3.dart';
@@ -8,112 +8,135 @@ import 'package:examples/stories/experimental/shapes.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/rendering.dart';
+import 'package:widgetbook/widgetbook.dart';
 
-void addExperimentalStories(Dashbook dashbook) {
-  dashbook
-      .storiesOf('Experimental')
-      .add(
-        'Shapes',
-        (_) => GameWidget(game: ShapesExample()),
+WidgetbookComponent experimentalStories() {
+  return WidgetbookComponent(
+    name: 'Experimental',
+    useCases: [
+      ExampleUseCase(
+        name: 'Shapes',
+        builder: (_) => GameWidget(game: ShapesExample()),
         codeLink: baseLink('experimental/shapes.dart'),
         info: ShapesExample.description,
-      )
-      .add(
-        'Layout Components 1',
-        (DashbookContext context) {
+      ),
+      ExampleUseCase(
+        name: 'Layout Components 1',
+        builder: (context) {
           return GameWidget(
             game: LayoutComponentExample1(
-              mainAxisAlignment: context.listProperty(
-                'MainAxisAlignment',
-                MainAxisAlignment.values.first,
-                MainAxisAlignment.values,
+              mainAxisAlignment: context.knobs.object.dropdown(
+                label: 'MainAxisAlignment',
+                initialOption: MainAxisAlignment.values.first,
+                options: MainAxisAlignment.values,
+                labelBuilder: (value) => value.name,
               ),
-              crossAxisAlignment: context.listProperty(
-                'CrossAxisAlignment',
-                CrossAxisAlignment.values.first,
-                CrossAxisAlignment.values,
+              crossAxisAlignment: context.knobs.object.dropdown(
+                label: 'CrossAxisAlignment',
+                initialOption: CrossAxisAlignment.values.first,
+                options: CrossAxisAlignment.values,
+                labelBuilder: (value) => value.name,
               ),
-              direction: context.listProperty(
-                'Direction',
-                Direction.values.first,
-                Direction.values,
+              direction: context.knobs.object.dropdown(
+                label: 'Direction',
+                initialOption: Direction.values.first,
+                options: Direction.values,
+                labelBuilder: (value) => value.name,
               ),
-              gap: context.numberProperty('Gap', 0),
-              demoSize: context.optionsProperty<LayoutComponentExampleSize>(
-                'Size',
-                LayoutComponentExampleSize.small,
-                LayoutComponentExampleSize.values.map((exampleSize) {
-                  return PropertyOption(exampleSize.name, exampleSize);
-                }).toList(),
+              gap: context.knobs.double.input(
+                label: 'Gap',
               ),
-              padding: context.edgeInsetsProperty(
-                'Padding',
-                const EdgeInsets.all(10),
+              demoSize: context.knobs.object.dropdown(
+                label: 'Size',
+                initialOption: LayoutComponentExampleSize.small,
+                options: LayoutComponentExampleSize.values,
+                labelBuilder: (size) => size.name,
               ),
-              expandedMode: context.boolProperty(
-                'Wrap with ExpandedComponent',
-                false,
+              padding: EdgeInsets.fromLTRB(
+                context.knobs.double.input(
+                  label: 'Padding left',
+                  initialValue: 10,
+                ),
+                context.knobs.double.input(
+                  label: 'Padding top',
+                  initialValue: 10,
+                ),
+                context.knobs.double.input(
+                  label: 'Padding right',
+                  initialValue: 10,
+                ),
+                context.knobs.double.input(
+                  label: 'Padding bottom',
+                  initialValue: 10,
+                ),
               ),
-              paddingInflateChild: context.boolProperty(
-                'Padding Component inflates child',
-                false,
+              expandedMode: context.knobs.boolean(
+                label: 'Wrap with ExpandedComponent',
+              ),
+              paddingInflateChild: context.knobs.boolean(
+                label: 'Padding Component inflates child',
               ),
             ),
           );
         },
         codeLink: baseLink('experimental/layout_components.dart'),
         info: LayoutComponentExample1.description,
-      )
-      .add(
-        'Layout Components 2',
-        (DashbookContext context) {
+      ),
+      ExampleUseCase(
+        name: 'Layout Components 2',
+        builder: (context) {
           return GameWidget(
             game: LayoutComponentExample2(
-              mainAxisAlignment: context.listProperty(
-                'MainAxisAlignment',
-                MainAxisAlignment.values.first,
-                MainAxisAlignment.values,
+              mainAxisAlignment: context.knobs.object.dropdown(
+                label: 'MainAxisAlignment',
+                initialOption: MainAxisAlignment.values.first,
+                options: MainAxisAlignment.values,
+                labelBuilder: (value) => value.name,
               ),
-              crossAxisAlignment: context.listProperty(
-                'CrossAxisAlignment',
-                CrossAxisAlignment.stretch,
-                CrossAxisAlignment.values,
+              crossAxisAlignment: context.knobs.object.dropdown(
+                label: 'CrossAxisAlignment',
+                initialOption: CrossAxisAlignment.stretch,
+                options: CrossAxisAlignment.values,
+                labelBuilder: (value) => value.name,
               ),
-              direction: context.listProperty(
-                'Direction',
-                Direction.values.first,
-                Direction.values,
+              direction: context.knobs.object.dropdown(
+                label: 'Direction',
+                initialOption: Direction.values.first,
+                options: Direction.values,
+                labelBuilder: (value) => value.name,
               ),
-              gap: context.numberProperty('Gap', 0),
-              demoSize: context.optionsProperty<LayoutComponentExampleSize>(
-                'Size',
-                LayoutComponentExampleSize.small,
-                LayoutComponentExampleSize.values.map((exampleSize) {
-                  return PropertyOption(exampleSize.name, exampleSize);
-                }).toList(),
+              gap: context.knobs.double.input(
+                label: 'Gap',
+              ),
+              demoSize: context.knobs.object.dropdown(
+                label: 'Size',
+                initialOption: LayoutComponentExampleSize.small,
+                options: LayoutComponentExampleSize.values,
+                labelBuilder: (size) => size.name,
               ),
             ),
           );
         },
         codeLink: baseLink('experimental/layout_components.dart'),
         info: LayoutComponentExample2.description,
-      )
-      .add(
-        'Layout Components 3',
-        (DashbookContext context) {
+      ),
+      ExampleUseCase(
+        name: 'Layout Components 3',
+        builder: (context) {
           return GameWidget(
             game: LayoutComponentExample3(
-              demoSize: context.optionsProperty<LayoutComponentExampleSize>(
-                'Size',
-                LayoutComponentExampleSize.small,
-                LayoutComponentExampleSize.values.map((exampleSize) {
-                  return PropertyOption(exampleSize.name, exampleSize);
-                }).toList(),
+              demoSize: context.knobs.object.dropdown(
+                label: 'Size',
+                initialOption: LayoutComponentExampleSize.small,
+                options: LayoutComponentExampleSize.values,
+                labelBuilder: (size) => size.name,
               ),
             ),
           );
         },
         codeLink: baseLink('experimental/layout_components.dart'),
         info: LayoutComponentExample3.description,
-      );
+      ),
+    ],
+  );
 }

@@ -13,7 +13,6 @@ environment:
 dependencies:
   collection: ^1.18.0
   crystal_ball: ^0.1.0
-  dashbook: ^0.1.18
   flame: ^1.38.0
   flame_audio: ^2.12.2
   flame_forge2d: ^0.20.0
@@ -34,7 +33,9 @@ dependencies:
   provider: ^6.1.2
   rogue_shooter: ^0.1.0
   trex_game: ^0.1.0
+  url_launcher: ^6.3.0
   web: ^1.1.0
+  widgetbook: ^3.25.0
 
 dev_dependencies:
   flame_lint: ^1.4.3
