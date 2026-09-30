@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:examples/commons/path_component.dart';
 import 'package:examples/commons/paths.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -92,11 +91,19 @@ class MyPathComponent extends PathComponent
     super.position,
     super.scale,
     super.angle,
-  }) : super(anchor: .center, renderHitboxes: true);
+  }) : super(anchor: .center) {
+    // The hitbox follows the same path, and it is rendered so that you can
+    // see the polygons that receive the gestures.
+    add(
+      PathHitbox(path: path)
+        ..renderShape = true
+        ..paint = whiteStroke,
+    );
+  }
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     baseColor = ColorExtension.random(withAlpha: 0.8, base: 100);
     paint.color = baseColor;
   }
@@ -131,7 +138,7 @@ class MyShapeComponent extends PositionComponent
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     baseColor = ColorExtension.random(withAlpha: 0.8, base: 100);
     hitbox.paint.color = baseColor;
     hitbox.renderShape = true;

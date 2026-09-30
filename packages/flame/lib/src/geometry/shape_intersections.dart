@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 
@@ -25,6 +26,135 @@ abstract class Intersections<
     } else {
       throw 'Unsupported shapes';
     }
+  }
+}
+
+/// The distinct intersection points of the [edgesA] and the [edgesB].
+List<Vector2> _edgeIntersections(
+  List<LineSegment> edgesA,
+  List<LineSegment> edgesB,
+) {
+  final intersectionPoints = <Vector2>[];
+  for (final lineA in edgesA) {
+    for (final lineB in edgesB) {
+      for (final intersection in lineA.intersections(lineB)) {
+        if (!intersectionPoints.contains(intersection)) {
+          intersectionPoints.add(intersection);
+        }
+      }
+    }
+  }
+  return intersectionPoints;
+}
+
+/// The center of the shape that is enclosed by the other, solid, shape, or
+/// nothing when neither shape encloses the other or the outer one is hollow.
+///
+/// Whether a shape is enclosed is decided by [pointA] and [pointB], which are
+/// a point of [shapeA] and of [shapeB] respectively.
+List<Vector2> _enclosedCenter(
+  ShapeComponent shapeA,
+  Vector2? pointA,
+  ShapeComponent shapeB,
+  Vector2? pointB,
+) {
+  if (!shapeA.isSolid && !shapeB.isSolid) {
+    return [];
+  }
+  final ShapeComponent? outerShape;
+  if (pointB != null && shapeA.containsPoint(pointB)) {
+    outerShape = shapeA;
+  } else if (pointA != null && shapeB.containsPoint(pointA)) {
+    outerShape = shapeB;
+  } else {
+    outerShape = null;
+  }
+  if (outerShape != null && outerShape.isSolid) {
+    final innerShape = outerShape == shapeA ? shapeB : shapeA;
+    return [innerShape.absoluteCenter];
+  }
+  return [];
+}
+
+/// A vertex of the [path], or null when it has no polygons.
+Vector2? _vertexOf(PathComponent path) {
+  return path.globalPolygons().firstOrNull?.first;
+}
+
+class PathPathIntersections
+    extends Intersections<PathComponent, PathComponent> {
+  /// Returns the intersection points of the edges of all the polygons of
+  /// [pathA] and [pathB].
+  @override
+  List<Vector2> intersect(
+    PathComponent pathA,
+    PathComponent pathB, {
+    Rect? overlappingRect,
+  }) {
+    final intersectionPoints = _edgeIntersections(
+      pathA.possibleIntersectionVertices(overlappingRect),
+      pathB.possibleIntersectionVertices(overlappingRect),
+    );
+    if (intersectionPoints.isEmpty) {
+      return _enclosedCenter(pathA, _vertexOf(pathA), pathB, _vertexOf(pathB));
+    }
+    return intersectionPoints;
+  }
+}
+
+class PathPolygonIntersections
+    extends Intersections<PathComponent, PolygonComponent> {
+  /// Returns the intersection points of the edges of all the polygons of
+  /// [path] and the edges of [polygon].
+  @override
+  List<Vector2> intersect(
+    PathComponent path,
+    PolygonComponent polygon, {
+    Rect? overlappingRect,
+  }) {
+    final intersectionPoints = _edgeIntersections(
+      path.possibleIntersectionVertices(overlappingRect),
+      polygon.possibleIntersectionVertices(overlappingRect),
+    );
+    if (intersectionPoints.isEmpty) {
+      return _enclosedCenter(
+        path,
+        _vertexOf(path),
+        polygon,
+        polygon.globalVertices().first,
+      );
+    }
+    return intersectionPoints;
+  }
+}
+
+class CirclePathIntersections
+    extends Intersections<CircleComponent, PathComponent> {
+  /// Returns the intersection points of [circle] and the edges of all the
+  /// polygons of [path].
+  @override
+  List<Vector2> intersect(
+    CircleComponent circle,
+    PathComponent path, {
+    Rect? overlappingRect,
+  }) {
+    final intersectionPoints = <Vector2>[];
+    for (final line in path.possibleIntersectionVertices(overlappingRect)) {
+      for (final intersection in circle.lineSegmentIntersections(line)) {
+        if (!intersectionPoints.contains(intersection)) {
+          intersectionPoints.add(intersection);
+        }
+      }
+    }
+    if (intersectionPoints.isEmpty) {
+      return _enclosedCenter(
+        circle,
+        circle.absoluteCenter,
+        path,
+        _vertexOf(path),
+      );
+    }
+    return intersectionPoints;
   }
 }
 
@@ -198,6 +328,9 @@ final List<Intersections> _intersectionSystems = [
   CircleCircleIntersections(),
   CirclePolygonIntersections(),
   PolygonPolygonIntersections(),
+  CirclePathIntersections(),
+  PathPolygonIntersections(),
+  PathPathIntersections(),
 ];
 
 List<Vector2> intersections(

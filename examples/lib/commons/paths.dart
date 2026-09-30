@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:examples/commons/path_component.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
@@ -88,6 +88,7 @@ PathComponent pathComponent(
   List<Paint>? paintLayers,
   Paint? contourPaint,
   bool? renderHitboxes,
+  bool? filter,
   Anchor? anchor,
 }) {
   // Create a standard test path that fits within our chosen size with its
@@ -101,6 +102,7 @@ PathComponent pathComponent(
     paintLayers: paintLayers,
     contourPaint: contourPaint,
     renderHitboxes: renderHitboxes,
+    filter: filter,
     anchor: anchor,
   );
 }
@@ -114,14 +116,22 @@ PathComponent pathComponentWith(
   List<Paint>? paintLayers,
   Paint? contourPaint,
   bool? renderHitboxes,
+  bool? filter,
   Anchor? anchor,
 }) {
   // Adjust the path such that fits within our chosen size with its
   // original aspect ratio.
   final path = resize ? srcPath.resizeTo(size, keepRatio: true) : srcPath;
 
-  // Create a component that displays the whole path: we filter all hitboxes
-  // that are (approximately) fully enclosed in the largest one.
+  // The hitbox follows the same path as the component, so that the component
+  // collides and reacts to gestures as a whole. By default, the polygons that
+  // lie inside of the largest one are left out of both.
+  final hitbox = PathHitbox(path: path, filter: filter ?? true);
+  if (renderHitboxes ?? false) {
+    hitbox
+      ..renderShape = true
+      ..paint = contourPaint ?? whiteStroke;
+  }
   return PathComponent(
     path: path,
     priority: shapePriority,
@@ -129,7 +139,7 @@ PathComponent pathComponentWith(
     anchor: anchor ?? Anchor.center,
     paint: paint ?? pathStroke,
     paintLayers: paintLayers,
-    hitboxesPaint: contourPaint,
-    renderHitboxes: renderHitboxes ?? false,
-  )..renderShape = true;
+    filter: filter ?? true,
+    children: [hitbox],
+  );
 }

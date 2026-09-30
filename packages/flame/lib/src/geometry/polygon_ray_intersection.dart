@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
+import 'package:meta/meta.dart';
 
 /// Used to add the [rayIntersection] method to [RectangleHitbox] and
 /// [PolygonHitbox], used by the raytracing and raycasting methods.
@@ -20,7 +21,28 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
     Ray2 ray, {
     RaycastResult<ShapeHitbox>? out,
   }) {
-    final vertices = globalVertices();
+    return intersectPolygon(
+      ray,
+      globalVertices(),
+      hitbox: this as T,
+      normal: _temporaryNormal,
+      out: out,
+    );
+  }
+
+  /// Returns the [RaycastResult] of the [ray] against the polygon with the
+  /// given global [vertices], which is reported as a hit on [hitbox].
+  ///
+  /// The [normal] is used as scratch space for the normal of the hit edge, and
+  /// [out] is populated and returned when it is given, see [rayIntersection].
+  @internal
+  static RaycastResult<ShapeHitbox>? intersectPolygon(
+    Ray2 ray,
+    List<Vector2> vertices, {
+    required ShapeHitbox hitbox,
+    required Vector2 normal,
+    RaycastResult<ShapeHitbox>? out,
+  }) {
     var closestDistance = double.infinity;
     Vector2? closestFrom;
     Vector2? closestTo;
@@ -71,20 +93,20 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
       );
       // This is "from" to "to" since it is defined ccw in the canvas
       // coordinate system
-      _temporaryNormal
+      normal
         ..setFrom(closestFrom)
         ..sub(closestTo);
-      _temporaryNormal
-        ..setValues(_temporaryNormal.y, -_temporaryNormal.x)
+      normal
+        ..setValues(normal.y, -normal.x)
         ..normalize();
       final isInsideHitbox = crossings.isOdd;
       if (isInsideHitbox) {
-        _temporaryNormal.invert();
+        normal.invert();
       }
       final reflectionDirection =
           (out?.reflectionRay?.direction ?? Vector2.zero())
             ..setFrom(ray.direction)
-            ..reflect(_temporaryNormal);
+            ..reflect(normal);
       // Reflect() can introduce sub-epsilon drift. Normalize to keep Ray2's
       // unit-length assertion satisfied.
       reflectionDirection.normalize();
@@ -96,9 +118,9 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
           )) ??
           Ray2(origin: intersectionPoint, direction: reflectionDirection);
       return (out ?? RaycastResult<ShapeHitbox>())..setWith(
-        hitbox: this as T,
+        hitbox: hitbox,
         reflectionRay: reflectionRay,
-        normal: _temporaryNormal,
+        normal: normal,
         distance: closestDistance,
         isInsideHitbox: isInsideHitbox,
       );
