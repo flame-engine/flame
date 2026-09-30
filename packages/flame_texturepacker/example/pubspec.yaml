@@ -14,7 +14,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  material_ui: any
+  material_ui: ^1.0.0
 dev_dependencies:
   flame_lint: ^1.4.3
 
