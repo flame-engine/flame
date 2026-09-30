@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,8 +15,9 @@ class _MyTimerComponent extends TimerComponent {
       );
 
   @override
-  void onTick() {
-    count++;
+  FutureOr<void> onLoad() {
+    timer.onTick = () => count++;
+    return super.onLoad();
   }
 }
 
@@ -30,8 +33,9 @@ class _MyTickOnLoadTimerComponent extends TimerComponent {
       );
 
   @override
-  void onTick() {
-    count++;
+  FutureOr<void> onLoad() {
+    timer.onTick = () => count++;
+    return super.onLoad();
   }
 }
 

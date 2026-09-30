@@ -85,7 +85,7 @@ class CalculatePrimeNumber extends PositionComponent
 
   @override
   Future<void> onMount() {
-    _interval = Timer(0.4, repeat: true, onTick: _checkNextAgainstPrime)
+    _interval = Timer(period: 0.4, repeat: true, onTick: _checkNextAgainstPrime)
       ..start();
     return super.onMount();
   }

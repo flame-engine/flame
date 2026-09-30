@@ -20,9 +20,9 @@ class TimerExample extends FlameGame with TapCallbacks {
 
   @override
   Future<void> onLoad() async {
-    countdown = Timer(5);
+    countdown = Timer(period: 5);
     interval = Timer(
-      1,
+      period: 1,
       onTick: () => elapsedSecs += 1,
       repeat: true,
     );
