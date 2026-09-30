@@ -1,9 +1,14 @@
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
+import 'package:flame_cli/src/commands/control_commands.dart';
+import 'package:flame_cli/src/commands/create_command.dart';
 import 'package:flame_cli/src/commands/debug_command.dart';
+import 'package:flame_cli/src/commands/diff_command.dart';
 import 'package:flame_cli/src/commands/game_loop_commands.dart';
+import 'package:flame_cli/src/commands/input_commands.dart';
 import 'package:flame_cli/src/commands/inspect_command.dart';
+import 'package:flame_cli/src/commands/logs_command.dart';
 import 'package:flame_cli/src/commands/overlay_commands.dart';
 import 'package:flame_cli/src/commands/run_command.dart';
 import 'package:flame_cli/src/commands/set_command.dart';
@@ -20,14 +25,30 @@ class FlameCommandRunner extends CommandRunner<int> {
     StringSink? err,
     Directory? workingDirectory,
     ProcessStarter? startProcess,
+    Stream<List<int>>? input,
   }) : _err = err ?? stderr,
        super(
          'flame',
-         'Inspect and control Flame games that are running in debug mode.',
+         'Create Flame games, and launch, observe, change and play the ones '
+             'that are running in debug mode.',
        ) {
     final output = out ?? stdout;
     final directory = workingDirectory ?? Directory.current;
-    addCommand(RunCommand(directory, startProcess: startProcess));
+    addCommand(
+      CreateCommand(output, directory, startProcess: startProcess, err: err),
+    );
+    addCommand(
+      RunCommand(
+        directory,
+        startProcess: startProcess,
+        input: input,
+        out: out,
+        err: err,
+      ),
+    );
+    addCommand(ReloadCommand(output, directory));
+    addCommand(RestartCommand(output, directory));
+    addCommand(LogsCommand(output, directory));
     addCommand(SnapshotCommand(output, directory));
     addCommand(TreeCommand(output, directory));
     addCommand(InspectCommand(output, directory));
@@ -38,6 +59,8 @@ class FlameCommandRunner extends CommandRunner<int> {
     addCommand(DebugCommand(output, directory));
     addCommand(OverlaysCommand(output, directory));
     addCommand(OverlayCommand(output, directory));
+    addCommand(InputCommand(output, directory));
+    addCommand(DiffCommand(output, directory));
   }
 
   final StringSink _err;

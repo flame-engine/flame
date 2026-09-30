@@ -5,10 +5,12 @@ inspects and controls a Flame game that is running in debug mode, without having
 [DevTools](debug.md#devtools-extension).
 
 This is useful for scripts, and for AI coding agents that want to see what the game currently looks
-like. The agent can start the game with `flame run`, take a snapshot with `flame snapshot` and then
-read the PNG image:
+like. The agent can create a game with `flame create`, start it with `flame run`, take a snapshot
+with `flame snapshot` and then read the PNG image:
 
 ```shell
+flame create my_game
+cd my_game
 flame run -d macos
 flame pause
 flame snapshot --output snapshot.png
@@ -63,10 +65,94 @@ If you have multiple games in your app, only the last one created is connected, 
 `DevToolsService.initWithGame` to change it.
 
 
+### Running several instances of one game
+
+A running game is tied to its project, the closest directory with a `pubspec.yaml`. Games started
+from different projects never interfere with each other, and that includes separate git checkouts
+of the same game: the commands pick the game of the project they are run in.
+
+You can also start the same project several times, for example to test on two devices at once or
+to compare two builds of the game:
+
+```shell
+flame run -d macos
+flame run -d chrome
+```
+
+The commands go to the game that was started last, in this case the one in Chrome. When that game
+is stopped, the game started before it becomes reachable again, and the [logs](#logs) command
+shows the output of whichever game the commands currently go to.
+
+To reach a game that was not started last, address it explicitly. Every `flame run` prints the two
+things needed for that when it starts:
+
+```text
+flame run: the reload and restart commands reach this game on port 50312.
+...
+A Dart VM Service on macOS is available at: http://127.0.0.1:50300/abc123=/
+```
+
+Pass the URI with `--uri` to the commands that talk to the game, and the port with `--port` to
+`reload` and `restart`:
+
+```shell
+flame snapshot --uri http://127.0.0.1:50300/abc123=/ --output macos.png
+flame reload --port 50312
+```
+
+A script that drives several instances can keep the URI and the port of each one and pass them
+every time, so that it never depends on which game was started last.
+
+
 ## Commands
 
 Run `flame --help` to list the commands, and `flame help <command>` for the options of a
 command.
+
+
+### create
+
+Creates a new Flame game, the same way `flutter create` creates a new Flutter app: without
+questions, with sensible defaults, and with options to change them:
+
+```shell
+flame create my_game
+cd my_game
+flame run
+```
+
+It runs `flutter create` for the platform folders and the `pubspec.yaml`, writes the files of the
+chosen template on top of it, replaces `flutter_lints` with `flame_lint`, and adds `flame` (and
+`flame_test` when the template has tests) with `flutter pub add`, so that the game starts on the
+newest versions. The result is a normal Flutter project that `flutter run`, your IDE and the other
+`flame` commands all understand.
+
+These are the options:
+
+- `--project-name`: The name of the game, a valid Dart package name. It defaults to the name of
+  the output directory, so `flame create my_game` creates the package `my_game`.
+- `--org`: The organization in reverse domain name notation, used for the bundle and package
+  identifiers, `com.example` by default.
+- `--description`: The description in the `pubspec.yaml`.
+- `--template` (`-t`): The template to start from, see below. The default is `basics`.
+- `--platforms`: The platforms to generate folders for, as a comma separated list such as
+  `macos,web`, passed on to `flutter create`. All of them by default.
+- `--packages`: Additional Flame packages to add, for example `--packages flame_audio,flame_tiled`.
+- `--flame-version`: A version constraint for `flame`, for example `^1.30.0`, instead of the
+  newest version.
+- `--overwrite`: Replace the files of a game that already exists in the output directory.
+
+These are the templates:
+
+- `simple`: The emptiest possible game, an empty `FlameGame` in a `GameWidget`, for starting from
+  scratch.
+- `basics`: The structure that most games start from, a world with a component that reacts to
+  taps, and a test for it.
+- `example`: A complete small game with a world, a camera, keyboard and tap input, collisions, a
+  score in the viewport and tests, spread over a few files, to show how the pieces fit together.
+
+Every template comes with `flame_lint` as its analysis options, and the games from the `basics`
+and `example` templates pass `flutter analyze` and `flutter test` right after they are created.
 
 
 ### run
@@ -79,12 +165,70 @@ flame run -d macos
 ```
 
 All the arguments are passed on to `flutter run`, and it works just like `flutter run`, including
-hot reload from the terminal. The file is removed again when the game is stopped. The `.dart_tool`
-directory is ignored by version control in Flutter projects, so the file is never committed.
+the keys in the terminal such as `r` for hot reload and `q` to quit. Next to the URI, `flame run`
+keeps two more files in `.dart_tool/flame`: `control_port`, through which the [reload and
+restart](#reload-and-restart) commands talk to it, and `log`, which the [logs](#logs) command
+reads. The URI and the port are removed when the game is stopped, the log is kept. The `.dart_tool`
+directory is ignored by version control in Flutter projects, so the files are never committed.
+
+The files live in the root of the project, the closest directory with a `pubspec.yaml`, no matter
+which subdirectory `flame run` was started from. That ties every running game to its project, and
+the same project can be started several times, see
+[running several instances of one game](#running-several-instances-of-one-game).
 
 When an agent or a script starts the game with `flame run` in the background, the other commands
 say that no running game was found until the game has started, so they can be retried until they
-succeed.
+succeed. Since `flame run` reads the terminal input like `flutter run` does, redirect its input
+from `/dev/null` when it runs in the background of an interactive shell:
+
+```shell
+flame run -d macos < /dev/null > run.log 2>&1 &
+```
+
+
+### reload and restart
+
+Hot reloads or hot restarts a game that was started with `flame run`, and waits for the result:
+
+```shell
+$ flame reload
+Reloaded 1 of 1097 libraries in 71ms.
+```
+
+This is the same as pressing `r` or `R` in the terminal of `flame run`, but it can be done from
+another terminal or from a script, and the command only returns when the reload is done. If the
+reload fails, for example because of a compile error, the errors are printed and the command exits
+with `70`, so an agent can fix the code and try again:
+
+```shell
+$ flame reload
+lib/main.dart:19:44: Error: Expected ';' after this.
+        paint: Paint()..color = Colors.orange
+                                       ^^^^^^
+Try again after fixing the above error(s).
+```
+
+Both commands take `--port` (`-p`) to reach a specific `flame run` when several games were
+started from the same project, see [run](#run).
+
+A hot reload swaps the code but keeps the state of the game, so a change to something that was
+set when a component was created, such as a paint in its constructor or a position in `onLoad`,
+is only visible after a hot restart. Changes to `update` and `render` methods show up right away.
+Component ids change with a restart, so run `tree` again afterwards.
+
+
+### logs
+
+Prints the output of the `flutter run` that `flame run` started, which includes everything the
+game prints and the exceptions it throws:
+
+```shell
+flame logs --lines 50
+```
+
+`--lines` (`-n`) is the number of lines from the end to print, 100 by default, and `--follow`
+(`-f`) keeps printing new output until the game is stopped. The log is kept after the game has
+stopped, so it can still be read after a crash.
 
 
 ### snapshot
@@ -108,14 +252,24 @@ These are the options:
   800x600 game to a 1600x1200 image.
 - `--component` (`-c`): The id of a single component to render instead of the whole game, see the
   [tree](#tree) command for how to find the id.
+- `--world` (`-w`): Renders the whole world directly instead of through the camera, so that
+  components that are off screen are visible too. The image covers the bounding rectangle of all
+  the position components in the world.
+- `--rect` (`-r`): Renders only this part of the world, given as `x,y,width,height` in world
+  coordinates, for example `--rect -100,-100,200,200`.
 
 A single component is rendered together with its children, but without the camera. For a
 `PositionComponent`, the image covers the component's bounding rectangle, with its anchor, angle
-and scale taken into account. Other components are rendered in a 100x100 image.
+and scale taken into account. For the `World` it covers all the position components in it, like
+`--world`. Other components are rendered in a 100x100 image.
 
 ```shell
 flame snapshot --component 220731871
 ```
+
+The pixel coordinates of a snapshot of the whole game, at the default pixel ratio, are the same
+coordinates that the [input](#input) commands take, so a position found in the image can be
+tapped directly.
 
 
 ### tree
@@ -243,15 +397,62 @@ the others, and `overlay only <name>` shows one overlay and hides all the others
 Flutter widgets, so they are not part of the images that `snapshot` takes.
 
 
+### input
+
+Sends taps, drags and key presses to the game, so that it can be played from the terminal:
+
+```shell
+flame input tap 400,300
+flame input drag 100,300 500,300 --steps 20
+flame input key space
+flame input key arrowLeft --down
+flame input key arrowLeft --up
+```
+
+Positions are in canvas coordinates, the same ones as the pixels of a `snapshot` of the whole
+game at pixel ratio 1. The events go through the same dispatchers as real input, so they reach the
+components with the `TapCallbacks` and `DragCallbacks` mixins, in the same order and with the same
+propagation rules. A drag sends a start event, `--steps` update events (10 by default) evenly
+spaced between the two positions, and an end event, all at once. If the game has no component
+that handles the event, the command fails with exit code `65` and says which mixin is missing.
+
+Keys are delivered to the `onKeyEvent` of a game with the `HasKeyboardHandlerComponents` or
+`KeyboardEvents` mixin. A key is named like the `LogicalKeyboardKey` constants, for example
+`space`, `enter`, `escape`, `arrowLeft`, `a` or `digit1`, and the name is matched without regard
+to case, spaces and underscores. By default the key is pressed and released right away. Pass
+`--down` to hold it, for example to keep a character walking while stepping the game, and `--up`
+to release it again.
+
+
+### diff
+
+Compares two PNG images, for example two snapshots, and reports how much and where they differ:
+
+```shell
+$ flame diff before.png after.png --output diff.png
+4.17% of the pixels differ (20000 of 480000), within the rectangle
+300,250 of size 200x100.
+/path/to/diff.png
+```
+
+The bounding rectangle of the changes makes it easy to tell what moved, even when the difference
+is too small to notice by looking at the two images. With `--output` the differing pixels are
+written in red on top of a dimmed version of the second image. `--threshold` (`-t`) is how much
+a color channel may differ, from 0 to 255, before a pixel counts as different, which helps with
+anti-aliasing. `--exit-code` makes the command exit with `1` when the images differ, like
+`git diff`, for use in scripts.
+
+
 ## Exit codes
 
 The commands follow the common Unix conventions for exit codes, so that scripts can tell failures
-apart. `flame run` exits with the exit code of `flutter run`, and the other commands use these:
+apart. `flame run` exits with the exit code of `flutter run`, `reload` and `restart` exit with
+`70` when the reload failed, and the other commands use these:
 
 - `0`: The command succeeded.
 - `64`: The command was used incorrectly, for example with an invalid option.
 - `65`: The game rejected the input, for example because there is no component with the given
-  id.
+  id, or the input files could not be read.
 - `69`: No running game was found, the game could not be reached, or it runs a version of Flame
   that does not support the command.
 - `70`: The game reported an error while running the command.

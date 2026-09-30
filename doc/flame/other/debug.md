@@ -33,7 +33,9 @@ extension and the CLI use. They are only available in debug mode and they are ca
 isolate that runs the game. Every `id` parameter is the `hashCode` of a component.
 
 - `ext.flame_devtools.getGameSnapshot`: Renders the whole game. It takes an optional `pixelRatio`
-  parameter and returns `snapshot` (a base64 encoded PNG image), `width` and `height`.
+  parameter and returns `snapshot` (a base64 encoded PNG image), `width` and `height`. With
+  `world` set to `true` the world is rendered directly instead of through the camera, and with
+  `rect` given as `x,y,width,height` in world coordinates only that part of the world is rendered.
 - `ext.flame_devtools.getComponentSnapshot`: Renders a single component. It takes the `id` of the
   component and an optional `pixelRatio` parameter, and returns `snapshot` (a base64 encoded PNG
   image). It responds with an invalid parameters error if no component with that id was found.
@@ -58,6 +60,12 @@ isolate that runs the game. Every `id` parameter is the `hashCode` of a componen
   the `active` parameter.
 - `ext.flame_devtools.navigateToOverlay`: Shows the `overlay` with the given name and hides all
   the others.
+- `ext.flame_devtools.tap`: Taps the game at `x`, `y` in canvas coordinates, through the tap
+  dispatcher of the game.
+- `ext.flame_devtools.drag`: Drags across the game from `fromX`, `fromY` to `toX`, `toY` in canvas
+  coordinates, with `steps` updates in between.
+- `ext.flame_devtools.key`: Delivers the `key` with the given name to the `onKeyEvent` of the
+  game, where `action` is `press`, `down` or `up`.
 
 If you have multiple games in your app, only the last one created is connected, see
 `DevToolsService.initWithGame` to change it.

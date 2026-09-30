@@ -37,6 +37,14 @@ dart pub global activate flame_cli
 
 ## Usage
 
+Create a new game, like `flutter create` but from a Flame template and with the Flame packages
+set up:
+
+```shell
+flame create my_game
+cd my_game
+```
+
 Start your game with `flame run` from your project directory. It takes the same arguments as
 `flutter run`, and lets the other commands find the game:
 
@@ -57,6 +65,13 @@ flame tree
 flame snapshot --component 220731871
 ```
 
+Hot reload or restart the game after changing the code, and read its output:
+
+```shell
+flame reload
+flame logs
+```
+
 Pause the game, step it forward a number of frames, inspect and change components, turn on the
 debug rendering and show or hide overlays:
 
@@ -69,8 +84,19 @@ flame debug on
 flame overlay show PauseMenu
 ```
 
-If the game was started in another way, pass the Dart VM Service URI that `flutter run` prints to
-the commands with `--uri`.
+A running game is tied to its project, so games from different projects never interfere. Several
+instances of one project can run at once, for example on two devices: the commands go to the one
+started last, and any other one can be addressed with the URI and the port that `flame run` prints,
+through `--uri` and, for `reload` and `restart`, `--port`. The same `--uri` option reaches a game
+that was started in another way, with the Dart VM Service URI that `flutter run` prints.
+
+Play the game by sending taps, drags and key presses, and compare two snapshots:
+
+```shell
+flame input tap 400,300
+flame input key space
+flame diff before.png after.png --output diff.png
+```
 
 Run `flame --help` for all the commands and options, and see the
 [documentation](https://docs.flame-engine.org/latest/flame/other/cli.html) for more information.

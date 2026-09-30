@@ -1,10 +1,10 @@
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/widgets.dart';
 
 Widget defaultContainerBuilder(BuildContext context, Widget child) {
   return DecoratedBox(
     decoration: BoxDecoration(
-      color: Colors.black.withValues(alpha: 0.8),
-      border: Border.all(color: Colors.white),
+      color: const Color(0xCC000000),
+      border: Border.all(color: const Color(0xFFFFFFFF)),
     ),
     child: Padding(
       padding: const EdgeInsets.all(8.0),
