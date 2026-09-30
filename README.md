@@ -84,21 +84,50 @@ helpers, in order to make integrations seamless.
 Flame officially provides bridge libraries to the following packages:
 
 - [flame_audio][flame_audio] for [AudioPlayers][audioplayers]: Play multiple audio files
-simultaneously.
+  simultaneously.
+- [flame_behavior_tree][flame_behavior_tree] for [behavior_tree][behavior_tree]: Drive game logic
+  with behavior trees.
 - [flame_bloc][flame_bloc] for [Bloc][bloc]: A predictable state management library.
 - [flame_fire_atlas][flame_fire_atlas] for [FireAtlas][fireatlas]: Create texture atlases for games.
 - [flame_forge2d][flame_forge2d] for [Forge2D][forge2d]: A Box2D physics engine.
-- [flame_gamepads][flame_gamepads] - Support gamepad input in your game (bridge package for [gamepads][gamepads])
+- [flame_gamepads][flame_gamepads] for [gamepads][gamepads]: Support gamepad input in your game.
 - [flame_isolate][flame_isolate] - Makes it easy to use [Flutter Isolates][flutter_isolates] in
-a Flame game.
-- [flame_lint][flame_lint] - Our set of linting (`analysis_options.yaml`) rules.
+  a Flame game.
+- [flame_kenney_xml][flame_kenney_xml] for [Kenney][kenney]: Load Kenney XML sprite sheets.
 - [flame_lottie][flame_lottie] - Support for [Lottie][lottie] animation in Flame.
+- [flame_markdown][flame_markdown] for [markdown][markdown]: Render Markdown with Flame's text
+  pipeline.
 - [flame_network_assets][flame_network_assets] - Helpers to load game assets from
-network.
+  network.
+- [flame_noise][flame_noise] for [fast_noise][fast_noise]: Noise generation and noise based
+  effects.
 - [flame_rive][flame_rive] for [Rive][rive]: Create interactive animations.
+- [flame_riverpod][flame_riverpod] for [Riverpod][riverpod]: A reactive caching and data-binding
+  framework.
+- [flame_spine][flame_spine] for [Spine][spine]: Use Spine skeletal animations.
+- [flame_sprite_fusion][flame_sprite_fusion] for [Sprite Fusion][sprite_fusion]: Load tile maps
+  exported from Sprite Fusion.
 - [flame_svg][flame_svg] for [flutter_svg][flutter_svg]: Draw SVG files in Flutter.
-- [flame_texturepacker][flame_texturepacker]: Load and use sprite sheets generated with [TexturePacker][texturepacker]
+- [flame_texturepacker][flame_texturepacker] for [TexturePacker][texturepacker]: Load and use
+  sprite sheets generated with TexturePacker.
 - [flame_tiled][flame_tiled] for [Tiled][tiled]: 2D tile map level editor.
+- [flame_typled][flame_typled] for [Typled][typled]: Load Typled sprite atlases.
+
+Other official packages that extend Flame:
+
+- [flame_3d][flame_3d] - Experimental 3D rendering on top of Flame.
+- [flame_behaviors][flame_behaviors] - Apply separation of concerns to game logic in the form of
+  Entities and Behaviors.
+- [flame_console][flame_console] - An in-game console to debug and interact with your game.
+- [flame_splash_screen][flame_splash_screen] - Add the "Powered by Flame" splash screen.
+- [flame_steering_behaviors][flame_steering_behaviors] - Steering algorithms built on top of
+  flame_behaviors.
+
+Tooling:
+
+- [flame_cli][flame_cli] - Inspect and control running Flame games from the terminal.
+- [flame_lint][flame_lint] - Our set of linting (`analysis_options.yaml`) rules.
+- [flame_test][flame_test] - Helpers for testing Flame games.
 
 
 ## Sponsors
@@ -197,3 +226,26 @@ via an issue, GitHub discussion, or reach out to the team either using the
 [texturepacker]: https://www.codeandweb.com/texturepacker
 [flame_tiled]: https://github.com/flame-engine/flame/tree/main/packages/flame_tiled
 [tiled]: https://www.mapeditor.org/
+[flame_3d]: https://github.com/flame-engine/flame/tree/main/packages/flame_3d
+[flame_behavior_tree]: https://github.com/flame-engine/flame/tree/main/packages/flame_behavior_tree
+[flame_behaviors]: https://github.com/flame-engine/flame/tree/main/packages/flame_behaviors
+[flame_cli]: https://github.com/flame-engine/flame/tree/main/packages/flame_cli
+[flame_console]: https://github.com/flame-engine/flame/tree/main/packages/flame_console
+[flame_kenney_xml]: https://github.com/flame-engine/flame/tree/main/packages/flame_kenney_xml
+[flame_markdown]: https://github.com/flame-engine/flame/tree/main/packages/flame_markdown
+[flame_noise]: https://github.com/flame-engine/flame/tree/main/packages/flame_noise
+[flame_riverpod]: https://github.com/flame-engine/flame/tree/main/packages/flame_riverpod
+[flame_spine]: https://github.com/flame-engine/flame/tree/main/packages/flame_spine
+[flame_splash_screen]: https://github.com/flame-engine/flame/tree/main/packages/flame_splash_screen
+[flame_sprite_fusion]: https://github.com/flame-engine/flame/tree/main/packages/flame_sprite_fusion
+[flame_steering_behaviors]: https://github.com/flame-engine/flame/tree/main/packages/flame_steering_behaviors
+[flame_test]: https://github.com/flame-engine/flame/tree/main/packages/flame_test
+[flame_typled]: https://github.com/flame-engine/flame/tree/main/packages/flame_typled
+[behavior_tree]: https://pub.dev/packages/behavior_tree
+[fast_noise]: https://pub.dev/packages/fast_noise
+[kenney]: https://kenney.nl/
+[markdown]: https://pub.dev/packages/markdown
+[riverpod]: https://github.com/rrousselGit/riverpod
+[spine]: https://pub.dev/packages/spine_flutter
+[sprite_fusion]: https://www.spritefusion.com/
+[typled]: https://pub.dev/packages/typled

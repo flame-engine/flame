@@ -16,7 +16,6 @@ environment:
   flutter: ">=3.44.0"
 
 dependencies:
-  cupertino_ui: any
   flame: ^1.38.0
   flutter:
     sdk: flutter

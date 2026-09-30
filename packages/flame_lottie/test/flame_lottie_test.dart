@@ -3,8 +3,8 @@ import 'dart:typed_data';
 
 import 'package:flame_lottie/flame_lottie.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:material_ui/material_ui.dart';
 
 void main() {
   testWithFlameGame(
