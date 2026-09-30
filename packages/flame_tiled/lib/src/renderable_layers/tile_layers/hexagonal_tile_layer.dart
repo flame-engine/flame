@@ -12,7 +12,6 @@ import 'package:meta/meta.dart';
 class HexagonalTileLayer extends FlameTileLayer {
   HexagonalTileLayer({
     required super.layer,
-    required super.parent,
     required super.map,
     required super.destTileSize,
     required super.tiledAtlas,

@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
@@ -78,9 +79,13 @@ void main() {
         expect(tiled.size, Vector2(512.0, 2048.0));
       });
 
-      test('from constructor', () {
+      test('from constructor', () async {
+        final tileMap = await RenderableTiledMap.fromFile(
+          'assets/tiles/map.tmx',
+          Vector2.all(16),
+        );
         final map = TiledComponent(
-          tiled.tileMap,
+          tileMap,
           position: Vector2(10, 20),
           anchor: Anchor.bottomCenter,
           children: [tiled],
@@ -90,11 +95,21 @@ void main() {
         );
 
         expect(tiled.parent, map);
+        expect(tileMap.parent, map);
         expect(map.anchor, Anchor.bottomCenter);
         expect(map.angle, 1.4);
         expect(map.priority, 2);
         expect(map.position, Vector2(10, 20));
         expect(map.scale, Vector2(1.5, 2.0));
+      });
+
+      test('a map can only belong to one component', () {
+        expect(
+          () => TiledComponent(tiled.tileMap),
+          failsAssert(
+            'A RenderableTiledMap can only belong to one TiledComponent',
+          ),
+        );
       });
     });
   });
@@ -178,7 +193,7 @@ void main() {
       );
       final canvasRecorder = PictureRecorder();
       final canvas = Canvas(canvasRecorder);
-      overlapMap.render(canvas);
+      overlapMap.renderTree(canvas);
       final picture = canvasRecorder.endRecording();
 
       final image = await picture.toImageSafe(32, 16);
@@ -257,7 +272,7 @@ void main() {
     Future<Uint8List> renderMap() async {
       final canvasRecorder = PictureRecorder();
       final canvas = Canvas(canvasRecorder);
-      overlapMap.render(canvas);
+      overlapMap.renderTree(canvas);
       final picture = canvasRecorder.endRecording();
 
       final image = await picture.toImageSafe(64, 32);
@@ -484,23 +499,22 @@ void main() {
         ],
         stringNames: ['map.tmx'],
       );
+
+      // Need to initialize a game and call `onGameResize` to get the camera
+      // and canvas sizes all initialized
+      final game = FlameGame();
+      game.onGameResize(mapSizePx);
+      final camera = game.camera;
       component = await TiledComponent.load(
         'assets/tiles/map.tmx',
         Vector2(16, 16),
         bundle: Flame.bundle,
+        camera: camera,
       );
-
-      // Need to initialize a game and call `onLoad` and `onGameResize` to
-      // get the camera and canvas sizes all initialized
-      final game = FlameGame();
-      game.onGameResize(mapSizePx);
-      final camera = game.camera;
       game.world.add(component);
       camera.viewfinder.position = Vector2(150, 20);
       camera.viewport.size = mapSizePx.clone();
       game.onGameResize(mapSizePx);
-      component.onGameResize(mapSizePx);
-      await component.onLoad();
       await game.ready();
     });
 
@@ -517,6 +531,22 @@ void main() {
         expect(pngData, matchesGoldenFile('goldens/orthogonal.png'));
       },
     );
+
+    test('layers are positioned for the parallax factor and offset', () async {
+      await renderMapToPng(component);
+      final layers = component.tileMap.renderableLayers;
+
+      // The view is centered on the camera position (150, 20), so a layer with
+      // a parallax factor of 0.4 is displaced by 0.6 times that.
+      final ground = layers[0];
+      expect(ground.position, Vector2.zero());
+      final background = layers[1] as GroupLayer;
+      expect(background.position, Vector2(-50 + 90, -100 + 12));
+      final skyTiles = background.children.first as FlameTileLayer;
+      expect(skyTiles.parallaxX, 0.4);
+      expect(skyTiles.position, Vector2(100, 100));
+      expect(skyTiles.absolutePosition, Vector2(140, 12));
+    });
   });
 
   group('isometric', () {
@@ -997,7 +1027,7 @@ void main() {
           expect(waterAnimation.frames.durations, [0.18, 0.17, 0.15]);
           expect(spikeAnimation.frames.durations, [0.176, 0.176, 0.176, 0.176]);
 
-          map.update(0.177);
+          map.updateTree(0.177);
           expect(waterAnimation.frame, 0);
           expect(waterAnimation.frames.frameTime, 0.177);
           expect(
@@ -1012,13 +1042,13 @@ void main() {
             spikeAnimation.frames.sources[1],
           );
 
-          map.update(0.003);
+          map.updateTree(0.003);
           expect(waterAnimation.frame, 1);
           expect(waterAnimation.frames.frameTime, moreOrLessEquals(0.0));
           expect(spikeAnimation.frame, 1);
           expect(spikeAnimation.frames.frameTime, moreOrLessEquals(0.004));
 
-          map.update(0.17 + 0.15);
+          map.updateTree(0.17 + 0.15);
           expect(waterAnimation.frame, 0, reason: 'wraps around');
           expect(
             waterAnimation.batchedSource.toRect(),
@@ -1035,21 +1065,21 @@ void main() {
             matchesGoldenFile('goldens/dungeon_animation_${mapType}_0.png'),
           );
 
-          component.update(0.18);
+          component.updateTree(0.18);
           pngData = await renderMapToPng(component);
           await expectLater(
             pngData,
             matchesGoldenFile('goldens/dungeon_animation_${mapType}_1.png'),
           );
 
-          component.update(0.18);
+          component.updateTree(0.18);
           pngData = await renderMapToPng(component);
           await expectLater(
             pngData,
             matchesGoldenFile('goldens/dungeon_animation_${mapType}_2.png'),
           );
 
-          component.update(0.18);
+          component.updateTree(0.18);
           pngData = await renderMapToPng(component);
           await expectLater(
             pngData,
@@ -1174,6 +1204,239 @@ void main() {
       expect(
         () => renderableTiledMap.setLayerOpacity(0, opacity: -0.1),
         throwsA(isA<AssertionError>()),
+      );
+    });
+  });
+
+  group('layers are components', () {
+    late RenderableTiledMap overlapMap;
+
+    Future<Uint8List> renderMap() async {
+      final canvasRecorder = PictureRecorder();
+      final canvas = Canvas(canvasRecorder);
+      overlapMap.renderTree(canvas);
+      final picture = canvasRecorder.endRecording();
+
+      final image = await picture.toImageSafe(32, 16);
+      final bytes = await image.toByteData();
+      return bytes!.buffer.asUint8List();
+    }
+
+    List<int> pixelAt(Uint8List pixels, int x, int y) {
+      final index = (y * 32 + x) * pixel;
+      return pixels.sublist(index, index + pixel);
+    }
+
+    setUp(() async {
+      final bundle = TestAssetBundle(
+        imageNames: [
+          'green_sprite.png',
+          'red_sprite.png',
+        ],
+        stringNames: ['2_tiles-green_on_red.tmx'],
+      );
+      overlapMap = await RenderableTiledMap.fromFile(
+        'assets/tiles/2_tiles-green_on_red.tmx',
+        Vector2.all(16),
+        bundle: bundle,
+        images: Images(bundle: bundle),
+      );
+    });
+
+    test('the layers are the children of the map, in map order', () {
+      expect(overlapMap.children.toList(), overlapMap.renderableLayers);
+      expect(
+        overlapMap.renderableLayers.map((layer) => layer.layer.name),
+        ['red_tile-base', 'green_tile-top'],
+      );
+    });
+
+    test('getRenderableLayer finds top level layers', () {
+      final layer = overlapMap.getRenderableLayer('green_tile-top');
+      expect(layer, isA<FlameTileLayer>());
+      expect(layer!.layer.name, 'green_tile-top');
+      expect(overlapMap.getRenderableLayer('Nonexistent layer'), isNull);
+    });
+
+    test('components added to a layer render between the layers', () async {
+      final blue = RectangleComponent(
+        size: Vector2(32, 16),
+        paint: Paint()..color = const Color(0xff0000ff),
+      );
+      overlapMap.getRenderableLayer('red_tile-base')!.add(blue);
+
+      final pixels = await renderMap();
+      // The green tile is on the layer above the rectangle.
+      expect(pixelAt(pixels, 8, 8), [0, 255, 0, 255]);
+      // The red tile is on the layer below the rectangle.
+      expect(pixelAt(pixels, 24, 8), [0, 0, 255, 255]);
+    });
+
+    test('children of the TiledComponent render on top of the map', () async {
+      final blue = RectangleComponent(
+        size: Vector2(32, 16),
+        paint: Paint()..color = const Color(0xff0000ff),
+      );
+      final component = TiledComponent(overlapMap, children: [blue]);
+      final canvasRecorder = PictureRecorder();
+      component.renderTree(Canvas(canvasRecorder));
+      final picture = canvasRecorder.endRecording();
+      final image = await picture.toImageSafe(32, 16);
+      final pixels = (await image.toByteData())!.buffer.asUint8List();
+
+      expect(pixelAt(pixels, 8, 8), [0, 0, 255, 255]);
+      expect(pixelAt(pixels, 24, 8), [0, 0, 255, 255]);
+    });
+
+    test('components added to a layer follow the offset of the layer', () {
+      final layer = overlapMap.getRenderableLayer('green_tile-top')!;
+      final marker = PositionComponent(position: Vector2(4, 2));
+      layer.add(marker);
+      layer
+        ..offsetX = 10
+        ..offsetY = 20;
+
+      final canvasRecorder = PictureRecorder();
+      overlapMap.renderTree(Canvas(canvasRecorder));
+
+      expect(layer.position, Vector2(10, 20));
+      expect(marker.absolutePosition, Vector2(14, 22));
+    });
+
+    test('invisible layers are kept but not rendered', () async {
+      overlapMap.setLayerVisibility(1, visible: false);
+      expect(overlapMap.renderableLayers, hasLength(2));
+      expect(overlapMap.renderableLayers[1].visible, isFalse);
+
+      var pixels = await renderMap();
+      expect(pixelAt(pixels, 8, 8), [255, 0, 0, 255]);
+
+      overlapMap.setLayerVisibility(1, visible: true);
+      pixels = await renderMap();
+      expect(pixelAt(pixels, 8, 8), [0, 255, 0, 255]);
+    });
+  });
+
+  group('parallax', () {
+    late FlameGame game;
+    late TiledComponent component;
+    final screenSize = Vector2(320, 240);
+
+    setUp(() async {
+      final bundle = TestAssetBundle(
+        imageNames: [
+          'map-level1.png',
+          'images/diamond.png',
+          'images/box2.png',
+        ],
+        stringNames: ['parallax_test.tmx'],
+      );
+      component = await TiledComponent.load(
+        'assets/tiles/parallax_test.tmx',
+        Vector2.all(16),
+        bundle: bundle,
+        images: Images(bundle: bundle),
+      );
+
+      game = await initializeFlameGame();
+      game.onGameResize(screenSize);
+      game.world.add(component);
+      await game.ready();
+    });
+
+    tearDown(() => game.onRemove());
+
+    test('getRenderableLayer finds layers nested in groups', () {
+      final boxes = component.tileMap.getRenderableLayer('Boxes')!;
+      expect(boxes.layer.name, 'Boxes');
+      expect(boxes.parentLayer!.layer.name, 'Group 2');
+      expect(boxes.parentLayer!.parentLayer!.layer.name, 'Group1');
+      expect(boxes.parallaxX, closeTo(2 * 1.1, 1e-4));
+      expect(boxes.parallaxY, closeTo(3.8 * 1.1, 1e-4));
+    });
+
+    test('layers are displaced by the view center of the camera', () async {
+      game.camera.viewfinder.position = Vector2(400, 160);
+      await renderGameToPng(game);
+
+      final map = component.tileMap;
+      expect(map.renderableLayers[0].position, Vector2.zero());
+
+      // Middle: parallax factor 1.5, displaced by 400 * (1 - 1.5) = -200.
+      final middle = map.getRenderableLayer('Middle')!;
+      expect(middle.position, Vector2(-200, 0));
+
+      // Foreground: parallax 1.2 on both axes.
+      final foreground = map.getRenderableLayer('Foreground')!;
+      expect(foreground.position.x, closeTo(400 * -0.2, 1e-4));
+      expect(foreground.position.y, closeTo(160 * -0.2, 1e-4));
+
+      // Group1: offset (-12, 6), parallax (2, 3.8).
+      final group = map.getRenderableLayer('Group1')!;
+      expect(group.position.x, closeTo(-12 + 400 * -1, 1e-4));
+      expect(group.position.y, closeTo(6 + 160 * -2.8, 1e-4));
+
+      // Boxes: offset (1, 10), parallax (1.1, 1.1) inside Group 2 inside
+      // Group1. The total displacement follows the total parallax factor.
+      final boxes = map.getRenderableLayer('Boxes')!;
+      expect(boxes.position.x, closeTo(1 + 400 * 2 * -0.1, 1e-4));
+      expect(boxes.position.y, closeTo(10 + 160 * 3.8 * -0.1, 1e-4));
+      expect(
+        boxes.absolutePosition.x,
+        closeTo(-12 + 1 + 400 * (1 - 2 * 1.1), 1e-4),
+      );
+      expect(
+        boxes.absolutePosition.y,
+        closeTo(6 + 10 + 160 * (1 - 3.8 * 1.1), 1e-4),
+      );
+    });
+
+    test('a map outside of the world uses the camera of the game', () async {
+      component.removeFromParent();
+      game.add(component);
+      await game.ready();
+      game.camera.viewfinder.position = Vector2(400, 160);
+      await renderGameToPng(game);
+
+      final middle = component.tileMap.getRenderableLayer('Middle')!;
+      expect(middle.position, Vector2(-200, 0));
+    });
+
+    test('a scaled map is displaced in its own coordinate space', () async {
+      component.scale = Vector2.all(2);
+      game.camera.viewfinder.position = Vector2(400, 160);
+      await renderGameToPng(game);
+
+      // The view center is at (200, 80) in the coordinate space of the map.
+      final middle = component.tileMap.getRenderableLayer('Middle')!;
+      expect(middle.position, Vector2(-100, 0));
+    });
+
+    test('renders through the camera at the parallax origin', () async {
+      game.camera.viewfinder.position = Vector2.zero();
+      final pngData = await renderGameToPng(game);
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/parallax_camera_origin.png'),
+      );
+    });
+
+    test('renders through the camera away from the origin', () async {
+      game.camera.viewfinder.position = Vector2(400, 160);
+      final pngData = await renderGameToPng(game);
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/parallax_camera_offset.png'),
+      );
+    });
+
+    test('repeating image layers cover the view far from the origin', () async {
+      component.tileMap.setLayerVisibility(2, visible: true);
+      game.camera.viewfinder.position = Vector2(2000, 1500);
+      final pngData = await renderGameToPng(game);
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/parallax_camera_repeat.png'),
       );
     });
   });

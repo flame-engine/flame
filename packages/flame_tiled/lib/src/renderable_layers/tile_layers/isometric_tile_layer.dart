@@ -11,7 +11,6 @@ import 'package:meta/meta.dart';
 class IsometricTileLayer extends FlameTileLayer {
   IsometricTileLayer({
     required super.layer,
-    required super.parent,
     required super.map,
     required super.destTileSize,
     required super.tiledAtlas,
