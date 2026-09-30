@@ -4,7 +4,9 @@ import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/commands/control_commands.dart';
 import 'package:flame_cli/src/commands/create_command.dart';
 import 'package:flame_cli/src/commands/debug_command.dart';
+import 'package:flame_cli/src/commands/devtools_command.dart';
 import 'package:flame_cli/src/commands/diff_command.dart';
+import 'package:flame_cli/src/commands/flame_command.dart';
 import 'package:flame_cli/src/commands/game_loop_commands.dart';
 import 'package:flame_cli/src/commands/input_commands.dart';
 import 'package:flame_cli/src/commands/inspect_command.dart';
@@ -25,6 +27,7 @@ class FlameCommandRunner extends CommandRunner<int> {
     StringSink? err,
     Directory? workingDirectory,
     ProcessStarter? startProcess,
+    GameConnector? connect,
     Stream<List<int>>? input,
   }) : _err = err ?? stderr,
        super(
@@ -49,6 +52,15 @@ class FlameCommandRunner extends CommandRunner<int> {
     addCommand(ReloadCommand(output, directory));
     addCommand(RestartCommand(output, directory));
     addCommand(LogsCommand(output, directory));
+    addCommand(
+      DevToolsCommand(
+        directory,
+        startProcess: startProcess,
+        connect: connect,
+        out: out,
+        err: err,
+      ),
+    );
     addCommand(SnapshotCommand(output, directory));
     addCommand(TreeCommand(output, directory));
     addCommand(InspectCommand(output, directory));
