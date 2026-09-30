@@ -9,6 +9,7 @@ void main() {
     ).usage;
 
     final categories = [
+      'Creating a game',
       'Launching the game',
       'Observing the game',
       'Pausing and changing the game',
@@ -20,17 +21,21 @@ void main() {
 
     int commandPosition(String name) => usage.indexOf('\n  $name ');
     expect(
-      commandPosition('run'),
+      commandPosition('create'),
       inExclusiveRange(positions[0], positions[1]),
     );
     expect(
-      commandPosition('tree'),
+      commandPosition('run'),
       inExclusiveRange(positions[1], positions[2]),
     );
     expect(
-      commandPosition('step'),
+      commandPosition('tree'),
       inExclusiveRange(positions[2], positions[3]),
     );
-    expect(commandPosition('input'), greaterThan(positions[3]));
+    expect(
+      commandPosition('step'),
+      inExclusiveRange(positions[3], positions[4]),
+    );
+    expect(commandPosition('input'), greaterThan(positions[4]));
   });
 }

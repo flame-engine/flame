@@ -5,10 +5,12 @@ inspects and controls a Flame game that is running in debug mode, without having
 [DevTools](debug.md#devtools-extension).
 
 This is useful for scripts, and for AI coding agents that want to see what the game currently looks
-like. The agent can start the game with `flame run`, take a snapshot with `flame snapshot` and then
-read the PNG image:
+like. The agent can create a game with `flame create`, start it with `flame run`, take a snapshot
+with `flame snapshot` and then read the PNG image:
 
 ```shell
+flame create my_game
+cd my_game
 flame run -d macos
 flame pause
 flame snapshot --output snapshot.png
@@ -106,6 +108,51 @@ every time, so that it never depends on which game was started last.
 
 Run `flame --help` to list the commands, and `flame help <command>` for the options of a
 command.
+
+
+### create
+
+Creates a new Flame game, the same way `flutter create` creates a new Flutter app: without
+questions, with sensible defaults, and with options to change them:
+
+```shell
+flame create my_game
+cd my_game
+flame run
+```
+
+It runs `flutter create` for the platform folders and the `pubspec.yaml`, writes the files of the
+chosen template on top of it, replaces `flutter_lints` with `flame_lint`, and adds `flame` (and
+`flame_test` when the template has tests) with `flutter pub add`, so that the game starts on the
+newest versions. The result is a normal Flutter project that `flutter run`, your IDE and the other
+`flame` commands all understand.
+
+These are the options:
+
+- `--project-name`: The name of the game, a valid Dart package name. It defaults to the name of
+  the output directory, so `flame create my_game` creates the package `my_game`.
+- `--org`: The organization in reverse domain name notation, used for the bundle and package
+  identifiers, `com.example` by default.
+- `--description`: The description in the `pubspec.yaml`.
+- `--template` (`-t`): The template to start from, see below. The default is `basics`.
+- `--platforms`: The platforms to generate folders for, as a comma separated list such as
+  `macos,web`, passed on to `flutter create`. All of them by default.
+- `--packages`: Additional Flame packages to add, for example `--packages flame_audio,flame_tiled`.
+- `--flame-version`: A version constraint for `flame`, for example `^1.30.0`, instead of the
+  newest version.
+- `--overwrite`: Replace the files of a game that already exists in the output directory.
+
+These are the templates:
+
+- `simple`: The emptiest possible game, an empty `FlameGame` in a `GameWidget`, for starting from
+  scratch.
+- `basics`: The structure that most games start from, a world with a component that reacts to
+  taps, and a test for it.
+- `example`: A complete small game with a world, a camera, keyboard and tap input, collisions, a
+  score in the viewport and tests, spread over a few files, to show how the pieces fit together.
+
+Every template comes with `flame_lint` as its analysis options, and the games from the `basics`
+and `example` templates pass `flutter analyze` and `flutter test` right after they are created.
 
 
 ### run
