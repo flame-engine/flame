@@ -105,7 +105,7 @@ Flame officially provides bridge libraries to the following packages:
 - [flame_riverpod][flame_riverpod] for [Riverpod][riverpod]: A reactive caching and data-binding
   framework.
 - [flame_spine][flame_spine] for [Spine][spine]: Use Spine skeletal animations.
-- [flame_sprite_fusion][flame_sprite_fusion] for [Sprite Fusion][sprite_fusion]: Load tilemaps
+- [flame_sprite_fusion][flame_sprite_fusion] for [Sprite Fusion][sprite_fusion]: Load tile maps
   exported from Sprite Fusion.
 - [flame_svg][flame_svg] for [flutter_svg][flutter_svg]: Draw SVG files in Flutter.
 - [flame_texturepacker][flame_texturepacker] for [TexturePacker][texturepacker]: Load and use
