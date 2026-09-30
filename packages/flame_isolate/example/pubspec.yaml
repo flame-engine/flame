@@ -17,7 +17,7 @@ dependencies:
   flame_isolate: ^0.6.3+23
   flutter:
     sdk: flutter
-  material_ui: any
+  material_ui: ^1.0.0
   quiver: ^3.2.1
 
 dev_dependencies:
