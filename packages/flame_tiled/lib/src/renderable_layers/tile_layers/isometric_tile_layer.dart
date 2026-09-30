@@ -23,7 +23,6 @@ class IsometricTileLayer extends FlameTileLayer {
 
   @override
   void cacheTiles() {
-    final tileData = layer.tileData!;
     final halfDestinationTile = destTileSize / 2;
     final size = destTileSize;
     final isometricXShift = map.height * halfDestinationTile.x;
@@ -34,15 +33,8 @@ class IsometricTileLayer extends FlameTileLayer {
       return;
     }
 
-    for (var ty = 0; ty < tileData.length; ty++) {
-      final tileRow = tileData[ty];
-
-      for (var tx = 0; tx < tileRow.length; tx++) {
-        final tileGid = tileRow[tx];
-        if (tileGid.tile == 0) {
-          continue;
-        }
-
+    for (final MapEntry(key: ty, value: tileRow) in tilesByWorldRow().entries) {
+      for (final (tx, tileGid) in tileRow) {
         final tile = map.tileByGid(tileGid.tile)!;
         final tileset = map.tilesetByTileGId(tileGid.tile);
         final img = tile.image ?? tileset.image;
@@ -78,7 +70,7 @@ class IsometricTileLayer extends FlameTileLayer {
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;
 
-        transforms[tx][ty] = MutableRSTransform(
+        final transform = MutableRSTransform(
           scos,
           ssin,
           offsetX,
@@ -86,10 +78,11 @@ class IsometricTileLayer extends FlameTileLayer {
           -scos * anchorX + ssin * anchorY,
           -ssin * anchorX - scos * anchorY,
         );
+        storeTransform(tx, ty, transform);
 
         batch.addTransform(
           source: src,
-          transform: transforms[tx][ty],
+          transform: transform,
           flip: shouldFlip(flips),
         );
 

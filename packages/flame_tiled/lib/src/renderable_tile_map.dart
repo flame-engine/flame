@@ -108,6 +108,13 @@ class RenderableTiledMap {
 
   /// Changes the Gid of the corresponding layer at the given layerId,
   /// if different
+  ///
+  /// {@template renderable_tile_map_set_tile}
+  /// [x] and [y] are the tile coordinates shown in the Tiled editor, which
+  /// can be negative on infinite maps. Only cells that exist in the map can
+  /// be changed: nothing happens for cells outside of a finite map, or
+  /// outside of the chunks of an infinite map.
+  /// {@endtemplate}
   void setTileData({
     required int layerId,
     required int x,
@@ -116,21 +123,16 @@ class RenderableTiledMap {
   }) {
     final layer = map.layers.firstWhereOrNull((layer) => layer.id == layerId);
     if (layer is TileLayer) {
-      final td = layer.tileData;
-      if (td != null) {
-        if (td[y][x].tile != gid.tile ||
-            td[y][x].flips.horizontally != gid.flips.horizontally ||
-            td[y][x].flips.vertically != gid.flips.vertically ||
-            td[y][x].flips.diagonally != gid.flips.diagonally) {
-          td[y][x] = gid;
-          _refreshCache();
-        }
+      if (layer.setTileAt(x, y, gid)) {
+        _refreshCache();
       }
     }
   }
 
   /// Changes the Gid of the corresponding layer at the given position,
   /// if different
+  ///
+  /// {@macro renderable_tile_map_set_tile}
   void setTileDataByLayerIndex({
     required int layerIndex,
     required int x,
@@ -139,20 +141,19 @@ class RenderableTiledMap {
   }) {
     final layer = map.layers[layerIndex];
     if (layer is TileLayer) {
-      final td = layer.tileData;
-      if (td != null) {
-        if (td[y][x].tile != gid.tile ||
-            td[y][x].flips.horizontally != gid.flips.horizontally ||
-            td[y][x].flips.vertically != gid.flips.vertically ||
-            td[y][x].flips.diagonally != gid.flips.diagonally) {
-          td[y][x] = gid;
-          _refreshCache();
-        }
+      if (layer.setTileAt(x, y, gid)) {
+        _refreshCache();
       }
     }
   }
 
   /// Gets the Gid  of the corresponding layer at the given layerId
+  ///
+  /// {@template renderable_tile_map_get_tile}
+  /// [x] and [y] are the tile coordinates shown in the Tiled editor, which
+  /// can be negative on infinite maps. Returns `null` for cells outside of a
+  /// finite map, or outside of the chunks of an infinite map.
+  /// {@endtemplate}
   Gid? getTileData({
     required int layerId,
     required int x,
@@ -160,12 +161,14 @@ class RenderableTiledMap {
   }) {
     final layer = map.layers.firstWhereOrNull((layer) => layer.id == layerId);
     if (layer is TileLayer) {
-      return layer.tileData?[y][x];
+      return layer.tileAt(x, y);
     }
     return null;
   }
 
   /// Gets the Gid  of the corresponding layer at the given position
+  ///
+  /// {@macro renderable_tile_map_get_tile}
   Gid? getTileDataByLayerIndex({
     required int layerIndex,
     required int x,
@@ -173,12 +176,15 @@ class RenderableTiledMap {
   }) {
     final layer = map.layers[layerIndex];
     if (layer is TileLayer) {
-      return layer.tileData?[y][x];
+      return layer.tileAt(x, y);
     }
     return null;
   }
 
   /// Select a group of tiles from the coordinates [x] and [y].
+  ///
+  /// [x] and [y] are the tile coordinates shown in the Tiled editor, which
+  /// can be negative on infinite maps.
   ///
   /// If [all] is set to true, every renderable tile from the map is collected.
   ///
@@ -239,8 +245,9 @@ class RenderableTiledMap {
           continue;
         }
 
-        if (layer.transforms[x][y] != null) {
-          tiles.add(layer.transforms[x][y]!);
+        final transform = layer.transformAt(x, y);
+        if (transform != null) {
+          tiles.add(transform);
         }
       }
     }

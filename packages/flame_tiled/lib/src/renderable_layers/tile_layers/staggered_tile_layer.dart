@@ -23,7 +23,6 @@ class StaggeredTileLayer extends FlameTileLayer {
 
   @override
   void cacheTiles() {
-    final tileData = layer.tileData!;
     final halfDestinationTile = destTileSize / 2;
     final size = destTileSize;
     final halfMapTile = Vector2(map.tileWidth / 2, map.tileHeight / 2);
@@ -43,9 +42,7 @@ class StaggeredTileLayer extends FlameTileLayer {
       staggerX = size.x * 0.5;
     }
 
-    for (var ty = 0; ty < tileData.length; ty++) {
-      final tileRow = tileData[ty];
-
+    for (final MapEntry(key: ty, value: tileRow) in tilesByWorldRow().entries) {
       // Isometric staggered tiles shift left and right depending on the row
       if (map.staggerAxis == StaggerAxis.y) {
         if ((ty.isOdd && map.staggerIndex == StaggerIndex.odd) ||
@@ -61,12 +58,7 @@ class StaggeredTileLayer extends FlameTileLayer {
       // painted over. See the second pass loop after tx.
       final xSecondPass = <TileTransform>[];
 
-      for (var tx = 0; tx < tileRow.length; tx++) {
-        final tileGid = tileRow[tx];
-        if (tileGid.tile == 0) {
-          continue;
-        }
-
+      for (final (tx, tileGid) in tileRow) {
         final tile = map.tileByGid(tileGid.tile)!;
         final tileset = map.tilesetByTileGId(tileGid.tile);
         final img = tile.image ?? tileset.image;
@@ -125,7 +117,7 @@ class StaggeredTileLayer extends FlameTileLayer {
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;
 
-        final transform = transforms[tx][ty] = MutableRSTransform(
+        final transform = MutableRSTransform(
           scos,
           ssin,
           offsetX,
@@ -133,6 +125,7 @@ class StaggeredTileLayer extends FlameTileLayer {
           -scos * anchorX + ssin * anchorY,
           -ssin * anchorX - scos * anchorY,
         );
+        storeTransform(tx, ty, transform);
 
         // A second pass is only needed in the case of staggery.
         if (map.staggerAxis == StaggerAxis.x && staggerY > 0) {

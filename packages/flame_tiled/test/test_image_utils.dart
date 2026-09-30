@@ -19,5 +19,26 @@ Future<Uint8List> renderMapToPng(
   return imageToPng(image);
 }
 
+/// Renders the part of [map] inside [region], which is given in map pixels.
+///
+/// Unlike [renderMapToPng] this can capture content at negative coordinates,
+/// which infinite maps have when tiles are placed left of or above the origin.
+Future<Uint8List> renderMapRegionToPng(
+  RenderableTiledMap map,
+  Rect region,
+) async {
+  final canvasRecorder = PictureRecorder();
+  final canvas = Canvas(canvasRecorder);
+  canvas.translate(-region.left, -region.top);
+  map.render(canvas);
+  final picture = canvasRecorder.endRecording();
+
+  final image = await picture.toImageSafe(
+    region.width.toInt(),
+    region.height.toInt(),
+  );
+  return imageToPng(image);
+}
+
 Future<Uint8List> imageToPng(Image image) async =>
     (await image.toByteData(format: ImageByteFormat.png))!.buffer.asUint8List();
