@@ -10,6 +10,11 @@ widgets in your tree. However, if you want to easily show widgets on top of your
 messages, menu screens or something of that nature, you can use the Widgets Overlay API to make
 things even easier.
 
+Overlays are placed on top of the whole game and are not affected by the camera or by component
+transforms. If you instead want a widget to be part of the game world, rendered in between other
+components and following their position, angle and scale, use a
+[`WidgetComponent`](components/utility_components.md#widgetcomponent).
+
 `Game.overlays` enables any Flutter widget to be shown on top of a game instance. This makes it very
 easy to create things like a pause menu or an inventory screen for example.
 

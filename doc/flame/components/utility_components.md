@@ -171,6 +171,75 @@ Check the example app
 for details on how to use it.
 
 
+## WidgetComponent
+
+A `WidgetComponent` hosts a Flutter widget inside the Flame component tree. The widget becomes a
+real part of the Flutter widget tree under the `GameWidget`, so it is laid out, painted, hit tested
+and focused like any other widget: buttons respond to taps, text fields receive keyboard input, and
+inherited widgets such as `Theme`, `MediaQuery` and `Directionality` are available to it. At the
+same time it is rendered in the middle of the Flame render pass, so it respects the component
+`priority`, the camera transform, and the position, angle, scale and anchor of the component and all
+of its ancestors.
+
+```dart
+world.add(
+  WidgetComponent(
+    position: Vector2(100, 100),
+    size: Vector2(200, 60),
+    anchor: Anchor.center,
+    widget: ElevatedButton(
+      onPressed: () => print('pressed'),
+      child: const Text('Play'),
+    ),
+  ),
+);
+```
+
+When `size` is given, the widget is laid out with tight constraints of that size, in the same way
+as a `SizedBox` would. When it is omitted, the component adopts whatever size the widget ends up
+with. In that case the widget is laid out with the `constraints` passed to the component, or, when
+those are omitted too, with loose constraints bounded by the size of the game canvas expressed in
+the local units of the component, so the scale of the component and of its ancestors is taken into
+account but the camera zoom is not.
+
+The hosted widget can be replaced at any time by assigning `widget`, which rebuilds the hosted
+subtree in the same way as returning a new widget from a `build` method would. State inside the
+widget, such as the text of a `TextField`, is kept as long as the widget types and keys line up, as
+in any other Flutter rebuild.
+
+Widgets are hit tested before the components of the game, so a tap on a button inside a
+`WidgetComponent` is not also delivered to a `TapCallbacks` component below it. Material widgets
+such as `ElevatedButton` and `TextField` need a `Material` ancestor, so either put a `Material`
+inside the hosted widget or make sure the `GameWidget` is inside a `MaterialApp` `Scaffold`.
+
+This differs from [overlays](../overlays.md), which are placed in a `Stack` on top of the whole
+game and are not affected by the camera or by any component transforms. Use overlays for menus and
+HUD elements that should stay fixed on the screen, and `WidgetComponent` for widgets that belong to
+the game world, for example a speech bubble attached to a character or a form on an in-game
+terminal.
+
+There are some limitations to be aware of:
+
+- The widget is only rendered by the `GameWidget` render pass. It is not included when the component
+  tree is rendered to a `Picture` or `Image` elsewhere, for example by the `Snapshot` mixin, by
+  `PostProcess`es or by the devtools component snapshot.
+- Flame paints are not applied to the widget. Paint based effects such as `OpacityEffect` or
+  `ColorEffect` on the component or its ancestors do not affect the widget, only transforms and
+  rectangular clips (such as the camera viewport) do.
+- A widget that needs its own compositing layer (for example one that contains a `RepaintBoundary`,
+  a scrollable list, or a platform view) splits the game's picture in two around it. Any `saveLayer`
+  that an ancestor component has active at that point is closed and reopened around the widget.
+- A widget can only be painted once per frame. When the same `WidgetComponent` is rendered several
+  times in one frame, for example because its world is viewed by several cameras, only the first
+  render paints the widget.
+- While the component is not rendered, for example because an ancestor is hidden, the widget stays
+  in the widget tree but is excluded from focus and semantics, and `isPainted` is false.
+
+Check the example app
+[widget_component](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/widget_component_example.dart)
+for details on how to use it.
+
+
 ## ComponentsNotifier
 
 Most of the time just accessing children and their attributes is enough to build the logic of
