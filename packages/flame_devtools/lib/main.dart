@@ -15,31 +15,24 @@ class FlameDevTools extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DevToolsExtension(
+    return const DevToolsExtension(
       child: ProviderScope(
         child: Column(
+          spacing: 16,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 16,
               children: [
-                const GameLoopControls(),
-                const DebugModeButton(),
-              ].withSpacing(),
+                GameLoopControls(),
+                DebugModeButton(),
+              ],
             ),
-            const Expanded(child: ComponentTree()),
-            const Flexible(child: OverlayNavigation()),
-          ].withSpacing(),
+            Expanded(child: ComponentTree()),
+            Flexible(child: OverlayNavigation()),
+          ],
         ),
       ),
     );
-  }
-}
-
-extension on List<Widget> {
-  List<Widget> withSpacing() {
-    return expand((item) sync* {
-      yield const SizedBox(width: 16, height: 16);
-      yield item;
-    }).skip(1).toList();
   }
 }

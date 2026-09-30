@@ -33,7 +33,7 @@ extension so that it can be loaded in the browser (the build files are not
 committed to the repository).
 
 After you have done any changes, make sure to run `melos devtools-build` to
-build and copy the changes to `packages/flame/extension/build`.
+build and copy the changes to `packages/flame/extension/devtools`.
 
 To develop things from the Flame side, create a new `DevToolsConnector` which
 registers the new extension end points so that you can communicate with Flame

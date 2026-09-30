@@ -40,7 +40,7 @@ class PositionComponentAttributesForm extends ConsumerWidget {
                   label: 'X',
                   initialValue: attributes.x,
                   onChanged: (v) {
-                    Repository.setPositionComponentAttribute(
+                    Repository.setComponentAttribute(
                       id: componentId,
                       attribute: 'x',
                       value: v,
@@ -53,7 +53,7 @@ class PositionComponentAttributesForm extends ConsumerWidget {
                   label: 'Y',
                   initialValue: attributes.y,
                   onChanged: (v) {
-                    Repository.setPositionComponentAttribute(
+                    Repository.setComponentAttribute(
                       id: componentId,
                       attribute: 'y',
                       value: v,
@@ -74,7 +74,7 @@ class PositionComponentAttributesForm extends ConsumerWidget {
                   label: 'Width',
                   initialValue: attributes.width,
                   onChanged: (v) {
-                    Repository.setPositionComponentAttribute(
+                    Repository.setComponentAttribute(
                       id: componentId,
                       attribute: 'width',
                       value: v,
@@ -87,7 +87,7 @@ class PositionComponentAttributesForm extends ConsumerWidget {
                   label: 'Height',
                   initialValue: attributes.height,
                   onChanged: (v) {
-                    Repository.setPositionComponentAttribute(
+                    Repository.setComponentAttribute(
                       id: componentId,
                       attribute: 'height',
                       value: v,
@@ -106,7 +106,7 @@ class PositionComponentAttributesForm extends ConsumerWidget {
               label: 'Radian',
               initialValue: attributes.angle,
               onChanged: (v) {
-                Repository.setPositionComponentAttribute(
+                Repository.setComponentAttribute(
                   id: componentId,
                   attribute: 'angle',
                   value: v,
@@ -125,7 +125,7 @@ class PositionComponentAttributesForm extends ConsumerWidget {
                   label: 'X',
                   initialValue: attributes.scaleX,
                   onChanged: (v) {
-                    Repository.setPositionComponentAttribute(
+                    Repository.setComponentAttribute(
                       id: componentId,
                       attribute: 'scaleX',
                       value: v,
@@ -138,7 +138,7 @@ class PositionComponentAttributesForm extends ConsumerWidget {
                   label: 'Y',
                   initialValue: attributes.scaleY,
                   onChanged: (v) {
-                    Repository.setPositionComponentAttribute(
+                    Repository.setComponentAttribute(
                       id: componentId,
                       attribute: 'scaleY',
                       value: v,
