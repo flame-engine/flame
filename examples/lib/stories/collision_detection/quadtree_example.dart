@@ -7,8 +7,8 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/layers.dart';
-import 'package:flutter/material.dart' hide Image, Draggable;
 import 'package:flutter/services.dart';
+import 'package:material_ui/material_ui.dart' hide Image, Draggable;
 
 const tileSize = 8.0;
 

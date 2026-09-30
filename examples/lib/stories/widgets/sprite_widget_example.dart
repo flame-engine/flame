@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:dashbook/dashbook.dart';
 import 'package:examples/stories/widgets/paints.dart';
 import 'package:flame/widgets.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 final anchorOptions = Anchor.values.map((e) => e.name).toList();
 

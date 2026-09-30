@@ -1,5 +1,5 @@
 import 'package:flame_devtools/repository.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ComponentCounter extends StatefulWidget {
   const ComponentCounter({super.key});

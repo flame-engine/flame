@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/flame_forge2d.dart' hide Transform;
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// The body shape that a widget is given, which follows the shape that
 /// Material draws it with.

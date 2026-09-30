@@ -22,7 +22,7 @@ import 'package:examples/stories/input/secondary_tap_callbacks_example.dart';
 import 'package:examples/stories/input/tap_callbacks_example.dart';
 import 'package:examples/stories/input/tertiary_tap_callbacks_example.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 void addInputStories(Dashbook dashbook) {
   dashbook.storiesOf('Input')

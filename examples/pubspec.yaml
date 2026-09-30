@@ -28,6 +28,7 @@ dependencies:
     sdk: flutter
   google_fonts: ^8.0.2
   jenny: ^1.5.1
+  material_ui: any
   meta: ^1.12.0
   padracing: ^1.0.0
   provider: ^6.1.2

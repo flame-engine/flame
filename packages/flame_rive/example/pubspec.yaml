@@ -12,6 +12,7 @@ dependencies:
   flame_rive: ^1.11.2
   flutter:
     sdk: flutter
+  material_ui: any
   rive: ^0.14.0
 
 dev_dependencies:

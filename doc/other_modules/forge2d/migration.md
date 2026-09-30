@@ -82,14 +82,14 @@ switch (shape.geometry) {
 
 ## Shape construction
 
-| Before | After |
-|---|---|
-| `CircleShape()..radius = r` | `Circle(radius: r, center: c)` |
-| `EdgeShape()..set(a, b)` | `Segment(point1: a, point2: b)` |
-| `PolygonShape()..set(vertices)` | `Polygon(vertices)` |
-| `PolygonShape()..setAsBoxXY(w, h)` | `Polygon.box(w, h)` |
-| `ChainShape()..createChain(points)` | `body.createChain(ChainDef(points: points))` |
-| `ChainShape()..createLoop(points)` | `body.createChain(ChainDef(points: points, isLoop: true))` |
+| Before                              | After                                                      |
+| ----------------------------------- | ---------------------------------------------------------- |
+| `CircleShape()..radius = r`         | `Circle(radius: r, center: c)`                             |
+| `EdgeShape()..set(a, b)`            | `Segment(point1: a, point2: b)`                            |
+| `PolygonShape()..set(vertices)`     | `Polygon(vertices)`                                        |
+| `PolygonShape()..setAsBoxXY(w, h)`  | `Polygon.box(w, h)`                                        |
+| `ChainShape()..createChain(points)` | `body.createChain(ChainDef(points: points))`               |
+| `ChainShape()..createLoop(points)`  | `body.createChain(ChainDef(points: points, isLoop: true))` |
 
 `Capsule` is new; there is no 0.14 equivalent.
 

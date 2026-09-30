@@ -12,10 +12,12 @@ environment:
 
 dependencies:
   collection: ^1.18.0
+  cupertino_ui: any
   flame: ^1.38.0
   flame_isolate: ^0.6.3+23
   flutter:
     sdk: flutter
+  material_ui: any
   quiver: ^3.2.1
 
 dev_dependencies:

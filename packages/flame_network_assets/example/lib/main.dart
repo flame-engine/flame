@@ -5,7 +5,7 @@ import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_network_assets/flame_network_assets.dart';
-import 'package:flutter/material.dart' hide Image;
+import 'package:material_ui/material_ui.dart' hide Image;
 
 void main() {
   runApp(const GameWidget.managed(gameFactory: MyGame.new));

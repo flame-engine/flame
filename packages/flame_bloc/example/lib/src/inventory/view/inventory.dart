@@ -1,6 +1,6 @@
 import 'package:flame_bloc_example/src/inventory/bloc/inventory_bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 class Inventory extends StatelessWidget {
   const Inventory({super.key});

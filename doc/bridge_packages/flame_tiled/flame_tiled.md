@@ -27,9 +27,28 @@ render visible layers using the performant `SpriteBatch` for each layer.
 
 Supported map types include: Orthogonal, Isometric, Hexagonal, and Staggered.
 
-Orthogonal | Hexagonal             |  Isomorphic
-:--:|:-------------------------:|:-------------------------:
-![An example of an orthogonal map](../../images/orthogonal.png)|![An example of hexagonal map](../../images/pointy_hex_even.png) |  ![An example of isomorphic map](../../images/tile_stack_single_move.png)
+<table class="docutils" style="text-align: center;">
+  <thead>
+    <tr>
+      <th>Orthogonal</th>
+      <th>Hexagonal</th>
+      <th>Isomorphic</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <img src="../../images/orthogonal.png" alt="An example of an orthogonal map">
+      </td>
+      <td>
+        <img src="../../images/pointy_hex_even.png" alt="An example of hexagonal map">
+      </td>
+      <td>
+        <img src="../../images/tile_stack_single_move.png" alt="An example of isomorphic map">
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 An example of how to use the API can be found
 [here](https://github.com/flame-engine/flame/tree/main/packages/flame_tiled/example).

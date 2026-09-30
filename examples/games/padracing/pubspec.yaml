@@ -14,6 +14,7 @@ dependencies:
   flutter:
     sdk: flutter
   google_fonts: ^8.0.2
+  material_ui: any
   url_launcher: ^6.1.11
 
 dev_dependencies:

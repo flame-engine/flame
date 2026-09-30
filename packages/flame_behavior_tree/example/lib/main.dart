@@ -8,7 +8,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_behavior_tree/flame_behavior_tree.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 typedef MyGame = FlameGame<GameWorld>;
 const gameWidth = 320.0;
