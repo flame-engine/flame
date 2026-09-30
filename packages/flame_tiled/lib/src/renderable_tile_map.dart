@@ -7,7 +7,6 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/rendering.dart';
 import 'package:flame_tiled/src/extensions.dart';
-import 'package:flame_tiled/src/flame_tsx_provider.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
@@ -252,8 +251,9 @@ class RenderableTiledMap {
   ///
   /// {@template renderable_tile_map_path}
   /// The [fileName] is the full path of the map, as declared in the
-  /// `pubspec.yaml`, for example `assets/tiles/map.tmx`. Any external `.tsx`
-  /// tileset the map references is resolved relative to that path.
+  /// `pubspec.yaml`, for example `assets/tiles/map.tmx`. External tilesets
+  /// (`.tsx`) and object templates (`.tx`) that the map references are
+  /// resolved relative to that path.
   /// {@endtemplate}
   ///
   /// {@template tiled_images_directory}
@@ -306,8 +306,8 @@ class RenderableTiledMap {
 
   /// Parses a string returning a [RenderableTiledMap].
   ///
-  /// External `.tsx` tilesets the map references are resolved against
-  /// [tsxDirectory].
+  /// External tilesets (`.tsx`) and object templates (`.tx`) that the map
+  /// references are resolved against [tsxDirectory].
   ///
   /// {@macro tiled_images_directory}
   ///
@@ -330,9 +330,12 @@ class RenderableTiledMap {
     double atlasPackingSpacingY = 0,
     String? package,
   }) async {
+    // tiled calls this once for every external file the map references,
+    // including files referenced from other external files, always with a
+    // path relative to the map.
     final map = await TiledMap.fromString(
       contents,
-      (key) => FlameTsxProvider.parse(key, bundle, tsxDirectory),
+      (path) => (bundle ?? Flame.bundle).loadString('$tsxDirectory$path'),
     );
     return fromTiledMap(
       map,

@@ -21,7 +21,7 @@ dependencies:
   flame: ^1.38.0
   flutter:
     sdk: flutter
-  xml: ^6.5.0
+  xml: ">=6.5.0 <8.0.0"
 
 dev_dependencies:
   build_runner: ^2.4.11
