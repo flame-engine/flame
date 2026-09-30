@@ -19,6 +19,30 @@ new tab called "Flame". This tab will show you information about the current gam
 visualization of the component tree, the ability to play, pause and step the game, information
 about the selected component, and more.
 
+The extension talks to the game through
+[service extensions](https://api.flutter.dev/flutter/dart-developer/registerExtension.html) that
+Flame registers when a `FlameGame` is created in debug mode. Other tools can call the same service
+extensions through the Dart VM Service. The [Flame CLI](cli.md) uses them to take snapshots of a
+running game from the terminal, which is also useful for scripts and AI coding agents.
+
+
+### Service extensions
+
+If you want to build your own tooling, these are the service extensions that can be used for
+snapshots. They are only available in debug mode and they are called on the isolate that runs the
+game.
+
+- `ext.flame_devtools.getGameSnapshot`: Renders the whole game. It takes an optional `pixelRatio`
+  parameter and returns `snapshot` (a base64 encoded PNG image), `width` and `height`.
+- `ext.flame_devtools.getComponentSnapshot`: Renders a single component. It takes the `id` of the
+  component and an optional `pixelRatio` parameter, and returns `snapshot` (a base64 encoded PNG
+  image). It responds with an invalid parameters error if no component with that id was found.
+- `ext.flame_devtools.getComponentTree`: Returns the `component_tree`, where every node has an
+  `id`, a `name`, the `toString` of the component and its `children`.
+
+The id of a component is its `hashCode`. If you have multiple games in your app, only the last one
+created is connected, see `DevToolsService.initWithGame` to change it.
+
 
 ## FPS
 

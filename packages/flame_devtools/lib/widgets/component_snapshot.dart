@@ -41,6 +41,9 @@ class _ComponentSnapshotState extends State<ComponentSnapshot> {
     return FutureBuilder<String?>(
       future: _snapshot,
       builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Text('Could not take a snapshot: ${snapshot.error}');
+        }
         if (snapshot.connectionState == ConnectionState.done &&
             snapshot.hasData) {
           return Base64Image(
