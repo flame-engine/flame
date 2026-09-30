@@ -9,8 +9,8 @@ environment:
 
 dependencies:
   collection: ^1.17.1
-  flame: ^1.38.0
-  flame_forge2d: ^0.20.0
+  flame: ^2.0.0-dev.0
+  flame_forge2d: ^0.21.0-dev.0
   flutter:
     sdk: flutter
   google_fonts: ^8.0.2
@@ -18,7 +18,7 @@ dependencies:
   url_launcher: ^6.1.11
 
 dev_dependencies:
-  flame_lint: ^1.4.3
+  flame_lint: ^1.4.4-dev.0
   flutter_test:
     sdk: flutter
 

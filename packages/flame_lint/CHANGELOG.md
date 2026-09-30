@@ -1,3 +1,7 @@
+## 1.4.4-dev.0
+
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+
 ## 1.4.3
 
  - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))

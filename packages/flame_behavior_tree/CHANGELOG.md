@@ -1,3 +1,13 @@
+## 0.2.0-dev.0+6
+
+> Note: This release has breaking changes.
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **BREAKING** **FEAT**: Make `Timer` and `TimerComponent` APIs consistent ([#4076](https://github.com/flame-engine/flame/issues/4076)). ([87a0265a](https://github.com/flame-engine/flame/commit/87a0265afb7288a5a5995bbbe118bc0cbaeb23ca))
+ - **BREAKING** **FEAT**: Making add,addAll sync methods ([#3968](https://github.com/flame-engine/flame/issues/3968)). ([52710ca6](https://github.com/flame-engine/flame/commit/52710ca67ff2b6e6094e9814f2e869314e2b79e8))
+ - **BREAKING** **FEAT**: Rename GameWidget.controlled to GameWidget.managed ([#3961](https://github.com/flame-engine/flame/issues/3961)). ([d99224e5](https://github.com/flame-engine/flame/commit/d99224e5e23c16c86d6d26bf8a807d31c4b4bbc4))
+
 ## 0.1.5+5
 
  - Update a dependency to the latest release.
