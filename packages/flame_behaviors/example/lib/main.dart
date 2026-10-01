@@ -13,7 +13,7 @@ class ExampleGame extends FlameGame with EntityMixin, HasCollisionDetection {
     // Game-specific behaviors
     add(SpawningBehavior());
 
-    return super.onLoad();
+    await super.onLoad();
   }
 }
 

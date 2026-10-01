@@ -57,26 +57,24 @@ class Animation extends GltfNode {
       final times = sampler.input.get().typedData();
       final values = sampler.output.get();
 
-      final spline =
-          switch (path) {
-                AnimationPath.translation => TranslationAnimationSpline.from(
-                  interpolation: sampler.interpolation,
-                  times: times,
-                  values: values.asVector3().typedData(),
-                ),
-                AnimationPath.scale => ScaleAnimationSpline.from(
-                  interpolation: sampler.interpolation,
-                  times: times,
-                  values: values.asVector3().typedData(),
-                ),
-                AnimationPath.rotation => RotationAnimationSpline.from(
-                  interpolation: sampler.interpolation,
-                  times: times,
-                  values: values.asQuaternion().typedData(),
-                ),
-                AnimationPath.weights => throw UnimplementedError(),
-              }
-              as AnimationSpline;
+      final spline = switch (path) {
+        AnimationPath.translation => TranslationAnimationSpline.from(
+          interpolation: sampler.interpolation,
+          times: times,
+          values: values.asVector3().typedData(),
+        ),
+        AnimationPath.scale => ScaleAnimationSpline.from(
+          interpolation: sampler.interpolation,
+          times: times,
+          values: values.asVector3().typedData(),
+        ),
+        AnimationPath.rotation => RotationAnimationSpline.from(
+          interpolation: sampler.interpolation,
+          times: times,
+          values: values.asQuaternion().typedData(),
+        ),
+        AnimationPath.weights => throw UnimplementedError(),
+      } as AnimationSpline;
 
       final nodeIndex = channel.target.node.index;
       (controllers[nodeIndex] ??= []).add(

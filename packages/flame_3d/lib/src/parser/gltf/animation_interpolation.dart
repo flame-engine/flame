@@ -25,7 +25,7 @@ enum AnimationInterpolation {
 
   final String value;
 
-  const AnimationInterpolation(this.value);
+  AnimationInterpolation(this.value);
 
   static AnimationInterpolation valueOf(String value) {
     return values.firstWhere((e) => e.value == value);

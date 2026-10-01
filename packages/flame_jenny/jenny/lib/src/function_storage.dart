@@ -192,7 +192,6 @@ class Udf {
       final argType = args[i].expression.type;
       final expectedType = _argumentTypes[i + i0];
       final typesAreCompatible =
-          false ||
           (argType == ExpressionType.boolean &&
               expectedType == _Type.boolean) ||
           (argType == ExpressionType.numeric &&
@@ -285,7 +284,6 @@ class Udf {
     var nOptionalArguments = 0;
     for (final type in types) {
       final isOptional =
-          false ||
           (type == _maybeInt) ||
           (type == _maybeBool) ||
           (type == _maybeDouble) ||

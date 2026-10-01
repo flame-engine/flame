@@ -358,7 +358,7 @@ void main() {
   });
 }
 
-class _SimpleDialogueView extends DialogueView {}
+class _SimpleDialogueView extends DialogueView;
 
 class _RecordingDialogueView extends DialogueView {
   _RecordingDialogueView({

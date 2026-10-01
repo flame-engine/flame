@@ -17,7 +17,7 @@ class _ParentComponent extends Component {
   }
 }
 
-class _ChildComponent extends _ParentComponent with HasWorldRef<World> {}
+class _ChildComponent extends _ParentComponent with HasWorldRef<World>;
 
 void main() {
   group('HasWorldRef', () {

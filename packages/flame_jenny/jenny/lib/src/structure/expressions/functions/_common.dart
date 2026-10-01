@@ -28,12 +28,11 @@ class FunctionArgument {
   final int position;
 }
 
-typedef FunctionBuilder =
-    Expression Function(
-      List<FunctionArgument>,
-      YarnProject,
-      ErrorFn,
-    );
+typedef FunctionBuilder = Expression Function(
+  List<FunctionArgument>,
+  YarnProject,
+  ErrorFn,
+);
 
 /// This is a complete list of all builtin functions in Jenny.
 ///

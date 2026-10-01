@@ -48,6 +48,6 @@ class _TestEffectController extends _MockEffectController
   _MockEffectController get child => _child;
 }
 
-class _MockEffectController extends Mock implements EffectController {}
+class _MockEffectController extends Mock implements EffectController;
 
-class _MockEffect extends Mock implements Effect {}
+class _MockEffect extends Mock implements Effect;

@@ -275,7 +275,7 @@ enum ButtonState {
   disabled,
   disabledAndSelected;
 
-  const ButtonState();
+  ButtonState();
 
   bool get isDefault {
     return this == ButtonState.up;

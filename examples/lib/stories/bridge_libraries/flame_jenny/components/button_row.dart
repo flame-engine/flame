@@ -59,11 +59,11 @@ class ButtonRow extends PositionComponent {
     addAll(optionButtons);
   }
 
-  void showCloseButton(Function() onClose) {
+  void showCloseButton(void Function() onClose) {
     final closeButton = DialogueButton(
       assetPath: 'assets/images/green_button_sqr.png',
       text: 'Close',
-      onPressed: () => onClose(),
+      onPressed: onClose,
       position: Vector2(size.x / 2, 0),
     );
     add(closeButton);

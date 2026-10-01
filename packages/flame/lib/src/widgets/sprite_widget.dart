@@ -92,11 +92,11 @@ class _SpriteWidgetState extends State<SpriteWidget> {
 
   FutureOr<Sprite> _initializeFuture() async {
     if (!widget.rasterize) {
-      return widget._spriteFuture;
+      return await widget._spriteFuture;
     }
 
     final sprite = await widget._spriteFuture;
-    return sprite.rasterize();
+    return await sprite.rasterize();
   }
 
   @override

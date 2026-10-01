@@ -7,7 +7,7 @@ enum BufferViewTarget {
 
   final int value;
 
-  const BufferViewTarget(this.value);
+  BufferViewTarget(this.value);
 
   static BufferViewTarget valueOf(int value) {
     return values.firstWhere((e) => e.value == value);

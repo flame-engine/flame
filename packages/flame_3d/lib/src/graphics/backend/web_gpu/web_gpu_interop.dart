@@ -112,21 +112,21 @@ extension type GPUTexture._(JSObject _) implements JSObject {
   external void destroy();
 }
 
-extension type GPUTextureView._(JSObject _) implements JSObject {}
+extension type GPUTextureView._(JSObject _) implements JSObject;
 
-extension type GPUSampler._(JSObject _) implements JSObject {}
+extension type GPUSampler._(JSObject _) implements JSObject;
 
-extension type GPUShaderModule._(JSObject _) implements JSObject {}
+extension type GPUShaderModule._(JSObject _) implements JSObject;
 
-extension type GPUBindGroupLayout._(JSObject _) implements JSObject {}
+extension type GPUBindGroupLayout._(JSObject _) implements JSObject;
 
-extension type GPUBindGroup._(JSObject _) implements JSObject {}
+extension type GPUBindGroup._(JSObject _) implements JSObject;
 
 extension type GPURenderPipeline._(JSObject _) implements JSObject {
   external GPUBindGroupLayout getBindGroupLayout(int index);
 }
 
-extension type GPUCommandBuffer._(JSObject _) implements JSObject {}
+extension type GPUCommandBuffer._(JSObject _) implements JSObject;
 
 extension type GPUCommandEncoder._(JSObject _) implements JSObject {
   external GPURenderPassEncoder beginRenderPass(

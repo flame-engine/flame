@@ -193,7 +193,7 @@ class TypledSpriteAtlas {
     }
 
     final picture = recorder.endRecording();
-    return picture.toImage(newWidth, newHeight);
+    return await picture.toImage(newWidth, newHeight);
   }
 
   static Future<TypledAtlas> _loadAtlas(
@@ -215,7 +215,7 @@ extension TypledSpriteAtlasGameExtension on Game {
     String path, {
     bool disablePadding = false,
   }) async {
-    return TypledSpriteAtlas.load(
+    return await TypledSpriteAtlas.load(
       path,
       cache: assets,
       disablePadding: disablePadding,

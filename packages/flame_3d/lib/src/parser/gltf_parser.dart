@@ -14,7 +14,7 @@ class GltfParser extends ModelParser {
 
   Future<GltfRoot> parseGltf(String filePath) async {
     final content = await Flame.assets.readJson(filePath);
-    return GltfRoot.from(
+    return await GltfRoot.from(
       prefix: ModelParser.prefix(filePath),
       json: content,
       chunks: [],

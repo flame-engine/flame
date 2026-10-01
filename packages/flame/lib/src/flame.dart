@@ -1,5 +1,3 @@
-library flame;
-
 import 'package:flame/src/cache/assets_cache.dart';
 import 'package:flame/src/cache/images.dart';
 import 'package:flame/src/device.dart';

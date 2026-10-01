@@ -48,7 +48,7 @@ class Image extends GltfNode with GltfNodeWithData<flame3d.ImageTexture> {
   Future<Uint8List> data() async {
     final uri = this.uri;
     if (uri != null) {
-      return root.readChunkFrom(uri);
+      return await root.readChunkFrom(uri);
     } else {
       final bufferView = this.bufferView?.get();
       if (bufferView == null) {
@@ -67,7 +67,7 @@ class Image extends GltfNode with GltfNodeWithData<flame3d.ImageTexture> {
 
   @override
   Future<flame3d.ImageTexture> loadData() async {
-    return flame3d.ImageTexture.create(await parseDartImage());
+    return await flame3d.ImageTexture.create(await parseDartImage());
   }
 
   flame3d.ImageTexture toFlameTexture() {

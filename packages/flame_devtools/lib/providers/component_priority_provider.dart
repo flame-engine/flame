@@ -3,6 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final componentPriorityProvider = FutureProvider.autoDispose.family<int, int>(
   (ref, id) async {
-    return Repository.getComponentPriority(id: id);
+    return await Repository.getComponentPriority(id: id);
   },
 );

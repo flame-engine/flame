@@ -83,21 +83,17 @@ class Ball extends CircleComponent
       // Left Side Collision
       if (collisionPoint.x == 0) {
         velocity.x = -velocity.x;
-        velocity.y = velocity.y;
       }
       // Right Side Collision
       if (collisionPoint.x == gameRef.size.x) {
         velocity.x = -velocity.x;
-        velocity.y = velocity.y;
       }
       // Top Side Collision
       if (collisionPoint.y == 0) {
-        velocity.x = velocity.x;
         velocity.y = -velocity.y;
       }
       // Bottom Side Collision
       if (collisionPoint.y == gameRef.size.y) {
-        velocity.x = velocity.x;
         velocity.y = -velocity.y;
       }
     }

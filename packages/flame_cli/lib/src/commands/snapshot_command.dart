@@ -108,7 +108,7 @@ class SnapshotCommand extends FlameCommand {
             args: {
               'pixelRatio': pixelRatio,
               if (argResults!.flag('world')) 'world': 'true',
-              if (rect != null) 'rect': rect,
+              'rect': ?rect,
             },
           )
         : await connection.call(

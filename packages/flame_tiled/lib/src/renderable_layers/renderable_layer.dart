@@ -91,7 +91,7 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent {
         layerPaintFactory: layerPaintFactory,
       );
     } else if (layer is ImageLayer) {
-      return FlameImageLayer.load(
+      return await FlameImageLayer.load(
         layer: layer,
         map: map,
         destTileSize: destTileSize,

@@ -207,7 +207,7 @@ void main() {
   });
 }
 
-class _DefaultDialogueView extends DialogueView {}
+class _DefaultDialogueView extends DialogueView;
 
 class _RecordingDialogueView extends DialogueView {
   _RecordingDialogueView([this.waitDuration = Duration.zero]);
@@ -285,7 +285,7 @@ class _RecordingDialogueView extends DialogueView {
   }
 }
 
-class _SomeOtherBaseClass {}
+class _SomeOtherBaseClass;
 
 class _RecordingDialogueViewAsMixin extends _SomeOtherBaseClass
     with DialogueView {

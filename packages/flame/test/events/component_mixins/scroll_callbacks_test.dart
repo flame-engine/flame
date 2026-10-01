@@ -175,7 +175,7 @@ class _ScrollCallbacksComponent extends PositionComponent
 }
 
 class _ScrollCallbacksGame extends FlameGame
-    with ScrollCallbacks, _ScrollInspector {}
+    with ScrollCallbacks, _ScrollInspector;
 
 class _RawScrollCallbacksComponent extends PositionComponent
     with ScrollCallbacks {

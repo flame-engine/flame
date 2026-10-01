@@ -4,7 +4,7 @@ enum LayoutAxis {
   x(0),
   y(1);
 
-  const LayoutAxis(this.axisIndex);
+  LayoutAxis(this.axisIndex);
 
   /// Necessary for use with LinearLayoutComponent's Direction
   final int axisIndex;

@@ -2588,7 +2588,6 @@ class _AsyncLoadingChild extends Component {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    return Future.value();
   }
 }
 

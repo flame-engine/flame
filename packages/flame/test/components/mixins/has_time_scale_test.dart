@@ -145,10 +145,10 @@ void main() {
   });
 }
 
-class _GameWithTimeScale extends FlameGame with HasTimeScale {}
+class _GameWithTimeScale extends FlameGame with HasTimeScale;
 
 class _ComponentWithTimeScale extends Component
-    with CustomTraversal, HasTimeScale {}
+    with CustomTraversal, HasTimeScale;
 
 class _MovingComponent extends PositionComponent {
   final speed = 1.0;

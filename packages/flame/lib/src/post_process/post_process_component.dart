@@ -56,7 +56,7 @@ class PostProcessComponent<T extends PostProcess> extends PositionComponent {
   @mustCallSuper
   Future<void> onLoad() async {
     await postProcess.onLoad();
-    return super.onLoad();
+    await super.onLoad();
   }
 
   @override
@@ -68,7 +68,7 @@ class PostProcessComponent<T extends PostProcess> extends PositionComponent {
 
   @override
   @mustCallSuper
-  void onChildrenChanged(_, __) {
+  void onChildrenChanged(_, _) {
     _recalculateBoundingSize();
   }
 

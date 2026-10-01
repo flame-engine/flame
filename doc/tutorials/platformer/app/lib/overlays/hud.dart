@@ -53,7 +53,7 @@ class Hud extends PositionComponent with HasGameRef<EmberQuestGame> {
       );
     }
 
-    return super.onLoad();
+    await super.onLoad();
   }
 
   @override

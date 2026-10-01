@@ -9,7 +9,7 @@ enum TextBoxConfigMaxWidth {
   small(200),
   large(640);
 
-  const TextBoxConfigMaxWidth(this.value);
+  TextBoxConfigMaxWidth(this.value);
 
   final double value;
 }

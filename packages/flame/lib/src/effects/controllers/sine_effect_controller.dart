@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'package:flame/geometry.dart';
 import 'package:flame/src/effects/controllers/duration_effect_controller.dart';
 import 'package:flame/src/effects/controllers/infinite_effect_controller.dart';

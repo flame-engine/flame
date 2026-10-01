@@ -14,7 +14,7 @@ enum ComponentType {
   final int value;
   final int byteSize;
 
-  const ComponentType({
+  ComponentType({
     required this.value,
     required this.byteSize,
   });

@@ -48,7 +48,7 @@ class GraphicsDevice {
   /// passes. Call [end] when the frame is complete.
   void begin() {
     // Reset the pool indices, each existing target becomes available again.
-    _poolIndex.updateAll((_, __) => 0);
+    _poolIndex.updateAll((_, _) => 0);
     _frame = backend.beginFrame();
   }
 

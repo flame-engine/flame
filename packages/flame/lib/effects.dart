@@ -37,16 +37,16 @@ export 'src/effects/provider_interfaces.dart'
     show
         AnchorProvider,
         AngleProvider,
-        ReadOnlyAngleProvider,
+        HueProvider,
+        OpacityProvider,
+        PaintProvider,
         PositionProvider,
-        ScaleProvider,
-        SizeProvider,
+        ReadOnlyAngleProvider,
         ReadOnlyPositionProvider,
         ReadOnlyScaleProvider,
         ReadOnlySizeProvider,
-        OpacityProvider,
-        PaintProvider,
-        HueProvider;
+        ScaleProvider,
+        SizeProvider;
 export 'src/effects/remove_effect.dart';
 export 'src/effects/rotate_around_effect.dart';
 export 'src/effects/rotate_effect.dart';

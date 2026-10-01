@@ -1,5 +1,5 @@
 /// Behavior tree implementation in dart
-library behavior_tree;
+library;
 
 export 'src/base_node.dart';
 export 'src/blackboard.dart';

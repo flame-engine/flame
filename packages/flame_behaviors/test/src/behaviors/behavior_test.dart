@@ -7,7 +7,7 @@ class _TestEntity extends PositionedEntity {
   _TestEntity({super.behaviors}) : super(size: Vector2.all(32));
 }
 
-class _TestBehavior extends Behavior<_TestEntity> {}
+class _TestBehavior extends Behavior<_TestEntity>;
 
 void main() {
   group('Behavior', () {

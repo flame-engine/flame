@@ -10,11 +10,10 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
 /// Function signature used by Flame Network Assets to fetch assets.
-typedef GetAssetFunction =
-    Future<FlameAssetResponse> Function(
-      String url, {
-      Map<String, String>? headers,
-    });
+typedef GetAssetFunction = Future<FlameAssetResponse> Function(
+  String url, {
+  Map<String, String>? headers,
+});
 
 /// Function signature used by Flame Network Assets to decode assets from a
 /// raw format.

@@ -27,7 +27,7 @@ class InputHandler extends PositionComponent
       ),
     );
 
-    return super.onLoad();
+    await super.onLoad();
   }
 
   @override

@@ -17,7 +17,7 @@ class TimeScaleGame extends FlameGame with HasTimeScale {
         onTap: (p0) => timeScale = getNextTimeScale(),
       ),
     );
-    return super.onLoad();
+    await super.onLoad();
   }
 
   double getNextTimeScale() {

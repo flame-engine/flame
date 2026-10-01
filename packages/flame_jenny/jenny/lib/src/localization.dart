@@ -133,7 +133,7 @@ String _plural25(num number, List<String> words) {
 /// The function requires 3 forms of the word: single-, few-, and many-. You
 /// can think of them as words needed for "1 X", "2 X", and "10 X". For example,
 /// the words for "рушниця" (rifle) would be:
-/// ```
+/// ```text
 /// plural(n, ["рушниця", "рушниці", "рушниць"])
 /// ```
 String _plural29(num number, List<String> words) {

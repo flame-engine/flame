@@ -65,4 +65,4 @@ class _ScaledRecorder extends _Recorder with CustomTraversal, HasTimeScale {
   _ScaledRecorder({super.children});
 }
 
-class _PausableGame extends FlameGame with HasTimeScale {}
+class _PausableGame extends FlameGame with HasTimeScale;

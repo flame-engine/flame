@@ -23,7 +23,7 @@ ProcessStarter _starter(
     workingDirectory,
     runInShell = false,
     mode = ProcessStartMode.normal,
-  }) async => onStart(executable, arguments, workingDirectory);
+  }) async => await onStart(executable, arguments, workingDirectory);
 }
 
 /// A connection to a game that is reachable at [uri], and that records

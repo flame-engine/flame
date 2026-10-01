@@ -1,4 +1,4 @@
-import 'dart:typed_data' show Float64List, Float32List;
+import 'dart:typed_data' show Float32List, Float64List;
 import 'dart:ui';
 
 class MatrixPool {

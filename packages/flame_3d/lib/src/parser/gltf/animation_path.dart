@@ -9,7 +9,7 @@ enum AnimationPath {
 
   final String value;
 
-  const AnimationPath(this.value);
+  AnimationPath(this.value);
 
   static AnimationPath valueOf(String value) {
     return values.firstWhere((e) => e.value == value);

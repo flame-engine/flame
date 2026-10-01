@@ -3,7 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flame_riverpod/flame_riverpod.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// ignore: depend_on_referenced_packages, implementation_imports
+// ignore: implementation_imports
 import 'package:riverpod/src/framework.dart';
 
 /// A [GameWidget] that provides access to [Component]s using
@@ -159,7 +159,7 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T> {
             // setState call has been replaced with forceBuild,
             // to prevent setState calls while the widget is
             // building, which throws a framework error.
-            (_, __) => forceBuild(),
+            (_, _) => forceBuild(),
           );
         }).read()
         as Res;
@@ -221,7 +221,7 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T> {
       listener,
       onError: onError,
       fireImmediately: fireImmediately,
-      // ignore: invalid_use_of_internal_member, from riverpod
+      // ignore: from riverpod
     );
 
     // Hook-up on onClose to avoid memory leaks.

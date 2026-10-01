@@ -1,5 +1,3 @@
-// ignore_for_file: comment_references
-
 import 'dart:math';
 
 import 'package:flame/collisions.dart';

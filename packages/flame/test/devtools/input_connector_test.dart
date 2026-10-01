@@ -38,7 +38,7 @@ class _Dragger extends PositionComponent with DragCallbacks {
   }
 }
 
-class _KeyGame extends FlameGame with HasKeyboardHandlerComponents {}
+class _KeyGame extends FlameGame with HasKeyboardHandlerComponents;
 
 class _Listener extends Component with KeyboardHandler {
   final events = <KeyEvent>[];

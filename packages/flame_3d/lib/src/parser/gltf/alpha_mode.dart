@@ -19,7 +19,7 @@ enum AlphaMode {
 
   final String value;
 
-  const AlphaMode(this.value);
+  AlphaMode(this.value);
 
   static AlphaMode valueOf(String value) {
     return values.firstWhere((e) => e.value == value);

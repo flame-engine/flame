@@ -62,7 +62,7 @@ abstract interface class GpuShaderLibrary {
 }
 
 /// Handle to a compiled render pipeline.
-abstract interface class GpuPipeline {}
+abstract interface class GpuPipeline;
 
 /// Handle to a render target.
 abstract interface class GpuRenderTarget {

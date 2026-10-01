@@ -76,7 +76,7 @@ class SpriteButton extends StatelessWidget {
   }) : _buttonsFuture = [
          sprite,
          pressedSprite,
-         if (disabledSprite != null) disabledSprite,
+         ?disabledSprite,
        ];
 
   SpriteButton.future({
@@ -100,7 +100,7 @@ class SpriteButton extends StatelessWidget {
   }) : _buttonsFuture = Future.wait([
          sprite,
          pressedSprite,
-         if (disabledSprite != null) disabledSprite,
+         ?disabledSprite,
        ]);
 
   /// Loads the images from the asset [path] and [pressedPath] and renders

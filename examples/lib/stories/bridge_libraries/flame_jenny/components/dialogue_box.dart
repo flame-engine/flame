@@ -17,7 +17,7 @@ class DialogueBoxComponent extends SpriteComponent with HasGameRef {
       srcSize: spriteSize,
     );
     addAll([buttonRow, textBox]);
-    return super.onLoad();
+    await super.onLoad();
   }
 
   void changeText(String newText, Function() goNextLine) {

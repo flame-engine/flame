@@ -6,7 +6,7 @@ import 'package:material_ui/material_ui.dart';
 class _Wrapper extends StatefulWidget {
   const _Wrapper({
     required this.child,
-    // ignore: unused_element, unused_element_parameter
+    // ignore: unused_element_parameter
     this.small = false,
   });
 

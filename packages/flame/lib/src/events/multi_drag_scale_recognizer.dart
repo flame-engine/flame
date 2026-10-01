@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'package:flutter/gestures.dart';
 
 /// A gesture recognizer that can recognize both individual pointer drags

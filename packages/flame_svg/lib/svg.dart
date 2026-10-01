@@ -85,7 +85,7 @@ class Svg {
   }) async {
     cache ??= Flame.assets;
     final svgString = await cache.readFile(fileName, package: package);
-    return Svg.loadFromString(
+    return await Svg.loadFromString(
       svgString,
       pixelRatio: pixelRatio,
       fixedRatio: fixedRatio,

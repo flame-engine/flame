@@ -63,7 +63,7 @@ enum ComputeType {
 
   final String description;
 
-  const ComputeType(this.description);
+  ComputeType(this.description);
 }
 
 class CalculatePrimeNumber extends PositionComponent

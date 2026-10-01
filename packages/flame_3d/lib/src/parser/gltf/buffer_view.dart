@@ -52,7 +52,7 @@ class BufferView extends GltfNode with GltfNodeWithData<Uint8List> {
 
   @override
   Future<Uint8List> loadData() async {
-    return root.readChunk(buffer);
+    return await root.readChunk(buffer);
   }
 
   Uint8List data() {

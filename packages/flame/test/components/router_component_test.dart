@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:flutter/widgets.dart' hide Route, OverlayRoute;
+import 'package:flutter/widgets.dart' hide OverlayRoute, Route;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -384,8 +384,8 @@ void main() {
           GameWidget(
             game: game,
             overlayBuilderMap: {
-              'first!': (_, __) => Container(key: key1),
-              'second': (_, __) => Container(key: key2),
+              'first!': (_, _) => Container(key: key1),
+              'second': (_, _) => Container(key: key2),
             },
           ),
         );
@@ -438,15 +438,15 @@ void main() {
   });
 }
 
-class _ComponentA extends Component {}
+class _ComponentA extends Component;
 
-class _ComponentB extends Component {}
+class _ComponentB extends Component;
 
-class _ComponentC extends Component {}
+class _ComponentC extends Component;
 
-class _ComponentD extends Component {}
+class _ComponentD extends Component;
 
-class _ComponentE extends Component {}
+class _ComponentE extends Component;
 
 class _TestRoute extends Route {
   int onPopTimes = 0;

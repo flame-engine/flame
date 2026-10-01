@@ -104,7 +104,7 @@ void main() {
   });
 }
 
-class _MockNode extends Mock implements NodeInterface {}
+class _MockNode extends Mock implements NodeInterface;
 
 class _StatusAfterNTries extends BaseNode implements NodeInterface {
   _StatusAfterNTries(this.nTries, this.statusAfterTries);

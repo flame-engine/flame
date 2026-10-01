@@ -230,8 +230,7 @@ class _Lexer {
   bool modeCommand() {
     return eatWhitespace() ||
         (eatCommandName() &&
-            (false || // subsequent mode will depend on the command type
-                (simpleCommands.contains(tokens.last)) ||
+            ((simpleCommands.contains(tokens.last)) ||
                 (bareExpressionCommands.contains(tokens.last) &&
                     pushToken(Token.startExpression, position) &&
                     pushMode(modeCommandExpression)) ||

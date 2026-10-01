@@ -13,7 +13,7 @@ enum AccessorType {
   final String name;
   final int size;
 
-  const AccessorType(this.name, this.size);
+  AccessorType(this.name, this.size);
 
   static AccessorType valueOf(String name) {
     return values.firstWhere((e) => e.name == name);

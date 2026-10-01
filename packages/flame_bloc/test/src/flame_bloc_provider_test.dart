@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../inventory_cubit.dart';
 
 class _InventoryReader extends Component
-    with FlameBlocReader<InventoryCubit, InventoryState> {}
+    with FlameBlocReader<InventoryCubit, InventoryState>;
 
 class _InventoryListener extends Component
     with FlameBlocListenable<InventoryCubit, InventoryState> {

@@ -39,7 +39,7 @@ Future<void> testScenario({
   }
 
   if (testName == null) {
-    return testBody();
+    return await testBody();
   } else {
     test(testName, testBody, skip: skip);
   }

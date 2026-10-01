@@ -59,4 +59,4 @@ class _DelayedComponent extends Component {
   }
 }
 
-class _SingletonGame extends FlameGame with SingleGameInstance {}
+class _SingletonGame extends FlameGame with SingleGameInstance;

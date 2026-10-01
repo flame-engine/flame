@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:flame/effects.dart';
 
 /// This effect controller invokes the [callback] function and then immediately

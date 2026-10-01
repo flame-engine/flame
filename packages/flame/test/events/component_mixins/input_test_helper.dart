@@ -163,10 +163,10 @@ class ScaleWithCallbacksComponent extends PositionComponent
 }
 
 class ScaleDragCallbacksComponent extends PositionComponent
-    with ScaleCallbacks, DragCallbacks, ScaleCounter, DragCounter {}
+    with ScaleCallbacks, DragCallbacks, ScaleCounter, DragCounter;
 
 class ScaleDragCallbacksGame extends FlameGame
-    with ScaleCallbacks, DragCallbacks, ScaleCounter, DragCounter {}
+    with ScaleCallbacks, DragCallbacks, ScaleCounter, DragCounter;
 
 class SimpleScaleDragCallbacksComponent extends PositionComponent
     with ScaleCallbacks, DragCallbacks {
@@ -404,9 +404,9 @@ extension ZoomTesting on WidgetTester {
 }
 
 class ScaleCallbacksComponent extends PositionComponent
-    with ScaleCallbacks, ScaleCounter {}
+    with ScaleCallbacks, ScaleCounter;
 
-class ScaleCallbacksGame extends FlameGame with ScaleCallbacks, ScaleCounter {}
+class ScaleCallbacksGame extends FlameGame with ScaleCallbacks, ScaleCounter;
 
 class SimpleScaleCallbacksComponent extends PositionComponent
     with ScaleCallbacks {
@@ -419,9 +419,9 @@ class SimpleDragCallbacksComponent extends PositionComponent
 }
 
 class DragCallbacksComponent extends PositionComponent
-    with DragCallbacks, DragCounter {}
+    with DragCallbacks, DragCounter;
 
-class DragCallbacksGame extends FlameGame with DragCallbacks, DragCounter {}
+class DragCallbacksGame extends FlameGame with DragCallbacks, DragCounter;
 
 /// An ancestor that starts out passing events through, but can be made to
 /// swallow them partway through a gesture by setting [ignoreEvents].

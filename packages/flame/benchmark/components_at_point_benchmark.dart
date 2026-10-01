@@ -225,7 +225,7 @@ List<Vector2> _generatePositions(Random random) {
   );
 }
 
-class _TappableComponent extends PositionComponent with TapCallbacks {}
+class _TappableComponent extends PositionComponent with TapCallbacks;
 
 Future<void> main() async {
   final r1 = Random(69420);

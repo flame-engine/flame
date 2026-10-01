@@ -369,7 +369,7 @@ enum _QuadTreeZone {
   bottomLeft(2),
   bottomRight(3);
 
-  const _QuadTreeZone(this.value);
+  _QuadTreeZone(this.value);
 
   factory _QuadTreeZone.fromIndex(int i) {
     return switch (i) {

@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame_studio/flame_studio.dart';

@@ -1,5 +1,5 @@
 /// {@canonicalFor anchor.Anchor}
-library components;
+library;
 
 export 'src/anchor.dart';
 export 'src/camera/camera_component.dart' show CameraComponent;

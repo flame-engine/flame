@@ -4,7 +4,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _GameRefGame extends FlameGame {}
+class _GameRefGame extends FlameGame;
 
 void main() {
   group('HasGameRef', () {
@@ -105,7 +105,7 @@ void main() {
   });
 }
 
-class _Component<T extends FlameGame> extends Component with HasGameRef<T> {}
+class _Component<T extends FlameGame> extends Component with HasGameRef<T>;
 
 class _MyGame extends FlameGame {
   bool calledFoo = false;
@@ -120,6 +120,6 @@ class _FooComponent extends Component with HasGameRef<_MyGame> {
   }
 }
 
-class _BarComponent extends Component with HasGameRef<_MyGame> {}
+class _BarComponent extends Component with HasGameRef<_MyGame>;
 
-class _MockFlameGame extends Mock implements _MyGame {}
+class _MockFlameGame extends Mock implements _MyGame;

@@ -1,5 +1,3 @@
-library flame_tiled;
-
 export 'package:tiled/tiled.dart';
 
 export 'src/extensions.dart';

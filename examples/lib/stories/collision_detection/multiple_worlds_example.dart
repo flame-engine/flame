@@ -34,7 +34,7 @@ class MultipleWorldsExample extends FlameGame {
   }
 }
 
-class CollisionDetectionWorld extends World with HasCollisionDetection {}
+class CollisionDetectionWorld extends World with HasCollisionDetection;
 
 class CollidableEmber extends Ember with CollisionCallbacks {
   CollidableEmber({super.position});

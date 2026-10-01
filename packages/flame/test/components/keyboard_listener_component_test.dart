@@ -7,7 +7,7 @@ abstract class _KeyCallStub {
   bool onCall(Set<LogicalKeyboardKey> keysPressed);
 }
 
-class _KeyCallStubImpl extends Mock implements _KeyCallStub {}
+class _KeyCallStubImpl extends Mock implements _KeyCallStub;
 
 class _MockKeyUpEvent extends Mock implements KeyUpEvent {
   @override

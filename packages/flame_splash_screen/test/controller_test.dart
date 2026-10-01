@@ -6,7 +6,7 @@ class OnFinishContainer {
   void onFinish() {}
 }
 
-class MockOnFinish extends Mock implements OnFinishContainer {}
+class MockOnFinish extends Mock implements OnFinishContainer;
 
 void main() {
   group('Without autostart', () {

@@ -499,10 +499,9 @@ typedef GameLoadingWidgetBuilder = Widget Function(BuildContext);
 
 typedef GameErrorWidgetBuilder = Widget Function(BuildContext, Object error);
 
-typedef OverlayWidgetBuilder<T extends Game> =
-    Widget Function(
-      BuildContext context,
-      T game,
-    );
+typedef OverlayWidgetBuilder<T extends Game> = Widget Function(
+  BuildContext context,
+  T game,
+);
 
 typedef GameFactory<T extends Game> = T Function();

@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:examples/stories/bridge_libraries/flame_jenny/components/dialogue_box.dart';
 import 'package:flame/components.dart' hide Timer;
 import 'package:jenny/jenny.dart';
@@ -24,7 +25,7 @@ class DialogueControllerComponent extends Component
   @override
   Future<void> onNodeFinish(Node node) async {
     _dialogueBoxComponent.showCloseButton(_onClose);
-    return _closeCompleter.future;
+    return await _closeCompleter.future;
   }
 
   void _onClose() {
@@ -38,7 +39,7 @@ class DialogueControllerComponent extends Component
   }
 
   Future<void> _advance() async {
-    return _forwardCompleter.future;
+    return await _forwardCompleter.future;
   }
 
   @override
@@ -46,7 +47,7 @@ class DialogueControllerComponent extends Component
     _forwardCompleter = Completer();
     _changeTextAndShowNextButton(line);
     await _advance();
-    return super.onLineStart(line);
+    return await super.onLineStart(line);
   }
 
   void _changeTextAndShowNextButton(DialogueLine line) {
@@ -71,7 +72,7 @@ class DialogueControllerComponent extends Component
       option2: choice.options[1],
     );
     await _advance();
-    return _choiceCompleter.future;
+    return await _choiceCompleter.future;
   }
 
   void _onChoice(int optionNumber) {

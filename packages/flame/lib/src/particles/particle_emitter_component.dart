@@ -51,7 +51,7 @@ class ParticleEmitterComponent extends PositionComponent {
     required this.renderer,
     this.removeOnFinish = true,
     this.worldSpace = false,
-    bool emitting = true,
+    this._emitting = true,
     Random? random,
     super.position,
     super.size,
@@ -61,10 +61,7 @@ class ParticleEmitterComponent extends PositionComponent {
     super.children,
     super.priority,
     super.key,
-  }) : // `this._emitting` requires Dart 3.12, but the minimum SDK is 3.11.
-       // ignore: prefer_initializing_formals
-       _emitting = emitting,
-       random = random ?? Random(),
+  }) : random = random ?? Random(),
        _buffer = ParticleBuffer(emitter.maxParticles),
        _burstFired = List.filled(emitter.bursts.length, false);
 

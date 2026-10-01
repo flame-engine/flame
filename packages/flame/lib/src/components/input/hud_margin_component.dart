@@ -41,9 +41,9 @@ class HudMarginComponent extends PositionComponent {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    _sizeProvider =
-        ancestors().firstWhereOrNull((c) => c is ReadOnlySizeProvider)
-            as ReadOnlySizeProvider?;
+    _sizeProvider = ancestors().firstWhereOrNull(
+      (c) => c is ReadOnlySizeProvider,
+    ) as ReadOnlySizeProvider?;
     assert(
       _sizeProvider != null,
       'The parent of a HudMarginComponent needs to provide a size, for example '

@@ -12,7 +12,7 @@ enum PrimitiveMode {
 
   final int value;
 
-  const PrimitiveMode(this.value);
+  PrimitiveMode(this.value);
 
   static PrimitiveMode valueOf(int value) {
     return values.firstWhere((e) => e.value == value);

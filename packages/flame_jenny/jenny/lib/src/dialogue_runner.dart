@@ -271,7 +271,6 @@ class _LineDeliveryPipeline {
     for (var i = 0; i < views.length; i++) {
       final maybeFuture = views[i].onLineStart(line);
       if (maybeFuture is Future) {
-        // ignore: cast_nullable_to_non_nullable
         final future = maybeFuture as Future<bool>;
         _futures[i] = future.then((_) => startCompleted(i));
         _numPendingFutures++;
@@ -305,7 +304,6 @@ class _LineDeliveryPipeline {
     for (var i = 0; i < views.length; i++) {
       final maybeFuture = views[i].onLineFinish(line);
       if (maybeFuture is Future) {
-        // ignore: unnecessary_cast
         final future = maybeFuture as Future<void>;
         _futures[i] = future.then((_) => finishCompleted(i));
         _numPendingFutures++;

@@ -10,7 +10,7 @@ enum ComputeType {
 
   final String description;
 
-  const ComputeType(this.description);
+  ComputeType(this.description);
 }
 
 class WorkerOvermindHud extends PositionComponent with TapCallbacks {

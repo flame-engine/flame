@@ -339,8 +339,8 @@ class PolygonComponent extends ShapeComponent {
   /// is null return all vertices as [LineSegment]s.
   List<LineSegment> possibleIntersectionVertices(Rect? rect) {
     final rectIntersections = <LineSegment>[];
-    if ((rect?.width == 0 || false) ||
-        (rect?.height == 0 || false) ||
+    if ((rect?.width == 0) ||
+        (rect?.height == 0) ||
         width == 0 ||
         height == 0) {
       return rectIntersections;

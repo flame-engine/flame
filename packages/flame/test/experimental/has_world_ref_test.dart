@@ -86,7 +86,7 @@ class _ReferenceWorld extends World {
   void foo() => calledFoo = true;
 }
 
-class _Component<T extends World> extends Component with HasWorldRef<T> {}
+class _Component<T extends World> extends Component with HasWorldRef<T>;
 
 class _MyGame extends FlameGame {
   _MyGame() : super(world: _ReferenceWorld());
@@ -98,6 +98,6 @@ class _FooComponent extends Component with HasWorldRef<_ReferenceWorld> {
   }
 }
 
-class _BarComponent extends Component with HasWorldRef<_ReferenceWorld> {}
+class _BarComponent extends Component with HasWorldRef<_ReferenceWorld>;
 
-class _MockWorld extends Mock implements _ReferenceWorld {}
+class _MockWorld extends Mock implements _ReferenceWorld;

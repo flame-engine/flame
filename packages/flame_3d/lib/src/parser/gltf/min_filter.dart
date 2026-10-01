@@ -12,7 +12,7 @@ enum MinFilter {
   final String name;
   final int value;
 
-  const MinFilter(this.name, this.value);
+  MinFilter(this.name, this.value);
 
   static MinFilter valueOf(int value) {
     return values.firstWhere((e) => e.value == value);

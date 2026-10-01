@@ -1,5 +1,5 @@
 import 'package:flame/game.dart';
-import 'package:material_ui/material_ui.dart' hide Image, Gradient;
+import 'package:material_ui/material_ui.dart' hide Gradient, Image;
 import 'package:trex_game/trex_game.dart';
 
 class TRexWidget extends StatelessWidget {

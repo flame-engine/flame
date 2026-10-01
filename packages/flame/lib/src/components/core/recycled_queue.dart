@@ -57,13 +57,13 @@ class RecycledQueue<T extends Disposable> extends Iterable<T>
   ///
   /// Two data layouts are possible: the normal one, when [_endIndex] is larger
   /// than or equal to the [_startIndex]:
-  /// ```
+  /// ```text
   ///   [----S############E--]
   /// ```
   /// and the wrap-around layout ([_endIndex] < [_startIndex]), which occurs
   /// when the active elements reach the end of the allocated list and start
   /// reusing items in the beginning:
-  /// ```
+  /// ```text
   ///   [##E------S##########]
   /// ```
   final List<T> _elements;

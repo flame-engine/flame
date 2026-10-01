@@ -8,7 +8,7 @@ abstract class ModelParser {
 
   static Future<Model> parse(String filePath) async {
     final parser = _getParser(filePath);
-    return parser.parseModel(filePath);
+    return await parser.parseModel(filePath);
   }
 
   static ModelParser _getParser(String filePath) {

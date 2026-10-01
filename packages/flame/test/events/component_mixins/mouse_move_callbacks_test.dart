@@ -111,4 +111,4 @@ class _MouseMoveCallbacksComponent extends PositionComponent
 }
 
 class _MouseMoveCallbacksGame extends FlameGame
-    with MouseMoveCallbacks, _MouseMoveInspector {}
+    with MouseMoveCallbacks, _MouseMoveInspector;

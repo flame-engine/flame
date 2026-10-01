@@ -1,5 +1,3 @@
-library flame_fire_atlas;
-
 import 'dart:convert';
 
 import 'package:archive/archive.dart';

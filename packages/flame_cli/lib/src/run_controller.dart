@@ -10,7 +10,7 @@ enum RunRequest {
   reload('r'),
   restart('R');
 
-  const RunRequest(this.key);
+  RunRequest(this.key);
 
   /// The key that `flutter run` expects for the request.
   final String key;

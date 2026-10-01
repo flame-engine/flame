@@ -10,14 +10,13 @@ import 'package:flame_cli/src/run_controller.dart';
 import 'package:io/io.dart';
 
 /// Starts a process, with the same signature as [Process.start].
-typedef ProcessStarter =
-    Future<Process> Function(
-      String executable,
-      List<String> arguments, {
-      String? workingDirectory,
-      bool runInShell,
-      ProcessStartMode mode,
-    });
+typedef ProcessStarter = Future<Process> Function(
+  String executable,
+  List<String> arguments, {
+  String? workingDirectory,
+  bool runInShell,
+  ProcessStartMode mode,
+});
 
 /// Starts `flutter` with [arguments] through [startProcess], and turns a
 /// failure to start it into a [FlameCliException] that tells the user to
@@ -168,7 +167,7 @@ class RunCommand extends Command<int> {
       outSink.writeln(helpHeader);
       final process = await _startFlutterRun(['--help']);
       await forwardOutput(process, outSink, errSink);
-      return process.exitCode;
+      return await process.exitCode;
     }
     if (arguments.any((a) => a.startsWith('--vmservice-out-file'))) {
       throw UsageException(

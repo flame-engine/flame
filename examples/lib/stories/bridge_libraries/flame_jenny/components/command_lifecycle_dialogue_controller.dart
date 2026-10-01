@@ -15,12 +15,12 @@ class CommandLifecycleDialogueController extends DialogueControllerComponent {
   @override
   FutureOr<void> onCommand(UserDefinedCommand command) async {
     await onCommandOverride(command);
-    return super.onCommand(command);
+    await super.onCommand(command);
   }
 
   @override
   FutureOr<void> onCommandFinish(UserDefinedCommand command) async {
     await onCommandFinishOverride(command);
-    return super.onCommandFinish(command);
+    await super.onCommandFinish(command);
   }
 }

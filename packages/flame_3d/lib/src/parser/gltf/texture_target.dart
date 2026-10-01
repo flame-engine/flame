@@ -7,7 +7,7 @@ enum TextureTarget {
   final String name;
   final int value;
 
-  const TextureTarget(this.name, this.value);
+  TextureTarget(this.name, this.value);
 
   static TextureTarget valueOf(String name) {
     return values.firstWhere((e) => e.name == name);

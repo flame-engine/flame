@@ -5,7 +5,7 @@ enum LayoutComponentExampleSize {
   small(640, 480),
   large(1080, 720);
 
-  const LayoutComponentExampleSize(
+  LayoutComponentExampleSize(
     this.x,
     this.y,
   );

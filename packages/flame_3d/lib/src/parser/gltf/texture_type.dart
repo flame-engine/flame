@@ -10,7 +10,7 @@ enum TextureType {
   final String name;
   final int value;
 
-  const TextureType(this.name, this.value);
+  TextureType(this.name, this.value);
 
   static TextureType valueOf(int value) {
     return values.firstWhere((e) => e.value == value);

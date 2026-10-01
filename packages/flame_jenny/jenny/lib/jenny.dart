@@ -3,7 +3,7 @@ export 'src/character_storage.dart' show CharacterStorage;
 export 'src/command_storage.dart' show CommandStorage;
 export 'src/dialogue_runner.dart' show DialogueRunner;
 export 'src/dialogue_view.dart' show DialogueView;
-export 'src/errors.dart' show SyntaxError, NameError, TypeError, DialogueError;
+export 'src/errors.dart' show DialogueError, NameError, SyntaxError, TypeError;
 export 'src/function_storage.dart' show FunctionStorage;
 export 'src/localization.dart' show Localization, localizationInfo;
 export 'src/structure/commands/command.dart' show Command;

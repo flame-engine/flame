@@ -11,7 +11,7 @@ abstract class _Callback {
   void call();
 }
 
-class _CallbackMock extends Mock implements _Callback {}
+class _CallbackMock extends Mock implements _Callback;
 
 void main() {
   group('EffectController', () {

@@ -150,11 +150,10 @@ class OverlayManager {
   }
 }
 
-typedef OverlayBuilderFunction =
-    Widget Function(
-      BuildContext context,
-      Game game,
-    );
+typedef OverlayBuilderFunction = Widget Function(
+  BuildContext context,
+  Game game,
+);
 
 @immutable
 class _OverlayData {

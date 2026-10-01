@@ -53,7 +53,7 @@ class DebugCommand extends FlameCommand {
     if (enable == null) {
       final response = await connection.call(
         'getDebugMode',
-        args: {if (componentId != null) 'id': componentId},
+        args: {'id': ?componentId},
       );
       final enabled = response['debug_mode'] == true;
       out.writeln('Debug mode is ${enabled ? 'on' : 'off'} for $target.');
@@ -64,7 +64,7 @@ class DebugCommand extends FlameCommand {
       'setDebugMode',
       args: {
         'debug_mode': enable.toString(),
-        if (componentId != null) 'id': componentId,
+        'id': ?componentId,
       },
     );
     out.writeln('Turned debug mode ${enable ? 'on' : 'off'} for $target.');

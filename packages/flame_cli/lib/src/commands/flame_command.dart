@@ -65,7 +65,7 @@ Future<FlameConnection> connectToGame(
     uriOption: uriOption,
   );
   if (file == null) {
-    return connect(uri);
+    return await connect(uri);
   }
 
   try {

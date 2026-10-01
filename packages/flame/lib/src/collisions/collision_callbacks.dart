@@ -165,11 +165,10 @@ mixin CollisionCallbacks on Component
 
 /// Can be used used to implement an `onCollisionCallback` or an
 /// `onCollisionStartCallback`.
-typedef CollisionCallback<T> =
-    void Function(
-      List<Vector2> intersectionPoints,
-      T other,
-    );
+typedef CollisionCallback<T> = void Function(
+  List<Vector2> intersectionPoints,
+  T other,
+);
 
 /// Can be used used to implement an `onCollisionEndCallback`.
 typedef CollisionEndCallback<T> = void Function(T other);

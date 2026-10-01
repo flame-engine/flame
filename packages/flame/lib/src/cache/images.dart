@@ -138,7 +138,7 @@ class Images {
     final imagePaths = manifest.listAssets().where((path) {
       return path.startsWith(directory) && path.toLowerCase().contains(pattern);
     });
-    return loadAll(imagePaths.toList());
+    return await loadAll(imagePaths.toList());
   }
 
   /// Whether the cache contains the specified [key] or not.
@@ -178,7 +178,7 @@ class Images {
   Future<Image> _fetchToMemory(String path) async {
     final data = await bundle.load(path);
     final bytes = Uint8List.view(data.buffer);
-    return decodeImageFromList(bytes);
+    return await decodeImageFromList(bytes);
   }
 }
 

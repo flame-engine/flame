@@ -3,9 +3,9 @@ import 'package:flame_3d/game.dart';
 export 'package:vector_math/vector_math.dart'
     show
         degrees2Radians,
-        setViewMatrix,
+        setOrthographicMatrix,
         setPerspectiveMatrix,
-        setOrthographicMatrix;
+        setViewMatrix;
 
 extension Matrix4Extension on Matrix4 {
   /// Set the matrix to be a view matrix.

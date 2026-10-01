@@ -49,14 +49,14 @@ abstract class _CollisionBehavior<
   }
 }
 
-class _CollisionBehaviorAtoB extends _CollisionBehavior<_EntityB, _EntityA> {}
+class _CollisionBehaviorAtoB extends _CollisionBehavior<_EntityB, _EntityA>;
 
-class _CollisionBehaviorAtoC extends _CollisionBehavior<_EntityC, _EntityA> {}
+class _CollisionBehaviorAtoC extends _CollisionBehavior<_EntityC, _EntityA>;
 
 class _CollisionBehaviorAtoComponent
-    extends _CollisionBehavior<PositionComponent, _EntityA> {}
+    extends _CollisionBehavior<PositionComponent, _EntityA>;
 
-class _TestGame extends FlameGame with HasCollisionDetection {}
+class _TestGame extends FlameGame with HasCollisionDetection;
 
 void main() {
   final flameTester = FlameTester(_TestGame.new);

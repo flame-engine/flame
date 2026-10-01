@@ -150,7 +150,7 @@ class FlameAudio {
   }) async {
     audioContext ??= _defaultAudioContext;
     final path = package == null ? sound : 'packages/$package/$sound';
-    return AudioPool.create(
+    return await AudioPool.create(
       source: AssetSource(path),
       audioCache: audioCache,
       minPlayers: minPlayers,

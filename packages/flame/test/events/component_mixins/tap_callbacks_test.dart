@@ -664,6 +664,6 @@ mixin _TapCounter on TapCallbacks {
 }
 
 class _TapCallbacksComponent extends PositionComponent
-    with TapCallbacks, _TapCounter {}
+    with TapCallbacks, _TapCounter;
 
-class _TapCallbacksGame extends FlameGame with TapCallbacks, _TapCounter {}
+class _TapCallbacksGame extends FlameGame with TapCallbacks, _TapCounter;

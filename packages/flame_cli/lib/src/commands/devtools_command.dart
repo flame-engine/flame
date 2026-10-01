@@ -91,6 +91,6 @@ class DevToolsCommand extends Command<int> {
       workingDirectory: workingDirectory,
     );
     await forwardOutput(process, out ?? stdout, err ?? stderr);
-    return process.exitCode;
+    return await process.exitCode;
   }
 }

@@ -138,7 +138,7 @@ void main() {
     testWithFlameGame('asserts icon is set on mount', (game) async {
       final component = IconComponent();
       expect(
-        () async => game.ensureAdd(component),
+        () async => await game.ensureAdd(component),
         throwsAssertionError,
       );
     });

@@ -9,7 +9,7 @@ final numberProvider = Provider.autoDispose((ref) {
   return 1;
 });
 
-class MyGame extends FlameGame with RiverpodGameMixin {}
+class MyGame extends FlameGame with RiverpodGameMixin;
 
 class MyGameWithRefAccess extends FlameGame with RiverpodGameMixin {
   @override

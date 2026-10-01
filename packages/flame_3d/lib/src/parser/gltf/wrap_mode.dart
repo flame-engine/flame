@@ -9,7 +9,7 @@ enum WrapMode {
   final String name;
   final int value;
 
-  const WrapMode(this.name, this.value);
+  WrapMode(this.name, this.value);
 
   static WrapMode valueOf(int value) {
     return values.firstWhere((e) => e.value == value);

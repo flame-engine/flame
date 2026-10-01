@@ -569,6 +569,6 @@ class _HeavyComponent extends PositionComponent {
   @override
   FutureOr<void> onLoad() async {
     await completer.future;
-    return super.onLoad();
+    await super.onLoad();
   }
 }

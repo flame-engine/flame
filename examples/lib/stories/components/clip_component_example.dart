@@ -15,8 +15,7 @@ class TappableEmber extends Ember with TapCallbacks {
 }
 
 class ClipComponentExample extends FlameGame {
-  static const String description =
-      '''Tap on the objects to increase their size and see how the clip component
+  static const String description = '''Tap on the objects to increase their size and see how the clip component
 works.''';
 
   late final _embers = <TappableEmber>[

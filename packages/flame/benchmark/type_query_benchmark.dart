@@ -83,7 +83,7 @@ class _MarkedComponent extends Component {
   final int marker = 1;
 }
 
-class _PlainComponent extends Component {}
+class _PlainComponent extends Component;
 
 Future<void> main() async {
   await TypeQueryChurnBenchmark.main();

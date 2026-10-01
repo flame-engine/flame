@@ -64,7 +64,7 @@ class TimeScaleExample extends FlameGame
       ),
       gameSpeedText,
     ]);
-    return super.onLoad();
+    await super.onLoad();
   }
 
   @override
@@ -98,7 +98,7 @@ class _Chopper extends SpriteAnimationComponent
   Future<void> onLoad() async {
     add(CircleHitbox());
     add(_timer);
-    return super.onLoad();
+    await super.onLoad();
   }
 
   @override

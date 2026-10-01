@@ -211,7 +211,7 @@ class RayCircleComponent extends CircleComponent
 
   @override
   void onMouseMove(MouseMoveEvent event) {
-    if (worldRef.hasHovering == false || worldRef.isHovering(this)) {
+    if (!worldRef.hasHovering || worldRef.isHovering(this)) {
       super.onMouseMove(event);
     }
   }

@@ -167,7 +167,7 @@ class GlobalVerticesBenchmark extends AsyncBenchmarkBase {
   }
 }
 
-class _CollisionGame extends FlameGame with HasCollisionDetection {}
+class _CollisionGame extends FlameGame with HasCollisionDetection;
 
 class _MovingBlock extends PositionComponent with CollisionCallbacks {
   final Vector2 velocity;

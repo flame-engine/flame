@@ -15,11 +15,9 @@ mixin CollisionPassthrough on CollisionCallbacks {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    passthroughParent =
-        ancestors().firstWhereOrNull(
-              (c) => c is CollisionCallbacks,
-            )
-            as CollisionCallbacks?;
+    passthroughParent = ancestors().firstWhereOrNull(
+      (c) => c is CollisionCallbacks,
+    ) as CollisionCallbacks?;
   }
 
   @override

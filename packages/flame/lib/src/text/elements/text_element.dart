@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:flame/extensions.dart';
 import 'package:flame/text.dart';
 

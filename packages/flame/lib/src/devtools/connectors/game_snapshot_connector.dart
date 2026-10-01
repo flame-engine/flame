@@ -87,7 +87,7 @@ class GameSnapshotConnector extends DevToolsConnector {
 
     game.render(canvas);
 
-    return _toImage(pictureRecorder, size.x, size.y, pixelRatio);
+    return await _toImage(pictureRecorder, size.x, size.y, pixelRatio);
   }
 
   /// Renders the [rect] of the world of the [game], in world coordinates,
@@ -108,7 +108,7 @@ class GameSnapshotConnector extends DevToolsConnector {
       child.renderTree(canvas);
     }
 
-    return _toImage(pictureRecorder, rect.width, rect.height, pixelRatio);
+    return await _toImage(pictureRecorder, rect.width, rect.height, pixelRatio);
   }
 
   /// The smallest rectangle, in world coordinates, that contains every

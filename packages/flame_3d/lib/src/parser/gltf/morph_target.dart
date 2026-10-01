@@ -38,7 +38,7 @@ enum MorphTargetType {
 
   final String value;
 
-  const MorphTargetType(this.value);
+  MorphTargetType(this.value);
 
   static MorphTargetType valueOf(String value) {
     return values.firstWhere((e) => e.value == value);

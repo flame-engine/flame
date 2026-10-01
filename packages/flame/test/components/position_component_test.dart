@@ -1339,7 +1339,7 @@ void main() {
   });
 }
 
-class _MyHitboxComponent extends PositionComponent with GestureHitboxes {}
+class _MyHitboxComponent extends PositionComponent with GestureHitboxes;
 
 class _MyDebugComponent extends PositionComponent {
   _MyDebugComponent({this.name});

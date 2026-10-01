@@ -11,7 +11,7 @@ enum TextureFormat {
   final String name;
   final int value;
 
-  const TextureFormat(this.name, this.value);
+  TextureFormat(this.name, this.value);
 
   static TextureFormat valueOf(String name) {
     return values.firstWhere((e) => e.name == name);

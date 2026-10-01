@@ -6,7 +6,7 @@ import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:material_ui/material_ui.dart' show Colors, Paint, Canvas;
+import 'package:material_ui/material_ui.dart' show Canvas, Colors, Paint;
 
 class RaycastExample extends Forge2DExampleGame with MouseMoveCallbacks {
   static const String description = '''

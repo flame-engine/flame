@@ -114,7 +114,7 @@ abstract mixin class Game {
         return true;
       }(),
     );
-    return _onLoadFuture;
+    return await _onLoadFuture;
   }
 
   /// To be used for tests that needs to evaluate the game after it has been
@@ -406,7 +406,7 @@ abstract mixin class Game {
   /// [overlays].remove.
   ///
   /// For example:
-  /// ```
+  /// ```dart
   /// final pauseOverlayIdentifier = 'PauseMenu';
   /// overlays.add(pauseOverlayIdentifier); // marks 'PauseMenu' to be rendered.
   /// overlays.remove(pauseOverlayIdentifier); // hides 'PauseMenu'.

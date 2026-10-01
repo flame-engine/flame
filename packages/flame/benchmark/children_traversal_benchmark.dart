@@ -142,7 +142,7 @@ class DeepTreeBenchmark extends _TraversalBenchmark {
       next = Component(
         children: [
           ...List.generate(_leavesPerLevel, (_) => Component()),
-          if (next != null) next,
+          ?next,
         ],
       );
     }

@@ -19,7 +19,7 @@ class GlbParser extends ModelParser {
 
   Future<GltfRoot> parseRoot(String filePath) async {
     final glb = await parseGlb(filePath);
-    return glb.parse();
+    return await glb.parse();
   }
 
   Future<Glb> parseGlb(String filePath) async {
@@ -92,7 +92,7 @@ class Glb {
   Future<GltfRoot> parse() async {
     final json = jsonChunk();
     final chunks = binaryChunks().toList();
-    return GltfRoot.from(
+    return await GltfRoot.from(
       prefix: prefix,
       json: json,
       chunks: chunks,

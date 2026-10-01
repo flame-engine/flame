@@ -22,7 +22,7 @@ class _TestBodyComponent extends BodyComponent with TapCallbacks {
   }
 }
 
-class _MockCanvas extends Mock implements Canvas {}
+class _MockCanvas extends Mock implements Canvas;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

@@ -1,5 +1,5 @@
 import 'package:flame/extensions.dart';
-import 'package:material_ui/material_ui.dart' hide Image, Gradient;
+import 'package:material_ui/material_ui.dart' hide Gradient, Image;
 
 enum GameColors {
   green,

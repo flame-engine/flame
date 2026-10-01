@@ -19,7 +19,7 @@ class _TappableComponent extends PositionComponent with TapCallbacks {
   }
 }
 
-class _SnapshotComponent extends PositionComponent with Snapshot {}
+class _SnapshotComponent extends PositionComponent with Snapshot;
 
 class _CameraGame extends FlameGame {
   @override
@@ -96,7 +96,7 @@ class _SplitScreenGame extends FlameGame {
   }
 }
 
-class _HidableComponent extends PositionComponent with HasVisibility {}
+class _HidableComponent extends PositionComponent with HasVisibility;
 
 void main() {
   group('WidgetComponent', () {

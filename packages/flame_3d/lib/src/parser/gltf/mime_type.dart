@@ -7,7 +7,7 @@ enum MimeType {
 
   final String value;
 
-  const MimeType(this.value);
+  MimeType(this.value);
 
   static MimeType valueOf(String value) {
     return values.firstWhere((e) => e.value == value);

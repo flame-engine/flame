@@ -9,7 +9,7 @@ class NormalTextureInfo extends TextureInfo {
   /// This value scales the normal vector in X and Y directions using the
   /// formula:
   ///
-  /// ```
+  /// ```text
   ///   scaledNormal =  normalize((<sampled normal texture value> * 2.0 - 1.0)
   ///                       * vec3(<normal scale>, <normal scale>, 1.0))
   /// ```

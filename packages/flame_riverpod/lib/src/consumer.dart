@@ -86,7 +86,7 @@ mixin RiverpodComponentMixin on Component {
     ref.game = findGame()! as RiverpodGameMixin;
     ref.game!._onBuildCallbacks.addAll(_onBuildCallbacks);
 
-    if (rebuildOnMountWhen(ref) == true) {
+    if (rebuildOnMountWhen(ref)) {
       rebuildGameWidget();
     }
   }
@@ -102,7 +102,7 @@ mixin RiverpodComponentMixin on Component {
     _onBuildCallbacks.clear();
 
     // Force build to flush dependencies
-    if (rebuildOnRemoveWhen(ref) == true) {
+    if (rebuildOnRemoveWhen(ref)) {
       rebuildGameWidget();
     }
 
@@ -113,7 +113,7 @@ mixin RiverpodComponentMixin on Component {
   }
 
   void rebuildGameWidget() {
-    assert(ref.game!.isMounted == true);
+    assert(ref.game!.isMounted);
     if (ref.game!.isMounted) {
       ref.game!.widgetKey!.currentState!.forceBuild();
     }

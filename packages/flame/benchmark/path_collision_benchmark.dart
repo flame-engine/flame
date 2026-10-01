@@ -86,7 +86,7 @@ class PathCollisionBenchmark extends AsyncBenchmarkBase {
   }
 }
 
-class _CollisionGame extends FlameGame with HasCollisionDetection {}
+class _CollisionGame extends FlameGame with HasCollisionDetection;
 
 class _MovingShape extends PositionComponent with CollisionCallbacks {
   final Vector2 velocity;
@@ -138,9 +138,9 @@ mixin _PartnerFilter on ShapeHitbox {
   }
 }
 
-class _Circle extends CircleHitbox with _PartnerFilter {}
+class _Circle extends CircleHitbox with _PartnerFilter;
 
-class _Rectangle extends RectangleHitbox with _PartnerFilter {}
+class _Rectangle extends RectangleHitbox with _PartnerFilter;
 
 class _Polygon extends PolygonHitbox with _PartnerFilter {
   _Polygon(super.vertices, {super.anchor, super.position});

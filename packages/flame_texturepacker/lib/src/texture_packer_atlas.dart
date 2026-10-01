@@ -1,5 +1,3 @@
-library flame_texturepacker;
-
 import 'package:collection/collection.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';

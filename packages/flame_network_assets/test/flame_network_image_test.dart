@@ -14,13 +14,13 @@ abstract class __MockHttpClient {
   });
 }
 
-class _MockHttpClient extends Mock implements __MockHttpClient {}
+class _MockHttpClient extends Mock implements __MockHttpClient;
 
 abstract class __MockPathProvider {
   Future<Directory> getAppDirectory();
 }
 
-class _MockPathProvider extends Mock implements __MockPathProvider {}
+class _MockPathProvider extends Mock implements __MockPathProvider;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

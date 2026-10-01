@@ -92,9 +92,9 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame> {
     required bool hasScale,
   }) {
     final game = component.findRootGame()!;
-    var dispatcher =
-        game.findByKey(const MultiDragScaleDispatcherKey())
-            as MultiDragScaleDispatcher?;
+    var dispatcher = game.findByKey(
+      const MultiDragScaleDispatcherKey(),
+    ) as MultiDragScaleDispatcher?;
     if (dispatcher == null) {
       dispatcher = MultiDragScaleDispatcher();
       game.registerKey(const MultiDragScaleDispatcherKey(), dispatcher);
@@ -119,9 +119,9 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame> {
     if (game == null) {
       return;
     }
-    final dispatcher =
-        game.findByKey(const MultiDragScaleDispatcherKey())
-            as MultiDragScaleDispatcher?;
+    final dispatcher = game.findByKey(
+      const MultiDragScaleDispatcherKey(),
+    ) as MultiDragScaleDispatcher?;
     if (dispatcher == null) {
       return;
     }

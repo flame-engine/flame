@@ -27,7 +27,7 @@ class _ParallaxGame extends FlameGame {
   }
 }
 
-class _MockImages extends Mock implements Images {}
+class _MockImages extends Mock implements Images;
 
 class _MockImage extends Mock implements Image {
   @override

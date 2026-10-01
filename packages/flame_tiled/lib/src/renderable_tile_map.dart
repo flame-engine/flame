@@ -328,7 +328,7 @@ class RenderableTiledMap extends Component {
   }) async {
     final mapPath = package == null ? fileName : 'packages/$package/$fileName';
     final contents = await (bundle ?? Flame.bundle).loadString(mapPath);
-    return fromString(
+    return await fromString(
       contents,
       destTileSize,
       atlasMaxX: atlasMaxX,
@@ -381,7 +381,7 @@ class RenderableTiledMap extends Component {
       contents,
       (path) => (bundle ?? Flame.bundle).loadString('$tsxDirectory$path'),
     );
-    return fromTiledMap(
+    return await fromTiledMap(
       map,
       destTileSize,
       atlasMaxX: atlasMaxX,

@@ -277,9 +277,9 @@ void main() {
   });
 }
 
-class _BehaviorTreeComponent extends Component with HasBehaviorTree {}
+class _BehaviorTreeComponent extends Component with HasBehaviorTree;
 
-class _MockNode extends Mock implements NodeInterface {}
+class _MockNode extends Mock implements NodeInterface;
 
 // Test helper nodes for blackboard testing
 

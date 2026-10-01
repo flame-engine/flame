@@ -8,7 +8,7 @@ enum MagFilter {
   final String name;
   final int value;
 
-  const MagFilter(this.name, this.value);
+  MagFilter(this.name, this.value);
 
   static MagFilter valueOf(int value) {
     return values.firstWhere((e) => e.value == value);

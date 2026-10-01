@@ -5,12 +5,12 @@ import 'package:flame/image_composition.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:meta/meta.dart';
 
-class HasCollidablesGame extends FlameGame with HasCollisionDetection {}
+class HasCollidablesGame extends FlameGame with HasCollisionDetection;
 
 class HasQuadTreeCollidablesGame extends FlameGame
-    with HasQuadTreeCollisionDetection {}
+    with HasQuadTreeCollisionDetection;
 
-class CollisionDetectionWorld extends World with HasCollisionDetection {}
+class CollisionDetectionWorld extends World with HasCollisionDetection;
 
 @isTest
 void testCollisionDetectionGame(
@@ -56,10 +56,10 @@ class TestHitbox extends RectangleHitbox {
   String? name;
 
   TestHitbox([this.name]) {
-    onCollisionCallback = (_, __) {
+    onCollisionCallback = (_, _) {
       onCollisionCounter++;
     };
-    onCollisionStartCallback = (_, __) {
+    onCollisionStartCallback = (_, _) {
       startCounter++;
     };
     onCollisionEndCallback = (_) {
@@ -81,10 +81,10 @@ class CompositeTestHitbox extends CompositeHitbox {
   int endCounter = 0;
 
   CompositeTestHitbox({super.size, super.children}) {
-    onCollisionCallback = (_, __) {
+    onCollisionCallback = (_, _) {
       onCollisionCounter++;
     };
-    onCollisionStartCallback = (_, __) {
+    onCollisionStartCallback = (_, _) {
       startCounter++;
     };
     onCollisionEndCallback = (_) {
