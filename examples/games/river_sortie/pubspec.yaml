@@ -1,0 +1,66 @@
+name: river_sortie
+resolution: workspace
+description: A jet up a river that never ends, a Flame game drawn in 3D through flame_flutter3d.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ">=3.12.0 <4.0.0"
+  flutter: ">=3.44.0"
+
+dependencies:
+  # Flame owns the game: the component tree, the hitboxes and their
+  # callbacks, the keyboard, the on-screen stick and the HUD.
+  flame: ^2.0.0-dev.0
+
+  # The bridge: the 3D layer under Flame's, one clock, and a component whose
+  # Flame position is written into a scene node every frame.
+  flame_flutter3d: ^0.9.0-dev.0
+
+  flutter:
+    sdk: flutter
+
+  # The scene graph, the meshes and the renderer the 3D layer draws with.
+  flutter3d: ^0.8.3
+
+  # The sound: a scene of voices, a silent backend for the tests and until
+  # the player's first input, SoLoud behind it after that.
+  flutter3d_audio_core: ^0.8.0
+
+  # `Bindings`, the key table `FlameInputBridge` translates through.
+  flutter3d_game: ^0.8.1
+
+  # The effects a blast is thrown with: emitters, gravity, colour and size
+  # over a particle's life.
+  flutter3d_particles: ^0.8.1
+
+  # `InputState`, `GameAction`, and `GameRandom`, the seeded generator the
+  # river is laid out with, so every run flies the same river.
+  flutter3d_sim: ^0.8.1
+
+  vector_math: ^2.2.0
+
+dev_dependencies:
+  flame_lint: ^1.4.4-dev.0
+
+  # Flame's own harness, so a test can mount the game and step it.
+  flame_test: ^3.0.0-dev.0
+
+  # A device with no GPU behind it, for the frame test.
+  flutter3d_cpu: ^0.8.0
+
+  # A fake device that records what is handed back to it, for the release
+  # test.
+  flutter3d_hardware: ^0.8.0
+
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  # The craft, and the one texture the Kenney ships share, beside them where
+  # their glTF looks for it. Who made each and under what licence is in
+  # `assets/models/LICENSES.md`.
+  assets:
+    - assets/models/
+    - assets/models/Textures/
