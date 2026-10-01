@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="9" height="9" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="2">
+ <tileset firstgid="1" name="maze" tilewidth="16" tileheight="16" tilecount="3" columns="3"/>
+ <layer id="1" name="floor" width="9" height="9" tintcolor="#2a2f3a">
+  <properties>
+   <property name="depth" type="float" value="0.1"/>
+   <property name="elevation" type="float" value="-0.1"/>
+   <property name="merged" type="bool" value="true"/>
+  </properties>
+  <data encoding="csv">
+1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1
+</data>
+ </layer>
+ <layer id="2" name="walls" width="9" height="9" tintcolor="#3050ff">
+  <properties>
+   <property name="depth" type="float" value="0.8"/>
+   <property name="solid" type="bool" value="true"/>
+  </properties>
+  <data encoding="csv">
+2,2,2,2,2,2,2,2,2,
+2,0,0,0,0,0,0,0,2,
+2,0,2,2,0,2,2,0,2,
+2,0,0,0,0,0,0,0,2,
+2,2,0,2,0,2,0,2,2,
+2,0,0,0,0,0,0,0,2,
+2,0,2,2,0,2,2,0,2,
+2,0,0,0,0,0,0,0,2,
+2,2,2,2,2,2,2,2,2
+</data>
+ </layer>
+ <layer id="3" name="dots" width="9" height="9" tintcolor="#ffd040">
+  <properties>
+   <property name="depth" type="float" value="0.15"/>
+   <property name="elevation" type="float" value="0.2"/>
+  </properties>
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,
+0,3,3,3,3,3,3,3,0,
+0,3,0,0,3,0,0,3,0,
+0,3,3,3,3,3,3,3,0,
+0,0,3,0,3,0,3,0,0,
+0,3,3,3,3,3,3,3,0,
+0,3,0,0,3,0,0,3,0,
+0,3,3,3,0,3,3,3,0,
+0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup id="4" name="actors">
+  <object id="1" name="player" x="72" y="120">
+   <point/>
+  </object>
+ </objectgroup>
+</map>

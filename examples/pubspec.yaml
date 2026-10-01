@@ -15,6 +15,7 @@ dependencies:
   crystal_ball: ^0.1.0
   flame: ^2.0.0-dev.0
   flame_audio: ^2.13.0-dev.0
+  flame_flutter3d: ^0.9.0-dev.0
   flame_forge2d: ^0.21.0-dev.0
   flame_isolate: ^0.7.0-dev.0+24
   flame_lottie: ^0.5.0-dev.0+24
@@ -25,6 +26,9 @@ dependencies:
   flame_tiled: ^4.0.0-dev.0
   flutter:
     sdk: flutter
+  flutter3d: ^0.8.3
+  flutter3d_cpu: ^0.8.0
+  flutter3d_sim: ^0.8.1
   google_fonts: ^8.0.2
   jenny: ^1.5.2-dev.0
   material_ui: ^1.0.0
@@ -32,6 +36,7 @@ dependencies:
   padracing: ^1.0.0
   provider: ^6.1.2
   rogue_shooter: ^0.1.0
+  tiled: ^0.12.0
   trex_game: ^0.1.0
   url_launcher: ^6.3.0
   web: ^1.1.0

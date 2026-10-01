@@ -3,6 +3,7 @@ import 'package:examples/platform/stub_provider.dart'
     if (dart.library.html) 'platform/web_provider.dart';
 import 'package:examples/stories/animations/animations.dart';
 import 'package:examples/stories/bridge_libraries/audio/audio.dart';
+import 'package:examples/stories/bridge_libraries/flame_flutter3d/flame_flutter3d.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/flame_forge2d.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/distance_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/filter_joint.dart';
@@ -116,6 +117,7 @@ void runAsWidgetbook() {
         imageStories(),
 
         // Bridge package examples
+        flameFlutter3dStories(),
         forge2DStories(),
         jointsStories(),
         flameIsolateStories(),
