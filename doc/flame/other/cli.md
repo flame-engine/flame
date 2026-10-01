@@ -231,6 +231,29 @@ flame logs --lines 50
 stopped, so it can still be read after a crash.
 
 
+### devtools
+
+Opens the Flutter DevTools for the running game in the browser, where the Flame tab holds the
+[Flame DevTools extension](debug.md#devtools-extension):
+
+```shell
+flame devtools
+```
+
+The command checks that the game is reachable and then runs `dart devtools` with the URI of the
+game, so it needs the Dart SDK on the `PATH` like the other commands need Flutter, and it keeps
+serving the DevTools until it is stopped with `Ctrl+C`. The game is found the same way as by the
+other commands, so `--uri` (`-u`) reaches a game that was not started with `flame run`. With
+`--no-launch-browser` only the URL of the DevTools is printed, to open it in a browser of your
+choice or to hand it to someone else.
+
+The DevTools only show the tab of an extension that is enabled in the `devtools_options.yaml` of
+the project, and ask whether to enable it otherwise. The command enables the Flame extension in
+that file before it starts the DevTools, creating the file if the project has none and keeping the
+other settings in it, so the Flame tab is there right away. The DevTools open on their overview
+page, select the Flame tab to get to the extension.
+
+
 ### snapshot
 
 Renders the whole game to a PNG image:

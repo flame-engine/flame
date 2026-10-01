@@ -65,11 +65,13 @@ flame tree
 flame snapshot --component 220731871
 ```
 
-Hot reload or restart the game after changing the code, and read its output:
+Hot reload or restart the game after changing the code, read its output, and open the Flutter
+DevTools with the Flame tab for the game:
 
 ```shell
 flame reload
 flame logs
+flame devtools
 ```
 
 Pause the game, step it forward a number of frames, inspect and change components, turn on the

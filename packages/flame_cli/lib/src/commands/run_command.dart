@@ -26,10 +26,43 @@ Future<Process> startFlutter(
   ProcessStarter startProcess,
   List<String> arguments, {
   required Directory workingDirectory,
+}) {
+  return _startTool(
+    startProcess,
+    'flutter',
+    arguments,
+    workingDirectory: workingDirectory,
+    installHint: 'Make sure that Flutter is installed and on your PATH.',
+  );
+}
+
+/// Starts `dart` with [arguments] through [startProcess], and turns a
+/// failure to start it into a [FlameCliException] that tells the user to
+/// install the Dart SDK.
+Future<Process> startDart(
+  ProcessStarter startProcess,
+  List<String> arguments, {
+  required Directory workingDirectory,
+}) {
+  return _startTool(
+    startProcess,
+    'dart',
+    arguments,
+    workingDirectory: workingDirectory,
+    installHint: 'Make sure that the Dart SDK is installed and on your PATH.',
+  );
+}
+
+Future<Process> _startTool(
+  ProcessStarter startProcess,
+  String executable,
+  List<String> arguments, {
+  required Directory workingDirectory,
+  required String installHint,
 }) async {
   try {
     return await startProcess(
-      'flutter',
+      executable,
       arguments,
       workingDirectory: workingDirectory.path,
       runInShell: Platform.isWindows,
@@ -38,8 +71,8 @@ Future<Process> startFlutter(
   } on ProcessException catch (error, stackTrace) {
     Error.throwWithStackTrace(
       FlameCliException(
-        'Could not start `flutter ${arguments.first}`: ${error.message}\n'
-        'Make sure that Flutter is installed and on your PATH.',
+        'Could not start `$executable ${arguments.first}`: ${error.message}\n'
+        '$installHint',
         exitCode: ExitCode.unavailable,
       ),
       stackTrace,

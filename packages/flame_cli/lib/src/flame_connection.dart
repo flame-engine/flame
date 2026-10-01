@@ -6,9 +6,13 @@ import 'package:vm_service/vm_service_io.dart';
 /// A connection to a Flame game that is running in debug mode, through the
 /// service extensions that Flame registers for the DevTools extension.
 class FlameConnection {
-  FlameConnection._(this._service, this._isolateId, this._extensions);
+  FlameConnection._(this.uri, this._service, this._isolateId, this._extensions);
 
   static const _extensionPrefix = 'ext.flame_devtools.';
+
+  /// The URI of the Dart VM Service that the connection was made to, as it
+  /// was passed to [connect].
+  final String uri;
 
   final VmService _service;
   final String _isolateId;
@@ -48,7 +52,7 @@ class FlameConnection {
           ),
         };
         if (extensions.isNotEmpty) {
-          return FlameConnection._(service, isolate.id!, extensions);
+          return FlameConnection._(uri, service, isolate.id!, extensions);
         }
       }
     } on Object catch (error, stackTrace) {

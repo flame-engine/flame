@@ -2,10 +2,12 @@ export 'package:io/io.dart' show ExitCode;
 
 export 'src/commands/control_commands.dart' show sendRunRequest;
 export 'src/commands/create_command.dart' show validateProjectName;
+export 'src/commands/flame_command.dart' show GameConnector, connectToGame;
 export 'src/commands/inspect_command.dart' show formatComponentInfo;
 export 'src/commands/run_command.dart' show ProcessStarter;
 export 'src/component_tree.dart';
 export 'src/create_templates.dart';
+export 'src/devtools_options.dart';
 export 'src/flame_cli_exception.dart';
 export 'src/flame_command_runner.dart';
 export 'src/flame_connection.dart';
