@@ -27,7 +27,7 @@ class WorkerOvermind extends Component
   @override
   Future<void> onMount() {
     calculateTasks();
-    _assignTaskInterval = Timer(0.2, repeat: true, onTick: _assignTasks)
+    _assignTaskInterval = Timer(period: 0.2, repeat: true, onTick: _assignTasks)
       ..start();
     return super.onMount();
   }

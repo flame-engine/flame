@@ -13,7 +13,7 @@ import 'package:flame/geometry.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/text.dart';
 import 'package:flame_test/test_paths.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 const side = 200.0;
 const playArea = Rect.fromLTRB(-side, -side, side, side);

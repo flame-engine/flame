@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:gamepads/gamepads.dart';
 
 /// This mixin can be added to a [Component] allowing it to receive

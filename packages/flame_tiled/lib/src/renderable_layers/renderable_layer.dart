@@ -9,36 +9,67 @@ import 'package:flame_tiled/src/renderable_layers/object_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:flame_tiled/src/tile_animation.dart';
 import 'package:flame_tiled/src/tile_atlas.dart';
+import 'package:flame_tiled/src/tiled_component.dart';
 import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';
 
-@internal
-abstract class RenderableLayer<T extends Layer> {
+/// {@template renderable_layer}
+/// A component that renders a single Tiled [Layer].
+///
+/// Every layer of a map is a [RenderableLayer] in the component tree of the
+/// map, nested in the same order and hierarchy as in Tiled. This means that
+/// components added to a layer are rendered right after that layer, and thus
+/// underneath any layer that comes later in the map. Use this to draw sprites
+/// between the layers of a map, for example a player that walks behind the
+/// foreground:
+///
+/// ```dart
+/// final layer = tiledComponent.tileMap.getRenderableLayer('Ground');
+/// layer?.add(player);
+/// ```
+///
+/// The [position] of a layer is the sum of the layer's offset ([offsetX] and
+/// [offsetY]) and the parallax displacement for the current camera view. It
+/// is recalculated whenever the map is rendered, so move a layer by changing
+/// [offsetX] and [offsetY] instead of [position].
+/// {@endtemplate}
+abstract class RenderableLayer<T extends Layer> extends PositionComponent {
+  /// The Tiled layer that this component renders.
   final T layer;
-  final Vector2 destTileSize;
-  final TiledMap map;
 
-  /// The parent [Group] layer (if it exists)
-  final GroupLayer? parent;
+  /// The target size for each tile of the map.
+  final Vector2 destTileSize;
+
+  /// The map that [layer] belongs to.
+  final TiledMap map;
 
   /// The [FilterQuality] that should be used by all the layers.
   final FilterQuality filterQuality;
 
+  /// The horizontal offset of this layer, relative to its parent, scaled to
+  /// [destTileSize].
+  late double offsetX = layer.offsetX * scaleX;
+
+  /// The vertical offset of this layer, relative to its parent, scaled to
+  /// [destTileSize].
+  late double offsetY = layer.offsetY * scaleY;
+
+  /// {@macro renderable_layer}
   RenderableLayer({
     required this.layer,
-    required this.parent,
     required this.map,
     required this.destTileSize,
     FilterQuality? filterQuality,
-  }) : filterQuality = filterQuality ?? FilterQuality.none;
+  }) : filterQuality = filterQuality ?? FilterQuality.none {
+    position.setValues(offsetX, offsetY);
+  }
 
   /// [load] is a factory method to create [RenderableLayer] by type of [layer].
+  @internal
   static Future<RenderableLayer> load({
     required Layer layer,
-    required GroupLayer? parent,
     required TiledMap map,
     required Vector2 destTileSize,
-    required CameraComponent? camera,
     required Map<Tile, TileFrames> animationFrames,
     required TiledAtlas atlas,
     required Paint Function(double opacity) layerPaintFactory,
@@ -51,7 +82,6 @@ abstract class RenderableLayer<T extends Layer> {
     if (layer is TileLayer) {
       return FlameTileLayer.load(
         layer: layer,
-        parent: parent,
         map: map,
         destTileSize: destTileSize,
         animationFrames: animationFrames,
@@ -63,8 +93,6 @@ abstract class RenderableLayer<T extends Layer> {
     } else if (layer is ImageLayer) {
       return FlameImageLayer.load(
         layer: layer,
-        parent: parent,
-        camera: camera,
         map: map,
         destTileSize: destTileSize,
         filterQuality: filterQuality,
@@ -73,17 +101,15 @@ abstract class RenderableLayer<T extends Layer> {
         imagesDirectory: imagesDirectory,
       );
     } else if (layer is ObjectGroup) {
-      return ObjectLayer.load(
-        layer,
-        map,
-        destTileSize,
-        filterQuality,
+      return ObjectLayer(
+        layer: layer,
+        map: map,
+        destTileSize: destTileSize,
+        filterQuality: filterQuality,
       );
     } else if (layer is Group) {
-      final groupLayer = layer;
       return GroupLayer(
-        layer: groupLayer,
-        parent: parent,
+        layer: layer,
         map: map,
         destTileSize: destTileSize,
         filterQuality: filterQuality,
@@ -92,30 +118,32 @@ abstract class RenderableLayer<T extends Layer> {
 
     return UnsupportedLayer(
       layer: layer,
-      parent: parent,
       map: map,
       destTileSize: destTileSize,
     );
   }
 
+  /// The group layer that this layer is nested in, if any.
+  RenderableLayer<Group>? get parentLayer {
+    final parent = this.parent;
+    return parent is RenderableLayer<Group> ? parent : null;
+  }
+
+  /// Whether this layer, and the components added to it, are rendered.
+  ///
+  /// Reflects [Layer.visible], so it can be changed at runtime through
+  /// `RenderableTiledMap.setLayerVisibility`.
   bool get visible => layer.visible;
 
-  void render(Canvas canvas, CameraComponent? camera);
-
-  void handleResize(Vector2 canvasSize);
-
+  /// Rebuilds the cached rendering data of this layer.
   void refreshCache();
-
-  void update(double dt);
 
   double get scaleX => destTileSize.x / map.tileWidth;
   double get scaleY => destTileSize.y / map.tileHeight;
 
-  late double offsetX = layer.offsetX * scaleX + (parent?.offsetX ?? 0);
-
-  late double offsetY = layer.offsetY * scaleY + (parent?.offsetY ?? 0);
-
-  double get opacity => layer.opacity * (parent?.opacity ?? 1);
+  /// The effective opacity of this layer, which is its own opacity multiplied
+  /// by the opacity of all its parent layers.
+  double get opacity => layer.opacity * (parentLayer?.opacity ?? 1);
 
   set opacity(double value) {
     layer.opacity = value;
@@ -130,59 +158,81 @@ abstract class RenderableLayer<T extends Layer> {
   @protected
   void onOpacityChanged() {}
 
-  late double parallaxX = layer.parallaxX * (parent?.parallaxX ?? 1);
+  /// The effective horizontal parallax factor of this layer, which is its own
+  /// factor multiplied by the factors of all its parent layers.
+  double get parallaxX => layer.parallaxX * (parentLayer?.parallaxX ?? 1);
 
-  late double parallaxY = layer.parallaxY * (parent?.parallaxY ?? 1);
+  /// The effective vertical parallax factor of this layer, which is its own
+  /// factor multiplied by the factors of all its parent layers.
+  double get parallaxY => layer.parallaxY * (parentLayer?.parallaxY ?? 1);
 
-  /// Calculates the offset we need to apply to the canvas to compensate for
-  /// parallax positioning and scroll for the layer and the current camera
-  /// position.
-  /// https://doc.mapeditor.org/en/latest/manual/layers/#parallax-scrolling-factor
-  void applyParallaxOffset(Canvas canvas, CameraComponent camera) {
-    final anchor = camera.viewfinder.anchor;
-    final cameraX = camera.viewfinder.position.x;
-    final cameraY = camera.viewfinder.position.y;
-    final viewportCenterX = camera.viewport.size.x * anchor.x;
-    final viewportCenterY = camera.viewport.size.y * anchor.y;
+  /// The area of this layer, in its local coordinates, that is currently
+  /// visible through the camera, or the area of the map when the map is
+  /// rendered without a camera.
+  Rect get visibleRect => _visibleRect ??= _mapRect;
+  Rect? _visibleRect;
 
-    // Due to how Tiled treats the center of the view as the reference
-    // point for parallax positioning (see Tiled docs), we need to offset the
-    // entire layer
-    var x = (1 - parallaxX) * viewportCenterX;
-    var y = (1 - parallaxY) * viewportCenterY;
-    // Compensate the offset for zoom.
-    x /= camera.viewfinder.zoom;
-    y /= camera.viewfinder.zoom;
-    // Scale to tile space.
-    x /= destTileSize.x;
-    y /= destTileSize.y;
+  Rect get _mapRect {
+    final size = TiledComponent.computeSize(
+      map.orientation,
+      destTileSize,
+      map.tileWidth,
+      map.tileHeight,
+      map.width,
+      map.height,
+      map.staggerAxis,
+    );
+    return Rect.fromLTWH(0, 0, size.x, size.y);
+  }
 
-    // Now add the scroll for the current camera position
-    x += cameraX - (cameraX * parallaxX);
-    y += cameraY - (cameraY * parallaxY);
+  /// Positions this layer for the current view of the camera, following the
+  /// parallax scrolling rules of Tiled.
+  ///
+  /// [viewCenter] is the point of the map that is in the center of the view.
+  /// A layer is displaced from its offset by `viewCenter * (1 - parallax)`, so
+  /// that a layer with a parallax factor of 0 stays fixed on the screen and a
+  /// layer with a factor of 1 scrolls together with the map. When the map is
+  /// rendered without a camera, [viewCenter] is zero and the layer sits at its
+  /// offset.
+  ///
+  /// [visibleRect] is the visible area of the map, in the local coordinates of
+  /// the parent of this layer.
+  ///
+  /// See https://doc.mapeditor.org/en/latest/manual/layers/#parallax-scrolling-factor
+  @internal
+  @mustCallSuper
+  void updateView(Vector2 viewCenter, Rect visibleRect) {
+    final parentParallaxX = parentLayer?.parallaxX ?? 1;
+    final parentParallaxY = parentLayer?.parallaxY ?? 1;
+    final x = offsetX + viewCenter.x * parentParallaxX * (1 - layer.parallaxX);
+    final y = offsetY + viewCenter.y * parentParallaxY * (1 - layer.parallaxY);
+    if (position.x != x || position.y != y) {
+      position.setValues(x, y);
+    }
+    _visibleRect = visibleRect.shift(Offset(-x, -y));
+  }
 
-    canvas.translate(x, y);
+  @override
+  void renderTree(Canvas canvas) {
+    if (!visible) {
+      return;
+    }
+    super.renderTree(canvas);
   }
 }
 
+/// A [RenderableLayer] for a layer type that this package cannot render.
+///
+/// It is still added to the component tree so that its offset and parallax
+/// factor propagate to any components that are added to it.
 @internal
 class UnsupportedLayer extends RenderableLayer {
   UnsupportedLayer({
     required super.layer,
-    required super.parent,
     required super.map,
     required super.destTileSize,
   });
 
   @override
-  void render(Canvas canvas, CameraComponent? camera) {}
-
-  @override
-  void handleResize(Vector2 canvasSize) {}
-
-  @override
   void refreshCache() {}
-
-  @override
-  void update(double dt) {}
 }

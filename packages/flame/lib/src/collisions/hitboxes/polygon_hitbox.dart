@@ -61,13 +61,16 @@ class PolygonHitbox extends PolygonComponent
   /// [sampling] of the contour are left out. Higher values give fewer vertices,
   /// which makes the collision detection cheaper, and a looser fit, while
   /// straight stretches and the corners between them are exact whatever the
-  /// [sampling] is.
+  /// [sampling] is. The given [tolerance] decides what samples to discard:
+  /// by default, its value is half the [sampling].
   ///
-  /// See [PathMetricExtension.walkContour] for the details of the sampling.
+  /// See [PathMetricExtension.walkContour] for the details of the [sampling]
+  /// and [tolerance] parameters.
   PolygonHitbox.fromPath(
     super.path, {
     super.contour,
     super.sampling,
+    super.tolerance,
     super.position,
     super.angle,
     super.anchor,

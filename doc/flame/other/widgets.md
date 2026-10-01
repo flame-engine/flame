@@ -7,7 +7,7 @@ mind.
 Here you can find all the available widgets provided by Flame.
 
 You can also see all the widgets showcased inside a
-[Dashbook](https://github.com/bluefireteam/dashbook) sandbox in the
+[Widgetbook](https://github.com/widgetbook/widgetbook) sandbox in the
 [widgets examples directory](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/widgets).
 
 

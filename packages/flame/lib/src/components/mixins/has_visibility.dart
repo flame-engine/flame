@@ -1,5 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A mixin that allows a component visibility to be toggled
 /// without removing it from the tree. Visibility affects

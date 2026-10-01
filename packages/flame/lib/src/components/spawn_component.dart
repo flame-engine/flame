@@ -142,7 +142,7 @@ class SpawnComponent extends Component {
   double get period => _period;
   set period(double newPeriod) {
     _period = newPeriod;
-    timer.limit = _period;
+    timer.period = _period;
   }
 
   double _period;

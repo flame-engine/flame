@@ -1,9 +1,9 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_riverpod/flame_riverpod.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 final numberProvider = Provider.autoDispose((ref) {
   return 1;

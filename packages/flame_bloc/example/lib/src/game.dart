@@ -4,8 +4,8 @@ import 'package:flame_bloc_example/src/game_stats/bloc/game_stats_bloc.dart';
 import 'package:flame_bloc_example/src/game_stats/view/game_stat.dart';
 import 'package:flame_bloc_example/src/inventory/bloc/inventory_bloc.dart';
 import 'package:flame_bloc_example/src/inventory/view/inventory.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 class GamePage extends StatelessWidget {
   const GamePage({super.key});

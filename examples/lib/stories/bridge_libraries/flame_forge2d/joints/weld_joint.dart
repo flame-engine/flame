@@ -5,7 +5,7 @@ import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class WeldJointExample extends Forge2DExampleGame {
   static const description = '''

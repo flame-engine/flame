@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide Image, Gradient;
+import 'package:material_ui/material_ui.dart' hide Image, Gradient;
 import 'package:padracing/menu_card.dart';
 import 'package:padracing/padracing_game.dart';
 

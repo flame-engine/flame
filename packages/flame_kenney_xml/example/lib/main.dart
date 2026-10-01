@@ -5,7 +5,7 @@ import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_kenney_xml/flame_kenney_xml.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A simple game that adds a random sprite component created from a kenney.nl
 /// sprite sheet to the screen when tapped.

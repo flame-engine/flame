@@ -28,8 +28,8 @@ mixin HasBehaviorTree<T extends NodeInterface> on Component
     _tickInterval = interval;
 
     if (_tickInterval > 0) {
-      _timer ??= Timer(interval, repeat: true);
-      _timer?.limit = interval;
+      _timer ??= Timer(period: interval, repeat: true);
+      _timer?.period = interval;
     } else {
       _timer?.onTick = null;
       _timer = null;

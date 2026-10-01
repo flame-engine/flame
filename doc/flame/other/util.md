@@ -71,7 +71,7 @@ class MyGame extends Game {
     style: const TextStyle(color: Colors.white, fontSize: 20),
   );
 
-  final countdown = Timer(2);
+  final countdown = Timer(period: 2);
 
   @override
   void update(double dt) {
@@ -110,7 +110,7 @@ class MyGame extends Game {
 
   MyGame() {
     interval = Timer(
-      1,
+      period: 1,
       onTick: () => elapsedSecs += 1,
       repeat: true,
     );

@@ -5,9 +5,9 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/particles.dart';
-import 'package:flutter/material.dart' hide Image;
+import 'package:material_ui/material_ui.dart' hide Image;
 
-/// The effect presets selectable in the properties panel.
+/// The effect presets selectable in the knobs panel.
 enum ParticleEffect {
   sparkles,
   fire,
@@ -22,11 +22,11 @@ enum ParticleEffect {
 class ParticlesInteractiveExample extends FlameGame with DragCallbacks {
   static const description =
       'Drag around the canvas to paint with particles, and pick an effect in '
-      'the properties panel (the knobs icon in the top right) to try the '
-      'different emitter presets and renderers. A single pooled '
-      'ParticleEmitterComponent follows the pointer: worldSpace keeps '
-      'already-spawned particles in place while emit() releases more from '
-      'the preallocated buffer, so no objects are allocated while you draw.';
+      'the knobs panel to try the different emitter presets and renderers. '
+      'A single pooled ParticleEmitterComponent follows the pointer: '
+      'worldSpace keeps already-spawned particles in place while emit() '
+      'releases more from the preallocated buffer, so no objects are '
+      'allocated while you draw.';
 
   ParticlesInteractiveExample({
     required this.effect,

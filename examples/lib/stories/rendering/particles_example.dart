@@ -5,7 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/particles.dart';
-import 'package:flutter/material.dart' hide Image;
+import 'package:material_ui/material_ui.dart' hide Image;
 
 class ParticlesExample extends FlameGame {
   static const String description = '''
@@ -57,8 +57,6 @@ class ParticlesExample extends FlameGame {
       );
     }
 
-    // Top-center, so it does not collide with the Dashbook menu button that
-    // overlays the top-left corner.
     add(
       _StatsText(
         position: Vector2(size.x / 2, 8),

@@ -19,6 +19,57 @@ new tab called "Flame". This tab will show you information about the current gam
 visualization of the component tree, the ability to play, pause and step the game, information
 about the selected component, and more.
 
+The extension talks to the game through
+[service extensions](https://api.flutter.dev/flutter/dart-developer/registerExtension.html) that
+Flame registers when a `FlameGame` is created in debug mode. Other tools can call the same service
+extensions through the Dart VM Service. The [Flame CLI](cli.md) uses them to take snapshots of a
+running game from the terminal, which is also useful for scripts and AI coding agents.
+
+
+### Service extensions
+
+If you want to build your own tooling, these are the service extensions that the DevTools
+extension and the CLI use. They are only available in debug mode and they are called on the
+isolate that runs the game. Every `id` parameter is the `hashCode` of a component.
+
+- `ext.flame_devtools.getGameSnapshot`: Renders the whole game. It takes an optional `pixelRatio`
+  parameter and returns `snapshot` (a base64 encoded PNG image), `width` and `height`. With
+  `world` set to `true` the world is rendered directly instead of through the camera, and with
+  `rect` given as `x,y,width,height` in world coordinates only that part of the world is rendered.
+- `ext.flame_devtools.getComponentSnapshot`: Renders a single component. It takes the `id` of the
+  component and an optional `pixelRatio` parameter, and returns `snapshot` (a base64 encoded PNG
+  image). It responds with an invalid parameters error if no component with that id was found.
+- `ext.flame_devtools.getComponentTree`: Returns the `component_tree`, where every node has an
+  `id`, a `name`, the `toString` of the component, its `attributes` and its `children`. The
+  attributes are the `priority` of the component, and for a `PositionComponent` also its
+  `position`, `size`, `angle`, `scale` and `anchor`.
+- `ext.flame_devtools.getComponentInfo`: Returns the same fields as a tree node for the component
+  with the given `id`, without the children, and additionally the id of its `parent`, its
+  `childCount` and its `debugMode`.
+- `ext.flame_devtools.getPositionComponentAttributes` and
+  `ext.flame_devtools.setPositionComponentAttributes`: Read and change the attributes of a
+  `PositionComponent`. Setting takes the `id`, an `attribute` (`x`, `y`, `width`, `height`,
+  `angle`, `scaleX`, `scaleY`, `anchor` or `priority`) and the `value` as a string. The
+  `priority` can be set on any component.
+- `ext.flame_devtools.getPaused`, `ext.flame_devtools.setPaused` and `ext.flame_devtools.step`:
+  Read and change whether the game loop is paused, and step a paused game by `step_time` seconds.
+- `ext.flame_devtools.getDebugMode` and `ext.flame_devtools.setDebugMode`: Read and change the
+  `debug_mode` of the whole game, or of a single component when an `id` is given.
+- `ext.flame_devtools.getOverlays`: Returns the registered `overlays` and the `active` ones.
+- `ext.flame_devtools.setOverlay`: Shows or hides the `overlay` with the given name depending on
+  the `active` parameter.
+- `ext.flame_devtools.navigateToOverlay`: Shows the `overlay` with the given name and hides all
+  the others.
+- `ext.flame_devtools.tap`: Taps the game at `x`, `y` in canvas coordinates, through the tap
+  dispatcher of the game.
+- `ext.flame_devtools.drag`: Drags across the game from `fromX`, `fromY` to `toX`, `toY` in canvas
+  coordinates, with `steps` updates in between.
+- `ext.flame_devtools.key`: Delivers the `key` with the given name to the `onKeyEvent` of the
+  game, where `action` is `press`, `down` or `up`.
+
+If you have multiple games in your app, only the last one created is connected, see
+`DevToolsService.initWithGame` to change it.
+
 
 ## FPS
 

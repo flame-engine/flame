@@ -1,3 +1,16 @@
+## 3.0.0-dev.0
+
+> Note: This release has breaking changes.
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([3bf30496](https://github.com/flame-engine/flame/commit/3bf304968867101cdb17aa02927b205bf46f664f))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **FEAT**: Prevent cache thrashing in class Svg by adding cache parameters/properties. ([#3956](https://github.com/flame-engine/flame/issues/3956)). ([7d8e0012](https://github.com/flame-engine/flame/commit/7d8e0012b20340079a604eba9b762a7994a3838d))
+ - **FEAT**: Removing prefix from asset loaders ([#4015](https://github.com/flame-engine/flame/issues/4015)). ([11972dfb](https://github.com/flame-engine/flame/commit/11972dfbaee484bcf1a99ed91aa325823560f837))
+ - **FEAT**: Prevent cache thrashing in class Svg by adding cache parameters/properties. ([#3956](https://github.com/flame-engine/flame/issues/3956)). ([cc47ed41](https://github.com/flame-engine/flame/commit/cc47ed41e39a40a6f5965399fed420192cb207c1))
+ - **BREAKING** **FEAT**: Remove integralSize property from class Svg, enforcing 'always true' behaviour ([#3969](https://github.com/flame-engine/flame/issues/3969)). ([9668c6db](https://github.com/flame-engine/flame/commit/9668c6db19ef9aece920c74bea5e37837005a189))
+ - **BREAKING** **FEAT**: Remove integralSize property from class Svg, enforcing 'always true' behaviour ([#3969](https://github.com/flame-engine/flame/issues/3969)). ([fa788209](https://github.com/flame-engine/flame/commit/fa788209db5f77072a76263853c4171203e65728))
+
 ## 2.0.0
 
 > Note: This release has breaking changes.

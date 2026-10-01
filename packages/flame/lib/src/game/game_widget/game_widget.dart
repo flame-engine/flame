@@ -6,6 +6,7 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame/src/game/game_widget/gesture_detector_builder.dart';
+import 'package:flame/src/game/widget_components.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -384,6 +385,13 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
         game: currentGame,
         addRepaintBoundary: widget.addRepaintBoundary,
         behavior: widget.behavior,
+        children: [
+          for (final component in currentGame.widgetComponents)
+            WidgetComponentHost(
+              key: ObjectKey(component),
+              component: component,
+            ),
+        ],
       );
 
       internalGameWidget = currentGame.gestureDetectors.build(

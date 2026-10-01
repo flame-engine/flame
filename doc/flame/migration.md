@@ -952,3 +952,38 @@ class SlowWorld extends World with CustomTraversal, HasTimeScale {}
 
 A `HasTimeScale` time scale of `0` (or `pause()`) now stops the update pass for the whole subtree
 instead of updating it with a `dt` of `0`, which is what `Route.stopTime()` relies on.
+
+
+### `flame_tiled` layers are components
+
+`RenderableTiledMap` is now a `Component` and every layer of the map is a `RenderableLayer`, which
+is a `PositionComponent` that is a child of the map, or of its group layer, in the same order as
+in Tiled. `TiledComponent` adds its `tileMap` as a child, so the whole map is part of the component
+tree. Components can be added to a layer to render between the layers of the map:
+
+```dart
+final ground = tiledComponent.tileMap.getRenderableLayer('Ground');
+ground?.add(player);
+```
+
+As a consequence of this, a few things changed:
+
+- `RenderableTiledMap.render`, `update` and `handleResize` are no longer meant to be called
+  directly, the map renders and updates as any other component. Where you rendered the map
+  yourself, use `renderTree` and `updateTree` instead.
+- `TiledComponent.tileMap` is final, since the map is a child of the component. To show another
+  map, replace the `TiledComponent`.
+- Layers that are not visible in Tiled are still loaded, so `renderableLayers` and the indices
+  used by `setLayerOpacity` and `getLayerOpacity` now match `TiledMap.layers`. Toggling the
+  visibility of a layer with `setLayerVisibility` works at runtime.
+- `RenderableLayer.offsetX` and `offsetY` are the offset of the layer relative to its parent
+  layer, instead of the accumulated offset of all its parents. The accumulated position is
+  available through `absolutePosition`.
+- The parallax scrolling reference point is now the center of the view, the same as in Tiled, so
+  layers with a parallax factor may render at a slightly different position than before.
+- The camera for the parallax calculation is the camera that the map is rendered through, falling
+  back to the camera of the game for a map that is not rendered through a camera, so
+  `TiledComponent` no longer looks up the first camera of the game in `onLoad`. Set
+  `RenderableTiledMap.camera` only when the map is rendered outside of a game.
+- A `RenderableTiledMap` can only belong to one `TiledComponent`, since it is a child of the
+  component. Constructing a second `TiledComponent` with the same map fails an assertion.

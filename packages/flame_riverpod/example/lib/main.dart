@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flame/components.dart' hide Timer;
 import 'package:flame/game.dart';
 import 'package:flame_riverpod/flame_riverpod.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_ui/material_ui.dart';
 
 final countingStreamProvider = StreamProvider<int>((ref) {
   return Stream.periodic(const Duration(seconds: 1), (inc) => inc);

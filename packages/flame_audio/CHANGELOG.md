@@ -1,3 +1,9 @@
+## 2.13.0-dev.0
+
+ - **FIX**: Use full asset paths in the remaining examples and docs ([#4027](https://github.com/flame-engine/flame/issues/4027)). ([1f8bf379](https://github.com/flame-engine/flame/commit/1f8bf379c01910fd684fc8ede186db9be445e673))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **FEAT**: Removing prefix from asset loaders ([#4015](https://github.com/flame-engine/flame/issues/4015)). ([11972dfb](https://github.com/flame-engine/flame/commit/11972dfbaee484bcf1a99ed91aa325823560f837))
+
 ## 2.12.2
 
  - Update a dependency to the latest release.

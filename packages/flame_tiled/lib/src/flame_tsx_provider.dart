@@ -1,36 +1,34 @@
 import 'package:flame/flame.dart';
 import 'package:flutter/services.dart';
 import 'package:tiled/tiled.dart';
-import 'package:xml/xml.dart';
 
-/// A implementation of [TsxProvider] use by RenderableTileMap.
+/// A [ParserProvider] for a single external tileset file loaded from
+/// [Flame.bundle] or a custom asset bundle.
 ///
-/// It uses [Flame.bundle] or a custom asset bundle
-/// and has a built-in cache for the file read.
-class FlameTsxProvider implements TsxProvider {
+/// `RenderableTiledMap` resolves external tilesets on its own, this is only
+/// needed when parsing a map manually, for example through
+/// [TiledMap.parseTmx].
+class FlameTsxProvider implements ParserProvider {
   /// Parsed data for this tsx file.
   final String data;
 
   /// Stored filename for corresponding tsx file.
-  final String _filename;
+  final String filename;
 
-  FlameTsxProvider._(this.data, this._filename);
-
-  @override
-  String get filename => _filename;
+  FlameTsxProvider._(this.data, this.filename);
 
   @override
-  Parser getSource(String key) {
-    final node = XmlDocument.parse(data).rootElement;
-    return XmlParser(node);
-  }
+  bool canProvide(String path) => path == filename;
 
   @override
+  Parser getSource(String path) => Parser.fromString(data);
+
+  /// Parsed tileset source, or `null` when [data] is empty.
   Parser? getCachedSource() {
     if (data.isEmpty) {
       return null;
     }
-    return getSource('');
+    return getSource(filename);
   }
 
   /// Parses a file returning a [FlameTsxProvider].

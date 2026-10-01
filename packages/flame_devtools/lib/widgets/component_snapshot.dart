@@ -3,7 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:flame/widgets.dart';
 import 'package:flame_devtools/repository.dart';
-import 'package:flutter/material.dart' hide Image;
+import 'package:material_ui/material_ui.dart' hide Image;
 
 class ComponentSnapshot extends StatefulWidget {
   const ComponentSnapshot({
@@ -41,6 +41,9 @@ class _ComponentSnapshotState extends State<ComponentSnapshot> {
     return FutureBuilder<String?>(
       future: _snapshot,
       builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Text('Could not take a snapshot: ${snapshot.error}');
+        }
         if (snapshot.connectionState == ConnectionState.done &&
             snapshot.hasData) {
           return Base64Image(

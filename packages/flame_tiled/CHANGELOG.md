@@ -1,3 +1,13 @@
+## 4.0.0-dev.0
+
+> Note: This release has breaking changes.
+
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **FEAT**: Support infinite maps in flame_tiled ([#4074](https://github.com/flame-engine/flame/issues/4074)). ([72901b4c](https://github.com/flame-engine/flame/commit/72901b4ce7f0d1e50f960cddb15de223632bfd5d))
+ - **FEAT**: Removing prefix from asset loaders ([#4015](https://github.com/flame-engine/flame/issues/4015)). ([11972dfb](https://github.com/flame-engine/flame/commit/11972dfbaee484bcf1a99ed91aa325823560f837))
+ - **BREAKING** **FEAT**: Make flame_tiled layers components so that components can be added between them ([#3653](https://github.com/flame-engine/flame/issues/3653)). ([6b93c663](https://github.com/flame-engine/flame/commit/6b93c663c7242330f0f4446e9881ea58dc31b8b8))
+ - **BREAKING** **FEAT**: Upgrade flame_tiled to tiled 0.12.0 ([#4073](https://github.com/flame-engine/flame/issues/4073)). ([7109f155](https://github.com/flame-engine/flame/commit/7109f1553de4abb9435587f32d9b812dfa30a525))
+
 ## 3.1.2
 
  - **FIX**(flame_tiled): Anchor oversized orthogonal tiles at bottom-left of cell ([#3923](https://github.com/flame-engine/flame/issues/3923)). ([4c775db0](https://github.com/flame-engine/flame/commit/4c775db08ffc4357420131251510bdbf71585948))
