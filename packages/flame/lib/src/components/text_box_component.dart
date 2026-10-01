@@ -84,7 +84,6 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   @visibleForTesting
   final List<String> lines = [];
-  double _maxLineWidth = 0.0;
   late double _lineHeight;
   late int _totalLines;
 
@@ -199,59 +198,18 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   void _updateBoundsWithTextPainter(double availableWidth) {
     final textPaint = textRenderer as TextPaint;
-    final textPainter = textPaint.toTextPainter(text);
-    textPainter.layout(maxWidth: availableWidth);
+    // A dedicated painter is used so that the wrapped layout does not leak
+    // into the painter that TextPaint caches for this string.
+    final paragraph = ParagraphTextElement.layout(
+      TextSpan(text: text, style: textPaint.style),
+      maxWidth: availableWidth,
+      textDirection: textPaint.textDirection,
+    );
 
-    // Extract lines from the laid out text using line boundaries
-    final lineMetricsList = textPainter.computeLineMetrics();
-    var lineHeight = 0.0;
-    var offset = 0;
-
-    while (offset < text.length) {
-      var range = textPainter.getLineBoundary(TextPosition(offset: offset));
-      // Flutter web sometimes report the range on the previous page instead of
-      // the following. This is probably a bug cause by the
-      // JS floating number inaccuracies.
-      //
-      // We have an issue tracking that down on Flutter itself:
-      // https://github.com/flutter/flutter/issues/188874
-      //
-      // This code is a workaround, that captures when such we fall
-      // in that issue and tries to get the next page.
-      if (range.start < offset) {
-        range = textPainter.getLineBoundary(
-          TextPosition(
-            offset: offset + 1,
-          ),
-        );
-      }
-      var lineText = text.substring(range.start, range.end);
-
-      // Don't include the trailing newline character in the line text
-      if (lineText.endsWith('\n')) {
-        lineText = lineText.substring(0, lineText.length - 1);
-      }
-
-      lines.add(lineText);
-
-      // Update max width based on actual line width
-      final actualLineMetrics = textRenderer.getLineMetrics(lineText);
-      _updateMaxWidth(actualLineMetrics.width);
-
-      // Move to the next line
-      offset = range.end;
-      if (offset < text.length && text[offset] == '\n') {
-        offset++; // Skip the newline character
-      }
-    }
-
-    // Get line height from the metrics
-    if (lineMetricsList.isNotEmpty) {
-      lineHeight = lineMetricsList.first.height;
-    }
-
-    _lineHeight = lineHeight;
+    lines.addAll(paragraph.lines);
+    _lineHeight = paragraph.lineMetrics.firstOrNull?.height ?? 0;
     _totalLines = lines.length;
+    paragraph.dispose();
   }
 
   void _updateBoundsWordBased(double availableWidth) {
@@ -264,7 +222,6 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       final metrics = textRenderer.getLineMetrics(possibleLine);
       lineHeight = max(lineHeight, metrics.height);
 
-      _updateMaxWidth(metrics.width);
       final bool canAppend;
       if (metrics.width <= availableWidth) {
         canAppend = lines.isNotEmpty;
@@ -284,12 +241,6 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     }
     _totalLines = lines.length;
     _lineHeight = lineHeight;
-  }
-
-  void _updateMaxWidth(double w) {
-    if (w > _maxLineWidth) {
-      _maxLineWidth = w;
-    }
   }
 
   double get totalCharTime => text.length * boxConfig.timePerChar;

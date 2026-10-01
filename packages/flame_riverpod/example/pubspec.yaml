@@ -6,8 +6,8 @@ version: 1.0.0+1
 environment:
   sdk: ">=3.12.0 <4.0.0"
 dependencies:
-  flame: ^1.38.0
-  flame_riverpod: ^5.5.5
+  flame: ^2.0.0-dev.0
+  flame_riverpod: ^5.5.6-dev.0
   flutter:
     sdk: flutter
   flutter_riverpod: ^3.0.3
@@ -15,7 +15,7 @@ dependencies:
 
 dev_dependencies:
   cupertino_ui: any
-  flame_lint: ^1.4.3
+  flame_lint: ^1.4.4-dev.0
   flutter_test:
     sdk: flutter
 

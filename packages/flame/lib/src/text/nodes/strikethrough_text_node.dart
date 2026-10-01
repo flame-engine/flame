@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/text.dart';
+import 'package:flutter/painting.dart' show InlineSpan;
 
 /// An [InlineTextNode] representing a text with a strikethrough line.
 ///
@@ -30,5 +31,5 @@ class StrikethroughTextNode extends InlineTextNode {
   }
 
   @override
-  TextNodeLayoutBuilder get layoutBuilder => child.layoutBuilder;
+  InlineSpan toInlineSpan() => child.toInlineSpan();
 }

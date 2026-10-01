@@ -155,5 +155,31 @@ Future<void> main() async {
         expect(internalButton.pressedSprite.image, image);
       },
     );
+    testWidgets(
+      'forwards pressedInsets to InternalSpriteButton',
+      (tester) async {
+        const pressedInsets = EdgeInsets.only(top: 42);
+        final sprite1 = Sprite(image);
+        final sprite2 = Sprite(image);
+
+        await tester.pumpWidget(
+          SpriteButton(
+            sprite: sprite1,
+            pressedSprite: sprite2,
+            onPressed: () {},
+            width: 100,
+            height: 100,
+            label: const SizedBox(),
+            pressedInsets: pressedInsets,
+          ),
+        );
+
+        final internalButton = tester.widget<InternalSpriteButton>(
+          find.byType(InternalSpriteButton),
+        );
+
+        expect(internalButton.pressedInsets, pressedInsets);
+      },
+    );
   });
 }

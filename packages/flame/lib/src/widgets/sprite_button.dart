@@ -232,6 +232,7 @@ class SpriteButton extends StatelessWidget {
         return InternalSpriteButton(
           onPressed: onPressed,
           label: label,
+          pressedInsets: pressedInsets,
           width: width,
           height: height,
           sprite: sprite,

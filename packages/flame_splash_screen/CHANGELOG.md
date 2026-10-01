@@ -1,3 +1,8 @@
+## 0.3.2-dev.0+4
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+
 ## 0.3.1+3
 
  - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))

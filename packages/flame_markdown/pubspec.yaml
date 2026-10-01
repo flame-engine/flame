@@ -2,7 +2,7 @@ name: flame_markdown
 resolution: workspace
 description: |
   Markdown support for the Flame game engine, bridging the markdown package into Flame's text rendering pipeline.
-version: 0.2.5+16
+version: 0.3.0-dev.0+17
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_markdown
 funding:
   - https://opencollective.com/blue-fire
@@ -17,13 +17,13 @@ environment:
   flutter: ">=3.44.0"
 
 dependencies:
-  flame: ^1.38.0
+  flame: ^2.0.0-dev.0
   flutter:
     sdk: flutter
   markdown: ^7.1.1
 
 dev_dependencies:
   dartdoc: ^9.0.0
-  flame_lint: ^1.4.3
+  flame_lint: ^1.4.4-dev.0
   flutter_test:
     sdk: flutter

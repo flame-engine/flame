@@ -269,6 +269,7 @@ classDiagram
         render(Canvas canvas, ...)
     }
     class TextPainterTextElement
+    class ParagraphTextElement
         
     TextRenderer --> TextPaint
     TextRenderer --> SpriteFontRenderer
@@ -282,6 +283,7 @@ classDiagram
     laid out and ready to render."
     TextElement --> TextPainterTextElement
     TextElement --> SpriteFontTextElement
+    TextElement --> ParagraphTextElement
     TextElement --> Others
 ```
 
@@ -596,18 +598,21 @@ Finally, we have the elements, that represent a combination of a node ("what") w
 and therefore represent a pre-compiled, laid-out piece of rich text to be rendered on the Canvas.
 
 Inline Text Elements specifically can alternatively be thought of as a combination of a
-`TextRenderer` (simplified "how") and a string (single line of "what").
+`TextRenderer` (simplified "how") and a string (single line of "what"). When using a renderer
+directly, the entire layout process is skipped, and a single `TextPainterTextElement` or
+`SpriteFontTextElement` is returned.
 
-That is because an `InlineTextStyle` can be converted to a specific `TextRenderer` via the
-`asTextRenderer` method, which is then used to lay out each line of text into a unique
-`InlineTextElement`.
+Text blocks in a document (`ParagraphNode`, `HeaderNode`) work differently: every `InlineTextNode`
+converts itself into a Flutter `InlineSpan` via `toInlineSpan`, and the whole block is laid out at
+once by Flutter's paragraph engine, producing a single `ParagraphTextElement`. This means that rich
+text gets Unicode line breaking (including scripts without spaces, such as CJK), every `TextAlign`
+value including `justify`, and kerning and ligatures that continue across differently styled spans.
+The `ParagraphTextElement` exposes the resulting `lines` and `lineMetrics` if you need to know how
+the text was broken up.
 
-When using the renderer directly, the entire layout process is skipped, and a single
-`TextPainterTextElement` or `SpriteFontTextElement` is returned.
-
-As you can see, both definitions of an Element are, essentially, equivalent, all things considered.
-But it still leaves us with two paths for rendering text. Which one to pick? How to solve this
-conundrum?
+Since documents are always laid out by Flutter, an `InlineTextStyle` can only describe font-based
+text. To render a `SpriteFont`, use `SpriteFontRenderer` with `TextComponent` or
+`TextBoxComponent` instead.
 
 When in doubt, the following guidelines can help you picking the best path for you:
 
@@ -616,8 +621,9 @@ When in doubt, the following guidelines can help you picking the best path for y
 - for rendering Sprite Fonts, you must use `SpriteFontRenderer` (a renderer implementation that
   accepts a `SpriteFont`);
 - for rendering multiple lines of text, with automatic line breaks, you have two options:
-  - use the FCS `TextBoxComponent`, which uses any text renderer to draw each line of text as an
-    Element, and does its own layout and line breaking;
-  - use the Text Node & Style system to create your pre-laid-out Elements. Note: there is no current
-    FCS component for it.
+  - use the FCS `TextBoxComponent`, which lets Flutter break the lines when used with `TextPaint`
+    (and falls back to breaking at spaces for other renderers), and then draws each line of text as
+    an Element;
+  - use the Text Node & Style system to create your pre-laid-out Elements, and render them with
+    `TextElementComponent`.
 - finally, in order to have formatted (or rich) text, you must use Text Nodes & Styles.

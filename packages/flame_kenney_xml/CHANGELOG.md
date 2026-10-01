@@ -1,3 +1,15 @@
+## 0.2.0-dev.0+3
+
+> Note: This release has breaking changes.
+
+ - **FIX**: Add a version constraint to the material_ui dependency ([#4075](https://github.com/flame-engine/flame/issues/4075)). ([7ce35d85](https://github.com/flame-engine/flame/commit/7ce35d85d160264a423bd493a06f4749c9d6263e))
+ - **FIX**: Use full asset paths in the remaining examples and docs ([#4027](https://github.com/flame-engine/flame/issues/4027)). ([1f8bf379](https://github.com/flame-engine/flame/commit/1f8bf379c01910fd684fc8ede186db9be445e673))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **FEAT**: Removing prefix from asset loaders ([#4015](https://github.com/flame-engine/flame/issues/4015)). ([11972dfb](https://github.com/flame-engine/flame/commit/11972dfbaee484bcf1a99ed91aa325823560f837))
+ - **DOCS**: Fix two code snippets that do not compile ([#3955](https://github.com/flame-engine/flame/issues/3955)). ([6f4c27c9](https://github.com/flame-engine/flame/commit/6f4c27c9d71cfaace7b8006ea8762baf840c8e49))
+ - **BREAKING** **FEAT**: Upgrade flame_tiled to tiled 0.12.0 ([#4073](https://github.com/flame-engine/flame/issues/4073)). ([7109f155](https://github.com/flame-engine/flame/commit/7109f1553de4abb9435587f32d9b812dfa30a525))
+ - **BREAKING** **FEAT**: Rename GameWidget.controlled to GameWidget.managed ([#3961](https://github.com/flame-engine/flame/issues/3961)). ([d99224e5](https://github.com/flame-engine/flame/commit/d99224e5e23c16c86d6d26bf8a807d31c4b4bbc4))
+
 ## 0.1.3+2
 
  - Update a dependency to the latest release.

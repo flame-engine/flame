@@ -1,3 +1,7 @@
+## 0.3.4-dev.0+24
+
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+
 ## 0.3.3+23
 
  - Update a dependency to the latest release.
