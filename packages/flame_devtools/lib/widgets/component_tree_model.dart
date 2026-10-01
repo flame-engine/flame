@@ -1,9 +1,9 @@
 import 'package:animated_tree_view/animated_tree_view.dart';
 import 'package:flame/devtools.dart';
 import 'package:flame_devtools/repository.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:material_ui/material_ui.dart';
 
 final selectedTreeNodeProvider = StateProvider<TreeNode<ComponentTreeNode>?>(
   (_) => null,
@@ -17,12 +17,22 @@ final loadedTreeModelProvider = StateProvider<ComponentTreeModel>(
 );
 
 final componentTreeLoaderProvider = FutureProvider<void>((ref) async {
-  final previousTreeModel = ref.watch(loadedTreeModelProvider);
+  final previousTreeModel = ref.read(loadedTreeModelProvider);
   final updatedModel = await ComponentTreeModel.refreshComponentTree(
     previousTreeModel,
   );
-  if (updatedModel != null) {
-    ref.read(loadedTreeModelProvider.notifier).state = updatedModel;
+  if (updatedModel == null) {
+    return;
+  }
+  ref.read(loadedTreeModelProvider.notifier).state = updatedModel;
+
+  // The tree nodes have been rebuilt, so the selection has to point to the
+  // new node for the same component, or be cleared if the component is gone.
+  final selectedKey = ref.read(selectedTreeNodeProvider)?.key;
+  if (selectedKey != null) {
+    ref.read(selectedTreeNodeProvider.notifier).state = updatedModel.findNode(
+      selectedKey,
+    );
   }
 });
 
@@ -40,22 +50,20 @@ class ComponentTreeModel {
 
   static Future<ComponentTreeModel?> refreshComponentTree(
     ComponentTreeModel previousModel,
-  ) {
-    final updatedComponentTree = Repository.getComponentTree();
-    return updatedComponentTree.then((node) {
-      final treeRoot = previousModel.treeRoot;
-      final componentRoot = TreeNode(key: node.id.toString(), data: node);
-      final (:count, :nodeHash) = _buildTree(node, componentRoot, isRoot: true);
-      if (previousModel.nodeHash != nodeHash) {
-        treeRoot.clear();
-        treeRoot.add(componentRoot);
-        return previousModel.copyWith(
-          componentCount: count,
-          nodeHash: nodeHash,
-        );
-      }
+  ) async {
+    final node = await Repository.getComponentTree();
+    final treeRoot = previousModel.treeRoot;
+    final componentRoot = TreeNode(key: node.id.toString(), data: node);
+    final (:count, :nodeHash) = _buildTree(node, componentRoot, isRoot: true);
+    if (previousModel.nodeHash == nodeHash) {
       return null;
-    });
+    }
+    treeRoot.clear();
+    treeRoot.add(componentRoot);
+    return previousModel.copyWith(
+      componentCount: count,
+      nodeHash: nodeHash,
+    );
   }
 
   static ({int count, int nodeHash}) _buildTree(
@@ -78,9 +86,31 @@ class ComponentTreeModel {
     for (final child in node.children) {
       final (:count, :nodeHash) = _buildTree(child, current);
       componentCount += count;
-      computedHash += nodeHash ^ (parent.data?.id ?? 0);
+      computedHash = Object.hash(computedHash, nodeHash);
     }
     return (count: componentCount, nodeHash: computedHash);
+  }
+
+  /// Finds the node with the given [key], which is the id of the component,
+  /// or returns null if there is no such node in the tree.
+  TreeNode<ComponentTreeNode>? findNode(String key) {
+    return _findNode(treeRoot, key);
+  }
+
+  static TreeNode<ComponentTreeNode>? _findNode(
+    TreeNode<ComponentTreeNode> node,
+    String key,
+  ) {
+    if (node.key == key) {
+      return node;
+    }
+    for (final child in node.childrenAsList) {
+      final found = _findNode(child as TreeNode<ComponentTreeNode>, key);
+      if (found != null) {
+        return found;
+      }
+    }
+    return null;
   }
 
   ComponentTreeModel copyWith({

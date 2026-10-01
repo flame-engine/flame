@@ -4,7 +4,9 @@ import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
 import 'package:flame_cli/src/flame_connection.dart';
 import 'package:flame_cli/src/vm_service_uri_file.dart';
-import 'package:io/io.dart';
+
+/// Connects to the game at the given URI, as [FlameConnection.connect] does.
+typedef GameConnector = Future<FlameConnection> Function(String uri);
 
 /// A command that talks to a running game.
 ///
@@ -34,47 +36,48 @@ abstract class FlameCommand extends Command<int> {
   @override
   Future<int> run() async {
     validate();
-    final connection = await _connect();
+    final connection = await connectToGame(
+      workingDirectory,
+      uriOption: argResults!.option('uri'),
+    );
     try {
       return await runWithConnection(connection);
     } finally {
       await connection.dispose();
     }
   }
+}
 
-  Future<FlameConnection> _connect() async {
-    final uri = argResults!.option('uri');
-    if (uri != null) {
-      return FlameConnection.connect(uri);
-    }
+/// Connects to the running game, which is [uriOption] when it is given, and
+/// otherwise the game that `flame run` started for the project that
+/// [workingDirectory] is in.
+///
+/// Throws a [FlameCliException] when no running game is found or when it
+/// cannot be reached, which says where the URI came from when it was read
+/// from the file that `flame run` writes.
+Future<FlameConnection> connectToGame(
+  Directory workingDirectory, {
+  String? uriOption,
+  GameConnector connect = FlameConnection.connect,
+}) async {
+  final (:uri, :file) = findVmServiceUri(
+    workingDirectory,
+    uriOption: uriOption,
+  );
+  if (file == null) {
+    return connect(uri);
+  }
 
-    const noGameFound = FlameCliException(
-      'No running game was found. Start the game with `flame run`, or pass '
-      'the Dart VM Service URI of the game with --uri.',
-      exitCode: ExitCode.unavailable,
+  try {
+    return await connect(uri);
+  } on FlameCliException catch (error, stackTrace) {
+    Error.throwWithStackTrace(
+      FlameCliException(
+        '${error.message}\nThe URI was read from ${file.path}, the game '
+        'might have been stopped.',
+        exitCode: error.exitCode,
+      ),
+      stackTrace,
     );
-    final file = findVmServiceUriFile(workingDirectory);
-    if (file == null) {
-      throw noGameFound;
-    }
-    final String fileUri;
-    try {
-      fileUri = file.readAsStringSync();
-    } on FileSystemException catch (_, stackTrace) {
-      Error.throwWithStackTrace(noGameFound, stackTrace);
-    }
-
-    try {
-      return await FlameConnection.connect(fileUri);
-    } on FlameCliException catch (error, stackTrace) {
-      Error.throwWithStackTrace(
-        FlameCliException(
-          '${error.message}\nThe URI was read from ${file.path}, the game '
-          'might have been stopped.',
-          exitCode: error.exitCode,
-        ),
-        stackTrace,
-      );
-    }
   }
 }

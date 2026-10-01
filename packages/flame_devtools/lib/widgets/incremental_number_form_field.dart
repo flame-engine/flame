@@ -1,4 +1,4 @@
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/material.dart';
 
 class IncrementalNumberFormField<T extends num> extends StatefulWidget {
   const IncrementalNumberFormField({
@@ -42,43 +42,39 @@ class _IncrementalNumberFormFieldState<T extends num>
     super.dispose();
   }
 
-  T _parse() {
-    if (T == double) {
-      return double.parse(_controller.text) as T;
-    } else {
-      return int.parse(_controller.text) as T;
-    }
+  T? _parse() {
+    final text = _controller.text;
+    final value = T == double ? double.tryParse(text) : int.tryParse(text);
+    return value as T?;
   }
 
-  void _tryUpdate(String value) {
-    try {
-      final value = _parse();
-      _update(value);
-    } on Exception catch (_) {
+  void _tryUpdate(String _) {
+    final value = _parse();
+    if (value == null) {
       setState(() {
         errorText = 'Invalid number';
       });
+    } else {
+      _update(value);
     }
   }
 
-  void _update(T v) {
+  void _update(T value) {
     setState(() {
       errorText = null;
     });
-
-    widget.onChanged?.call(v);
+    widget.onChanged?.call(value);
   }
 
-  void _increment() {
-    final value = _parse() + 1 as T;
-    _update(value);
-    _controller.text = value.toString();
-  }
-
-  void _decrement() {
-    final value = _parse() - 1 as T;
-    _update(value);
-    _controller.text = value.toString();
+  void _step(int delta) {
+    final value = _parse();
+    if (value == null) {
+      _tryUpdate(_controller.text);
+      return;
+    }
+    final next = (value + delta) as T;
+    _controller.text = next.toString();
+    _update(next);
   }
 
   @override
@@ -86,7 +82,7 @@ class _IncrementalNumberFormFieldState<T extends num>
     return Row(
       children: [
         IconButton(
-          onPressed: _decrement,
+          onPressed: () => _step(-1),
           icon: const Icon(Icons.remove),
         ),
         const SizedBox(width: 8),
@@ -103,7 +99,7 @@ class _IncrementalNumberFormFieldState<T extends num>
         ),
         const SizedBox(width: 8),
         IconButton(
-          onPressed: _increment,
+          onPressed: () => _step(1),
           icon: const Icon(Icons.add),
         ),
       ],
