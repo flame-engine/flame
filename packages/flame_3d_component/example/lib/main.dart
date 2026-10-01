@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
@@ -57,7 +56,9 @@ class Skeleton extends Component3D with DragCallbacks {
         ),
       );
 
-  late final Node model;
+  /// The imported model is animated, and the animation owns the transform
+  /// of the node it is bound to, so the rotation is applied to this parent.
+  final Node pivot = Node();
   double _yaw = 0;
   double _pitch = 0;
 
@@ -65,8 +66,9 @@ class Skeleton extends Component3D with DragCallbacks {
   Future<void> onLoad() async {
     await super.onLoad();
     // Model by Kay Lousberg, https://kaylousberg.itch.io/kaykit-skeletons
-    model = await Node.fromGlbAsset('assets/models/skeleton.glb');
-    root.add(model);
+    final model = await Node.fromGlbAsset('assets/models/skeleton.glb');
+    pivot.add(model);
+    root.add(pivot);
 
     final walk = model.findAnimationByName('Walking_A');
     if (walk != null) {
@@ -87,7 +89,7 @@ class Skeleton extends Component3D with DragCallbacks {
     super.onDragUpdate(event);
     _yaw += event.localDelta.x * 0.01;
     _pitch = (_pitch + event.localDelta.y * 0.01).clamp(-0.5, 0.5);
-    model.rotation =
+    pivot.rotation =
         Quaternion.axisAngle(Vector3(0, 1, 0), _yaw) *
         Quaternion.axisAngle(Vector3(1, 0, 0), _pitch);
   }
@@ -102,6 +104,9 @@ class Ember extends SpriteAnimationComponent with HasGameRef {
         anchor: Anchor.bottomCenter,
       );
 
+  static const _secondsPerCrossing = 4.0;
+  double _time = 0;
+
   @override
   Future<void> onLoad() async {
     animation = await gameRef.loadSpriteAnimation(
@@ -112,21 +117,18 @@ class Ember extends SpriteAnimationComponent with HasGameRef {
         stepTime: 0.15,
       ),
     );
-    add(
-      MoveByEffect(
-        Vector2(gameRef.size.x - size.x * 2, 0),
-        EffectController(
-          duration: 4,
-          reverseDuration: 4,
-          infinite: true,
-        ),
-      ),
-    );
   }
 
   @override
-  void onGameResize(Vector2 size) {
-    super.onGameResize(size);
-    position = Vector2(this.size.x, size.y * 0.7);
+  void update(double dt) {
+    super.update(dt);
+    _time += dt;
+    // Walk back and forth between the screen edges, always measured
+    // against the current game size so a resize never pushes it off screen.
+    final phase = (_time / _secondsPerCrossing) % 2;
+    final progress = phase < 1 ? phase : 2 - phase;
+    final gameSize = gameRef.size;
+    final travel = (gameSize.x - size.x).clamp(0.0, double.infinity);
+    position = Vector2(size.x / 2 + progress * travel, gameSize.y * 0.7);
   }
 }
