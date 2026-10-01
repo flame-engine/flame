@@ -35,4 +35,11 @@ class GroupElement extends BlockElement {
         ) ??
         Rect.zero;
   }
+
+  @override
+  void dispose() {
+    for (final child in children) {
+      child.dispose();
+    }
+  }
 }
