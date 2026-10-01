@@ -282,20 +282,30 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
     final boundsHalfWidth = isSwapped ? halfHeight : halfWidth;
     final boundsHalfHeight = isSwapped ? halfWidth : halfHeight;
 
-    // The transform rotates around the center of the image, so we place that
-    // center on the center of the area that the rotated tile covers. Since
-    // [offsetX] and [offsetY] are the center of the cell, we move to its
-    // bottom-left corner (-tileWidth / 2, +tileHeight / 2) and then to the
-    // center of the covered area (+boundsHalfWidth, -boundsHalfHeight).
+    // The transform rotates around the center of the image, which has to end up
+    // on the center of the area that the rotated tile covers. [offsetX] and
+    // [offsetY] are the center of the cell, so we move to its bottom-left
+    // corner (-tileWidth / 2, +tileHeight / 2) and then to the center of the
+    // covered area (+boundsHalfWidth, -boundsHalfHeight).
+    final centerShiftX = scale * (boundsHalfWidth - map.tileWidth / 2);
+    final centerShiftY = scale * (map.tileHeight / 2 - boundsHalfHeight);
+
+    // The position of the transform is kept on the center of the cell for every
+    // tile, no matter its size or rotation. This matters because a TileStack
+    // sets the same position on the tiles of all of its layers, so tiles with
+    // different sizes would lose their relative offsets otherwise. The shift
+    // above is added to the anchor instead, which doesn't change where the tile
+    // is drawn.
+    //
+    // RSTransform wants the anchor as the offset from the position to where
+    // the origin of the image ends up once it has been rotated and scaled.
     return MutableRSTransform(
       scos,
       ssin,
-      offsetX + scale * (boundsHalfWidth - map.tileWidth / 2),
-      offsetY + scale * (map.tileHeight / 2 - boundsHalfHeight),
-      // RSTransform wants the anchor as the offset from the translation to the
-      // origin of the image once it has been rotated and scaled.
-      -scos * halfWidth + ssin * halfHeight,
-      -ssin * halfWidth - scos * halfHeight,
+      offsetX,
+      offsetY,
+      -scos * halfWidth + ssin * halfHeight + centerShiftX,
+      -ssin * halfWidth - scos * halfHeight + centerShiftY,
     );
   }
 

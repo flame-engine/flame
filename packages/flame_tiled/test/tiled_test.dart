@@ -1213,6 +1213,40 @@ void main() {
         );
       });
     }
+
+    test('tiles of a TileStack stay on the center of their cell', () async {
+      // A TileStack sets the same position on the tiles of all its layers, so
+      // oversized and rotated tiles must report the same position as the
+      // cell-sized tiles they are stacked on.
+      final bundle = TestAssetBundle(
+        imageNames: [
+          'oversized_demo_cell_orthogonal.png',
+          'oversized_demo_tile_orthogonal.png',
+        ],
+        stringNames: ['oversized_demo_flips_orthogonal.tmx'],
+      );
+      final component = await TiledComponent.load(
+        'assets/tiles/oversized_demo_flips_orthogonal.tmx',
+        Vector2.all(32),
+        bundle: bundle,
+        images: Images(bundle: bundle),
+      );
+
+      // The flipped tiles are in a row, three cells apart.
+      for (var i = 0; i < 8; i++) {
+        final x = 3 * i;
+        final cell = component.tileMap.tileStack(x, 1, named: {'cells'});
+        final oversized = component.tileMap.tileStack(
+          x,
+          1,
+          named: {'oversized'},
+        );
+
+        expect(oversized.length, 1);
+        expect(oversized.position, cell.position);
+        expect(oversized.position, Vector2((x + 0.5) * 32, 1.5 * 32));
+      }
+    });
   });
 
   group('RenderableTiledMap.TileData', () {
