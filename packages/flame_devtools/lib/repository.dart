@@ -1,17 +1,7 @@
 import 'package:devtools_extensions/devtools_extensions.dart';
 import 'package:flame/devtools.dart';
 
-sealed class Repository {
-  Repository._();
-
-  static Future<int> getComponentCount() async {
-    final componentCountResponse = await serviceManager
-        .callServiceExtensionOnMainIsolate(
-          'ext.flame_devtools.getComponentCount',
-        );
-    return componentCountResponse.json!['component_count'] as int;
-  }
-
+abstract final class Repository {
   static Future<ComponentTreeNode> getComponentTree() async {
     final componentTreeResponse = await serviceManager
         .callServiceExtensionOnMainIsolate(
@@ -22,12 +12,12 @@ sealed class Repository {
     );
   }
 
-  static Future<List<String>> getOverlays() async {
+  static Future<Overlays> getOverlays() async {
     final overlaysResponse = await serviceManager
         .callServiceExtensionOnMainIsolate(
           'ext.flame_devtools.getOverlays',
         );
-    return List<String>.from(overlaysResponse.json!['overlays'] as List);
+    return Overlays.fromJson(overlaysResponse.json!);
   }
 
   static Future<void> navigateToOverlay(String overlay) async {
@@ -37,13 +27,32 @@ sealed class Repository {
     );
   }
 
+  static Future<void> setOverlay(
+    String overlay, {
+    required bool active,
+  }) async {
+    await serviceManager.callServiceExtensionOnMainIsolate(
+      'ext.flame_devtools.setOverlay',
+      args: {'overlay': overlay, 'active': active.toString()},
+    );
+  }
+
+  static Future<int> getComponentPriority({required int id}) async {
+    final infoResponse = await serviceManager.callServiceExtensionOnMainIsolate(
+      'ext.flame_devtools.getComponentInfo',
+      args: {'id': id.toString()},
+    );
+    final attributes = infoResponse.json!['attributes'] as Map<String, dynamic>;
+    return attributes['priority'] as int;
+  }
+
   static Future<bool> swapDebugMode({int? id}) async {
     final nextDebugMode = !(await getDebugMode(id: id));
     await serviceManager.callServiceExtensionOnMainIsolate(
       'ext.flame_devtools.setDebugMode',
       args: {
-        'debug_mode': nextDebugMode,
-        'id': id,
+        'debug_mode': nextDebugMode.toString(),
+        if (id != null) 'id': id.toString(),
       },
     );
     return nextDebugMode;
@@ -53,7 +62,7 @@ sealed class Repository {
     final debugModeResponse = await serviceManager
         .callServiceExtensionOnMainIsolate(
           'ext.flame_devtools.getDebugMode',
-          args: {'id': id},
+          args: {if (id != null) 'id': id.toString()},
         );
     return debugModeResponse.json!['debug_mode'] as bool;
   }
@@ -62,7 +71,7 @@ sealed class Repository {
   static Future<bool> setPaused(bool shouldPause) async {
     await serviceManager.callServiceExtensionOnMainIsolate(
       'ext.flame_devtools.setPaused',
-      args: {'paused': shouldPause},
+      args: {'paused': shouldPause.toString()},
     );
     return shouldPause;
   }
@@ -80,25 +89,25 @@ sealed class Repository {
       'ext.flame_devtools.step',
       args: {'step_time': stepTime.toString()},
     );
-    return stepResponse.json!['step_time'] as double;
+    return (stepResponse.json!['step_time'] as num).toDouble();
   }
 
-  static Future<String?> snapshot({String? id}) async {
+  static Future<String?> snapshot({required int id}) async {
     final snapshotResponse = await serviceManager
         .callServiceExtensionOnMainIsolate(
           'ext.flame_devtools.getComponentSnapshot',
-          args: {'id': id},
+          args: {'id': id.toString()},
         );
     return snapshotResponse.json!['snapshot'] as String?;
   }
 
   static Future<PositionComponentAttributes> getPositionComponentAttributes({
-    int? id,
+    required int id,
   }) async {
     final potentialPositionComponentResponse = await serviceManager
         .callServiceExtensionOnMainIsolate(
           'ext.flame_devtools.getPositionComponentAttributes',
-          args: {'id': id},
+          args: {'id': id.toString()},
         );
 
     return PositionComponentAttributes.fromJson(
@@ -106,18 +115,35 @@ sealed class Repository {
     );
   }
 
-  static Future<void> setPositionComponentAttribute({
+  /// Sets the [attribute] of the component with the given [id], where
+  /// `priority` can be set on any component and the other attributes only on
+  /// position components.
+  static Future<void> setComponentAttribute({
+    required int id,
     required String attribute,
-    required dynamic value,
-    int? id,
+    required Object value,
   }) async {
     await serviceManager.callServiceExtensionOnMainIsolate(
       'ext.flame_devtools.setPositionComponentAttributes',
       args: {
-        'id': id,
+        'id': id.toString(),
         'attribute': attribute,
-        'value': value,
+        'value': value.toString(),
       },
+    );
+  }
+}
+
+class Overlays {
+  final List<String> registered;
+  final List<String> active;
+
+  Overlays({required this.registered, required this.active});
+
+  factory Overlays.fromJson(Map<String, dynamic> json) {
+    return Overlays(
+      registered: List<String>.from(json['overlays'] as List),
+      active: List<String>.from(json['active'] as List),
     );
   }
 }
@@ -143,13 +169,13 @@ class PositionComponentAttributes {
 
   factory PositionComponentAttributes.fromJson(Map<String, dynamic> json) {
     return PositionComponentAttributes(
-      x: json['x'] as double,
-      y: json['y'] as double,
-      width: json['width'] as double,
-      height: json['height'] as double,
-      angle: json['angle'] as double,
-      scaleX: json['scaleX'] as double,
-      scaleY: json['scaleY'] as double,
+      x: (json['x'] as num).toDouble(),
+      y: (json['y'] as num).toDouble(),
+      width: (json['width'] as num).toDouble(),
+      height: (json['height'] as num).toDouble(),
+      angle: (json['angle'] as num).toDouble(),
+      scaleX: (json['scaleX'] as num).toDouble(),
+      scaleY: (json['scaleY'] as num).toDouble(),
     );
   }
 }

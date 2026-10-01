@@ -8,7 +8,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 
 /// When a [DevToolsConnector] is initialized by the [DevToolsService] it will
-/// call the [init] method the first time, where you should will register
+/// call the [init] method the first time, where you should register
 /// service extensions which makes it possible for the devtools extension to
 /// communicate with your interface. Then the [initGame] method will be called
 /// every time a new game is set in the service.

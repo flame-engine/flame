@@ -1,11 +1,12 @@
 import 'package:animated_tree_view/animated_tree_view.dart';
 import 'package:devtools_app_shared/ui.dart' as devtools_ui;
+import 'package:flame_devtools/widgets/component_priority_form.dart';
 import 'package:flame_devtools/widgets/component_snapshot.dart';
 import 'package:flame_devtools/widgets/component_tree_model.dart';
 import 'package:flame_devtools/widgets/debug_mode_button.dart';
 import 'package:flame_devtools/widgets/position_component_attributes_form.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:material_ui/material_ui.dart';
 
 class ComponentTree extends StatelessWidget {
   const ComponentTree({super.key});
@@ -32,7 +33,7 @@ class ComponentTreeSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final loader = ref.read(componentTreeLoaderProvider);
+    final loader = ref.watch(componentTreeLoaderProvider);
     final loadedModel = ref.watch(loadedTreeModelProvider);
     final selectedTreeNode = ref.watch(selectedTreeNodeProvider);
     final componentCount = loadedModel.componentCount;
@@ -137,18 +138,21 @@ class ComponentSection extends ConsumerWidget {
                   : SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 10,
                         children: [
                           Row(
+                            spacing: 10,
                             children: [
                               Text('Id: ${node.id}', style: textStyle),
                               DebugModeButton(id: node.id),
-                            ].withSpacing(),
+                            ],
                           ),
                           Text('Type: ${node.name}', style: textStyle),
                           Text(
                             'Children: ${node.children.length}',
                             style: textStyle,
                           ),
+                          ComponentPriorityForm(componentId: node.id),
                           if (node.isPositionComponent)
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8),
@@ -160,8 +164,8 @@ class ComponentSection extends ConsumerWidget {
                             'toString:\n${node.toStringText}',
                             style: textStyle,
                           ),
-                          ComponentSnapshot(id: node.id.toString()),
-                        ].withSpacing(),
+                          ComponentSnapshot(id: node.id),
+                        ],
                       ),
                     ),
             ),
@@ -169,14 +173,5 @@ class ComponentSection extends ConsumerWidget {
         ],
       ),
     );
-  }
-}
-
-extension on List<Widget> {
-  List<Widget> withSpacing() {
-    return expand((item) sync* {
-      yield const SizedBox(width: 10, height: 10);
-      yield item;
-    }).skip(1).toList();
   }
 }

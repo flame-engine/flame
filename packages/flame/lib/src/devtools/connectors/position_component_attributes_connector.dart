@@ -37,7 +37,7 @@ class PositionComponentAttributesConnector extends DevToolsConnector {
           );
         } else {
           return ServiceExtensionResponse.error(
-            ServiceExtensionResponse.extensionError,
+            ServiceExtensionResponse.invalidParams,
             'No PositionComponent found with id: $id',
           );
         }
@@ -54,7 +54,7 @@ class PositionComponentAttributesConnector extends DevToolsConnector {
         final component = findComponent<Component>(id);
         if (component == null) {
           return ServiceExtensionResponse.error(
-            ServiceExtensionResponse.extensionError,
+            ServiceExtensionResponse.invalidParams,
             'No component found with id: $id',
           );
         }
@@ -64,7 +64,7 @@ class PositionComponentAttributesConnector extends DevToolsConnector {
             component.priority = int.parse(value);
           } else if (component is! PositionComponent) {
             return ServiceExtensionResponse.error(
-              ServiceExtensionResponse.extensionError,
+              ServiceExtensionResponse.invalidParams,
               'No PositionComponent found with id: $id',
             );
           } else if (attribute == 'x') {
@@ -85,7 +85,7 @@ class PositionComponentAttributesConnector extends DevToolsConnector {
             component.anchor = Anchor.valueOf(value);
           } else {
             return ServiceExtensionResponse.error(
-              ServiceExtensionResponse.extensionError,
+              ServiceExtensionResponse.invalidParams,
               'Invalid attribute: $attribute',
             );
           }
