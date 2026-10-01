@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
@@ -48,13 +50,13 @@ class Skeleton extends Component3D {
         anchor: Anchor.center,
         // The model is about 2.2 units tall with its feet at the origin.
         camera: PerspectiveCamera(
-          position: Vector3(0, 1.8, -5.2),
+          position: Vector3(0, 1.8, 5.2),
           target: Vector3(0, 1.0, 0),
         ),
       );
 
   late final Node model;
-  double _turn = 0;
+  double _time = 0;
 
   @override
   Future<void> onLoad() async {
@@ -80,12 +82,17 @@ class Skeleton extends Component3D {
   @override
   void update(double dt) {
     super.update(dt);
-    _turn += dt * 0.5;
-    model.rotation = Quaternion.axisAngle(Vector3(0, 1, 0), _turn);
+    _time += dt;
+    // Sway from side to side while keeping the front toward the camera.
+    model.rotation = Quaternion.axisAngle(
+      Vector3(0, 1, 0),
+      sin(_time * 0.8) * 0.6,
+    );
   }
 }
 
-/// A regular sprite animation walking back and forth in front of the model.
+/// A regular sprite animation walking back and forth across the model, in
+/// front of it.
 class Ember extends SpriteAnimationComponent with HasGameRef {
   Ember()
     : super(
@@ -118,6 +125,6 @@ class Ember extends SpriteAnimationComponent with HasGameRef {
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
-    position = Vector2(this.size.x, size.y - 16);
+    position = Vector2(this.size.x, size.y * 0.7);
   }
 }
