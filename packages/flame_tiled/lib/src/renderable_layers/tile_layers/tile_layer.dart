@@ -248,6 +248,43 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
   @protected
   void cacheTiles();
 
+  /// Builds the transform of a tile whose map cell is centered on
+  /// ([offsetX], [offsetY]), so that it is drawn the same way Tiled draws it.
+  ///
+  /// Tiles are aligned to the bottom-left of their cell, so tiles that are
+  /// larger than the map's tile size grow up and to the right. Flips and
+  /// rotations happen within the bounds of the tile image itself, a diagonal
+  /// flip swaps the width and height of the image but keeps its bottom-left
+  /// corner on the bottom-left corner of the cell.
+  @protected
+  MutableRSTransform tileTransform({
+    required MutableRect src,
+    required SimpleFlips flips,
+    required double offsetX,
+    required double offsetY,
+  }) {
+    final scale = destTileSize.x / map.tileWidth;
+    final scos = flips.cos * scale;
+    final ssin = flips.sin * scale;
+
+    final halfWidth = src.width / 2;
+    final halfHeight = src.height / 2;
+    // The bounds the tile covers once it has been flipped and rotated.
+    final isSwapped = flips.angle.isOdd;
+    final boundsHalfWidth = isSwapped ? halfHeight : halfWidth;
+    final boundsHalfHeight = isSwapped ? halfWidth : halfHeight;
+
+    return MutableRSTransform(
+      scos,
+      ssin,
+      offsetX + scale * (boundsHalfWidth - map.tileWidth / 2),
+      offsetY + scale * (map.tileHeight / 2 - boundsHalfHeight),
+      // Rotate around the center of the image.
+      -scos * halfWidth + ssin * halfHeight,
+      -ssin * halfWidth - scos * halfHeight,
+    );
+  }
+
   @protected
   bool shouldFlip(SimpleFlips flips) => !ignoreFlip && flips.flip;
 }
