@@ -1,5 +1,4 @@
 import 'package:flame/extensions.dart';
-import 'package:flame/rendering.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/mutable_rect.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
@@ -25,7 +24,6 @@ class HexagonalTileLayer extends FlameTileLayer {
   void cacheTiles() {
     final halfDestinationTile = destTileSize / 2;
     final size = destTileSize;
-    final halfMapTile = Vector2(map.tileWidth / 2, map.tileHeight / 2);
     final batch = tiledAtlas.batch;
     if (batch == null) {
       return;
@@ -87,11 +85,7 @@ class HexagonalTileLayer extends FlameTileLayer {
           }
         }
 
-        final flips = SimpleFlips.fromFlips(tileGid.flips);
-        final scale = size.x / map.tileWidth;
-        final anchorX = src.width - halfMapTile.x;
-        final anchorY = src.height - halfMapTile.y;
-
+        final flips = SimpleFlips.fromHexagonalFlips(tileGid.flips);
         late double offsetX;
         late double offsetY;
 
@@ -113,16 +107,11 @@ class HexagonalTileLayer extends FlameTileLayer {
         offsetX += tileset.tileOffset?.x ?? 0;
         offsetY += tileset.tileOffset?.y ?? 0;
 
-        final scos = flips.cos * scale;
-        final ssin = flips.sin * scale;
-
-        final transform = MutableRSTransform(
-          scos,
-          ssin,
-          offsetX,
-          offsetY,
-          -scos * anchorX + ssin * anchorY,
-          -ssin * anchorX - scos * anchorY,
+        final transform = tileTransform(
+          src: src,
+          flips: flips,
+          offsetX: offsetX,
+          offsetY: offsetY,
         );
         storeTransform(tx, ty, transform);
         // A second pass is only needed in the case of staggery.

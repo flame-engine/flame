@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="4" height="4" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="1">
+ <tileset firstgid="1" name="cell" tilewidth="32" tileheight="32" tilecount="1" columns="1">
+  <image source="oversized_demo_cell_orthogonal.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="2" name="oversized" tilewidth="64" tileheight="96" tilecount="1" columns="1">
+  <image source="oversized_demo_tile_orthogonal.png" width="64" height="96"/>
+ </tileset>
+ <layer id="1" name="cells" width="4" height="4">
+  <data encoding="csv">
+1,1,1,1,
+1,1,1,1,
+1,1,1,1,
+1,1,1,1
+</data>
+ </layer>
+ <layer id="2" name="oversized" width="4" height="4">
+  <data encoding="csv">
+2,0,0,0,
+0,0,2,0,
+0,0,0,0,
+0,2,0,0
+</data>
+ </layer>
+</map>

@@ -24,4 +24,10 @@ abstract class TextElement {
   void draw(Canvas canvas);
 
   Rect get boundingBox;
+
+  /// Releases any native resources held by this element.
+  ///
+  /// The element must not be drawn after this has been called. Elements that
+  /// hold no such resources do nothing.
+  void dispose() {}
 }

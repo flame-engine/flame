@@ -1127,6 +1127,128 @@ void main() {
     }
   });
 
+  // These maps use a reference layer of cell-sized tiles below a layer of tiles
+  // that are larger than the map's tile size. In Tiled, oversized tiles are
+  // anchored at the bottom-left of their cell and grow up and to the right, so
+  // the red area of the big tiles should sit exactly on top of the grey cells.
+  // The maps can be opened in Tiled to cross-check the goldens. The goldens
+  // include padding around the map since the tiles overflow its bounds, while
+  // Tiled crops its exports to the bounds of the map.
+  //
+  // The flipped variants of the maps hold every flip and rotation combination
+  // of the same tile. Tiled flips tiles within their own bounds instead of
+  // swinging them around the cell, and in hexagonal maps it rotates the
+  // diagonal flips in steps of 60º, which is why those look different from
+  // the other orientations.
+  group('oversized tile anchoring', () {
+    for (final mapType in [
+      'orthogonal',
+      'isometric',
+      'staggered',
+      'hexagonal',
+    ]) {
+      test('renders like Tiled ($mapType)', () async {
+        final bundle = TestAssetBundle(
+          imageNames: [
+            'oversized_demo_cell_$mapType.png',
+            'oversized_demo_tile_$mapType.png',
+          ],
+          stringNames: ['oversized_demo_$mapType.tmx'],
+        );
+        final component = await TiledComponent.load(
+          'assets/tiles/oversized_demo_$mapType.tmx',
+          Vector2(
+            mapType == 'orthogonal' || mapType == 'hexagonal' ? 32 : 64,
+            32,
+          ),
+          bundle: bundle,
+          images: Images(bundle: bundle),
+        );
+        final size = component.size;
+        final pngData = await renderMapRegionToPng(
+          component.tileMap,
+          Rect.fromLTRB(-64, -96, size.x + 64, size.y + 32),
+        );
+        await expectLater(
+          pngData,
+          matchesGoldenFile('goldens/oversized_demo_$mapType.png'),
+        );
+      });
+    }
+
+    // Every flip and rotation combination of the oversized tile, from left to
+    // right: none, H, V, H+V, D, D+H, D+V and D+H+V (D is the diagonal flip).
+    // The black corner marker shows how each tile is oriented.
+    for (final mapType in [
+      'orthogonal',
+      'isometric',
+      'staggered',
+      'hexagonal',
+    ]) {
+      test('renders flipped tiles like Tiled ($mapType)', () async {
+        final bundle = TestAssetBundle(
+          imageNames: [
+            'oversized_demo_cell_$mapType.png',
+            'oversized_demo_tile_$mapType.png',
+          ],
+          stringNames: ['oversized_demo_flips_$mapType.tmx'],
+        );
+        final component = await TiledComponent.load(
+          'assets/tiles/oversized_demo_flips_$mapType.tmx',
+          Vector2(
+            mapType == 'orthogonal' || mapType == 'hexagonal' ? 32 : 64,
+            32,
+          ),
+          bundle: bundle,
+          images: Images(bundle: bundle),
+        );
+        final size = component.size;
+        final pngData = await renderMapRegionToPng(
+          component.tileMap,
+          Rect.fromLTRB(-96, -128, size.x + 96, size.y + 32),
+        );
+        await expectLater(
+          pngData,
+          matchesGoldenFile('goldens/oversized_demo_flips_$mapType.png'),
+        );
+      });
+    }
+
+    test('tiles of a TileStack stay on the center of their cell', () async {
+      // A TileStack sets the same position on the tiles of all its layers, so
+      // oversized and rotated tiles must report the same position as the
+      // cell-sized tiles they are stacked on.
+      final bundle = TestAssetBundle(
+        imageNames: [
+          'oversized_demo_cell_orthogonal.png',
+          'oversized_demo_tile_orthogonal.png',
+        ],
+        stringNames: ['oversized_demo_flips_orthogonal.tmx'],
+      );
+      final component = await TiledComponent.load(
+        'assets/tiles/oversized_demo_flips_orthogonal.tmx',
+        Vector2.all(32),
+        bundle: bundle,
+        images: Images(bundle: bundle),
+      );
+
+      // The flipped tiles are in a row, three cells apart.
+      for (var i = 0; i < 8; i++) {
+        final x = 3 * i;
+        final cell = component.tileMap.tileStack(x, 1, named: {'cells'});
+        final oversized = component.tileMap.tileStack(
+          x,
+          1,
+          named: {'oversized'},
+        );
+
+        expect(oversized.length, 1);
+        expect(oversized.position, cell.position);
+        expect(oversized.position, Vector2((x + 0.5) * 32, 1.5 * 32));
+      }
+    });
+  });
+
   group('RenderableTiledMap.TileData', () {
     late RenderableTiledMap renderableTiledMap;
 
