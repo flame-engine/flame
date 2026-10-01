@@ -1,7 +1,6 @@
-import 'dart:math';
-
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 import 'package:flame_3d_component/flame_3d_component.dart';
@@ -35,7 +34,9 @@ class ExampleGame extends FlameGame {
     camera.viewport.add(Ember());
     camera.viewport.add(
       TextComponent(
-        text: 'A flutter_scene model between two Flame layers',
+        text:
+            'A flutter_scene model between two Flame layers, '
+            'drag to rotate it',
         position: Vector2.all(16),
       ),
     );
@@ -43,8 +44,9 @@ class ExampleGame extends FlameGame {
 }
 
 /// The 3D object. It fills the whole game area and renders with a transparent
-/// background, so the parallax behind it stays visible.
-class Skeleton extends Component3D {
+/// background, so the parallax behind it stays visible. Dragging rotates the
+/// model.
+class Skeleton extends Component3D with DragCallbacks {
   Skeleton()
     : super(
         anchor: Anchor.center,
@@ -56,7 +58,8 @@ class Skeleton extends Component3D {
       );
 
   late final Node model;
-  double _time = 0;
+  double _yaw = 0;
+  double _pitch = 0;
 
   @override
   Future<void> onLoad() async {
@@ -80,14 +83,13 @@ class Skeleton extends Component3D {
   }
 
   @override
-  void update(double dt) {
-    super.update(dt);
-    _time += dt;
-    // Sway from side to side while keeping the front toward the camera.
-    model.rotation = Quaternion.axisAngle(
-      Vector3(0, 1, 0),
-      sin(_time * 0.8) * 0.6,
-    );
+  void onDragUpdate(DragUpdateEvent event) {
+    super.onDragUpdate(event);
+    _yaw += event.localDelta.x * 0.01;
+    _pitch = (_pitch + event.localDelta.y * 0.01).clamp(-0.5, 0.5);
+    model.rotation =
+        Quaternion.axisAngle(Vector3(0, 1, 0), _yaw) *
+        Quaternion.axisAngle(Vector3(1, 0, 0), _pitch);
   }
 }
 
