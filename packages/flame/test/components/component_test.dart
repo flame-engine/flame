@@ -1680,6 +1680,126 @@ void main() {
       });
 
       testWithFlameGame(
+        'descendants() of a component without children',
+        (game) async {
+          final leaf = Component();
+          await game.world.ensureAdd(leaf);
+
+          expect(leaf.descendants().toList(), isEmpty);
+          expect(leaf.descendants(reversed: true).toList(), isEmpty);
+          expect(leaf.descendants(includeSelf: true).toList(), [leaf]);
+          expect(
+            leaf.descendants(includeSelf: true, reversed: true).toList(),
+            [leaf],
+          );
+        },
+      );
+
+      testWithFlameGame(
+        'descendants() order matches on a deep chain with side branches',
+        (game) async {
+          final world = game.world;
+          final expectedOrder = <Component>[];
+          Component parent = world;
+          for (var level = 0; level < 50; level++) {
+            final sideBranch = Component()..addToParent(parent);
+            final next = Component()..addToParent(parent);
+            expectedOrder
+              ..add(sideBranch)
+              ..add(next);
+            parent = next;
+          }
+          await game.ready();
+
+          expect(world.descendants().toList(), expectedOrder);
+          expect(
+            world.descendants(reversed: true).toList(),
+            expectedOrder.reversed.toList(),
+          );
+        },
+      );
+
+      testWithFlameGame(
+        'descendants() iterator can be resumed after exhaustion',
+        (game) async {
+          final componentA = Component()..addToParent(game.world);
+          final componentB = Component()..addToParent(componentA);
+          await game.ready();
+
+          final iterator = game.world.descendants().iterator;
+          expect(iterator.moveNext(), isTrue);
+          expect(iterator.current, componentA);
+          expect(iterator.moveNext(), isTrue);
+          expect(iterator.current, componentB);
+          expect(iterator.moveNext(), isFalse);
+          expect(iterator.moveNext(), isFalse);
+        },
+      );
+
+      testWithFlameGame(
+        'descendants() throws when the container being walked is reordered',
+        (game) async {
+          final parent = Component();
+          await game.world.ensureAdd(parent);
+          final firstChild = Component();
+          await parent.ensureAddAll([firstChild, Component()]);
+
+          expect(
+            () {
+              for (final component in game.world.descendants()) {
+                if (component == firstChild) {
+                  parent.add(Component(priority: -1));
+                  game.update(0);
+                }
+              }
+            },
+            throwsConcurrentModificationError,
+          );
+        },
+      );
+
+      testWithFlameGame(
+        'descendants() allows reordering the children of the component that '
+        'was just emitted',
+        (game) async {
+          final parent = Component();
+          await game.world.ensureAdd(parent);
+          await parent.ensureAddAll([Component(), Component()]);
+          final inserted = Component(priority: -1);
+
+          final visited = <Component>[];
+          for (final component in game.world.descendants()) {
+            visited.add(component);
+            if (component == parent) {
+              parent.add(inserted);
+              game.update(0);
+            }
+          }
+          expect(visited, [parent, inserted, ...parent.children.skip(1)]);
+        },
+      );
+
+      testWithFlameGame(
+        'descendants() does not touch the tree before iteration starts',
+        (game) async {
+          final parent = Component();
+          await game.world.ensureAdd(parent);
+          await parent.ensureAddAll([Component(), Component()]);
+
+          for (final reversed in [false, true]) {
+            final iterator = parent.descendants(reversed: reversed).iterator;
+            parent.add(Component(priority: -1));
+            game.update(0);
+            final visited = <Component>[];
+            while (iterator.moveNext()) {
+              visited.add(iterator.current);
+            }
+            expect(visited.length, parent.children.length);
+          }
+        },
+      );
+
+      testWithFlameGame(
         'firstChild returns the first child on the matching type',
         (game) async {
           final firstA = _ComponentA();

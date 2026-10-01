@@ -1,5 +1,4 @@
 import 'package:flame/extensions.dart';
-import 'package:flame/rendering.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/mutable_rect.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
@@ -23,7 +22,6 @@ class OrthogonalTileLayer extends FlameTileLayer {
   @override
   void cacheTiles() {
     final size = destTileSize;
-    final halfMapTile = Vector2(map.tileWidth / 2, map.tileHeight / 2);
     final batch = tiledAtlas.batch;
     if (batch == null) {
       return;
@@ -52,17 +50,6 @@ class OrthogonalTileLayer extends FlameTileLayer {
         );
 
         final flips = SimpleFlips.fromFlips(tileGid.flips);
-        final scale = size.x / map.tileWidth;
-        // Anchor at the bottom-left of the map cell (Tiled's convention for
-        // oversized tiles from image collections), not the bottom-right.
-        // For uniform tiles where the image size equals the map tile size,
-        // halfMapTile.x == src.width - halfMapTile.x, so behavior is
-        // unchanged. For oversized tiles (e.g. trees, decorative props),
-        // this makes the image extend up and to the right from the cell,
-        // matching how Tiled renders the same tile in its editor.
-        final anchorX = halfMapTile.x;
-        final anchorY = src.height - halfMapTile.y;
-
         late double offsetX;
         late double offsetY;
         offsetX = (tx + 0.5) * size.x;
@@ -71,16 +58,11 @@ class OrthogonalTileLayer extends FlameTileLayer {
         offsetX += tileset.tileOffset?.x ?? 0;
         offsetY += tileset.tileOffset?.y ?? 0;
 
-        final scos = flips.cos * scale;
-        final ssin = flips.sin * scale;
-
-        final transform = MutableRSTransform(
-          scos,
-          ssin,
-          offsetX,
-          offsetY,
-          -scos * anchorX + ssin * anchorY,
-          -ssin * anchorX - scos * anchorY,
+        final transform = tileTransform(
+          src: src,
+          flips: flips,
+          offsetX: offsetX,
+          offsetY: offsetY,
         );
         storeTransform(tx, ty, transform);
 

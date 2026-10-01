@@ -3,8 +3,8 @@ import 'package:flame_devtools/widgets/component_tree.dart';
 import 'package:flame_devtools/widgets/debug_mode_button.dart';
 import 'package:flame_devtools/widgets/game_loop_controls.dart';
 import 'package:flame_devtools/widgets/overlay_navigation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:material_ui/material_ui.dart';
 
 void main() {
   runApp(const FlameDevTools());
@@ -15,31 +15,24 @@ class FlameDevTools extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DevToolsExtension(
+    return const DevToolsExtension(
       child: ProviderScope(
         child: Column(
+          spacing: 16,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 16,
               children: [
-                const GameLoopControls(),
-                const DebugModeButton(),
-              ].withSpacing(),
+                GameLoopControls(),
+                DebugModeButton(),
+              ],
             ),
-            const Expanded(child: ComponentTree()),
-            const Flexible(child: OverlayNavigation()),
-          ].withSpacing(),
+            Expanded(child: ComponentTree()),
+            OverlayNavigation(),
+          ],
         ),
       ),
     );
-  }
-}
-
-extension on List<Widget> {
-  List<Widget> withSpacing() {
-    return expand((item) sync* {
-      yield const SizedBox(width: 16, height: 16);
-      yield item;
-    }).skip(1).toList();
   }
 }

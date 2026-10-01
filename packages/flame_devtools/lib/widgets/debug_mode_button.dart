@@ -1,5 +1,5 @@
 import 'package:flame_devtools/repository.dart';
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/material.dart';
 
 class DebugModeButton extends StatefulWidget {
   const DebugModeButton({super.key, this.id});
@@ -7,19 +7,24 @@ class DebugModeButton extends StatefulWidget {
   final int? id;
 
   @override
-  Key? get key => super.key ?? ValueKey(id);
-
-  @override
   State<DebugModeButton> createState() => _DebugModeButtonState();
 }
 
 class _DebugModeButtonState extends State<DebugModeButton> {
-  Future<bool>? _debugMode;
+  late Future<bool> _debugMode;
 
   @override
   void initState() {
-    _debugMode = Repository.getDebugMode(id: widget.id);
     super.initState();
+    _debugMode = Repository.getDebugMode(id: widget.id);
+  }
+
+  @override
+  void didUpdateWidget(DebugModeButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.id != widget.id) {
+      _debugMode = Repository.getDebugMode(id: widget.id);
+    }
   }
 
   @override
@@ -37,11 +42,9 @@ class _DebugModeButtonState extends State<DebugModeButton> {
           onPressed: value.data == null
               ? null
               : () {
-                  setState(
-                    () {
-                      _debugMode = Repository.swapDebugMode(id: widget.id);
-                    },
-                  );
+                  setState(() {
+                    _debugMode = Repository.swapDebugMode(id: widget.id);
+                  });
                 },
           child: Text('$buttonPrefix Debug Mode'),
         );

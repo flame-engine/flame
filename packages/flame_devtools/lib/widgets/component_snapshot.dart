@@ -3,7 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:flame/widgets.dart';
 import 'package:flame_devtools/repository.dart';
-import 'package:material_ui/material_ui.dart' hide Image;
+import 'package:flutter/material.dart' hide Image;
 
 class ComponentSnapshot extends StatefulWidget {
   const ComponentSnapshot({
@@ -11,7 +11,7 @@ class ComponentSnapshot extends StatefulWidget {
     super.key,
   });
 
-  final String id;
+  final int id;
 
   @override
   State<ComponentSnapshot> createState() => _ComponentSnapshotState();
@@ -46,10 +46,7 @@ class _ComponentSnapshotState extends State<ComponentSnapshot> {
         }
         if (snapshot.connectionState == ConnectionState.done &&
             snapshot.hasData) {
-          return Base64Image(
-            base64: snapshot.data!,
-            imageId: widget.id,
-          );
+          return Base64Image(base64: snapshot.data!);
         }
         return const Text('Loading snapshot...');
       },
@@ -60,18 +57,16 @@ class _ComponentSnapshotState extends State<ComponentSnapshot> {
 /// Displays an image decoded from a base64 data string.
 ///
 /// The decoded [ui.Image] is held by this widget and disposed when the widget
-/// is removed or when [base64] / [imageId] changes — without going through
-/// the global Flame images cache, so the same component id can show
-/// different snapshots over time without serving a stale cached frame.
+/// is removed or when [base64] changes, without going through the global Flame
+/// images cache, so the same component id can show different snapshots over
+/// time without serving a stale cached frame.
 class Base64Image extends StatefulWidget {
   const Base64Image({
     required this.base64,
-    required this.imageId,
     super.key,
   });
 
   final String base64;
-  final String imageId;
 
   @override
   State<Base64Image> createState() => _Base64ImageState();
@@ -80,6 +75,7 @@ class Base64Image extends StatefulWidget {
 class _Base64ImageState extends State<Base64Image> {
   late Future<ui.Image> _imageFuture;
   ui.Image? _image;
+  var _decodeGeneration = 0;
 
   @override
   void initState() {
@@ -90,8 +86,7 @@ class _Base64ImageState extends State<Base64Image> {
   @override
   void didUpdateWidget(Base64Image oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.base64 != widget.base64 ||
-        oldWidget.imageId != widget.imageId) {
+    if (oldWidget.base64 != widget.base64) {
       _disposeImage();
       _imageFuture = _decode(widget.base64);
     }
@@ -104,13 +99,14 @@ class _Base64ImageState extends State<Base64Image> {
   }
 
   Future<ui.Image> _decode(String base64Data) async {
+    final generation = ++_decodeGeneration;
     final commaIndex = base64Data.indexOf(',');
     final payload = commaIndex == -1
         ? base64Data
         : base64Data.substring(commaIndex + 1);
     final bytes = base64.decode(payload);
     final image = await decodeImageFromList(bytes);
-    if (mounted) {
+    if (mounted && generation == _decodeGeneration) {
       _image = image;
     } else {
       image.dispose();
@@ -129,7 +125,8 @@ class _Base64ImageState extends State<Base64Image> {
       future: _imageFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done &&
-            snapshot.hasData) {
+            snapshot.hasData &&
+            snapshot.data == _image) {
           return SizedBox(
             width: 200,
             height: 200,

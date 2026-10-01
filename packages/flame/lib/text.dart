@@ -5,8 +5,9 @@ export 'src/text/common/line_metrics.dart' show LineMetrics;
 export 'src/text/common/sprite_font.dart' show SpriteFont;
 export 'src/text/elements/block_element.dart' show BlockElement;
 export 'src/text/elements/group_element.dart' show GroupElement;
-export 'src/text/elements/group_text_element.dart' show GroupTextElement;
 export 'src/text/elements/inline_text_element.dart' show InlineTextElement;
+export 'src/text/elements/paragraph_text_element.dart'
+    show ParagraphTextElement;
 export 'src/text/elements/rect_element.dart' show RectElement;
 export 'src/text/elements/rrect_element.dart' show RRectElement;
 export 'src/text/elements/sprite_font_text_element.dart'
@@ -22,8 +23,7 @@ export 'src/text/nodes/custom_text_node.dart' show CustomInlineTextNode;
 export 'src/text/nodes/document_root.dart' show DocumentRoot;
 export 'src/text/nodes/group_text_node.dart' show GroupTextNode;
 export 'src/text/nodes/header_node.dart' show HeaderNode;
-export 'src/text/nodes/inline_text_node.dart'
-    show InlineTextNode, TextNodeLayoutBuilder;
+export 'src/text/nodes/inline_text_node.dart' show InlineTextNode;
 export 'src/text/nodes/italic_text_node.dart' show ItalicTextNode;
 export 'src/text/nodes/paragraph_node.dart' show ParagraphNode;
 export 'src/text/nodes/plain_text_node.dart' show PlainTextNode;

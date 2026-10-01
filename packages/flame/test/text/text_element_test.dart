@@ -31,7 +31,7 @@ void main() {
       expect(element1.boundingBox, expected);
       final element2 = element1.children.single as GroupElement;
       expect(element2.boundingBox, expected);
-      final element3 = element2.children.single as InlineTextElement;
+      final element3 = element2.children.single as ParagraphTextElement;
       expect(element3.boundingBox, expected);
     });
 
