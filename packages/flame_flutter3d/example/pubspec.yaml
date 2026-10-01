@@ -1,0 +1,46 @@
+name: flame_flutter3d_example
+description: "The smallest hybrid game: a Flame HUD over a 3D yard, a cube Flame steers, and a crate whose landing Flame hears."
+publish_to: 'none'
+version: 0.1.0+1
+resolution: workspace
+
+environment:
+  sdk: ">=3.12.0 <4.0.0"
+
+dependencies:
+  flame: ^2.0.0-dev.0
+
+  # The bridge: two layers, one clock, transforms, collisions and input.
+  flame_flutter3d: ^0.9.0-dev.0
+
+  flutter:
+    sdk: flutter
+
+  # The renderer and the scene graph.
+  flutter3d: ^0.8.3
+
+  # `Bindings`, the key table the input bridge writes through.
+  flutter3d_game: ^0.8.0
+
+  # `InputState` and `GameAction`, and the physics it re-exports.
+  flutter3d_sim: ^0.8.1
+
+dev_dependencies:
+  flame_lint: ^1.4.4-dev.0
+
+  # A device with no GPU under it, so a test can build the world the way the
+  # application does.
+  flutter3d_cpu: ^0.8.0
+
+  flutter_test:
+    sdk: flutter
+
+# **No platform folders here on purpose**, as in `packages/flutter3d_app/example`:
+# this exists to be analysed and to be copied. In the project it is copied
+# into, `flutter create --platforms=macos .` gives it a window, and then
+# Flutter GPU has to be switched on for that platform, or the 3D layer draws
+# nothing: `FLTEnableFlutterGPU` and `FLTEnableImpeller` in
+# `macos/Runner/Info.plist` (and `ios/Runner/Info.plist`),
+# `io.flutter.embedding.android.EnableFlutterGPU` in `AndroidManifest.xml`.
+flutter:
+  uses-material-design: true

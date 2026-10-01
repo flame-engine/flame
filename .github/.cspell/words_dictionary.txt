@@ -1,13 +1,27 @@
 # actual english words (or common abbreviations) missing from CSpell
+autofocused # focused automatically, as a widget given autofocus
+behaviour # British spelling of behavior
 bloodlust
+centimetres # British spelling of centimeters
 collidable
 collidables
+colour # British spelling of color
+colours # British spelling of colors
+crossfading # blending one animation clip into the next
+despawn # remove a spawned entity from the game
+despawned # removed from the game after being spawned
 gamepads
 grayscale
 hoverable
 Hoverables
 inactives
+invertibly # in a way that can be inverted
 layouting
+licence # British spelling of license (the noun)
+neighbour # British spelling of neighbor
+neighbouring # British spelling of neighboring
+neighbours # British spelling of neighbors
+normalises # British spelling of normalizes
 NTSC
 orientable
 platformer
@@ -24,9 +38,14 @@ renderable
 rerasterize
 rescan
 Roboto
+scroller # as in side-scroller, a game that scrolls sideways
+starfighter # a small combat spacecraft
 subclassing
 tappable
 thumbstick
 trackpad
 underutilize
+unflipped # not flipped
+unshields # takes a shield off
+unticked # not advanced by a tick
 untinted

@@ -8,6 +8,7 @@ feroult # github.com/feroult
 fröber # github.com/Brixto
 gnarhard # github.com/gnarhard
 Hoodead # github.com/kornellapu
+kazuma # author of the helicopter model on poly.pizza
 kenney # kenney.nl
 Klingsbo # github.com/spydon
 Kornél # github.com/kornellapu

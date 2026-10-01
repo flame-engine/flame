@@ -1,6 +1,8 @@
 # general development-adjacent terms and expressions
 AABB # axis aligned bounding box
 abelian # Abelian Group, also known as commutative group
+affector # something that changes a particle over its life
+affectors # plural of affector
 alignof # alignment of
 ARGB # alpha red green blue
 arities # plural of arity
@@ -13,10 +15,13 @@ bitfield # data structure consisting of adjacent bits
 broadphase # common division of collision detection between broad and narrow phases
 cathetus # the non-hypotenuse sides of a right triangle
 clusterized # past tense of clusterize
+colormap # a texture of flat colors that a model kit's meshes share
+flipbook # a sequence of frames shown in turn
 gles # OpenGL for Embedded Systems
 glsl # OpenGL Shading Language
 gltf # OpenGL Transmission Format, a file format for 3D models
 goldens # test files used as reference for Golden Tests
+GTAO # ground truth ambient occlusion
 highp # high float precission setting on glsl fragment shaders
 hitbox # the collision box around objects for the purposes of collision detection
 hitboxes # plural of hitbox
@@ -26,6 +31,8 @@ IHDR # PNG header chunk
 ints # short for integers
 jank # stutter or inconsistent gap or timing
 lerp # short for linear interpolation
+libm # the C math library
+lightmap # a texture holding precomputed lighting
 LTRBR # left top right bottom radius
 LTWH # left top width height
 mediump # medium GLSL float precision
@@ -37,7 +44,10 @@ pathfinding # computer algorithm to find the best path through a world or maze
 perlin # Perlin Noise, a type of noise generating algorithm
 platformers # plural of platformer, a genre of video game
 quadtree # a tree-based data structure where each node has exactly 4 children
+rasterizer # converts primitives into pixels
 rasterizing
+redrawer # the callback that redraws a frame
+Reinhard # Reinhard tone mapping operator
 respawn # when the player character dies and is brought back after some time and penalties
 respawned # past tense of respawn
 retarget # to direct (something) toward a different target
@@ -48,6 +58,7 @@ scrollers # plural of scroller, a genre of video game
 shaderbundle # a file extension used to bundle shaders for GLSL
 slerp # short for spherical linear interpolation, a method to interpolate quaternions
 spritesheet # a single image packing multiple sprites, normally in a grid
+SSAO # screen-space ambient occlusion
 ssin # sine of a rotation multiplied by the scale factor
 subfolders # plural of subfolders
 sublists # plural of sublist
@@ -57,9 +68,11 @@ texel # texture pixel (unit of texture map)
 texels # plural of texel
 tileset # image with a collection of tiles. in games, tiles are small square sprites laid out in a grid to form the game map
 tilesets # plural of tileset
+tonemap # map HDR colors to the display range
 truecolor # truecolor rendering
 uncapturederror # dumb webgpu javascript name
 unorm # unsigned normalized integer
+unproject # map a screen point back into the scene
 viewports # plural of viewport
 WASD # movement keys on a keyboard
 WBMP # wireless bitmap image format
@@ -67,3 +80,4 @@ webgpu # gpu standard for web browsers
 WebP # WebP image format
 WGSL # WGSL shader language
 wgslbundle # WGSL shader bundle format
+xorshift # a family of fast pseudorandom number generators

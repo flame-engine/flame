@@ -31,6 +31,12 @@ with their games.
 Create texture atlases for games (bridge package for [FireAtlas]).
 :::
 
+:::{package} flame_flutter3d
+
+A 3D layer under a Flame game, with HDR post-processing and one shared game loop (bridge package for
+[flutter3d]).
+:::
+
 :::{package} flame_forge2d
 
 A Box2D physics engine (bridge package for [Forge2D]).
@@ -100,6 +106,7 @@ Load Typled sprite atlases with edge-repeated padding (bridge package for [Typle
 [AudioPlayers]: https://github.com/bluefireteam/audioplayers
 [Bloc]: https://github.com/felangel/bloc
 [FireAtlas]: https://github.com/flame-engine/fire-atlas
+[flutter3d]: https://pub.dev/packages/flutter3d
 [Forge2D]: https://github.com/flame-engine/forge2d
 [gamepads]: https://github.com/flame-engine/gamepads
 [Lottie]: https://pub.dev/packages/lottie
@@ -119,6 +126,7 @@ flame_audio                 <flame_audio/flame_audio.md>
 flame_behaviors             <flame_behaviors/flame_behaviors.md>
 flame_bloc                  <flame_bloc/flame_bloc.md>
 flame_fire_atlas            <flame_fire_atlas/flame_fire_atlas.md>
+flame_flutter3d             <flame_flutter3d/flame_flutter3d.md>
 flame_forge2d               <flame_forge2d/flame_forge2d.md>
 flame_gamepads              <flame_gamepads/flame_gamepads.md>
 flame_isolate               <flame_isolate/flame_isolate.md>

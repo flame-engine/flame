@@ -2,15 +2,19 @@
 Artboard # What a project file is called within Rive
 Aseprite # Animated sprite editor and pixel art tool https://www.aseprite.org/
 Audioplayers # A Flutter plugin to play multiple simultaneously audio files https://github.com/bluefireteam/audioplayers
+Battlezone # a 1980 Atari tank game in wireframe 3D
 BGUG # Break Guns Using Gems, a game by BlueFire https://github.com/bluefireteam/bgug
 Bodymovin # An After Effects extension to export Lottie animations https://aescripts.com/bodymovin/
 emberquest # Ember Quest, our platformer tutorial game
+firstgid # first global tile id of a Tiled tileset
 Hermione # A character from the book Harry Potter
 Kenobi # Eminent Jedi Master, General of the Republic Army, Obi-Wan Kenobi
 Nakama # An open-source server designed to power modern games and apps https://github.com/Allan-Nava/nakama-flutter
+objectgroup # Tiled object layer element
 Overmind # A character in the game StarCraft
 padracing # A pad racing game by BlueFire https://github.com/flame-engine/flame/tree/main/examples/games/padracing
 Prosser # A character from the book The Hitchhiker's Guide to the Galaxy
+renderorder # Tiled map attribute
 riverpod # A state management library for Flutter https://github.com/rrousselGit/riverpod
 spineboy # Name of a famous character used as an example for Spine https://en.esotericsoftware.com/spine-examples-spineboy
 spineboys # Plural of spineboy
@@ -18,7 +22,11 @@ Spritecow # A handy tool for locating sprites within a spritesheet http://www.sp
 Supabase # Supabase, one of our sponsors https://supabase.com/
 terminui # A terminal UI library for Flutter
 texturepacker # a packed spritesheet format
+tilecount # Tiled tileset attribute
+tileheight # Tiled map attribute
 Tilemap # What tile maps are called within Tiled
+tilewidth # Tiled map attribute
+tintcolor # Tiled layer attribute
 typled # A grid map and sprite sheet tool https://github.com/erickzanardo/typled
 vantablack # brand name for a famous super-black ink known as the darkest ever made
 Weasley # Ron Weasley, a character from the book Harry Potter

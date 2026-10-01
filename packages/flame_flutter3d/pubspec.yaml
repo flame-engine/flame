@@ -1,0 +1,90 @@
+name: flame_flutter3d
+description: "A bridge to the Flame 2D game engine: Flame draws its own layer, flutter3d draws its own, and the two stay reconciled — transforms, lifecycle, physics contacts, input and the actor system."
+version: 0.9.0-dev.0
+homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_flutter3d
+funding:
+  - https://opencollective.com/blue-fire
+  - https://github.com/sponsors/bluefireteam
+  - https://patreon.com/bluefireoss
+topics:
+  - game-development
+  - game-engine
+  - graphics
+  - flame
+resolution: workspace
+
+environment:
+  sdk: ">=3.12.0 <4.0.0"
+  flutter: ">=3.44.0"
+
+dependencies:
+  # Flame renders its own layer; nothing here reimplements its component
+  # tree, its camera, or its collision broadphase.
+  flame: ^2.0.0-dev.0
+
+  flutter:
+    sdk: flutter
+
+  # The scene graph a Flame component's transform is bridged onto.
+  flutter3d: ^0.8.3
+
+  # The surface flutter3d itself draws through, and the clock every host in
+  # this repo already ticks a scene with.
+  flutter3d_app: ^0.8.1
+
+  # `Bindings`, and the desktop/pad input translators the input bridge's own
+  # guide points a reader back to rather than duplicating.
+  flutter3d_game: ^0.8.1
+
+  # The pool and the instanced draw a Flame game's blasts go through. Plain
+  # Dart, no native code: a game that throws no particles pays nothing.
+  flutter3d_particles: ^0.8.1
+
+  # Rigid bodies and the collision world the physics bridge steps and
+  # listens to.
+  flutter3d_physics: ^0.8.2
+
+  # The actor/entity system the ECS bridge wraps, and the shared `InputState`
+  # the input bridge writes into — the same object `flutter3d_game`'s own
+  # `DesktopInput`/`PadInput` write into, so a bridged game and a native one
+  # read one input model.
+  flutter3d_sim: ^0.8.1
+
+  # The map a Tiled level is read into, the one `flame_tiled` reads too: a
+  # game that loads its level through `TiledComponent` hands over its
+  # `tileMap.map`. Plain Dart and XML, no rendering.
+  tiled: ^0.12.0
+
+  vector_math: ^2.2.0
+
+dev_dependencies:
+  # Flame's own 2D physics, for the test that a bridged component follows
+  # one of its bodies; the bridge itself asks only for Flame's providers.
+  flame_forge2d: ^0.21.0-dev.0
+
+  flame_lint: ^1.4.4-dev.0
+
+  # Flame's own test harness: a `GameWidget` under `flutter_test` needs its
+  # first load/resize driven a specific way plain `pumpWidget`/`pump` does
+  # not do on their own.
+  flame_test: ^3.0.0-dev.0
+
+  # A renderer with no GPU under it, so a bridge test can build a scene and
+  # pump a frame without a device.
+  flutter3d_cpu: ^0.8.0
+
+  # A runner that climbs, for the character body's own test.
+  flutter3d_game_platformer: ^0.8.0
+
+  # A device that records rather than draws, to see what a component gave
+  # back when it went.
+  flutter3d_hardware: ^0.8.0
+
+  flutter_test:
+    sdk: flutter
+
+  # A controller that is not there, for the pad feed's own test.
+  pad_input: ^0.4.3
+
+flutter:
+  uses-material-design: true
