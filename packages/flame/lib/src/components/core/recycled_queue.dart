@@ -27,16 +27,12 @@ import 'dart:math';
 /// shared cursor.
 ///
 /// Internally, the queue is backed by a circular list.
-class RecycledQueue<T extends Disposable> extends Iterable<T>
-    implements Iterator<T> {
-  RecycledQueue(this.factory, {int initialCapacity = 8})
-    : _elements = List.generate(initialCapacity, (i) => factory()),
-      _startIndex = -1,
-      _endIndex = -1,
-      _currentIndex = -1;
-
+class RecycledQueue<T extends Disposable>(
   /// Function for creating new elements in the queue.
-  final T Function() factory;
+  final T Function() factory, {
+  int initialCapacity = 8,
+}) extends Iterable<T> implements Iterator<T> {
+  this : _startIndex = -1, _endIndex = -1, _currentIndex = -1;
 
   /// Index of the first element in the queue, or -1 if the queue is empty.
   int _startIndex;
@@ -66,7 +62,7 @@ class RecycledQueue<T extends Disposable> extends Iterable<T>
   /// ```text
   ///   [##E------S##########]
   /// ```
-  final List<T> _elements;
+  final List<T> _elements = List.generate(initialCapacity, (i) => factory());
 
   /// The list of indices of elements that ought to be removed: this list is
   /// populated when elements are removed during the iteration, and then the
@@ -339,6 +335,6 @@ class RecycledQueue<T extends Disposable> extends Iterable<T>
 }
 
 /// The interface for the elements allowed in the [RecycledQueue].
-abstract class Disposable {
+abstract class Disposable() {
   void dispose();
 }

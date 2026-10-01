@@ -3,9 +3,7 @@ import 'package:flame_studio/src/widgets/left_panel.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LeftPanelGrip extends ConsumerWidget {
-  const LeftPanelGrip({super.key});
-
+class const LeftPanelGrip({super.key}) extends ConsumerWidget {
   /// Tracks the initial coordinates of a drag event. This can be static
   /// because we support only one drag at a time.
   static double _delta = 0;

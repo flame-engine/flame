@@ -4,7 +4,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_rive/flame_rive.dart';
 
-class RiveExampleGame extends FlameGame with TapCallbacks {
+class RiveExampleGame() extends FlameGame with TapCallbacks {
   ViewModelInstanceNumber? coinInput;
   ViewModelInstanceNumber? gemInput;
 

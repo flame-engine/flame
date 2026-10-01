@@ -11,7 +11,8 @@ import 'package:flame_3d_example/example_game_3d.dart';
 import 'package:flame_3d_example/keyboard_utils.dart';
 import 'package:flutter/services.dart';
 
-class Player extends MeshComponent
+class Player({required Vector3 position})
+    extends MeshComponent
     with HasGameRef<ExampleGame3D>, KeyboardHandler {
   final Vector2 _input = Vector2.zero();
 
@@ -27,7 +28,7 @@ class Player extends MeshComponent
 
   Vector3 get lookAt => Vector3(sin(_lookAngle), 0.0, cos(_lookAngle));
 
-  Player({required Vector3 position})
+  this
     : super(
         position: position,
         mesh: CuboidMesh(

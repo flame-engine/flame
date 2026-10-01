@@ -16,7 +16,7 @@ import 'package:vector_math/vector_math.dart';
 ///   - [Polygon]
 ///   - [Rectangle]
 ///   - [RoundedRectangle]
-abstract class Shape {
+abstract class Shape() {
   /// True if the shape is "closed", in the sense that it has an interior. For
   /// example, a closed shape can be filled with a paint.
   bool get isClosed => true;

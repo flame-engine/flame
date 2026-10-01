@@ -3,12 +3,8 @@ import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/functions/_common.dart';
 import 'package:jenny/src/yarn_project.dart';
 
-class VisitedFn extends BoolExpression {
-  VisitedFn(this._node, this._yarn);
-
-  final StringExpression _node;
-  final YarnProject _yarn;
-
+class VisitedFn(final StringExpression _node, final YarnProject _yarn)
+    extends BoolExpression {
   static Expression make(
     List<FunctionArgument> args,
     YarnProject yarnProject,

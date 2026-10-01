@@ -2,19 +2,15 @@ import 'package:flame_3d/src/parser/gltf/gltf_node.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_root.dart';
 
 /// A buffer points to binary geometry, animation, or skins.
-class Buffer extends GltfNode {
+class Buffer({
+  required super.root,
+
   /// The length of the buffer in bytes.
-  final int byteLength;
+  required final int byteLength,
 
   /// The URI of the buffer.
-  final String? uri;
-
-  Buffer({
-    required super.root,
-    required this.byteLength,
-    required this.uri,
-  });
-
+  required final String? uri,
+}) extends GltfNode {
   Buffer.parse(
     GltfRoot root,
     Map<String, Object?> map,

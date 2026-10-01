@@ -6,7 +6,7 @@ void main() {
   runApp(GameWidget(game: SpaceShooterGame()));
 }
 
-class Player extends PositionComponent {
+class Player() extends PositionComponent {
   static final _paint = Paint()..color = Colors.white;
   @override
   void render(Canvas canvas) {
@@ -14,7 +14,7 @@ class Player extends PositionComponent {
   }
 }
 
-class SpaceShooterGame extends FlameGame {
+class SpaceShooterGame() extends FlameGame {
   @override
   Future<void> onLoad() async {
     add(

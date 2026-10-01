@@ -2,16 +2,14 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart';
 
-class MyGameWidget extends StatelessWidget {
-  const MyGameWidget({super.key});
-
+class const MyGameWidget({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GameWidget(game: MyGame());
   }
 }
 
-class Background extends SpriteComponent with HasGameRef<MyGame> {
+class Background() extends SpriteComponent with HasGameRef<MyGame> {
   @override
   Future<void> onLoad() async {
     sprite = await gameRef.loadSprite('assets/images/city.png');
@@ -20,7 +18,7 @@ class Background extends SpriteComponent with HasGameRef<MyGame> {
   }
 }
 
-class MyGame extends FlameGame {
+class MyGame() extends FlameGame {
   @override
   Future<void> onLoad() async {
     final background = Background();

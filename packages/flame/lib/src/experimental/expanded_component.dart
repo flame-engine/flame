@@ -31,16 +31,15 @@ import 'package:flame/experimental.dart';
 ///   ],
 /// );
 /// ```
-class ExpandedComponent extends SingleLayoutComponent
-    with ParentIsA<LinearLayoutComponent> {
-  ExpandedComponent({
-    super.key,
-    super.position,
-    super.anchor,
-    super.priority,
-    super.inflateChild = true,
-    super.child,
-  }) : super(size: null);
+class ExpandedComponent({
+  super.key,
+  super.position,
+  super.anchor,
+  super.priority,
+  super.inflateChild = true,
+  super.child,
+}) extends SingleLayoutComponent with ParentIsA<LinearLayoutComponent> {
+  this : super(size: null);
 
   @override
   void setLayoutAxisLength(LayoutAxis axis, double? value) {

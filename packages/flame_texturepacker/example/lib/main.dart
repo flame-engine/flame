@@ -12,7 +12,7 @@ void main() {
   );
 }
 
-class MyGame extends FlameGame {
+class MyGame() extends FlameGame {
   @override
   Future<void> onLoad() async {
     super.onLoad();

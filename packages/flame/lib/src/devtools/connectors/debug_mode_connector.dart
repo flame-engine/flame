@@ -6,7 +6,7 @@ import 'package:flame/src/devtools/dev_tools_connector.dart';
 
 /// The [DebugModeConnector] is responsible for reporting and setting the
 /// `debugMode` of the game from the devtools extension.
-class DebugModeConnector extends DevToolsConnector {
+class DebugModeConnector() extends DevToolsConnector {
   @override
   void init() {
     // Get the `debugMode` for a component in the tree.

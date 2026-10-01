@@ -26,20 +26,21 @@ import 'package:meta/meta.dart';
 /// expected to define the `apply()` method, which facilitates the necessary
 /// changes in the effect's target; and also the `reset()` method if they have
 /// non-trivial internal state.
-abstract class Effect extends Component {
-  Effect(
-    this.controller, {
-    this.onComplete,
-    super.key,
-  }) : removeOnFinish = true,
-       _paused = false,
-       _started = false,
-       _finished = false {
+abstract class Effect(
+  /// An object that describes how the effect should evolve over time.
+  final EffectController controller, {
+
+  /// Optional callback function to be invoked once the effect completes.
+  var void Function()? onComplete,
+  super.key,
+}) extends Component {
+  this
+    : removeOnFinish = true,
+      _paused = false,
+      _started = false,
+      _finished = false {
     controller.onMount(this);
   }
-
-  /// An object that describes how the effect should evolve over time.
-  final EffectController controller;
 
   /// Whether the effect should be removed from its parent once it is completed,
   /// true by default.
@@ -48,9 +49,6 @@ abstract class Effect extends Component {
   /// game tree in the "completed" state. However, you can `reset()` the effect
   /// in order to make it run once again.
   bool removeOnFinish;
-
-  /// Optional callback function to be invoked once the effect completes.
-  void Function()? onComplete;
 
   /// Boolean indicators of the effect's state, their purpose is to ensure that
   /// the `onStart()` and `onFinish()` callbacks are called exactly once.

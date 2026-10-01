@@ -6,14 +6,12 @@ import 'package:tiled/tiled.dart';
 /// component tree so that components can be added to it and be rendered at the
 /// depth of the layer.
 @internal
-class ObjectLayer extends RenderableLayer<ObjectGroup> {
-  ObjectLayer({
-    required super.layer,
-    required super.map,
-    required super.destTileSize,
-    super.filterQuality,
-  });
-
+class ObjectLayer({
+  required super.layer,
+  required super.map,
+  required super.destTileSize,
+  super.filterQuality,
+}) extends RenderableLayer<ObjectGroup> {
   @override
   void refreshCache() {}
 }

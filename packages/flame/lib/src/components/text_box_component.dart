@@ -14,37 +14,29 @@ import 'package:meta/meta.dart';
 /// A set of configurations for the [TextBoxComponent] itself, as opposed to
 /// the [TextRenderer], which contains the configuration for how to render the
 /// text only (font size, color, family, etc).
-class TextBoxConfig {
+class const TextBoxConfig({
   /// Max width this paragraph can take. Lines will be broken trying to respect
   /// word boundaries in as many lines as necessary.
-  final double maxWidth;
+  final double maxWidth = 200.0,
 
   /// Margins of the text box with respect to the [PositionComponent.size].
-  final EdgeInsets margins;
+  final EdgeInsets margins = const EdgeInsets.all(8.0),
 
   /// Defaults to 0. If not zero, the characters will appear one-by-one giving
   /// a typing effect to the text box, and this will be the delay in seconds
   /// between each character.
-  final double timePerChar;
+  final double timePerChar = 0.0,
 
   /// Defaults to null. If not null, this component will disappear after this
   /// many seconds after being fully typed out.
-  final double? dismissDelay;
+  final double? dismissDelay,
 
   /// Only relevant if [timePerChar] is set. If true, the box will start with
   /// the size to fit the first character and grow as more lines are typed.
   /// If false, the box will start with the full necessary size from the
   /// beginning (both width and height).
-  final bool growingBox;
-
-  const TextBoxConfig({
-    this.maxWidth = 200.0,
-    this.margins = const EdgeInsets.all(8.0),
-    this.timePerChar = 0.0,
-    this.dismissDelay,
-    this.growingBox = false,
-  });
-
+  final bool growingBox = false,
+}) {
   TextBoxConfig copyWith({
     double? maxWidth,
     EdgeInsets? margins,
@@ -62,10 +54,27 @@ class TextBoxConfig {
   }
 }
 
-class TextBoxComponent<T extends TextRenderer> extends TextComponent {
+class TextBoxComponent<T extends TextRenderer>({
+  super.text,
+  T? super.textRenderer,
+  TextBoxConfig? boxConfig,
+  Anchor? align,
+  double? pixelRatio,
+  super.position,
+  super.size,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority,
+
+  /// Callback function to be executed after all text is displayed.
+  var void Function()? onComplete,
+  super.key,
+}) extends TextComponent {
   static final Paint _imagePaint = BasicPalette.white.paint()
     ..filterQuality = FilterQuality.medium;
-  TextBoxConfig _boxConfig;
+  TextBoxConfig _boxConfig = boxConfig ?? const TextBoxConfig();
 
   TextBoxConfig get boxConfig => _boxConfig;
 
@@ -80,7 +89,8 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     redraw();
   }
 
-  final double pixelRatio;
+  final double pixelRatio =
+      pixelRatio ?? PlatformDispatcher.instance.views.first.devicePixelRatio;
 
   @visibleForTesting
   final List<String> lines = [];
@@ -105,32 +115,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   double _currentLinePosition = 0.0;
   bool _isOnCompleteExecuted = false;
 
-  /// Callback function to be executed after all text is displayed.
-  void Function()? onComplete;
-
   double get lineHeight => _lineHeight;
-
-  TextBoxComponent({
-    super.text,
-    T? super.textRenderer,
-    TextBoxConfig? boxConfig,
-    Anchor? align,
-    double? pixelRatio,
-    super.position,
-    super.size,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-    this.onComplete,
-    super.key,
-  }) : _boxConfig = boxConfig ?? const TextBoxConfig(),
-       _fixedSize = size != null,
-       align = align ?? Anchor.topLeft,
-       pixelRatio =
-           pixelRatio ??
-           PlatformDispatcher.instance.views.first.devicePixelRatio;
 
   /// Alignment of the text within its bounding box.
   ///
@@ -144,14 +129,14 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   /// its every line will have 10% of whitespace on the left, and 90% on the
   /// right. You can use an `AnchorEffect` to make the text gradually transition
   /// between different alignment values.
-  Anchor align;
+  Anchor align = align ?? Anchor.topLeft;
 
   /// If true, the size of the component will remain fixed. If false, the size
   /// will expand or shrink to the fit the text.
   ///
   /// This property is set to true if the user has explicitly specified [size]
   /// in the constructor.
-  final bool _fixedSize;
+  final bool _fixedSize = size != null;
 
   @override
   set text(String value) {

@@ -13,8 +13,8 @@ import 'package:flame/events.dart';
 ///
 /// The [TertiaryTapCancelEvent] will only occur if there was a previous
 /// [TertiaryTapDownEvent].
-class TertiaryTapCancelEvent extends Event<void> {
-  TertiaryTapCancelEvent() : super(raw: null);
+class TertiaryTapCancelEvent() extends Event<void> {
+  this : super(raw: null);
 
   @override
   String toString() => 'TertiaryTapCancel()';

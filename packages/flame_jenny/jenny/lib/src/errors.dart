@@ -1,8 +1,4 @@
-class SyntaxError implements Exception {
-  SyntaxError(this.message);
-
-  final String? message;
-
+class SyntaxError(final String? message) implements Exception {
   @override
   String toString() => 'SyntaxError: $message';
 }
@@ -10,29 +6,17 @@ class SyntaxError implements Exception {
 /// This error is emitted when accessing an unknown name, such as: undefined
 /// variable name, unknown node title, unrecognized function, unspecified
 /// command, etc.
-class NameError implements Exception {
-  NameError(this.message);
-
-  final String? message;
-
+class NameError(final String? message) implements Exception {
   @override
   String toString() => 'NameError: $message';
 }
 
-class TypeError implements Exception {
-  TypeError(this.message);
-
-  final String? message;
-
+class TypeError(final String? message) implements Exception {
   @override
   String toString() => 'TypeError: $message';
 }
 
-class DialogueError implements Exception {
-  DialogueError(this.message);
-
-  final String? message;
-
+class DialogueError(final String? message) implements Exception {
   @override
   String toString() => 'DialogueError: $message';
 }

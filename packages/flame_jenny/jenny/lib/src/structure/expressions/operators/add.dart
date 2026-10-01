@@ -25,24 +25,18 @@ abstract class Add extends Expression {
 }
 
 /// Operator PLUS (+) for numeric arguments.
-class _NumAdd extends NumExpression implements Add {
-  _NumAdd(this._lhs, this._rhs);
-
-  final NumExpression _lhs;
-  final NumExpression _rhs;
-
+class _NumAdd(final NumExpression _lhs, final NumExpression _rhs)
+    extends NumExpression
+    implements Add {
   @override
   num get value => _lhs.value + _rhs.value;
 }
 
 /// Operator PLUS (+) for string arguments. This operator simply concatenates
 /// strings.
-class _StringAdd extends StringExpression implements Add {
-  _StringAdd(this._lhs, this._rhs);
-
-  final StringExpression _lhs;
-  final StringExpression _rhs;
-
+class _StringAdd(final StringExpression _lhs, final StringExpression _rhs)
+    extends StringExpression
+    implements Add {
   @override
   String get value => _lhs.value + _rhs.value;
 }

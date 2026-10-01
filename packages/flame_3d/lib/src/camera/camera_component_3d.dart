@@ -1,48 +1,45 @@
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/game.dart';
 
-enum CameraProjection { perspective, orthographic }
+enum CameraProjection() {
+  perspective,
+  orthographic,
+}
 
 /// {@template camera_component_3d}
 /// [CameraComponent3D] is a component through which a [World3D] is observed.
 /// {@endtemplate}
-class CameraComponent3D extends CameraComponent {
-  /// {@macro camera_component_3d}
-  CameraComponent3D({
-    this.fovY = 60,
-    Vector3? position,
-    Quaternion? rotation,
-    Vector3? target,
-    Vector3? up,
-    this.projection = CameraProjection.perspective,
-    World3D? super.world,
-    super.viewport,
-    super.viewfinder,
-    super.backdrop,
-    super.hudComponents,
-  }) : position = position?.clone() ?? Vector3.zero(),
-       rotation = rotation ?? Quaternion.identity(),
-       target = target?.clone() ?? Vector3(0, 0, -1),
-       _up = up?.clone() ?? Vector3(0, 1, 0);
+class CameraComponent3D({
+  /// The [fovY] is the field of view in Y (degrees) when the [projection] is
+  /// [CameraProjection.perspective] otherwise it is used as the near plane when
+  /// the [projection] is [CameraProjection.orthographic].
+  var double fovY = 60,
+  Vector3? position,
+  Quaternion? rotation,
+  Vector3? target,
+  Vector3? up,
 
+  /// The current camera projection.
+  var CameraProjection projection = CameraProjection.perspective,
+  World3D? super.world,
+  super.viewport,
+  super.viewfinder,
+  super.backdrop,
+  super.hudComponents,
+}) extends CameraComponent {
   @override
   World3D? get world => super.world as World3D?;
 
   @override
   set world(covariant World3D? world) => super.world = world;
 
-  /// The [fovY] is the field of view in Y (degrees) when the [projection] is
-  /// [CameraProjection.perspective] otherwise it is used as the near plane when
-  /// the [projection] is [CameraProjection.orthographic].
-  double fovY;
-
   /// The position of the camera in 3D space.
   ///
   /// Often also referred to as the "eye".
-  Vector3 position;
+  Vector3 position = position?.clone() ?? Vector3.zero();
 
   /// The target in 3D space that the camera is looking at.
-  Vector3 target;
+  Vector3 target = target?.clone() ?? Vector3(0, 0, -1);
 
   /// The forward direction relative to the camera.
   Vector3 get forward => target - position;
@@ -53,13 +50,10 @@ class CameraComponent3D extends CameraComponent {
   /// The up direction relative to the camera.
   Vector3 get up => _up.normalized();
   set up(Vector3 up) => _up.setFrom(up);
-  final Vector3 _up;
+  final Vector3 _up = up?.clone() ?? Vector3(0, 1, 0);
 
   /// The rotation of the camera.
-  Quaternion rotation;
-
-  /// The current camera projection.
-  CameraProjection projection;
+  Quaternion rotation = rotation ?? Quaternion.identity();
 
   /// The view matrix of the camera, this is without any projection applied on
   /// it.

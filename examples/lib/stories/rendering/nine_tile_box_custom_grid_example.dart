@@ -2,7 +2,8 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 
-class NineTileBoxCustomGridExample extends FlameGame
+class NineTileBoxCustomGridExample()
+    extends FlameGame
     with TapCallbacks, DoubleTapCallbacks {
   static const String description = '''
     If you want to create a background for something that can stretch you can

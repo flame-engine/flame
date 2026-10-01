@@ -12,10 +12,12 @@ import 'package:flutter/services.dart';
 /// {@template web_gpu_backend}
 /// A [base.GpuBackend] implemented on browser WebGPU (`navigator.gpu`).
 /// {@endtemplate}
-base class GpuBackend extends base.GpuBackend {
-  GpuBackend._(this._device, this._bundles)
-    : _queue = _device.queue,
-      _defaultSampler = _device.createSampler(
+base class GpuBackend._(
+  final GPUDevice _device,
+  final Map<String, WebShaderBundle> _bundles,
+) extends base.GpuBackend {
+  this
+    : _defaultSampler = _device.createSampler(
         GPUSamplerDescriptor(
           magFilter: 'nearest',
           minFilter: 'nearest',
@@ -87,11 +89,7 @@ base class GpuBackend extends base.GpuBackend {
     return bundles;
   }
 
-  final GPUDevice _device;
-
-  final GPUQueue _queue;
-
-  final Map<String, WebShaderBundle> _bundles;
+  final GPUQueue _queue = _device.queue;
 
   late final GPUSampler _defaultSampler;
 
@@ -332,13 +330,10 @@ typedef _PipelineKey = (
   CullMode,
 );
 
-class _WebGpuShaderLibrary implements GpuShaderLibrary {
-  const _WebGpuShaderLibrary(this._device, this._bundle);
-
-  final GPUDevice _device;
-
-  final WebShaderBundle _bundle;
-
+class const _WebGpuShaderLibrary(
+  final GPUDevice _device,
+  final WebShaderBundle _bundle,
+) implements GpuShaderLibrary {
   @override
   GpuShader operator [](String entryPoint) => switch (entryPoint) {
     'TextureVertex' => _WebGpuShader(_device, _bundle.vertex, _bundle.slots),
@@ -351,15 +346,11 @@ class _WebGpuShaderLibrary implements GpuShaderLibrary {
   };
 }
 
-class _WebGpuShader implements GpuShader {
-  _WebGpuShader(this._device, this._wgsl, this.slots);
-
-  final GPUDevice _device;
-
-  final String _wgsl;
-
-  final Map<String, WebShaderSlot> slots;
-
+class _WebGpuShader(
+  final GPUDevice _device,
+  final String _wgsl,
+  final Map<String, WebShaderSlot> slots,
+) implements GpuShader {
   GPUShaderModule? _module;
 
   GPUShaderModule get module => _module ??= _device.createShaderModule(
@@ -376,11 +367,8 @@ class _WebGpuShader implements GpuShader {
   }
 }
 
-class _WebGpuUniformSlot implements GpuUniformSlot {
-  const _WebGpuUniformSlot(this.slot);
-
-  final WebShaderSlot slot;
-
+class const _WebGpuUniformSlot(final WebShaderSlot slot)
+    implements GpuUniformSlot {
   @override
   int? get sizeInBytes => slot.sizeInBytes;
 
@@ -388,13 +376,10 @@ class _WebGpuUniformSlot implements GpuUniformSlot {
   int? getMemberOffsetInBytes(String member) => slot.memberOffsets[member];
 }
 
-class _WebGpuPipeline implements GpuPipeline {
-  const _WebGpuPipeline(this._vertex, this._fragment);
-
-  final _WebGpuShader _vertex;
-
-  final _WebGpuShader _fragment;
-
+class const _WebGpuPipeline(
+  final _WebGpuShader _vertex,
+  final _WebGpuShader _fragment,
+) implements GpuPipeline {
   GPUShaderModule get vertexModule => _vertex.module;
 
   GPUShaderModule get fragmentModule => _fragment.module;
@@ -402,30 +387,20 @@ class _WebGpuPipeline implements GpuPipeline {
   Map<String, WebShaderSlot> get slots => _vertex.slots;
 }
 
-class _WebGpuBuffer implements GpuBuffer {
-  const _WebGpuBuffer(this._queue, this.raw);
-
-  final GPUQueue _queue;
-
-  final GPUBuffer raw;
-
+class const _WebGpuBuffer(final GPUQueue _queue, final GPUBuffer raw)
+    implements GpuBuffer {
   @override
   void write(ByteData data, {int destinationOffsetInBytes = 0}) {
     _queue.writeBuffer(raw, destinationOffsetInBytes, _padded(data));
   }
 }
 
-class _WebGpuSampledTexture implements GpuTexture {
-  const _WebGpuSampledTexture(this._queue, this.raw, this._width, this._height);
-
-  final GPUQueue _queue;
-
-  final GPUTexture raw;
-
-  final int _width;
-
-  final int _height;
-
+class const _WebGpuSampledTexture(
+  final GPUQueue _queue,
+  final GPUTexture raw,
+  final int _width,
+  final int _height,
+) implements GpuTexture {
   @override
   void write(ByteData data) {
     _queue.writeTexture(
@@ -445,45 +420,32 @@ class _WebGpuSampledTexture implements GpuTexture {
       throw UnsupportedError('A sampled texture cannot be read as an Image.');
 }
 
-class _WebGpuRenderTarget implements GpuRenderTarget {
-  _WebGpuRenderTarget(
-    this.canvas,
-    this.context,
-    this.depthTexture,
-    Color clearValue,
-  ) : clearColor = GPUColor(
-        r: clearValue.r,
-        g: clearValue.g,
-        b: clearValue.b,
-        a: clearValue.a,
-      ),
-      _colorTexture = _WebGpuColorTexture(
-        canvas,
-        canvas.width,
-        canvas.height,
-      );
+class _WebGpuRenderTarget(
+  final OffscreenCanvas canvas,
+  final GPUCanvasContext context,
+  final GPUTexture depthTexture,
+  Color clearValue,
+) implements GpuRenderTarget {
+  final GPUColor clearColor = GPUColor(
+    r: clearValue.r,
+    g: clearValue.g,
+    b: clearValue.b,
+    a: clearValue.a,
+  );
 
-  final OffscreenCanvas canvas;
-
-  final GPUCanvasContext context;
-
-  final GPUTexture depthTexture;
-
-  final GPUColor clearColor;
-
-  final _WebGpuColorTexture _colorTexture;
+  final _WebGpuColorTexture _colorTexture = _WebGpuColorTexture(
+    canvas,
+    canvas.width,
+    canvas.height,
+  );
 
   @override
   GpuTexture get colorTexture => _colorTexture;
 }
 
-class _WebGpuColorTexture implements GpuTexture {
-  _WebGpuColorTexture(this._canvas, int width, int height)
-    : _blitCanvas = OffscreenCanvas(width, height);
-
-  final OffscreenCanvas _canvas;
-
-  final OffscreenCanvas _blitCanvas;
+class _WebGpuColorTexture(final OffscreenCanvas _canvas, int width, int height)
+    implements GpuTexture {
+  final OffscreenCanvas _blitCanvas = OffscreenCanvas(width, height);
 
   late final CanvasContext2D _blit = _blitCanvas.context2D();
 
@@ -523,11 +485,7 @@ class _WebGpuColorTexture implements GpuTexture {
   }
 }
 
-class _WebGpuFrame implements base.GpuFrame {
-  _WebGpuFrame(this._backend);
-
-  final GpuBackend _backend;
-
+class _WebGpuFrame(final GpuBackend _backend) implements base.GpuFrame {
   final List<List<GPUBuffer>> _uniformPools = [[], [], []];
   int _frameIndex = 0;
 
@@ -614,28 +572,14 @@ class _WebGpuFrame implements base.GpuFrame {
   }
 }
 
-class _WebGpuRenderPass implements base.GpuRenderPass {
-  _WebGpuRenderPass(
-    this._backend,
-    this._frame,
-    this._blend,
-    this._depthStencil,
-    this._encoder,
-    this._pass,
-  );
-
-  final GpuBackend _backend;
-
-  final _WebGpuFrame _frame;
-
-  final BlendState _blend;
-
-  final DepthStencilState _depthStencil;
-
-  final GPUCommandEncoder _encoder;
-
-  final GPURenderPassEncoder _pass;
-
+class _WebGpuRenderPass(
+  final GpuBackend _backend,
+  final _WebGpuFrame _frame,
+  final BlendState _blend,
+  final DepthStencilState _depthStencil,
+  final GPUCommandEncoder _encoder,
+  final GPURenderPassEncoder _pass,
+) implements base.GpuRenderPass {
   late _WebGpuPipeline _pipeline;
 
   late GPURenderPipeline _renderPipeline;

@@ -3,11 +3,7 @@ import 'package:jenny/src/structure/expressions/functions/_common.dart';
 import 'package:jenny/src/yarn_project.dart';
 
 /// Function `string(x)` converts a numeric or boolean `x` into a string.
-class StringFn extends StringExpression {
-  StringFn(this._arg);
-
-  final Expression _arg;
-
+class StringFn(final Expression _arg) extends StringExpression {
   /// Static constructor to be used in parse.dart.
   static Expression make(
     List<FunctionArgument> args,

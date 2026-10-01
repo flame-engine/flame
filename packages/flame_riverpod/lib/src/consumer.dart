@@ -7,11 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart';
 
-class ComponentRef {
-  ComponentRef({required this.game});
-
-  RiverpodGameMixin? game;
-
+class ComponentRef({required var RiverpodGameMixin? game}) {
   BuildContext get context => game!.buildContext!;
 
   RiverpodAwareGameWidgetState? get _container {

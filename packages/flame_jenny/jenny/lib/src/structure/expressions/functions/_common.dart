@@ -22,11 +22,7 @@ import 'package:meta/meta.dart';
 
 typedef ErrorFn = Never Function(String message, [int? position]);
 
-class FunctionArgument {
-  FunctionArgument(this.expression, this.position);
-  final Expression expression;
-  final int position;
-}
+class FunctionArgument(final Expression expression, final int position);
 
 typedef FunctionBuilder = Expression Function(
   List<FunctionArgument>,

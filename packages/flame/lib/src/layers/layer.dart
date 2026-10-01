@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flame/src/layers/processors.dart';
 import 'package:meta/meta.dart';
 
-abstract class Layer {
+abstract class Layer() {
   List<LayerProcessor> preProcessors = [];
   List<LayerProcessor> postProcessors = [];
 
@@ -55,8 +55,8 @@ abstract class Layer {
   void drawLayer();
 }
 
-abstract class PreRenderedLayer extends Layer {
-  PreRenderedLayer() {
+abstract class PreRenderedLayer() extends Layer {
+  this {
     reRender();
   }
 
@@ -67,7 +67,7 @@ abstract class PreRenderedLayer extends Layer {
   }
 }
 
-abstract class DynamicLayer extends Layer {
+abstract class DynamicLayer() extends Layer {
   @override
   void render(Canvas canvas, {double x = 0.0, double y = 0.0}) {
     beginRendering();

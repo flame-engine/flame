@@ -27,7 +27,6 @@ linter:
     - avoid_empty_else
     - avoid_equals_and_hash_code_on_mutable_classes
     - avoid_escaping_inner_quotes
-    - avoid_field_initializers_in_const_classes
     - avoid_final_parameters
     - avoid_init_to_null
     - avoid_js_rounded_ints
@@ -173,15 +172,14 @@ linter:
     - unnecessary_unawaited
     - unnecessary_underscores
     - unrelated_type_equality_checks
-    - use_declaring_parameters
     - use_enums
     - use_full_hex_values_for_flutter_colors
     - use_function_type_syntax_for_parameters
     - use_is_even_rather_than_modulo
     - use_key_in_widget_constructors
-    - use_late_for_private_fields_and_variables
     - use_named_constants
     - use_null_aware_elements
+    - use_primary_constructors
     - use_raw_strings
     - use_rethrow_when_possible
     - use_setters_to_change_properties

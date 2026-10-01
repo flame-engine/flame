@@ -7,29 +7,30 @@ import 'package:flame_steering_behaviors/flame_steering_behaviors.dart';
 import 'package:flame_steering_behaviors_example/src/behaviors/behaviors.dart';
 import 'package:flame_steering_behaviors_example/src/example_game.dart';
 
-class Dot extends PositionedEntity with Steerable {
-  Dot({
-    super.position,
-    Random? random,
-  }) : super(
-         size: Vector2.all(relativeValue),
-         children: [
-           CircleComponent.relative(
-             1,
-             parentSize: Vector2.all(relativeValue),
-           ),
-         ],
-         behaviors: [
-           PropagatingCollisionBehavior(CircleHitbox()),
-           ScreenWrappingBehavior(),
-           WanderBehavior(
-             circleDistance: 3 * relativeValue,
-             maximumAngle: 45 * degrees2Radians,
-             startingAngle: 0,
-             random: random,
-           ),
-         ],
-       );
+class Dot({
+  super.position,
+  Random? random,
+}) extends PositionedEntity with Steerable {
+  this
+    : super(
+        size: Vector2.all(relativeValue),
+        children: [
+          CircleComponent.relative(
+            1,
+            parentSize: Vector2.all(relativeValue),
+          ),
+        ],
+        behaviors: [
+          PropagatingCollisionBehavior(CircleHitbox()),
+          ScreenWrappingBehavior(),
+          WanderBehavior(
+            circleDistance: 3 * relativeValue,
+            maximumAngle: 45 * degrees2Radians,
+            startingAngle: 0,
+            random: random,
+          ),
+        ],
+      );
 
   @override
   double get maxVelocity => 10 * relativeValue;

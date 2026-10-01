@@ -4,7 +4,7 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:material_ui/material_ui.dart';
 
-class LongPressExample extends FlameGame {
+class LongPressExample() extends FlameGame {
   static const String description = '''
     In this example we show how to use `LongPressCallbacks`.\n\n
     The colored squares will turn red when a long press is recognized,
@@ -28,17 +28,18 @@ class LongPressExample extends FlameGame {
   }
 }
 
-class LongPressSquare extends RectangleComponent with LongPressCallbacks {
-  LongPressSquare({required Paint paint, required Vector2 position})
-    : _originalPaint = paint,
-      super(
+class LongPressSquare({required Paint paint, required Vector2 position})
+    extends RectangleComponent
+    with LongPressCallbacks {
+  this
+    : super(
         position: position,
         size: Vector2.all(100),
         paint: paint,
         anchor: Anchor.center,
       );
 
-  final Paint _originalPaint;
+  final Paint _originalPaint = paint;
 
   @override
   void onLongPressStart(LongPressStartEvent event) {

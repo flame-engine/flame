@@ -19,35 +19,26 @@ import 'package:tiled/tiled.dart';
 /// Hexagonal maps are the exception: Tiled rotates their tiles in steps of
 /// pi/3 instead, see [SimpleFlips.fromHexagonalFlips].
 /// {@endtemplate}
-class SimpleFlips {
+class SimpleFlips(
   /// The angle (in steps of pi/2 rads, or pi/3 rads if [isHexagonal] is true),
   /// clockwise, around the center of the tile.
-  final int angle;
+  final int angle,
 
   /// The cosine of the rotation.
-  final double cos;
+  final double cos,
 
   /// The sine of the rotation.
-  final double sin;
+  final double sin, {
 
   /// Whether to flip (across a central vertical axis).
-  final bool flip;
+  required final bool flip,
 
   /// Whether the rotation is in steps of pi/3, as in hexagonal maps, instead
   /// of steps of pi/2.
   ///
   /// Tiles that are rotated in steps of pi/2 swap their width and height.
-  final bool isHexagonal;
-
-  /// {@macro _simple_flips}
-  SimpleFlips(
-    this.angle,
-    this.cos,
-    this.sin, {
-    required this.flip,
-    this.isHexagonal = false,
-  });
-
+  final bool isHexagonal = false,
+}) {
   /// Converts the flips of a tile in a hexagonal map.
   ///
   /// Tiled doesn't rotate tiles in steps of 90º in hexagonal maps, the

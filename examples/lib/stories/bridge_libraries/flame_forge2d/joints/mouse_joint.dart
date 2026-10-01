@@ -6,18 +6,18 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class MouseJointExample extends Forge2DExampleGame {
+class MouseJointExample() extends Forge2DExampleGame {
   static const description = '''
     In this example we use a `MouseJoint` to make the ball follow the mouse
     when you drag it around. The line shows the joint pulling the ball
     towards the pointer.
   ''';
 
-  MouseJointExample()
-    : super(gravity: Vector2(0, 10.0), world: MouseJointWorld());
+  this : super(gravity: Vector2(0, 10.0), world: MouseJointWorld());
 }
 
-class MouseJointWorld extends Forge2DWorld
+class MouseJointWorld()
+    extends Forge2DWorld
     with DragCallbacks, HasGameRef<Forge2DGame> {
   late Ball ball;
   late Body groundBody;

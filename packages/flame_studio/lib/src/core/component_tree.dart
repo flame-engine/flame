@@ -11,9 +11,10 @@ final componentTreeProvider =
     });
 
 @immutable
-class ComponentTreeNode {
-  const ComponentTreeNode._(this.component, this.children);
-
+class const ComponentTreeNode._(
+  final Component component,
+  final List<ComponentTreeNode>? children,
+) {
   factory ComponentTreeNode.fromComponent(Component component) {
     return ComponentTreeNode._(
       component,
@@ -23,8 +24,6 @@ class ComponentTreeNode {
     );
   }
 
-  final Component component;
-  final List<ComponentTreeNode>? children;
   String get name => component.runtimeType.toString();
   bool get hasChildren => children?.isNotEmpty ?? false;
 
@@ -39,13 +38,11 @@ class ComponentTreeNode {
 }
 
 @immutable
-class ComponentTreeState {
-  ComponentTreeState(Component? rootComponent)
-    : root = rootComponent == null
-          ? null
-          : ComponentTreeNode.fromComponent(rootComponent);
-
-  final ComponentTreeNode? root;
+// ignore: prefer_const_constructors_in_immutables
+class ComponentTreeState(Component? rootComponent) {
+  final ComponentTreeNode? root = rootComponent == null
+      ? null
+      : ComponentTreeNode.fromComponent(rootComponent);
 
   @override
   bool operator ==(Object other) =>
@@ -55,9 +52,9 @@ class ComponentTreeState {
   int get hashCode => root?.hashCode ?? 0;
 }
 
-class ComponentTreeObserver extends StateNotifier<ComponentTreeState> {
-  ComponentTreeObserver(Component? rootComponent)
-    : super(ComponentTreeState(rootComponent)) {
+class ComponentTreeObserver(Component? rootComponent)
+    extends StateNotifier<ComponentTreeState> {
+  this : super(ComponentTreeState(rootComponent)) {
     if (rootComponent != null) {
       _refresh();
     }

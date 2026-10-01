@@ -2,11 +2,8 @@ import 'package:flame/src/game/game.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
-class GestureDetectorBuilder {
-  GestureDetectorBuilder([this._onChange]);
-
+class GestureDetectorBuilder([final void Function()? _onChange]) {
   final Map<Type, GestureRecognizerFactory> _factories = {};
-  final void Function()? _onChange;
 
   /// Registers a gesture recognizer of type [T].
   ///

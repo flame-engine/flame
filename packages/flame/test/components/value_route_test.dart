@@ -107,23 +107,18 @@ void main() {
   });
 }
 
-class _CustomValueRoute<T> extends ValueRoute<T> {
-  _CustomValueRoute({
-    required T defaultValue,
-    required this.builder,
-  }) : super(value: defaultValue);
-
-  final Component Function(_CustomValueRoute<T>) builder;
+class _CustomValueRoute<T>({
+  required T defaultValue,
+  required final Component Function(_CustomValueRoute<T>) builder,
+}) extends ValueRoute<T> {
+  this : super(value: defaultValue);
 
   @override
   Component build() => builder(this);
 }
 
-class _CustomComponent extends Component {
-  _CustomComponent({this.onUpdate});
-
-  final void Function(double dt)? onUpdate;
-
+class _CustomComponent({final void Function(double dt)? onUpdate})
+    extends Component {
   @override
   void update(double dt) => onUpdate?.call(dt);
 }

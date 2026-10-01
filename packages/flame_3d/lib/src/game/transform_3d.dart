@@ -26,9 +26,9 @@ import 'package:flutter/foundation.dart' show ChangeNotifier;
 /// can subscribe to get notified when individual components of the transform
 /// change: [position], [scale], and [rotation].
 /// {@endtemplate}
-class Transform3D extends ChangeNotifier {
+class Transform3D() extends ChangeNotifier {
   /// {@macro transform_3d}
-  Transform3D()
+  this
     : _recalculate = true,
       _position = NotifyingVector3.zero(),
       _rotation = NotifyingQuaternion(0, 0, 0, 0),

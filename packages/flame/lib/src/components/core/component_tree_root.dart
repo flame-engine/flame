@@ -3,7 +3,7 @@ part of 'component.dart';
 /// A future that can be awaited repeatedly, and is resolved by calling
 /// [fire]. Once fired, a new future is created lazily for the next round of
 /// waiters, so the signal can be awaited again right away.
-class _ResettableSignal {
+class _ResettableSignal() {
   Completer<void>? _completer;
 
   /// Whether some caller is currently awaiting [future].
@@ -23,12 +23,11 @@ class _ResettableSignal {
 /// This class is just a regular [Component], with some additional
 /// functionality, namely: it contains global lifecycle events for the component
 /// tree.
-class ComponentTreeRoot extends Component {
-  ComponentTreeRoot({
-    super.children,
-    super.key,
-  }) : queue = RecycledQueue(LifecycleEvent.new),
-       _blocked = <Component>{};
+class ComponentTreeRoot({
+  super.children,
+  super.key,
+}) extends Component {
+  this : queue = RecycledQueue(LifecycleEvent.new), _blocked = <Component>{};
 
   @internal
   final RecycledQueue<LifecycleEvent> queue;
@@ -351,7 +350,7 @@ class ComponentTreeRoot extends Component {
 }
 
 /// The status of processing a Lifecycle event.
-enum _LifecycleEventStatus {
+enum _LifecycleEventStatus() {
   /// The event cannot be processed yet: move over to the next one, and skip
   /// any other events for the same child or parent in this pass.
   block,
@@ -361,7 +360,7 @@ enum _LifecycleEventStatus {
 }
 
 @internal
-enum LifecycleEventKind {
+enum LifecycleEventKind() {
   unknown,
   add,
   remove,
@@ -370,7 +369,7 @@ enum LifecycleEventKind {
 }
 
 @visibleForTesting
-class LifecycleEvent implements Disposable {
+class LifecycleEvent() implements Disposable {
   LifecycleEventKind kind = LifecycleEventKind.unknown;
   Component? child;
   Component? parent;

@@ -3,11 +3,7 @@ import 'package:jenny/src/structure/expressions/functions/_common.dart';
 import 'package:jenny/src/yarn_project.dart';
 
 /// Function `random()` returns a random double between 0 and 1.
-class RandomFn extends NumExpression {
-  RandomFn(this._yarn);
-
-  final YarnProject _yarn;
-
+class RandomFn(final YarnProject _yarn) extends NumExpression {
   static Expression make(
     List<FunctionArgument> arguments,
     YarnProject yarnProject,

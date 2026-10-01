@@ -5,9 +5,7 @@ import 'package:crystal_ball/src/game/game.dart';
 import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart';
 
-class CrystalBallWidget extends StatefulWidget {
-  const CrystalBallWidget({super.key});
-
+class const CrystalBallWidget({super.key}) extends StatefulWidget {
   static const String description = '''
 A demonstration of how to leverage the power of Fragment Shaders in Flame.
 The game is a simple crystal ball that jumps around in a swampy world.
@@ -19,7 +17,7 @@ and the glowing effect of the crystal ball.
   State<CrystalBallWidget> createState() => _CrystalBallWidgetState();
 }
 
-class _CrystalBallWidgetState extends State<CrystalBallWidget> {
+class _CrystalBallWidgetState() extends State<CrystalBallWidget> {
   // PreloadedPrograms is a simple data class that holds the preloaded
   late final Future<PreloadedPrograms> preloadedPrograms =
       Future.wait([

@@ -7,7 +7,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class DominoExample extends Forge2DExampleGame {
+class DominoExample() extends Forge2DExampleGame {
   static const description = '''
     The classic domino tower: vertical dominoes carry horizontal ones as
     planks, level by level, with braces at the edges.
@@ -16,7 +16,7 @@ class DominoExample extends Forge2DExampleGame {
     that topples it.
   ''';
 
-  DominoExample()
+  this
     : super(
         gravity: Vector2(0, 10.0),
         world: DominoExampleWorld(),
@@ -24,7 +24,8 @@ class DominoExample extends Forge2DExampleGame {
       );
 }
 
-class DominoExampleWorld extends Forge2DWorld
+class DominoExampleWorld()
+    extends Forge2DWorld
     with TapCallbacks, HasGameRef<Forge2DGame> {
   static const dominoWidth = 0.2;
   static const dominoHeight = 1.0;
@@ -132,20 +133,16 @@ class DominoExampleWorld extends Forge2DWorld
   }
 }
 
-class Domino extends BodyComponent with GlowingBody {
-  Domino({
-    required this.initialPosition,
-    required this.horizontal,
-    required this.density,
-    required Color color,
-  }) {
+class Domino({
+  /// Where the domino starts out; [position] tracks the live body position.
+  required final Vector2 initialPosition,
+  required final bool horizontal,
+  required final double density,
+  required Color color,
+}) extends BodyComponent with GlowingBody {
+  this {
     paint = Paint()..color = color;
   }
-
-  /// Where the domino starts out; [position] tracks the live body position.
-  final Vector2 initialPosition;
-  final bool horizontal;
-  final double density;
 
   @override
   double get outlineWidth => 0.04;
@@ -170,8 +167,8 @@ class Domino extends BodyComponent with GlowingBody {
   }
 }
 
-class Ground extends BodyComponent with GlowingBody {
-  Ground() {
+class Ground() extends BodyComponent with GlowingBody {
+  this {
     paint = Paint()..color = ExampleColors.slate;
   }
 

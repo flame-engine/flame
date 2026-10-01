@@ -9,13 +9,13 @@ import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _AssetsCacheMock extends Mock implements AssetsCache;
+class _AssetsCacheMock() extends Mock implements AssetsCache;
 
-class _ImagesMock extends Mock implements Images;
+class _ImagesMock() extends Mock implements Images;
 
-class _ImageMock extends Mock implements Image;
+class _ImageMock() extends Mock implements Image;
 
-class _MockedGame extends Mock implements FlameGame {
+class _MockedGame() extends Mock implements FlameGame {
   final _imagesMock = _ImagesMock();
   @override
   Images get images => _imagesMock;

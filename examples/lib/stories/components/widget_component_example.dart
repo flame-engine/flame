@@ -6,7 +6,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-class WidgetComponentExample extends FlameGame {
+class WidgetComponentExample() extends FlameGame {
   static const String description = '''
     In this example we showcase the `WidgetComponent`, which hosts a Flutter
     widget inside the Flame component tree. The widgets are real parts of the
@@ -117,15 +117,13 @@ class WidgetComponentExample extends FlameGame {
 
 /// An Ember rendered behind the card, to show that widgets are rendered in
 /// between other components according to their priority.
-class _BackgroundEmber extends Ember {
-  _BackgroundEmber({required super.position})
-    : super(size: Vector2.all(160), priority: 0);
+class _BackgroundEmber({required super.position}) extends Ember {
+  this : super(size: Vector2.all(160), priority: 0);
 }
 
 /// An Ember rendered in front of the card, orbiting around it.
-class _ForegroundEmber extends Ember {
-  _ForegroundEmber({required super.position})
-    : super(size: Vector2.all(40), priority: 2);
+class _ForegroundEmber({required super.position}) extends Ember {
+  this : super(size: Vector2.all(40), priority: 2);
 
   @override
   Future<void> onLoad() async {
@@ -139,11 +137,8 @@ class _ForegroundEmber extends Ember {
   }
 }
 
-class _LabelCard extends StatelessWidget {
-  const _LabelCard({required this.label});
-
-  final ValueNotifier<String> label;
-
+class const _LabelCard({required final ValueNotifier<String> label})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(

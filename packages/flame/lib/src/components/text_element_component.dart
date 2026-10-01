@@ -2,23 +2,18 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/text.dart';
 
-class TextElementComponent extends PositionComponent {
-  final Vector2? documentSize;
-  TextElement element;
-
-  TextElementComponent({
-    required this.element,
-    this.documentSize,
-    super.size,
-    super.position,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.key,
-  });
-
+class TextElementComponent({
+  required var TextElement element,
+  final Vector2? documentSize,
+  super.size,
+  super.position,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.key,
+}) extends PositionComponent {
   factory TextElementComponent.fromDocument({
     required DocumentRoot document,
     DocumentStyle? style,

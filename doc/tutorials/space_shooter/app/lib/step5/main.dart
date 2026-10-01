@@ -9,7 +9,7 @@ void main() {
   runApp(GameWidget(game: SpaceShooterGame()));
 }
 
-class SpaceShooterGame extends FlameGame with DragCallbacks {
+class SpaceShooterGame() extends FlameGame with DragCallbacks {
   late Player player;
 
   @override
@@ -58,9 +58,10 @@ class SpaceShooterGame extends FlameGame with DragCallbacks {
   }
 }
 
-class Player extends SpriteAnimationComponent
+class Player()
+    extends SpriteAnimationComponent
     with HasGameRef<SpaceShooterGame> {
-  Player()
+  this
     : super(
         size: Vector2(100, 150),
         anchor: Anchor.center,
@@ -115,14 +116,14 @@ class Player extends SpriteAnimationComponent
   }
 }
 
-class Bullet extends SpriteAnimationComponent
-    with HasGameRef<SpaceShooterGame> {
-  Bullet({
-    super.position,
-  }) : super(
-         size: Vector2(25, 50),
-         anchor: Anchor.center,
-       );
+class Bullet({
+  super.position,
+}) extends SpriteAnimationComponent with HasGameRef<SpaceShooterGame> {
+  this
+    : super(
+        size: Vector2(25, 50),
+        anchor: Anchor.center,
+      );
 
   @override
   Future<void> onLoad() async {
@@ -150,13 +151,14 @@ class Bullet extends SpriteAnimationComponent
   }
 }
 
-class Enemy extends SpriteAnimationComponent with HasGameRef<SpaceShooterGame> {
-  Enemy({
-    super.position,
-  }) : super(
-         size: Vector2.all(enemySize),
-         anchor: Anchor.center,
-       );
+class Enemy({
+  super.position,
+}) extends SpriteAnimationComponent with HasGameRef<SpaceShooterGame> {
+  this
+    : super(
+        size: Vector2.all(enemySize),
+        anchor: Anchor.center,
+      );
 
   static const enemySize = 50.0;
 

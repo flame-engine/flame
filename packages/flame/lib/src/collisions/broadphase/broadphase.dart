@@ -15,9 +15,7 @@ import 'package:flame/collisions.dart';
 ///   for details.
 ///
 /// Always experiment to see which approach works best for your game.
-abstract class Broadphase<T extends Hitbox<T>> {
-  Broadphase();
-
+abstract class Broadphase<T extends Hitbox<T>>() {
   /// This method can be used if there are things that needs to be prepared in
   /// each tick.
   void update() {}

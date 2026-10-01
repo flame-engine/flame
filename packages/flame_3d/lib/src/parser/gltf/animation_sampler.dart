@@ -6,26 +6,21 @@ import 'package:flame_3d/src/parser/gltf/gltf_root.dart';
 
 /// An animation sampler combines timestamps with a sequence of output values
 /// and defines an interpolation algorithm.
-class AnimationSampler extends GltfNode {
+class AnimationSampler({
+  required super.root,
+
   /// The index of an accessor containing keyframe timestamps.
   /// The accessor **MUST** be of scalar type with floating-point components.
   /// The values represent time in seconds with `time[0] >= 0.0`, and strictly
   /// increasing values, i.e., `time[n + 1] > time[n]`.
-  final GltfRef<FloatAccessor> input;
+  required final GltfRef<FloatAccessor> input,
 
   /// Interpolation algorithm.
-  final AnimationInterpolation interpolation;
+  required final AnimationInterpolation interpolation,
 
   /// The index of an accessor, containing keyframe output values.
-  final GltfRef<RawAccessor> output;
-
-  AnimationSampler({
-    required super.root,
-    required this.input,
-    required this.interpolation,
-    required this.output,
-  });
-
+  required final GltfRef<RawAccessor> output,
+}) extends GltfNode {
   AnimationSampler.parse(
     GltfRoot root,
     Map<String, Object?> map,

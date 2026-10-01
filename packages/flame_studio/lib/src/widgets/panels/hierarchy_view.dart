@@ -3,14 +3,12 @@ import 'package:flame_studio/src/core/component_tree.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HierarchyView extends ConsumerStatefulWidget {
-  const HierarchyView({super.key});
-
+class const HierarchyView({super.key}) extends ConsumerStatefulWidget {
   @override
   HierarchyViewState createState() => HierarchyViewState();
 }
 
-class HierarchyViewState extends ConsumerState<ConsumerStatefulWidget> {
+class HierarchyViewState() extends ConsumerState<ConsumerStatefulWidget> {
   Component? selectedComponent;
   Set<Component> expandedComponents = {};
 
@@ -67,14 +65,14 @@ class HierarchyViewState extends ConsumerState<ConsumerStatefulWidget> {
   }
 }
 
-class _ListItem extends StatelessWidget {
-  _ListItem(this.state, this.node, this.indent, {required this.isFirst})
-    : super(key: ObjectKey(node.component));
-
-  final HierarchyViewState state;
-  final ComponentTreeNode node;
-  final int indent;
-  final bool isFirst;
+// ignore: prefer_const_constructors_in_immutables
+class _ListItem(
+  final HierarchyViewState state,
+  final ComponentTreeNode node,
+  final int indent, {
+  required final bool isFirst,
+}) extends StatelessWidget {
+  this : super(key: ObjectKey(node.component));
 
   @override
   Widget build(BuildContext context) {
@@ -135,10 +133,7 @@ class _ListItem extends StatelessWidget {
   }
 }
 
-class _ClosingBrace extends StatelessWidget {
-  const _ClosingBrace(this.indent);
-  final int indent;
-
+class const _ClosingBrace(final int indent) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -151,19 +146,12 @@ class _ClosingBrace extends StatelessWidget {
   }
 }
 
-class _ExpanderIcon extends StatelessWidget {
-  const _ExpanderIcon({
-    required this.hasChildren,
-    this.isExpanded = false,
-    this.isFirst = false,
-    this.isLast = false,
-  });
-
-  final bool hasChildren;
-  final bool isExpanded;
-  final bool isFirst;
-  final bool isLast;
-
+class const _ExpanderIcon({
+  required final bool hasChildren,
+  final bool isExpanded = false,
+  final bool isFirst = false,
+  final bool isLast = false,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
@@ -173,10 +161,7 @@ class _ExpanderIcon extends StatelessWidget {
   }
 }
 
-class _ExpanderIconPainter extends CustomPainter {
-  _ExpanderIconPainter(this.icon);
-
-  final _ExpanderIcon icon;
+class _ExpanderIconPainter(final _ExpanderIcon icon) extends CustomPainter {
   static final _paint = Paint()
     ..color = const Color(0xFFFFFFFF)
     ..style = PaintingStyle.stroke;

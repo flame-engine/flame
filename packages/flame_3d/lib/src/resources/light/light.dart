@@ -9,17 +9,10 @@ import 'package:flame_3d/resources.dart';
 /// Instead, it is used to modify how other resources are uploaded.
 ///
 /// {@endtemplate}
-class Light extends Resource<void> {
-  final Vector3 position;
-
-  final LightSource source;
-
-  /// {@macro light}
-  Light({
-    required this.position,
-    required this.source,
-  });
-
+class Light({
+  required final Vector3 position,
+  required final LightSource source,
+}) extends Resource<void> {
   @override
   void createResource() {}
 }

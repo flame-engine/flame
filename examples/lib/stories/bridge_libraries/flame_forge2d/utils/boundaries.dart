@@ -18,13 +18,12 @@ List<Wall> createBoundaries(Forge2DGame game, {double? strokeWidth}) {
   ];
 }
 
-class Wall extends BodyComponent with GlowingBody {
-  final Vector2 start;
-  final Vector2 end;
-  final double strokeWidth;
+class Wall(final Vector2 start, final Vector2 end, {double? strokeWidth})
+    extends BodyComponent
+    with GlowingBody {
+  final double strokeWidth = strokeWidth ?? 0.15;
 
-  Wall(this.start, this.end, {double? strokeWidth})
-    : strokeWidth = strokeWidth ?? 0.15 {
+  this {
     paint = Paint()..color = ExampleColors.slate;
   }
 

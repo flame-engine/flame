@@ -13,7 +13,7 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 /// [Forge2DWorld.preSolveCallback] (and [ShapeDef.enablePreSolveEvents] on
 /// the involved shapes). To measure impact strength, enable
 /// [ShapeDef.enableHitEvents] and poll the world's `contactEvents.hit`.
-mixin class ContactCallbacks {
+mixin class ContactCallbacks() {
   /// Called when two [Shape]s start being in contact.
   ///
   /// It is called for sensors and non-sensors.

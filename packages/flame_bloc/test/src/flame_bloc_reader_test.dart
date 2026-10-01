@@ -6,7 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 import '../inventory_cubit.dart';
 import '../player_cubit.dart';
 
-class _PlayerReader extends Component
+class _PlayerReader()
+    extends Component
     with FlameBlocReader<PlayerCubit, PlayerState>;
 
 void main() {

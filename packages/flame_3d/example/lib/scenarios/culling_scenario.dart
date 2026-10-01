@@ -8,7 +8,7 @@ import 'package:flame_3d_example/components/rendered_point_light.dart';
 import 'package:flame_3d_example/example_game_3d.dart';
 import 'package:flame_3d_example/scenarios/game_scenario.dart';
 
-class CullingScenario implements GameScenario {
+class CullingScenario() implements GameScenario {
   @override
   Future<void> onLoad() async {}
 
@@ -73,11 +73,11 @@ class CullingScenario implements GameScenario {
   }
 }
 
-class _ObjectGroup extends Object3D {
-  _ObjectGroup({
-    required List<MeshComponent> children,
-    super.position,
-  }) : super(children: children);
+class _ObjectGroup({
+  required List<MeshComponent> children,
+  super.position,
+}) extends Object3D {
+  this : super(children: children);
 
   @override
   void draw(RenderContext context) {}

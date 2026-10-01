@@ -3,7 +3,8 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart';
 
-class TimerComponentExample extends FlameGame
+class TimerComponentExample()
+    extends FlameGame
     with TapCallbacks, DoubleTapCallbacks {
   static const String description = '''
     This examples showcases the `TimerComponent`.\n\n
@@ -29,14 +30,13 @@ class TimerComponentExample extends FlameGame
   }
 }
 
-class RenderedTimeComponent extends TimerComponent {
+class RenderedTimeComponent(double period, {final double yOffset = 150})
+    extends TimerComponent {
   final TextPaint textPaint = TextPaint(
     style: const TextStyle(color: Colors.white, fontSize: 20),
   );
 
-  final double yOffset;
-
-  RenderedTimeComponent(double period, {this.yOffset = 150})
+  this
     : super(
         period: period,
         removeOnFinish: true,

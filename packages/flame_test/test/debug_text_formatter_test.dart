@@ -41,11 +41,8 @@ void main() {
   });
 }
 
-class _TextElementsComponent extends PositionComponent {
-  _TextElementsComponent(this.elements);
-
-  final List<InlineTextElement> elements;
-
+class _TextElementsComponent(final List<InlineTextElement> elements)
+    extends PositionComponent {
   @override
   void render(Canvas canvas) {
     for (final element in elements) {

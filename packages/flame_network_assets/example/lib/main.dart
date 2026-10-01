@@ -11,7 +11,7 @@ void main() {
   runApp(const GameWidget.managed(gameFactory: MyGame.new));
 }
 
-class MyGame extends FlameGame with TapCallbacks {
+class MyGame() extends FlameGame with TapCallbacks {
   final networkImages = FlameNetworkImages();
   late Image playerSprite;
 

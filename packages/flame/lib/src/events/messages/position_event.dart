@@ -7,10 +7,8 @@ import 'package:flame/game.dart';
 ///
 /// This class includes properties that describe the position where the event
 /// has occurred.
-abstract class PositionEvent<R> extends LocationContextEvent<Vector2, R> {
-  PositionEvent(this._game, {required this.devicePosition, required super.raw});
-
-  final Game _game;
+abstract class PositionEvent<R>(
+  final Game _game, {
 
   /// Event position in the coordinate space of the device -- either the phone,
   /// or the browser window, or the app.
@@ -18,8 +16,9 @@ abstract class PositionEvent<R> extends LocationContextEvent<Vector2, R> {
   /// If the game runs in a full-screen mode, then this would be equal to the
   /// [canvasPosition]. Otherwise, the [devicePosition] is the Flutter-level
   /// global position.
-  final Vector2 devicePosition;
-
+  required final Vector2 devicePosition,
+  required super.raw,
+}) extends LocationContextEvent<Vector2, R> {
   /// Event position in the coordinate space of the game widget, i.e. relative
   /// to the game canvas.
   ///

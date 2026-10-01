@@ -7,20 +7,12 @@ import 'package:flame_3d/resources.dart';
 /// {@template texture}
 /// Base texture [Resource], represents an image/texture on the GPU.
 /// {@endtemplate}
-class Texture extends Resource<GpuTexture> {
-  final ByteData sourceData;
-  final int width;
-  final int height;
-  final PixelFormat format;
-
-  /// {@macro texture}
-  Texture(
-    this.sourceData, {
-    required this.width,
-    required this.height,
-    this.format = PixelFormat.rgba8888,
-  });
-
+class Texture(
+  final ByteData sourceData, {
+  required final int width,
+  required final int height,
+  final PixelFormat format = PixelFormat.rgba8888,
+}) extends Resource<GpuTexture> {
   @override
   GpuTexture createResource() {
     return GpuBackend.instance.createTexture(

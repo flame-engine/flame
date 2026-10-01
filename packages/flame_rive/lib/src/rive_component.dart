@@ -4,39 +4,35 @@ import 'package:flame/components.dart';
 import 'package:flutter/rendering.dart';
 import 'package:rive/rive.dart';
 
-class RiveComponent extends PositionComponent {
-  final Artboard artboard;
-  final StateMachine? stateMachine;
-  final Alignment _alignment;
-  final bool _clipToBounds;
-  final Fit _riveFit;
-  final Paint? _layerPaint;
+class RiveComponent({
+  required final Artboard artboard,
+  final StateMachine? stateMachine,
+  bool antialiasing = true,
+  BoxFit fit = BoxFit.contain,
+  final Alignment _alignment = Alignment.center,
+  final bool _clipToBounds = false,
+  super.position,
+
+  /// The logical size of the component.
+  /// Default value is ArtboardSize
+  Vector2? size,
+  super.scale,
+  super.angle = 0.0,
+  super.anchor = Anchor.topLeft,
+  super.children,
+  super.priority,
+  super.key,
+}) extends PositionComponent {
+  final Fit _riveFit = _toRiveFit(fit);
+  final Paint? _layerPaint = antialiasing
+      ? null
+      : (Paint()..isAntiAlias = false);
 
   late Size _renderSize;
   AABB _frame = AABB();
   Size _frameSize = Size.zero;
 
-  RiveComponent({
-    required this.artboard,
-    this.stateMachine,
-    bool antialiasing = true,
-    BoxFit fit = BoxFit.contain,
-    this._alignment = Alignment.center,
-    this._clipToBounds = false,
-    super.position,
-
-    /// The logical size of the component.
-    /// Default value is ArtboardSize
-    Vector2? size,
-    super.scale,
-    super.angle = 0.0,
-    super.anchor = Anchor.topLeft,
-    super.children,
-    super.priority,
-    super.key,
-  }) : _riveFit = _toRiveFit(fit),
-       _layerPaint = antialiasing ? null : (Paint()..isAntiAlias = false),
-       super(size: size ?? Vector2(artboard.width, artboard.height)) {
+  this : super(size: size ?? Vector2(artboard.width, artboard.height)) {
     void updateRenderSize() {
       _renderSize = this.size.toSize();
     }

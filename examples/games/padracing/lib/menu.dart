@@ -5,11 +5,8 @@ import 'package:padracing/menu_card.dart';
 import 'package:padracing/padracing_game.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Menu extends StatelessWidget {
-  const Menu(this.game, {super.key});
-
-  final PadRacingGame game;
-
+class const Menu(final PadRacingGame game, {super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;

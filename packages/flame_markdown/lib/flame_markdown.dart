@@ -12,7 +12,10 @@ import 'package:markdown/markdown.dart';
 /// code blocks, images, and inline HTML.
 /// It is also possible that some otherwise valid markdown nestings of
 /// block and inline-type elements are not currently supported.
-class FlameMarkdown {
+class FlameMarkdown() {
+  /// Creates a [FlameMarkdown] instance.
+  this;
+
   /// Converts a markdown string to a [DocumentRoot] from Flame.
   ///
   /// This uses the `markdown` package to parse the markdown string

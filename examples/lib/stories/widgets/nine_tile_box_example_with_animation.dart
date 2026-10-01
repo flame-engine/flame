@@ -1,15 +1,14 @@
 import 'package:flame/widgets.dart';
 import 'package:material_ui/material_ui.dart';
 
-class AnimatedNineTileBoxWidgetExample extends StatefulWidget {
-  const AnimatedNineTileBoxWidgetExample({super.key});
-
+class const AnimatedNineTileBoxWidgetExample({super.key})
+    extends StatefulWidget {
   @override
   State<AnimatedNineTileBoxWidgetExample> createState() =>
       _AnimatedNineTileBoxWidgetExampleState();
 }
 
-class _AnimatedNineTileBoxWidgetExampleState
+class _AnimatedNineTileBoxWidgetExampleState()
     extends State<AnimatedNineTileBoxWidgetExample> {
   var _opacity = 1.0;
 

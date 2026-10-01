@@ -2,7 +2,7 @@ import 'package:doc_flame_examples/flower.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 
-class SequenceEffectGame extends FlameGame {
+class SequenceEffectGame() extends FlameGame {
   @override
   Future<void> onLoad() async {
     final flower = Flower(

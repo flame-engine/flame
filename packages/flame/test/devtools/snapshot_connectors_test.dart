@@ -20,7 +20,7 @@ Future<Color> _pixelAt(Image image, int x, int y) async {
   );
 }
 
-class _BackgroundGame extends FlameGame {
+class _BackgroundGame() extends FlameGame {
   @override
   Color backgroundColor() => const Color(0xFF0000FF);
 }

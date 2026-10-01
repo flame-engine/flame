@@ -22,15 +22,10 @@ Iterable<IntVector2>? findPath({
   );
 }
 
-class PathFinderData {
-  final Map<IntVector2, double> terrain;
-  final Set<IntVector2> unWalkableTiles;
-
-  const PathFinderData._({
-    required this.terrain,
-    required this.unWalkableTiles,
-  });
-
+class const PathFinderData._({
+  required final Map<IntVector2, double> terrain,
+  required final Set<IntVector2> unWalkableTiles,
+}) {
   factory PathFinderData.fromWorld({
     required Map<IntVector2, Terrain> terrain,
     required List<ColonistsObject> worldObjects,

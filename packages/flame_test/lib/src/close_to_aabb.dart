@@ -14,12 +14,8 @@ Matcher closeToAabb(Aabb2 expected, [double epsilon = 1e-15]) {
   return _IsCloseToAabb(expected, epsilon);
 }
 
-class _IsCloseToAabb extends Matcher {
-  const _IsCloseToAabb(this._expected, this._epsilon);
-
-  final Aabb2 _expected;
-  final double _epsilon;
-
+class const _IsCloseToAabb(final Aabb2 _expected, final double _epsilon)
+    extends Matcher {
   @override
   bool matches(dynamic item, Map matchState) {
     return (item is Aabb2) &&

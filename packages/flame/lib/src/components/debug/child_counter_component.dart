@@ -8,13 +8,10 @@ import 'package:flame/text.dart';
 /// a target component.
 ///
 /// Add it to the game to start seeing the count.
-class ChildCounterComponent<T extends Component> extends TextComponent {
-  ChildCounterComponent({
-    required this.target,
-    super.position,
-  });
-
-  final Component target;
+class ChildCounterComponent<T extends Component>({
+  required final Component target,
+  super.position,
+}) extends TextComponent {
   late String _label;
 
   @override

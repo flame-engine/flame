@@ -28,8 +28,8 @@ import 'package:flame_behaviors/flame_behaviors.dart';
 /// [PropagatingCollisionBehavior] and the game to register a
 /// [ScreenHitbox] for the screen edges.
 /// {@endtemplate}
-abstract class ScreenCollisionBehavior<Parent extends EntityMixin>
-    extends CollisionBehavior<ScreenHitbox, Parent> {
-  /// {@macro screen_collision_behavior}
-  ScreenCollisionBehavior({super.children, super.priority, super.key});
-}
+abstract class ScreenCollisionBehavior<Parent extends EntityMixin>({
+  super.children,
+  super.priority,
+  super.key,
+}) extends CollisionBehavior<ScreenHitbox, Parent>;

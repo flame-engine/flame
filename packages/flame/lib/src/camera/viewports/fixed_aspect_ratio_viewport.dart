@@ -11,14 +11,12 @@ import 'package:vector_math/vector_math.dart';
 /// This viewport will automatically adjust its size and position when the
 /// game canvas changes in size. At the same time, manually changing the size
 /// of this viewport is not supported.
-class FixedAspectRatioViewport extends Viewport {
-  FixedAspectRatioViewport({
-    required this.aspectRatio,
-    super.children,
-  }) : assert(aspectRatio > 0);
-
+class FixedAspectRatioViewport({
   /// The ratio of width to height of the viewport.
-  final double aspectRatio;
+  required final double aspectRatio,
+  super.children,
+}) extends Viewport {
+  this : assert(aspectRatio > 0);
 
   Rect _clipRect = Rect.zero;
 

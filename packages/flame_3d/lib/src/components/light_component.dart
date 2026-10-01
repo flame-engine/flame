@@ -6,12 +6,10 @@ import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
 
 /// A [Component3D] that represents a light source in 3D space.
-class LightComponent extends Component3D {
-  LightComponent({
-    required this.source,
-    super.position,
-  });
-
+class LightComponent({
+  required final LightSource source,
+  super.position,
+}) extends Component3D {
   LightComponent.point({
     Vector3? position,
     Color color = const Color(0xFFFFFFFF),
@@ -33,8 +31,6 @@ class LightComponent extends Component3D {
            intensity: intensity,
          ),
        );
-
-  final LightSource source;
 
   late final Light _light = Light(
     position: Vector3.fromBuffer(

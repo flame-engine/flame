@@ -6,7 +6,7 @@ import 'package:flame/text.dart';
 
 /// [TextRenderer] is an abstract interface for a class that can convert an
 /// arbitrary string of text into a renderable [InlineTextElement].
-abstract class TextRenderer {
+abstract class TextRenderer() {
   InlineTextElement format(String text);
 
   LineMetrics getLineMetrics(String text) {

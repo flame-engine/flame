@@ -16,13 +16,11 @@ import 'package:meta/meta.dart';
 ///
 /// If the route is popped without invoking [completeWith], then the
 /// [_defaultValue] will be used.
-abstract class ValueRoute<T> extends Route {
-  ValueRoute({required T value, super.transparent})
-    : _defaultValue = value,
-      _completer = Completer<T>(),
-      super(null);
+abstract class ValueRoute<T>({required T value, super.transparent})
+    extends Route {
+  this : _completer = Completer<T>(), super(null);
 
-  final T _defaultValue;
+  final T _defaultValue = value;
   final Completer<T> _completer;
 
   /// Future that will complete when this route is popped from the stack.

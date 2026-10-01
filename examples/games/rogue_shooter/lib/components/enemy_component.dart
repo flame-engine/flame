@@ -3,13 +3,13 @@ import 'package:flame/components.dart';
 import 'package:rogue_shooter/components/explosion_component.dart';
 import 'package:rogue_shooter/rogue_shooter_game.dart';
 
-class EnemyComponent extends SpriteAnimationComponent
+class EnemyComponent({required super.position})
+    extends SpriteAnimationComponent
     with HasGameRef<RogueShooterGame>, CollisionCallbacks {
   static const speed = 150;
   static final Vector2 initialSize = Vector2.all(25);
 
-  EnemyComponent({required super.position})
-    : super(size: initialSize, anchor: Anchor.center);
+  this : super(size: initialSize, anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {

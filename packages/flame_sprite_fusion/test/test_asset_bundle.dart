@@ -8,15 +8,10 @@ import 'package:flutter/services.dart' show CachingAssetBundle;
 /// Keys are full asset paths, exactly as they would be declared in a
 /// `pubspec.yaml`, and are mapped onto the fixture directory. For example,
 /// `assets/map.json` resolves to `test/assets/map.json`.
-class TestAssetBundle extends CachingAssetBundle {
-  TestAssetBundle({
-    required this.imageNames,
-    required this.stringNames,
-  });
-
-  final List<String> imageNames;
-  final List<String> stringNames;
-
+class TestAssetBundle({
+  required final List<String> imageNames,
+  required final List<String> stringNames,
+}) extends CachingAssetBundle {
   String _resolve(String key, List<String> known) {
     final name = key.startsWith('assets/')
         ? key.substring('assets/'.length)

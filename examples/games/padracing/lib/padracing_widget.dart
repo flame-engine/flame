@@ -5,9 +5,7 @@ import 'package:padracing/game_over.dart';
 import 'package:padracing/menu.dart';
 import 'package:padracing/padracing_game.dart';
 
-class PadracingWidget extends StatelessWidget {
-  const PadracingWidget({super.key});
-
+class const PadracingWidget({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = ThemeData(

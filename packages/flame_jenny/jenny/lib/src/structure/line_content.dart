@@ -5,13 +5,11 @@ import 'package:meta/meta.dart';
 /// The content of a single line in a dialogue. This contains both regular text,
 /// inline expressions, and markup attributes.
 @internal
-class LineContent {
-  LineContent(this.text, [this.expressions, this.attributes]);
-
-  final String text;
-  final List<InlineExpression>? expressions;
-  final List<MarkupAttribute>? attributes;
-
+class LineContent(
+  final String text, [
+  final List<InlineExpression>? expressions,
+  final List<MarkupAttribute>? attributes,
+]) {
   bool get isConst => expressions == null;
 
   /// Evaluates the line, substituting all inline expressions, and updating the
@@ -43,8 +41,4 @@ class LineContent {
 }
 
 @internal
-class InlineExpression {
-  InlineExpression(this.position, this.expression);
-  final int position;
-  final StringExpression expression;
-}
+class InlineExpression(final int position, final StringExpression expression);

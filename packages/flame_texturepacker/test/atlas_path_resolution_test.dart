@@ -6,11 +6,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _MockAssetBundle extends Mock implements AssetBundle;
+class _MockAssetBundle() extends Mock implements AssetBundle;
 
-class _MockImages extends Mock implements Images;
+class _MockImages() extends Mock implements Images;
 
-class FakeImage extends Mock implements ui.Image;
+class FakeImage() extends Mock implements ui.Image;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

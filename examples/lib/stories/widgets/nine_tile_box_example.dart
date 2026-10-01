@@ -1,16 +1,11 @@
 import 'package:flame/widgets.dart';
 import 'package:flutter/widgets.dart';
 
-class NineTileBoxWidgetExample extends StatelessWidget {
-  const NineTileBoxWidgetExample({
-    required this.width,
-    required this.height,
-    super.key,
-  });
-
-  final double width;
-  final double height;
-
+class const NineTileBoxWidgetExample({
+  required final double width,
+  required final double height,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(

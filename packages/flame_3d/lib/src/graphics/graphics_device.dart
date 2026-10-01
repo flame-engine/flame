@@ -14,18 +14,13 @@ import 'package:flame_3d/src/graphics/backend/gpu_handles.dart';
 /// render passes can be created with [beginPass]/[endPass], each producing an
 /// [Image].
 /// {@endtemplate}
-class GraphicsDevice {
-  /// {@macro graphics_device}
-  GraphicsDevice({
-    this.clearValue = const Color(0x00000000),
-    GpuBackend? backend,
-  }) : backend = backend ?? GpuBackend.instance;
-
-  /// The GPU backend this device records its rendering commands through.
-  final GpuBackend backend;
-
+class GraphicsDevice({
   /// The clear value, used to clear out the screen.
-  final Color clearValue;
+  final Color clearValue = const Color(0x00000000),
+  GpuBackend? backend,
+}) {
+  /// The GPU backend this device records its rendering commands through.
+  final GpuBackend backend = backend ?? GpuBackend.instance;
 
   /// Blend state applied to each render pass.
   BlendState blendState = BlendState.alphaBlend;

@@ -1,16 +1,12 @@
 import 'package:flame_devtools/repository.dart';
 import 'package:flutter/material.dart';
 
-class DebugModeButton extends StatefulWidget {
-  const DebugModeButton({super.key, this.id});
-
-  final int? id;
-
+class const DebugModeButton({super.key, final int? id}) extends StatefulWidget {
   @override
   State<DebugModeButton> createState() => _DebugModeButtonState();
 }
 
-class _DebugModeButtonState extends State<DebugModeButton> {
+class _DebugModeButtonState() extends State<DebugModeButton> {
   late Future<bool> _debugMode;
 
   @override

@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 
-class ComposabilityExample extends FlameGame {
+class ComposabilityExample() extends FlameGame {
   static const String description = '''
     In this example we showcase how you can add children to a component and how
     they transform together with their parent, if the parent is a
@@ -30,11 +30,13 @@ class ComposabilityExample extends FlameGame {
   }
 }
 
-class ParentSquare extends RectangleComponent with HasGameRef {
+class ParentSquare(Vector2 position, Vector2 size)
+    extends RectangleComponent
+    with HasGameRef {
   static final defaultPaint = BasicPalette.white.paint()
     ..style = PaintingStyle.stroke;
 
-  ParentSquare(Vector2 position, Vector2 size)
+  this
     : super(
         position: position,
         size: size,

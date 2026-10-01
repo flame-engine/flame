@@ -3,11 +3,7 @@ import 'package:jenny/src/errors.dart';
 import 'package:jenny/src/structure/commands/command.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 
-class WaitCommand extends Command {
-  const WaitCommand(this.arg);
-
-  final NumExpression arg;
-
+class const WaitCommand(final NumExpression arg) extends Command {
   @override
   String get name => 'wait';
 

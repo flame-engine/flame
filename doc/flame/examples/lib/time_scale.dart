@@ -4,7 +4,7 @@ import 'package:doc_flame_examples/ember.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
-class TimeScaleGame extends FlameGame with HasTimeScale {
+class TimeScaleGame() extends FlameGame with HasTimeScale {
   final _timeScales = [0.5, 1.0, 2.0];
   var _index = 1;
 

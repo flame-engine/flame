@@ -4,8 +4,8 @@ import 'package:flame/src/effects/effect.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _MyEffect extends Effect {
-  _MyEffect(super.controller) {
+class _MyEffect(super.controller) extends Effect {
+  this {
     completed.whenComplete(() => ++completedCounter);
   }
 

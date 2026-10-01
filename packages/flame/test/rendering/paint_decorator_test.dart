@@ -105,12 +105,12 @@ void main() {
   });
 }
 
-class _DecoratedSprite extends SpriteComponent {
-  _DecoratedSprite({
-    required Decorator decorator,
-    super.sprite,
-    super.position,
-  }) {
+class _DecoratedSprite({
+  required Decorator decorator,
+  super.sprite,
+  super.position,
+}) extends SpriteComponent {
+  this {
     this.decorator.addLast(decorator);
   }
 }

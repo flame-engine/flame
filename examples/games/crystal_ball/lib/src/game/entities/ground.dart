@@ -3,17 +3,18 @@ import 'package:crystal_ball/src/game/game.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
-class Ground extends Component {
-  Ground() : super(children: [Rectangle(kPlayerSize.y / 2)]) {
+class Ground() extends Component {
+  this : super(children: [Rectangle(kPlayerSize.y / 2)]) {
     rectangle = children.first as Rectangle;
   }
 
   late final Rectangle rectangle;
 }
 
-class Rectangle extends PositionComponent
+class Rectangle(double y)
+    extends PositionComponent
     with CollisionCallbacks, ParentIsA<Ground>, HasGameRef<CrystalBallGame> {
-  Rectangle(double y)
+  this
     : super(
         anchor: Anchor.topCenter,
         position: Vector2(0, y),

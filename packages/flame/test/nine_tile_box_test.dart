@@ -61,8 +61,8 @@ void main() {
   });
 }
 
-class _MyComponent1 extends PositionComponent {
-  _MyComponent1() : super(size: Vector2(300, 200));
+class _MyComponent1() extends PositionComponent {
+  this : super(size: Vector2(300, 200));
   late final Sprite sprite;
   late final NineTileBox nineTileBox;
   final bgPaint = Paint()..color = const Color.fromARGB(255, 57, 113, 158);
@@ -83,8 +83,8 @@ class _MyComponent1 extends PositionComponent {
   }
 }
 
-class _MyComponent2 extends PositionComponent {
-  _MyComponent2() : super(size: Vector2(300, 200));
+class _MyComponent2() extends PositionComponent {
+  this : super(size: Vector2(300, 200));
   late final Sprite sprite;
   late final NineTileBox nineTileBox;
   final bgPaint = Paint()..color = const Color.fromARGB(255, 57, 113, 158);

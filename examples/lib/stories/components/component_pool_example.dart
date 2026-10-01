@@ -5,7 +5,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart';
 
-class ComponentPoolExample extends FlameGame {
+class ComponentPoolExample() extends FlameGame {
   static const String description =
       'Tap on the screen to spawn a burst of pooled balls. '
       'Watch the stats to see active vs pooled balls and observe '
@@ -14,7 +14,7 @@ class ComponentPoolExample extends FlameGame {
   static const gameWidth = 800.0;
   static const gameHeight = 600.0;
 
-  ComponentPoolExample()
+  this
     : super(
         world: _BallWorld(),
         camera: CameraComponent.withFixedResolution(
@@ -26,7 +26,7 @@ class ComponentPoolExample extends FlameGame {
   }
 }
 
-class _BallWorld extends World with TapCallbacks {
+class _BallWorld() extends World with TapCallbacks {
   late final ComponentPool<_PooledBall> ballPool;
   late final _StatsDisplay statsDisplay;
   final Random _random = Random();
@@ -90,7 +90,8 @@ class _BallWorld extends World with TapCallbacks {
 /// Uses two child [CircleComponent]s for visuals: a shadow (rendered first via
 /// lower priority) and the ball itself on top. A bouncing scale effect
 /// simulates the ball bouncing up and down as it travels outward.
-class _PooledBall extends PositionComponent
+class _PooledBall()
+    extends PositionComponent
     with HasGameRef, ParentIsA<_BallWorld> {
   static const _radius = 4.0;
   static const _bounceSpeed = 8.0;
@@ -102,7 +103,7 @@ class _PooledBall extends PositionComponent
   late final CircleComponent _shadow;
   late final CircleComponent _ball;
 
-  _PooledBall() : super(anchor: Anchor.center);
+  this : super(anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {
@@ -164,11 +165,12 @@ class _PooledBall extends PositionComponent
 }
 
 /// Displays statistics about the ball pool.
-class _StatsDisplay extends TextComponent with ParentIsA<_BallWorld> {
-  final ComponentPool<_PooledBall> pool;
+class _StatsDisplay({required final ComponentPool<_PooledBall> pool})
+    extends TextComponent
+    with ParentIsA<_BallWorld> {
   int _activeBalls = 0;
 
-  _StatsDisplay({required this.pool})
+  this
     : super(
         position: Vector2(10, 10),
         textRenderer: TextPaint(

@@ -201,12 +201,10 @@ mixin HasPaint<T extends Object> on Component
   void onChanged() {}
 }
 
-class _ProxyOpacityProvider<T extends Object> implements OpacityProvider {
-  _ProxyOpacityProvider(this.paintId, this.target);
-
-  final T paintId;
-  final HasPaint<T> target;
-
+class _ProxyOpacityProvider<T extends Object>(
+  final T paintId,
+  final HasPaint<T> target,
+) implements OpacityProvider {
   @override
   double get opacity => target.getOpacity(paintId: paintId);
 
@@ -214,12 +212,12 @@ class _ProxyOpacityProvider<T extends Object> implements OpacityProvider {
   set opacity(double value) => target.setOpacity(value, paintId: paintId);
 }
 
-class _MultiPaintOpacityProvider<T extends Object> implements OpacityProvider {
-  _MultiPaintOpacityProvider(
-    this.paintIds,
-    this.target, {
-    required this.includeLayers,
-  }) {
+class _MultiPaintOpacityProvider<T extends Object>(
+  final List<T?> paintIds,
+  final HasPaint<T> target, {
+  required final bool includeLayers,
+}) implements OpacityProvider {
+  this {
     final maxOpacity = opacity;
 
     _opacityRatios = [
@@ -233,9 +231,6 @@ class _MultiPaintOpacityProvider<T extends Object> implements OpacityProvider {
         .toList(growable: false);
   }
 
-  final List<T?> paintIds;
-  final HasPaint<T> target;
-  final bool includeLayers;
   late final List<double> _opacityRatios;
   late final List<double>? _layerOpacityRatios;
 

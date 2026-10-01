@@ -12,12 +12,12 @@ import 'package:flame/effects.dart';
 /// The child's duration is randomized first at construction, and then at each
 /// reset (`setToStart`). Thus, the child has a concrete well-defined duration
 /// at any point in time.
-class RandomEffectController extends EffectController
+class RandomEffectController(
+  final DurationEffectController _child,
+  final RandomVariable randomGenerator,
+) extends EffectController
     with HasSingleChildEffectController<DurationEffectController> {
-  RandomEffectController(DurationEffectController child, this.randomGenerator)
-    : assert(!child.isInfinite, 'Child cannot be infinite'),
-      _child = child,
-      super.empty() {
+  this : assert(!_child.isInfinite, 'Child cannot be infinite'), super.empty() {
     _initializeDuration();
   }
 
@@ -51,9 +51,6 @@ class RandomEffectController extends EffectController
       _ExponentialRandomVariable(beta, random),
     );
   }
-
-  final DurationEffectController _child;
-  final RandomVariable randomGenerator;
 
   @override
   DurationEffectController get child => _child;
@@ -95,11 +92,9 @@ class RandomEffectController extends EffectController
 /// [RandomVariable] is an object capable of producing random values with the
 /// prescribed distribution function. Each distribution is implemented within
 /// its own derived class.
-abstract class RandomVariable {
-  RandomVariable(Random? random) : _random = random ?? _defaultRandom;
-
+abstract class RandomVariable(Random? random) {
   /// Internal random number generator.
-  final Random _random;
+  final Random _random = random ?? _defaultRandom;
   static final Random _defaultRandom = Random();
 
   /// Produces the next value for this random variable.
@@ -107,24 +102,19 @@ abstract class RandomVariable {
 }
 
 /// Random variable distributed uniformly between [min] and [max].
-class _UniformRandomVariable extends RandomVariable {
-  _UniformRandomVariable(this.min, this.max, Random? random) : super(random);
-
-  final double min;
-  final double max;
-
+class _UniformRandomVariable(final double min, final double max, super.random)
+    extends RandomVariable {
   @override
   double nextValue() => _random.nextDouble() * (max - min) + min;
 }
 
 /// Exponentially distributed random variable with rate parameter [beta].
-class _ExponentialRandomVariable extends RandomVariable {
-  _ExponentialRandomVariable(this.beta, Random? random) : super(random);
-
+class _ExponentialRandomVariable(
   /// Rate parameter of the exponential distribution. This will be the average
   /// of all returned values
-  final double beta;
-
+  final double beta,
+  super.random,
+) extends RandomVariable {
   @override
   double nextValue() => -log(1 - _random.nextDouble()) * beta;
 }

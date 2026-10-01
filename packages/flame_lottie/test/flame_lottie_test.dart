@@ -53,11 +53,9 @@ void main() {
 ByteData _bytesForFile(String path) =>
     File(path).readAsBytesSync().buffer.asByteData();
 
-class _FakeAssetBundle extends Fake implements AssetBundle {
-  final Map<String, Future<ByteData>> data;
-
-  _FakeAssetBundle(this.data);
-
+class _FakeAssetBundle(final Map<String, Future<ByteData>> data)
+    extends Fake
+    implements AssetBundle {
   @override
   Future<ByteData> load(String key) {
     return data[key] ?? (Future.error('Asset $key not found'));

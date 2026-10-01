@@ -8,7 +8,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class RevoluteJointWithMotorExample extends Forge2DExampleGame {
+class RevoluteJointWithMotorExample() extends Forge2DExampleGame {
   static const String description = '''
     This example showcases a revolute joint, which is the spinning balls in the
     center.
@@ -18,10 +18,11 @@ class RevoluteJointWithMotorExample extends Forge2DExampleGame {
     down the funnel.
   ''';
 
-  RevoluteJointWithMotorExample() : super(world: RevoluteJointWithMotorWorld());
+  this : super(world: RevoluteJointWithMotorWorld());
 }
 
-class RevoluteJointWithMotorWorld extends Forge2DWorld
+class RevoluteJointWithMotorWorld()
+    extends Forge2DWorld
     with TapCallbacks, HasGameRef<Forge2DGame> {
   final random = Random();
 
@@ -47,11 +48,7 @@ class RevoluteJointWithMotorWorld extends Forge2DWorld
   }
 }
 
-class CircleShuffler extends BodyComponent {
-  CircleShuffler(this._center);
-
-  final Vector2 _center;
-
+class CircleShuffler(final Vector2 _center) extends BodyComponent {
   @override
   Body createBody() {
     final bodyDef = BodyDef(
@@ -91,13 +88,12 @@ class CircleShuffler extends BodyComponent {
   }
 }
 
-class CornerRamp extends BodyComponent with GlowingBody {
-  CornerRamp(this._center, {this.isMirrored = false}) {
+class CornerRamp(final Vector2 _center, {final bool isMirrored = false})
+    extends BodyComponent
+    with GlowingBody {
+  this {
     paint = Paint()..color = ExampleColors.slate;
   }
-
-  final bool isMirrored;
-  final Vector2 _center;
 
   @override
   Body createBody() {

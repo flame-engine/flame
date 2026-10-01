@@ -6,7 +6,9 @@ import 'package:flame_isolate_example/colonists_game.dart';
 import 'package:flame_isolate_example/standard/int_vector2.dart';
 import 'package:material_ui/material_ui.dart';
 
-enum MoveDirection {
+enum MoveDirection({
+  required final bool isLeft,
+}) {
   idle(isLeft: false), // 0
   up(isLeft: false), // 1
   down(isLeft: false), // 2
@@ -16,12 +18,6 @@ enum MoveDirection {
   upLeft(isLeft: true), // 6
   left(isLeft: true), // 7
   downRight(isLeft: false); // 8
-
-  final bool isLeft;
-
-  MoveDirection({
-    required this.isLeft,
-  });
 
   /// Returns the horizontally mirrored direction
   MoveDirection get mirrored {
@@ -104,10 +100,10 @@ mixin Movable on PositionComponent, HasGameRef<ColonistsGame> {
   };
 }
 
-class PathLine extends ShapeComponent {
-  final Path path;
+class PathLine(List<Vector2> path) extends ShapeComponent {
+  final Path path = _toPath(path);
 
-  PathLine(List<Vector2> path) : path = _toPath(path) {
+  this {
     paint = Paint()
       ..color = const Color(0x30ffffff)
       ..style = PaintingStyle.stroke;

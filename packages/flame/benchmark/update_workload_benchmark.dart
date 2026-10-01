@@ -32,17 +32,13 @@ const _worldHeight = 600.0;
 /// the light and heavy rows are not directly comparable to each other, only
 /// to their own no-op counterpart in the traversal suite and across engine
 /// versions.
-abstract class _WorkloadBenchmark extends AsyncBenchmarkBase {
+abstract class _WorkloadBenchmark(
+  super.name, {
+  required final int ticks,
+  required final bool heavy,
+}) extends AsyncBenchmarkBase {
   static const _amountTargets = 32;
 
-  _WorkloadBenchmark(
-    super.name, {
-    required this.ticks,
-    required this.heavy,
-  });
-
-  final int ticks;
-  final bool heavy;
   final Random _random = Random(69420);
   late final FlameGame _game;
   late final List<Vector2> _targets;
@@ -100,10 +96,11 @@ abstract class _WorkloadBenchmark extends AsyncBenchmarkBase {
 }
 
 /// 10k components in a single children container.
-class WideTreeWorkloadBenchmark extends _WorkloadBenchmark {
+class WideTreeWorkloadBenchmark({required super.heavy})
+    extends _WorkloadBenchmark {
   static const _amountChildren = 10000;
 
-  WideTreeWorkloadBenchmark({required super.heavy})
+  this
     : super(
         'Update wide tree (10k x 1), ${heavy ? 'heavy' : 'light'} logic',
         ticks: heavy ? 10 : 50,
@@ -121,11 +118,12 @@ class WideTreeWorkloadBenchmark extends _WorkloadBenchmark {
 }
 
 /// 1k parents with 10 children each: many small children containers.
-class NestedTreeWorkloadBenchmark extends _WorkloadBenchmark {
+class NestedTreeWorkloadBenchmark({required super.heavy})
+    extends _WorkloadBenchmark {
   static const _amountParents = 1000;
   static const _amountChildren = 10;
 
-  NestedTreeWorkloadBenchmark({required super.heavy})
+  this
     : super(
         'Update nested tree (1k x 10), ${heavy ? 'heavy' : 'light'} logic',
         ticks: heavy ? 9 : 45,
@@ -150,11 +148,10 @@ class NestedTreeWorkloadBenchmark extends _WorkloadBenchmark {
   }
 }
 
-class _LightComponent extends PositionComponent {
-  final Vector2 velocity;
-
-  _LightComponent({required super.position, required this.velocity});
-
+class _LightComponent({
+  required super.position,
+  required final Vector2 velocity,
+}) extends PositionComponent {
   @override
   void update(double dt) {
     position.addScaled(velocity, dt);
@@ -167,23 +164,18 @@ class _LightComponent extends PositionComponent {
   }
 }
 
-class _HeavyComponent extends PositionComponent {
+class _HeavyComponent({
+  required super.position,
+  required final Vector2 velocity,
+  required final List<Vector2> targets,
+  required var double cooldown,
+}) extends PositionComponent {
   static const _maxSpeed = 120.0;
   static const _acceleration = 300.0;
   static const _cooldownDuration = 1.5;
 
-  final Vector2 velocity;
-  final List<Vector2> targets;
   final Vector2 _steering = Vector2.zero();
-  double cooldown;
   int shotsFired = 0;
-
-  _HeavyComponent({
-    required super.position,
-    required this.velocity,
-    required this.targets,
-    required this.cooldown,
-  });
 
   @override
   void update(double dt) {

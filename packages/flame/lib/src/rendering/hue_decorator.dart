@@ -43,11 +43,8 @@ List<double> hueRotationMatrix(double angle) {
 /// **Performance Note**: This decorator uses `canvas.saveLayer()` which has
 /// significant overhead compared to direct [Paint] manipulation (like
 /// `HueEffect`). Prefer `HueEffect` for high-density rendering.
-class HueDecorator extends Decorator {
-  HueDecorator({this._hue = 0.0});
-
+class HueDecorator({var double _hue = 0.0}) extends Decorator {
   final _paint = Paint();
-  double _hue;
   bool _isDirty = true;
 
   /// The hue shift in radians.

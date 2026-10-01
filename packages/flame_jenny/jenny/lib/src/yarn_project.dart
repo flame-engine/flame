@@ -18,8 +18,8 @@ import 'package:meta/meta.dart';
 /// - [functions]: user-defined functions;
 /// - [commands]: user-defined commands;
 ///
-class YarnProject {
-  YarnProject()
+class YarnProject() {
+  this
     : nodes = <String, Node>{},
       variables = VariableStorage(),
       functions = FunctionStorage(),

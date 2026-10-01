@@ -20,15 +20,12 @@ import 'package:flame_3d/resources.dart';
 /// See the [MeshComponent] for an [Object3D] that has a visual representation
 /// using a [Mesh].
 /// {@endtemplate}
-abstract class Object3D extends Component3D {
-  /// {@macro object_3d}
-  Object3D({
-    super.position,
-    super.scale,
-    super.rotation,
-    super.children,
-  });
-
+abstract class Object3D({
+  super.position,
+  super.scale,
+  super.rotation,
+  super.children,
+}) extends Component3D {
   /// Whether an ancestor's AABB was fully inside the frustum, meaning
   /// children can skip their own frustum tests.
   static bool _ancestorFullyInside = false;

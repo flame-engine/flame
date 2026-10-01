@@ -3,13 +3,11 @@ import 'package:jenny/src/structure/commands/command.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/variable_storage.dart';
 
-class SetCommand extends Command {
-  const SetCommand(this.variable, this.expression, this.storage);
-
-  final String variable;
-  final Expression expression;
-  final VariableStorage storage;
-
+class const SetCommand(
+  final String variable,
+  final Expression expression,
+  final VariableStorage storage,
+) extends Command {
   @override
   String get name => 'set';
 

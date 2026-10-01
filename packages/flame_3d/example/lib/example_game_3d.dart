@@ -11,11 +11,12 @@ import 'package:flame_3d_example/scenarios/game_scenario.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-class ExampleGame3D extends FlameGame3D<World3D, ExampleCamera3D>
+class ExampleGame3D()
+    extends FlameGame3D<World3D, ExampleCamera3D>
     with DragCallbacks, ScrollCallbacks, HasKeyboardHandlerComponents {
   late final Player player;
 
-  ExampleGame3D()
+  this
     : super(
         world: World3D(),
         camera: ExampleCamera3D(),

@@ -4,7 +4,8 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 
 /// Showcases how to mix tap and drag callbacks
-class MultitapAdvancedExample extends FlameGame
+class MultitapAdvancedExample()
+    extends FlameGame
     with TapCallbacks, DragCallbacks {
   static const String description = '''
     This showcases the use of both `TapCallbacks` and `DragCallbacks`

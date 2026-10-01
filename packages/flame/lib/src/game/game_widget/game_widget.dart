@@ -206,7 +206,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   }
 }
 
-class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
+class GameWidgetState<T extends Game>() extends State<GameWidget<T>> {
   late T currentGame;
 
   Future<void> get loaderFuture => _loaderFuture ??= (() async {

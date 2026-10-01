@@ -5,7 +5,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart';
 
-class DynamicScaleDragExample extends FlameGame {
+class DynamicScaleDragExample() extends FlameGame {
   static const String description = '''
     Demonstrates dynamically adding draggable and scalable components at
     runtime. Use the buttons to spawn components with different interaction
@@ -104,17 +104,13 @@ class DynamicScaleDragExample extends FlameGame {
   }
 }
 
-class _Button extends PositionComponent with TapCallbacks {
-  _Button({
-    required this._text,
-    required super.position,
-    required this._color,
-    required this._onPressed,
-  }) : super(size: Vector2(100, 30));
-
-  final Color _color;
-  final VoidCallback _onPressed;
-  final String _text;
+class _Button({
+  required final String _text,
+  required super.position,
+  required final Color _color,
+  required final VoidCallback _onPressed,
+}) extends PositionComponent with TapCallbacks {
+  this : super(size: Vector2(100, 30));
 
   @override
   Future<void> onLoad() async {
@@ -145,20 +141,18 @@ class _Button extends PositionComponent with TapCallbacks {
 }
 
 /// A rectangle that only responds to drag.
-class _DragBox extends RectangleComponent
-    with DragCallbacks, HasGameRef<FlameGame> {
-  _DragBox({
-    required this._label,
-    required Vector2 position,
-    required Color color,
-  }) : super(
-         position: position,
-         size: Vector2.all(120),
-         anchor: Anchor.center,
-         paint: Paint()..color = color,
-       );
-
-  final String _label;
+class _DragBox({
+  required final String _label,
+  required Vector2 position,
+  required Color color,
+}) extends RectangleComponent with DragCallbacks, HasGameRef<FlameGame> {
+  this
+    : super(
+        position: position,
+        size: Vector2.all(120),
+        anchor: Anchor.center,
+        paint: Paint()..color = color,
+      );
 
   @override
   Future<void> onLoad() async {
@@ -181,19 +175,19 @@ class _DragBox extends RectangleComponent
 }
 
 /// A rectangle that only responds to scale (pinch/zoom).
-class _ScaleBox extends RectangleComponent with ScaleCallbacks {
-  _ScaleBox({
-    required this._label,
-    required Vector2 position,
-    required Color color,
-  }) : super(
-         position: position,
-         size: Vector2.all(120),
-         anchor: Anchor.center,
-         paint: Paint()..color = color,
-       );
+class _ScaleBox({
+  required final String _label,
+  required Vector2 position,
+  required Color color,
+}) extends RectangleComponent with ScaleCallbacks {
+  this
+    : super(
+        position: position,
+        size: Vector2.all(120),
+        anchor: Anchor.center,
+        paint: Paint()..color = color,
+      );
 
-  final String _label;
   double _initialAngle = 0;
   double _lastScale = 1.0;
 
@@ -231,20 +225,20 @@ class _ScaleBox extends RectangleComponent with ScaleCallbacks {
 }
 
 /// A rectangle that responds to both drag and scale.
-class _DragScaleBox extends RectangleComponent
+class _DragScaleBox({
+  required final String _label,
+  required Vector2 position,
+  required Color color,
+}) extends RectangleComponent
     with ScaleCallbacks, DragCallbacks, HasGameRef<FlameGame> {
-  _DragScaleBox({
-    required this._label,
-    required Vector2 position,
-    required Color color,
-  }) : super(
-         position: position,
-         size: Vector2.all(120),
-         anchor: Anchor.center,
-         paint: Paint()..color = color,
-       );
+  this
+    : super(
+        position: position,
+        size: Vector2.all(120),
+        anchor: Anchor.center,
+        paint: Paint()..color = color,
+      );
 
-  final String _label;
   double _initialAngle = 0;
   double _lastScale = 1.0;
 

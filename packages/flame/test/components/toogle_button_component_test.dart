@@ -244,13 +244,9 @@ void main() {
   });
 }
 
-class _SimpleStatelessWidget extends StatelessWidget {
-  const _SimpleStatelessWidget({
-    required this._build,
-  });
-
-  final Widget Function(BuildContext) _build;
-
+class const _SimpleStatelessWidget({
+  required final Widget Function(BuildContext) _build,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) => _build(context);
 }

@@ -11,16 +11,14 @@ const _amountTicks = 500;
 const _amountInputs = 125;
 const _amountChildren = 10;
 
-class UpdateComponentsBenchmark extends AsyncBenchmarkBase {
-  final Random random;
-
+class UpdateComponentsBenchmark(final Random random)
+    extends AsyncBenchmarkBase {
   late final FlameGame _game;
   late final List<_BenchmarkComponent> _components;
   late final List<double> _dts;
   late final Set<int> _inputTicks;
 
-  UpdateComponentsBenchmark(this.random)
-    : super('Updating Components Benchmark');
+  this : super('Updating Components Benchmark');
 
   static Future<void> main() async {
     final r = Random(69420);
@@ -65,13 +63,10 @@ class UpdateComponentsBenchmark extends AsyncBenchmarkBase {
   }
 }
 
-class _BenchmarkComponent extends PositionComponent {
+class _BenchmarkComponent(final int id) extends PositionComponent {
   static const _groundY = -20.0;
 
-  final int id;
   final Vector2 velocity = Vector2.zero();
-
-  _BenchmarkComponent(this.id);
 
   @override
   Future<void> onLoad() async {

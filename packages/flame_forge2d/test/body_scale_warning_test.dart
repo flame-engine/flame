@@ -3,12 +3,10 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _ShapeBody extends BodyComponent {
-  _ShapeBody({required this.geometry, required this.type});
-
-  final ShapeGeometry geometry;
-  final BodyType type;
-
+class _ShapeBody({
+  required final ShapeGeometry geometry,
+  required final BodyType type,
+}) extends BodyComponent {
   @override
   Body createBody() =>
       world.createBody(BodyDef(type: type))..createShape(geometry, ShapeDef());

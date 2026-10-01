@@ -21,8 +21,8 @@ final _style = TextStyle(
   ],
 );
 
-class SimpleHud extends Component with HasGameRef<ExampleGame3D> {
-  SimpleHud() : super(children: [FpsComponent()]);
+class SimpleHud() extends Component with HasGameRef<ExampleGame3D> {
+  this : super(children: [FpsComponent()]);
 
   String get fps =>
       children.query<FpsComponent>().firstOrNull?.fps.toStringAsFixed(2) ?? '0';

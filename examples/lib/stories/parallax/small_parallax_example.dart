@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 
-class SmallParallaxExample extends FlameGame {
+class SmallParallaxExample() extends FlameGame {
   static const String description = '''
     Shows how to create a smaller parallax in the center of the screen.
   ''';

@@ -15,7 +15,7 @@ import 'package:flame/src/devtools/dev_tools_connector.dart';
 /// `world` parameter set to `true`, or a `rect` given as `x,y,width,height`
 /// in world coordinates, the world is rendered directly instead of through
 /// the camera, which also shows the components that are off screen.
-class GameSnapshotConnector extends DevToolsConnector {
+class GameSnapshotConnector() extends DevToolsConnector {
   @override
   void init() {
     registerExtension(

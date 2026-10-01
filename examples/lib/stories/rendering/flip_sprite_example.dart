@@ -1,7 +1,7 @@
 import 'package:examples/commons/ember.dart';
 import 'package:flame/game.dart';
 
-class FlipSpriteExample extends FlameGame {
+class FlipSpriteExample() extends FlameGame {
   static const String description = '''
     In this example we show how you can flip components horizontally and
     vertically.

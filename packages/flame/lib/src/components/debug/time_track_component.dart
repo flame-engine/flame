@@ -14,9 +14,7 @@ import 'package:flame/text.dart';
 /// and [TimeTrackComponent.end] with that same identifier to finish tracking.
 ///
 /// To see the recorded times, simply add this component to your game.
-class TimeTrackComponent extends TextComponent {
-  TimeTrackComponent({super.position});
-
+class TimeTrackComponent({super.position}) extends TextComponent {
   static final Map<String, int> _startTimes = {};
   static final Map<String, int> _endTimes = {};
 

@@ -6,10 +6,17 @@ import 'package:meta/meta.dart';
 
 /// A component that uses a [Timer] instance which you can react to when it has
 /// finished.
-class TimerComponent extends Component {
+class TimerComponent({
+  required double period,
+  bool repeat = false,
+  bool autoStart = true,
+  final bool removeOnFinish = false,
+  VoidCallback? onTick,
+  final bool tickWhenLoaded = false,
+  int? tickCount,
+  super.key,
+}) extends Component {
   late final Timer timer;
-  final bool removeOnFinish;
-  final bool tickWhenLoaded;
 
   /// Creates a [TimerComponent]
   ///
@@ -23,16 +30,7 @@ class TimerComponent extends Component {
   /// [tickCount] The number of time the timer will tick before stopping.
   /// This is is only used when [repeat] is true. If null,
   /// the timer will run indefinitely.
-  TimerComponent({
-    required double period,
-    bool repeat = false,
-    bool autoStart = true,
-    this.removeOnFinish = false,
-    VoidCallback? onTick,
-    this.tickWhenLoaded = false,
-    int? tickCount,
-    super.key,
-  }) {
+  this {
     timer = Timer(
       period: period,
       repeat: repeat,

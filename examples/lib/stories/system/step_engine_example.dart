@@ -10,7 +10,8 @@ import 'package:flame/palette.dart';
 import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 
-class StepEngineExample extends FlameGame
+class StepEngineExample()
+    extends FlameGame
     with HasCollisionDetection, HasKeyboardHandlerComponents {
   static const description = '''
     This example demonstrates how the game can be advanced frame by frame using
@@ -122,14 +123,12 @@ class StepEngineExample extends FlameGame
   );
 }
 
-class _DetectorComponents extends CircleComponent with CollisionCallbacks {
-  _DetectorComponents({
-    super.radius,
-    super.position,
-    super.anchor,
-    super.children,
-  });
-
+class _DetectorComponents({
+  super.radius,
+  super.position,
+  super.anchor,
+  super.children,
+}) extends CircleComponent with CollisionCallbacks {
   @override
   void onCollisionStart(
     List<Vector2> intersectionPoints,

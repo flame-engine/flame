@@ -12,7 +12,7 @@ import 'package:flame/text.dart';
 ///
 /// Elements are at the final stage of the text rendering pipeline, they are
 /// created during the layout step.
-abstract class TextElement {
+abstract class TextElement() {
   /// Moves the element by ([dx], [dy]) relative to its current location.
   void translate(double dx, double dy);
 

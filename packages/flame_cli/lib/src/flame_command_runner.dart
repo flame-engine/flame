@@ -21,20 +21,20 @@ import 'package:io/io.dart';
 
 /// The runner of the `flame` command, which returns the exit code instead of
 /// throwing when a command fails.
-class FlameCommandRunner extends CommandRunner<int> {
-  FlameCommandRunner({
-    StringSink? out,
-    StringSink? err,
-    Directory? workingDirectory,
-    ProcessStarter? startProcess,
-    GameConnector? connect,
-    Stream<List<int>>? input,
-  }) : _err = err ?? stderr,
-       super(
-         'flame',
-         'Create Flame games, and launch, observe, change and play the ones '
-             'that are running in debug mode.',
-       ) {
+class FlameCommandRunner({
+  StringSink? out,
+  StringSink? err,
+  Directory? workingDirectory,
+  ProcessStarter? startProcess,
+  GameConnector? connect,
+  Stream<List<int>>? input,
+}) extends CommandRunner<int> {
+  this
+    : super(
+        'flame',
+        'Create Flame games, and launch, observe, change and play the ones '
+            'that are running in debug mode.',
+      ) {
     final output = out ?? stdout;
     final directory = workingDirectory ?? Directory.current;
     addCommand(
@@ -75,7 +75,7 @@ class FlameCommandRunner extends CommandRunner<int> {
     addCommand(DiffCommand(output, directory));
   }
 
-  final StringSink _err;
+  final StringSink _err = err ?? stderr;
 
   @override
   Future<int> run(Iterable<String> args) async {

@@ -27,12 +27,13 @@ void parse(String text, YarnProject project) {
   _Parser(project, text, tokens).parseMain();
 }
 
-class _Parser {
-  _Parser(this.project, this.text, this.tokens) : position = 0;
+class _Parser(
+  final YarnProject project,
+  final String text,
+  final List<Token> tokens,
+) {
+  this : position = 0;
 
-  final YarnProject project;
-  final String text;
-  final List<Token> tokens;
   VariableStorage? localVariables;
 
   /// The index of the next token to parse.
@@ -976,14 +977,9 @@ class _Parser {
   }
 }
 
-class _NodeHeader {
-  _NodeHeader(this.title, this.tags);
+class _NodeHeader(var String? title, var Map<String, String>? tags);
 
-  String? title;
-  Map<String, String>? tags;
-}
-
-class _Markup {
+class _Markup() {
   bool closing = false;
   bool selfClosing = false;
   String? name;

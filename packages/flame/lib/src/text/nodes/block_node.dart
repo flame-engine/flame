@@ -11,7 +11,7 @@ import 'package:flame/text.dart';
 /// Implementations include:
 /// * ColumnNode
 /// * TextBlockNode (which itself can be a HeaderNode or ParagraphNode)
-abstract class BlockNode implements TextNode<BlockStyle> {
+abstract class BlockNode() implements TextNode<BlockStyle> {
   /// The runtime style applied to this node, this will be set by [fillStyles].
   @override
   late BlockStyle style;

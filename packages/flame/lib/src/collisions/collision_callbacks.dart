@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 
 /// The [CollisionType] is used to determine which other hitboxes that it
 /// should collide with.
-enum CollisionType {
+enum CollisionType() {
   /// Collides with other hitboxes of type active or passive.
   active,
 
@@ -16,9 +16,8 @@ enum CollisionType {
 }
 
 /// Utility class allows to subscribe on collision type changing event
-class CollisionTypeNotifier with ChangeNotifier {
-  CollisionTypeNotifier(CollisionType type) : _value = type;
-  CollisionType _value = CollisionType.active;
+class CollisionTypeNotifier(CollisionType type) with ChangeNotifier {
+  CollisionType _value = type;
 
   set value(CollisionType type) {
     _value = type;

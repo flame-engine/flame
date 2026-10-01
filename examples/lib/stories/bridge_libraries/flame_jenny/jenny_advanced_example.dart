@@ -9,7 +9,7 @@ import 'package:flame/text.dart';
 import 'package:flutter/services.dart';
 import 'package:jenny/jenny.dart';
 
-class JennyAdvancedExample extends FlameGame {
+class JennyAdvancedExample() extends FlameGame {
   static const String description = '''
     This is an advanced example of how to use the Jenny Package. 
     It includes implementing dialogue choices, setting custom variables,

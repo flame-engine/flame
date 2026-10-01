@@ -6,7 +6,7 @@ import 'package:flame/src/devtools/dev_tools_connector.dart';
 /// The [OverlayNavigationConnector] is responsible of getting the names of all
 /// registered overlays, navigating to the overlay with the given name, and
 /// showing or hiding single overlays.
-class OverlayNavigationConnector extends DevToolsConnector {
+class OverlayNavigationConnector() extends DevToolsConnector {
   @override
   void init() {
     // Get the names of all registered overlays, and of the active ones.

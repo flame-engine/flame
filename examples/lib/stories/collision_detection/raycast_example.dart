@@ -7,7 +7,8 @@ import 'package:flame/geometry.dart';
 import 'package:flame/palette.dart';
 import 'package:material_ui/material_ui.dart';
 
-class RaycastExample extends FlameGame
+class RaycastExample()
+    extends FlameGame
     with HasCollisionDetection, PathsCreationMixin {
   static const description = '''
 In this example the raycast functionality is showcased. The circle moves around

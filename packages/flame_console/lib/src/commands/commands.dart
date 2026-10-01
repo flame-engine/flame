@@ -12,7 +12,7 @@ export 'debug_command.dart';
 export 'ls_command.dart';
 export 'remove_command.dart';
 
-abstract class FlameConsoleCommand<T extends FlameGame>
+abstract class FlameConsoleCommand<T extends FlameGame>()
     extends TerminuiCommand<T> {
   List<Component> listAllChildren(Component component) {
     return [
@@ -52,7 +52,7 @@ abstract class FlameConsoleCommand<T extends FlameGame>
   }
 }
 
-abstract class QueryCommand<G extends FlameGame>
+abstract class QueryCommand<G extends FlameGame>()
     extends FlameConsoleCommand<G> {
   (String?, String) processChildren(List<Component> children);
 
@@ -87,7 +87,7 @@ abstract class QueryCommand<G extends FlameGame>
     );
 }
 
-class FlameConsoleCommands {
+class FlameConsoleCommands() {
   static List<FlameConsoleCommand> commands = [
     LsConsoleCommand(),
     RemoveConsoleCommand(),

@@ -1,11 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
-abstract class IsCloseToVector<V> extends Matcher {
-  const IsCloseToVector(this._value, this._epsilon);
-
-  final V _value;
-  final double _epsilon;
-
+abstract class const IsCloseToVector<V>(final V _value, final double _epsilon)
+    extends Matcher {
   double dist(V a, V b);
   List<double> storage(V value);
 

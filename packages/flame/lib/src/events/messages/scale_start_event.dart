@@ -7,24 +7,26 @@ import 'package:flutter/gestures.dart';
 ///
 /// This is a [PositionEvent], where the position is the focal point of the
 ///  gesture.
-class ScaleStartEvent extends PositionEvent<ScaleStartDetails> {
-  ScaleStartEvent(this.pointerId, super.game, ScaleStartDetails details)
-    : deviceKind = details.kind ?? PointerDeviceKind.unknown,
-      super(
-        raw: details,
-        devicePosition: details.focalPoint.toVector2(),
-      );
-
+class ScaleStartEvent(
   /// The unique identifier of the scale event.
   ///
   /// Subsequent [ScaleUpdateEvent] or [ScaleEndEvent] will carry the same
   /// pointer id. This allows distinguishing multiple simultaneous scale
   /// gestures.
   ///
-  final int pointerId;
+  final int pointerId,
+  super.game,
+  ScaleStartDetails details,
+) extends PositionEvent<ScaleStartDetails> {
+  this
+    : super(
+        raw: details,
+        devicePosition: details.focalPoint.toVector2(),
+      );
 
   /// The type of device that initiated the gesture.
-  final PointerDeviceKind deviceKind;
+  final PointerDeviceKind deviceKind =
+      details.kind ?? PointerDeviceKind.unknown;
 
   @override
   String toString() =>

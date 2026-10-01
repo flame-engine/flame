@@ -22,10 +22,10 @@ import 'package:flame_3d/src/parser/gltf/skin.dart';
 import 'package:flame_3d/src/parser/gltf/texture.dart';
 
 /// The root schema of a GLTF file.
-class GltfRoot {
+class GltfRoot._({
   /// Path prefix used to resolve relative paths.
-  final String _prefix;
-
+  required final String _prefix,
+}) {
   late final List<Buffer> buffers;
   late final List<BufferView> bufferViews;
   late final List<RawAccessor> accessors;
@@ -44,10 +44,6 @@ class GltfRoot {
   late final List<Image> images;
 
   late final List<GlbChunk> chunks;
-
-  GltfRoot._({
-    required this._prefix,
-  });
 
   Future<Uint8List> readChunk(GltfRef<Buffer> ref) async {
     if (chunks.isNotEmpty) {

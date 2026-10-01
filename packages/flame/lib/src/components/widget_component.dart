@@ -54,30 +54,8 @@ import 'package:meta/meta.dart';
 ///   [WidgetComponent] is rendered several times in one frame, for example
 ///   because its world is viewed by several cameras, only the first render
 ///   paints the widget.
-class WidgetComponent extends PositionComponent {
-  WidgetComponent({
-    required Widget widget,
-    this.constraints,
-    super.size,
-    super.position,
-    super.scale,
-    super.angle,
-    super.nativeAngle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.key,
-  }) : _widget = widget, // ignore: prefer_initializing_formals
-       _adoptsWidgetSize = size == null {
-    size.addListener(_onSizeChanged);
-  }
-
-  Widget _widget;
-  final bool _adoptsWidgetSize;
-  bool _isAdoptingSize = false;
-  bool _isPainted = false;
-  Game? _game;
-  final _HostNotifier _hostNotifier = _HostNotifier();
+class WidgetComponent({
+  required var Widget _widget,
 
   /// The constraints that the widget is laid out with when no [size] was
   /// given. When this is null too, the widget is laid out with loose
@@ -85,7 +63,26 @@ class WidgetComponent extends PositionComponent {
   ///
   /// Ignored when a [size] was given, since the widget then always gets tight
   /// constraints of that size.
-  final BoxConstraints? constraints;
+  final BoxConstraints? constraints,
+  super.size,
+  super.position,
+  super.scale,
+  super.angle,
+  super.nativeAngle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.key,
+}) extends PositionComponent {
+  this {
+    size.addListener(_onSizeChanged);
+  }
+
+  final bool _adoptsWidgetSize = size == null;
+  bool _isAdoptingSize = false;
+  bool _isPainted = false;
+  Game? _game;
+  final _HostNotifier _hostNotifier = _HostNotifier();
 
   /// The Flutter widget hosted by this component.
   ///
@@ -199,6 +196,6 @@ class WidgetComponent extends PositionComponent {
   }
 }
 
-class _HostNotifier extends ChangeNotifier {
+class _HostNotifier() extends ChangeNotifier {
   void notify() => notifyListeners();
 }

@@ -7,7 +7,7 @@ import 'package:meta/meta.dart';
 ///
 /// A point maps to `(a * x + c * y + tx, b * x + d * y + ty)`.
 @internal
-class AbsoluteTransform {
+class AbsoluteTransform() {
   double _a = 1;
   double _b = 0;
   double _c = 0;

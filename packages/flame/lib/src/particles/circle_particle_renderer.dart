@@ -8,24 +8,23 @@ import 'package:flame/src/particles/particle_renderer.dart';
 /// A circle texture is rasterized once when the renderer loads; every
 /// particle is then a transformed, tinted copy of it. The circle's color
 /// comes from the emitter's `colorOverLife` ramp (white when unset).
-class CircleParticleRenderer extends TextureParticleRenderer {
+class CircleParticleRenderer({
+  /// How much the circle fades out towards its edge, from 0 (crisp) to 1
+  /// (fully soft).
+  final double softness = 0,
+  super.blendMode,
+  super.paint,
+}) extends TextureParticleRenderer {
   /// Creates a circle renderer.
   ///
   /// [softness] goes from 0 (a crisp edge) to 1 (fully faded from the
   /// center), which suits smoke and glow, especially combined with
   /// `blendMode: BlendMode.plus`.
-  CircleParticleRenderer({
-    this.softness = 0,
-    super.blendMode,
-    super.paint,
-  }) : assert(
-         softness >= 0 && softness <= 1,
-         'softness must be between 0 and 1',
-       );
-
-  /// How much the circle fades out towards its edge, from 0 (crisp) to 1
-  /// (fully soft).
-  final double softness;
+  this
+    : assert(
+        softness >= 0 && softness <= 1,
+        'softness must be between 0 and 1',
+      );
 
   static const int _textureSize = 64;
 

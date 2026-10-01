@@ -7,25 +7,26 @@ import 'package:flame_behaviors_example/entities/circle/behaviors/behaviors.dart
 import 'package:flame_behaviors_example/entities/entities.dart';
 import 'package:material_ui/material_ui.dart';
 
-class Circle extends PositionedEntity with HasPaint {
-  Circle({
-    required double rotationSpeed,
-    required Vector2 velocity,
-    super.position,
-    super.size,
-  }) : super(
-         anchor: Anchor.center,
-         behaviors: [
-           PropagatingCollisionBehavior(CircleHitbox()),
-           CircleCollisionBehavior(),
-           RectangleCollisionBehavior(),
-           ScreenCollidingBehavior(),
-           MovingBehavior(velocity: velocity),
-           RotatingBehavior(rotationSpeed: rotationSpeed),
-           TappingBehavior(),
-           DraggingBehavior(),
-         ],
-       );
+class Circle({
+  required double rotationSpeed,
+  required Vector2 velocity,
+  super.position,
+  super.size,
+}) extends PositionedEntity with HasPaint {
+  this
+    : super(
+        anchor: Anchor.center,
+        behaviors: [
+          PropagatingCollisionBehavior(CircleHitbox()),
+          CircleCollisionBehavior(),
+          RectangleCollisionBehavior(),
+          ScreenCollidingBehavior(),
+          MovingBehavior(velocity: velocity),
+          RotatingBehavior(rotationSpeed: rotationSpeed),
+          TappingBehavior(),
+          DraggingBehavior(),
+        ],
+      );
 
   final defaultColor = Colors.blue.withValues(alpha: 0.8);
 

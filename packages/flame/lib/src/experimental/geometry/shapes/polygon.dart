@@ -15,7 +15,7 @@ import 'package:flame/src/math/tmp_vector2.dart';
 ///
 /// A polygon can be either convex or not, the [containsPoint] method will work
 /// in both cases, however, the method used with convex polygon is faster.
-class Polygon extends Shape {
+class Polygon(final List<Vector2> _vertices, {bool? convex}) extends Shape {
   /// Constructs the polygon from the given list of vertices.
   ///
   /// If the list is not in the counter-clockwise order, then it will be
@@ -24,8 +24,7 @@ class Polygon extends Shape {
   /// If the [convex] flag is provided, then it serves as a hint about whether
   /// the polygon is convex or not. With this flag the user promises that the
   /// vertices are already in the correct CCW order.
-  Polygon(this._vertices, {bool? convex})
-    : assert(_vertices.length >= 3, 'At least 3 vertices are required') {
+  this : assert(_vertices.length >= 3, 'At least 3 vertices are required') {
     _initializeEdges();
     if (convex == null) {
       _ensureProperOrientation();
@@ -61,7 +60,6 @@ class Polygon extends Shape {
   /// The user should treat this list as read-only and not attempt to modify
   /// either the list itself or individual points.
   List<Vector2> get vertices => _vertices;
-  final List<Vector2> _vertices;
 
   /// The edges (sides) of the polygon.
   ///

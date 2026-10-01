@@ -2,12 +2,8 @@ import 'dart:ui';
 
 import 'package:flame/extensions.dart';
 
-class PaletteEntry {
-  final Color color;
-
+class const PaletteEntry(final Color color) {
   Paint paint() => Paint()..color = color;
-
-  const PaletteEntry(this.color);
 
   PaletteEntry withAlpha(int alpha) {
     return PaletteEntry(color.withAlpha(alpha));
@@ -34,7 +30,7 @@ class PaletteEntry {
   }
 }
 
-class BasicPalette {
+class BasicPalette() {
   static const PaletteEntry transparent = PaletteEntry(Color(0x00FFFFFF));
   static const PaletteEntry white = PaletteEntry(Color(0xFFFFFFFF));
   static const PaletteEntry black = PaletteEntry(Color(0xFF000000));

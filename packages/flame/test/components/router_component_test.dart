@@ -438,17 +438,17 @@ void main() {
   });
 }
 
-class _ComponentA extends Component;
+class _ComponentA() extends Component;
 
-class _ComponentB extends Component;
+class _ComponentB() extends Component;
 
-class _ComponentC extends Component;
+class _ComponentC() extends Component;
 
-class _ComponentD extends Component;
+class _ComponentD() extends Component;
 
-class _ComponentE extends Component;
+class _ComponentE() extends Component;
 
-class _TestRoute extends Route {
+class _TestRoute(super.builder) extends Route {
   int onPopTimes = 0;
   int onPushTimes = 0;
   int didPopTimes = 0;
@@ -457,8 +457,6 @@ class _TestRoute extends Route {
   String? lastOnPushPreviousRoute;
   String? lastDidPopNextRoute;
   String? lastDidPushPreviousRoute;
-
-  _TestRoute(super.builder);
 
   @override
   void onPop(Route nextRoute) {

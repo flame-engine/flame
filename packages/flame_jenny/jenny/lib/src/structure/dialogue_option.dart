@@ -2,17 +2,13 @@ import 'package:jenny/src/structure/block.dart';
 import 'package:jenny/src/structure/dialogue_line.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 
-class DialogueOption extends DialogueLine {
-  DialogueOption({
-    required super.content,
-    super.character,
-    super.tags,
-    this._condition,
-    this.block = const Block([]),
-  });
-
-  final BoolExpression? _condition;
-  final Block block;
+class DialogueOption({
+  required super.content,
+  super.character,
+  super.tags,
+  final BoolExpression? _condition,
+  final Block block = const Block([]),
+}) extends DialogueLine {
   bool _available = true;
 
   bool get isAvailable => _available;

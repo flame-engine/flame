@@ -10,14 +10,13 @@ import '../rank.dart';
 import '../suit.dart';
 import 'tableau_pile.dart';
 
-class Card extends PositionComponent with DragCallbacks {
-  Card(int intRank, int intSuit)
-    : rank = Rank.fromInt(intRank),
-      suit = Suit.fromInt(intSuit),
-      super(size: KlondikeGame.cardSize);
+class Card(int intRank, int intSuit)
+    extends PositionComponent
+    with DragCallbacks {
+  this : super(size: KlondikeGame.cardSize);
 
-  final Rank rank;
-  final Suit suit;
+  final Rank rank = Rank.fromInt(intRank);
+  final Suit suit = Suit.fromInt(intSuit);
   Pile? pile;
   bool _faceUp = false;
   bool _isDragging = false;

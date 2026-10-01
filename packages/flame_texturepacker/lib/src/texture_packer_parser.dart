@@ -12,7 +12,7 @@ import 'package:flutter/painting.dart';
 typedef TextureAtlasData = ({List<Page> pages, List<Region> regions});
 
 /// Internal parser for TexturePacker atlas files.
-abstract class TexturePackerParser {
+abstract class TexturePackerParser() {
   /// Parses structural data of a texture atlas file.
   ///
   /// The [path] is the full path of the atlas, as declared in the

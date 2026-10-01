@@ -4,9 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 
-class LeftPanel extends ConsumerWidget {
-  const LeftPanel({super.key});
-
+class const LeftPanel({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final width = ref.watch(leftPanelWidthProvider);
@@ -34,8 +32,8 @@ class LeftPanel extends ConsumerWidget {
   }
 }
 
-class _WidthNotifier extends StateNotifier<double> {
-  _WidthNotifier() : super(250.0);
+class _WidthNotifier() extends StateNotifier<double> {
+  this : super(250.0);
 
   static const minWidth = 200.0;
   static const maxWidth = 500.0;

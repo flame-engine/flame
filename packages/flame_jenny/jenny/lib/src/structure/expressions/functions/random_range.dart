@@ -5,13 +5,11 @@ import 'package:jenny/src/yarn_project.dart';
 
 /// Function `random_range(a, b)` returns a random integer between `a` and `b`,
 /// inclusive.
-class RandomRangeFn extends NumExpression {
-  const RandomRangeFn(this._a, this._b, this._yarn);
-
-  final NumExpression _a;
-  final NumExpression _b;
-  final YarnProject _yarn;
-
+class const RandomRangeFn(
+  final NumExpression _a,
+  final NumExpression _b,
+  final YarnProject _yarn,
+) extends NumExpression {
   /// Static constructor, used by parse.dart.
   static Expression make(
     List<FunctionArgument> args,

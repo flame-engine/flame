@@ -10,21 +10,17 @@ import 'package:flutter/widgets.dart';
 ///
 /// Note that given the active rendering nature of a game, `shouldRepaint` is
 /// ignored by this component.
-class CustomPainterComponent extends PositionComponent {
+class CustomPainterComponent({
   /// The [CustomPainter] used to render this component
-  CustomPainter? painter;
-
-  CustomPainterComponent({
-    this.painter,
-    super.position,
-    super.size,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-  });
-
+  var CustomPainter? painter,
+  super.position,
+  super.size,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority,
+}) extends PositionComponent {
   @override
   @mustCallSuper
   void render(Canvas canvas) {

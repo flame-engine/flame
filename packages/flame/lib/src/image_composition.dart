@@ -11,21 +11,16 @@ export '../extensions.dart';
 ///
 /// **Note:** Composing images is a heavy async operation and should not be
 /// called inside the game loop.
-class ImageComposition {
-  ImageComposition({
-    this.defaultBlendMode = BlendMode.srcOver,
-    this.defaultAntiAlias = false,
-  });
-
-  /// The values that will be used to compose the image
-  final List<_Fragment> _composes = [];
-
+class ImageComposition({
   /// The [defaultBlendMode] can be used to change how each image will be
   /// blended onto the composition. Defaults to [BlendMode.srcOver].
-  final BlendMode defaultBlendMode;
+  final BlendMode defaultBlendMode = BlendMode.srcOver,
 
   /// The [defaultAntiAlias] can be used to if each image will be anti aliased.
-  final bool defaultAntiAlias;
+  final bool defaultAntiAlias = false,
+}) {
+  /// The values that will be used to compose the image
+  final List<_Fragment> _composes = [];
 
   /// Add an image to the [ImageComposition].
   ///
@@ -149,47 +144,30 @@ class ImageComposition {
 }
 
 @immutable
-class _ComposeResult {
-  const _ComposeResult({
-    required this.picture,
-    required this.width,
-    required this.height,
-  });
+class const _ComposeResult({
+  required final Picture picture,
+  required final int width,
+  required final int height,
+});
 
-  final Picture picture;
-  final int width;
-  final int height;
-}
-
-class _Fragment {
-  _Fragment(
-    this.image,
-    this.position,
-    this.source,
-    this.angle,
-    this.anchor,
-    this.blendMode, {
-    required this.antiAlias,
-  });
-
+class _Fragment(
   /// The image that will be composed.
-  final Image image;
+  final Image image,
 
   /// The position where the [image] will be composed.
-  final Vector2 position;
+  final Vector2 position,
 
   /// The source on the [image] that will be composed.
-  final Rect source;
+  final Rect source,
 
   /// The angle (in radians) used to rotate the [image] around it's [anchor].
-  final double angle;
+  final double angle,
 
   /// The point around which the [image] will be rotated
   /// (defaults to the centre of the [source]).
-  final Vector2 anchor;
-
-  final bool antiAlias;
+  final Vector2 anchor,
 
   /// The [BlendMode] that will be used when composing the [image].
-  final BlendMode blendMode;
-}
+  final BlendMode blendMode, {
+  required final bool antiAlias,
+});

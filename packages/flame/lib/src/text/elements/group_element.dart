@@ -1,14 +1,12 @@
 import 'package:flame/extensions.dart';
 import 'package:flame/text.dart';
 
-class GroupElement extends BlockElement {
-  GroupElement({
-    required double width,
-    required double height,
-    required this.children,
-  }) : super(width, height);
-
-  final List<TextElement> children;
+class GroupElement({
+  required double width,
+  required double height,
+  required final List<TextElement> children,
+}) extends BlockElement {
+  this : super(width, height);
 
   @override
   void translate(double dx, double dy) {

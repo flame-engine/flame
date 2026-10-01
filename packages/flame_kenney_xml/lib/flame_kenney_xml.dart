@@ -10,11 +10,11 @@ import 'package:xml/xpath.dart';
 /// The XML file must be in the format of a ShoeBox XML file, formatted in the
 /// same way as the Kenney.nl sprite sheets.
 /// https://twitter.com/KenneyNL/status/1777429120936202344
-class XmlSpriteSheet {
-  XmlSpriteSheet({
-    required this.image,
-    required String xml,
-  }) {
+class XmlSpriteSheet({
+  required final Image image,
+  required String xml,
+}) {
+  this {
     final document = XmlDocument.parse(xml);
     // ignore: experimental_member_use
     for (final node in document.xpath('//TextureAtlas/SubTexture')) {
@@ -50,7 +50,6 @@ class XmlSpriteSheet {
     return XmlSpriteSheet(image: image, xml: xml);
   }
 
-  final Image image;
   final _spriteBoundaries = <String, Rect>{};
 
   late final List<String> spriteNames = _spriteBoundaries.keys.toList();

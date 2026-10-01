@@ -2,7 +2,7 @@ import 'package:flame_3d/game.dart';
 import 'package:vector_math/vector_math.dart' show Frustum;
 
 /// Result of a frustum-AABB intersection test.
-enum CullResult {
+enum CullResult() {
   /// The AABB is fully outside the frustum cull the entire subtree.
   outside,
 

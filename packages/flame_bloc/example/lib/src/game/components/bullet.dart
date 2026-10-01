@@ -4,22 +4,18 @@ import 'package:flame_bloc_example/src/game/components/enemy.dart';
 import 'package:flame_bloc_example/src/game/game.dart';
 import 'package:flame_bloc_example/src/inventory/bloc/inventory_bloc.dart';
 
-class BulletComponent extends SpriteAnimationComponent
+class BulletComponent(
+  double x,
+  double y,
+  final Weapon weapon, {
+  var double xDirection = 0.0,
+}) extends SpriteAnimationComponent
     with HasGameRef<SpaceShooterGame>, CollisionCallbacks {
   static const bulletSpeed = -500;
 
   bool destroyed = false;
 
-  double xDirection;
-
-  final Weapon weapon;
-
-  BulletComponent(
-    double x,
-    double y,
-    this.weapon, {
-    this.xDirection = 0.0,
-  }) : super(position: Vector2(x, y)) {
+  this : super(position: Vector2(x, y)) {
     size = Vector2(_mapWidth(), 20);
 
     add(RectangleHitbox());

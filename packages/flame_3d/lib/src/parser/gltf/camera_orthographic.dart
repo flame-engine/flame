@@ -3,33 +3,27 @@ import 'package:flame_3d/src/parser/gltf/gltf_root.dart';
 
 /// An orthographic camera containing properties to create an orthographic
 /// projection matrix.
-class CameraOrthographic extends GltfNode {
+class CameraOrthographic({
+  required super.root,
+
   /// The floating-point horizontal magnification of the view.
   /// This value **MUST NOT** be equal to zero.
   /// This value **SHOULD NOT** be negative.
-  final double xMag;
+  required final double xMag,
 
   /// The floating-point vertical magnification of the view.
   /// This value **MUST NOT** be equal to zero.
   /// This value **SHOULD NOT** be negative.
-  final double yMag;
+  required final double yMag,
 
   /// The floating-point distance to the far clipping plane.
   /// This value **MUST NOT** be equal to zero.
   /// `zFar` **MUST** be greater than `zNear`.
-  final double xFar;
+  required final double xFar,
 
   /// The floating-point distance to the near clipping plane.
-  final double zNear;
-
-  CameraOrthographic({
-    required super.root,
-    required this.xMag,
-    required this.yMag,
-    required this.xFar,
-    required this.zNear,
-  });
-
+  required final double zNear,
+}) extends GltfNode {
   CameraOrthographic.parse(
     GltfRoot root,
     Map<String, Object?> map,

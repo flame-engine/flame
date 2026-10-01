@@ -17,20 +17,19 @@ import 'package:flame/src/extensions/vector2.dart';
 /// but it can also be set explicitly in the constructor. If the target is not
 /// passed explicitly in the constructor, then the parent component must be a
 /// [PositionProvider].
-class BoundedPositionBehavior extends Component {
-  BoundedPositionBehavior({
-    required this._bounds,
-    this._target,
-    double precision = 0.5,
-    super.priority,
-    super.key,
-  }) : assert(precision > 0, 'Precision must be positive: $precision'),
-       _previousPosition = Vector2.zero(),
-       _precision = precision;
+class BoundedPositionBehavior({
+  required var Shape _bounds,
+  var PositionProvider? _target,
+  final double _precision = 0.5,
+  super.priority,
+  super.key,
+}) extends Component {
+  this
+    : assert(_precision > 0, 'Precision must be positive: $_precision'),
+      _previousPosition = Vector2.zero();
 
   /// The region within which the target's position must be kept.
   Shape get bounds => _bounds;
-  Shape _bounds;
   set bounds(Shape newBounds) {
     _bounds = newBounds;
     if (!isValidPoint(_previousPosition)) {
@@ -44,10 +43,7 @@ class BoundedPositionBehavior extends Component {
   bool isValidPoint(Vector2 point) => _bounds.containsPoint(point);
 
   PositionProvider get target => _target!;
-  PositionProvider? _target;
-
   double get precision => _precision;
-  final double _precision;
 
   /// Saved position from the last game tick.
   final Vector2 _previousPosition;

@@ -7,11 +7,7 @@ import 'package:meta/meta.dart';
 ///
 /// During formatting, produces an element which is as wide as the available
 /// width, and tall enough to fit all the available children elements.
-abstract class ColumnNode extends BlockNode {
-  ColumnNode(this.children);
-
-  final List<BlockNode> children;
-
+abstract class ColumnNode(final List<BlockNode> children) extends BlockNode {
   @override
   GroupElement format(double availableWidth) {
     final out = <TextElement>[];

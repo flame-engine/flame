@@ -5,24 +5,17 @@ import 'package:flame_steering_behaviors/flame_steering_behaviors.dart';
 /// {@template flee_behavior}
 /// Flee steering behavior.
 /// {@endtemplate}
-class FleeBehavior<Parent extends Steerable> extends SteeringBehavior<Parent> {
-  /// {@macro flee_behavior}
-  FleeBehavior(
-    this.target, {
-    required this.maxAcceleration,
-    required this.panicDistance,
-  });
-
+class FleeBehavior<Parent extends Steerable>(
   /// The target to flee from.
-  final ReadOnlyPositionProvider target;
+  final ReadOnlyPositionProvider target, {
 
   /// The maximum acceleration of the entity.
-  final double maxAcceleration;
+  required final double maxAcceleration,
 
   /// The maximum distance between the target and entity for the entity to
   /// panic.
-  final double panicDistance;
-
+  required final double panicDistance,
+}) extends SteeringBehavior<Parent> {
   @override
   void update(double dt) {
     final distanceToTarget = target.position.distanceTo(parent.position);

@@ -9,7 +9,7 @@ import 'package:flame/extensions.dart' show Aabb2Extension, PathExtension;
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 
-class ShapesExample extends FlameGame {
+class ShapesExample() extends FlameGame {
   static const description = '''
     This example shows multiple raw `Shape`s, and random points whose color
     should match the colors of the shapes that they fall in. Points that are
@@ -86,23 +86,22 @@ class ShapesExample extends FlameGame {
   }
 }
 
-class ShapesComponent extends Component {
-  ShapesComponent(this.shapes, List<Color> colors)
+class ShapesComponent(final List<Shape> shapes, List<Color> colors)
+    extends Component {
+  this
     : assert(
         shapes.length == colors.length,
         'The shapes and colors lists have to be of the same length',
-      ),
-      paints = colors
-          .map(
-            (color) => Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 1
-              ..color = color,
-          )
-          .toList();
+      );
 
-  final List<Shape> shapes;
-  final List<Paint> paints;
+  final List<Paint> paints = colors
+      .map(
+        (color) => Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1
+          ..color = color,
+      )
+      .toList();
 
   @override
   void render(Canvas canvas) {
@@ -112,15 +111,13 @@ class ShapesComponent extends Component {
   }
 }
 
-class DotsComponent extends Component {
-  DotsComponent(this.shapes, this.shapeColors)
+class DotsComponent(final List<Shape> shapes, final List<Color> shapeColors)
+    extends Component {
+  this
     : assert(
         shapes.length == shapeColors.length,
         'The shapes and shapeColors lists have to be of the same length',
       );
-
-  final List<Shape> shapes;
-  final List<Color> shapeColors;
 
   final Random random = Random();
   final List<Vector2> points = [];

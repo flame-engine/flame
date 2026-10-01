@@ -6,8 +6,8 @@ import 'package:flame_cli/src/flame_connection.dart';
 import 'package:io/io.dart';
 
 /// Changes the attributes of a component.
-class SetCommand extends FlameCommand {
-  SetCommand(super.out, super.workingDirectory) {
+class SetCommand(super.out, super.workingDirectory) extends FlameCommand {
+  this {
     argParser
       ..addOption(
         'position',

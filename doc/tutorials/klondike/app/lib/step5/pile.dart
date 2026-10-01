@@ -1,8 +1,11 @@
 import 'components/card.dart';
 
-enum MoveMethod { drag, tap }
+enum MoveMethod() {
+  drag,
+  tap,
+}
 
-abstract class Pile {
+abstract class Pile() {
   /// Returns true if the [card] can be taken away from this pile and moved
   /// somewhere else. A tapping move may need additional validation.
   bool canMoveCard(Card card, MoveMethod method);

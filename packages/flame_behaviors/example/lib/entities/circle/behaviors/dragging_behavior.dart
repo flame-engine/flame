@@ -3,7 +3,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flame_behaviors_example/entities/entities.dart';
 
-class DraggingBehavior extends DraggableBehavior<Circle> {
+class DraggingBehavior() extends DraggableBehavior<Circle> {
   MovingBehavior? movement;
 
   Vector2? originalVelocity;

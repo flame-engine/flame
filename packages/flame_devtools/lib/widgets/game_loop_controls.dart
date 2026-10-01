@@ -2,14 +2,12 @@ import 'package:flame_devtools/repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class GameLoopControls extends StatefulWidget {
-  const GameLoopControls({super.key});
-
+class const GameLoopControls({super.key}) extends StatefulWidget {
   @override
   State<GameLoopControls> createState() => _GameLoopControlsState();
 }
 
-class _GameLoopControlsState extends State<GameLoopControls> {
+class _GameLoopControlsState() extends State<GameLoopControls> {
   Future<bool>? _paused;
   final _stepTimeController = TextEditingController();
   double get stepTime => double.tryParse(_stepTimeController.text) ?? 0;

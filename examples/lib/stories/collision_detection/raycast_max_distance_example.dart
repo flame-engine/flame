@@ -12,7 +12,7 @@ import 'package:flame_noise/flame_noise.dart';
 import 'package:flame_test/test_paths.dart';
 import 'package:material_ui/material_ui.dart';
 
-class RaycastMaxDistanceExample extends FlameGame with HasCollisionDetection {
+class RaycastMaxDistanceExample() extends FlameGame with HasCollisionDetection {
   static const description = '''
 This examples showcases how raycast APIs can be used to detect hits within certain range.
 ''';
@@ -107,11 +107,11 @@ This examples showcases how raycast APIs can be used to detect hits within certa
   }
 }
 
-class _Character extends PositionComponent {
-  _Character({required this.maxDistance, super.position, super.anchor});
-
-  final double maxDistance;
-
+class _Character({
+  required final double maxDistance,
+  super.position,
+  super.anchor,
+}) extends PositionComponent {
   final _rayOriginPoint = Offset.zero;
   late final _rayEndPoint = Offset(maxDistance, 0);
   final _rayPaint = BasicPalette.gray.paint();

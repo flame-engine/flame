@@ -6,52 +6,48 @@ import 'package:meta/meta.dart';
 
 export '../sprite_animation.dart';
 
-class SpriteAnimationComponent extends PositionComponent with HasPaint {
-  /// The animation ticker used for updating [animation].
-  SpriteAnimationTicker? _animationTicker;
-
-  /// Returns the animation ticker for current [animation].
-  SpriteAnimationTicker? get animationTicker => _animationTicker;
+class SpriteAnimationComponent({
+  SpriteAnimation? animation,
+  bool? autoResize,
 
   /// If the component should be removed once the animation has finished.
   /// Needs the animation to have `loop = false` to ever remove the component,
   /// since it will never finish otherwise.
-  bool removeOnFinish;
+  var bool removeOnFinish = false,
 
   /// Whether the animation is paused or playing.
-  bool playing;
+  var bool playing = true,
 
   /// Whether to reset the animation when the component is removed from the
   /// component tree.
-  bool resetOnRemove;
+  var bool resetOnRemove = false,
+  Paint? paint,
+  super.position,
+  super.size,
+  super.scale,
+  super.angle,
+  super.nativeAngle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.key,
+}) extends PositionComponent with HasPaint {
+  /// The animation ticker used for updating [animation].
+  SpriteAnimationTicker? _animationTicker = animation?.createTicker();
+
+  /// Returns the animation ticker for current [animation].
+  SpriteAnimationTicker? get animationTicker => _animationTicker;
 
   /// When set to true, the component is auto-resized to match the
   /// size of current animation sprite.
-  bool _autoResize;
+  bool _autoResize = autoResize ?? size == null;
 
   /// Creates a component with an empty animation which can be set later
-  SpriteAnimationComponent({
-    SpriteAnimation? animation,
-    bool? autoResize,
-    this.removeOnFinish = false,
-    this.playing = true,
-    this.resetOnRemove = false,
-    Paint? paint,
-    super.position,
-    super.size,
-    super.scale,
-    super.angle,
-    super.nativeAngle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.key,
-  }) : assert(
-         (size == null) == (autoResize ?? size == null),
-         '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
-       ),
-       _autoResize = autoResize ?? size == null,
-       _animationTicker = animation?.createTicker() {
+  this
+    : assert(
+        (size == null) == (autoResize ?? size == null),
+        '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
+      ) {
     if (paint != null) {
       this.paint = paint;
     }

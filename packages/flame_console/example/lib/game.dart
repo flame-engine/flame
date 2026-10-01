@@ -9,7 +9,7 @@ import 'package:flame/palette.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-class MyGame extends FlameGame with HasKeyboardHandlerComponents {
+class MyGame() extends FlameGame with HasKeyboardHandlerComponents {
   @override
   FutureOr<void> onLoad() async {
     await super.onLoad();

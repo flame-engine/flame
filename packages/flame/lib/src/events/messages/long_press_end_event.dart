@@ -7,19 +7,20 @@ import 'package:flutter/gestures.dart';
 ///
 /// This is a [PositionEvent], where the position is the point where the
 /// pointer was lifted.
-class LongPressEndEvent extends PositionEvent<LongPressEndDetails> {
-  LongPressEndEvent(this.pointerId, super.game, LongPressEndDetails details)
-    : velocity = details.velocity.pixelsPerSecond.toVector2(),
-      super(
+class LongPressEndEvent(
+  /// The unique identifier for this long press gesture.
+  final int pointerId,
+  super.game,
+  LongPressEndDetails details,
+) extends PositionEvent<LongPressEndDetails> {
+  this
+    : super(
         raw: details,
         devicePosition: details.globalPosition.toVector2(),
       );
 
-  /// The unique identifier for this long press gesture.
-  final int pointerId;
-
   /// The velocity of the pointer at the time the long press ended.
-  final Vector2 velocity;
+  final Vector2 velocity = details.velocity.pixelsPerSecond.toVector2();
 
   @override
   String toString() =>

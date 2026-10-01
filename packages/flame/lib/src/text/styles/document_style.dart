@@ -11,58 +11,7 @@ import 'package:flutter/painting.dart' show EdgeInsets;
 ///
 /// All styles that collectively describe how to render text are organized into
 /// a tree, with [DocumentStyle] at the root.
-class DocumentStyle extends FlameTextStyle {
-  DocumentStyle({
-    this.width,
-    this.height,
-    this.padding = EdgeInsets.zero,
-    this.background,
-    InlineTextStyle? text,
-    InlineTextStyle? boldText,
-    InlineTextStyle? italicText,
-    InlineTextStyle? codeText,
-    InlineTextStyle? strikethroughText,
-    this._customStyles,
-    BlockStyle? paragraph,
-    BlockStyle? header1,
-    BlockStyle? header2,
-    BlockStyle? header3,
-    BlockStyle? header4,
-    BlockStyle? header5,
-    BlockStyle? header6,
-  }) : _text = FlameTextStyle.merge(DocumentStyle.defaultTextStyle, text),
-       _boldText = FlameTextStyle.merge(BoldTextNode.defaultStyle, boldText),
-       _italicText = FlameTextStyle.merge(
-         ItalicTextNode.defaultStyle,
-         italicText,
-       ),
-       _codeText = FlameTextStyle.merge(CodeTextNode.defaultStyle, codeText),
-       _strikethroughText = FlameTextStyle.merge(
-         StrikethroughTextNode.defaultStyle,
-         strikethroughText,
-       ),
-       _paragraph = FlameTextStyle.merge(ParagraphNode.defaultStyle, paragraph),
-       _header1 = FlameTextStyle.merge(HeaderNode.defaultStyleH1, header1),
-       _header2 = FlameTextStyle.merge(HeaderNode.defaultStyleH2, header2),
-       _header3 = FlameTextStyle.merge(HeaderNode.defaultStyleH3, header3),
-       _header4 = FlameTextStyle.merge(HeaderNode.defaultStyleH4, header4),
-       _header5 = FlameTextStyle.merge(HeaderNode.defaultStyleH5, header5),
-       _header6 = FlameTextStyle.merge(HeaderNode.defaultStyleH6, header6);
-
-  final InlineTextStyle? _text;
-  final InlineTextStyle? _boldText;
-  final InlineTextStyle? _italicText;
-  final InlineTextStyle? _codeText;
-  final InlineTextStyle? _strikethroughText;
-  final Map<String, InlineTextStyle>? _customStyles;
-  final BlockStyle? _paragraph;
-  final BlockStyle? _header1;
-  final BlockStyle? _header2;
-  final BlockStyle? _header3;
-  final BlockStyle? _header4;
-  final BlockStyle? _header5;
-  final BlockStyle? _header6;
-
+class DocumentStyle({
   /// Outer width of the document page.
   ///
   /// This width is the distance between the left edge of the left border, and
@@ -71,7 +20,7 @@ class DocumentStyle extends FlameTextStyle {
   ///
   /// If this property is `null`, then the page width must be provided when
   /// formatting a document.
-  final double? width;
+  final double? width,
 
   /// Outer height of the document page.
   ///
@@ -82,12 +31,7 @@ class DocumentStyle extends FlameTextStyle {
   /// If this property is `null`, then the page height must be provided when
   /// formatting a document (except for the overflow-expand mode, when the
   /// value of [height] defaults to 0).
-  final double? height;
-
-  /// Behavior of the document when the amount of content that needs to be laid
-  /// out exceeds the provided [height]. See the [Overflow] enum description for
-  /// more details.
-  Overflow get overflow => Overflow.expand;
+  final double? height,
 
   /// The distance from the outer edges of the page to the inner content box of
   /// the document.
@@ -97,11 +41,78 @@ class DocumentStyle extends FlameTextStyle {
   ///
   /// If the document's horizontal padding exceeds its width, an exception will
   /// be thrown.
-  final EdgeInsets padding;
+  final EdgeInsets padding = EdgeInsets.zero,
 
   /// If present, describes what kind of background and borders to draw for the
   /// document page(s).
-  final BackgroundStyle? background;
+  final BackgroundStyle? background,
+  InlineTextStyle? text,
+  InlineTextStyle? boldText,
+  InlineTextStyle? italicText,
+  InlineTextStyle? codeText,
+  InlineTextStyle? strikethroughText,
+  final Map<String, InlineTextStyle>? _customStyles,
+  BlockStyle? paragraph,
+  BlockStyle? header1,
+  BlockStyle? header2,
+  BlockStyle? header3,
+  BlockStyle? header4,
+  BlockStyle? header5,
+  BlockStyle? header6,
+}) extends FlameTextStyle {
+  final InlineTextStyle? _text = FlameTextStyle.merge(
+    DocumentStyle.defaultTextStyle,
+    text,
+  );
+  final InlineTextStyle? _boldText = FlameTextStyle.merge(
+    BoldTextNode.defaultStyle,
+    boldText,
+  );
+  final InlineTextStyle? _italicText = FlameTextStyle.merge(
+    ItalicTextNode.defaultStyle,
+    italicText,
+  );
+  final InlineTextStyle? _codeText = FlameTextStyle.merge(
+    CodeTextNode.defaultStyle,
+    codeText,
+  );
+  final InlineTextStyle? _strikethroughText = FlameTextStyle.merge(
+    StrikethroughTextNode.defaultStyle,
+    strikethroughText,
+  );
+  final BlockStyle? _paragraph = FlameTextStyle.merge(
+    ParagraphNode.defaultStyle,
+    paragraph,
+  );
+  final BlockStyle? _header1 = FlameTextStyle.merge(
+    HeaderNode.defaultStyleH1,
+    header1,
+  );
+  final BlockStyle? _header2 = FlameTextStyle.merge(
+    HeaderNode.defaultStyleH2,
+    header2,
+  );
+  final BlockStyle? _header3 = FlameTextStyle.merge(
+    HeaderNode.defaultStyleH3,
+    header3,
+  );
+  final BlockStyle? _header4 = FlameTextStyle.merge(
+    HeaderNode.defaultStyleH4,
+    header4,
+  );
+  final BlockStyle? _header5 = FlameTextStyle.merge(
+    HeaderNode.defaultStyleH5,
+    header5,
+  );
+  final BlockStyle? _header6 = FlameTextStyle.merge(
+    HeaderNode.defaultStyleH6,
+    header6,
+  );
+
+  /// Behavior of the document when the amount of content that needs to be laid
+  /// out exceeds the provided [height]. See the [Overflow] enum description for
+  /// more details.
+  Overflow get overflow => Overflow.expand;
 
   InlineTextStyle get text => _text!;
   InlineTextStyle get boldText => _boldText!;

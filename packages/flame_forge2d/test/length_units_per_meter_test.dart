@@ -5,12 +5,12 @@ import 'package:flutter_test/flutter_test.dart';
 // The length unit is process-wide, so this file changes it for every test in
 // it. `flutter test` runs each test file in its own process, which is what
 // keeps it from reaching the rest of the suite.
-class _ScaledGame extends Forge2DGame {
-  _ScaledGame() : super(lengthUnitsPerMeter: 100);
+class _ScaledGame() extends Forge2DGame {
+  this : super(lengthUnitsPerMeter: 100);
 }
 
-class _ConflictingGame extends Forge2DGame {
-  _ConflictingGame() : super(lengthUnitsPerMeter: 25);
+class _ConflictingGame() extends Forge2DGame {
+  this : super(lengthUnitsPerMeter: 25);
 }
 
 void main() {

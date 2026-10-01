@@ -82,11 +82,7 @@ typedef PrepareFunction = Future<void> Function(
   WidgetTester tester,
 );
 
-class GameWithBackgroundColor extends FlameGame {
-  final Color _backgroundColor;
-
-  GameWithBackgroundColor(this._backgroundColor);
-
+class GameWithBackgroundColor(final Color _backgroundColor) extends FlameGame {
   @override
   Color backgroundColor() => _backgroundColor;
 }

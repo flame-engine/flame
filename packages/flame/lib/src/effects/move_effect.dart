@@ -14,15 +14,15 @@ import 'package:flame/src/effects/provider_interfaces.dart';
 ///
 /// Factory constructors [MoveEffect.by] and [MoveEffect.to] are also provided,
 /// but they may be deprecated in the future.
-abstract class MoveEffect extends Effect
+abstract class MoveEffect(
+  super.controller,
+  PositionProvider? target, {
+  super.onComplete,
+  super.key,
+}) extends Effect
     with EffectTarget<PositionProvider>
     implements MeasurableEffect {
-  MoveEffect(
-    super.controller,
-    PositionProvider? target, {
-    super.onComplete,
-    super.key,
-  }) {
+  this {
     this.target = target;
   }
 

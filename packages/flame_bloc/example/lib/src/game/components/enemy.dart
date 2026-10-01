@@ -4,14 +4,14 @@ import 'package:flame/components.dart';
 import 'package:flame_bloc_example/src/game/components/explosion.dart';
 import 'package:flame_bloc_example/src/game/game.dart';
 
-class EnemyComponent extends SpriteAnimationComponent
+class EnemyComponent(double x, double y)
+    extends SpriteAnimationComponent
     with HasGameRef<SpaceShooterGame>, CollisionCallbacks {
   static const enemySpeed = 50;
 
   bool destroyed = false;
 
-  EnemyComponent(double x, double y)
-    : super(position: Vector2(x, y), size: Vector2.all(25)) {
+  this : super(position: Vector2(x, y), size: Vector2.all(25)) {
     add(RectangleHitbox(collisionType: CollisionType.passive));
   }
 

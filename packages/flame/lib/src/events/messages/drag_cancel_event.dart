@@ -1,12 +1,12 @@
 import 'package:flame/events.dart';
 import 'package:flutter/gestures.dart';
 
-class DragCancelEvent extends Event<void> {
-  DragCancelEvent(this.pointerId) : super(raw: null);
-
+class DragCancelEvent(
   /// The id of the event that has been cancelled. This id corresponds to the
   /// id of the previous [DragStartEvent].
-  final int pointerId;
+  final int pointerId,
+) extends Event<void> {
+  this : super(raw: null);
 
   DragEndEvent toDragEnd() => DragEndEvent(pointerId, DragEndDetails());
 

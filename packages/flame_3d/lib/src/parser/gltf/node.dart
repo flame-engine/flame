@@ -21,69 +21,54 @@ import 'package:flame_3d/src/parser/gltf/skin.dart';
 ///
 /// When a node is targeted for animation (referenced by an
 /// animation.channel.target), `matrix` **MUST NOT** be present.
-class Node extends GltfNode {
+class Node({
+  required super.root,
+
   /// The reference to the camera referenced by this node.
-  final GltfRef<Camera>? camera;
+  required final GltfRef<Camera>? camera,
 
   /// The references to this node's children.
-  final List<GltfRef<Node>> children;
+  required final List<GltfRef<Node>> children,
 
   /// The reference to skeleton nodes.
   ///
   /// Each node defines a subtree, which has a `jointName` of the corresponding
   /// element in the referenced `skin.jointNames`.
-  final List<GltfRef<Node>> skeletons;
+  required final List<GltfRef<Node>> skeletons,
 
   /// The reference to the skin referenced by this node.
   /// When a skin is referenced by a node within a scene, all joints used by
   /// the skin **MUST** belong to the same scene.
   /// When defined, `mesh` **MUST** also be defined.
-  final GltfRef<Skin>? skin;
+  required final GltfRef<Skin>? skin,
 
   /// Name used when this node is a joint in a skin.
-  final String? jointName;
+  required final String? jointName,
 
   /// A floating-point 4x4 transformation matrix stored in column-major order.
-  final Matrix4? matrix;
+  required final Matrix4? matrix,
 
   /// The reference to the mesh in this node.
-  final GltfRef<Mesh>? mesh;
+  required final GltfRef<Mesh>? mesh,
 
   /// The node's unit quaternion rotation in the order (x, y, z, w),
   /// where w is the scalar.
-  final Quaternion? rotation;
+  required final Quaternion? rotation,
 
   /// The node's non-uniform scale, given as the scaling factors along
   /// the x, y, and z axes.
-  final Vector3? scale;
+  required final Vector3? scale,
 
   /// The node's translation along the x, y, and z axes.".
-  final Vector3? translation;
+  required final Vector3? translation,
 
   /// The weights of the instantiated morph target.
   /// The number of array elements **MUST** match the number of morph targets
   /// of the referenced mesh.
   /// When defined, `mesh` **MUST** also be defined.
-  final List<double>? weights;
-
-  final String? name;
-
-  Node({
-    required super.root,
-    required this.camera,
-    required this.children,
-    required this.skeletons,
-    required this.skin,
-    required this.jointName,
-    required this.matrix,
-    required this.mesh,
-    required this.rotation,
-    required this.scale,
-    required this.translation,
-    required this.weights,
-    required this.name,
-  });
-
+  required final List<double>? weights,
+  required final String? name,
+}) extends GltfNode {
   Node.parse(
     GltfRoot root,
     Map<String, Object?> map,

@@ -2,7 +2,7 @@ import 'package:doc_flame_examples/flower.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 
-class MoveByEffectGame extends FlameGame {
+class MoveByEffectGame() extends FlameGame {
   bool reset = false;
   @override
   Future<void> onLoad() async {

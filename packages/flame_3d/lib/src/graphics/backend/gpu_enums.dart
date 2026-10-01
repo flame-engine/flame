@@ -1,5 +1,5 @@
 /// How a GPU resource's memory is allocated and accessed.
-enum GpuStorageMode {
+enum GpuStorageMode() {
   /// Memory visible to the host (CPU): used for resources written from Dart.
   hostVisible,
 
@@ -11,7 +11,7 @@ enum GpuStorageMode {
 }
 
 /// Pixel layout of a GPU texture.
-enum GpuPixelFormat {
+enum GpuPixelFormat() {
   /// 8 bits per channel, RGBA order.
   rgba8888,
 
@@ -26,7 +26,7 @@ enum GpuPixelFormat {
 }
 
 /// Width of the integers stored in an index buffer.
-enum GpuIndexType {
+enum GpuIndexType() {
   /// 16-bit unsigned indices.
   uint16,
 
@@ -35,7 +35,7 @@ enum GpuIndexType {
 }
 
 /// Color blending mode for a render pass output.
-enum BlendState {
+enum BlendState() {
   /// No blending, source overwrites destination.
   opaque,
 
@@ -48,7 +48,7 @@ enum BlendState {
 }
 
 /// Depth buffer behavior for a render pass.
-enum DepthStencilState {
+enum DepthStencilState() {
   /// Depth test and write enabled (normal opaque 3D rendering).
   /// Fragments closer than the stored depth pass and update the buffer.
   standard,
@@ -63,7 +63,7 @@ enum DepthStencilState {
 
 /// Face culling mode. Controls which triangle faces are discarded before
 /// rasterization.
-enum CullMode {
+enum CullMode() {
   /// No culling, both front and back faces are rendered.
   none,
 

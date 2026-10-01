@@ -5,26 +5,24 @@ import 'package:flame/text.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
-class TextComponent<T extends TextRenderer> extends PositionComponent
-    with HasPaint {
-  TextComponent({
-    String? text,
-    T? textRenderer,
-    super.position,
-    super.size,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.key,
-  }) : _text = text ?? '',
-       _textRenderer = textRenderer ?? TextRendererFactory.createDefault<T>() {
+class TextComponent<T extends TextRenderer>({
+  String? text,
+  T? textRenderer,
+  super.position,
+  super.size,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.key,
+}) extends PositionComponent with HasPaint {
+  this {
     updateBounds();
   }
 
   String get text => _text;
-  String _text;
+  String _text = text ?? '';
   set text(String text) {
     if (_text != text) {
       _text = text;
@@ -33,7 +31,7 @@ class TextComponent<T extends TextRenderer> extends PositionComponent
   }
 
   T get textRenderer => _textRenderer;
-  T _textRenderer;
+  T _textRenderer = textRenderer ?? TextRendererFactory.createDefault<T>();
   set textRenderer(T textRenderer) {
     _textRenderer = textRenderer;
     updateBounds();

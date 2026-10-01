@@ -52,17 +52,13 @@ import 'package:meta/meta.dart';
 ///   shaders
 /// - [PostProcessingContextFinder] for a way to access the post process
 ///   context from within a component during rendering
-abstract class PostProcess {
-  PostProcess({double? pixelRatio})
-    : pixelRatio =
-          pixelRatio ??
-          PlatformDispatcher.instance.views.first.devicePixelRatio;
-
+abstract class PostProcess({double? pixelRatio}) {
   /// The pixel ratio of the screen. This is used to scale the image generated
   /// by  [rasterizeSubtree] to the correct size.
   ///
   /// Defaults to [FlutterView.devicePixelRatio].
-  double pixelRatio;
+  double pixelRatio =
+      pixelRatio ?? PlatformDispatcher.instance.views.first.devicePixelRatio;
 
   /// Similarly to components, post processes can be loaded asynchronously.
   ///
@@ -183,13 +179,9 @@ abstract class PostProcess {
 /// - [PostProcessSequentialGroup] for a group of post processes that will be
 /// applied in sequence where each post process will be considered part of the
 /// subtree of the next one.
-class PostProcessGroup extends PostProcess {
-  PostProcessGroup({
-    required this.postProcesses,
-  });
-
-  final List<PostProcess> postProcesses;
-
+class PostProcessGroup({
+  required final List<PostProcess> postProcesses,
+}) extends PostProcess {
   @override
   Future<void> onLoad() async {
     for (final postProcess in postProcesses) {
@@ -235,11 +227,9 @@ class PostProcessGroup extends PostProcess {
 /// - [PostProcessGroup] for a group of post processes that will be applied
 /// in parallel where all the post processes will be rendered with the same
 /// subtree.
-class PostProcessSequentialGroup extends PostProcessGroup {
-  PostProcessSequentialGroup({
-    required super.postProcesses,
-  });
-
+class PostProcessSequentialGroup({
+  required super.postProcesses,
+}) extends PostProcessGroup {
   @override
   void render(
     Canvas canvas,

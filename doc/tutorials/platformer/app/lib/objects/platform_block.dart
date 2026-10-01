@@ -3,16 +3,13 @@ import 'package:flame/components.dart';
 
 import '../ember_quest.dart';
 
-class PlatformBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
-  final Vector2 gridPosition;
-  double xOffset;
-
+class PlatformBlock({
+  required final Vector2 gridPosition,
+  required var double xOffset,
+}) extends SpriteComponent with HasGameRef<EmberQuestGame> {
   final Vector2 velocity = Vector2.zero();
 
-  PlatformBlock({
-    required this.gridPosition,
-    required this.xOffset,
-  }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft);
+  this : super(size: Vector2.all(64), anchor: Anchor.bottomLeft);
 
   @override
   Future<void> onLoad() async {

@@ -4,14 +4,11 @@ import 'package:behavior_tree/behavior_tree.dart';
 typedef TaskCallback = NodeStatus Function();
 
 /// This is a leaf node that will execute the given task when ticked.
-class Task extends BaseNode implements NodeInterface {
-  /// Creates a task node for given [taskCallback].
-  Task(this.taskCallback);
-
+class Task(
   /// The callback that will be executed when the task is ticked.
   /// It should return the status of the task.
-  final TaskCallback taskCallback;
-
+  final TaskCallback taskCallback,
+) extends BaseNode implements NodeInterface {
   @override
   void tick() => status = taskCallback();
 }

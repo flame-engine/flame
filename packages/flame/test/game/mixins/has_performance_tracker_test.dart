@@ -33,11 +33,11 @@ void main() {
   );
 }
 
-class _GameWithPerformanceTracker extends FlameGame with HasPerformanceTracker {
-  _GameWithPerformanceTracker({super.children});
-}
+class _GameWithPerformanceTracker({super.children})
+    extends FlameGame
+    with HasPerformanceTracker;
 
-class _SlowComponent extends Component {
+class _SlowComponent() extends Component {
   static const duration = Duration(milliseconds: 8);
   @override
   void update(double dt) => sleep(duration);

@@ -6,14 +6,12 @@ import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';
 
 @internal
-class GroupLayer extends RenderableLayer<Group> {
-  GroupLayer({
-    required super.layer,
-    required super.map,
-    required super.destTileSize,
-    super.filterQuality,
-  });
-
+class GroupLayer({
+  required super.layer,
+  required super.map,
+  required super.destTileSize,
+  super.filterQuality,
+}) extends RenderableLayer<Group> {
   /// The layers of this group, in the order they are rendered.
   Iterable<RenderableLayer> get layers => children.whereType<RenderableLayer>();
 

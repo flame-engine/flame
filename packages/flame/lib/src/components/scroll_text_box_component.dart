@@ -14,7 +14,22 @@ import 'package:flutter/painting.dart';
 ///
 /// This component uses [TextBoxComponent] to provide scrollable text
 /// capabilities.
-class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
+class ScrollTextBoxComponent<T extends TextRenderer>({
+  required Vector2 size,
+  String? text,
+  T? textRenderer,
+  TextBoxConfig? boxConfig,
+  Anchor align = Anchor.topLeft,
+  double pixelRatio = 1.0,
+  super.position,
+  super.scale,
+  double angle = 0.0,
+  super.anchor = Anchor.topLeft,
+  super.priority,
+  super.key,
+  List<Component>? children,
+  void Function()? onComplete,
+}) extends PositionComponent {
   late final _ScrollTextBoxComponent<T> _scrollTextBoxComponent;
   late final ValueNotifier<int> newLineNotifier;
 
@@ -28,26 +43,12 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
   /// - Other parameters include alignment, pixel ratio, and positioning
   ///   settings.
   /// An assertion ensures that the [size] has positive dimensions.
-  ScrollTextBoxComponent({
-    required Vector2 size,
-    String? text,
-    T? textRenderer,
-    TextBoxConfig? boxConfig,
-    Anchor align = Anchor.topLeft,
-    double pixelRatio = 1.0,
-    super.position,
-    super.scale,
-    double angle = 0.0,
-    super.anchor = Anchor.topLeft,
-    super.priority,
-    super.key,
-    List<Component>? children,
-    void Function()? onComplete,
-  }) : assert(
-         size.x > 0 && size.y > 0,
-         'size must have positive dimensions: $size',
-       ),
-       super(size: size) {
+  this
+    : assert(
+        size.x > 0 && size.y > 0,
+        'size must have positive dimensions: $size',
+      ),
+      super(size: size) {
     final marginTop = boxConfig?.margins.top ?? 0;
     final marginBottom = boxConfig?.margins.bottom ?? 0;
     final innerMargins = EdgeInsets.fromLTRB(0, marginTop, 0, marginBottom);
@@ -104,8 +105,17 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
 /// Extends [TextBoxComponent] and incorporates drag callbacks for text
 /// scrolling. It manages the rendering and user interaction for the text within
 /// the box.
-class _ScrollTextBoxComponent<T extends TextRenderer> extends TextBoxComponent
-    with DragCallbacks {
+class _ScrollTextBoxComponent<T extends TextRenderer>({
+  String? text,
+  T? textRenderer,
+  TextBoxConfig? boxConfig,
+  Anchor super.align = Anchor.topLeft,
+  double super.pixelRatio = 1.0,
+  super.position,
+  super.scale,
+  double super.angle = 0.0,
+  super.onComplete,
+}) extends TextBoxComponent with DragCallbacks {
   double scrollBoundsY = 0.0;
 
   late final ClipComponent clipComponent;
@@ -114,21 +124,12 @@ class _ScrollTextBoxComponent<T extends TextRenderer> extends TextBoxComponent
 
   bool _isOnCompleteExecuted = false;
 
-  _ScrollTextBoxComponent({
-    String? text,
-    T? textRenderer,
-    TextBoxConfig? boxConfig,
-    Anchor super.align = Anchor.topLeft,
-    double super.pixelRatio = 1.0,
-    super.position,
-    super.scale,
-    double super.angle = 0.0,
-    super.onComplete,
-  }) : super(
-         text: text ?? '',
-         textRenderer: textRenderer ?? TextPaint(),
-         boxConfig: boxConfig ?? const TextBoxConfig(),
-       );
+  this
+    : super(
+        text: text ?? '',
+        textRenderer: textRenderer ?? TextPaint(),
+        boxConfig: boxConfig ?? const TextBoxConfig(),
+      );
 
   @override
   Future<void> onLoad() {

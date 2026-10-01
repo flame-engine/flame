@@ -3,11 +3,8 @@ import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgetbook/widgetbook.dart';
 
-class ExampleApp extends StatelessWidget {
-  const ExampleApp({required this.child, super.key});
-
-  final Widget child;
-
+class const ExampleApp({required final Widget child, super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final useCase = WidgetbookState.of(context).useCase;
@@ -28,11 +25,7 @@ class ExampleApp extends StatelessWidget {
   }
 }
 
-class _ExampleBar extends StatelessWidget {
-  const _ExampleBar(this.useCase);
-
-  final ExampleUseCase useCase;
-
+class const _ExampleBar(final ExampleUseCase useCase) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -67,11 +60,7 @@ class _ExampleBar extends StatelessWidget {
   }
 }
 
-class _InfoDialog extends StatelessWidget {
-  const _InfoDialog(this.useCase);
-
-  final ExampleUseCase useCase;
-
+class const _InfoDialog(final ExampleUseCase useCase) extends StatelessWidget {
   static final _paragraphBreak = RegExp(r'\n{2,}');
   static final _lineBreak = RegExp(r'\n(?!\d+\. |[-*] )');
 

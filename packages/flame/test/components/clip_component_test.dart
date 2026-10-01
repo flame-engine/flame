@@ -3,8 +3,8 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
-class _Rectangle extends RectangleComponent {
-  _Rectangle()
+class _Rectangle() extends RectangleComponent {
+  this
     : super(
         size: Vector2(200, 200),
         anchor: Anchor.center,

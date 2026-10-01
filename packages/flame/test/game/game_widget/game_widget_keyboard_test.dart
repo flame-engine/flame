@@ -5,10 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
-class _KeyboardEventsGame extends FlameGame with KeyboardEvents {
+class _KeyboardEventsGame() extends FlameGame with KeyboardEvents {
   final List<String> keysPressed = [];
-
-  _KeyboardEventsGame();
 
   @override
   KeyEventResult onKeyEvent(
@@ -21,7 +19,7 @@ class _KeyboardEventsGame extends FlameGame with KeyboardEvents {
   }
 }
 
-class _KeyboardHandlerComponent extends Component with KeyboardHandler {
+class _KeyboardHandlerComponent() extends Component with KeyboardHandler {
   final List<String> keysPressed = [];
 
   @override
@@ -31,10 +29,9 @@ class _KeyboardHandlerComponent extends Component with KeyboardHandler {
   }
 }
 
-class _HasKeyboardHandlerComponentsGame extends FlameGame
+class _HasKeyboardHandlerComponentsGame()
+    extends FlameGame
     with HasKeyboardHandlerComponents {
-  _HasKeyboardHandlerComponentsGame();
-
   late _KeyboardHandlerComponent keyboardHandler;
 
   @override
@@ -44,11 +41,7 @@ class _HasKeyboardHandlerComponentsGame extends FlameGame
   }
 }
 
-class _GamePage extends StatelessWidget {
-  final Widget child;
-
-  const _GamePage({required this.child});
-
+class const _GamePage({required final Widget child}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

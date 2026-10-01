@@ -7,15 +7,11 @@ import '../klondike_game.dart';
 import '../rank.dart';
 import '../suit.dart';
 
-class Card extends PositionComponent {
-  Card(int intRank, int intSuit)
-    : rank = Rank.fromInt(intRank),
-      suit = Suit.fromInt(intSuit),
-      _faceUp = false,
-      super(size: KlondikeGame.cardSize);
+class Card(int intRank, int intSuit) extends PositionComponent {
+  this : _faceUp = false, super(size: KlondikeGame.cardSize);
 
-  final Rank rank;
-  final Suit suit;
+  final Rank rank = Rank.fromInt(intRank);
+  final Suit suit = Suit.fromInt(intSuit);
   bool _faceUp;
 
   bool get isFaceUp => _faceUp;

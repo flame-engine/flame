@@ -6,7 +6,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart';
 
-class BouncingBallExample extends FlameGame with HasCollisionDetection {
+class BouncingBallExample() extends FlameGame with HasCollisionDetection {
   static const description = '''
     This example shows how you can use the Collisions detection api to know when a ball
     collides with the screen boundaries and then update it to bounce off these boundaries.
@@ -20,11 +20,12 @@ class BouncingBallExample extends FlameGame with HasCollisionDetection {
   }
 }
 
-class Ball extends CircleComponent
+class Ball()
+    extends CircleComponent
     with HasGameRef<FlameGame>, CollisionCallbacks {
   late Vector2 velocity;
 
-  Ball() {
+  this {
     paint = Paint()..color = Colors.white;
     radius = 10;
   }

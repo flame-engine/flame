@@ -98,27 +98,22 @@ extension ParallaxExtension on Game {
   }
 }
 
-abstract class ParallaxRenderer {
+abstract class ParallaxRenderer({
+  ImageRepeat? repeat,
+  Alignment? alignment,
+  LayerFill? fill,
+  FilterQuality? filterQuality,
+}) {
   /// If and how the image should be repeated on the canvas
-  final ImageRepeat repeat;
+  final ImageRepeat repeat = repeat ?? ImageRepeat.repeatX;
 
   /// How to align the image in relation to the screen
-  final Alignment alignment;
+  final Alignment alignment = alignment ?? Alignment.bottomLeft;
 
   /// How to fill the screen with the image, always proportionally scaled.
-  final LayerFill fill;
+  final LayerFill fill = fill ?? LayerFill.height;
 
-  final FilterQuality filterQuality;
-
-  ParallaxRenderer({
-    ImageRepeat? repeat,
-    Alignment? alignment,
-    LayerFill? fill,
-    FilterQuality? filterQuality,
-  }) : repeat = repeat ?? ImageRepeat.repeatX,
-       alignment = alignment ?? Alignment.bottomLeft,
-       fill = fill ?? LayerFill.height,
-       filterQuality = filterQuality ?? FilterQuality.low;
+  final FilterQuality filterQuality = filterQuality ?? FilterQuality.low;
 
   void update(double dt);
 
@@ -127,18 +122,14 @@ abstract class ParallaxRenderer {
 
 /// Specifications with a path to an image and how it should be drawn in
 /// relation to the device screen
-class ParallaxImage extends ParallaxRenderer {
+class ParallaxImage(
   /// The image
-  final Image _image;
-
-  ParallaxImage(
-    this._image, {
-    super.repeat,
-    super.alignment,
-    super.fill,
-    super.filterQuality,
-  });
-
+  final Image _image, {
+  super.repeat,
+  super.alignment,
+  super.fill,
+  super.filterQuality,
+}) extends ParallaxRenderer {
   /// Takes the full path of an image, and optionally arguments for how the
   /// image should repeat ([repeat]), which edge it should align with
   /// ([alignment]), which axis it should fill the image on ([fill]) and
@@ -177,21 +168,18 @@ class ParallaxImage extends ParallaxRenderer {
 
 /// Specifications with a SpriteAnimation and how it should be drawn in
 /// relation to the device screen
-class ParallaxAnimation extends ParallaxRenderer {
-  final SpriteAnimationTicker _animationTicker;
+class ParallaxAnimation(
+  SpriteAnimation animation,
 
   /// The animation's frames pre-rendered into images so it can be used in the
   /// parallax.
-  final List<Image> _prerenderedFrames;
-
-  ParallaxAnimation(
-    SpriteAnimation animation,
-    this._prerenderedFrames, {
-    super.repeat,
-    super.alignment,
-    super.fill,
-    super.filterQuality,
-  }) : _animationTicker = animation.createTicker();
+  final List<Image> _prerenderedFrames, {
+  super.repeat,
+  super.alignment,
+  super.fill,
+  super.filterQuality,
+}) extends ParallaxRenderer {
+  final SpriteAnimationTicker _animationTicker = animation.createTicker();
 
   /// Takes the full path of an image, a SpriteAnimationData, and optionally
   /// arguments for how the image should repeat ([repeat]), which edge it should
@@ -250,8 +238,10 @@ class ParallaxAnimation extends ParallaxRenderer {
 
 /// Represents one layer in the parallax, draws out an image on a canvas in the
 /// manner specified by the parallaxImage.
-class ParallaxLayer {
-  final ParallaxRenderer parallaxRenderer;
+class ParallaxLayer(
+  final ParallaxRenderer parallaxRenderer, {
+  Vector2? velocityMultiplier,
+}) {
   late Vector2 velocityMultiplier;
   late Rect _paintArea;
   final Vector2 _scroll = Vector2.zero();
@@ -262,10 +252,7 @@ class ParallaxLayer {
   /// the layer should behave.
   /// [velocityMultiplier] will be used to determine the velocity of the layer
   /// by multiplying the [Parallax.baseVelocity] with the [velocityMultiplier].
-  ParallaxLayer(
-    this.parallaxRenderer, {
-    Vector2? velocityMultiplier,
-  }) : velocityMultiplier = velocityMultiplier ?? Vector2.all(1.0);
+  this : velocityMultiplier = velocityMultiplier ?? Vector2.all(1.0);
 
   Vector2 currentOffset() => _scroll;
 
@@ -377,9 +364,13 @@ class ParallaxLayer {
 }
 
 /// How to fill the screen with the image, always proportionally scaled.
-enum LayerFill { height, width, none }
+enum LayerFill() {
+  height,
+  width,
+  none,
+}
 
-abstract class ParallaxData {
+abstract class ParallaxData() {
   Future<ParallaxRenderer> load(
     ImageRepeat repeat,
     Alignment alignment,
@@ -391,11 +382,7 @@ abstract class ParallaxData {
 }
 
 /// Contains the fields and logic to load a [ParallaxImage].
-class ParallaxImageData extends ParallaxData {
-  final String path;
-
-  ParallaxImageData(this.path);
-
+class ParallaxImageData(final String path) extends ParallaxData {
   @override
   Future<ParallaxRenderer> load(
     ImageRepeat repeat,
@@ -418,12 +405,10 @@ class ParallaxImageData extends ParallaxData {
 }
 
 /// Contains the fields and logic to load a [ParallaxAnimation].
-class ParallaxAnimationData extends ParallaxData {
-  final String path;
-  final SpriteAnimationData animationData;
-
-  ParallaxAnimationData(this.path, this.animationData);
-
+class ParallaxAnimationData(
+  final String path,
+  final SpriteAnimationData animationData,
+) extends ParallaxData {
   @override
   Future<ParallaxRenderer> load(
     ImageRepeat repeat,
@@ -448,11 +433,13 @@ class ParallaxAnimationData extends ParallaxData {
 
 /// A full parallax, several layers of images drawn out on the screen and each
 /// layer moves with different velocities to give an effect of depth.
-class Parallax {
+class Parallax(
+  final List<ParallaxLayer> layers, {
+  Vector2? size,
+  Vector2? baseVelocity,
+}) {
   late Vector2 baseVelocity;
   late Rect _clipRect;
-  final List<ParallaxLayer> layers;
-
   bool isSized = false;
   late final Vector2 _size;
 
@@ -463,11 +450,7 @@ class Parallax {
     resize(newSize);
   }
 
-  Parallax(
-    this.layers, {
-    Vector2? size,
-    Vector2? baseVelocity,
-  }) {
+  this {
     this.baseVelocity = baseVelocity ?? Vector2.zero();
     if (size != null) {
       resize(size);

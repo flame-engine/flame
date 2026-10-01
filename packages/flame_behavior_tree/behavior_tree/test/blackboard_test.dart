@@ -274,14 +274,10 @@ void main() {
 
 // Test helper classes
 
-class _MockBlackboardProvider implements BlackboardProvider {
-  _MockBlackboardProvider(this.blackboard);
+class _MockBlackboardProvider(@override final Blackboard blackboard)
+    implements BlackboardProvider;
 
-  @override
-  final Blackboard blackboard;
-}
-
-class _TestTask extends BaseNode {
+class _TestTask() extends BaseNode {
   int? accessedValue;
 
   @override
@@ -291,7 +287,7 @@ class _TestTask extends BaseNode {
   }
 }
 
-class _IncrementTask extends BaseNode {
+class _IncrementTask() extends BaseNode {
   @override
   void tick() {
     final current = blackboard?.get<int>('counter') ?? 0;
@@ -300,7 +296,7 @@ class _IncrementTask extends BaseNode {
   }
 }
 
-class _IncrementSharedTask extends BaseNode {
+class _IncrementSharedTask() extends BaseNode {
   @override
   void tick() {
     final current = blackboard?.get<int>('shared') ?? 0;
@@ -309,7 +305,7 @@ class _IncrementSharedTask extends BaseNode {
   }
 }
 
-class _CheckFlagTask extends BaseNode {
+class _CheckFlagTask() extends BaseNode {
   bool wasExecuted = false;
 
   @override
@@ -320,7 +316,7 @@ class _CheckFlagTask extends BaseNode {
   }
 }
 
-class _SetFlagTask extends BaseNode {
+class _SetFlagTask() extends BaseNode {
   @override
   void tick() {
     blackboard?.set('flag', true);
@@ -328,7 +324,7 @@ class _SetFlagTask extends BaseNode {
   }
 }
 
-class _ConditionTask extends BaseNode {
+class _ConditionTask() extends BaseNode {
   @override
   void tick() {
     final condition = blackboard?.get<bool>('condition') ?? false;
@@ -336,7 +332,7 @@ class _ConditionTask extends BaseNode {
   }
 }
 
-class _CountExecutionTask extends BaseNode {
+class _CountExecutionTask() extends BaseNode {
   @override
   void tick() {
     final count = blackboard?.get<int>('executeCount') ?? 0;

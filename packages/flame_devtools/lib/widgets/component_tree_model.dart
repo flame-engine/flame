@@ -37,17 +37,14 @@ final componentTreeLoaderProvider = FutureProvider<void>((ref) async {
 });
 
 @immutable
-class ComponentTreeModel {
-  ComponentTreeModel({
-    this.nodeHash = 0,
-    this.componentCount = 0,
-    TreeNode<ComponentTreeNode>? treeRoot,
-  }) : treeRoot = treeRoot ?? TreeNode<ComponentTreeNode>.root();
-
-  final TreeNode<ComponentTreeNode> treeRoot;
-  final int componentCount;
-  final int nodeHash;
-
+// ignore: prefer_const_constructors_in_immutables
+class ComponentTreeModel({
+  final int nodeHash = 0,
+  final int componentCount = 0,
+  TreeNode<ComponentTreeNode>? treeRoot,
+}) {
+  final TreeNode<ComponentTreeNode> treeRoot =
+      treeRoot ?? TreeNode<ComponentTreeNode>.root();
   static Future<ComponentTreeModel?> refreshComponentTree(
     ComponentTreeModel previousModel,
   ) async {

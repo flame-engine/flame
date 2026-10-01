@@ -10,36 +10,33 @@ export '../sprite.dart';
 /// angle.
 ///
 /// This a commonly used subclass of [Component].
-class SpriteComponent extends PositionComponent with HasPaint {
+class SpriteComponent({
+  /// The [sprite] to be rendered by this component.
+  var Sprite? _sprite,
+  bool? autoResize,
+  Paint? paint,
+  super.position,
+  Vector2? size,
+  super.scale,
+  super.angle,
+  super.nativeAngle,
+  super.anchor,
+  super.children,
+  super.priority,
+  var double? bleed,
+  super.key,
+}) extends PositionComponent with HasPaint {
   /// When set to true, the component is auto-resized to match the
   /// size of underlying sprite.
-  bool _autoResize;
-
-  /// The [sprite] to be rendered by this component.
-  Sprite? _sprite;
+  bool _autoResize = autoResize ?? size == null;
 
   /// Creates a component with an empty sprite which can be set later
-  SpriteComponent({
-    Sprite? sprite,
-    bool? autoResize,
-    Paint? paint,
-    super.position,
-    Vector2? size,
-    super.scale,
-    super.angle,
-    super.nativeAngle,
-    super.anchor,
-    super.children,
-    super.priority,
-    this.bleed,
-    super.key,
-  }) : assert(
-         (size == null) == (autoResize ?? size == null),
-         '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
-       ),
-       _autoResize = autoResize ?? size == null,
-       _sprite = sprite,
-       super(size: size ?? sprite?.srcSize) {
+  this
+    : assert(
+        (size == null) == (autoResize ?? size == null),
+        '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
+      ),
+      super(size: size ?? _sprite?.srcSize) {
     if (paint != null) {
       this.paint = paint;
     }
@@ -108,8 +105,6 @@ class SpriteComponent extends PositionComponent with HasPaint {
     _sprite = value;
     _resizeToSprite();
   }
-
-  double? bleed;
 
   @override
   @mustCallSuper

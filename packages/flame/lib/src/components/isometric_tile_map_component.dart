@@ -9,42 +9,37 @@ import 'package:flame/src/sprite_sheet.dart';
 ///
 /// It can change the scale of each block by using the optional destTileSize
 /// property.
-class IsometricTileMapComponent extends PositionComponent {
+class IsometricTileMapComponent(
   /// This is the tileset that will be used to render this map.
-  SpriteSheet tileset;
+  var SpriteSheet tileset,
 
   /// The positions of each block will be placed respecting this matrix.
-  List<List<int>> matrix;
+  var List<List<int>> matrix, {
 
   /// Optionally provide a new tile size to render it scaled.
-  Vector2? destTileSize;
+  var Vector2? destTileSize,
 
   /// This is the vertical height of each block in the tile set.
   ///
   /// Note: this must be measured in the destination space.
-  double? tileHeight;
-
+  var double? tileHeight,
+  super.position,
+  super.size,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.key,
+}) extends PositionComponent {
   /// Where the tileset's image is stored.
-  Sprite _renderSprite;
+  Sprite _renderSprite = Sprite(tileset.image);
 
   /// Displacement applied so that the origin of the component
   /// matches the origin of the AABB.
   final Vector2 _offset = Vector2.zero();
 
-  IsometricTileMapComponent(
-    this.tileset,
-    this.matrix, {
-    this.destTileSize,
-    this.tileHeight,
-    super.position,
-    super.size,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.key,
-  }) : _renderSprite = Sprite(tileset.image) {
+  this {
     _recomputeSizeAndOffset();
   }
 

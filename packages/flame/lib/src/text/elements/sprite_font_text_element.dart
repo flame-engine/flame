@@ -3,20 +3,14 @@ import 'dart:ui';
 
 import 'package:flame/text.dart';
 
-class SpriteFontTextElement extends InlineTextElement {
-  SpriteFontTextElement({
-    required this.source,
-    required this.transforms,
-    required this.rects,
-    required this.paint,
-    required LineMetrics metrics,
-  }) : _box = metrics;
-
-  final Image source;
-  final Float32List transforms;
-  final Float32List rects;
-  final Paint paint;
-  final LineMetrics _box;
+class SpriteFontTextElement({
+  required final Image source,
+  required final Float32List transforms,
+  required final Float32List rects,
+  required final Paint paint,
+  required LineMetrics metrics,
+}) extends InlineTextElement {
+  final LineMetrics _box = metrics;
 
   @override
   LineMetrics get metrics => _box;

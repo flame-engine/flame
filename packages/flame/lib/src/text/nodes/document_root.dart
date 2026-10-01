@@ -4,11 +4,7 @@ import 'package:flame/src/text/common/utils.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/painting.dart';
 
-class DocumentRoot {
-  DocumentRoot(this.children);
-
-  final List<BlockNode> children;
-
+class DocumentRoot(final List<BlockNode> children) {
   /// Applies [style] to this document, producing an Element that can be
   /// rendered on a canvas. Parameters [width] and [height] serve as the
   /// fallback values if they were not specified in the style itself.

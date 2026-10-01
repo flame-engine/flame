@@ -41,7 +41,7 @@ void main() {
   });
 }
 
-class _MockCanvas extends Fake implements Canvas {
+class _MockCanvas() extends Fake implements Canvas {
   bool saveLayerCalled = false;
   bool restoreCalled = false;
 

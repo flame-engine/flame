@@ -5,14 +5,13 @@ import 'package:flame/sprite.dart';
 import 'package:rogue_shooter/components/star_component.dart';
 import 'package:rogue_shooter/rogue_shooter_game.dart';
 
-class StarBackGroundCreator extends Component
+class StarBackGroundCreator()
+    extends Component
     with HasGameRef<RogueShooterGame> {
   final gapSize = 12;
 
   late final SpriteSheet spriteSheet;
   Random random = Random();
-
-  StarBackGroundCreator();
 
   @override
   Future<void> onLoad() async {

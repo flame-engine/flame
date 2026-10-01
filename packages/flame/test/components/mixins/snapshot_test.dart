@@ -170,12 +170,8 @@ void main() {
   );
 }
 
-class _SnapshotTestGame extends FlameGame {
+class _SnapshotTestGame({var bool renderSnapshot = true}) extends FlameGame {
   late final _MockSnapshotComponent snapshotComponent;
-  bool renderSnapshot;
-
-  _SnapshotTestGame({this.renderSnapshot = true});
-
   @override
   Future<void> onLoad() async {
     // Add a snapshot-enabled component that has it's own rendered content
@@ -218,7 +214,7 @@ class _SnapshotTestGame extends FlameGame {
   }
 }
 
-class _MockSnapshotComponent extends _MockComponentSuper with Snapshot {
+class _MockSnapshotComponent() extends _MockComponentSuper with Snapshot {
   int renderCalled = 0;
   int renderTreeCalled = 0;
   int takeSnapshotCalled = 0;
@@ -244,7 +240,7 @@ class _MockSnapshotComponent extends _MockComponentSuper with Snapshot {
 
 /// Mock a superclass just so we can count how many times super.renderTree has
 /// been called
-class _MockComponentSuper extends PositionComponent {
+class _MockComponentSuper() extends PositionComponent {
   int parentRenderTreeCalled = 0;
 
   @override

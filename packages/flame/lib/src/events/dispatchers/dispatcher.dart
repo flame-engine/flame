@@ -1,7 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:flame/src/game/flame_game.dart';
 
-abstract class Dispatcher<G extends FlameGame> extends Component
+abstract class Dispatcher<G extends FlameGame>()
+    extends Component
     with HasGameRef<G> {
   static void addDispatcher<T extends Component>(
     Component component,

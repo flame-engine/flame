@@ -1,12 +1,11 @@
-class Localization {
-  const Localization(
-    this.pluralFunction,
-    this.pluralMinWordCount, [
-    int? pluralMaxWordCount,
-  ]) : pluralMaxWordCount = pluralMaxWordCount ?? pluralMinWordCount;
+class const Localization(
+  final PluralFnType pluralFunction,
+  final int pluralMinWordCount, [
+  int? pluralMaxWordCount,
+]) {
+  // ignore: initialize_in_field_declaration
+  this : pluralMaxWordCount = pluralMaxWordCount ?? pluralMinWordCount;
 
-  final PluralFnType pluralFunction;
-  final int pluralMinWordCount;
   final int pluralMaxWordCount;
 }
 

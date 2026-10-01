@@ -35,20 +35,19 @@ import 'package:meta/meta.dart';
 ///
 /// When [W] is specified, a matching world instance **must** be passed to the
 /// constructor; otherwise, a runtime assertion error is thrown.
-class FlameGame<W extends World> extends ComponentTreeRoot
+class FlameGame<W extends World>({
+  super.children,
+  W? world,
+  CameraComponent? camera,
+}) extends ComponentTreeRoot
     with Game, CustomTraversal
     implements ReadOnlySizeProvider {
-  FlameGame({
-    super.children,
-    W? world,
-    CameraComponent? camera,
-  }) : assert(
-         world != null || W == World,
-         'The generics type $W does not conform to the type of '
-         '${world?.runtimeType ?? 'World'}.',
-       ),
-       _world = world ?? World() as W,
-       _camera = camera ?? CameraComponent() {
+  this
+    : assert(
+        world != null || W == World,
+        'The generics type $W does not conform to the type of '
+        '${world?.runtimeType ?? 'World'}.',
+      ) {
     assert(
       Component.staticGameInstance == null,
       '$this instantiated, while another game ${Component.staticGameInstance} '
@@ -82,7 +81,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     }
   }
 
-  W _world;
+  W _world = world ?? World() as W;
 
   /// The component that is responsible for rendering your [world].
   ///
@@ -104,7 +103,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     _camera.world ??= world;
   }
 
-  CameraComponent _camera;
+  CameraComponent _camera = camera ?? CameraComponent();
 
   @internal
   late final List<ComponentsNotifier> notifiers = [];

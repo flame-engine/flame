@@ -11,7 +11,8 @@ mixin ColonistsObject on PositionComponent {
   );
 }
 
-abstract class StaticColonistsObject extends SpriteComponent
+abstract class StaticColonistsObject(int x, int y)
+    extends SpriteComponent
     with ColonistsObject {
   Sprite get objectSprite;
 
@@ -26,7 +27,7 @@ abstract class StaticColonistsObject extends SpriteComponent
     y ~/ Constants.tileSize,
   );
 
-  StaticColonistsObject(int x, int y) {
+  this {
     sprite = objectSprite;
     width = tileSize.x * Constants.tileSize;
     height = tileSize.y * Constants.tileSize;

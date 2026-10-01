@@ -10,9 +10,7 @@ void main() {
   runApp(const FlameDevTools());
 }
 
-class FlameDevTools extends StatelessWidget {
-  const FlameDevTools({super.key});
-
+class const FlameDevTools({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const DevToolsExtension(

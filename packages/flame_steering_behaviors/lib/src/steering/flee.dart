@@ -5,19 +5,13 @@ import 'package:flame_steering_behaviors/flame_steering_behaviors.dart';
 /// {@template flee}
 /// Flee steering algorithm.
 /// {@endtemplate}
-class Flee extends SteeringCore {
-  /// {@macro flee}
-  const Flee(
-    this.target, {
-    required this.maxAcceleration,
-  });
-
+class const Flee(
   /// The target to flee from.
-  final ReadOnlyPositionProvider target;
+  final ReadOnlyPositionProvider target, {
 
   /// The maximum acceleration of the entity.
-  final double maxAcceleration;
-
+  required final double maxAcceleration,
+}) extends SteeringCore {
   @override
   Vector2 getSteering(Steerable parent) {
     final desiredVelocity = (parent.position - target.position)

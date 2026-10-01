@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _TestComponent extends PositionComponent {
+class _TestComponent() extends PositionComponent {
   int mountCount = 0;
 
   @override

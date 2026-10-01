@@ -9,9 +9,9 @@ import 'package:flame_cli/src/run_controller.dart';
 import 'package:io/io.dart';
 
 /// Hot reloads the game through `flame run`.
-class ReloadCommand extends _RunRequestCommand {
-  ReloadCommand(super.out, super.workingDirectory)
-    : super(request: RunRequest.reload);
+class ReloadCommand(super.out, super.workingDirectory)
+    extends _RunRequestCommand {
+  this : super(request: RunRequest.reload);
 
   @override
   String get name => 'reload';
@@ -22,9 +22,9 @@ class ReloadCommand extends _RunRequestCommand {
 }
 
 /// Hot restarts the game through `flame run`.
-class RestartCommand extends _RunRequestCommand {
-  RestartCommand(super.out, super.workingDirectory)
-    : super(request: RunRequest.restart);
+class RestartCommand(super.out, super.workingDirectory)
+    extends _RunRequestCommand {
+  this : super(request: RunRequest.restart);
 
   @override
   String get name => 'restart';
@@ -34,8 +34,12 @@ class RestartCommand extends _RunRequestCommand {
       'Hot restart the game, which has to have been started with `flame run`.';
 }
 
-abstract class _RunRequestCommand extends Command<int> {
-  _RunRequestCommand(this.out, this.workingDirectory, {required this.request}) {
+abstract class _RunRequestCommand(
+  final StringSink out,
+  final Directory workingDirectory, {
+  required final RunRequest request,
+}) extends Command<int> {
+  this {
     argParser.addOption(
       'port',
       abbr: 'p',
@@ -46,10 +50,6 @@ abstract class _RunRequestCommand extends Command<int> {
           'was not started last.',
     );
   }
-
-  final StringSink out;
-  final Directory workingDirectory;
-  final RunRequest request;
 
   @override
   String get category => CommandCategories.launching;

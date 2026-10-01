@@ -13,30 +13,28 @@ import 'package:riverpod/src/framework.dart';
 /// The corresponding [State] object ([RiverpodAwareGameWidgetState]) assumes
 /// responsibilities associated with ConsumerStatefulElement in
 /// `flutter_riverpod`.
-class RiverpodAwareGameWidget<T extends Game> extends GameWidget<T> {
-  RiverpodAwareGameWidget({
-    required super.game,
-    required this.key,
-    super.textDirection,
-    super.loadingBuilder,
-    super.errorBuilder,
-    super.backgroundBuilder,
-    super.overlayBuilderMap,
-    super.initialActiveOverlays,
-    super.focusNode,
-    super.autofocus,
-    super.mouseCursor,
-    super.addRepaintBoundary,
-  }) : super(key: key);
-
-  @override
-  final GlobalKey<RiverpodAwareGameWidgetState<T>> key;
+class RiverpodAwareGameWidget<T extends Game>({
+  required super.game,
+  @override required final GlobalKey<RiverpodAwareGameWidgetState<T>> key,
+  super.textDirection,
+  super.loadingBuilder,
+  super.errorBuilder,
+  super.backgroundBuilder,
+  super.overlayBuilderMap,
+  super.initialActiveOverlays,
+  super.focusNode,
+  super.autofocus,
+  super.mouseCursor,
+  super.addRepaintBoundary,
+}) extends GameWidget<T> {
+  this : super(key: key);
 
   @override
   GameWidgetState<T> createState() => RiverpodAwareGameWidgetState<T>();
 }
 
-class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T> {
+class RiverpodAwareGameWidgetState<T extends Game>()
+    extends GameWidgetState<T> {
   RiverpodGameMixin get game => widget.game! as RiverpodGameMixin;
 
   bool _isForceBuilding = false;

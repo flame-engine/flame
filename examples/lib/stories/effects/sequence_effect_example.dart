@@ -5,7 +5,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 
-class SequenceEffectExample extends FlameGame {
+class SequenceEffectExample() extends FlameGame {
   static const String description = '''
     Sequence of effects, consisting of a move effect, a rotate effect, another
     move effect, a scale effect, and then one more move effect. The sequence
@@ -36,8 +36,8 @@ class SequenceEffectExample extends FlameGame {
   }
 }
 
-class Player extends PositionComponent {
-  Player()
+class Player() extends PositionComponent {
+  this
     : path = Path()
         ..lineTo(40, 20)
         ..lineTo(0, 40)

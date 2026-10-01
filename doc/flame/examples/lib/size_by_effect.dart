@@ -3,7 +3,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 
-class SizeByEffectGame extends FlameGame {
+class SizeByEffectGame() extends FlameGame {
   bool reset = false;
   @override
   Future<void> onLoad() async {

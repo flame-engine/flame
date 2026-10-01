@@ -17,17 +17,16 @@ import 'package:vector_math/vector_math.dart';
 /// allows it to be combined with other [MoveEffect]s. When several
 /// [MoveByEffect]s are applied to the same target simultaneously, the target
 /// is moved by the vector sum of offsets from all effects.
-class MoveByEffect extends MoveEffect {
-  MoveByEffect(
-    Vector2 offset,
-    EffectController controller, {
-    PositionProvider? target,
-    void Function()? onComplete,
-    super.key,
-  }) : _offset = offset.clone(),
-       super(controller, target, onComplete: onComplete);
+class MoveByEffect(
+  Vector2 offset,
+  EffectController controller, {
+  PositionProvider? target,
+  void Function()? onComplete,
+  super.key,
+}) extends MoveEffect {
+  this : super(controller, target, onComplete: onComplete);
 
-  final Vector2 _offset;
+  final Vector2 _offset = offset.clone();
 
   @override
   void apply(double progress) {

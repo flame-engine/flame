@@ -7,7 +7,8 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/services.dart';
 
-class CameraFollowAndWorldBoundsExample extends FlameGame
+class CameraFollowAndWorldBoundsExample()
+    extends FlameGame
     with HasKeyboardHandlerComponents {
   static const description = '''
     This example demonstrates camera following the player, but also obeying the
@@ -30,8 +31,8 @@ class CameraFollowAndWorldBoundsExample extends FlameGame
   }
 }
 
-class Ground extends PositionComponent {
-  Ground() : pebbles = [], super(size: Vector2(1000, 30)) {
+class Ground() extends PositionComponent {
+  this : pebbles = [], super(size: Vector2(1000, 30)) {
     final random = Random();
     for (var i = 0; i < 25; i++) {
       pebbles.add(
@@ -63,8 +64,8 @@ class Ground extends PositionComponent {
   }
 }
 
-class Player extends PositionComponent with KeyboardHandler {
-  Player()
+class Player() extends PositionComponent with KeyboardHandler {
+  this
     : body = Path()
         ..moveTo(10, 0)
         ..cubicTo(17, 0, 28, 20, 10, 20)

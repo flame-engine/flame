@@ -19,16 +19,14 @@ import 'package:flame/src/effects/provider_interfaces.dart';
 /// This effect applies incremental changes to the component's angle, and
 /// requires that any other effect or update logic applied to the same component
 /// also used incremental updates.
-class RotateEffect extends Effect
-    with EffectTarget<AngleProvider>
-    implements MeasurableEffect {
-  RotateEffect.by(
-    double angle,
-    super.controller, {
-    super.onComplete,
-    super.key,
-  }) : _angle = angle;
-
+class RotateEffect.by(
+  /// The magnitude of the effect: how much the target should turn as the
+  /// progress goes from 0 to 1.
+  var double _angle,
+  super.controller, {
+  super.onComplete,
+  super.key,
+}) extends Effect with EffectTarget<AngleProvider> implements MeasurableEffect {
   factory RotateEffect.to(
     double angle,
     EffectController controller, {
@@ -43,10 +41,6 @@ class RotateEffect extends Effect
     );
   }
 
-  /// The magnitude of the effect: how much the target should turn as the
-  /// progress goes from 0 to 1.
-  double _angle;
-
   @override
   void apply(double progress) {
     final dProgress = progress - previousProgress;
@@ -57,16 +51,15 @@ class RotateEffect extends Effect
   double measure() => _angle;
 }
 
-class _RotateToEffect extends RotateEffect {
-  _RotateToEffect(
-    double angle,
-    EffectController controller, {
-    super.onComplete,
-    super.key,
-  }) : _destinationAngle = angle,
-       super.by(0, controller);
+class _RotateToEffect(
+  double angle,
+  EffectController controller, {
+  super.onComplete,
+  super.key,
+}) extends RotateEffect {
+  this : super.by(0, controller);
 
-  final double _destinationAngle;
+  final double _destinationAngle = angle;
 
   @override
   void onStart() {

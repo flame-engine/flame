@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 /// The **CharacterStorage** is a cache for all [Character]s defined in your
 /// yarn scripts. This container is populated from the `<<character>>`
 /// commands as the YarnProject parses the input scripts.
-class CharacterStorage {
+class CharacterStorage() {
   final Map<String, Character> _cache = {};
 
   bool get isEmpty => _cache.isEmpty;

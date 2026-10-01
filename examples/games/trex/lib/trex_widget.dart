@@ -2,9 +2,7 @@ import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart' hide Gradient, Image;
 import 'package:trex_game/trex_game.dart';
 
-class TRexWidget extends StatelessWidget {
-  const TRexWidget({super.key});
-
+class const TRexWidget({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

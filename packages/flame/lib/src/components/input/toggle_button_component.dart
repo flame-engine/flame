@@ -9,31 +9,33 @@ import 'package:flutter/foundation.dart';
 /// Note: You have to set the [defaultSkin], [defaultSelectedSkin]
 /// and other skins that you want to use in [onLoad] if you are not passed in
 /// through the constructor.
-class ToggleButtonComponent extends AdvancedButtonComponent {
-  ToggleButtonComponent({
-    super.onPressed,
-    this.onSelectedChanged,
-    super.onChangeState,
-    super.defaultSkin,
-    super.downSkin,
-    super.hoverSkin,
-    super.disabledSkin,
-    PositionComponent? defaultSelectedSkin,
-    PositionComponent? downAndSelectedSkin,
-    PositionComponent? hoverAndSelectedSkin,
-    PositionComponent? disabledAndSelectedSkin,
-    super.defaultLabel,
-    super.disabledLabel,
-    PositionComponent? defaultSelectedLabel,
-    PositionComponent? disabledAndSelectedLabel,
-    super.size,
-    super.position,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-  }) {
+class ToggleButtonComponent({
+  super.onPressed,
+
+  /// Callback when button selected changed
+  var ValueChanged<bool>? onSelectedChanged,
+  super.onChangeState,
+  super.defaultSkin,
+  super.downSkin,
+  super.hoverSkin,
+  super.disabledSkin,
+  PositionComponent? defaultSelectedSkin,
+  PositionComponent? downAndSelectedSkin,
+  PositionComponent? hoverAndSelectedSkin,
+  PositionComponent? disabledAndSelectedSkin,
+  super.defaultLabel,
+  super.disabledLabel,
+  PositionComponent? defaultSelectedLabel,
+  PositionComponent? disabledAndSelectedLabel,
+  super.size,
+  super.position,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority,
+}) extends AdvancedButtonComponent {
+  this {
     this.defaultSelectedSkin = defaultSelectedSkin;
     this.downAndSelectedSkin = downAndSelectedSkin;
     this.hoverAndSelectedSkin = hoverAndSelectedSkin;
@@ -41,9 +43,6 @@ class ToggleButtonComponent extends AdvancedButtonComponent {
     this.defaultSelectedLabel = defaultSelectedLabel;
     this.disabledAndSelectedLabel = disabledAndSelectedLabel;
   }
-
-  /// Callback when button selected changed
-  ValueChanged<bool>? onSelectedChanged;
 
   @override
   @mustCallSuper

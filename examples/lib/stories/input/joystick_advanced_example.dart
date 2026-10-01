@@ -9,7 +9,7 @@ import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:material_ui/material_ui.dart';
 
-class JoystickAdvancedExample extends FlameGame with HasCollisionDetection {
+class JoystickAdvancedExample() extends FlameGame with HasCollisionDetection {
   static const String description = '''
     In this example we showcase how to use the joystick by creating 
     `SpriteComponent`s that serve as the joystick's knob and background.
@@ -20,7 +20,7 @@ class JoystickAdvancedExample extends FlameGame with HasCollisionDetection {
     the buttons.
   ''';
 
-  JoystickAdvancedExample()
+  this
     : super(
         camera: CameraComponent.withFixedResolution(width: 1200, height: 800),
       );

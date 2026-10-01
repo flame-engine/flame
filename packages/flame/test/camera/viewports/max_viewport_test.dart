@@ -64,7 +64,7 @@ void main() {
   });
 }
 
-class _MyMaxViewport extends MaxViewport {
+class _MyMaxViewport() extends MaxViewport {
   int onViewportResizeCalled = 0;
 
   @override

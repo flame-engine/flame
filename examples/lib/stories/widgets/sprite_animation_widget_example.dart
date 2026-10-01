@@ -2,22 +2,14 @@ import 'package:flame/extensions.dart';
 import 'package:flame/widgets.dart';
 import 'package:flutter/widgets.dart';
 
-class SpriteAnimationWidgetExample extends StatelessWidget {
-  const SpriteAnimationWidgetExample({
-    required this.width,
-    required this.height,
-    required this.playing,
-    required this.anchor,
-    required this.paint,
-    super.key,
-  });
-
-  final double width;
-  final double height;
-  final bool playing;
-  final Anchor anchor;
-  final Paint? paint;
-
+class const SpriteAnimationWidgetExample({
+  required final double width,
+  required final double height,
+  required final bool playing,
+  required final Anchor anchor,
+  required final Paint? paint,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -38,20 +30,13 @@ class SpriteAnimationWidgetExample extends StatelessWidget {
   }
 }
 
-class SizedSpriteAnimationWidgetExample extends StatelessWidget {
-  const SizedSpriteAnimationWidgetExample({
-    required this.size,
-    required this.playing,
-    required this.anchor,
-    required this.paint,
-    super.key,
-  });
-
-  final Size size;
-  final bool playing;
-  final Anchor anchor;
-  final Paint? paint;
-
+class const SizedSpriteAnimationWidgetExample({
+  required final Size size,
+  required final bool playing,
+  required final Anchor anchor,
+  required final Paint? paint,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SpriteAnimationWidget.asset(

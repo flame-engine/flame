@@ -2,8 +2,8 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class _TestForge2DWorld extends Forge2DWorld {
-  _TestForge2DWorld() : super(gravity: Vector2(0, 0));
+class _TestForge2DWorld() extends Forge2DWorld {
+  this : super(gravity: Vector2(0, 0));
 }
 
 void main() {

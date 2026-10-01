@@ -9,7 +9,7 @@ import 'package:flutter/foundation.dart';
 ///
 /// Direct modification of this vector's [storage] is not allowed.
 /// {@endtemplate}
-class UnmodifiableVector3 extends Vector3 {
+class UnmodifiableVector3.zero() extends Vector3 {
   /// {@macro unmodifiable_vector_3}
   ///
   /// Constructs a vector using the raw values [x], [y], and [z].
@@ -19,7 +19,7 @@ class UnmodifiableVector3 extends Vector3 {
   /// {@macro unmodifiable_vector_3}
   ///
   /// Create an empty vector.
-  UnmodifiableVector3.zero() : super.zero();
+  this : super.zero();
 
   /// {@macro unmodifiable_vector_3}
   ///

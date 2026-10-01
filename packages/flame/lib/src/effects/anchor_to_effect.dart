@@ -9,17 +9,15 @@ import 'package:vector_math/vector_math.dart';
 /// The anchor will move in a straight line from the anchor's value at the start
 /// of the effect towards the provided target. The timing of the move is
 /// governed by the [controller].
-class AnchorToEffect extends AnchorEffect {
-  AnchorToEffect(
-    Anchor destination,
-    EffectController controller, {
-    AnchorProvider? target,
-    void Function()? onComplete,
-    super.key,
-  }) : _destination = destination,
-       super(controller, target, onComplete: onComplete);
+class AnchorToEffect(
+  final Anchor _destination,
+  EffectController controller, {
+  AnchorProvider? target,
+  void Function()? onComplete,
+  super.key,
+}) extends AnchorEffect {
+  this : super(controller, target, onComplete: onComplete);
 
-  final Anchor _destination;
   late Vector2 _offset;
 
   @override

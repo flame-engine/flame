@@ -4,12 +4,12 @@ import 'package:flame/game.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
-class _TransparentGame extends FlameGame with DeferHitTestToComponents {
+class _TransparentGame() extends FlameGame with DeferHitTestToComponents {
   @override
   Color backgroundColor() => const Color(0x00000000);
 }
 
-class _TrackingGame extends FlameGame with DeferHitTestToComponents {
+class _TrackingGame() extends FlameGame with DeferHitTestToComponents {
   int componentsAtPointCallCount = 0;
 
   @override
@@ -25,7 +25,7 @@ class _TrackingGame extends FlameGame with DeferHitTestToComponents {
   }
 }
 
-class _TappableComponent extends PositionComponent with TapCallbacks {
+class _TappableComponent() extends PositionComponent with TapCallbacks {
   int tapDownCount = 0;
   int tapUpCount = 0;
 

@@ -20,43 +20,37 @@ import 'package:meta/meta.dart';
 /// any potentially costly initialization operations.
 ///
 /// Routes are managed by the [RouterComponent] component.
-class Route extends PositionComponent
-    with ParentIsA<RouterComponent>, CustomTraversal, HasTimeScale {
-  Route(
-    Component Function()? builder, {
-    this._loadingBuilder,
-    this.transparent = false,
-    this.maintainState = true,
-  }) : _builder = builder,
-       _renderEffect = Decorator();
+class Route(
+  /// The function that will be invoked in order to build the page component
+  /// when this route first becomes active. This function may also be `null`,
+  /// in which case the user must override the [build] method.
+  final Component Function()? _builder, {
+
+  /// The function that will build the loading page component, which is shown
+  /// when this route first becomes active, but hasn't fully loaded yet.
+  final Component Function()? _loadingBuilder,
 
   /// If true, then the route below this one will continue to be rendered when
   /// this route becomes active. If false, then this route is assumed to
   /// completely obscure any route that would be underneath, and therefore the
   /// route underneath doesn't need to be rendered.
-  final bool transparent;
+  final bool transparent = false,
 
   /// If false, the route will not maintain the state of this route's page
   /// component.  By default, once a route becomes active, the component
   /// built by the build routine is maintained by the route after the route
   /// is popped off the stack. Setting [maintainState] to false will drop the
   /// page component when the route is popped off the stack.
-  final bool maintainState;
+  final bool maintainState = true,
+}) extends PositionComponent
+    with ParentIsA<RouterComponent>, CustomTraversal, HasTimeScale {
+  this : _renderEffect = Decorator();
 
   /// The name of the route (set by the [RouterComponent]).
   String? get name => _name;
   String? _name;
   @internal
   set name(String? value) => _name = value;
-
-  /// The function that will be invoked in order to build the page component
-  /// when this route first becomes active. This function may also be `null`,
-  /// in which case the user must override the [build] method.
-  final Component Function()? _builder;
-
-  /// The function that will build the loading page component, which is shown
-  /// when this route first becomes active, but hasn't fully loaded yet.
-  final Component Function()? _loadingBuilder;
 
   /// This method is invoked when the route is pushed on top of the
   /// [RouterComponent]'s stack.

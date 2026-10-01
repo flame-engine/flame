@@ -6,16 +6,17 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class DistanceJointExample extends Forge2DExampleGame {
+class DistanceJointExample() extends Forge2DExampleGame {
   static const description = '''
     This example shows how to use a `DistanceJoint`. Tap the screen to add a 
     pair of balls joined with a `DistanceJoint`.
   ''';
 
-  DistanceJointExample() : super(world: DistanceJointWorld());
+  this : super(world: DistanceJointWorld());
 }
 
-class DistanceJointWorld extends Forge2DWorld
+class DistanceJointWorld()
+    extends Forge2DWorld
     with TapCallbacks, HasGameRef<Forge2DGame> {
   @override
   Future<void> onLoad() async {

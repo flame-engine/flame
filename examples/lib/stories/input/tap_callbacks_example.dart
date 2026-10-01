@@ -4,7 +4,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart';
 
-class TapCallbacksExample extends FlameGame {
+class TapCallbacksExample() extends FlameGame {
   static const String description = '''
     In this example we show the `TapCallbacks` mixin functionality. You can add
     the `TapCallbacks` mixin to any `PositionComponent`.\n\n
@@ -18,13 +18,15 @@ class TapCallbacksExample extends FlameGame {
   }
 }
 
-class TappableSquare extends RectangleComponent with TapCallbacks {
+class TappableSquare({Vector2? position})
+    extends RectangleComponent
+    with TapCallbacks {
   static final Paint _white = Paint()..color = const Color(0xFFFFFFFF);
   static final Paint _grey = Paint()..color = const Color(0xFFA5A5A5);
 
   bool _beenPressed = false;
 
-  TappableSquare({Vector2? position})
+  this
     : super(
         position: position ?? Vector2.all(100),
         size: Vector2.all(100),

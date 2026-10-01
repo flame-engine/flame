@@ -423,16 +423,17 @@ lines.''',
   );
 }
 
-class _FramedTextBox extends TextBoxComponent {
-  _FramedTextBox({
-    required String super.text,
-    super.align,
-    super.position,
-    super.size,
-    super.anchor,
-  }) : super(
-         textRenderer: DebugTextRenderer(fontSize: 22),
-       );
+class _FramedTextBox({
+  required String super.text,
+  super.align,
+  super.position,
+  super.size,
+  super.anchor,
+}) extends TextBoxComponent {
+  this
+    : super(
+        textRenderer: DebugTextRenderer(fontSize: 22),
+      );
 
   final Paint _borderPaint = Paint()
     ..style = PaintingStyle.stroke

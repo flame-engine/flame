@@ -62,7 +62,25 @@ import 'package:meta/meta.dart';
 /// the approximate bounding rectangle of the rendered picture. If you
 /// do not specify the size of a PositionComponent, then it will be
 /// equal to zero and the component won't be able to respond to taps.
-class PositionComponent extends Component
+class PositionComponent({
+  Vector2? position,
+  Vector2? size,
+  Vector2? scale,
+  double? angle,
+
+  /// The angle where this component is looking at when it is in
+  /// the default state, i.e. when [angle] is equal to zero.
+  /// For example, a nativeAngle of
+  ///     0 implies up/north direction
+  ///  pi/2 implies right/east direction
+  ///    pi implies down/south direction
+  /// -pi/2 implies left/west direction
+  var double nativeAngle = 0,
+  Anchor? anchor,
+  super.children,
+  super.priority,
+  super.key,
+}) extends Component
     implements
         AnchorProvider,
         AngleProvider,
@@ -70,19 +88,7 @@ class PositionComponent extends Component
         ScaleProvider,
         SizeProvider,
         CoordinateTransform {
-  PositionComponent({
-    Vector2? position,
-    Vector2? size,
-    Vector2? scale,
-    double? angle,
-    this.nativeAngle = 0,
-    Anchor? anchor,
-    super.children,
-    super.priority,
-    super.key,
-  }) : transform = Transform2D(),
-       _anchor = anchor ?? Anchor.topLeft,
-       _size = NotifyingVector2.copy(size ?? Vector2.zero()) {
+  this : transform = Transform2D() {
     decorator = Transform2DDecorator(transform);
     if (position != null) {
       transform.position = position;
@@ -98,17 +104,8 @@ class PositionComponent extends Component
   }
 
   final Transform2D transform;
-  final NotifyingVector2 _size;
-  Anchor _anchor;
-
-  /// The angle where this component is looking at when it is in
-  /// the default state, i.e. when [angle] is equal to zero.
-  /// For example, a nativeAngle of
-  ///     0 implies up/north direction
-  ///  pi/2 implies right/east direction
-  ///    pi implies down/south direction
-  /// -pi/2 implies left/west direction
-  double nativeAngle;
+  final NotifyingVector2 _size = NotifyingVector2.copy(size ?? Vector2.zero());
+  Anchor _anchor = anchor ?? Anchor.topLeft;
 
   /// The decorator is used to apply visual effects to a component.
   ///

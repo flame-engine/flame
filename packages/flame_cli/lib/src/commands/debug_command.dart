@@ -5,8 +5,8 @@ import 'package:flame_cli/src/flame_connection.dart';
 import 'package:io/io.dart';
 
 /// Shows or changes the debug mode of the game, or of a single component.
-class DebugCommand extends FlameCommand {
-  DebugCommand(super.out, super.workingDirectory) {
+class DebugCommand(super.out, super.workingDirectory) extends FlameCommand {
+  this {
     argParser.addOption(
       'component',
       abbr: 'c',

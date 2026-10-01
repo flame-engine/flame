@@ -2,14 +2,12 @@ import 'package:devtools_app_shared/ui.dart' as devtools_ui;
 import 'package:flame_devtools/repository.dart';
 import 'package:flutter/material.dart';
 
-class OverlayNavigation extends StatefulWidget {
-  const OverlayNavigation({super.key});
-
+class const OverlayNavigation({super.key}) extends StatefulWidget {
   @override
   State<OverlayNavigation> createState() => _OverlayNavigationState();
 }
 
-class _OverlayNavigationState extends State<OverlayNavigation> {
+class _OverlayNavigationState() extends State<OverlayNavigation> {
   late Future<Overlays> _overlays;
 
   @override

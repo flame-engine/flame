@@ -15,7 +15,7 @@ import 'package:flame/src/devtools/dev_tools_connector.dart';
 /// `ext.flame_devtools.getComponentTree` service extension. The optional
 /// `pixelRatio` parameter can be used to render the image in a higher (or
 /// lower) resolution than the logical size of the component.
-class ComponentSnapshotConnector extends DevToolsConnector {
+class ComponentSnapshotConnector() extends DevToolsConnector {
   @override
   void init() {
     registerExtension(

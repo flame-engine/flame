@@ -7,18 +7,14 @@ import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart';
 
-class LayoutComponentExample3 extends FlameGame with DragCallbacks {
-  LayoutComponentExample3({
-    required this.demoSize,
-  });
-
+class LayoutComponentExample3({
+  required final LayoutComponentExampleSize demoSize,
+}) extends FlameGame with DragCallbacks {
   static const String description = '''
 When ColumnComponent has a TextBoxComponent as a child, and its 
 crossAxisAlignment is stretch, it will also set the maxWidth of the
 TextBoxComponent.
   ''';
-
-  final LayoutComponentExampleSize demoSize;
 
   @override
   FutureOr<void> onLoad() {
@@ -55,19 +51,20 @@ TextBoxComponent.
   bool get debugMode => true;
 }
 
-class LayoutDemo3 extends ColumnComponent {
-  LayoutDemo3({
-    required super.position,
-    super.size,
-    super.key,
-  }) : super(
-         anchor: Anchor.topLeft,
-         priority: 0,
-         children: [],
-         gap: 16,
-         mainAxisAlignment: MainAxisAlignment.start,
-         crossAxisAlignment: CrossAxisAlignment.stretch,
-       );
+class LayoutDemo3({
+  required super.position,
+  super.size,
+  super.key,
+}) extends ColumnComponent {
+  this
+    : super(
+        anchor: Anchor.topLeft,
+        priority: 0,
+        children: [],
+        gap: 16,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+      );
 
   @override
   FutureOr<void> onLoad() {

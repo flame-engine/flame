@@ -16,14 +16,11 @@ import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 /// of the bounds, when it is false only the viewfinder anchor is considered.
 /// Note that it only works with [Rectangle], [RoundedRectangle] and [Circle]
 /// shapes.
-class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
-  Shape _boundsShape;
+class ViewportAwareBoundsBehavior({
+  required var Shape _boundsShape,
+  super.key,
+}) extends Component with ParentIsA<Viewfinder> {
   late Rect _visibleWorldRect;
-
-  ViewportAwareBoundsBehavior({
-    required this._boundsShape,
-    super.key,
-  });
 
   @override
   void onLoad() {

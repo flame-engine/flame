@@ -3,7 +3,9 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/animation.dart';
 
-class CameraTarget extends PositionComponent with HasGameRef<CrystalBallGame> {
+class CameraTarget()
+    extends PositionComponent
+    with HasGameRef<CrystalBallGame> {
   final effectController = CurvedEffectController(
     0.1,
     Curves.easeOut,
@@ -26,16 +28,15 @@ class CameraTarget extends PositionComponent with HasGameRef<CrystalBallGame> {
   }
 }
 
-class MoveCameraTarget extends Effect with EffectTarget<CameraTarget> {
-  MoveCameraTarget(this._to, super.controller);
-
+class MoveCameraTarget(final Vector2 _to, super.controller)
+    extends Effect
+    with EffectTarget<CameraTarget> {
   @override
   void onMount() {
     super.onMount();
     _from = target.position;
   }
 
-  final Vector2 _to;
   late final Vector2 _from;
 
   @override

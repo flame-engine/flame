@@ -4,14 +4,10 @@ import 'package:flame_devtools/widgets/incremental_number_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ComponentPriorityForm extends ConsumerWidget {
-  const ComponentPriorityForm({
-    required this.componentId,
-    super.key,
-  });
-
-  final int componentId;
-
+class const ComponentPriorityForm({
+  required final int componentId,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final priority = ref.watch(componentPriorityProvider(componentId));

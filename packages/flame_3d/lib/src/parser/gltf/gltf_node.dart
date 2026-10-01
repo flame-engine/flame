@@ -5,19 +5,13 @@ import 'package:flame_3d/src/parser/gltf/gltf_root.dart';
 /// A base class for all data classes representing the GLTF schema.
 /// It holds a reference to the [GltfRoot] that contains it, which allows
 /// for [GltfRef]s to be resolved.
-abstract class GltfNode {
-  final GltfRoot root;
-
-  GltfNode({
-    required this.root,
-  });
-}
+abstract class GltfNode({
+  required final GltfRoot root,
+});
 
 /// A helper utility class to group different methods for parsing GLTF data
 /// into data classes.
-class Parser {
-  Parser._();
-
+class Parser._() {
   static GltfRef<T>? ref<T extends GltfNode>(
     GltfRoot root,
     Map<String, Object?> map,

@@ -2,18 +2,20 @@ import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/gestures.dart';
 
-class DragUpdateEvent extends DisplacementEvent<DragUpdateDetails> {
-  DragUpdateEvent(this.pointerId, super.game, DragUpdateDetails details)
-    : timestamp = details.sourceTimeStamp ?? Duration.zero,
-      super(
+class DragUpdateEvent(
+  final int pointerId,
+  super.game,
+  DragUpdateDetails details,
+) extends DisplacementEvent<DragUpdateDetails> {
+  this
+    : super(
         raw: details,
         deviceStartPosition: details.globalPosition.toVector2(),
         deviceEndPosition:
             details.globalPosition.toVector2() + details.delta.toVector2(),
       );
 
-  final int pointerId;
-  final Duration timestamp;
+  final Duration timestamp = details.sourceTimeStamp ?? Duration.zero;
 
   @override
   String toString() =>

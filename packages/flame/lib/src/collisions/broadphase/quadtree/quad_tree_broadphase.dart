@@ -17,25 +17,21 @@ typedef ExternalMinDistanceCheck = bool Function(
 ///
 /// See [HasQuadTreeCollisionDetection.initializeCollisionDetection] for a
 /// detailed description of its initialization parameters.
-class QuadTreeBroadphase extends Broadphase<ShapeHitbox> {
-  QuadTreeBroadphase({
-    required Rect mainBoxSize,
-    required this.broadphaseCheck,
-    required this.minimumDistanceCheck,
-    int maxObjects = 25,
-    int maxDepth = 10,
-  }) : tree = QuadTree<ShapeHitbox>(
-         mainBoxSize: mainBoxSize,
-         maxObjects: maxObjects,
-         maxDepth: maxDepth,
-       );
-
-  final QuadTree<ShapeHitbox> tree;
+class QuadTreeBroadphase({
+  required Rect mainBoxSize,
+  required var ExternalBroadphaseCheck broadphaseCheck,
+  required var ExternalMinDistanceCheck minimumDistanceCheck,
+  int maxObjects = 25,
+  int maxDepth = 10,
+}) extends Broadphase<ShapeHitbox> {
+  final QuadTree<ShapeHitbox> tree = QuadTree<ShapeHitbox>(
+    mainBoxSize: mainBoxSize,
+    maxObjects: maxObjects,
+    maxDepth: maxDepth,
+  );
 
   final activeHitboxes = HashSet<ShapeHitbox>();
 
-  ExternalBroadphaseCheck broadphaseCheck;
-  ExternalMinDistanceCheck minimumDistanceCheck;
   final _broadphaseCheckCache = <ShapeHitbox, Map<ShapeHitbox, bool>>{};
 
   final _cachedCenters = <ShapeHitbox, Vector2>{};

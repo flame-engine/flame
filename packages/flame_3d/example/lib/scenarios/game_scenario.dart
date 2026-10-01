@@ -4,7 +4,7 @@ import 'package:flame_3d_example/scenarios/colors_scenario.dart';
 import 'package:flame_3d_example/scenarios/culling_scenario.dart';
 import 'package:flame_3d_example/scenarios/models_scenario.dart';
 
-abstract class GameScenario {
+abstract class GameScenario() {
   Future<void> onLoad();
 
   void setup(ExampleGame3D game);

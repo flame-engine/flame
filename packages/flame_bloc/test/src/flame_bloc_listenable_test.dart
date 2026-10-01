@@ -7,7 +7,8 @@ import 'package:flutter_test/flutter_test.dart';
 import '../inventory_cubit.dart';
 import '../player_cubit.dart';
 
-class _PlayerListener extends Component
+class _PlayerListener()
+    extends Component
     with FlameBlocListenable<PlayerCubit, PlayerState> {
   PlayerState? last;
   @override
@@ -25,7 +26,8 @@ class _PlayerListener extends Component
   }
 }
 
-class _SadPlayerListener extends Component
+class _SadPlayerListener()
+    extends Component
     with FlameBlocListenable<PlayerCubit, PlayerState> {
   PlayerState? last;
 
@@ -49,7 +51,8 @@ class _SadPlayerListener extends Component
   }
 }
 
-class _BlocAccessingListener extends Component
+class _BlocAccessingListener()
+    extends Component
     with FlameBlocListenable<PlayerCubit, PlayerState> {
   PlayerCubit? initialBloc;
 
@@ -233,17 +236,13 @@ void main() {
   });
 }
 
-class _CustomBlocRoute extends Route {
-  _CustomBlocRoute({
-    Component Function()? builder,
-    this._onPush,
-    this._onPop,
-    this._build,
-  }) : super(builder);
-
-  final void Function(Route, Route?)? _onPush;
-  final void Function(Route, Route)? _onPop;
-  final Component Function(Route)? _build;
+class _CustomBlocRoute({
+  Component Function()? builder,
+  final void Function(Route, Route?)? _onPush,
+  final void Function(Route, Route)? _onPop,
+  final Component Function(Route)? _build,
+}) extends Route {
+  this : super(builder);
 
   @override
   void onPush(Route? route) => _onPush?.call(this, route);

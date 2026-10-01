@@ -8,7 +8,7 @@ import 'package:flame/src/devtools/dev_tools_connector.dart';
 /// The [ComponentTreeConnector] is responsible for reporting the component
 /// tree of the game, and information about single components, to the devtools
 /// extension.
-class ComponentTreeConnector extends DevToolsConnector {
+class ComponentTreeConnector() extends DevToolsConnector {
   @override
   void init() {
     // Get the component tree of the game.
@@ -55,24 +55,15 @@ class ComponentTreeConnector extends DevToolsConnector {
 }
 
 /// This should only be used internally by the devtools extension.
-class ComponentTreeNode {
-  final int id;
-  final String name;
-  final String toStringText;
-  final bool isPositionComponent;
-  final Map<String, dynamic> attributes;
-  final List<ComponentTreeNode> children;
-
-  ComponentTreeNode(
-    this.id,
-    this.name,
-    this.toStringText,
-    // ignore: avoid_positional_boolean_parameters
-    this.isPositionComponent,
-    this.children, {
-    this.attributes = const {},
-  });
-
+class ComponentTreeNode(
+  final int id,
+  final String name,
+  final String toStringText,
+  // ignore: avoid_positional_boolean_parameters
+  final bool isPositionComponent,
+  final List<ComponentTreeNode> children, {
+  final Map<String, dynamic> attributes = const {},
+}) {
   ComponentTreeNode.fromComponent(Component component)
     : this(
         component.hashCode,

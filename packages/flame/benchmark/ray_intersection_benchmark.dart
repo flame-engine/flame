@@ -16,10 +16,10 @@ const _worldWidth = 800.0;
 const _worldHeight = 600.0;
 final _half = Vector2(0.5, 0.5);
 
-abstract class RayIntersectionBenchmark extends AsyncBenchmarkBase {
-  RayIntersectionBenchmark(super.name, {required this.random});
-
-  final Random random;
+abstract class RayIntersectionBenchmark(
+  super.name, {
+  required final Random random,
+}) extends AsyncBenchmarkBase {
   late final RayIntersectionGame game;
 
   @override
@@ -30,11 +30,11 @@ abstract class RayIntersectionBenchmark extends AsyncBenchmarkBase {
   }
 }
 
-class ConcaveRayIntersectionBenchmark extends RayIntersectionBenchmark {
-  final RayInputs inputs;
-
-  ConcaveRayIntersectionBenchmark(this.inputs, {required super.random})
-    : super('Concave polygon ray intersection');
+class ConcaveRayIntersectionBenchmark(
+  final RayInputs inputs, {
+  required super.random,
+}) extends RayIntersectionBenchmark {
+  this : super('Concave polygon ray intersection');
 
   static Future<void> main() async {
     final r = Random(69420);
@@ -51,11 +51,11 @@ class ConcaveRayIntersectionBenchmark extends RayIntersectionBenchmark {
   }
 }
 
-class ConvexRayIntersectionBenchmark extends RayIntersectionBenchmark {
-  final RayInputs inputs;
-
-  ConvexRayIntersectionBenchmark(this.inputs, {required super.random})
-    : super('Convex polygon ray intersection');
+class ConvexRayIntersectionBenchmark(
+  final RayInputs inputs, {
+  required super.random,
+}) extends RayIntersectionBenchmark {
+  this : super('Convex polygon ray intersection');
 
   static Future<void> main() async {
     final r = Random(69420);
@@ -78,12 +78,8 @@ class ConvexRayIntersectionBenchmark extends RayIntersectionBenchmark {
   }
 }
 
-class RayIntersectionGame extends FlameGame {
+class RayIntersectionGame(final RayBatch batch) extends FlameGame {
   late final RayIntersectionComponent rayIntersectionComponent;
-  late final RayBatch batch;
-
-  RayIntersectionGame(this.batch);
-
   FutureOr<void> prepare() async {
     onGameResize(Vector2(_worldWidth, _worldHeight));
     await load();
@@ -103,11 +99,7 @@ class RayIntersectionGame extends FlameGame {
   }
 }
 
-class RayIntersectionComponent extends Component {
-  RayIntersectionComponent(this.batch);
-
-  final RayBatch batch;
-
+class RayIntersectionComponent(final RayBatch batch) extends Component {
   @override
   void update(double dt) {
     super.update(dt);
@@ -117,19 +109,9 @@ class RayIntersectionComponent extends Component {
   }
 }
 
-class RayInputs {
-  RayInputs(this.positions, this.rays);
+class RayInputs(final List<Vector2> positions, final List<Ray2> rays);
 
-  final List<Vector2> positions;
-  final List<Ray2> rays;
-}
-
-class RayBatch {
-  RayBatch(this.hitboxes, this.rays);
-
-  final List<PolygonHitbox> hitboxes;
-  final List<Ray2> rays;
-}
+class RayBatch(final List<PolygonHitbox> hitboxes, final List<Ray2> rays);
 
 RayBatch _createBatch(List<Vector2> vertices, RayInputs inputs) {
   final hitboxes = [

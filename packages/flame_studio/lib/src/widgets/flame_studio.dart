@@ -2,11 +2,8 @@ import 'package:flame_studio/src/widgets/ui_scaffold.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FlameStudio extends StatelessWidget {
-  const FlameStudio(this.child, {super.key});
-
-  final Widget child;
-
+class const FlameStudio(final Widget child, {super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ProviderScope(

@@ -5,17 +5,16 @@ import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class MotorJointExample extends Forge2DExampleGame {
+class MotorJointExample() extends Forge2DExampleGame {
   static const description = '''
     This example shows how to use a `MotorJoint`. The ball spins around the 
     center point. Tap the screen to change the direction.
   ''';
 
-  MotorJointExample()
-    : super(gravity: Vector2.zero(), world: MotorJointWorld());
+  this : super(gravity: Vector2.zero(), world: MotorJointWorld());
 }
 
-class MotorJointWorld extends Forge2DWorld with TapCallbacks {
+class MotorJointWorld() extends Forge2DWorld with TapCallbacks {
   late Ball ball;
   late MotorJoint joint;
   final motorSpeed = 1;

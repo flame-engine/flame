@@ -5,25 +5,25 @@ import 'package:flame_3d/game.dart';
 import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
 
-enum PrimitiveType {
+enum PrimitiveType() {
   triangles,
 }
 
 /// {@template surface}
 /// Base surface [Resource], it describes a single surface to be rendered.
 /// {@endtemplate}
-class Surface extends Resource<GpuBuffer> {
-  /// {@macro surface}
-  Surface({
-    required List<Vertex> vertices,
-    required List<int> indices,
-    Material? material,
-    this.jointMap,
-    /**
+class Surface({
+  required List<Vertex> vertices,
+  required List<int> indices,
+  Material? material,
+  var Map<int, int>? jointMap,
+  /**
      * If `true`, the normals will be calculated if they are not provided.
      */
-    bool calculateNormals = true,
-  }) : material = material ?? Material.defaultMaterial {
+  bool calculateNormals = true,
+}) extends Resource<GpuBuffer> {
+  /// {@macro surface}
+  this {
     final normalizedVertices = _normalize(
       vertices: vertices,
       indices: indices,
@@ -54,9 +54,7 @@ class Surface extends Resource<GpuBuffer> {
     _calculateAabb(normalizedVertices);
   }
 
-  Material material;
-  Map<int, int>? jointMap;
-
+  Material material = material ?? Material.defaultMaterial;
   Aabb3 get aabb => _aabb;
   late Aabb3 _aabb;
 

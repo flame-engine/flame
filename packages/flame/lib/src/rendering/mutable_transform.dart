@@ -5,25 +5,23 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 
 /// A mutable version of [RSTransform] for custom batch manipulation.
-class MutableRSTransform implements RSTransform, PositionProvider {
-  final _values = Float32List(4);
+class MutableRSTransform(
+  double scos,
+  double ssin,
+  double tx,
+  double ty,
 
   /// This is a cache of `-scos * anchorX + ssin * anchorY`
-  final double _anchorX;
+  final double _anchorX,
 
   /// This is a cache of `-ssin * anchorX - scos * anchorY`
-  final double _anchorY;
+  final double _anchorY,
+) implements RSTransform, PositionProvider {
+  final _values = Float32List(4);
 
-  final Vector2 _position;
+  final Vector2 _position = Vector2(tx, ty);
 
-  MutableRSTransform(
-    double scos,
-    double ssin,
-    double tx,
-    double ty,
-    this._anchorX,
-    this._anchorY,
-  ) : _position = Vector2(tx, ty) {
+  this {
     _values[0] = scos;
     _values[1] = ssin;
     _values[2] = tx + _anchorX;

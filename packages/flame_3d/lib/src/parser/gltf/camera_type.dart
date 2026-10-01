@@ -1,7 +1,7 @@
 import 'package:flame_3d/src/parser/gltf/gltf_node.dart';
 
 /// Specifies if the camera uses a perspective or orthographic projection.
-enum CameraType {
+enum CameraType() {
   perspective,
   orthographic;
 

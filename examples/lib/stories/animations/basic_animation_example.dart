@@ -5,7 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 
-class BasicAnimationsExample extends FlameGame {
+class BasicAnimationsExample() extends FlameGame {
   static const description = '''
     Basic example of how to use `SpriteAnimation`s in Flame's.
 
@@ -13,10 +13,10 @@ class BasicAnimationsExample extends FlameGame {
     animations.
   ''';
 
-  BasicAnimationsExample() : super(world: BasicAnimationsWorld());
+  this : super(world: BasicAnimationsWorld());
 }
 
-class BasicAnimationsWorld extends World with TapCallbacks, HasGameRef {
+class BasicAnimationsWorld() extends World with TapCallbacks, HasGameRef {
   late Image creature;
 
   @override

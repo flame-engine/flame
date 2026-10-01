@@ -5,7 +5,7 @@ import 'package:flame/experimental.dart';
 import 'package:flame/image_composition.dart';
 import 'package:flutter/rendering.dart';
 
-enum Direction {
+enum Direction() {
   horizontal,
   vertical;
 
@@ -73,20 +73,21 @@ enum Direction {
 ///    [TextBoxComponent]'s [TextBoxComponent.boxConfig] to a copy such that
 ///    [TextBoxConfig.maxWidth] is set to whatever value any other child's width
 ///    would be set to.
-abstract class LinearLayoutComponent extends LayoutComponent {
-  LinearLayoutComponent({
-    required super.key,
-    required this.direction,
-    required this._crossAxisAlignment,
-    required this._mainAxisAlignment,
-    required this._gap,
-    required super.size,
-    required super.position,
-    required super.priority,
-    required super.anchor,
-    required super.children,
-  });
+abstract class LinearLayoutComponent({
+  required super.key,
+  required final Direction direction,
+  required var CrossAxisAlignment _crossAxisAlignment,
+  required var MainAxisAlignment _mainAxisAlignment,
 
+  /// This reflects the value set explicitly and naively, without considering
+  /// the various values of [mainAxisAlignment].
+  required var double _gap,
+  required super.size,
+  required super.position,
+  required super.priority,
+  required super.anchor,
+  required super.children,
+}) extends LayoutComponent {
   factory LinearLayoutComponent.fromDirection(
     Direction direction, {
     CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.start,
@@ -121,10 +122,6 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     }
   }
 
-  final Direction direction;
-
-  CrossAxisAlignment _crossAxisAlignment;
-
   CrossAxisAlignment get crossAxisAlignment {
     return _crossAxisAlignment;
   }
@@ -133,8 +130,6 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     _crossAxisAlignment = value;
     _layoutCrossAxis();
   }
-
-  MainAxisAlignment _mainAxisAlignment;
 
   MainAxisAlignment get mainAxisAlignment {
     if (isShrinkWrappedIn(direction.mainAxis)) {
@@ -147,10 +142,6 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     _mainAxisAlignment = value;
     _layoutMainAxis();
   }
-
-  /// This reflects the value set explicitly and naively, without considering
-  /// the various values of [mainAxisAlignment].
-  double _gap;
 
   /// The gap between components, that will actually be used for positioning.
   /// If one or more [ExpandedComponent]s exist among the [children], or if

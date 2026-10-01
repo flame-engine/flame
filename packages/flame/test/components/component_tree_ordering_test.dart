@@ -192,7 +192,7 @@ void main() {
   });
 }
 
-class _EventLogComponent extends Component {
+class _EventLogComponent() extends Component {
   final List<String> events = [];
 
   @override
@@ -206,16 +206,12 @@ class _EventLogComponent extends Component {
   }
 }
 
-class _HittablePositionComponent extends PositionComponent {
-  _HittablePositionComponent({super.priority}) : super(size: Vector2.all(10));
+class _HittablePositionComponent({super.priority}) extends PositionComponent {
+  this : super(size: Vector2.all(10));
 }
 
-class _UpdateLogComponent extends Component {
-  _UpdateLogComponent(this.id, this.order);
-
-  final int id;
-  final List<int> order;
-
+class _UpdateLogComponent(final int id, final List<int> order)
+    extends Component {
   @override
   void update(double dt) {
     order.add(id);

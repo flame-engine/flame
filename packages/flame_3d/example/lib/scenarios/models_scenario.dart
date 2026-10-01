@@ -4,7 +4,7 @@ import 'package:flame_3d/parser.dart';
 import 'package:flame_3d_example/example_game_3d.dart';
 import 'package:flame_3d_example/scenarios/game_scenario.dart';
 
-class ModelsScenario implements GameScenario {
+class ModelsScenario() implements GameScenario {
   late final Model model;
 
   @override

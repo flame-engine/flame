@@ -1,11 +1,7 @@
 import 'package:jenny/src/structure/expressions/expression.dart';
 
 /// Operator UNARY MINUS (-).
-class Negate extends NumExpression {
-  const Negate(this._arg);
-
-  final NumExpression _arg;
-
+class const Negate(final NumExpression _arg) extends NumExpression {
   @override
   num get value => -_arg.value;
 }

@@ -5,7 +5,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/rendering.dart';
 
-class TapEventsGame extends FlameGame {
+class TapEventsGame() extends FlameGame {
   @override
   Future<void> onLoad() async {
     add(TapTarget());
@@ -14,8 +14,8 @@ class TapEventsGame extends FlameGame {
 
 /// This component is the tappable blue-ish rectangle in the center of the game.
 /// It uses the [TapCallbacks] mixin to receive tap events.
-class TapTarget extends PositionComponent with TapCallbacks {
-  TapTarget() : super(anchor: Anchor.center);
+class TapTarget() extends PositionComponent with TapCallbacks {
+  this : super(anchor: Anchor.center);
 
   final _paint = Paint()..color = const Color(0x448BA8FF);
 
@@ -61,8 +61,8 @@ class TapTarget extends PositionComponent with TapCallbacks {
   }
 }
 
-class ExpandingCircle extends Component {
-  ExpandingCircle(this._center)
+class ExpandingCircle(final Vector2 _center) extends Component {
+  this
     : _baseColor = HSLColor.fromAHSL(
         1,
         random.nextDouble() * 360,
@@ -71,7 +71,6 @@ class ExpandingCircle extends Component {
       ).toColor();
 
   final Color _baseColor;
-  final Vector2 _center;
   double _outerRadius = 0;
   double _innerRadius = 0;
   bool _released = false;

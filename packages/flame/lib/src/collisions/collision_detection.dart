@@ -11,15 +11,11 @@ import 'package:material_ui/material_ui.dart';
 abstract class CollisionDetection<
   T extends Hitbox<T>,
   B extends Broadphase<T>
-> {
-  final B broadphase;
-
+>({required final B broadphase}) {
   List<T> get items => broadphase.items;
   final _lastProspectPool = ProspectPool<T>();
   final _currentPotentials = <CollisionProspect<T>>{};
   final collisionsCompletedNotifier = CollisionDetectionCompletionNotifier();
-
-  CollisionDetection({required this.broadphase});
 
   void add(T item) => broadphase.add(item);
 
@@ -183,7 +179,7 @@ abstract class CollisionDetection<
 
 /// A class to handle callbacks for when the collision detection is done each
 /// tick.
-class CollisionDetectionCompletionNotifier extends ChangeNotifier {
+class CollisionDetectionCompletionNotifier() extends ChangeNotifier {
   @override
   void notifyListeners() => super.notifyListeners();
 }

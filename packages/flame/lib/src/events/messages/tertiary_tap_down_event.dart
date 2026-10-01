@@ -9,15 +9,16 @@ import 'package:flutter/gestures.dart';
 ///
 /// In order for a component to be eligible to receive this event, it must add
 /// the [TertiaryTapCallbacks] mixin.
-class TertiaryTapDownEvent extends PositionEvent<TapDownDetails> {
-  TertiaryTapDownEvent(super.game, TapDownDetails details)
-    : deviceKind = details.kind ?? PointerDeviceKind.unknown,
-      super(
+class TertiaryTapDownEvent(super.game, TapDownDetails details)
+    extends PositionEvent<TapDownDetails> {
+  this
+    : super(
         raw: details,
         devicePosition: details.globalPosition.toVector2(),
       );
 
-  final PointerDeviceKind deviceKind;
+  final PointerDeviceKind deviceKind =
+      details.kind ?? PointerDeviceKind.unknown;
 
   @override
   String toString() =>

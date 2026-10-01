@@ -1,11 +1,9 @@
 import 'package:collection/collection.dart';
 import 'package:flame/collisions.dart';
 
-class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
-  Sweep({List<T>? items}) : items = items ?? [];
-
+class Sweep<T extends Hitbox<T>>({List<T>? items}) extends Broadphase<T> {
   @override
-  final List<T> items;
+  final List<T> items = items ?? [];
 
   final _active = <T>[];
   final _prospectPool = ProspectPool<T>();

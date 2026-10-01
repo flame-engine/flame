@@ -8,13 +8,11 @@ const _amountPoints = 1000;
 
 /// The per-frame pattern of a moving component: the position changes every
 /// tick and the matrix is requested again when the component is rendered.
-class PositionUpdateBenchmark extends BenchmarkBase {
-  final Random random;
-
+class PositionUpdateBenchmark(final Random random) extends BenchmarkBase {
   late final List<Transform2D> _transforms;
   late final List<Vector2> _positions;
 
-  PositionUpdateBenchmark(this.random) : super('Transform2D position update');
+  this : super('Transform2D position update');
 
   static void main() {
     PositionUpdateBenchmark(Random(69420)).report();
@@ -39,13 +37,11 @@ class PositionUpdateBenchmark extends BenchmarkBase {
 
 /// A rotating component: the angle changes every tick and the matrix is
 /// requested again when the component is rendered.
-class AngleUpdateBenchmark extends BenchmarkBase {
-  final Random random;
-
+class AngleUpdateBenchmark(final Random random) extends BenchmarkBase {
   late final List<Transform2D> _transforms;
   late final List<double> _angles;
 
-  AngleUpdateBenchmark(this.random) : super('Transform2D angle update');
+  this : super('Transform2D angle update');
 
   static void main() {
     AngleUpdateBenchmark(Random(69420)).report();
@@ -72,15 +68,12 @@ class AngleUpdateBenchmark extends BenchmarkBase {
 
 /// Converting points back and forth through an unchanged transform, as done
 /// by hit testing and the camera.
-class PointConversionBenchmark extends BenchmarkBase {
-  final Random random;
-
+class PointConversionBenchmark(final Random random) extends BenchmarkBase {
   late final Transform2D _transform;
   late final List<Vector2> _points;
   final Vector2 _output = Vector2.zero();
 
-  PointConversionBenchmark(this.random)
-    : super('Transform2D localToGlobal/globalToLocal');
+  this : super('Transform2D localToGlobal/globalToLocal');
 
   static void main() {
     PointConversionBenchmark(Random(69420)).report();
@@ -103,14 +96,11 @@ class PointConversionBenchmark extends BenchmarkBase {
 }
 
 /// Assigning a full matrix to a transform and reading it back.
-class MatrixAssignmentBenchmark extends BenchmarkBase {
-  final Random random;
-
+class MatrixAssignmentBenchmark(final Random random) extends BenchmarkBase {
   late final List<Transform2D> _transforms;
   late final List<Matrix4> _matrices;
 
-  MatrixAssignmentBenchmark(this.random)
-    : super('Transform2D transformMatrix setter');
+  this : super('Transform2D transformMatrix setter');
 
   static void main() {
     MatrixAssignmentBenchmark(Random(69420)).report();
@@ -135,13 +125,11 @@ class MatrixAssignmentBenchmark extends BenchmarkBase {
 }
 
 /// Copying one transform into another and reading the resulting matrix.
-class SetFromBenchmark extends BenchmarkBase {
-  final Random random;
-
+class SetFromBenchmark(final Random random) extends BenchmarkBase {
   late final List<Transform2D> _transforms;
   late final List<Transform2D> _sources;
 
-  SetFromBenchmark(this.random) : super('Transform2D setFrom');
+  this : super('Transform2D setFrom');
 
   static void main() {
     SetFromBenchmark(Random(69420)).report();

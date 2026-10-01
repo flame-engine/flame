@@ -87,7 +87,7 @@ class SpriteWidget extends StatefulWidget {
   State<SpriteWidget> createState() => _SpriteWidgetState();
 }
 
-class _SpriteWidgetState extends State<SpriteWidget> {
+class _SpriteWidgetState() extends State<SpriteWidget> {
   late FutureOr<Sprite> _spriteFuture = _initializeFuture();
 
   FutureOr<Sprite> _initializeFuture() async {
@@ -171,26 +171,18 @@ class _SpriteWidgetState extends State<SpriteWidget> {
 
 /// A [StatefulWidget] that renders a still [Sprite].
 @visibleForTesting
-class InternalSpriteWidget extends StatelessWidget {
+class const InternalSpriteWidget({
   /// The [Sprite] to be rendered
-  final Sprite sprite;
+  required final Sprite sprite,
 
   /// The positioning [Anchor] for the [sprite]
-  final Anchor anchor;
+  final Anchor anchor = Anchor.topLeft,
 
   /// The angle to rotate this [sprite], in rad. (default = 0)
-  final double angle;
-
-  final Paint? paint;
-
-  const InternalSpriteWidget({
-    required this.sprite,
-    this.anchor = Anchor.topLeft,
-    this.angle = 0,
-    this.paint,
-    super.key,
-  });
-
+  final double angle = 0,
+  final Paint? paint,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(

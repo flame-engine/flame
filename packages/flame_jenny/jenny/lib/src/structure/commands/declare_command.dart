@@ -18,9 +18,7 @@ import 'package:jenny/src/structure/commands/command.dart';
 /// <<declare $variable as Number>>  // initial value will be 0
 /// <<declare $variable = 7 as Number>>
 /// ```
-class DeclareCommand extends Command {
-  const DeclareCommand();
-
+class const DeclareCommand() extends Command {
   @override
   String get name => 'declare';
 

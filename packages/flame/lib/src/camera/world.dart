@@ -14,13 +14,11 @@ import 'package:vector_math/vector_math.dart';
 /// The [priority] of the world by default is the maximum 32bit negative int
 /// value to ensure it will always be earlier in the component tree than a
 /// [CameraComponent].
-class World extends Component implements CoordinateTransform {
-  World({
-    super.children,
-    super.priority = -0x7fffffff,
-    super.key,
-  });
-
+class World({
+  super.children,
+  super.priority = -0x7fffffff,
+  super.key,
+}) extends Component implements CoordinateTransform {
   @override
   void renderTree(Canvas canvas) {}
 

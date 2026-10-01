@@ -9,9 +9,7 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+class const MyApp({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,9 +22,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class PlatformerGame extends FlameGame {
-  PlatformerGame({super.camera});
-
+class PlatformerGame({super.camera}) extends FlameGame {
   @override
   Color backgroundColor() => Colors.white70;
 

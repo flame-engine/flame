@@ -9,18 +9,19 @@ import 'package:flutter/gestures.dart';
 /// has last occurred.
 ///
 /// The [TapUpEvent] will only occur if there was a previous [TapDownEvent].
-class TapUpEvent extends PositionEvent<TapUpDetails> {
-  TapUpEvent(this.pointerId, super.game, TapUpDetails details)
-    : deviceKind = details.kind,
-      super(
+class TapUpEvent(
+  /// The id of the previous [TapDownEvent] to which this event corresponds.
+  final int pointerId,
+  super.game,
+  TapUpDetails details,
+) extends PositionEvent<TapUpDetails> {
+  this
+    : super(
         raw: details,
         devicePosition: details.globalPosition.toVector2(),
       );
 
-  /// The id of the previous [TapDownEvent] to which this event corresponds.
-  final int pointerId;
-
-  final PointerDeviceKind deviceKind;
+  final PointerDeviceKind deviceKind = details.kind;
 
   TapCancelEvent toTapCancel() => TapCancelEvent(pointerId);
 

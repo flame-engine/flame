@@ -10,19 +10,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gpu/gpu.dart' as gpu;
 
 /// A [base.GpuBackend] implemented on top of `flutter_gpu`.
-base class GpuBackend extends base.GpuBackend {
+///
+/// Creates a backend wrapping `gpuContext`, defaulting to the global
+/// `flutter_gpu` context.
+base class GpuBackend({gpu.GpuContext? gpuContext}) extends base.GpuBackend {
   static Future<void> initialize() async {
     await create()?._preloadShaderLibraries();
   }
 
   static GpuBackend? create() => GpuBackend();
 
-  /// Creates a backend wrapping [gpuContext], defaulting to the global
-  /// `flutter_gpu` context.
-  GpuBackend({gpu.GpuContext? gpuContext})
-    : _context = gpuContext ?? gpu.gpuContext;
-
-  final gpu.GpuContext _context;
+  final gpu.GpuContext _context = gpuContext ?? gpu.gpuContext;
 
   late final gpu.HostBuffer _hostBuffer = _context.createHostBuffer();
   late final _FlutterGpuFrame _frame = _FlutterGpuFrame(this);
@@ -156,11 +154,7 @@ base class GpuBackend extends base.GpuBackend {
   }
 }
 
-class _FlutterGpuTexture implements GpuTexture {
-  const _FlutterGpuTexture(this.raw);
-
-  final gpu.Texture raw;
-
+class const _FlutterGpuTexture(final gpu.Texture raw) implements GpuTexture {
   @override
   void write(ByteData data) => raw.overwrite(data);
 
@@ -168,24 +162,17 @@ class _FlutterGpuTexture implements GpuTexture {
   Image asImage() => raw.asImage();
 }
 
-class _FlutterGpuBuffer implements GpuBuffer {
-  const _FlutterGpuBuffer(this.raw);
-
-  final gpu.DeviceBuffer raw;
-
+class const _FlutterGpuBuffer(final gpu.DeviceBuffer raw) implements GpuBuffer {
   @override
   void write(ByteData data, {int destinationOffsetInBytes = 0}) {
     raw.overwrite(data, destinationOffsetInBytes: destinationOffsetInBytes);
   }
 }
 
-class _FlutterGpuShaderLibrary implements GpuShaderLibrary {
-  const _FlutterGpuShaderLibrary(this.raw, this._assetName);
-
-  final gpu.ShaderLibrary raw;
-
-  final String _assetName;
-
+class const _FlutterGpuShaderLibrary(
+  final gpu.ShaderLibrary raw,
+  final String _assetName,
+) implements GpuShaderLibrary {
   @override
   GpuShader operator [](String entryPoint) {
     final shader = raw[entryPoint];
@@ -198,22 +185,15 @@ class _FlutterGpuShaderLibrary implements GpuShaderLibrary {
   }
 }
 
-class _FlutterGpuShader implements GpuShader {
-  const _FlutterGpuShader(this.raw);
-
-  final gpu.Shader raw;
-
+class const _FlutterGpuShader(final gpu.Shader raw) implements GpuShader {
   @override
   GpuUniformSlot getUniformSlot(String slot) {
     return _FlutterGpuUniformSlot(raw.getUniformSlot(slot));
   }
 }
 
-class _FlutterGpuUniformSlot implements GpuUniformSlot {
-  const _FlutterGpuUniformSlot(this.raw);
-
-  final gpu.UniformSlot raw;
-
+class const _FlutterGpuUniformSlot(final gpu.UniformSlot raw)
+    implements GpuUniformSlot {
   @override
   int? get sizeInBytes => raw.sizeInBytes;
 
@@ -223,28 +203,19 @@ class _FlutterGpuUniformSlot implements GpuUniformSlot {
   }
 }
 
-class _FlutterGpuPipeline implements GpuPipeline {
-  const _FlutterGpuPipeline(this.raw);
+class const _FlutterGpuPipeline(final gpu.RenderPipeline raw)
+    implements GpuPipeline;
 
-  final gpu.RenderPipeline raw;
-}
-
-class _FlutterGpuRenderTarget implements GpuRenderTarget {
-  const _FlutterGpuRenderTarget(this._colorTexture, this.raw);
-
-  final _FlutterGpuTexture _colorTexture;
-
-  final gpu.RenderTarget raw;
-
+class const _FlutterGpuRenderTarget(
+  final _FlutterGpuTexture _colorTexture,
+  final gpu.RenderTarget raw,
+) implements GpuRenderTarget {
   @override
   GpuTexture get colorTexture => _colorTexture;
 }
 
-class _FlutterGpuFrame implements base.GpuFrame {
-  const _FlutterGpuFrame(this._backend);
-
-  final GpuBackend _backend;
-
+class const _FlutterGpuFrame(final GpuBackend _backend)
+    implements base.GpuFrame {
   @override
   base.GpuRenderPass beginRenderPass(
     GpuRenderTarget target, {
@@ -297,19 +268,11 @@ class _FlutterGpuFrame implements base.GpuFrame {
   }
 }
 
-class _FlutterGpuRenderPass implements base.GpuRenderPass {
-  _FlutterGpuRenderPass(
-    this._backend,
-    this._commandBuffer,
-    this._renderPass,
-  );
-
-  final GpuBackend _backend;
-
-  final gpu.CommandBuffer _commandBuffer;
-
-  final gpu.RenderPass _renderPass;
-
+class _FlutterGpuRenderPass(
+  final GpuBackend _backend,
+  final gpu.CommandBuffer _commandBuffer,
+  final gpu.RenderPass _renderPass,
+) implements base.GpuRenderPass {
   // `flutter_gpu` takes the counts in `draw`/`drawIndexed` rather than at
   // bind time, so they are recorded here until [draw] is called.
   int _vertexCount = 0;

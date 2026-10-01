@@ -23,12 +23,8 @@ Matcher closeToMatrix4(Matrix4 matrix, [double epsilon = 1e-15]) {
   return _IsCloseTo(matrix, epsilon);
 }
 
-class _IsCloseTo extends Matcher {
-  const _IsCloseTo(this._value, this._epsilon);
-
-  final Matrix4 _value;
-  final double _epsilon;
-
+class const _IsCloseTo(final Matrix4 _value, final double _epsilon)
+    extends Matcher {
   @override
   bool matches(dynamic item, Map matchState) {
     if (item is! Matrix4) {

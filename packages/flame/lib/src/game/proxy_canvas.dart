@@ -28,18 +28,14 @@ import 'package:vector_math/vector_math_64.dart';
 /// ancestors of the game render box through layers instead of drawing them on
 /// the shared canvas.
 @internal
-class ProxyCanvas implements Canvas {
-  ProxyCanvas(this._canvas)
-    : _baseSaveCount = _canvas.getSaveCount(),
-      _initialTransform = _canvas.getTransform(),
-      _initialClip = _canvas.getDestinationClipBounds() {
+class ProxyCanvas(var Canvas _canvas) implements Canvas {
+  this {
     _levels.add(_SaveLevel.plain());
   }
 
-  Canvas _canvas;
-  int _baseSaveCount;
-  final Float64List _initialTransform;
-  final Rect _initialClip;
+  int _baseSaveCount = _canvas.getSaveCount();
+  final Float64List _initialTransform = _canvas.getTransform();
+  final Rect _initialClip = _canvas.getDestinationClipBounds();
   final List<_SaveLevel> _levels = [];
   final Matrix4 _scratch = Matrix4.identity();
 
@@ -385,7 +381,7 @@ class _SaveLevel {
   }
 }
 
-abstract class _ClipOperation {
+abstract class _ClipOperation() {
   /// The transform that was accumulated between the previous clip (or the
   /// start of the save level) and this clip.
   final Matrix4 transformBefore = Matrix4.identity();
@@ -393,53 +389,37 @@ abstract class _ClipOperation {
   void apply(Canvas canvas);
 }
 
-class _ClipRectOperation extends _ClipOperation {
-  _ClipRectOperation(
-    this.rect, {
-    required this.clipOp,
-    required this.doAntiAlias,
-  });
-
-  final Rect rect;
-  final ClipOp clipOp;
-  final bool doAntiAlias;
-
+class _ClipRectOperation(
+  final Rect rect, {
+  required final ClipOp clipOp,
+  required final bool doAntiAlias,
+}) extends _ClipOperation {
   @override
   void apply(Canvas canvas) {
     canvas.clipRect(rect, clipOp: clipOp, doAntiAlias: doAntiAlias);
   }
 }
 
-class _ClipRRectOperation extends _ClipOperation {
-  _ClipRRectOperation(this.rrect, {required this.doAntiAlias});
-
-  final RRect rrect;
-  final bool doAntiAlias;
-
+class _ClipRRectOperation(final RRect rrect, {required final bool doAntiAlias})
+    extends _ClipOperation {
   @override
   void apply(Canvas canvas) {
     canvas.clipRRect(rrect, doAntiAlias: doAntiAlias);
   }
 }
 
-class _ClipRSuperellipseOperation extends _ClipOperation {
-  _ClipRSuperellipseOperation(this.shape, {required this.doAntiAlias});
-
-  final RSuperellipse shape;
-  final bool doAntiAlias;
-
+class _ClipRSuperellipseOperation(
+  final RSuperellipse shape, {
+  required final bool doAntiAlias,
+}) extends _ClipOperation {
   @override
   void apply(Canvas canvas) {
     canvas.clipRSuperellipse(shape, doAntiAlias: doAntiAlias);
   }
 }
 
-class _ClipPathOperation extends _ClipOperation {
-  _ClipPathOperation(this.path, {required this.doAntiAlias});
-
-  final Path path;
-  final bool doAntiAlias;
-
+class _ClipPathOperation(final Path path, {required final bool doAntiAlias})
+    extends _ClipOperation {
   @override
   void apply(Canvas canvas) {
     canvas.clipPath(path, doAntiAlias: doAntiAlias);

@@ -95,26 +95,20 @@ Future<void> forwardOutput(Process process, StringSink out, StringSink err) {
 /// The output of `flutter run` is also written to the log file of the project
 /// for the `logs` command, and `reload` and `restart` requests are accepted
 /// through a [RunController].
-class RunCommand extends Command<int> {
-  RunCommand(
-    this.workingDirectory, {
-    ProcessStarter? startProcess,
-    this.input,
-    this.out,
-    this.err,
-  }) : _startProcess = startProcess ?? Process.start;
-
-  final Directory workingDirectory;
-  final ProcessStarter _startProcess;
-
-  /// Where the output of `flutter run` is mirrored to, the standard output
-  /// and error of this process by default.
-  final StringSink? out;
-  final StringSink? err;
+class RunCommand(
+  final Directory workingDirectory, {
+  ProcessStarter? startProcess,
 
   /// The input of the terminal, which is forwarded to `flutter run` so that
   /// its keys, such as `r` for hot reload, keep working.
-  final Stream<List<int>>? input;
+  final Stream<List<int>>? input,
+
+  /// Where the output of `flutter run` is mirrored to, the standard output
+  /// and error of this process by default.
+  final StringSink? out,
+  final StringSink? err,
+}) extends Command<int> {
+  final ProcessStarter _startProcess = startProcess ?? Process.start;
 
   final _argParser = ArgParser.allowAnything();
 
@@ -236,12 +230,10 @@ class RunCommand extends Command<int> {
   }
 }
 
-class _TerminalMode {
-  _TerminalMode({required this.echoMode, required this.lineMode});
-
-  final bool echoMode;
-  final bool lineMode;
-
+class _TerminalMode({
+  required final bool echoMode,
+  required final bool lineMode,
+}) {
   void restore() {
     try {
       stdin

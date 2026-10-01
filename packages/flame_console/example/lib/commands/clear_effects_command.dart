@@ -3,7 +3,7 @@ import 'package:flame/effects.dart';
 import 'package:flame_console/flame_console.dart';
 import 'package:flame_console_example/game.dart';
 
-class ClearEffectsCommand extends FlameConsoleCommand<MyGame> {
+class ClearEffectsCommand() extends FlameConsoleCommand<MyGame> {
   @override
   String get name => 'clear_effects';
 

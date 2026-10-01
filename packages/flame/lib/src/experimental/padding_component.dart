@@ -27,22 +27,21 @@ import 'package:flutter/rendering.dart';
 ///   child: TextComponent(text: 'bar')
 /// );
 /// ```
-class PaddingComponent extends SingleLayoutComponent {
-  PaddingComponent({
-    super.key,
-    EdgeInsets? padding,
-    super.anchor,
-    super.position,
-    super.priority,
-    super.size,
-    super.inflateChild = false,
-    PositionComponent? child,
-  }) : _padding = padding ?? EdgeInsets.zero,
-       super(child: null) {
+class PaddingComponent({
+  super.key,
+  EdgeInsets? padding,
+  super.anchor,
+  super.position,
+  super.priority,
+  super.size,
+  super.inflateChild = false,
+  PositionComponent? child,
+}) extends SingleLayoutComponent {
+  this : super(child: null) {
     this.child = child;
   }
 
-  EdgeInsets _padding;
+  EdgeInsets _padding = padding ?? EdgeInsets.zero;
 
   EdgeInsets get padding => _padding;
 

@@ -5,21 +5,13 @@ import 'package:meta/meta.dart';
 /// [BlockStyle] is a generic descriptor for a visual appearance of a block-
 /// level element.
 @immutable
-class BlockStyle extends FlameTextStyle {
-  const BlockStyle({
-    this._margin,
-    this._padding,
-    this.background,
-    this.text,
-    this.textAlign,
-  });
-
-  final EdgeInsets? _margin;
-  final EdgeInsets? _padding;
-  final BackgroundStyle? background;
-  final InlineTextStyle? text;
-  final TextAlign? textAlign;
-
+class const BlockStyle({
+  final EdgeInsets? _margin,
+  final EdgeInsets? _padding,
+  final BackgroundStyle? background,
+  final InlineTextStyle? text,
+  final TextAlign? textAlign,
+}) extends FlameTextStyle {
   EdgeInsets get margin => _margin ?? EdgeInsets.zero;
   EdgeInsets get padding => _padding ?? EdgeInsets.zero;
 

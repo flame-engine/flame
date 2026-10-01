@@ -28,12 +28,7 @@ ProcessStarter _starter(
 
 /// A connection to a game that is reachable at [uri], and that records
 /// whether it was disposed.
-class _FakeConnection implements FlameConnection {
-  _FakeConnection(this.uri);
-
-  @override
-  final String uri;
-
+class _FakeConnection(@override final String uri) implements FlameConnection {
   bool disposed = false;
 
   @override

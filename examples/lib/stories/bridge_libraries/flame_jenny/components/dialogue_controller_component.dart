@@ -4,7 +4,8 @@ import 'package:examples/stories/bridge_libraries/flame_jenny/components/dialogu
 import 'package:flame/components.dart' hide Timer;
 import 'package:jenny/jenny.dart';
 
-class DialogueControllerComponent extends Component
+class DialogueControllerComponent()
+    extends Component
     with DialogueView, HasGameRef {
   Completer<void> _forwardCompleter = Completer();
   Completer<int> _choiceCompleter = Completer<int>();

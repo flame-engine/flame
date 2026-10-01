@@ -92,13 +92,13 @@ void main() {
   });
 }
 
-class _DecoratedRectangle extends RectangleComponent {
-  _DecoratedRectangle({
-    super.position,
-    super.size,
-    super.paint,
-    Decorator? decorator,
-  }) {
+class _DecoratedRectangle({
+  super.position,
+  super.size,
+  super.paint,
+  Decorator? decorator,
+}) extends RectangleComponent {
+  this {
     this.decorator.addLast(decorator);
   }
 }

@@ -11,16 +11,14 @@ import 'package:flutter/foundation.dart';
 /// A pairing of a [ShapeGeometry] with an optional [ShapeDef], used by
 /// [BodyComponent.shapeSpecs] to describe the shapes that should be created
 /// on the body.
-class ShapeSpec {
-  const ShapeSpec(this.geometry, [this.definition]);
-
+class const ShapeSpec(
   /// The geometry of the shape, for example a [Circle] or a [Polygon].
-  final ShapeGeometry geometry;
+  final ShapeGeometry geometry, [
 
   /// The definition that the shape is created with, or the Forge2D defaults
   /// when null.
-  final ShapeDef? definition;
-}
+  final ShapeDef? definition,
+]);
 
 /// Since a pure BodyComponent doesn't have anything drawn on top of it,
 /// it is a good idea to turn on [debugMode] for it so that the bodies can be
@@ -29,21 +27,37 @@ class ShapeSpec {
 /// You can use the optional [bodyDef] and [shapeSpecs] arguments to create
 /// the [BodyComponent]'s body without having to create the definitions within
 /// the component.
-class BodyComponent<T extends Forge2DGame> extends Component
+class BodyComponent<T extends Forge2DGame>({
+  Paint? paint,
+  super.children,
+  super.priority,
+
+  /// Specifies if the body's shapes should be rendered.
+  ///
+  /// [renderBody] is true by default for [BodyComponent], if set to false
+  /// the body's shapes wont be rendered.
+  ///
+  /// If you render something on top of the [BodyComponent], or doesn't want it
+  /// to be seen, you probably want to set it to false.
+  var bool renderBody = true,
+
+  /// The default implementation of [createBody] will use this value to create
+  /// the [Body], if it is provided.
+  ///
+  /// If you do not provide a [BodyDef] here, you must override [createBody].
+  var BodyDef? bodyDef,
+
+  /// The default implementation of [createBody] will create these shapes on
+  /// the [Body] that it creates from [bodyDef].
+  var List<ShapeSpec>? shapeSpecs,
+  super.key,
+}) extends Component
     with HasGameRef<T>, HasPaint
     implements
         CoordinateTransform,
         ReadOnlyPositionProvider,
         ReadOnlyAngleProvider {
-  BodyComponent({
-    Paint? paint,
-    super.children,
-    super.priority,
-    this.renderBody = true,
-    this.bodyDef,
-    this.shapeSpecs,
-    super.key,
-  }) {
+  this {
     this.paint = paint ?? (Paint()..color = defaultColor);
   }
 
@@ -58,27 +72,8 @@ class BodyComponent<T extends Forge2DGame> extends Component
   @visibleForTesting
   static bool debugWarnedAboutBodyScale = false;
 
-  /// The default implementation of [createBody] will use this value to create
-  /// the [Body], if it is provided.
-  ///
-  /// If you do not provide a [BodyDef] here, you must override [createBody].
-  BodyDef? bodyDef;
-
-  /// The default implementation of [createBody] will create these shapes on
-  /// the [Body] that it creates from [bodyDef].
-  List<ShapeSpec>? shapeSpecs;
-
   @override
   Vector2 get position => body.position;
-
-  /// Specifies if the body's shapes should be rendered.
-  ///
-  /// [renderBody] is true by default for [BodyComponent], if set to false
-  /// the body's shapes wont be rendered.
-  ///
-  /// If you render something on top of the [BodyComponent], or doesn't want it
-  /// to be seen, you probably want to set it to false.
-  bool renderBody;
 
   /// You should create the Forge2D [Body] in this method when you extend
   /// the BodyComponent.

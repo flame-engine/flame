@@ -2,12 +2,13 @@ import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/gestures.dart';
 
-class DoubleTapDownEvent extends PositionEvent<TapDownDetails> {
-  final PointerDeviceKind deviceKind;
+class DoubleTapDownEvent(super.game, TapDownDetails details)
+    extends PositionEvent<TapDownDetails> {
+  final PointerDeviceKind deviceKind =
+      details.kind ?? PointerDeviceKind.unknown;
 
-  DoubleTapDownEvent(super.game, TapDownDetails details)
-    : deviceKind = details.kind ?? PointerDeviceKind.unknown,
-      super(
+  this
+    : super(
         raw: details,
         devicePosition: details.globalPosition.toVector2(),
       );

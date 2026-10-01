@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/layers.dart';
 
-class LayerExample extends FlameGame {
+class LayerExample() extends FlameGame {
   static const String description = '''
     In this example we show how layers can be used to produce a shadow effect.
   ''';
@@ -39,11 +39,9 @@ class LayerExample extends FlameGame {
   Color backgroundColor() => const Color(0xFF38607C);
 }
 
-class GameLayer extends DynamicLayer {
-  final Sprite playerSprite;
-  final Sprite enemySprite;
-
-  GameLayer(this.playerSprite, this.enemySprite) {
+class GameLayer(final Sprite playerSprite, final Sprite enemySprite)
+    extends DynamicLayer {
+  this {
     preProcessors.add(ShadowProcessor());
   }
 
@@ -62,10 +60,8 @@ class GameLayer extends DynamicLayer {
   }
 }
 
-class BackgroundLayer extends PreRenderedLayer {
-  final Sprite sprite;
-
-  BackgroundLayer(this.sprite) {
+class BackgroundLayer(final Sprite sprite) extends PreRenderedLayer {
+  this {
     preProcessors.add(ShadowProcessor());
   }
 

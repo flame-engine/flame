@@ -3,15 +3,13 @@ import 'package:jenny/src/structure/block.dart';
 import 'package:jenny/src/structure/commands/command.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 
-class IfCommand extends Command {
-  const IfCommand(this.ifs);
-
+class const IfCommand(
   /// First entry here is the `<<if>>` command, subsequent entries are the
   /// `<<elseif>>` commands, and the last entry is the `<<else>>` block (if
   /// present), which is represented as an [IfBlock] with `condition =
   /// constTrue`.
-  final List<IfBlock> ifs;
-
+  final List<IfBlock> ifs,
+) extends Command {
   @override
   String get name => 'if';
 
@@ -26,9 +24,4 @@ class IfCommand extends Command {
   }
 }
 
-class IfBlock {
-  const IfBlock(this.condition, this.block);
-
-  final BoolExpression condition;
-  final Block block;
-}
+class const IfBlock(final BoolExpression condition, final Block block);

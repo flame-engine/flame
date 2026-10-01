@@ -15,9 +15,8 @@ Matcher closeToQuaternion(Quaternion quaternion, [double epsilon = 1e-15]) {
   return _IsCloseToQuaternion(quaternion, epsilon);
 }
 
-class _IsCloseToQuaternion extends IsCloseToVector<Quaternion> {
-  const _IsCloseToQuaternion(super.value, super.epsilon);
-
+class const _IsCloseToQuaternion(super.value, super.epsilon)
+    extends IsCloseToVector<Quaternion> {
   @override
   double dist(Quaternion a, Quaternion b) => (a - b).length;
 

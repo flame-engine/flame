@@ -12,7 +12,7 @@ import 'components/waste_pile.dart';
 
 import 'klondike_game.dart';
 
-class KlondikeWorld extends World with HasGameRef<KlondikeGame> {
+class KlondikeWorld() extends World with HasGameRef<KlondikeGame> {
   final cardGap = KlondikeGame.cardGap;
   final topGap = KlondikeGame.topGap;
   final cardSpaceWidth = KlondikeGame.cardSpaceWidth;

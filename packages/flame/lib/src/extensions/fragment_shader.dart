@@ -57,12 +57,7 @@ extension FragmentShaderExtension on ui.FragmentShader {
 }
 
 /// A helper class that allows you to set uniforms in a more convenient way.
-class UniformsSetter {
-  UniformsSetter(this.shader, this._index);
-
-  int _index;
-  final ui.FragmentShader shader;
-
+class UniformsSetter(final ui.FragmentShader shader, var int _index) {
   void setFloat(double value) {
     shader.setFloat(_index++, value);
   }

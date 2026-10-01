@@ -6,14 +6,12 @@ import 'package:flame/src/flame.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 
-class Images {
-  Images({AssetBundle? bundle}) : bundle = bundle ?? Flame.bundle;
-
+class Images({AssetBundle? bundle}) {
   final Map<String, _ImageAsset> _assets = {};
 
   /// The [AssetBundle] from which images are loaded.
   /// defaults to [Flame.bundle].
-  AssetBundle bundle;
+  AssetBundle bundle = bundle ?? Flame.bundle;
 
   /// Adds the [image] into the cache under the key [name].
   ///

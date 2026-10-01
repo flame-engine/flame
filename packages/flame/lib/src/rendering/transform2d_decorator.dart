@@ -7,11 +7,8 @@ import 'package:flame/src/rendering/decorator.dart';
 /// the canvas.
 ///
 /// This decorator is used internally by the [PositionComponent].
-class Transform2DDecorator extends Decorator {
-  Transform2DDecorator([Transform2D? transform])
-    : transform2d = transform ?? Transform2D();
-
-  final Transform2D transform2d;
+class Transform2DDecorator([Transform2D? transform]) extends Decorator {
+  final Transform2D transform2d = transform ?? Transform2D();
 
   @override
   void apply(void Function(Canvas) draw, Canvas canvas) {

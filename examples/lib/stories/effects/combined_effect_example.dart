@@ -5,7 +5,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 
-class CombinedEffectExample extends FlameGame {
+class CombinedEffectExample() extends FlameGame {
   static const String description = '''
     A combination of effects, consisting of a move effect, a rotate effect, and
     a scale effect. The combination of effects then runs in the opposite order
@@ -33,8 +33,8 @@ class CombinedEffectExample extends FlameGame {
   }
 }
 
-class Player extends PositionComponent {
-  Player()
+class Player() extends PositionComponent {
+  this
     : path = Path()
         ..lineTo(40, 20)
         ..lineTo(0, 40)

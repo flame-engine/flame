@@ -4,24 +4,20 @@ import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
 import 'package:spine_flutter/spine_flutter.dart';
 
-class SpineComponent extends PositionComponent {
-  final BoundsProvider _boundsProvider;
-  final SkeletonDrawableFlutter _drawable;
+class SpineComponent(
+  final SkeletonDrawableFlutter _drawable, {
+  final bool _ownsDrawable = true,
+  final BoundsProvider _boundsProvider = const SetupPoseBounds(),
+  super.position,
+  super.scale,
+  double super.angle = 0.0,
+  Anchor super.anchor = Anchor.topLeft,
+  super.children,
+  super.priority,
+  super.key,
+}) extends PositionComponent {
   late final Bounds _bounds;
-  final bool _ownsDrawable;
-
-  SpineComponent(
-    this._drawable, {
-    this._ownsDrawable = true,
-    this._boundsProvider = const SetupPoseBounds(),
-    super.position,
-    super.scale,
-    double super.angle = 0.0,
-    Anchor super.anchor = Anchor.topLeft,
-    super.children,
-    super.priority,
-    super.key,
-  }) {
+  this {
     _drawable.update(0);
     _bounds = _boundsProvider.computeBounds(_drawable);
     size = Vector2(_bounds.width, _bounds.height);

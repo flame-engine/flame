@@ -16,10 +16,11 @@ import 'package:forge2d/forge2d.dart' show Tolerances;
 /// Only the rendering is affected, so body positions, the [position] of the
 /// viewfinder, [visibleGameSize], [CameraComponent.visibleWorldRect] and the
 /// local positions that events report are all still in meters.
-class Forge2DViewfinder extends Viewfinder {
-  Forge2DViewfinder({double metersToPixels = defaultMetersToPixels, super.key})
-    : assert(metersToPixels > 0, 'metersToPixels must be positive'),
-      _metersToPixels = metersToPixels {
+class Forge2DViewfinder({
+  var double _metersToPixels = defaultMetersToPixels,
+  super.key,
+}) extends Viewfinder {
+  this : assert(_metersToPixels > 0, 'metersToPixels must be positive') {
     zoom = 1;
   }
 
@@ -31,8 +32,6 @@ class Forge2DViewfinder extends Viewfinder {
   /// at roughly ten meters. Laying a world out so that it fills the screen at
   /// this scale lands it in the range that Forge2D is tuned for.
   static const double defaultMetersToPixels = 100;
-
-  double _metersToPixels;
 
   /// The number of pixels that one meter of the physics world is rendered as.
   double get metersToPixels => _metersToPixels;

@@ -4,7 +4,7 @@ import 'package:flame/game.dart';
 
 import 'package:material_ui/material_ui.dart';
 
-class GlowEffectExample extends FlameGame {
+class GlowEffectExample() extends FlameGame {
   @override
   Future<void> onLoad() async {
     final paint = Paint()..color = const Color(0xff39FF14);

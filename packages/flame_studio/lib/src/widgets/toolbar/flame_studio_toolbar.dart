@@ -7,9 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final toolbarHeightProvider = Provider((ref) => 28.0);
 
-class FlameStudioToolbar extends ConsumerWidget {
-  const FlameStudioToolbar({super.key});
-
+class const FlameStudioToolbar({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     const middleButtons = <Widget>[

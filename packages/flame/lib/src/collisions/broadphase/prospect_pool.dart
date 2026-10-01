@@ -9,13 +9,11 @@ import 'package:flame/src/collisions/hitboxes/hitbox.dart';
 ///
 /// Internally uses a private mutable subclass but only exposes the immutable
 /// [CollisionProspect] interface. Implements [Iterable] over acquired entries.
-class ProspectPool<T extends Hitbox<T>>
-    extends IterableBase<CollisionProspect<T>> {
-  ProspectPool({this.incrementSize = 1000});
-
+class ProspectPool<T extends Hitbox<T>>({
   /// How much the pool should increase in size every time it needs to be made
   /// larger.
-  final int incrementSize;
+  final int incrementSize = 1000,
+}) extends IterableBase<CollisionProspect<T>> {
   final _storage = <_MutableCollisionProspect<T>>[];
 
   /// The number of prospects currently acquired this frame.
@@ -70,12 +68,10 @@ class ProspectPool<T extends Hitbox<T>>
   }
 }
 
-class _ProspectPoolIterator<T extends Hitbox<T>>
-    implements Iterator<CollisionProspect<T>> {
-  _ProspectPoolIterator(this._storage, this._length);
-
-  final List<_MutableCollisionProspect<T>> _storage;
-  final int _length;
+class _ProspectPoolIterator<T extends Hitbox<T>>(
+  final List<_MutableCollisionProspect<T>> _storage,
+  final int _length,
+) implements Iterator<CollisionProspect<T>> {
   int _index = -1;
 
   @override
@@ -93,12 +89,8 @@ class _ProspectPoolIterator<T extends Hitbox<T>>
 /// hash-based collections. All access outside this file is through the
 /// immutable [CollisionProspect] interface.
 // ignore: must_be_immutable
-class _MutableCollisionProspect<T> extends CollisionProspect<T> {
-  _MutableCollisionProspect(this._a, this._b);
-
-  T _a;
-  T _b;
-
+class _MutableCollisionProspect<T>(var T _a, var T _b)
+    extends CollisionProspect<T> {
   @override
   T get a => _a;
   @override

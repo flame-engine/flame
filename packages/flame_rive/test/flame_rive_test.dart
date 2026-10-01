@@ -121,14 +121,11 @@ void main() {
   );
 }
 
-class _RiveComponent extends RiveComponent {
-  _RiveComponent({required super.artboard});
-}
+class _RiveComponent({required super.artboard}) extends RiveComponent;
 
-class _RiveComponentWithAnimation extends RiveComponent {
-  _RiveComponentWithAnimation({required super.artboard});
-}
+class _RiveComponentWithAnimation({required super.artboard})
+    extends RiveComponent;
 
-class _RiveComponentWithTappable extends RiveComponent with TapCallbacks {
-  _RiveComponentWithTappable({required super.artboard});
-}
+class _RiveComponentWithTappable({required super.artboard})
+    extends RiveComponent
+    with TapCallbacks;

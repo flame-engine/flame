@@ -1,9 +1,13 @@
 import 'package:bloc/bloc.dart';
 
-enum PlayerState { alive, dead, sad }
+enum PlayerState() {
+  alive,
+  dead,
+  sad,
+}
 
-class PlayerCubit extends Cubit<PlayerState> {
-  PlayerCubit() : super(PlayerState.alive);
+class PlayerCubit() extends Cubit<PlayerState> {
+  this : super(PlayerState.alive);
 
   void kill() {
     emit(PlayerState.dead);

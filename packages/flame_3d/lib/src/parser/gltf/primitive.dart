@@ -15,38 +15,31 @@ import 'package:flame_3d/src/parser/gltf/primitive_mode.dart';
 // (used in GLTF as the key for texture coordinate attributes)
 
 /// Geometry to be rendered with the given material.
-class Primitive extends GltfNode {
+class Primitive({
+  required super.root,
+
   /// The topology type of primitives to render.
-  final PrimitiveMode mode;
+  required final PrimitiveMode mode,
 
   /// A plain JSON object, where each key corresponds to a mesh attribute
   /// semantic and each value is the index of the accessor containing
   /// attribute's data.
   ///
   /// Typical keys include: `POSITION`, `NORMAL`, `TEXCOORD_0`, etc.
-  final Map<String, int> attributes;
+  required final Map<String, int> attributes,
 
   /// The reference to the accessor that contains the vertex indices.
   /// When this is undefined, the primitive defines non-indexed geometry.
   /// When defined, the accessor **MUST** have `SCALAR` type and an unsigned
   /// integer component type.
-  final GltfRef<IntAccessor>? indices;
+  required final GltfRef<IntAccessor>? indices,
 
   /// The reference to the material to apply to this primitive when rendering.
-  final GltfRef<Material>? material;
+  required final GltfRef<Material>? material,
 
   /// An array of morph targets.
-  final List<MorphTarget> targets;
-
-  Primitive({
-    required super.root,
-    required this.mode,
-    required this.attributes,
-    required this.indices,
-    required this.material,
-    required this.targets,
-  });
-
+  required final List<MorphTarget> targets,
+}) extends GltfNode {
   GltfRef<Vector3Accessor>? get positions => _accessor('POSITION');
   GltfRef<Vector3Accessor>? get normals => _accessor('NORMAL');
   GltfRef<Vector2Accessor>? get texCoords => _accessor('TEXCOORD_0');
@@ -191,17 +184,11 @@ class Primitive extends GltfNode {
       );
 }
 
-class JointData {
-  final List<Vector4> weights;
-  final List<Vector4> localizedJoints;
-  final Map<int, int> jointMap;
-
-  JointData({
-    required this.weights,
-    required this.localizedJoints,
-    required this.jointMap,
-  });
-
+class JointData({
+  required final List<Vector4> weights,
+  required final List<Vector4> localizedJoints,
+  required final Map<int, int> jointMap,
+}) {
   Vector4 weight(int index) {
     return weights.elementAtOrNull(index) ?? Vector4.zero();
   }

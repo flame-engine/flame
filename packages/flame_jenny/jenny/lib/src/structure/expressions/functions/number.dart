@@ -7,11 +7,7 @@ import 'package:jenny/src/yarn_project.dart';
 ///
 /// If `x` is boolean, then it will be converted into numbers 0 or 1. If `x` is
 /// a string, then
-class NumberFn extends NumExpression {
-  const NumberFn(this._arg);
-
-  final Expression _arg;
-
+class const NumberFn(final Expression _arg) extends NumExpression {
   /// Static constructor to be used in parse.dart.
   static Expression make(
     List<FunctionArgument> args,

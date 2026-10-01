@@ -70,8 +70,8 @@ void main() {
   });
 }
 
-class _MyRasterComponent extends PositionComponent {
-  _MyRasterComponent() : super(size: Vector2(200, 400));
+class _MyRasterComponent() extends PositionComponent {
+  this : super(size: Vector2(200, 400));
   late final Sprite sprite;
 
   @override

@@ -10,20 +10,15 @@ import 'package:flame_3d/src/camera/camera_component_3d.dart';
 ///
 /// This is a commonly used subclass of [Object3D].
 /// {@endtemplate}
-class MeshComponent extends Object3D {
-  /// {@macro mesh_component}
-  MeshComponent({
-    required this._mesh,
-    super.position,
-    super.scale,
-    super.rotation,
-    super.children,
-  });
-
+class MeshComponent({
+  required final Mesh _mesh,
+  super.position,
+  super.scale,
+  super.rotation,
+  super.children,
+}) extends Object3D {
   /// The mesh resource.
   Mesh get mesh => _mesh;
-  final Mesh _mesh;
-
   @override
   Aabb3? computeLocalAabb() => mesh.aabb;
 

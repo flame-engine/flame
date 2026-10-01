@@ -11,13 +11,11 @@ import 'package:flame/src/effects/provider_interfaces.dart';
 /// This effect applies incremental changes to the hue property of the target,
 /// and requires that any other effect or update logic applied to the same
 /// target also used incremental updates.
-abstract class HueEffect extends Effect with EffectTarget<HueProvider> {
-  HueEffect(
-    super.controller, {
-    super.onComplete,
-    super.key,
-  });
-
+abstract class HueEffect(
+  super.controller, {
+  super.onComplete,
+  super.key,
+}) extends Effect with EffectTarget<HueProvider> {
   factory HueEffect.by(
     double angle,
     EffectController controller, {

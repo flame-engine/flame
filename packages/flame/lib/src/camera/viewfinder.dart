@@ -16,17 +16,15 @@ import 'package:meta/meta.dart';
 ///
 /// If you add children to the [Viewfinder] they will appear like HUDs i.e.
 /// statically in front of the world.
-class Viewfinder extends Component
+class Viewfinder({
+  super.key,
+}) extends Component
     implements
         AnchorProvider,
         AngleProvider,
         PositionProvider,
         ScaleProvider,
         CoordinateTransform {
-  Viewfinder({
-    super.key,
-  });
-
   /// Transform matrix used by the viewfinder.
   final Transform2D transform = Transform2D();
 
