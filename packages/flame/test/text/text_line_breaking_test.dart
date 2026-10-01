@@ -12,12 +12,24 @@ void main() {
       paragraph: const BlockStyle(padding: EdgeInsets.zero),
     );
 
-    List<String> layOut(List<InlineTextNode> nodes, double width) {
+    ParagraphTextElement layOutParagraph(
+      List<InlineTextNode> nodes,
+      double width, {
+      DocumentStyle? documentStyle,
+    }) {
       final document = DocumentRoot([ParagraphNode.group(nodes)]);
-      final block = document.format(style, width: width).children.single;
-      return (block as GroupElement).children
-          .map((line) => _textOf(line).trim())
-          .toList();
+      final block = document
+          .format(documentStyle ?? style, width: width)
+          .children
+          .single;
+      return (block as GroupElement).children.single as ParagraphTextElement;
+    }
+
+    List<String> layOut(List<InlineTextNode> nodes, double width) {
+      return layOutParagraph(
+        nodes,
+        width,
+      ).lines.map((line) => line.trim()).toList();
     }
 
     test('breaks between words', () {
@@ -97,23 +109,56 @@ void main() {
       );
     });
 
-    test('breaks a glued run that is wider than a line', () {
+    test('breaks inside a glued run that is wider than a line', () {
       expect(
         layOut([
           PlainTextNode('a '),
           CodeTextNode.simple('bbbb'),
           PlainTextNode('ccc'),
         ], 50),
-        ['a', 'bbbb', 'ccc'],
+        // cSpell:ignore bbb bccc
+        ['a bbb', 'bccc'],
       );
     });
-  });
-}
 
-String _textOf(TextElement element) {
-  return switch (element) {
-    final GroupTextElement group => group.children.map(_textOf).join(),
-    final TextPainterTextElement text => text.textPainter.plainText,
-    _ => '',
-  };
+    test('breaks at hard line breaks', () {
+      expect(
+        layOut([PlainTextNode('foo\nbar baz')], 200),
+        ['foo', 'bar baz'],
+      );
+    });
+
+    test('breaks text without spaces at script boundaries', () {
+      expect(
+        layOut([PlainTextNode('こんにちは世界')], 50),
+        ['こんにちは', '世界'],
+      );
+    });
+
+    test('lays out lines below each other', () {
+      final paragraph = layOutParagraph([PlainTextNode('foo to bars.')], 110);
+      final lines = paragraph.lineMetrics;
+      expect(lines, hasLength(2));
+      expect(lines[0].baseline, lessThan(lines[1].baseline));
+      expect(paragraph.height, lines[0].height + lines[1].height);
+    });
+
+    test('justifies all but the last line', () {
+      final paragraph = layOutParagraph(
+        [PlainTextNode('foo to bars.')],
+        110,
+        documentStyle: DocumentStyle(
+          text: InlineTextStyle(fontSize: 10),
+          paragraph: const BlockStyle(
+            padding: EdgeInsets.zero,
+            textAlign: TextAlign.justify,
+          ),
+        ),
+      );
+      final lines = paragraph.lineMetrics;
+      expect(lines, hasLength(2));
+      expect(lines[0].width, 110);
+      expect(lines[1].width, 50);
+    });
+  });
 }

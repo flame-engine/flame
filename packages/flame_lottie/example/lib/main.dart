@@ -1,6 +1,6 @@
 import 'package:flame/game.dart';
 import 'package:flame_lottie/flame_lottie.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   runApp(GameWidget(game: LottieExampleGame()));

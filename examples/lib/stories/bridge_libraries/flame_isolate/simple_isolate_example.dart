@@ -6,7 +6,7 @@ import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_isolate/flame_isolate.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class SimpleIsolateExample extends FlameGame {
   static const String description = '''
@@ -85,7 +85,7 @@ class CalculatePrimeNumber extends PositionComponent
 
   @override
   Future<void> onMount() {
-    _interval = Timer(0.4, repeat: true, onTick: _checkNextAgainstPrime)
+    _interval = Timer(period: 0.4, repeat: true, onTick: _checkNextAgainstPrime)
       ..start();
     return super.onMount();
   }

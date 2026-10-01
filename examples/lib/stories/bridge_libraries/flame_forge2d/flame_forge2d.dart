@@ -1,5 +1,5 @@
-import 'package:dashbook/dashbook.dart';
 import 'package:examples/commons/commons.dart';
+import 'package:examples/commons/example_use_case.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/animated_body_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/camera_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/composition_example.dart';
@@ -20,131 +20,137 @@ import 'package:examples/stories/bridge_libraries/flame_forge2d/sprite_body_exam
 import 'package:examples/stories/bridge_libraries/flame_forge2d/tap_callbacks_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/widget_example.dart';
 import 'package:flame/game.dart';
+import 'package:widgetbook/widgetbook.dart';
 
 String link(String example) =>
     baseLink('bridge_libraries/flame_forge2d/$example');
 
-void addForge2DStories(Dashbook dashbook) {
-  dashbook.storiesOf('flame_forge2d')
-    ..add(
-      'Composition example',
-      (DashbookContext ctx) => GameWidget(game: CompositionExample()),
-      codeLink: link('composition_example.dart'),
-      info: CompositionExample.description,
-    )
-    ..add(
-      'Domino example',
-      (DashbookContext ctx) => GameWidget(game: DominoExample()),
-      codeLink: link('domino_example.dart'),
-      info: DominoExample.description,
-    )
-    ..add(
-      'Contact Callbacks',
-      (DashbookContext ctx) => GameWidget(game: ContactCallbacksExample()),
-      codeLink: link('contact_callbacks_example.dart'),
-      info: ContactCallbacksExample.description,
-    )
-    ..add(
-      'RevoluteJoint with Motor',
-      (DashbookContext ctx) =>
-          GameWidget(game: RevoluteJointWithMotorExample()),
-      codeLink: link('revolute_joint_with_motor_example.dart'),
-      info: RevoluteJointWithMotorExample.description,
-    )
-    ..add(
-      'Sprite Bodies',
-      (DashbookContext ctx) => GameWidget(game: SpriteBodyExample()),
-      codeLink: link('sprite_body_example.dart'),
-      info: SpriteBodyExample.description,
-    )
-    ..add(
-      'Animated Bodies',
-      (DashbookContext ctx) => GameWidget(game: AnimatedBodyExample()),
-      codeLink: link('animated_body_example.dart'),
-      info: AnimatedBodyExample.description,
-    )
-    ..add(
-      'Tappable Body',
-      (DashbookContext ctx) => GameWidget(game: TapCallbacksExample()),
-      codeLink: link('tap_callbacks_example.dart'),
-      info: TapCallbacksExample.description,
-    )
-    ..add(
-      'Draggable Body',
-      (DashbookContext ctx) => GameWidget(game: DragCallbacksExample()),
-      codeLink: link('drag_callbacks_example.dart'),
-      info: DragCallbacksExample.description,
-    )
-    ..add(
-      'Camera',
-      (DashbookContext ctx) => GameWidget(game: CameraExample()),
-      codeLink: link('camera_example.dart'),
-      info: CameraExample.description,
-    )
-    ..add(
-      'Raycasting',
-      (DashbookContext ctx) => GameWidget(game: RaycastExample()),
-      codeLink: link('raycast_example.dart'),
-      info: RaycastExample.description,
-    )
-    ..add(
-      'Widgets',
-      (DashbookContext ctx) => const BodyWidgetExample(),
-      codeLink: link('widget_example.dart'),
-      info: WidgetExample.description,
-    );
-  addJointsStories(dashbook);
+WidgetbookComponent forge2DStories() {
+  return WidgetbookComponent(
+    name: 'flame_forge2d',
+    useCases: [
+      ExampleUseCase(
+        name: 'Composition example',
+        builder: (_) => GameWidget(game: CompositionExample()),
+        codeLink: link('composition_example.dart'),
+        info: CompositionExample.description,
+      ),
+      ExampleUseCase(
+        name: 'Domino example',
+        builder: (_) => GameWidget(game: DominoExample()),
+        codeLink: link('domino_example.dart'),
+        info: DominoExample.description,
+      ),
+      ExampleUseCase(
+        name: 'Contact Callbacks',
+        builder: (_) => GameWidget(game: ContactCallbacksExample()),
+        codeLink: link('contact_callbacks_example.dart'),
+        info: ContactCallbacksExample.description,
+      ),
+      ExampleUseCase(
+        name: 'RevoluteJoint with Motor',
+        builder: (_) => GameWidget(game: RevoluteJointWithMotorExample()),
+        codeLink: link('revolute_joint_with_motor_example.dart'),
+        info: RevoluteJointWithMotorExample.description,
+      ),
+      ExampleUseCase(
+        name: 'Sprite Bodies',
+        builder: (_) => GameWidget(game: SpriteBodyExample()),
+        codeLink: link('sprite_body_example.dart'),
+        info: SpriteBodyExample.description,
+      ),
+      ExampleUseCase(
+        name: 'Animated Bodies',
+        builder: (_) => GameWidget(game: AnimatedBodyExample()),
+        codeLink: link('animated_body_example.dart'),
+        info: AnimatedBodyExample.description,
+      ),
+      ExampleUseCase(
+        name: 'Tappable Body',
+        builder: (_) => GameWidget(game: TapCallbacksExample()),
+        codeLink: link('tap_callbacks_example.dart'),
+        info: TapCallbacksExample.description,
+      ),
+      ExampleUseCase(
+        name: 'Draggable Body',
+        builder: (_) => GameWidget(game: DragCallbacksExample()),
+        codeLink: link('drag_callbacks_example.dart'),
+        info: DragCallbacksExample.description,
+      ),
+      ExampleUseCase(
+        name: 'Camera',
+        builder: (_) => GameWidget(game: CameraExample()),
+        codeLink: link('camera_example.dart'),
+        info: CameraExample.description,
+      ),
+      ExampleUseCase(
+        name: 'Raycasting',
+        builder: (_) => GameWidget(game: RaycastExample()),
+        codeLink: link('raycast_example.dart'),
+        info: RaycastExample.description,
+      ),
+      ExampleUseCase(
+        name: 'Widgets',
+        builder: (_) => const BodyWidgetExample(),
+        codeLink: link('widget_example.dart'),
+        info: WidgetExample.description,
+      ),
+    ],
+  );
 }
 
-void addJointsStories(Dashbook dashbook) {
-  dashbook
-      .storiesOf('flame_forge2d/joints')
-      .add(
-        'FilterJoint',
-        (DashbookContext ctx) => GameWidget(game: FilterJointExample()),
+WidgetbookComponent jointsStories() {
+  return WidgetbookComponent(
+    name: 'flame_forge2d/joints',
+    useCases: [
+      ExampleUseCase(
+        name: 'FilterJoint',
+        builder: (_) => GameWidget(game: FilterJointExample()),
         codeLink: link('joints/filter_joint.dart'),
         info: FilterJointExample.description,
-      )
-      .add(
-        'DistanceJoint',
-        (DashbookContext ctx) => GameWidget(game: DistanceJointExample()),
+      ),
+      ExampleUseCase(
+        name: 'DistanceJoint',
+        builder: (_) => GameWidget(game: DistanceJointExample()),
         codeLink: link('joints/distance_joint.dart'),
         info: DistanceJointExample.description,
-      )
-      .add(
-        'MotorJoint',
-        (DashbookContext ctx) => GameWidget(game: MotorJointExample()),
+      ),
+      ExampleUseCase(
+        name: 'MotorJoint',
+        builder: (_) => GameWidget(game: MotorJointExample()),
         codeLink: link('joints/motor_joint.dart'),
         info: MotorJointExample.description,
-      )
-      .add(
-        'MouseJoint',
-        (DashbookContext ctx) => GameWidget(game: MouseJointExample()),
+      ),
+      ExampleUseCase(
+        name: 'MouseJoint',
+        builder: (_) => GameWidget(game: MouseJointExample()),
         codeLink: link('joints/mouse_joint.dart'),
         info: MouseJointExample.description,
-      )
-      .add(
-        'PrismaticJoint',
-        (DashbookContext ctx) => GameWidget(game: PrismaticJointExample()),
+      ),
+      ExampleUseCase(
+        name: 'PrismaticJoint',
+        builder: (_) => GameWidget(game: PrismaticJointExample()),
         codeLink: link('joints/prismatic_joint.dart'),
         info: PrismaticJointExample.description,
-      )
-      .add(
-        'RevoluteJoint',
-        (DashbookContext ctx) => GameWidget(game: RevoluteJointExample()),
+      ),
+      ExampleUseCase(
+        name: 'RevoluteJoint',
+        builder: (_) => GameWidget(game: RevoluteJointExample()),
         codeLink: link('joints/revolute_joint.dart'),
         info: RevoluteJointExample.description,
-      )
-      .add(
-        'WeldJoint',
-        (DashbookContext ctx) => GameWidget(game: WeldJointExample()),
+      ),
+      ExampleUseCase(
+        name: 'WeldJoint',
+        builder: (_) => GameWidget(game: WeldJointExample()),
         codeLink: link('joints/weld_joint.dart'),
         info: WeldJointExample.description,
-      )
-      .add(
-        'WheelJoint',
-        (DashbookContext ctx) => GameWidget(game: WheelJointExample()),
+      ),
+      ExampleUseCase(
+        name: 'WheelJoint',
+        builder: (_) => GameWidget(game: WheelJointExample()),
         codeLink: link('joints/wheel_joint.dart'),
         info: WheelJointExample.description,
-      );
+      ),
+    ],
+  );
 }

@@ -1,3 +1,14 @@
+## 0.4.0-dev.0
+
+> Note: This release has breaking changes.
+
+ - **FIX**: Use full asset paths in the remaining examples and docs ([#4027](https://github.com/flame-engine/flame/issues/4027)). ([1f8bf379](https://github.com/flame-engine/flame/commit/1f8bf379c01910fd684fc8ede186db9be445e673))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **BREAKING** **PERF**: Replace the OrderedSet children container with a flat sorted-array ComponentList ([#4019](https://github.com/flame-engine/flame/issues/4019)). ([ab6ef3e3](https://github.com/flame-engine/flame/commit/ab6ef3e3e38fadb92bebe233f375d6d64d9039b1))
+ - **BREAKING** **FEAT**: Kill ScrollDetector in favour of ScrollCallbacks ([#4005](https://github.com/flame-engine/flame/issues/4005)). ([d415867b](https://github.com/flame-engine/flame/commit/d415867b0bd4970aba580a5476180f438d3f5239))
+ - **BREAKING** **FEAT**: Rename GameWidget.controlled to GameWidget.managed ([#3961](https://github.com/flame-engine/flame/issues/3961)). ([d99224e5](https://github.com/flame-engine/flame/commit/d99224e5e23c16c86d6d26bf8a807d31c4b4bbc4))
+ - **BREAKING** **CHORE**: Rename HasWorldReference to HasWorldRef for consistency with HasGameRef ([#4039](https://github.com/flame-engine/flame/issues/4039)). ([cced5ccd](https://github.com/flame-engine/flame/commit/cced5ccd6fd241deb5f097c77181964d4307e3b8))
+
 ## 0.3.0
 
 > Note: This release has breaking changes.

@@ -11,8 +11,8 @@ import 'package:flame_isolate_example/game_map/game_map.dart';
 import 'package:flame_isolate_example/objects/colonists_object.dart';
 import 'package:flame_isolate_example/terrain/terrain.dart';
 import 'package:flame_isolate_example/units/worker.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ColonistsGame extends FlameGame with KeyboardEvents {
   final PositionComponent _cameraPosition = PositionComponent();

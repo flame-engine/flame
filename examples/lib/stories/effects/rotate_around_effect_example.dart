@@ -6,7 +6,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
-import 'package:flutter/material.dart' as material;
+import 'package:material_ui/material_ui.dart' as material;
 
 class RotateAroundEffectExample extends FlameGame {
   static const description = '''

@@ -5,7 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flame_behaviors_example/entities/circle/behaviors/behaviors.dart';
 import 'package:flame_behaviors_example/entities/entities.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class Circle extends PositionedEntity with HasPaint {
   Circle({

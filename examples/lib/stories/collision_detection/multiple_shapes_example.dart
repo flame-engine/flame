@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:examples/commons/path_component.dart';
 import 'package:examples/commons/paths.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -8,7 +7,7 @@ import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
-import 'package:flutter/material.dart' hide Image, Draggable;
+import 'package:material_ui/material_ui.dart' hide Image, Draggable;
 
 enum Shapes { circle, rectangle, polygon, path }
 
@@ -198,62 +197,22 @@ class CollidablePolygon extends MyCollidable {
   }
 }
 
-class CollidablePath extends MyCollidable with CollisionPassthrough {
+class CollidablePath extends MyCollidable {
   CollidablePath(
     super.position,
     super.size,
     super.velocity,
     super.screenHitbox,
   ) {
-    // The path is centered on the origin, so the hitbox is placed in the
-    // middle of the component.
-    final path = randomPath(size.toSize());
-    _pathPaint = Paint.from(pathStroke)..color = defaultColor;
-    _component = pathComponentWith(
-      path,
-      size.toSize(),
-      paint: _pathPaint,
-      anchor: .center,
-    );
-    add(_component);
+    // The path keeps its aspect ratio within the size, so the hitbox is
+    // centered in the component.
+    hitbox = PathHitbox(
+      path: randomPath(size.toSize()),
+      position: size / 2,
+      anchor: Anchor.center,
+    )..renderShape = true;
+    add(hitbox!);
   }
-
-  @override
-  bool containsLocalPoint(Vector2 point) {
-    var result = super.containsLocalPoint(point);
-    if (!result) {
-      final area = Rect.fromCenter(center: .zero, width: width, height: height);
-      result = area.containsPoint(point);
-    }
-    return result;
-  }
-
-  @override
-  void render(Canvas canvas) {
-    if (isDragged) {
-      canvas.drawCircle(.zero, 5, dragIndicatorPaint);
-    }
-  }
-
-  @override
-  void onCollisionStart(
-    List<Vector2> intersectionPoints,
-    PositionComponent other,
-  ) {
-    super.onCollisionStart(intersectionPoints, other);
-    _pathPaint.color = other is ScreenHitbox ? screenColor : collisionColor;
-  }
-
-  @override
-  void onCollisionEnd(PositionComponent other) {
-    super.onCollisionEnd(other);
-    if (!isColliding) {
-      _pathPaint.color = defaultColor;
-    }
-  }
-
-  late final PathComponent _component;
-  late final Paint _pathPaint;
 }
 
 class CollidableRectangle extends MyCollidable {

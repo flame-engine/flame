@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 void main() {
   group('Timer', () {
     test('can be started and stopped, discarding progress', () {
-      final timer = Timer(1.0, autoStart: false);
+      final timer = Timer(period: 1.0, autoStart: false);
       expect(timer.isRunning(), false);
       timer.start();
       expect(timer.isRunning(), true);
@@ -15,7 +15,7 @@ void main() {
     });
 
     test('can be paused and resumed, retaining progress', () {
-      final timer = Timer(1.0, autoStart: false);
+      final timer = Timer(period: 1.0, autoStart: false);
       expect(timer.isRunning(), false);
       timer.start();
       expect(timer.isRunning(), true);
@@ -28,7 +28,7 @@ void main() {
     });
 
     test('tracks current delta time', () {
-      final timer = Timer(1.0);
+      final timer = Timer(period: 1.0);
       timer.update(0.5);
       expect(timer.current, 0.5);
       timer.update(0.2);
@@ -36,7 +36,7 @@ void main() {
     });
 
     test('tracks progress percent capped at 1.0', () {
-      final timer = Timer(2.0);
+      final timer = Timer(period: 2.0);
       timer.update(0.5);
       expect(timer.progress, 0.25);
       timer.update(0.5);
@@ -47,7 +47,7 @@ void main() {
 
     test('onTick fires once if non-repeating', () {
       var onTickCount = 0;
-      final timer = Timer(1.0, onTick: () => onTickCount++);
+      final timer = Timer(period: 1.0, onTick: () => onTickCount++);
       timer.update(0.9);
       expect(onTickCount, 0);
       timer.update(0.2);
@@ -57,7 +57,7 @@ void main() {
     });
 
     test('finishes when complete if non-repeating', () {
-      final timer = Timer(1.0);
+      final timer = Timer(period: 1.0);
       expect(timer.finished, false);
       timer.update(1.1);
       expect(timer.finished, true);
@@ -65,7 +65,11 @@ void main() {
 
     test('onTick fires repeatedly if repeating', () {
       var onTickCount = 0;
-      final timer = Timer(1.0, repeat: true, onTick: () => onTickCount++);
+      final timer = Timer(
+        period: 1.0,
+        repeat: true,
+        onTick: () => onTickCount++,
+      );
       timer.update(0.9);
       expect(onTickCount, 0);
       timer.update(0.2);
@@ -75,7 +79,7 @@ void main() {
     });
 
     test('does not finish past limit if repeating', () {
-      final timer = Timer(1.0, repeat: true);
+      final timer = Timer(period: 1.0, repeat: true);
       expect(timer.finished, false);
       timer.update(1.1);
       expect(timer.finished, false);
@@ -84,7 +88,7 @@ void main() {
     test('when tickCount is provided, tick only the provided amount', () {
       var count = 0;
       final timer = Timer(
-        1,
+        period: 1,
         repeat: true,
         tickCount: 2,
         onTick: () {

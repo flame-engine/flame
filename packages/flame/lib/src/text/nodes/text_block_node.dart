@@ -1,7 +1,8 @@
-import 'dart:ui';
+import 'dart:math';
 
 import 'package:flame/src/text/common/utils.dart';
 import 'package:flame/text.dart';
+import 'package:flutter/painting.dart' hide TextStyle;
 import 'package:meta/meta.dart';
 
 abstract class TextBlockNode extends BlockNode {
@@ -17,63 +18,46 @@ abstract class TextBlockNode extends BlockNode {
 
   /// Converts this node into a [BlockElement].
   ///
+  /// The inline content is laid out as a single left-to-right paragraph by
+  /// Flutter, which takes care of line breaking, alignment, kerning and
+  /// ligatures across differently styled spans.
+  ///
   /// All late variables must be initialized prior to calling this method.
   @override
   BlockElement format(double availableWidth) {
-    final layoutBuilder = child.layoutBuilder;
     final blockWidth = availableWidth;
-    final contentWidth = blockWidth - style.padding.horizontal;
-
-    final lines = <InlineTextElement>[];
-    final horizontalOffset = style.padding.left;
-    var verticalOffset = style.padding.top;
+    final contentWidth = max(blockWidth - style.padding.horizontal, 0.0);
     final textAlign = style.textAlign ?? TextAlign.left;
-    while (!layoutBuilder.isDone) {
-      final element = layoutBuilder.layOutNextLine(
-        contentWidth,
-        isStartOfLine: true,
-      );
-      if (element == null) {
-        // Not enough horizontal space to lay out. For now we just stop the
-        // layout altogether cutting off the remainder of the content. But is
-        // there a better alternative?
-        break;
-      } else {
-        final metrics = element.metrics;
-        assert(metrics.left == 0 && metrics.baseline == 0);
 
-        final dx =
-            horizontalOffset +
-            (contentWidth - metrics.width) * _relativeOffset(textAlign);
-        final dy = verticalOffset + metrics.ascent;
-        element.translate(dx, dy);
+    final paragraph = ParagraphTextElement.layout(
+      child.toInlineSpan(),
+      maxWidth: contentWidth,
+      textAlign: textAlign,
+    );
+    final dx =
+        style.padding.left +
+        (contentWidth - paragraph.width) * _relativeOffset(textAlign);
+    paragraph.translate(dx, style.padding.top);
 
-        lines.add(element);
-        verticalOffset += metrics.height;
-      }
-    }
-    verticalOffset += style.padding.bottom;
-    final bg = makeBackground(style.background, blockWidth, verticalOffset);
-    final elements = bg == null ? lines : [bg, ...lines];
+    final blockHeight = paragraph.height + style.padding.vertical;
+    final background = makeBackground(
+      style.background,
+      blockWidth,
+      blockHeight,
+    );
+    final elements = background == null ? [paragraph] : [background, paragraph];
     return GroupElement(
       width: blockWidth,
-      height: verticalOffset,
+      height: blockHeight,
       children: elements,
     );
   }
 
   double _relativeOffset(TextAlign textAlign) {
     return switch (textAlign) {
-      TextAlign.left => 0,
-      TextAlign.right => 1,
+      TextAlign.left || TextAlign.start || TextAlign.justify => 0,
+      TextAlign.right || TextAlign.end => 1,
       TextAlign.center => 0.5,
-      // NOTE: we do not support non-LRT text directions
-      TextAlign.start => 0,
-      TextAlign.end => 1,
-      // Not supported by Flame
-      TextAlign.justify => throw UnimplementedError(
-        'The text rendering pipeline cannot justify text.',
-      ),
     };
   }
 }

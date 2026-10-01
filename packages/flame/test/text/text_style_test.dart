@@ -115,10 +115,9 @@ void main() {
 
       final element = document.format(style);
       final groupElement = element.children.first as GroupElement;
-      final groupTextElement = groupElement.children.first as GroupTextElement;
-      final styles = groupTextElement.children.map((e) {
-        return (e as TextPainterTextElement).textPainter.text!.style!;
-      }).toList();
+      final paragraph = groupElement.children.first as ParagraphTextElement;
+      final span = paragraph.textPainter.text! as TextSpan;
+      final styles = span.children!.map((child) => child.style!).toList();
 
       expect(styles[0].fontSize, 12);
       expect(styles[0].fontWeight, isNull);

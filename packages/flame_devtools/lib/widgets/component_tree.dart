@@ -4,8 +4,8 @@ import 'package:flame_devtools/widgets/component_snapshot.dart';
 import 'package:flame_devtools/widgets/component_tree_model.dart';
 import 'package:flame_devtools/widgets/debug_mode_button.dart';
 import 'package:flame_devtools/widgets/position_component_attributes_form.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ComponentTree extends StatelessWidget {
   const ComponentTree({super.key});

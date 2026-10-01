@@ -1,9 +1,9 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:doc_flame_examples/ember.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/animation.dart';
-import 'package:flutter/cupertino.dart';
 
 class ColorEffectExample extends FlameGame {
   bool reset = false;

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/text.dart';
+import 'package:flutter/painting.dart' show InlineSpan;
 
 /// An [InlineTextNode] representing bold text.
 class BoldTextNode extends InlineTextNode {
@@ -22,5 +23,5 @@ class BoldTextNode extends InlineTextNode {
   }
 
   @override
-  TextNodeLayoutBuilder get layoutBuilder => child.layoutBuilder;
+  InlineSpan toInlineSpan() => child.toInlineSpan();
 }

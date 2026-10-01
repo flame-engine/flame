@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:examples/commons/path_component.dart';
 import 'package:examples/commons/paths.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -9,7 +8,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/palette.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class RaytraceExample extends FlameGame
     with HasCollisionDetection, MouseMoveCallbacks, TapCallbacks {
@@ -43,6 +42,7 @@ bounce on will appear.
   @override
   Future<void> onLoad() async {
     final halfCanvas = Size.square(min(canvasSize.x, canvasSize.y) / 2);
+    final canvasPath = randomPath(halfCanvas * 2);
     addAll([
       ScreenHitbox(),
       if (random.nextDouble() <= 0.5)
@@ -52,12 +52,14 @@ bounce on will appear.
           children: [CircleHitbox()],
         )
       else
+        // The rays should bounce on the inner contours too, so the hitbox
+        // keeps every polygon of the path.
         PathComponent(
-          path: randomPath(halfCanvas * 2),
+          path: canvasPath,
           position: halfCanvas.toVector2(),
           anchor: .center,
           paint: boxPaint,
-          filterHitboxes: false,
+          children: [PathHitbox(path: canvasPath, filter: false)],
         ),
     ]);
   }
@@ -73,6 +75,7 @@ bounce on will appear.
     }
     _timePassed = 0;
     if (extraChildren.isEmpty) {
+      final extraPath = path;
       addAll(
         extraChildren..addAll(
           [
@@ -97,11 +100,11 @@ bounce on will appear.
               children: [CircleHitbox()],
             ),
             PathComponent(
-              path: path,
+              path: extraPath,
               position: Vector2.all(350),
               anchor: Anchor.center,
               paint: boxPaint,
-              filterHitboxes: false,
+              children: [PathHitbox(path: extraPath, filter: false)],
             ),
             RectangleComponent(
               position: Vector2.all(500),

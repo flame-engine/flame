@@ -1,6 +1,6 @@
 import 'package:flame_devtools/repository.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:material_ui/material_ui.dart';
 
 class GameLoopControls extends StatefulWidget {
   const GameLoopControls({super.key});

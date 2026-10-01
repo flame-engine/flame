@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame_forge2d/flame_forge2d.dart' hide World;
-import 'package:flutter/material.dart' hide Image, Gradient;
+import 'package:material_ui/material_ui.dart' hide Image, Gradient;
 import 'package:padracing/game_colors.dart';
 import 'package:padracing/lap_line.dart';
 import 'package:padracing/padracing_game.dart';

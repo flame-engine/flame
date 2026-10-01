@@ -9,7 +9,6 @@ import 'package:meta/meta.dart';
 class TimerComponent extends Component {
   late final Timer timer;
   final bool removeOnFinish;
-  final VoidCallback? _onTick;
   final bool tickWhenLoaded;
 
   /// Creates a [TimerComponent]
@@ -17,9 +16,9 @@ class TimerComponent extends Component {
   /// [period] The period of time in seconds that the tick will be called
   /// [repeat] When true, this will continue running after [period] is reached
   /// [autoStart] When true, will start upon instantiation (default is true)
-  /// [_onTick] When provided, will be called every time [period] is reached.
-  /// This overrides the [_onTick] method
-  /// [tickWhenLoaded] When true, will call [_onTick] when the component is
+  /// [onTick] When provided, will be called every time [period] is reached.
+  /// It can be changed later through [Timer.onTick] on [timer].
+  /// [tickWhenLoaded] When true, will call [onTick] when the component is
   /// first loaded (default is false).
   /// [tickCount] The number of time the timer will tick before stopping.
   /// This is is only used when [repeat] is true. If null,
@@ -29,13 +28,13 @@ class TimerComponent extends Component {
     bool repeat = false,
     bool autoStart = true,
     this.removeOnFinish = false,
-    this._onTick,
+    VoidCallback? onTick,
     this.tickWhenLoaded = false,
     int? tickCount,
     super.key,
   }) {
     timer = Timer(
-      period,
+      period: period,
       repeat: repeat,
       onTick: onTick,
       autoStart: autoStart,
@@ -49,15 +48,8 @@ class TimerComponent extends Component {
     await super.onLoad();
 
     if (tickWhenLoaded) {
-      onTick();
+      timer.onTick?.call();
     }
-  }
-
-  /// Called every time the [timer] reached a tick.
-  /// The default implementation calls the closure received on the
-  /// constructor and can be overridden to add custom logic.
-  void onTick() {
-    _onTick?.call();
   }
 
   @override

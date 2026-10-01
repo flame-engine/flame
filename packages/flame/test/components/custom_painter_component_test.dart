@@ -1,6 +1,6 @@
 import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 

@@ -8,10 +8,11 @@ class EnemyCreator extends TimerComponent with HasGameRef<RogueShooterGame> {
   final Random random = Random();
   final _halfWidth = EnemyComponent.initialSize.x / 2;
 
-  EnemyCreator() : super(period: 0.05, repeat: true);
+  EnemyCreator() : super(period: 0.05, repeat: true) {
+    timer.onTick = _spawn;
+  }
 
-  @override
-  void onTick() {
+  void _spawn() {
     gameRef.enemyGroup.addAll(
       List.generate(
         5,

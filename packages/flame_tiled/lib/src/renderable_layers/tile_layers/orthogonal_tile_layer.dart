@@ -11,7 +11,6 @@ import 'package:meta/meta.dart';
 class OrthogonalTileLayer extends FlameTileLayer {
   OrthogonalTileLayer({
     required super.layer,
-    required super.parent,
     required super.map,
     required super.destTileSize,
     required super.tiledAtlas,
@@ -23,7 +22,6 @@ class OrthogonalTileLayer extends FlameTileLayer {
 
   @override
   void cacheTiles() {
-    final tileData = layer.tileData!;
     final size = destTileSize;
     final halfMapTile = Vector2(map.tileWidth / 2, map.tileHeight / 2);
     final batch = tiledAtlas.batch;
@@ -31,15 +29,8 @@ class OrthogonalTileLayer extends FlameTileLayer {
       return;
     }
 
-    for (var ty = 0; ty < tileData.length; ty++) {
-      final tileRow = tileData[ty];
-
-      for (var tx = 0; tx < tileRow.length; tx++) {
-        final tileGid = tileRow[tx];
-        if (tileGid.tile == 0) {
-          continue;
-        }
-
+    for (final MapEntry(key: ty, value: tileRow) in tilesByWorldRow().entries) {
+      for (final (tx, tileGid) in tileRow) {
         final tile = map.tileByGid(tileGid.tile)!;
         final tileset = map.tilesetByTileGId(tileGid.tile);
         final img = tile.image ?? tileset.image;
@@ -83,7 +74,7 @@ class OrthogonalTileLayer extends FlameTileLayer {
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;
 
-        transforms[tx][ty] = MutableRSTransform(
+        final transform = MutableRSTransform(
           scos,
           ssin,
           offsetX,
@@ -91,10 +82,11 @@ class OrthogonalTileLayer extends FlameTileLayer {
           -scos * anchorX + ssin * anchorY,
           -ssin * anchorX - scos * anchorY,
         );
+        storeTransform(tx, ty, transform);
 
         batch.addTransform(
           source: src,
-          transform: transforms[tx][ty],
+          transform: transform,
           flip: shouldFlip(flips),
         );
 
