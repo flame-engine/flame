@@ -251,11 +251,19 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
   /// Builds the transform of a tile whose map cell is centered on
   /// ([offsetX], [offsetY]), so that it is drawn the same way Tiled draws it.
   ///
-  /// Tiles are aligned to the bottom-left of their cell, so tiles that are
-  /// larger than the map's tile size grow up and to the right. Flips and
-  /// rotations happen within the bounds of the tile image itself, a diagonal
-  /// flip swaps the width and height of the image but keeps its bottom-left
-  /// corner on the bottom-left corner of the cell.
+  /// Tiled aligns a tile to the bottom-left corner of its cell, which means
+  /// that tiles that are larger than the map's tile size (oversized tiles) grow
+  /// up and to the right. Flips and rotations are then applied within the
+  /// bounds of the tile image itself, not around the cell:
+  ///  - Horizontal and vertical flips keep the tile where it is.
+  ///  - Rotations of 90º (which is what a diagonal flip is) swap the width and
+  ///    height of the tile, but keep its bottom-left corner on the bottom-left
+  ///    corner of the cell.
+  ///  - In hexagonal maps the tile is rotated in steps of 60º around the center
+  ///    of the image instead, and it keeps its size (see
+  ///    [SimpleFlips.fromHexagonalFlips]).
+  ///
+  /// For reference, this is the same as `CellRenderer::render` in Tiled.
   @protected
   MutableRSTransform tileTransform({
     required MutableRect src,
@@ -269,22 +277,31 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
 
     final halfWidth = src.width / 2;
     final halfHeight = src.height / 2;
-    // The bounds the tile covers once it has been flipped and rotated.
-    final isSwapped = flips.angle.isOdd;
+    // The size of the area that the tile covers once it has been rotated.
+    final isSwapped = !flips.isHexagonal && flips.angle.isOdd;
     final boundsHalfWidth = isSwapped ? halfHeight : halfWidth;
     final boundsHalfHeight = isSwapped ? halfWidth : halfHeight;
 
+    // The transform rotates around the center of the image, so we place that
+    // center on the center of the area that the rotated tile covers. Since
+    // [offsetX] and [offsetY] are the center of the cell, we move to its
+    // bottom-left corner (-tileWidth / 2, +tileHeight / 2) and then to the
+    // center of the covered area (+boundsHalfWidth, -boundsHalfHeight).
     return MutableRSTransform(
       scos,
       ssin,
       offsetX + scale * (boundsHalfWidth - map.tileWidth / 2),
       offsetY + scale * (map.tileHeight / 2 - boundsHalfHeight),
-      // Rotate around the center of the image.
+      // RSTransform wants the anchor as the offset from the translation to the
+      // origin of the image once it has been rotated and scaled.
       -scos * halfWidth + ssin * halfHeight,
       -ssin * halfWidth - scos * halfHeight,
     );
   }
 
+  /// The flip (done by mirroring the tile horizontally) is applied before the
+  /// rotation of [tileTransform], so vertical flips are represented by a
+  /// horizontal flip and a rotation of 180º in [SimpleFlips].
   @protected
   bool shouldFlip(SimpleFlips flips) => !ignoreFlip && flips.flip;
 }

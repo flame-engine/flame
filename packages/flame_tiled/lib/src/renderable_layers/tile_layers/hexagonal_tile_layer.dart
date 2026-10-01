@@ -85,7 +85,7 @@ class HexagonalTileLayer extends FlameTileLayer {
           }
         }
 
-        final flips = SimpleFlips.fromFlips(tileGid.flips);
+        final flips = SimpleFlips.fromHexagonalFlips(tileGid.flips);
         late double offsetX;
         late double offsetY;
 

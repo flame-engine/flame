@@ -1132,7 +1132,14 @@ void main() {
   // anchored at the bottom-left of their cell and grow up and to the right, so
   // the red area of the big tiles should sit exactly on top of the grey cells.
   // The maps can be opened in Tiled to cross-check the goldens. The goldens
-  // include padding around the map since the tiles overflow its bounds.
+  // include padding around the map since the tiles overflow its bounds, while
+  // Tiled crops its exports to the bounds of the map.
+  //
+  // The flipped variants of the maps hold every flip and rotation combination
+  // of the same tile. Tiled flips tiles within their own bounds instead of
+  // swinging them around the cell, and in hexagonal maps it rotates the
+  // diagonal flips in steps of 60º, which is why those look different from
+  // the other orientations.
   group('oversized tile anchoring', () {
     for (final mapType in [
       'orthogonal',
