@@ -1,3 +1,8 @@
+## 0.3.1
+
+ - **FIX**: Require Flutter 3.47.0 or newer for flame_3d. ([f9d12195](https://github.com/flame-engine/flame/commit/f9d1219508dbd0d0a14b3f3c52b9618462c03cfb))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([3bf30496](https://github.com/flame-engine/flame/commit/3bf304968867101cdb17aa02927b205bf46f664f))
+
 ## 0.3.0
 
 > Note: This release has breaking changes.

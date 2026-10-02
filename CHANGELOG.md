@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-10-02
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_3d` - `v0.3.1`](#flame_3d---v031)
+
+---
+
+#### `flame_3d` - `v0.3.1`
+
+ - **FIX**: Require Flutter 3.47.0 or newer for flame_3d. ([f9d12195](https://github.com/flame-engine/flame/commit/f9d1219508dbd0d0a14b3f3c52b9618462c03cfb))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([3bf30496](https://github.com/flame-engine/flame/commit/3bf304968867101cdb17aa02927b205bf46f664f))
+
+
 ## 2026-08-27
 
 ### Changes
