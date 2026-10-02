@@ -1,3 +1,7 @@
+## 0.3.2
+
+ - **FIX**: Republish flame_3d with the Flutter 3.47.0 constraint. ([b883d818](https://github.com/flame-engine/flame/commit/b883d818e3e6239587ed30b021a68809f2182607))
+
 ## 0.3.1
 
  - **FIX**: Require Flutter 3.47.0 or newer for flame_3d. ([f9d12195](https://github.com/flame-engine/flame/commit/f9d1219508dbd0d0a14b3f3c52b9618462c03cfb))

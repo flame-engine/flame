@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`flame_3d` - `v0.3.2`](#flame_3d---v032)
+
+---
+
+#### `flame_3d` - `v0.3.2`
+
+ - **FIX**: Republish flame_3d with the Flutter 3.47.0 constraint. ([b883d818](https://github.com/flame-engine/flame/commit/b883d818e3e6239587ed30b021a68809f2182607))
+
+
+## 2026-10-02
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`flame_3d` - `v0.3.1`](#flame_3d---v031)
 
 ---
