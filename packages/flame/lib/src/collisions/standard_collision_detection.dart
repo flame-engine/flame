@@ -360,6 +360,7 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
 
 /// A hitbox that a ray may reach, with the distance at which the ray enters
 /// the bounding box of the hitbox.
+// ignore: use_primary_constructors
 class _RayCandidate {
   double distance = 0;
   ShapeHitbox? hitbox;

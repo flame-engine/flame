@@ -1,3 +1,5 @@
+// ignore_for_file: use_primary_constructors
+
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:flame/collisions.dart';
 

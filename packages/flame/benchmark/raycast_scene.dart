@@ -1,3 +1,6 @@
+// ignore_for_file: use_primary_constructors, empty_container_bodies
+// ignore_for_file: unnecessary_const_in_enum_constructor
+
 import 'dart:math';
 import 'dart:ui';
 
