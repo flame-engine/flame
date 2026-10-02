@@ -52,7 +52,8 @@ some reading first!
 
 This package provides 3D support for Flame but it depends on the still
 experimental [Flutter GPU](https://github.com/flutter/flutter/wiki/Flutter-GPU),
-which in turn depends on Impeller.
+which in turn depends on Impeller. Because the Flutter GPU API is still
+changing, this package requires Flutter 3.47.0 or newer.
 
 Therefore, this package is also experimental; you can check our
 [Roadmap](https://github.com/flame-engine/flame/blob/main/packages/flame_3d/ROADMAP.md)
