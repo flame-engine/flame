@@ -8,7 +8,7 @@ import 'package:flame/particles.dart';
 import 'package:material_ui/material_ui.dart' hide Image;
 
 /// The effect presets selectable in the knobs panel.
-enum ParticleEffect {
+enum ParticleEffect() {
   sparkles,
   fire,
   smoke,
@@ -19,7 +19,11 @@ enum ParticleEffect {
   bubbles,
 }
 
-class ParticlesInteractiveExample extends FlameGame with DragCallbacks {
+class ParticlesInteractiveExample({
+  /// The selected effect preset.
+  required final ParticleEffect effect,
+  required double zoom,
+}) extends FlameGame with DragCallbacks {
   static const description =
       'Drag around the canvas to paint with particles, and pick an effect in '
       'the knobs panel to try the different emitter presets and renderers. '
@@ -28,18 +32,13 @@ class ParticlesInteractiveExample extends FlameGame with DragCallbacks {
       'releases more from the preallocated buffer, so no objects are '
       'allocated while you draw.';
 
-  ParticlesInteractiveExample({
-    required this.effect,
-    required double zoom,
-  }) : super(
-         camera: CameraComponent.withFixedResolution(
-           width: 400,
-           height: 600,
-         )..viewfinder.zoom = zoom,
-       );
-
-  /// The selected effect preset.
-  final ParticleEffect effect;
+  this
+    : super(
+        camera: CameraComponent.withFixedResolution(
+          width: 400,
+          height: 600,
+        )..viewfinder.zoom = zoom,
+      );
 
   late ParticleEmitterComponent _emitter;
 

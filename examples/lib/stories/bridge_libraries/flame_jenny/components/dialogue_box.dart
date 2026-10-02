@@ -3,7 +3,7 @@ import 'package:examples/stories/bridge_libraries/flame_jenny/components/dialogu
 import 'package:flame/components.dart';
 import 'package:jenny/jenny.dart';
 
-class DialogueBoxComponent extends SpriteComponent with HasGameRef {
+class DialogueBoxComponent() extends SpriteComponent with HasGameRef {
   DialogueTextBox textBox = DialogueTextBox(text: '');
   final Vector2 spriteSize = Vector2(736, 128);
   late final ButtonRow buttonRow = ButtonRow(size: spriteSize);
@@ -17,7 +17,7 @@ class DialogueBoxComponent extends SpriteComponent with HasGameRef {
       srcSize: spriteSize,
     );
     addAll([buttonRow, textBox]);
-    return super.onLoad();
+    await super.onLoad();
   }
 
   void changeText(String newText, Function() goNextLine) {

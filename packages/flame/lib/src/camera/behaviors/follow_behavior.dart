@@ -17,33 +17,26 @@ import 'package:vector_math/vector_math.dart';
 ///
 /// The flags [horizontalOnly]/[verticalOnly] allow constraining the [owner]'s
 /// movement to the horizontal/vertical directions respectively.
-class FollowBehavior extends Component {
-  FollowBehavior({
-    required this._target,
-    this._owner,
-    double maxSpeed = double.infinity,
-    this.horizontalOnly = false,
-    this.verticalOnly = false,
-    super.priority,
-    super.key,
-  }) : _speed = maxSpeed,
-       assert(maxSpeed > 0, 'maxSpeed must be positive: $maxSpeed'),
-       assert(
-         !(horizontalOnly && verticalOnly),
-         'The behavior cannot be both horizontalOnly and verticalOnly',
-       );
+class FollowBehavior({
+  required final ReadOnlyPositionProvider _target,
+  var PositionProvider? _owner,
+  double maxSpeed = double.infinity,
+  final bool horizontalOnly = false,
+  final bool verticalOnly = false,
+  super.priority,
+  super.key,
+}) extends Component {
+  this
+    : assert(maxSpeed > 0, 'maxSpeed must be positive: $maxSpeed'),
+      assert(
+        !(horizontalOnly && verticalOnly),
+        'The behavior cannot be both horizontalOnly and verticalOnly',
+      );
 
   ReadOnlyPositionProvider get target => _target;
-  final ReadOnlyPositionProvider _target;
-
   PositionProvider get owner => _owner!;
-  PositionProvider? _owner;
-
   double get maxSpeed => _speed;
-  final double _speed;
-
-  final bool horizontalOnly;
-  final bool verticalOnly;
+  final double _speed = maxSpeed;
 
   final _tempDelta = Vector2.zero();
 

@@ -6,20 +6,17 @@ import 'package:flame_bloc/flame_bloc.dart';
 /// Similar to [FlameBlocProvider], but provides multiples blocs down
 /// to the component tree
 /// {@endtemplate}
-class FlameMultiBlocProvider extends Component {
+class FlameMultiBlocProvider({
+  required final List<FlameBlocProvider> _providers,
+  List<Component>? children,
+  super.key,
+}) extends Component {
   /// {@macro flame_multi_bloc_provider}
-  FlameMultiBlocProvider({
-    required List<FlameBlocProvider> providers,
-    List<Component>? children,
-    super.key,
-  }) : _providers = providers,
-       _initialChildren = children,
-       assert(providers.isNotEmpty, 'At least one provider must be given') {
+  this : assert(_providers.isNotEmpty, 'At least one provider must be given') {
     _addProviders();
   }
 
-  final List<FlameBlocProvider> _providers;
-  final List<Component>? _initialChildren;
+  final List<Component>? _initialChildren = children;
   FlameBlocProvider? _lastProvider;
 
   void _addProviders() {

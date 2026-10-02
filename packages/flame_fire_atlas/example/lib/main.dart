@@ -11,7 +11,7 @@ void main() {
   runApp(GameWidget(game: game));
 }
 
-class ExampleGame extends FlameGame with TapCallbacks {
+class ExampleGame() extends FlameGame with TapCallbacks {
   late FireAtlas _atlas;
 
   @override

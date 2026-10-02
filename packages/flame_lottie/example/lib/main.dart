@@ -6,7 +6,7 @@ void main() {
   runApp(GameWidget(game: LottieExampleGame()));
 }
 
-class LottieExampleGame extends FlameGame {
+class LottieExampleGame() extends FlameGame {
   @override
   Future<void> onLoad() async {
     final asset = await loadLottie(Lottie.asset('assets/LottieLogo1.json'));

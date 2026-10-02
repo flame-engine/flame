@@ -12,9 +12,7 @@ import 'package:jenny/src/structure/dialogue_line.dart';
 /// - [Command]
 /// - [DialogueChoice]
 /// - [DialogueLine]
-abstract class DialogueEntry {
-  const DialogueEntry();
-
+abstract class const DialogueEntry() {
   /// Runs the entry within the context of a dialogue runner.
   ///
   /// This method is invoked by the [dialogueRunner] itself, at the right time.

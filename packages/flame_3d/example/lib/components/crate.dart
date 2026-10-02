@@ -5,11 +5,11 @@ import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
 
-class Crate extends MeshComponent {
-  Crate({
-    required Vector3 size,
-    super.position,
-  }) : super(mesh: CuboidMesh(size: size));
+class Crate({
+  required Vector3 size,
+  super.position,
+}) extends MeshComponent {
+  this : super(mesh: CuboidMesh(size: size));
 
   @override
   FutureOr<void> onLoad() async {

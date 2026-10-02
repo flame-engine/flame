@@ -2,11 +2,11 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _TestWorld1 extends World {
+class _TestWorld1() extends World {
   int value = 0;
 }
 
-class _TestWorld2 extends World {}
+class _TestWorld2() extends World;
 
 void main() {
   group('WorldRoute', () {

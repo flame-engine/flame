@@ -112,21 +112,21 @@ extension type GPUTexture._(JSObject _) implements JSObject {
   external void destroy();
 }
 
-extension type GPUTextureView._(JSObject _) implements JSObject {}
+extension type GPUTextureView._(JSObject _) implements JSObject;
 
-extension type GPUSampler._(JSObject _) implements JSObject {}
+extension type GPUSampler._(JSObject _) implements JSObject;
 
-extension type GPUShaderModule._(JSObject _) implements JSObject {}
+extension type GPUShaderModule._(JSObject _) implements JSObject;
 
-extension type GPUBindGroupLayout._(JSObject _) implements JSObject {}
+extension type GPUBindGroupLayout._(JSObject _) implements JSObject;
 
-extension type GPUBindGroup._(JSObject _) implements JSObject {}
+extension type GPUBindGroup._(JSObject _) implements JSObject;
 
 extension type GPURenderPipeline._(JSObject _) implements JSObject {
   external GPUBindGroupLayout getBindGroupLayout(int index);
 }
 
-extension type GPUCommandBuffer._(JSObject _) implements JSObject {}
+extension type GPUCommandBuffer._(JSObject _) implements JSObject;
 
 extension type GPUCommandEncoder._(JSObject _) implements JSObject {
   external GPURenderPassEncoder beginRenderPass(
@@ -428,14 +428,14 @@ extension type CanvasContext2D._(JSObject _) implements JSObject {
   external void drawImage(JSObject image, num dx, num dy);
 }
 
-abstract final class GPUBufferUsage {
+abstract final class GPUBufferUsage() {
   static const int copyDst = 0x0008;
   static const int index = 0x0010;
   static const int vertex = 0x0020;
   static const int uniform = 0x0040;
 }
 
-abstract final class GPUTextureUsage {
+abstract final class GPUTextureUsage() {
   static const int copyDst = 0x02;
   static const int textureBinding = 0x04;
   static const int renderAttachment = 0x10;

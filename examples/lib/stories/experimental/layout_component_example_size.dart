@@ -1,16 +1,12 @@
 import 'package:flame/components.dart';
 
-enum LayoutComponentExampleSize {
+enum LayoutComponentExampleSize(
+  final double? x,
+  final double? y,
+) {
   shrinkWrap(null, null),
   small(640, 480),
   large(1080, 720);
-
-  const LayoutComponentExampleSize(
-    this.x,
-    this.y,
-  );
-  final double? x;
-  final double? y;
 
   Vector2? toVector2() {
     final x = this.x;

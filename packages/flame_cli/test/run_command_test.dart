@@ -21,7 +21,7 @@ ProcessStarter _starter(
     workingDirectory,
     runInShell = false,
     mode = ProcessStartMode.normal,
-  }) async => onStart(executable, arguments, workingDirectory);
+  }) async => await onStart(executable, arguments, workingDirectory);
 }
 
 void main() {

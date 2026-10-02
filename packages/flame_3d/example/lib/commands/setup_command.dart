@@ -3,7 +3,7 @@ import 'package:flame_3d_example/example_game_3d.dart';
 import 'package:flame_3d_example/scenarios/game_scenario.dart';
 import 'package:flame_console/flame_console.dart';
 
-class SetupCommand extends FlameConsoleCommand<ExampleGame3D> {
+class SetupCommand() extends FlameConsoleCommand<ExampleGame3D> {
   @override
   String get name => 'setup';
 

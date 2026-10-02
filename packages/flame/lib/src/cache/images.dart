@@ -6,14 +6,12 @@ import 'package:flame/src/flame.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 
-class Images {
-  Images({AssetBundle? bundle}) : bundle = bundle ?? Flame.bundle;
-
+class Images({AssetBundle? bundle}) {
   final Map<String, _ImageAsset> _assets = {};
 
   /// The [AssetBundle] from which images are loaded.
   /// defaults to [Flame.bundle].
-  AssetBundle bundle;
+  AssetBundle bundle = bundle ?? Flame.bundle;
 
   /// Adds the [image] into the cache under the key [name].
   ///
@@ -138,7 +136,7 @@ class Images {
     final imagePaths = manifest.listAssets().where((path) {
       return path.startsWith(directory) && path.toLowerCase().contains(pattern);
     });
-    return loadAll(imagePaths.toList());
+    return await loadAll(imagePaths.toList());
   }
 
   /// Whether the cache contains the specified [key] or not.
@@ -178,7 +176,7 @@ class Images {
   Future<Image> _fetchToMemory(String path) async {
     final data = await bundle.load(path);
     final bytes = Uint8List.view(data.buffer);
-    return decodeImageFromList(bytes);
+    return await decodeImageFromList(bytes);
   }
 }
 

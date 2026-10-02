@@ -12,7 +12,7 @@ import 'package:flutter/foundation.dart';
 ///
 /// Direct modification of this vector's [storage] is not allowed.
 /// {@endtemplate}
-class NotifyingVector3 extends Vector3 with ChangeNotifier {
+class NotifyingVector3.zero() extends Vector3 with ChangeNotifier {
   /// {@macro notifying_vector_3}
   ///
   /// Constructs a vector using the raw values [x], [y], and [z].
@@ -22,7 +22,7 @@ class NotifyingVector3 extends Vector3 with ChangeNotifier {
   /// {@macro notifying_vector_3}
   ///
   /// Create an empty vector.
-  NotifyingVector3.zero() : super.zero();
+  this : super.zero();
 
   /// {@macro notifying_vector_3}
   ///

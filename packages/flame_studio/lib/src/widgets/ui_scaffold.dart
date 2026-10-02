@@ -5,11 +5,8 @@ import 'package:flame_studio/src/widgets/toolbar/flame_studio_toolbar.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class UiScaffold extends ConsumerWidget {
-  const UiScaffold({required this.gameApp, super.key});
-
-  final Widget gameApp;
-
+class const UiScaffold({required final Widget gameApp, super.key})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final toolbarHeight = ref.watch(toolbarHeightProvider);

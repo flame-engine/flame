@@ -4,9 +4,8 @@ import 'package:flame/game.dart';
 import 'package:flame/widgets.dart';
 import 'package:material_ui/material_ui.dart';
 
-class ComponentsNotifierExampleWidget extends StatefulWidget {
-  const ComponentsNotifierExampleWidget({super.key});
-
+class const ComponentsNotifierExampleWidget({super.key})
+    extends StatefulWidget {
   static const String description = '''
       Showcases how the components notifier can be used between
       a flame game instance and widgets.
@@ -20,7 +19,7 @@ class ComponentsNotifierExampleWidget extends StatefulWidget {
       _ComponentsNotifierExampleWidgetState();
 }
 
-class _ComponentsNotifierExampleWidgetState
+class _ComponentsNotifierExampleWidgetState()
     extends State<ComponentsNotifierExampleWidget> {
   @override
   void initState() {
@@ -58,16 +57,11 @@ class _ComponentsNotifierExampleWidgetState
   }
 }
 
-class GameHud extends StatelessWidget {
-  const GameHud({
-    required this.remainingEnemies,
-    required this.onReplay,
-    super.key,
-  });
-
-  final int remainingEnemies;
-  final VoidCallback onReplay;
-
+class const GameHud({
+  required final int remainingEnemies,
+  required final VoidCallback onReplay,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -84,8 +78,10 @@ class GameHud extends StatelessWidget {
   }
 }
 
-class Enemy extends CircleComponent with TapCallbacks, Notifier {
-  Enemy({super.position})
+class Enemy({super.position})
+    extends CircleComponent
+    with TapCallbacks, Notifier {
+  this
     : super(
         radius: 20,
         paint: Paint()..color = const Color(0xFFFF0000),
@@ -97,7 +93,7 @@ class Enemy extends CircleComponent with TapCallbacks, Notifier {
   }
 }
 
-class ComponentNotifierExample extends FlameGame {
+class ComponentNotifierExample() extends FlameGame {
   @override
   Future<void> onLoad() async {
     replay();

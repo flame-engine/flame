@@ -8,13 +8,13 @@ import 'package:material_ui/material_ui.dart';
 
 const TextStyle _textStyle = TextStyle(color: Colors.white, fontSize: 2);
 
-class CompositionExample extends Forge2DExampleGame {
+class CompositionExample() extends Forge2DExampleGame {
   static const description = '''
     This example shows how to compose a `BodyComponent` together with a normal
     Flame component. Click the ball to see the number increment.
   ''';
 
-  CompositionExample() : super(metersToPixels: 20, gravity: Vector2(0, 10.0));
+  this : super(metersToPixels: 20, gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {
@@ -26,8 +26,8 @@ class CompositionExample extends Forge2DExampleGame {
   }
 }
 
-class TappableText extends TextComponent with TapCallbacks {
-  TappableText(Vector2 position)
+class TappableText(Vector2 position) extends TextComponent with TapCallbacks {
+  this
     : super(
         text: 'A normal tappable Flame component',
         textRenderer: TextPaint(style: _textStyle),
@@ -62,12 +62,12 @@ class TappableText extends TextComponent with TapCallbacks {
   }
 }
 
-class TappableBall extends Ball with TapCallbacks {
+class TappableBall(super.position) extends Ball with TapCallbacks {
   late final TextComponent textComponent;
   int counter = 0;
   late final TextPaint _textPaint;
 
-  TappableBall(super.position) {
+  this {
     originalPaint = Paint()..color = Colors.amber;
     paint = originalPaint;
   }

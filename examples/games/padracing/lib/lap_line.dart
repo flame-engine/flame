@@ -4,19 +4,19 @@ import 'dart:ui';
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_forge2d/flame_forge2d.dart' hide World;
-import 'package:material_ui/material_ui.dart' hide Image, Gradient;
+import 'package:material_ui/material_ui.dart' hide Gradient, Image;
 
 import 'package:padracing/car.dart';
 import 'package:padracing/game_colors.dart';
 
-class LapLine extends BodyComponent with ContactCallbacks {
-  LapLine(this.id, this.initialPosition, this.size, {required this.isFinish})
-    : super(priority: 1);
+class LapLine(
+  final int id,
+  final Vector2 initialPosition,
+  final Vector2 size, {
+  required final bool isFinish,
+}) extends BodyComponent with ContactCallbacks {
+  this : super(priority: 1);
 
-  final int id;
-  final bool isFinish;
-  final Vector2 initialPosition;
-  final Vector2 size;
   late final Rect rect = size.toRect();
   Image? _finishOverlay;
 

@@ -13,13 +13,12 @@ const _amountComponents = 500;
 const _amountTicks = 2;
 const _depthMultiplier = 0.25;
 
-class RenderComponentsBenchmark extends AsyncBenchmarkBase {
-  final Random random;
-
+class RenderComponentsBenchmark(final Random random)
+    extends AsyncBenchmarkBase {
   late final Canvas _canvas;
   late final FlameGame _game;
 
-  RenderComponentsBenchmark(this.random) : super('Render Components Benchmark');
+  this : super('Render Components Benchmark');
 
   static Future<void> main() async {
     final r = Random(69420);
@@ -51,15 +50,10 @@ class RenderComponentsBenchmark extends AsyncBenchmarkBase {
   }
 }
 
-class _BenchmarkComponent extends PositionComponent {
-  final Random random;
-  final double level;
-
-  _BenchmarkComponent({
-    required this.random,
-    required this.level,
-  });
-
+class _BenchmarkComponent({
+  required final Random random,
+  required final double level,
+}) extends PositionComponent {
   @override
   Future<void> onLoad() async {
     if (random.nextDouble() <= level) {

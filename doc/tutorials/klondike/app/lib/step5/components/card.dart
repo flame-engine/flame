@@ -15,17 +15,16 @@ import 'foundation_pile.dart';
 import 'stock_pile.dart';
 import 'tableau_pile.dart';
 
-class Card extends PositionComponent
+class Card(int intRank, int intSuit, {final bool isBaseCard = false})
+    extends PositionComponent
     with DragCallbacks, TapCallbacks, HasWorldRef<KlondikeWorld> {
-  Card(int intRank, int intSuit, {this.isBaseCard = false})
-    : rank = Rank.fromInt(intRank),
-      suit = Suit.fromInt(intSuit),
-      super(
+  this
+    : super(
         size: KlondikeGame.cardSize,
       );
 
-  final Rank rank;
-  final Suit suit;
+  final Rank rank = Rank.fromInt(intRank);
+  final Suit suit = Suit.fromInt(intSuit);
   Pile? pile;
 
   // A Base Card is rendered in outline only and is NOT playable. It can be
@@ -33,8 +32,6 @@ class Card extends PositionComponent
   // taps and short drags (on an empty Pile) with the same behavior and
   // tolerances as for regular cards (see KlondikeGame.dragTolerance) and using
   // the same event-handling code, but with different handleTapUp() methods.
-  final bool isBaseCard;
-
   bool _faceUp = false;
   bool _isAnimatedFlip = false;
   bool _isFaceUpView = false;
@@ -486,16 +483,12 @@ class Card extends PositionComponent
   //#endregion
 }
 
-class CardMoveEffect extends MoveToEffect {
-  CardMoveEffect(
-    super.destination,
-    super.controller, {
-    super.onComplete,
-    this.transitPriority = 100,
-  });
-
-  final int transitPriority;
-
+class CardMoveEffect(
+  super.destination,
+  super.controller, {
+  super.onComplete,
+  final int transitPriority = 100,
+}) extends MoveToEffect {
   @override
   void onStart() {
     super.onStart(); // Flame connects MoveToEffect to EffectController.

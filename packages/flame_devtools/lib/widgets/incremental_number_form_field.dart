@@ -1,23 +1,17 @@
 import 'package:flutter/material.dart';
 
-class IncrementalNumberFormField<T extends num> extends StatefulWidget {
-  const IncrementalNumberFormField({
-    required this.initialValue,
-    required this.label,
-    this.onChanged,
-    super.key,
-  });
-
-  final String label;
-  final T initialValue;
-  final void Function(T)? onChanged;
-
+class const IncrementalNumberFormField<T extends num>({
+  required final T initialValue,
+  required final String label,
+  final void Function(T)? onChanged,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<IncrementalNumberFormField<T>> createState() =>
       _IncrementalNumberFormFieldState<T>();
 }
 
-class _IncrementalNumberFormFieldState<T extends num>
+class _IncrementalNumberFormFieldState<T extends num>()
     extends State<IncrementalNumberFormField<T>> {
   late final _controller = TextEditingController()
     ..text = widget.initialValue.toString();

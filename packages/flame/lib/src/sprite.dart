@@ -15,16 +15,15 @@ import 'package:flame/src/palette.dart';
 /// in the Canvas the sprite is rendered).
 /// It also has a [paint] field that can be overwritten to apply a tint to this
 /// [Sprite] (default is white, meaning no tint).
-class Sprite {
+class Sprite(
+  var Image image, {
+  Vector2? srcPosition,
+  Vector2? srcSize,
+}) {
   Paint paint = BasicPalette.white.paint();
-  Image image;
   Rect src = Rect.zero;
 
-  Sprite(
-    this.image, {
-    Vector2? srcPosition,
-    Vector2? srcSize,
-  }) {
+  this {
     this.srcSize = srcSize;
     this.srcPosition = srcPosition;
   }

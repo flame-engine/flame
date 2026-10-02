@@ -3,19 +3,12 @@ import 'package:jenny/src/structure/block.dart';
 import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:meta/meta.dart';
 
-class Node extends Iterable<DialogueEntry> {
-  const Node({
-    required this.title,
-    required this._content,
-    this._tags,
-    this._variables,
-  });
-
-  final String title;
-  final Map<String, String>? _tags;
-  final Block _content;
-  final VariableStorage? _variables;
-
+class const Node({
+  required final String title,
+  required final Block _content,
+  final Map<String, String>? _tags,
+  final VariableStorage? _variables,
+}) extends Iterable<DialogueEntry> {
   /// The list of extra tags specified in the node header.
   Map<String, String> get tags => _tags ?? const <String, String>{};
 
@@ -34,12 +27,11 @@ class Node extends Iterable<DialogueEntry> {
   String toString() => 'Node($title)';
 }
 
-class NodeIterator implements Iterator<DialogueEntry> {
-  NodeIterator(this.node) {
+class NodeIterator(final Node node) implements Iterator<DialogueEntry> {
+  this {
     diveInto(node._content);
   }
 
-  final Node node;
   final List<Block> blocks = [];
   final List<int> multiIndex = [];
 

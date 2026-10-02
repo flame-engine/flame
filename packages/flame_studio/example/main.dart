@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame_studio/flame_studio.dart';
@@ -13,7 +14,7 @@ void main() {
   );
 }
 
-class MyGame extends FlameGame {
+class MyGame() extends FlameGame {
   @override
   Color backgroundColor() => const Color(0x00000000);
 
@@ -38,14 +39,11 @@ class MyGame extends FlameGame {
   }
 }
 
-class Circle extends CircleComponent {
-  Circle({
-    required this.velocity,
-    required super.position,
-    super.radius = 15.0,
-  });
-
-  final Vector2 velocity;
+class Circle({
+  required final Vector2 velocity,
+  required super.position,
+  super.radius = 15.0,
+}) extends CircleComponent {
   final Vector2 gameSize = Vector2.zero();
 
   @override

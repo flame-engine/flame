@@ -198,9 +198,10 @@ void main() {
   });
 }
 
-class _SecondaryTapCallbacksComponent extends PositionComponent
+class _SecondaryTapCallbacksComponent()
+    extends PositionComponent
     with SecondaryTapCallbacks {
-  _SecondaryTapCallbacksComponent() {
+  this {
     anchor = Anchor.center;
     size = Vector2.all(10);
   }
@@ -225,9 +226,10 @@ class _SecondaryTapCallbacksComponent extends PositionComponent
   }
 }
 
-class _BothTapCallbacksComponent extends PositionComponent
+class _BothTapCallbacksComponent()
+    extends PositionComponent
     with TapCallbacks, SecondaryTapCallbacks {
-  _BothTapCallbacksComponent() {
+  this {
     anchor = Anchor.center;
     size = Vector2.all(10);
   }

@@ -2,11 +2,17 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:trex_game/trex_game.dart';
 
-enum PlayerState { crashed, jumping, running, waiting }
+enum PlayerState() {
+  crashed,
+  jumping,
+  running,
+  waiting,
+}
 
-class Player extends SpriteAnimationGroupComponent<PlayerState>
+class Player()
+    extends SpriteAnimationGroupComponent<PlayerState>
     with HasGameRef<TRexGame>, CollisionCallbacks {
-  Player() : super(size: Vector2(90, 88));
+  this : super(size: Vector2(90, 88));
 
   final double gravity = 0.85;
 

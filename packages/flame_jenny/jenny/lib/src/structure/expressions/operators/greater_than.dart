@@ -2,12 +2,8 @@ import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/operators/_common.dart';
 
 /// Operator GREATER_THAN(>), applies to numeric operands only.
-class GreaterThan extends BoolExpression {
-  const GreaterThan(this._lhs, this._rhs);
-
-  final NumExpression _lhs;
-  final NumExpression _rhs;
-
+class const GreaterThan(final NumExpression _lhs, final NumExpression _rhs)
+    extends BoolExpression {
   /// Static constructor, used by parse.dart
   factory GreaterThan.make(
     Expression lhs,

@@ -17,8 +17,8 @@ import 'package:flame_3d/src/graphics/backend/gpu_handles.dart';
 /// [GpuBackend] implementation sets the [instance] at construction time through
 /// it's super constructor.
 /// {@endtemplate}
-abstract base class GpuBackend {
-  GpuBackend() {
+abstract base class GpuBackend() {
+  this {
     _instance = this;
   }
 
@@ -81,7 +81,7 @@ abstract base class GpuBackend {
 ///
 /// Owns the transient uniform storage shared across the frame's render passes.
 /// Obtain one via [GpuBackend.beginFrame] and finalize it with [end].
-abstract interface class GpuFrame {
+abstract interface class GpuFrame() {
   /// Begins a render pass that draws into [target] using [blend] and
   /// [depthStencil] state.
   GpuRenderPass beginRenderPass(
@@ -97,7 +97,7 @@ abstract interface class GpuFrame {
 /// Records the bind and draw commands of a single render pass.
 ///
 /// Obtain one via [GpuFrame.beginRenderPass] and submit it with [submit].
-abstract interface class GpuRenderPass {
+abstract interface class GpuRenderPass() {
   /// Binds the render [pipeline] and applies [cullMode].
   void bindPipeline(GpuPipeline pipeline, CullMode cullMode);
 

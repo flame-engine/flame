@@ -5,14 +5,12 @@ import 'package:flame/src/anchor.dart';
 import 'package:flame/src/sprite.dart';
 import 'package:flutter/widgets.dart';
 
-class SpritePainter extends CustomPainter {
-  final Sprite _sprite;
-  final Anchor _anchor;
-  final Paint? _paint;
-  final double _angle;
-
-  SpritePainter(this._sprite, this._anchor, this._paint, {this._angle = 0});
-
+class SpritePainter(
+  final Sprite _sprite,
+  final Anchor _anchor,
+  final Paint? _paint, {
+  final double _angle = 0,
+}) extends CustomPainter {
   @override
   bool shouldRepaint(SpritePainter oldDelegate) {
     return oldDelegate._sprite != _sprite ||

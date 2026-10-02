@@ -6,7 +6,8 @@ import 'package:rogue_shooter/components/enemy_creator.dart';
 import 'package:rogue_shooter/components/player_component.dart';
 import 'package:rogue_shooter/components/star_background_creator.dart';
 
-class RogueShooterGame extends FlameGame
+class RogueShooterGame()
+    extends FlameGame
     with
         DragCallbacks,
         HasCollisionDetection,
@@ -157,8 +158,10 @@ class RogueShooterGame extends FlameGame
   }
 }
 
-class BatchGroup extends PositionComponent with HasAutoBatchedChildren {
-  BatchGroup({super.priority, bool batchingEnabled = false}) {
+class BatchGroup({super.priority, bool batchingEnabled = false})
+    extends PositionComponent
+    with HasAutoBatchedChildren {
+  this {
     this.batchingEnabled = batchingEnabled;
   }
 }

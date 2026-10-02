@@ -10,7 +10,7 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
 
-class _MockRandom extends Mock implements Random {}
+class _MockRandom() extends Mock implements Random;
 
 void main() {
   final flameTester = FlameTester(TestGame.new);

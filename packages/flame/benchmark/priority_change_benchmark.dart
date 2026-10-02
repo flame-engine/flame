@@ -17,7 +17,7 @@ const _randomSeed = 69420;
 ///
 /// All priority values and child picks are precomputed in [setup] and replayed
 /// identically on every run, so results are comparable across engine versions.
-class SiblingPriorityChangeBenchmark extends AsyncBenchmarkBase {
+class SiblingPriorityChangeBenchmark() extends AsyncBenchmarkBase {
   static const _amountParents = 100;
   static const _amountChildren = 50;
   static const _amountTicks = 50;
@@ -26,8 +26,7 @@ class SiblingPriorityChangeBenchmark extends AsyncBenchmarkBase {
   late final List<List<Component>> _children;
   late final List<List<(int, int)>> _changes;
 
-  SiblingPriorityChangeBenchmark()
-    : super('Priority change (1 child per parent)');
+  this : super('Priority change (1 child per parent)');
 
   static Future<void> main() async {
     await SiblingPriorityChangeBenchmark().report();
@@ -79,7 +78,7 @@ class SiblingPriorityChangeBenchmark extends AsyncBenchmarkBase {
 /// Measures the y-sort pattern: every child of a single large container gets
 /// a new priority every tick (as when sorting sprites by their y coordinate
 /// while they move), followed by an update that reorders the whole container.
-class YSortPriorityBenchmark extends AsyncBenchmarkBase {
+class YSortPriorityBenchmark() extends AsyncBenchmarkBase {
   static const _amountChildren = 1000;
   static const _amountTicks = 30;
 
@@ -87,7 +86,7 @@ class YSortPriorityBenchmark extends AsyncBenchmarkBase {
   late final List<Component> _children;
   late final List<List<int>> _priorities;
 
-  YSortPriorityBenchmark() : super('Priority change (y-sort, all children)');
+  this : super('Priority change (y-sort, all children)');
 
   static Future<void> main() async {
     await YSortPriorityBenchmark().report();

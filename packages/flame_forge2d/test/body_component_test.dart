@@ -10,7 +10,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _TestBodyComponent extends BodyComponent with TapCallbacks {
+class _TestBodyComponent() extends BodyComponent with TapCallbacks {
   int tapCount = 0;
 
   @override
@@ -22,7 +22,7 @@ class _TestBodyComponent extends BodyComponent with TapCallbacks {
   }
 }
 
-class _MockCanvas extends Mock implements Canvas {}
+class _MockCanvas() extends Mock implements Canvas;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -689,9 +689,8 @@ void main() {
   });
 }
 
-class _CountingBodyComponent extends BodyComponent {
-  _CountingBodyComponent({super.bodyDef, super.shapeSpecs});
-
+class _CountingBodyComponent({super.bodyDef, super.shapeSpecs})
+    extends BodyComponent {
   int renderedShapes = 0;
 
   @override
@@ -701,9 +700,7 @@ class _CountingBodyComponent extends BodyComponent {
   }
 }
 
-class _ConsistentBodyComponent extends BodyComponent {
-  _ConsistentBodyComponent({super.bodyDef});
-
+class _ConsistentBodyComponent({super.bodyDef}) extends BodyComponent {
   Forge2DWorld? onMountWorld;
   Forge2DWorld? onRemoveWorld;
 

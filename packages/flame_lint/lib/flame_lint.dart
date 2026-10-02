@@ -11,4 +11,4 @@
 /// ```yaml
 /// include: package:flame_lint/analysis_options.yaml
 /// ```
-library flame_lint;
+library;

@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 /// full-screen).
 ///
 /// To use this class, access it via Flame.device.
-class Device {
+class Device() {
   void _warnIfDesktop(String source) {
     assert(() {
       if (!kIsWeb &&

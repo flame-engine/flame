@@ -13,9 +13,8 @@ Matcher closeToVector3(Vector3 vector, [double epsilon = 1e-15]) {
   return _IsCloseToVector3(vector, epsilon);
 }
 
-class _IsCloseToVector3 extends IsCloseToVector<Vector3> {
-  const _IsCloseToVector3(super.value, super.epsilon);
-
+class const _IsCloseToVector3(super.value, super.epsilon)
+    extends IsCloseToVector<Vector3> {
   @override
   double dist(Vector3 a, Vector3 b) => (a - b).length;
 

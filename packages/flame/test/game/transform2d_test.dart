@@ -1,13 +1,9 @@
 import 'dart:math' as math;
 
-// TODO(spydon): Remove this import once Flutter 3.35.0 is the minimum version.
-// ignore: unnecessary_import
-import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
-// ignore: unnecessary_import
 import 'package:vector_math/vector_math.dart';
 
 void main() {

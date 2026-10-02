@@ -29,20 +29,18 @@ import 'package:meta/meta.dart';
 /// in parallel
 /// - [CameraComponent.postProcess] for a way to apply post processes to the
 /// whole screen.
-class PostProcessComponent<T extends PostProcess> extends PositionComponent {
-  PostProcessComponent({
-    required this.postProcess,
-    super.position,
-    super.size,
-    super.scale,
-    super.angle,
-    super.nativeAngle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.key,
-  });
-
+class PostProcessComponent<T extends PostProcess>({
+  required final T postProcess,
+  super.position,
+  super.size,
+  super.scale,
+  super.angle,
+  super.nativeAngle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.key,
+}) extends PositionComponent {
   @override
   PostProcessComponentRenderContext<T> get renderContext => _renderContext;
 
@@ -50,13 +48,11 @@ class PostProcessComponent<T extends PostProcess> extends PositionComponent {
     postProcess: null,
   );
 
-  final T postProcess;
-
   @override
   @mustCallSuper
   Future<void> onLoad() async {
     await postProcess.onLoad();
-    return super.onLoad();
+    await super.onLoad();
   }
 
   @override
@@ -68,7 +64,7 @@ class PostProcessComponent<T extends PostProcess> extends PositionComponent {
 
   @override
   @mustCallSuper
-  void onChildrenChanged(_, __) {
+  void onChildrenChanged(_, _) {
     _recalculateBoundingSize();
   }
 
@@ -124,14 +120,9 @@ class PostProcessComponent<T extends PostProcess> extends PositionComponent {
   }
 }
 
-class PostProcessComponentRenderContext<T extends PostProcess>
-    extends ComponentRenderContext {
-  PostProcessComponentRenderContext({
-    required this.postProcess,
-  });
-
-  T? postProcess;
-}
+class PostProcessComponentRenderContext<T extends PostProcess>({
+  required var T? postProcess,
+}) extends ComponentRenderContext;
 
 extension PostProcessingContextFinder on Component {
   T? findPostProcessFromContext<T extends PostProcess>() {

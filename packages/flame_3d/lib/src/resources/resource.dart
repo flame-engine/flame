@@ -5,7 +5,7 @@
 /// A Resource is the base class for any resource typed classes. The primary
 /// use case is to be a data container.
 /// {@endtemplate}
-abstract class Resource<R> {
+abstract class Resource<R>() {
   R? _resource;
   bool recreateResource = true;
 

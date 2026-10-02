@@ -1,18 +1,14 @@
 part of 'inventory_bloc.dart';
 
-enum Weapon {
+enum Weapon() {
   bullet,
   laser,
   plasma,
 }
 
-class InventoryState extends Equatable {
-  final Weapon weapon;
-
-  const InventoryState({
-    required this.weapon,
-  });
-
+class const InventoryState({
+  required final Weapon weapon,
+}) extends Equatable {
   const InventoryState.empty() : this(weapon: Weapon.bullet);
 
   InventoryState copyWith({

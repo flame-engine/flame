@@ -7,7 +7,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class WheelJointExample extends Forge2DExampleGame {
+class WheelJointExample() extends Forge2DExampleGame {
   static const description = '''
     This example shows how to use a `WheelJoint`, which is the suspension of
     a vehicle: the wheel can spin and travel along a spring-loaded axis.
@@ -15,7 +15,7 @@ class WheelJointExample extends Forge2DExampleGame {
     Tap the screen to change the direction that the car drives in.
   ''';
 
-  WheelJointExample()
+  this
     : super(
         gravity: Vector2(0, 10.0),
         world: WheelJointWorld(),
@@ -23,7 +23,8 @@ class WheelJointExample extends Forge2DExampleGame {
       );
 }
 
-class WheelJointWorld extends Forge2DWorld
+class WheelJointWorld()
+    extends Forge2DWorld
     with TapCallbacks, HasGameRef<Forge2DGame> {
   final joints = <WheelJoint>[];
   static const _motorSpeed = 20.0;
@@ -82,12 +83,10 @@ class WheelJointWorld extends Forge2DWorld
   }
 }
 
-class Chassis extends BodyComponent with GlowingBody {
-  Chassis(this._position) {
+class Chassis(final Vector2 _position) extends BodyComponent with GlowingBody {
+  this {
     paint = Paint()..color = ExampleColors.indigo;
   }
-
-  final Vector2 _position;
 
   @override
   Body createBody() {
@@ -99,12 +98,10 @@ class Chassis extends BodyComponent with GlowingBody {
   }
 }
 
-class Wheel extends BodyComponent with GlowingBody {
-  Wheel(this._position) {
+class Wheel(final Vector2 _position) extends BodyComponent with GlowingBody {
+  this {
     paint = Paint()..color = ExampleColors.emerald;
   }
-
-  final Vector2 _position;
 
   @override
   Body createBody() {
@@ -117,8 +114,8 @@ class Wheel extends BodyComponent with GlowingBody {
 }
 
 /// Rolling hills for the car to drive over, built as a one-sided chain.
-class Terrain extends BodyComponent with GlowingBody {
-  Terrain() {
+class Terrain() extends BodyComponent with GlowingBody {
+  this {
     paint = Paint()..color = ExampleColors.slate;
   }
 
@@ -147,12 +144,10 @@ class Terrain extends BodyComponent with GlowingBody {
 }
 
 /// A wall at the end of the track that the car bumps into.
-class TrackEnd extends BodyComponent with GlowingBody {
-  TrackEnd(this._x) {
+class TrackEnd(final double _x) extends BodyComponent with GlowingBody {
+  this {
     paint = Paint()..color = ExampleColors.slate;
   }
-
-  final double _x;
 
   @override
   Body createBody() {

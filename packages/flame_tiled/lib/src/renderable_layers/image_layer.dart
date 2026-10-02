@@ -8,18 +8,17 @@ import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';
 
 @internal
-class FlameImageLayer extends RenderableLayer<ImageLayer> {
-  final Image _image;
+class FlameImageLayer({
+  required super.layer,
+  required super.map,
+  required super.destTileSize,
+  required final Image _image,
+  super.filterQuality,
+}) extends RenderableLayer<ImageLayer> {
   late final ImageRepeat _repeat;
   final MutableRect _paintArea = MutableRect.fromLTRB(0, 0, 0, 0);
 
-  FlameImageLayer({
-    required super.layer,
-    required super.map,
-    required super.destTileSize,
-    required this._image,
-    super.filterQuality,
-  }) {
+  this {
     _initImageRepeat();
   }
 

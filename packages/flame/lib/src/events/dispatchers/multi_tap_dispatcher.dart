@@ -6,9 +6,7 @@ import 'package:flame/src/game/flame_game.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
-class MultiTapDispatcherKey implements ComponentKey {
-  const MultiTapDispatcherKey();
-
+class const MultiTapDispatcherKey() implements ComponentKey {
   @override
   int get hashCode => 401913931; // 'MultiTapDispatcherKey' as hashCode
 
@@ -17,7 +15,7 @@ class MultiTapDispatcherKey implements ComponentKey {
       other is MultiTapDispatcherKey && other.hashCode == hashCode;
 }
 
-class MultiTapDispatcher extends Dispatcher<FlameGame> {
+class MultiTapDispatcher() extends Dispatcher<FlameGame> {
   /// The record of all components currently being touched.
   final Set<TaggedComponent<TapCallbacks>> _record = {};
 

@@ -2,11 +2,11 @@ import 'package:flame_splash_screen/flame_splash_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
-class OnFinishContainer {
+class OnFinishContainer() {
   void onFinish() {}
 }
 
-class MockOnFinish extends Mock implements OnFinishContainer {}
+class MockOnFinish() extends Mock implements OnFinishContainer;
 
 void main() {
   group('Without autostart', () {

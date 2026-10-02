@@ -101,8 +101,8 @@ void main() {
   });
 }
 
-class _BadVariableStorage extends VariableStorage {
-  _BadVariableStorage() {
+class _BadVariableStorage() extends VariableStorage {
+  this {
     variables['x'] = null;
   }
 }

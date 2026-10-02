@@ -8,29 +8,24 @@ import 'package:flame_3d/src/parser/gltf/gltf_root.dart';
 ///
 /// A node **MAY** reference a camera to apply a transform to place the camera
 /// in the scene.
-class Camera extends GltfNode {
+class Camera({
+  required super.root,
+
   /// Specifies if the camera uses a perspective or orthographic projection.
   /// Based on this, either the camera's `perspective` or `orthographic`
   /// property **MUST** be defined.
-  final CameraType type;
+  required final CameraType type,
 
   /// An orthographic camera containing properties to create an orthographic
   /// projection matrix.
   /// This property **MUST NOT** be defined when `perspective` is defined.
-  final CameraOrthographic? orthographic;
+  required final CameraOrthographic? orthographic,
 
   /// A perspective camera containing properties to create a perspective
   /// projection matrix.
   /// This property **MUST NOT** be defined when `orthographic` is defined.
-  final CameraPerspective? perspective;
-
-  Camera({
-    required super.root,
-    required this.type,
-    required this.orthographic,
-    required this.perspective,
-  });
-
+  required final CameraPerspective? perspective,
+}) extends GltfNode {
   Camera.parse(
     GltfRoot root,
     Map<String, Object?> map,

@@ -10,35 +10,26 @@ import 'package:flutter/foundation.dart';
 /// The [onNewAngle] should be used to get the [angle] value for the next
 /// [Wander] creation.
 /// {@endtemplate}
-class Wander extends SteeringCore {
-  /// {@macro wander}
-  Wander({
-    required this.circleDistance,
-    required this.maximumAngle,
-    required this.angle,
-    required this.onNewAngle,
-    required this.random,
-  });
-
+class Wander({
   /// The distance to the circle center of the next target.
-  final double circleDistance;
+  required final double circleDistance,
 
   /// The maximum angle used to calculate the next wander [angle].
   ///
   /// Value is represented in radians.
-  final double maximumAngle;
+  required final double maximumAngle,
 
   /// The current wander angle in radians.
-  final double angle;
+  required final double angle,
 
   /// Called when the next [angle] value is calculated.
   ///
   /// The next call to [Wander] expects the angle to be this value.
-  final ValueChanged<double> onNewAngle;
+  required final ValueChanged<double> onNewAngle,
 
   /// The random number generator used to calculate the next wander [angle].
-  final Random random;
-
+  required final Random random,
+}) extends SteeringCore {
   @override
   Vector2 getSteering(Steerable parent) {
     // Calculate the circle center for the next target that is right in front

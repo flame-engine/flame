@@ -43,7 +43,7 @@ import 'package:flutter/animation.dart' show Curve, Curves;
 /// Unlike the `dart.ui.AnimationController`, this class does not use a `Ticker`
 /// to keep track of time. Instead, it must be pushed through time manually, by
 /// calling the `update()` method within the game loop.
-abstract class EffectController {
+abstract class EffectController.empty() {
   /// Factory function for producing common [EffectController]s.
   ///
   /// In the simplest case, when only `duration` is provided, this will return
@@ -229,8 +229,6 @@ abstract class EffectController {
     }
     return controller;
   }
-
-  EffectController.empty();
 
   /// Will the effect continue to run forever (never completes)?
   bool get isInfinite => duration == double.infinity;

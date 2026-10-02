@@ -1,9 +1,20 @@
 import 'package:flame/components.dart';
 import 'package:flutter/foundation.dart';
+
 import 'klondike_game.dart';
 
 @immutable
-class Rank {
+// ignore: prefer_const_constructors_in_immutables
+class Rank._(
+  final int value,
+  final String label,
+  double x1,
+  double y1,
+  double x2,
+  double y2,
+  double w,
+  double h,
+) {
   factory Rank.fromInt(int value) {
     assert(
       value >= 1 && value <= 13,
@@ -12,22 +23,8 @@ class Rank {
     return _singletons[value - 1];
   }
 
-  Rank._(
-    this.value,
-    this.label,
-    double x1,
-    double y1,
-    double x2,
-    double y2,
-    double w,
-    double h,
-  ) : redSprite = klondikeSprite(x1, y1, w, h),
-      blackSprite = klondikeSprite(x2, y2, w, h);
-
-  final int value;
-  final String label;
-  final Sprite redSprite;
-  final Sprite blackSprite;
+  final Sprite redSprite = klondikeSprite(x1, y1, w, h);
+  final Sprite blackSprite = klondikeSprite(x2, y2, w, h);
 
   static final List<Rank> _singletons = [
     Rank._(1, 'A', 335, 164, 789, 161, 120, 129),

@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../helpers/helpers.dart';
 
-class _TestSteeringCore extends SteeringCore {
+class _TestSteeringCore() extends SteeringCore {
   @override
   Vector2 getSteering(Steerable parent) {
     throw UnimplementedError();

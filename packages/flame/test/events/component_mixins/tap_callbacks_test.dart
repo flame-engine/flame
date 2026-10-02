@@ -565,7 +565,7 @@ void main() {
 
 /// Holds the values that are only readable while an event is being delivered,
 /// so that they can be asserted on after the gesture has finished.
-class _CapturedTapEvent {
+class _CapturedTapEvent() {
   late final Vector2 localPosition;
   late final Vector2? parentContext;
   late final List<Vector2> trace;
@@ -577,45 +577,31 @@ class _CapturedTapEvent {
   }
 }
 
-class _TapWithCallbacksGame extends FlameGame with TapCallbacks {
-  _TapWithCallbacksGame({required this.onTapDownCallback});
-
-  final void Function(TapDownEvent) onTapDownCallback;
-
+class _TapWithCallbacksGame({
+  required final void Function(TapDownEvent) onTapDownCallback,
+}) extends FlameGame with TapCallbacks {
   @override
   void onTapDown(TapDownEvent event) => onTapDownCallback(event);
 }
 
-class _DragWithParentContextComponent extends PositionComponent
-    with DragCallbacks {
-  _DragWithParentContextComponent({
-    required Vector2 super.position,
-    required Vector2 super.size,
-    required this.onDragUpdateCallback,
-  });
-
-  final void Function(DragUpdateEvent) onDragUpdateCallback;
-
+class _DragWithParentContextComponent({
+  required Vector2 super.position,
+  required Vector2 super.size,
+  required final void Function(DragUpdateEvent) onDragUpdateCallback,
+}) extends PositionComponent with DragCallbacks {
   @override
   void onDragUpdate(DragUpdateEvent event) => onDragUpdateCallback(event);
 }
 
-class _TapWithCallbacksComponent extends PositionComponent with TapCallbacks {
-  _TapWithCallbacksComponent({
-    required Vector2 super.position,
-    required Vector2 super.size,
-    super.children,
-    this._onTapDown,
-    this._onLongTapDown,
-    this._onTapUp,
-    this._onTapCancel,
-  });
-
-  final void Function(TapDownEvent)? _onTapDown;
-  final void Function(TapDownEvent)? _onLongTapDown;
-  final void Function(TapUpEvent)? _onTapUp;
-  final void Function(TapCancelEvent)? _onTapCancel;
-
+class _TapWithCallbacksComponent({
+  required Vector2 super.position,
+  required Vector2 super.size,
+  super.children,
+  final void Function(TapDownEvent)? _onTapDown,
+  final void Function(TapDownEvent)? _onLongTapDown,
+  final void Function(TapUpEvent)? _onTapUp,
+  final void Function(TapCancelEvent)? _onTapCancel,
+}) extends PositionComponent with TapCallbacks {
   @override
   void onTapDown(TapDownEvent event) => _onTapDown?.call(event);
 
@@ -629,9 +615,9 @@ class _TapWithCallbacksComponent extends PositionComponent with TapCallbacks {
   void onTapCancel(TapCancelEvent event) => _onTapCancel?.call(event);
 }
 
-class _SimpleTapCallbacksComponent extends PositionComponent with TapCallbacks {
-  _SimpleTapCallbacksComponent({super.size});
-}
+class _SimpleTapCallbacksComponent({super.size})
+    extends PositionComponent
+    with TapCallbacks;
 
 mixin _TapCounter on TapCallbacks {
   int tapDownEvent = 0;
@@ -663,7 +649,8 @@ mixin _TapCounter on TapCallbacks {
   }
 }
 
-class _TapCallbacksComponent extends PositionComponent
-    with TapCallbacks, _TapCounter {}
+class _TapCallbacksComponent()
+    extends PositionComponent
+    with TapCallbacks, _TapCounter;
 
-class _TapCallbacksGame extends FlameGame with TapCallbacks, _TapCounter {}
+class _TapCallbacksGame() extends FlameGame with TapCallbacks, _TapCounter;

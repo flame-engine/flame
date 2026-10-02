@@ -14,38 +14,31 @@ bool _defaultTilesetPackingFilter(Tileset _) => true;
 ///
 /// Please note that [TiledAtlas] should not be reused without [clone] as it may
 /// have a different [batch] instance.
-class TiledAtlas {
+///
+/// Track one atlas for all images in the Tiled map.
+///
+/// See [fromTiledMap] for asynchronous loading.
+class TiledAtlas._({
   /// Single atlas for all renders.
-  // Retain this as SpriteBatch can dispose of the original image for flips.
-  final Image? atlas;
+  required final Image? atlas,
 
   /// Map of all source images to their new offset.
-  final Map<String, Offset> offsets;
-
-  /// The single batch operation for this atlas.
-  final SpriteBatch? batch;
+  required final Map<String, Offset> offsets,
 
   /// Image key for this atlas.
-  final String key;
+  required final String key,
 
   /// If SpriteBatch should use atlas or not.
-  final bool useAtlas;
-
-  /// Track one atlas for all images in the Tiled map.
-  ///
-  /// See [fromTiledMap] for asynchronous loading.
-  TiledAtlas._({
-    required this.atlas,
-    required this.offsets,
-    required this.key,
-    this.useAtlas = true,
-  }) : batch = atlas == null
-           ? null
-           : SpriteBatch(
-               atlas,
-               imageKey: key,
-               useAtlas: useAtlas,
-             );
+  final bool useAtlas = true,
+}) {
+  /// The single batch operation for this atlas.
+  final SpriteBatch? batch = atlas == null
+      ? null
+      : SpriteBatch(
+          atlas,
+          imageKey: key,
+          useAtlas: useAtlas,
+        );
 
   /// Returns whether or not this atlas contains [source].
   bool contains(String? source) => offsets.containsKey(source);

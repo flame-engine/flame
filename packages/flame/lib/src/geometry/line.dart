@@ -6,13 +6,7 @@ import 'package:flame/extensions.dart';
 /// of ax + by = c.
 ///
 /// If you just want to represent a part of a line, look into LineSegment.
-class Line {
-  final double a;
-  final double b;
-  final double c;
-
-  const Line(this.a, this.b, this.c);
-
+class const Line(final double a, final double b, final double c) {
   Line.fromPoints(Vector2 p1, Vector2 p2)
     : this(
         p2.y - p1.y,

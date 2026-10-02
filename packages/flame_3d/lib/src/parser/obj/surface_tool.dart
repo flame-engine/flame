@@ -8,7 +8,7 @@ import 'package:flame_3d/resources.dart';
 
 // TODO(wolfenrain): heavily inspired by the Godot one, maybe this should be
 // part of the core package
-class SurfaceTool {
+class SurfaceTool() {
   final List<Vertex> _vertices = [];
   final List<int> _indices = [];
 

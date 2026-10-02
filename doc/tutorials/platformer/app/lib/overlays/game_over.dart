@@ -2,11 +2,9 @@ import 'package:material_ui/material_ui.dart';
 
 import '../ember_quest.dart';
 
-class GameOver extends StatelessWidget {
+class const GameOver({required final EmberQuestGame game, super.key})
+    extends StatelessWidget {
   // Reference to parent game.
-  final EmberQuestGame game;
-  const GameOver({required this.game, super.key});
-
   @override
   Widget build(BuildContext context) {
     const blackTextColor = Color.fromRGBO(0, 0, 0, 1.0);

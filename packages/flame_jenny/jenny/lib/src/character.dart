@@ -7,18 +7,17 @@ import 'package:jenny/jenny.dart';
 /// All characters must be declared with the help of the `<<character>>`
 /// command, unless [YarnProject]'s setting `strictCharacterNames` is set to
 /// false.
-class Character {
-  Character(this.name, {List<String>? aliases}) : aliases = aliases ?? [];
-
-  Map<String, dynamic>? _data;
-
+class Character(
   /// The canonical name of the character, which was the first argument in the
   /// [<<character>>] command.
-  final String name;
+  final String name, {
+  List<String>? aliases,
+}) {
+  Map<String, dynamic>? _data;
 
   /// Additional names (IDs) that may be used for this character in yarn
   /// scripts.
-  final List<String> aliases;
+  final List<String> aliases = aliases ?? [];
 
   /// Additional information associated with this character. This may include
   /// their short bio, portrait, affiliation, color, etc. This information

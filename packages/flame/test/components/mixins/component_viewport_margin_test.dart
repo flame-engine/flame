@@ -43,7 +43,8 @@ void main() {
   });
 }
 
-class _TestGame extends FlameGame<World> {}
+class _TestGame() extends FlameGame<World>;
 
-class _ComponentWithViewportMargin extends PositionComponent
-    with HasGameRef<_TestGame>, ComponentViewportMargin<_TestGame> {}
+class _ComponentWithViewportMargin()
+    extends PositionComponent
+    with HasGameRef<_TestGame>, ComponentViewportMargin<_TestGame>;

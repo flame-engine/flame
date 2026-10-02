@@ -1,3 +1,3 @@
-abstract class PageProvider {
+abstract class PageProvider() {
   String? getPage();
 }

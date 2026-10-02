@@ -8,13 +8,13 @@ import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:material_ui/material_ui.dart' as material;
 
-class RotateAroundEffectExample extends FlameGame {
+class RotateAroundEffectExample() extends FlameGame {
   static const description = '''
 This example shows how to use the RotateAroundEffect to rotate a component
 around a fixed point.
 ''';
 
-  RotateAroundEffectExample()
+  this
     : super(
         camera: CameraComponent.withFixedResolution(
           width: 400,
@@ -24,7 +24,7 @@ around a fixed point.
       );
 }
 
-class _RotateAroundEffectWorld extends World {
+class _RotateAroundEffectWorld() extends World {
   @override
   void onLoad() {
     add(_GlowingBall(position: Vector2.zero(), radius: 30));
@@ -49,11 +49,11 @@ class _RotateAroundEffectWorld extends World {
   }
 }
 
-class _GlowingBall extends CircleComponent {
-  _GlowingBall({
-    required super.position,
-    required super.radius,
-  }) : super(anchor: Anchor.center);
+class _GlowingBall({
+  required super.position,
+  required super.radius,
+}) extends CircleComponent {
+  this : super(anchor: Anchor.center);
 
   static final random = Random(6);
 

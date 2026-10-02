@@ -5,12 +5,8 @@ import 'package:jenny/src/structure/expressions/operators/_common.dart';
 ///
 /// The OR operator returns `false` if both of its operands are `false`, and
 /// `true` otherwise.
-class Or extends BoolExpression {
-  const Or(this._lhs, this._rhs);
-
-  final BoolExpression _lhs;
-  final BoolExpression _rhs;
-
+class const Or(final BoolExpression _lhs, final BoolExpression _rhs)
+    extends BoolExpression {
   factory Or.make(
     Expression lhs,
     Expression rhs,

@@ -1,13 +1,11 @@
 import 'package:flame/game.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:material_ui/material_ui.dart' hide Image, Gradient;
+import 'package:material_ui/material_ui.dart' hide Gradient, Image;
 import 'package:padracing/game_over.dart';
 import 'package:padracing/menu.dart';
 import 'package:padracing/padracing_game.dart';
 
-class PadracingWidget extends StatelessWidget {
-  const PadracingWidget({super.key});
-
+class const PadracingWidget({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = ThemeData(

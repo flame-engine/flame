@@ -3,9 +3,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/gestures.dart';
 
-class DoubleTapDispatcherKey implements ComponentKey {
-  const DoubleTapDispatcherKey();
-
+class const DoubleTapDispatcherKey() implements ComponentKey {
   @override
   int get hashCode => 20260645; // 'DoubleTapDispatcherKey' as hashCode
 
@@ -18,7 +16,7 @@ class DoubleTapDispatcherKey implements ComponentKey {
 /// the component tree that is mixed with [DoubleTapCallbacks]. This will be
 /// attached to the [FlameGame] instance automatically whenever any
 /// [DoubleTapCallbacks] are mounted into the component tree.
-class DoubleTapDispatcher extends Dispatcher<FlameGame> {
+class DoubleTapDispatcher() extends Dispatcher<FlameGame> {
   final _components = <DoubleTapCallbacks>{};
 
   void _onDoubleTapDown(DoubleTapDownEvent event) {

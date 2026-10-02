@@ -4,25 +4,23 @@ import 'package:flame/components.dart';
 import 'package:flame_svg/svg.dart';
 
 /// Wraps [Svg] in a Flame component.
-class SvgComponent extends PositionComponent with HasPaint {
+class SvgComponent({
+  /// The wrapped instance of [Svg].
+  var Svg? _svg,
+  super.position,
+  super.size,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority,
+  Paint? paint,
+  super.key,
+}) extends PositionComponent with HasPaint {
   /// Creates an [SvgComponent]
-  SvgComponent({
-    this._svg,
-    super.position,
-    super.size,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-    Paint? paint,
-    super.key,
-  }) {
+  this {
     this.paint = paint ?? (this.paint..filterQuality = FilterQuality.medium);
   }
-
-  /// The wrapped instance of [Svg].
-  Svg? _svg;
 
   set svg(Svg? svg) {
     _svg?.dispose();

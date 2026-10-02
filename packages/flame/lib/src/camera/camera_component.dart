@@ -50,23 +50,24 @@ import 'package:flame/src/game/flame_game.dart';
 /// rendering of the world. This is useful for applying effects such as bloom,
 /// blur, or other fragment shader effects to the world. See [postProcess] for
 /// more information.
-class CameraComponent extends Component {
-  CameraComponent({
-    this.world,
-    Viewport? viewport,
-    Viewfinder? viewfinder,
-    Component? backdrop,
-    List<Component>? hudComponents,
-    super.children,
-    super.key,
-  }) : _viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []),
-       _viewfinder = viewfinder ?? Viewfinder(),
-       _backdrop = backdrop ?? Component(),
-       // The priority is set to the max here to avoid some bugs for the users,
-       // if they for example would add any components that modify positions
-       // before the CameraComponent, since it then will render the positions
-       // of the last tick each tick.
-       super(priority: 0x7fffffff) {
+class CameraComponent({
+  /// Special component that is designed to be the root of a game world.
+  ///
+  /// Multiple cameras can observe the same [world] simultaneously, and the
+  /// world may itself contain cameras that look into other worlds, or even into
+  /// itself.
+  ///
+  /// The [world] component is generally mounted externally to the camera, and
+  /// this variable is a mere reference to it.
+  var World? world,
+  Viewport? viewport,
+  Viewfinder? viewfinder,
+  Component? backdrop,
+  List<Component>? hudComponents,
+  super.children,
+  super.key,
+}) extends Component {
+  this : super(priority: 0x7fffffff) {
     children.register<PostProcessComponent>();
     addAll([_backdrop, _viewport, _viewfinder]);
   }
@@ -115,7 +116,7 @@ class CameraComponent extends Component {
     _viewfinder.updateTransform();
   }
 
-  Viewport _viewport;
+  Viewport _viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []);
 
   /// The [viewfinder] controls which part of the world is seen through the
   /// viewport.
@@ -132,24 +133,14 @@ class CameraComponent extends Component {
     add(_viewfinder);
   }
 
-  Viewfinder _viewfinder;
-
-  /// Special component that is designed to be the root of a game world.
-  ///
-  /// Multiple cameras can observe the same [world] simultaneously, and the
-  /// world may itself contain cameras that look into other worlds, or even into
-  /// itself.
-  ///
-  /// The [world] component is generally mounted externally to the camera, and
-  /// this variable is a mere reference to it.
-  World? world;
+  Viewfinder _viewfinder = viewfinder ?? Viewfinder();
 
   /// The [backdrop] component is rendered statically behind the world.
   ///
   /// Here you can add things like the parallax component which should be static
   /// when the camera moves around.
   Component get backdrop => _backdrop;
-  Component _backdrop;
+  Component _backdrop = backdrop ?? Component();
   set backdrop(Component newBackdrop) {
     _backdrop.removeFromParent();
     add(newBackdrop);
@@ -557,6 +548,6 @@ class CameraComponent extends Component {
   }
 }
 
-class CameraRenderContext extends ComponentRenderContext {
+class CameraRenderContext() extends ComponentRenderContext {
   PostProcess? currentPostProcess;
 }

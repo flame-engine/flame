@@ -26,18 +26,14 @@ final pathStroke = Paint()
 ///
 /// Paints are expensive to create, so the three of them are created once
 /// and picked by state with [forState] whenever they are needed.
-class InteractiveStatePaints {
-  InteractiveStatePaints({
-    required Color normal,
-    required Color hovered,
-    required Color active,
-  }) : normal = _stroke(normal),
-       hovered = _stroke(hovered, 1.05),
-       active = _stroke(active, 1.25);
-
-  final Paint normal;
-  final Paint hovered;
-  final Paint active;
+class InteractiveStatePaints({
+  required Color normal,
+  required Color hovered,
+  required Color active,
+}) {
+  final Paint normal = _stroke(normal);
+  final Paint hovered = _stroke(hovered, 1.05);
+  final Paint active = _stroke(active, 1.25);
 
   Paint forState({required bool isDragging, required bool isHovering}) {
     if (isDragging) {

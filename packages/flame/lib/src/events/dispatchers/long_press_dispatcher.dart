@@ -9,7 +9,7 @@ import 'package:meta/meta.dart';
 /// that use the [LongPressCallbacks] mixin. It will be attached to the
 /// [FlameGame] instance automatically whenever any [LongPressCallbacks]
 /// components are mounted into the component tree.
-class LongPressDispatcher extends Dispatcher<FlameGame> {
+class LongPressDispatcher() extends Dispatcher<FlameGame> {
   /// Records all components currently being long-pressed, keyed by pointerId.
   final Set<TaggedComponent<LongPressCallbacks>> _records = {};
 
@@ -148,9 +148,7 @@ class LongPressDispatcher extends Dispatcher<FlameGame> {
 }
 
 /// Unique key for the [LongPressDispatcher] so the game can identify it.
-class LongPressDispatcherKey implements ComponentKey {
-  const LongPressDispatcherKey();
-
+class const LongPressDispatcherKey() implements ComponentKey {
   @override
   int get hashCode => 71825634; // arbitrary unique number
 

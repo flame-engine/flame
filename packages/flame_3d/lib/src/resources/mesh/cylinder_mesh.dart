@@ -4,13 +4,16 @@ import 'package:flame/geometry.dart';
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
 
-class CylinderMesh extends Mesh {
-  CylinderMesh({
-    required this.radius,
-    required this.height,
-    int segments = 16,
-    Material? material,
-  }) {
+class CylinderMesh({
+  /// The radius of the cylinder.
+  required final double radius,
+
+  /// The full height of the cylinder along the y-axis.
+  required final double height,
+  int segments = 16,
+  Material? material,
+}) extends Mesh {
+  this {
     final vertices = <Vertex>[];
     final halfHeight = height / 2.0;
 
@@ -91,10 +94,4 @@ class CylinderMesh extends Mesh {
       ),
     );
   }
-
-  /// The radius of the cylinder.
-  final double radius;
-
-  /// The full height of the cylinder along the y-axis.
-  final double height;
 }

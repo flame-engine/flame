@@ -2334,15 +2334,11 @@ void main() {
   });
 }
 
-class _ComponentA extends Component {
-  _ComponentA({super.key});
-}
+class _ComponentA({super.key}) extends Component;
 
-class _ComponentB extends Component {
-  _ComponentB();
-}
+class _ComponentB() extends Component;
 
-class _ComponentWithSizeHistory extends Component {
+class _ComponentWithSizeHistory() extends Component {
   List<Vector2> history = [];
 
   @override
@@ -2352,17 +2348,15 @@ class _ComponentWithSizeHistory extends Component {
   }
 }
 
-class _Visitor extends Component {
+class _Visitor() extends Component {
   bool visited = false;
 }
 
-class _IntComponent extends Component {
+class _IntComponent() extends Component {
   int value = 0;
 }
 
-class _TwoChildrenComponent extends Component {
-  _TwoChildrenComponent({super.children});
-
+class _TwoChildrenComponent({super.children}) extends Component {
   late final Component child1;
   late final Component child2;
 
@@ -2375,12 +2369,8 @@ class _TwoChildrenComponent extends Component {
   }
 }
 
-class _LifecycleComponent extends Component {
+class _LifecycleComponent([final String name = '']) extends Component {
   final List<String> events = [];
-  final String name;
-
-  _LifecycleComponent([this.name = '']);
-
   int countEvents(String event) {
     return events.where((e) => e == event).length;
   }
@@ -2421,11 +2411,9 @@ class _LifecycleComponent extends Component {
   String toString() => 'LifecycleComponent($name)';
 }
 
-class _LoadException implements Exception {
-  const _LoadException();
-}
+class const _LoadException() implements Exception;
 
-class _FailingLoadComponent extends Component {
+class _FailingLoadComponent() extends Component {
   @override
   Future<void> onLoad() async {
     await Future<void>.delayed(const Duration(milliseconds: 10));
@@ -2433,12 +2421,12 @@ class _FailingLoadComponent extends Component {
   }
 }
 
-class _FailingSyncLoadComponent extends Component {
+class _FailingSyncLoadComponent() extends Component {
   @override
   void onLoad() => throw const _LoadException();
 }
 
-class _SlowLoadingComponent extends Component {
+class _SlowLoadingComponent() extends Component {
   int onLoadCalledCount = 0;
 
   @override
@@ -2448,11 +2436,8 @@ class _SlowLoadingComponent extends Component {
   }
 }
 
-class _SlowComponent extends Component {
-  _SlowComponent(this.name, this.loadTime);
-  final double loadTime;
-  final String name;
-
+class _SlowComponent(final String name, final double loadTime)
+    extends Component {
   @override
   Future<void> onLoad() async {
     final ms = (loadTime * 1000).toInt();
@@ -2463,19 +2448,13 @@ class _SlowComponent extends Component {
   String toString() => 'SlowComponent($name, loadTime=$loadTime)';
 }
 
-class _GatedLoadComponent extends Component {
-  _GatedLoadComponent(this.loadGate);
-
-  final Completer<void> loadGate;
-
+class _GatedLoadComponent(final Completer<void> loadGate) extends Component {
   @override
   Future<void> onLoad() => loadGate.future;
 }
 
-class _ParentWithGatedChild extends Component {
-  _ParentWithGatedChild(this.childLoadGate);
-
-  final Completer<void> childLoadGate;
+class _ParentWithGatedChild(final Completer<void> childLoadGate)
+    extends Component {
   late final _GatedLoadComponent child;
 
   @override
@@ -2485,7 +2464,7 @@ class _ParentWithGatedChild extends Component {
   }
 }
 
-class _ParentWithFailingChild extends Component {
+class _ParentWithFailingChild() extends Component {
   late final _FailingLoadComponent child;
 
   @override
@@ -2495,10 +2474,8 @@ class _ParentWithFailingChild extends Component {
   }
 }
 
-class _GrandParentWithGatedGrandChild extends Component {
-  _GrandParentWithGatedGrandChild(this.grandChildLoadGate);
-
-  final Completer<void> grandChildLoadGate;
+class _GrandParentWithGatedGrandChild(final Completer<void> grandChildLoadGate)
+    extends Component {
   late final _ParentWithGatedChild child;
 
   @override
@@ -2508,7 +2485,7 @@ class _GrandParentWithGatedGrandChild extends Component {
   }
 }
 
-class _SelfRemovingOnLoadComponent extends Component {
+class _SelfRemovingOnLoadComponent() extends Component {
   @override
   Future<void>? onLoad() {
     removeFromParent();
@@ -2516,17 +2493,16 @@ class _SelfRemovingOnLoadComponent extends Component {
   }
 }
 
-class _SelfRemovingOnMountComponent extends Component {
+class _SelfRemovingOnMountComponent() extends Component {
   @override
   void onMount() {
     removeFromParent();
   }
 }
 
-class _SiblingRemovingOnMountComponent extends _LifecycleComponent {
-  _SiblingRemovingOnMountComponent(this.sibling) : super('remover');
-
-  final Component sibling;
+class _SiblingRemovingOnMountComponent(final Component sibling)
+    extends _LifecycleComponent {
+  this : super('remover');
 
   @override
   void onMount() {
@@ -2535,24 +2511,16 @@ class _SiblingRemovingOnMountComponent extends _LifecycleComponent {
   }
 }
 
-class _ReAddingOnMountComponent extends Component {
-  _ReAddingOnMountComponent(this.component);
-
-  final Component component;
-
+class _ReAddingOnMountComponent(final Component component) extends Component {
   @override
   void onMount() {
     parent!.add(component);
   }
 }
 
-class _Pair {
-  _Pair(this.component, this.points);
-  final Component component;
-  final List<Vector2> points;
-}
+class _Pair(final Component component, final List<Vector2> points);
 
-class _PrepareGame extends FlameGame {
+class _PrepareGame() extends FlameGame {
   late final _ParentOnPrepareComponent prepareParent;
 
   @override
@@ -2561,7 +2529,7 @@ class _PrepareGame extends FlameGame {
   }
 }
 
-class _OnPrepareComponent extends Component {
+class _OnPrepareComponent() extends Component {
   int onMountRuns = 0;
 
   @override
@@ -2571,31 +2539,25 @@ class _OnPrepareComponent extends Component {
   }
 }
 
-class _ParentOnPrepareComponent extends _OnPrepareComponent {
+class _ParentOnPrepareComponent() extends _OnPrepareComponent {
   @override
   Future<void> onLoad() async {
     add(_OnPrepareComponent());
   }
 }
 
-class _IdentifiableComponent extends Component {
-  final int id;
+class _IdentifiableComponent(final int id) extends Component;
 
-  _IdentifiableComponent(this.id);
-}
-
-class _AsyncLoadingChild extends Component {
+class _AsyncLoadingChild() extends Component {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    return Future.value();
   }
 }
 
-class _GameResizeComponent extends PositionComponent {
-  _GameResizeComponent(this.name) : super(size: Vector2.all(2.0));
+class _GameResizeComponent(var String name) extends PositionComponent {
+  this : super(size: Vector2.all(2.0));
 
-  String name;
   late Vector2 gameSize;
 
   @override
@@ -2605,7 +2567,7 @@ class _GameResizeComponent extends PositionComponent {
   }
 }
 
-class _OnChildrenChangedComponent extends PositionComponent {
+class _OnChildrenChangedComponent() extends PositionComponent {
   int onChangedChildrenRuns = 0;
   ChildrenChangeType? lastChangeType;
 
@@ -2616,7 +2578,7 @@ class _OnChildrenChangedComponent extends PositionComponent {
   }
 }
 
-class _RemoveWhereComponent extends Component {
+class _RemoveWhereComponent() extends Component {
   @override
   Future<void> onLoad() async {
     add(Component());
@@ -2624,20 +2586,15 @@ class _RemoveWhereComponent extends Component {
   }
 }
 
-class _Wrapper extends StatefulWidget {
-  const _Wrapper({
-    required this.child,
-    this.open = false,
-  });
-
-  final Widget child;
-  final bool open;
-
+class const _Wrapper({
+  required final Widget child,
+  final bool open = false,
+}) extends StatefulWidget {
   @override
   State<_Wrapper> createState() => _WrapperState();
 }
 
-class _WrapperState extends State<_Wrapper> {
+class _WrapperState() extends State<_Wrapper> {
   late bool _open;
 
   @override
@@ -2667,7 +2624,7 @@ class _WrapperState extends State<_Wrapper> {
   }
 }
 
-class _DetachableFlameGame extends FlameGame {
+class _DetachableFlameGame() extends FlameGame {
   bool onAttachCalled = false;
   bool onDetachCalled = false;
 
@@ -2698,7 +2655,7 @@ FlameTester<_DetachableFlameGame> _myDetachableGame({required bool open}) {
   );
 }
 
-class _ComponentWithChildrenRemoveAll extends Component {
+class _ComponentWithChildrenRemoveAll() extends Component {
   @override
   void onMount() {
     super.onMount();
@@ -2708,7 +2665,7 @@ class _ComponentWithChildrenRemoveAll extends Component {
   }
 }
 
-class _RemoveAllChildrenComponent extends Component {
+class _RemoveAllChildrenComponent() extends Component {
   @override
   void onRemove() {
     super.onRemove();
@@ -2716,12 +2673,12 @@ class _RemoveAllChildrenComponent extends Component {
   }
 }
 
-class _CustomListComponent extends Component {
+class _CustomListComponent() extends Component {
   @override
   ComponentList createComponentList() => ComponentList(strictMode: true);
 }
 
-class _ReverseOrderedComponent extends Component {
+class _ReverseOrderedComponent() extends Component {
   @override
   ComponentList createComponentList() {
     return ComponentList(

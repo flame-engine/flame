@@ -9,13 +9,13 @@ import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _AssetsCacheMock extends Mock implements AssetsCache {}
+class _AssetsCacheMock() extends Mock implements AssetsCache;
 
-class _ImagesMock extends Mock implements Images {}
+class _ImagesMock() extends Mock implements Images;
 
-class _ImageMock extends Mock implements Image {}
+class _ImageMock() extends Mock implements Image;
 
-class _MockedGame extends Mock implements FlameGame {
+class _MockedGame() extends Mock implements FlameGame {
   final _imagesMock = _ImagesMock();
   @override
   Images get images => _imagesMock;
@@ -35,7 +35,7 @@ Future<FireAtlas> _readTestAtlas() async {
   final assetsMock = _AssetsCacheMock();
 
   when(() => assetsMock.readBinaryFile('cave.fa')).thenAnswer((_) async {
-    return _readTestFile();
+    return await _readTestFile();
   });
 
   final imagesMock = _ImagesMock();
@@ -91,7 +91,7 @@ void main() {
       final assetsMock = _AssetsCacheMock();
 
       when(() => assetsMock.readBinaryFile('cave.fa')).thenAnswer((_) async {
-        return _readTestFile();
+        return await _readTestFile();
       });
 
       final imagesMock = _ImagesMock();
@@ -183,7 +183,7 @@ void main() {
         final game = _MockedGame();
 
         when(() => game.assets.readBinaryFile('cave.fa')).thenAnswer((_) async {
-          return _readTestFile();
+          return await _readTestFile();
         });
 
         when(() => game.images.fromBase64(any(), any())).thenAnswer((_) async {

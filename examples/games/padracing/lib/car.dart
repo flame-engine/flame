@@ -3,14 +3,17 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame_forge2d/flame_forge2d.dart' hide World;
-import 'package:material_ui/material_ui.dart' hide Image, Gradient;
+import 'package:material_ui/material_ui.dart' hide Gradient, Image;
 import 'package:padracing/game_colors.dart';
 import 'package:padracing/lap_line.dart';
 import 'package:padracing/padracing_game.dart';
 import 'package:padracing/tire.dart';
 
-class Car extends BodyComponent<PadRacingGame> {
-  Car({required this.playerNumber, required this.cameraComponent})
+class Car({
+  required final int playerNumber,
+  required final CameraComponent cameraComponent,
+}) extends BodyComponent<PadRacingGame> {
+  this
     : super(
         priority: 3,
         paint: Paint()..color = colors[playerNumber],
@@ -23,9 +26,7 @@ class Car extends BodyComponent<PadRacingGame> {
 
   late final List<Tire> tires;
   final ValueNotifier<int> lapNotifier = ValueNotifier<int>(1);
-  final int playerNumber;
   final Set<LapLine> passedStartControl = {};
-  final CameraComponent cameraComponent;
   late final Image _image;
   final size = const Size(6, 10);
   final scale = 10.0;

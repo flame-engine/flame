@@ -2,7 +2,7 @@ import 'package:doc_flame_examples/flower.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 
-class ScaleByEffectGame extends FlameGame {
+class ScaleByEffectGame() extends FlameGame {
   bool reverse = false;
   bool hold = false;
   @override

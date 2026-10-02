@@ -14,15 +14,15 @@ import 'package:flame/src/effects/provider_interfaces.dart';
 ///
 /// Factory constructors [AnchorEffect.by] and [AnchorEffect.to] are also
 /// provided for convenience.
-abstract class AnchorEffect extends Effect
+abstract class AnchorEffect(
+  super.controller,
+  AnchorProvider? target, {
+  super.onComplete,
+  super.key,
+}) extends Effect
     with EffectTarget<AnchorProvider>
     implements MeasurableEffect {
-  AnchorEffect(
-    super.controller,
-    AnchorProvider? target, {
-    super.onComplete,
-    super.key,
-  }) {
+  this {
     this.target = target;
   }
 

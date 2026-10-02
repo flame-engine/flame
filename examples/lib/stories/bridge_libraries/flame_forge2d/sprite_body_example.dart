@@ -6,20 +6,21 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class SpriteBodyExample extends Forge2DExampleGame {
+class SpriteBodyExample() extends Forge2DExampleGame {
   static const String description = '''
     In this example we show how to add a sprite on top of a `BodyComponent`.
     Tap the screen to add more pizzas.
   ''';
 
-  SpriteBodyExample()
+  this
     : super(
         gravity: Vector2(0, 10.0),
         world: SpriteBodyWorld(),
       );
 }
 
-class SpriteBodyWorld extends Forge2DWorld
+class SpriteBodyWorld()
+    extends Forge2DWorld
     with TapCallbacks, HasGameRef<Forge2DGame> {
   @override
   Future<void> onLoad() async {
@@ -35,14 +36,11 @@ class SpriteBodyWorld extends Forge2DWorld
   }
 }
 
-class Pizza extends BodyComponent {
-  final Vector2 initialPosition;
-  final Vector2 size;
-
-  Pizza(
-    this.initialPosition, {
-    Vector2? size,
-  }) : size = size ?? Vector2(2, 3);
+class Pizza(
+  final Vector2 initialPosition, {
+  Vector2? size,
+}) extends BodyComponent {
+  final Vector2 size = size ?? Vector2(2, 3);
 
   @override
   Future<void> onLoad() async {

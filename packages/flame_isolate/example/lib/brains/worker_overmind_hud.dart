@@ -3,17 +3,13 @@ import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/rendering.dart';
 
-enum ComputeType {
+enum ComputeType(final String description) {
   isolate('Running in isolate'),
   compute('Running in compute function'),
-  synchronous('Running synchronously');
-
-  final String description;
-
-  const ComputeType(this.description);
+  synchronous('Running synchronously'),
 }
 
-class WorkerOvermindHud extends PositionComponent with TapCallbacks {
+class WorkerOvermindHud() extends PositionComponent with TapCallbacks {
   ComputeType computeType = ComputeType.isolate;
 
   @override

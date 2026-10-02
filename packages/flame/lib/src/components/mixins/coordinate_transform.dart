@@ -17,7 +17,7 @@ import 'package:vector_math/vector_math.dart';
 /// The two methods of this interface convert between the parent's coordinate
 /// space and the local coordinates. The methods may also return `null`,
 /// indicating that the given cannot be mapped to any local/parent point.
-abstract class CoordinateTransform {
+abstract class CoordinateTransform() {
   Vector2? parentToLocal(Vector2 point);
 
   Vector2? localToParent(Vector2 point);

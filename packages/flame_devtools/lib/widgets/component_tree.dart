@@ -8,9 +8,7 @@ import 'package:flame_devtools/widgets/position_component_attributes_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ComponentTree extends StatelessWidget {
-  const ComponentTree({super.key});
-
+class const ComponentTree({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return devtools_ui.SplitPane(
@@ -27,9 +25,7 @@ class ComponentTree extends StatelessWidget {
   }
 }
 
-class ComponentTreeSection extends ConsumerWidget {
-  const ComponentTreeSection({super.key});
-
+class const ComponentTreeSection({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
@@ -103,9 +99,7 @@ class ComponentTreeSection extends ConsumerWidget {
   }
 }
 
-class ComponentSection extends ConsumerWidget {
-  const ComponentSection({super.key});
-
+class const ComponentSection({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final node = ref.watch(selectedTreeNodeProvider)?.data;

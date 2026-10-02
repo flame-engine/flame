@@ -3,13 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-abstract class _KeyCallStub {
+abstract class _KeyCallStub() {
   bool onCall(Set<LogicalKeyboardKey> keysPressed);
 }
 
-class _KeyCallStubImpl extends Mock implements _KeyCallStub {}
+class _KeyCallStubImpl() extends Mock implements _KeyCallStub;
 
-class _MockKeyUpEvent extends Mock implements KeyUpEvent {
+class _MockKeyUpEvent() extends Mock implements KeyUpEvent {
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return super.toString();

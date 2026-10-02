@@ -9,7 +9,8 @@ import 'package:flame_bloc_example/src/game_stats/bloc/game_stats_bloc.dart';
 import 'package:flame_bloc_example/src/inventory/bloc/inventory_bloc.dart';
 import 'package:flutter/services.dart';
 
-class PlayerController extends Component
+class PlayerController()
+    extends Component
     with
         HasGameRef<SpaceShooterGame>,
         FlameBlocListenable<GameStatsBloc, GameStatsState> {
@@ -28,7 +29,8 @@ class PlayerController extends Component
   }
 }
 
-class PlayerComponent extends SpriteAnimationComponent
+class PlayerComponent()
+    extends SpriteAnimationComponent
     with
         HasGameRef<SpaceShooterGame>,
         CollisionCallbacks,
@@ -37,8 +39,7 @@ class PlayerComponent extends SpriteAnimationComponent
   bool destroyed = false;
   late Timer bulletCreator;
 
-  PlayerComponent()
-    : super(size: Vector2(50, 75), position: Vector2(100, 500)) {
+  this : super(size: Vector2(50, 75), position: Vector2(100, 500)) {
     bulletCreator = Timer(period: 0.5, repeat: true, onTick: _createBullet);
 
     add(RectangleHitbox());

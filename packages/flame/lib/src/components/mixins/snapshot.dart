@@ -23,7 +23,7 @@ mixin Snapshot on PositionComponent {
   set renderSnapshot(bool value) {
     if (_renderSnapshot != value) {
       _renderSnapshot = value;
-      if (_renderSnapshot == true) {
+      if (_renderSnapshot) {
         _picture = null;
       }
     }

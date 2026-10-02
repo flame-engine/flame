@@ -2749,4 +2749,4 @@ void main() {
   });
 }
 
-class _CollisionDetectionGame extends FlameGame with HasCollisionDetection {}
+class _CollisionDetectionGame() extends FlameGame with HasCollisionDetection;

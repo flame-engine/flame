@@ -1,32 +1,32 @@
 import 'package:flame/palette.dart';
 import 'package:flame_forge2d/flame_forge2d.dart' hide World;
 import 'package:flutter/services.dart';
-import 'package:material_ui/material_ui.dart' hide Image, Gradient;
+import 'package:material_ui/material_ui.dart' hide Gradient, Image;
 import 'package:padracing/car.dart';
 import 'package:padracing/padracing_game.dart';
 import 'package:padracing/trail.dart';
 
-class Tire extends BodyComponent<PadRacingGame> {
-  Tire({
-    required this.car,
-    required this.pressedKeys,
-    required this.isFrontTire,
-    required this.isLeftTire,
-    this.isTurnableTire = false,
-  }) : super(
-         paint: Paint()
-           ..color = car.paint.color
-           ..strokeWidth = 0.2
-           ..style = PaintingStyle.stroke,
-         priority: 2,
-       );
+class Tire({
+  required final Car car,
+  required final Set<LogicalKeyboardKey> pressedKeys,
+  required final bool isFrontTire,
+  required final bool isLeftTire,
+  final bool isTurnableTire = false,
+}) extends BodyComponent<PadRacingGame> {
+  this
+    : super(
+        paint: Paint()
+          ..color = car.paint.color
+          ..strokeWidth = 0.2
+          ..style = PaintingStyle.stroke,
+        priority: 2,
+      );
 
   static const double _backTireMaxDriveForce = 300.0;
   static const double _frontTireMaxDriveForce = 600.0;
   static const double _backTireMaxLateralImpulse = 8.5;
   static const double _frontTireMaxLateralImpulse = 7.5;
 
-  final Car car;
   final size = Vector2(0.5, 1.25);
   late final RRect _renderRect = RRect.fromLTRBR(
     -size.x,
@@ -35,8 +35,6 @@ class Tire extends BodyComponent<PadRacingGame> {
     size.y,
     const Radius.circular(0.3),
   );
-
-  final Set<LogicalKeyboardKey> pressedKeys;
 
   late final double _maxDriveForce = isFrontTire
       ? _frontTireMaxDriveForce
@@ -52,10 +50,6 @@ class Tire extends BodyComponent<PadRacingGame> {
   final double _maxBackwardSpeed = -40.0;
 
   late final RevoluteJoint joint;
-  final bool isTurnableTire;
-  final bool isFrontTire;
-  final bool isLeftTire;
-
   final double _lockAngle = 0.6;
   final double _turnSpeedPerSecond = 4;
 

@@ -5,9 +5,7 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+class const MyApp({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,9 +16,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class OtherScreen extends StatelessWidget {
-  const OtherScreen({super.key});
-
+class const OtherScreen({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,14 +35,12 @@ class OtherScreen extends StatelessWidget {
   }
 }
 
-class SplashScreenGame extends StatefulWidget {
-  const SplashScreenGame({super.key});
-
+class const SplashScreenGame({super.key}) extends StatefulWidget {
   @override
   SplashScreenGameState createState() => SplashScreenGameState();
 }
 
-class SplashScreenGameState extends State<SplashScreenGame> {
+class SplashScreenGameState() extends State<SplashScreenGame> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

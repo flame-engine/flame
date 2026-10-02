@@ -6,7 +6,6 @@ void main() {
     test('without message', () {
       expect(
         () {
-          // ignore: prefer_asserts_with_message
           assert(2 + 2 == 5);
         },
         failsAssert(),

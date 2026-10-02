@@ -11,7 +11,8 @@ import 'package:material_ui/material_ui.dart';
 /// A game that allows for camera control and displays Tap, Drag & Scroll
 /// events information on the screen, to allow exploration of the 3 coordinate
 /// systems of Flame (global, widget, game).
-class CoordinateSystemsExample extends FlameGame
+class CoordinateSystemsExample()
+    extends FlameGame
     with TapCallbacks, DragCallbacks, ScrollCallbacks, KeyboardEvents {
   static const String description = '''
     Displays event data in all 3 coordinate systems (global, widget and game).
@@ -189,16 +190,14 @@ class CoordinateSystemsExample extends FlameGame
 /// A simple widget that "wraps" a Flame game with some Containers
 /// on each direction (top, bottom, left and right) and allow adding
 /// or removing containers.
-class CoordinateSystemsWidget extends StatefulWidget {
-  const CoordinateSystemsWidget({super.key});
-
+class const CoordinateSystemsWidget({super.key}) extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _CoordinateSystemsState();
   }
 }
 
-class _CoordinateSystemsState extends State<CoordinateSystemsWidget> {
+class _CoordinateSystemsState() extends State<CoordinateSystemsWidget> {
   /// The number of blocks in each direction (top, left, right, bottom).
   List<int> blocks = [1, 1, 1, 1];
 

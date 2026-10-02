@@ -6,18 +6,18 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/post_process.dart';
 
-class BallGlow extends PostProcessComponent<BallGlowPostProcess>
+class BallGlow({
+  super.position,
+  super.scale,
+  super.angle,
+  super.nativeAngle,
+  super.anchor = Anchor.center,
+  super.children,
+  super.priority,
+  super.key,
+}) extends PostProcessComponent<BallGlowPostProcess>
     with HasGameRef<CrystalBallGame> {
-  BallGlow({
-    super.position,
-    super.scale,
-    super.angle,
-    super.nativeAngle,
-    super.anchor = Anchor.center,
-    super.children,
-    super.priority,
-    super.key,
-  }) : super(postProcess: BallGlowPostProcess());
+  this : super(postProcess: BallGlowPostProcess());
 
   @override
   Future<void> onLoad() {
@@ -40,7 +40,7 @@ class BallGlow extends PostProcessComponent<BallGlowPostProcess>
 ///
 /// Also, its shader is not preloaded in the game, but rather loaded
 /// when the post process is loaded.
-class BallGlowPostProcess extends PostProcess {
+class BallGlowPostProcess() extends PostProcess {
   late CrystalBallGameWorld world;
 
   late final FragmentProgram fragmentProgram;

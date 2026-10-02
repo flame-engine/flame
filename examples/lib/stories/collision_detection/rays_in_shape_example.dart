@@ -21,7 +21,7 @@ const fontSize = 9.0;
 
 typedef ButtonColors = (Color, Color);
 
-class RaysInShapeExample extends FlameGame<RaysInShapeWorld> {
+class RaysInShapeExample() extends FlameGame<RaysInShapeWorld> {
   static const description = '''
 In this example we showcase the raytrace functionality where you can see whether
 the rays are inside the shapes or not. The rays originate from small circles,
@@ -52,7 +52,7 @@ casts a new set of rays and the Rotate button rotates the shape.
   late AdvancedButtonComponent _shapeButton;
   late AdvancedButtonComponent _raysButton;
 
-  RaysInShapeExample()
+  this
     : super(
         world: RaysInShapeWorld(),
         camera: CameraComponent.withFixedResolution(
@@ -148,26 +148,24 @@ casts a new set of rays and the Rotate button rotates the shape.
   }
 }
 
-class RayCircleComponent extends CircleComponent
+class RayCircleComponent(
+  final Ray2 ray, {
+  super.radius,
+  super.position,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.paint,
+  super.paintLayers,
+  super.key,
+}) extends CircleComponent
     with
         DragCallbacks,
         HoverCallbacks,
         TapCallbacks,
         HasWorldRef<RaysInShapeWorld> {
-  RayCircleComponent(
-    this.ray, {
-    super.radius,
-    super.position,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.paint,
-    super.paintLayers,
-    super.key,
-  });
-
   RaycastResult<ShapeHitbox>? _raycastResult;
   bool get _hitScreen {
     final hitbox = _raycastResult?.hitbox;
@@ -211,7 +209,7 @@ class RayCircleComponent extends CircleComponent
 
   @override
   void onMouseMove(MouseMoveEvent event) {
-    if (worldRef.hasHovering == false || worldRef.isHovering(this)) {
+    if (!worldRef.hasHovering || worldRef.isHovering(this)) {
       super.onMouseMove(event);
     }
   }
@@ -322,8 +320,6 @@ class RayCircleComponent extends CircleComponent
     }
   }
 
-  final Ray2 ray;
-
   bool get isDragging => _isDragging || isDragged;
   bool get isHovering => _isHovering || isHovered;
 
@@ -339,7 +335,8 @@ class RayCircleComponent extends CircleComponent
   }
 }
 
-class RaysInShapeWorld extends World
+class RaysInShapeWorld()
+    extends World
     with HasGameRef<RaysInShapeExample>, HasCollisionDetection {
   final _rng = Random();
   List<Ray2> _rays = [];

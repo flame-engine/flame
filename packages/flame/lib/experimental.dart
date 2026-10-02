@@ -9,7 +9,7 @@
 /// After the components lived here for some time, and when we gain more
 /// confidence in their robustness, they will be moved out into the main Flame
 /// library.
-library experimental;
+library;
 
 export 'src/experimental/column_component.dart' show ColumnComponent;
 export 'src/experimental/expanded_component.dart' show ExpandedComponent;
@@ -20,9 +20,9 @@ export 'src/experimental/geometry/shapes/rounded_rectangle.dart'
     show RoundedRectangle;
 export 'src/experimental/geometry/shapes/shape.dart' show Shape;
 export 'src/experimental/layout_component.dart'
-    show LayoutComponent, LayoutAxis;
+    show LayoutAxis, LayoutComponent;
 export 'src/experimental/linear_layout_component.dart'
-    show LinearLayoutComponent, Direction;
+    show Direction, LinearLayoutComponent;
 export 'src/experimental/padding_component.dart' show PaddingComponent;
 export 'src/experimental/row_component.dart' show RowComponent;
 export 'src/experimental/single_layout_component.dart'

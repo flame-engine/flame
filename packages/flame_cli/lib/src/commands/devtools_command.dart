@@ -15,15 +15,17 @@ import 'package:flame_cli/src/flame_connection.dart';
 /// is checked to be reachable before the DevTools are started. The Flame
 /// extension is enabled in the `devtools_options.yaml` of the project, so
 /// that the DevTools show the Flame tab without asking.
-class DevToolsCommand extends Command<int> {
-  DevToolsCommand(
-    this.workingDirectory, {
-    ProcessStarter? startProcess,
-    GameConnector? connect,
-    this.out,
-    this.err,
-  }) : _startProcess = startProcess ?? Process.start,
-       _connect = connect ?? FlameConnection.connect {
+class DevToolsCommand(
+  final Directory workingDirectory, {
+  ProcessStarter? startProcess,
+  GameConnector? connect,
+
+  /// Where the output of `dart devtools` is mirrored to, the standard output
+  /// and error of this process by default.
+  final StringSink? out,
+  final StringSink? err,
+}) extends Command<int> {
+  this {
     argParser
       ..addOption(
         'uri',
@@ -43,14 +45,8 @@ class DevToolsCommand extends Command<int> {
       );
   }
 
-  final Directory workingDirectory;
-  final ProcessStarter _startProcess;
-  final GameConnector _connect;
-
-  /// Where the output of `dart devtools` is mirrored to, the standard output
-  /// and error of this process by default.
-  final StringSink? out;
-  final StringSink? err;
+  final ProcessStarter _startProcess = startProcess ?? Process.start;
+  final GameConnector _connect = connect ?? FlameConnection.connect;
 
   @override
   String get name => 'devtools';
@@ -91,6 +87,6 @@ class DevToolsCommand extends Command<int> {
       workingDirectory: workingDirectory,
     );
     await forwardOutput(process, out ?? stdout, err ?? stderr);
-    return process.exitCode;
+    return await process.exitCode;
   }
 }

@@ -31,8 +31,8 @@ void main() {
   });
 }
 
-class _ParentComponent extends Component {}
+class _ParentComponent() extends Component;
 
-class _DifferentComponent extends Component {}
+class _DifferentComponent() extends Component;
 
-class _TestComponent extends Component with ParentIsA<_ParentComponent> {}
+class _TestComponent() extends Component with ParentIsA<_ParentComponent>;

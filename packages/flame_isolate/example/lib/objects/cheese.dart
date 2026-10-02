@@ -3,7 +3,7 @@ import 'package:flame/flame.dart';
 import 'package:flame_isolate_example/objects/colonists_object.dart';
 import 'package:flame_isolate_example/standard/int_vector2.dart';
 
-class Cheese extends StaticColonistsObject {
+class Cheese(super.x, super.y) extends StaticColonistsObject {
   @override
   final Sprite objectSprite = Sprite(
     Flame.images.fromCache('assets/images/cheese.png'),
@@ -11,8 +11,6 @@ class Cheese extends StaticColonistsObject {
 
   @override
   final IntVector2 tileSize = const IntVector2(1, 1);
-
-  Cheese(super.x, super.y);
 
   @override
   double difficulty = 8.6;

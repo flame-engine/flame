@@ -9,9 +9,9 @@ import 'package:flame_3d/resources.dart';
 /// This class isn't a true resource, it does not upload it self to the GPU.
 /// Instead it uploads [Surface]s, it acts as a proxy.
 /// {@endtemplate}
-class Mesh extends Resource<void> {
+class Mesh() extends Resource<void> {
   /// {@macro mesh}
-  Mesh() : _surfaces = [];
+  this : _surfaces = [];
 
   final List<Surface> _surfaces;
   Aabb3? _aabb;

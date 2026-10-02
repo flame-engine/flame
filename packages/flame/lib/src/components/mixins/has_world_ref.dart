@@ -22,9 +22,8 @@ mixin HasWorldRef<T extends World> on Component {
 
   T? findWorld() {
     return ancestors(
-          includeSelf: true,
-        ).firstWhereOrNull((ancestor) => ancestor is T)
-        as T?;
+      includeSelf: true,
+    ).firstWhereOrNull((ancestor) => ancestor is T) as T?;
   }
 
   T _findWorldAndCheck() {

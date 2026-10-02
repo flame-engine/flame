@@ -4,8 +4,8 @@ import 'dart:ui';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
 
-class RotatingLight extends LightComponent {
-  RotatingLight()
+class RotatingLight() extends LightComponent {
+  this
     : super.point(
         position: Vector3.zero(),
         color: const Color(0xFF00FF00),

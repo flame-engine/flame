@@ -639,21 +639,18 @@ void main() {
   });
 }
 
-class _SolidBackground extends Component with HasPaint {
-  _SolidBackground(this.color);
-  final Color color;
+class _SolidBackground(final Color color) extends Component with HasPaint {
   @override
   void render(Canvas canvas) => canvas.drawColor(color, BlendMode.src);
 }
 
-class _RenderCounter extends PositionComponent {
-  _RenderCounter({super.size, super.position});
+class _RenderCounter({super.size, super.position}) extends PositionComponent {
   int renderCount = 0;
   @override
   void render(Canvas canvas) => renderCount++;
 }
 
-class _PostProcessChecker extends PostProcess {
+class _PostProcessChecker() extends PostProcess {
   bool isLoaded = false;
 
   @override

@@ -25,12 +25,7 @@ List<Vector2> _pathVertices(Path path) {
   return contours.first.vertices;
 }
 
-class _RayCase {
-  _RayCase(this.ray, {required this.expectsHit});
-
-  final Ray2 ray;
-  final bool expectsHit;
-}
+class _RayCase(final Ray2 ray, {required final bool expectsHit});
 
 List<_RayCase> _randomRayCases(
   PolygonHitbox polygon,

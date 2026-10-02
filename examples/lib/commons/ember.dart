@@ -2,9 +2,13 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:meta/meta.dart';
 
-class Ember<T extends FlameGame> extends SpriteAnimationComponent
-    with HasGameRef<T> {
-  Ember({super.position, Vector2? size, super.priority, super.key})
+class Ember<T extends FlameGame>({
+  super.position,
+  Vector2? size,
+  super.priority,
+  super.key,
+}) extends SpriteAnimationComponent with HasGameRef<T> {
+  this
     : super(
         size: size ?? Vector2.all(50),
         anchor: Anchor.center,

@@ -4,13 +4,10 @@ typedef ConditionCallback = bool Function();
 
 /// This is a leaf node that will updates its [status] based on
 /// [conditionCallback].
-class Condition extends BaseNode {
-  /// Creates a condition node for given [conditionCallback].
-  Condition(this.conditionCallback);
-
+class Condition(
   /// The callback that will be executed when the condition is ticked.
-  final ConditionCallback conditionCallback;
-
+  final ConditionCallback conditionCallback,
+) extends BaseNode {
   @override
   void tick() {
     status = conditionCallback() ? NodeStatus.success : NodeStatus.failure;

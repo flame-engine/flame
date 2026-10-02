@@ -547,19 +547,13 @@ void main() {
   });
 }
 
-class _IndexedComponent extends Component {
-  final int index;
+class _IndexedComponent(final int index) extends Component;
 
-  _IndexedComponent(this.index);
-}
-
-class _ConstructorChildrenGame extends FlameGame {
-  final Iterable<_IndexedComponent> onLoadChildren;
-
-  _ConstructorChildrenGame({
-    required Iterable<_IndexedComponent> constructorChildren,
-    required this.onLoadChildren,
-  }) : super(children: constructorChildren);
+class _ConstructorChildrenGame({
+  required Iterable<_IndexedComponent> constructorChildren,
+  required final Iterable<_IndexedComponent> onLoadChildren,
+}) extends FlameGame {
+  this : super(children: constructorChildren);
 
   @override
   Future<void> onLoad() async {
@@ -567,7 +561,7 @@ class _ConstructorChildrenGame extends FlameGame {
   }
 }
 
-class _MyTappableComponent extends _MyComponent with TapCallbacks {
+class _MyTappableComponent() extends _MyComponent with TapCallbacks {
   bool tapped = false;
 
   @override
@@ -577,7 +571,7 @@ class _MyTappableComponent extends _MyComponent with TapCallbacks {
   }
 }
 
-class _MyComponent extends PositionComponent with HasGameRef {
+class _MyComponent() extends PositionComponent with HasGameRef {
   bool isUpdateCalled = false;
   bool isRenderCalled = false;
   int onRemoveCallCounter = 0;
@@ -609,30 +603,26 @@ class _MyComponent extends PositionComponent with HasGameRef {
   }
 }
 
-class _MyAsyncComponent extends _MyComponent {
+class _MyAsyncComponent() extends _MyComponent {
   @override
   Future<void> onLoad() {
     return Future.value();
   }
 }
 
-class _ReadyingOnMountComponent extends Component {
+class _ReadyingOnMountComponent() extends Component {
   @override
   void onMount() {
     unawaited(findGame()!.ready());
   }
 }
 
-class _NeverLoadingComponent extends Component {
+class _NeverLoadingComponent() extends Component {
   @override
   Future<void> onLoad() => Completer<void>().future;
 }
 
-class _OnAttachGame extends FlameGame {
-  final VoidCallback onAttachCallback;
-
-  _OnAttachGame(this.onAttachCallback);
-
+class _OnAttachGame(final VoidCallback onAttachCallback) extends FlameGame {
   @override
   void onAttach() {
     onAttachCallback();
@@ -644,12 +634,12 @@ class _OnAttachGame extends FlameGame {
   }
 }
 
-class _CompleterGame extends FlameGame {
+class _CompleterGame() extends FlameGame {
   int loadedCompleterCount = 0;
   int mountedCompleterCount = 0;
   int removedCompleterCount = 0;
 
-  _CompleterGame() {
+  this {
     loaded.whenComplete(() => loadedCompleterCount++);
     mounted.whenComplete(() => mountedCompleterCount++);
     removed.whenComplete(() => removedCompleterCount++);

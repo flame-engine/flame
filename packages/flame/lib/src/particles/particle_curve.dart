@@ -8,7 +8,7 @@ import 'package:flutter/animation.dart';
 /// evaluating it for thousands of particles per frame costs only an array
 /// read and one interpolation, no matter how expensive the source function
 /// is.
-class ParticleCurve {
+class ParticleCurve.custom(double Function(double t) f) {
   /// Interpolates from [from] at spawn to [to] at death, optionally shaped
   /// by an animation [curve] (for example [Curves.easeOut]).
   ParticleCurve(double from, double to, {Curve curve = Curves.linear})
@@ -19,8 +19,7 @@ class ParticleCurve {
 
   /// Bakes an arbitrary function of the life progress `t`, where `t` goes
   /// from 0 at spawn to 1 at death.
-  ParticleCurve.custom(double Function(double t) f)
-    : _samples = Float32List(_resolution + 1) {
+  this : _samples = Float32List(_resolution + 1) {
     for (var i = 0; i <= _resolution; i++) {
       _samples[i] = f(i / _resolution);
     }

@@ -6,7 +6,7 @@ import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flutter/rendering.dart';
 
-class DragEventsGame extends FlameGame {
+class DragEventsGame() extends FlameGame {
   @override
   Future<void> onLoad() async {
     addAll([
@@ -49,8 +49,8 @@ class DragEventsGame extends FlameGame {
 
 /// This component is the pink-ish rectangle in the center of the game window.
 /// It uses the [DragCallbacks] mixin in order to receive drag events.
-class DragTarget extends PositionComponent with DragCallbacks {
-  DragTarget() : super(anchor: Anchor.center);
+class DragTarget() extends PositionComponent with DragCallbacks {
+  this : super(anchor: Anchor.center);
 
   final _rectPaint = Paint()..color = const Color(0x88AC54BF);
 
@@ -99,11 +99,9 @@ class DragTarget extends PositionComponent with DragCallbacks {
   }
 }
 
-class Trail extends Component {
-  Trail(Vector2 origin)
-    : _paths = [Path()..moveTo(origin.x, origin.y)],
-      _opacities = [1],
-      _lastPoint = origin.clone(),
+class Trail(Vector2 origin) extends Component {
+  this
+    : _opacities = [1],
       _color = HSLColor.fromAHSL(
         1,
         random.nextDouble() * 360,
@@ -111,7 +109,7 @@ class Trail extends Component {
         0.8,
       ).toColor();
 
-  final List<Path> _paths;
+  final List<Path> _paths = [Path()..moveTo(origin.x, origin.y)];
   final List<double> _opacities;
   Color _color;
   late final _linePaint = Paint()..style = PaintingStyle.stroke;
@@ -119,7 +117,7 @@ class Trail extends Component {
   bool _released = false;
   double _timer = 0;
   final _vanishInterval = 0.03;
-  final Vector2 _lastPoint;
+  final Vector2 _lastPoint = origin.clone();
 
   static final random = Random();
   static const lineWidth = 10.0;
@@ -182,15 +180,15 @@ class Trail extends Component {
   }
 }
 
-class Star extends PositionComponent with DragCallbacks {
-  Star({
-    required int n,
-    required double radius1,
-    required double radius2,
-    required double sharpness,
-    required this.color,
-    super.position,
-  }) {
+class Star({
+  required int n,
+  required double radius1,
+  required double radius2,
+  required double sharpness,
+  required final Color color,
+  super.position,
+}) extends PositionComponent with DragCallbacks {
+  this {
     _path = Path()..moveTo(radius1, 0);
     for (var i = 0; i < n; i++) {
       final p1 = Vector2(radius2, 0)..rotate(tau / n * (i + sharpness));
@@ -201,7 +199,6 @@ class Star extends PositionComponent with DragCallbacks {
     _path.close();
   }
 
-  final Color color;
   final Paint _paint = Paint();
   final Paint _borderPaint = Paint()
     ..color = const Color(0xFFffffff)

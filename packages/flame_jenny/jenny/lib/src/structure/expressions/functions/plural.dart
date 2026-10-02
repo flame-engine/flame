@@ -2,13 +2,11 @@ import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/functions/_common.dart';
 import 'package:jenny/src/yarn_project.dart';
 
-class PluralFn extends StringExpression {
-  PluralFn(this._num, this._words, this._yarn);
-
-  final NumExpression _num;
-  final List<StringExpression> _words;
-  final YarnProject _yarn;
-
+class PluralFn(
+  final NumExpression _num,
+  final List<StringExpression> _words,
+  final YarnProject _yarn,
+) extends StringExpression {
   /// Static constructor, used by parse.dart.
   static Expression make(
     List<FunctionArgument> arguments,

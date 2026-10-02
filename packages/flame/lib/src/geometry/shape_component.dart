@@ -6,29 +6,17 @@ import 'package:flame/components.dart';
 /// and angle. It can also have an anchor if it shouldn't be rotated around its
 /// center.
 /// A point can be determined to be within of outside of a shape.
-abstract class ShapeComponent extends PositionComponent with HasPaint {
-  ShapeComponent({
-    super.position,
-    super.size,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.key,
-    Paint? paint,
-    List<Paint>? paintLayers,
-    this.isSolid = false,
-  }) {
-    this.paint = paint ?? this.paint;
-    // Only read from this.paintLayers if paintLayers not null to prevent
-    // unnecessary creation of the paintLayers list.
-    if (paintLayers != null) {
-      this.paintLayers = paintLayers;
-    }
-  }
-
-  bool renderShape = true;
+abstract class ShapeComponent({
+  super.position,
+  super.size,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.key,
+  Paint? paint,
+  List<Paint>? paintLayers,
 
   /// Whether the shape is solid or hollow.
   ///
@@ -40,5 +28,16 @@ abstract class ShapeComponent extends PositionComponent with HasPaint {
   ///
   /// This field is not related to how the shape should be rendered, see
   /// [Paint.style] for that.
-  bool isSolid;
+  var bool isSolid = false,
+}) extends PositionComponent with HasPaint {
+  this {
+    this.paint = paint ?? this.paint;
+    // Only read from this.paintLayers if paintLayers not null to prevent
+    // unnecessary creation of the paintLayers list.
+    if (paintLayers != null) {
+      this.paintLayers = paintLayers;
+    }
+  }
+
+  bool renderShape = true;
 }

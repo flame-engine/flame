@@ -5,7 +5,7 @@ import 'package:flame/geometry.dart';
 import 'package:flame/palette.dart';
 import 'package:material_ui/material_ui.dart';
 
-class RayCastExample extends FlameGame with HasCollisionDetection {
+class RayCastExample() extends FlameGame with HasCollisionDetection {
   final origin = Vector2(20, 20);
 
   final direction = Vector2(1, 0);

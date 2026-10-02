@@ -358,20 +358,16 @@ void main() {
   });
 }
 
-class _SimpleDialogueView extends DialogueView {}
+class _SimpleDialogueView() extends DialogueView;
 
-class _RecordingDialogueView extends DialogueView {
-  _RecordingDialogueView({
-    List<String>? target,
-    String? name,
-    List<int>? choices,
-  }) : events = target ?? [],
-       name = name ?? '*',
-       choices = choices ?? [];
-
-  final List<String> events;
-  final String name;
-  final List<int> choices;
+class _RecordingDialogueView({
+  List<String>? target,
+  String? name,
+  List<int>? choices,
+}) extends DialogueView {
+  final List<String> events = target ?? [];
+  final String name = name ?? '*';
+  final List<int> choices = choices ?? [];
 
   @override
   void onDialogueStart() => _record('onDialogueStart()');
@@ -406,19 +402,13 @@ class _RecordingDialogueView extends DialogueView {
   }
 }
 
-class _DelayedDialogueView extends _RecordingDialogueView {
-  _DelayedDialogueView({
-    super.target,
-    super.name,
-    this.dialogueStartDelay = 0,
-    this.lineStartDelay = 0,
-    this.lineFinishDelay = 0,
-  });
-
-  final double dialogueStartDelay;
-  final double lineStartDelay;
-  final double lineFinishDelay;
-
+class _DelayedDialogueView({
+  super.target,
+  super.name,
+  final double dialogueStartDelay = 0,
+  final double lineStartDelay = 0,
+  final double lineFinishDelay = 0,
+}) extends _RecordingDialogueView {
   @override
   FutureOr<void> onDialogueStart() {
     super.onDialogueStart();
@@ -443,7 +433,7 @@ class _DelayedDialogueView extends _RecordingDialogueView {
   }
 }
 
-class _ImmediateChoiceDialogueView extends DialogueView {
+class _ImmediateChoiceDialogueView() extends DialogueView {
   bool finished = false;
 
   @override

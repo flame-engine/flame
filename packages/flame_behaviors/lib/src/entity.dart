@@ -62,17 +62,18 @@ mixin EntityMixin on Component {
 /// The visualization of the entity is defined by the [Component]s that are
 /// attached to it.
 /// {@endtemplate}
-abstract class Entity extends Component with EntityMixin {
+abstract class Entity({
+  super.children,
+  super.priority,
+  super.key,
+  Iterable<Behavior>? behaviors,
+}) extends Component with EntityMixin {
   /// {@macro entity}
-  Entity({
-    super.children,
-    super.priority,
-    super.key,
-    Iterable<Behavior>? behaviors,
-  }) : assert(
-         children?.whereType<Behavior>().isEmpty ?? true,
-         'Behaviors cannot be added to as a child directly.',
-       ) {
+  this
+    : assert(
+        children?.whereType<Behavior>().isEmpty ?? true,
+        'Behaviors cannot be added to as a child directly.',
+      ) {
     if (behaviors != null) {
       addAll(behaviors);
     }
@@ -85,23 +86,24 @@ abstract class Entity extends Component with EntityMixin {
 /// This entity is based on the [PositionComponent] and can be positioned
 /// on the screen.
 /// {@endtemplate}
-abstract class PositionedEntity extends PositionComponent with EntityMixin {
+abstract class PositionedEntity({
+  super.position,
+  super.size,
+  super.scale,
+  super.angle,
+  super.nativeAngle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.key,
+  Iterable<Behavior>? behaviors,
+}) extends PositionComponent with EntityMixin {
   /// {@macro positioned_entity}
-  PositionedEntity({
-    super.position,
-    super.size,
-    super.scale,
-    super.angle,
-    super.nativeAngle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.key,
-    Iterable<Behavior>? behaviors,
-  }) : assert(
-         children?.whereType<Behavior>().isEmpty ?? true,
-         'Behaviors cannot be added to as a child directly.',
-       ) {
+  this
+    : assert(
+        children?.whereType<Behavior>().isEmpty ?? true,
+        'Behaviors cannot be added to as a child directly.',
+      ) {
     if (behaviors != null) {
       addAll(behaviors);
     }

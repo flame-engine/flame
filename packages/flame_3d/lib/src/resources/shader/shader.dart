@@ -16,7 +16,19 @@ import 'package:flame_3d/resources.dart';
 /// Samplers are auto-detected at compile time via [GpuUniformSlot.sizeInBytes]
 /// returning `null` — no need to declare them separately.
 /// {@endtemplate}
-class Shader extends Resource<GpuShader> {
+class Shader._(
+  final GpuShader Function(String key) _getShader, {
+
+  /// The shader entry point name within the bundle.
+  required final String entryPoint,
+
+  /// Names of all uniform slots — both struct blocks and samplers.
+  ///
+  /// The type of each slot is auto-detected at compile time:
+  /// struct blocks have a non-null [GpuUniformSlot.sizeInBytes],
+  /// samplers return `null`.
+  required final List<String> slots,
+}) extends Resource<GpuShader> {
   /// Load a [Shader] from asset.
   Shader.fromAsset(
     String assetName, {
@@ -27,24 +39,6 @@ class Shader extends Resource<GpuShader> {
          entryPoint: entryPoint,
          slots: slots,
        );
-
-  Shader._(
-    this._getShader, {
-    required this.entryPoint,
-    required this.slots,
-  });
-
-  /// The shader entry point name within the bundle.
-  final String entryPoint;
-
-  /// Names of all uniform slots — both struct blocks and samplers.
-  ///
-  /// The type of each slot is auto-detected at compile time:
-  /// struct blocks have a non-null [GpuUniformSlot.sizeInBytes],
-  /// samplers return `null`.
-  final List<String> slots;
-
-  final GpuShader Function(String key) _getShader;
 
   final Map<String, GpuUniformSlot> _slots = {};
   final Map<String, _SlotBinding> _bindings = {};
@@ -172,22 +166,17 @@ class Shader extends Resource<GpuShader> {
   }
 }
 
-sealed class _SlotBinding<T> {
-  _SlotBinding(this.slot);
-
-  final GpuUniformSlot slot;
-
+sealed class _SlotBinding<T>(final GpuUniformSlot slot) {
   T get resource;
 }
 
-class _UniformBinding extends _SlotBinding<ByteBuffer> {
-  _UniformBinding(super.slot)
-    : _data = Float32List(slot.sizeInBytes! ~/ Float32List.bytesPerElement);
-
+class _UniformBinding(super.slot) extends _SlotBinding<ByteBuffer> {
   @override
   ByteBuffer get resource => _data.buffer;
 
-  final Float32List _data;
+  final Float32List _data = Float32List(
+    slot.sizeInBytes! ~/ Float32List.bytesPerElement,
+  );
   final Map<String, int> _memberOffsets = {};
 
   /// Write a struct member (optionally array-indexed) directly into the buffer.
@@ -223,9 +212,5 @@ class _UniformBinding extends _SlotBinding<ByteBuffer> {
   }
 }
 
-class _TextureBinding extends _SlotBinding<Texture> {
-  _TextureBinding(super.slot, this.resource);
-
-  @override
-  Texture resource;
-}
+class _TextureBinding(super.slot, @override var Texture resource)
+    extends _SlotBinding<Texture>;

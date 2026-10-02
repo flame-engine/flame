@@ -7,8 +7,9 @@ import 'package:flame_cli/src/flame_connection.dart';
 import 'package:io/io.dart';
 
 /// Sends taps, drags and key presses to the game.
-class InputCommand extends Command<int> {
-  InputCommand(StringSink out, Directory workingDirectory) {
+class InputCommand(StringSink out, Directory workingDirectory)
+    extends Command<int> {
+  this {
     addSubcommand(_TapCommand(out, workingDirectory));
     addSubcommand(_DragCommand(out, workingDirectory));
     addSubcommand(_KeyCommand(out, workingDirectory));
@@ -26,9 +27,7 @@ class InputCommand extends Command<int> {
       'terminal.';
 }
 
-class _TapCommand extends FlameCommand {
-  _TapCommand(super.out, super.workingDirectory);
-
+class _TapCommand(super.out, super.workingDirectory) extends FlameCommand {
   @override
   String get name => 'tap';
 
@@ -61,8 +60,8 @@ class _TapCommand extends FlameCommand {
   }
 }
 
-class _DragCommand extends FlameCommand {
-  _DragCommand(super.out, super.workingDirectory) {
+class _DragCommand(super.out, super.workingDirectory) extends FlameCommand {
+  this {
     argParser.addOption(
       'steps',
       abbr: 's',
@@ -118,8 +117,8 @@ class _DragCommand extends FlameCommand {
   }
 }
 
-class _KeyCommand extends FlameCommand {
-  _KeyCommand(super.out, super.workingDirectory) {
+class _KeyCommand(super.out, super.workingDirectory) extends FlameCommand {
+  this {
     argParser
       ..addFlag(
         'down',

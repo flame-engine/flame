@@ -15,7 +15,7 @@ import 'package:material_ui/material_ui.dart';
 /// If you are adding a custom implementation of the
 /// [renderTree] method, make sure to wrap your render code
 /// in a conditional. i.e.:
-/// ```
+/// ```dart
 /// if (isVisible) {
 ///     // Custom render code here
 /// }

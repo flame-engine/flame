@@ -5,15 +5,13 @@ import 'package:meta/meta.dart';
 ///
 /// Represents a position in a 2d-matrix or tilemap.
 @immutable
-class Block {
+class const Block(
   /// x coordinate in the matrix.
-  final int x;
+  final int x,
 
   /// y coordinate in the matrix.
-  final int y;
-
-  const Block(this.x, this.y);
-
+  final int y,
+) {
   const Block.zero() : this(0, 0);
 
   Block.roundFromVector2(Vector2 position)

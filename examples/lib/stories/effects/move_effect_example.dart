@@ -7,7 +7,7 @@ import 'package:flame/geometry.dart';
 import 'package:flame_noise/flame_noise.dart';
 import 'package:material_ui/material_ui.dart';
 
-class MoveEffectExample extends FlameGame {
+class MoveEffectExample() extends FlameGame {
   static const description = '''
     Top square has `MoveEffect.to` effect that makes the component move along a
     straight line back and forth. The effect uses a non-linear progression
@@ -22,7 +22,7 @@ class MoveEffectExample extends FlameGame {
     an arbitrary path using `MoveEffect.along`.
   ''';
 
-  MoveEffectExample()
+  this
     : super(
         camera: CameraComponent.withFixedResolution(
           width: 400,
@@ -32,7 +32,7 @@ class MoveEffectExample extends FlameGame {
       );
 }
 
-class _MoveEffectWorld extends World {
+class _MoveEffectWorld() extends World {
   @override
   void onLoad() {
     final paint1 = Paint()

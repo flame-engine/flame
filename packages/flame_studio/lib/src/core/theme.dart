@@ -6,7 +6,7 @@ final textDirectionProvider = Provider((ref) => TextDirection.ltr);
 
 final themeProvider = Provider((ref) => Theme());
 
-class Theme {
+class Theme() {
   final Color backdropColor = const Color(0xFF484848);
   final Color toolbarColor = const Color(0xFF303030);
   final Color panelColor = const Color(0xFF383838);

@@ -11,7 +11,13 @@ import 'package:vector_math/vector_math.dart';
 ///
 /// The rounded parts of the rectangle are symmetrical in x- and y-directions,
 /// and across all corners.
-class RoundedRectangle extends Shape {
+class RoundedRectangle.fromLTRBR(
+  var double _left,
+  var double _top,
+  var double _right,
+  var double _bottom,
+  var double _radius,
+) extends Shape {
   /// Constructs a [RoundedRectangle] with left, top, right and bottom edges,
   /// and the given radius.
   ///
@@ -22,13 +28,7 @@ class RoundedRectangle extends Shape {
   /// it will be reduced so that the rounded edge can fit inside the rectangle.
   /// In other words, the radius will be adjusted to not exceed the half-width
   /// or half-height of the rectangle.
-  RoundedRectangle.fromLTRBR(
-    this._left,
-    this._top,
-    this._right,
-    this._bottom,
-    this._radius,
-  ) : assert(_radius >= 0, 'Radius cannot be negative: $_radius') {
+  this : assert(_radius >= 0, 'Radius cannot be negative: $_radius') {
     if (_left > _right) {
       final tmp = _left;
       _left = _right;
@@ -74,12 +74,6 @@ class RoundedRectangle extends Shape {
       radius,
     );
   }
-
-  double _left;
-  double _top;
-  double _right;
-  double _bottom;
-  double _radius;
 
   double get left => _left;
   double get right => _right;

@@ -9,7 +9,7 @@ void main() {
   runApp(const GameWidget.managed(gameFactory: Forge2DExample.new));
 }
 
-class Forge2DExample extends Forge2DGame {
+class Forge2DExample() extends Forge2DGame {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -40,8 +40,8 @@ class Forge2DExample extends Forge2DGame {
 /// Forge2D is tuned for bodies roughly between 0.1 and 10 meters, so the
 /// world is laid out at a realistic scale and the camera decides how large
 /// that ends up being on screen.
-class Ball extends BodyComponent with TapCallbacks {
-  Ball({Vector2? initialPosition})
+class Ball({Vector2? initialPosition}) extends BodyComponent with TapCallbacks {
+  this
     : super(
         shapeSpecs: [
           ShapeSpec(
@@ -64,12 +64,7 @@ class Ball extends BodyComponent with TapCallbacks {
   }
 }
 
-class Wall extends BodyComponent {
-  final Vector2 _start;
-  final Vector2 _end;
-
-  Wall(this._start, this._end);
-
+class Wall(final Vector2 _start, final Vector2 _end) extends BodyComponent {
   @override
   Body createBody() {
     final shapeDef = ShapeDef(material: SurfaceMaterial(friction: 0.3));

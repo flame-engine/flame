@@ -19,9 +19,7 @@ import 'package:flame/src/devtools/dev_tools_connector.dart';
 /// created will be connected to the devtools. If you want to change it to
 /// another game instance you can call [DevToolsService.initWithGame] with
 /// the game instance that you want to observe.
-class DevToolsService {
-  DevToolsService._();
-
+class DevToolsService._() {
   static final instance = DevToolsService._();
 
   /// Initializes the service with the given game instance.

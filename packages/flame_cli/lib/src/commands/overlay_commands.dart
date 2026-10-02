@@ -8,8 +8,8 @@ import 'package:flame_cli/src/json_output.dart';
 import 'package:io/io.dart';
 
 /// Lists the registered overlays of the game and which of them are active.
-class OverlaysCommand extends FlameCommand {
-  OverlaysCommand(super.out, super.workingDirectory) {
+class OverlaysCommand(super.out, super.workingDirectory) extends FlameCommand {
+  this {
     argParser.addFlag(
       'json',
       negatable: false,
@@ -50,8 +50,9 @@ class OverlaysCommand extends FlameCommand {
 }
 
 /// Shows, hides or navigates to an overlay.
-class OverlayCommand extends Command<int> {
-  OverlayCommand(StringSink out, Directory workingDirectory) {
+class OverlayCommand(StringSink out, Directory workingDirectory)
+    extends Command<int> {
+  this {
     addSubcommand(_SetOverlayCommand(out, workingDirectory, active: true));
     addSubcommand(_SetOverlayCommand(out, workingDirectory, active: false));
     addSubcommand(_OnlyOverlayCommand(out, workingDirectory));
@@ -67,11 +68,11 @@ class OverlayCommand extends Command<int> {
   String get description => 'Show or hide an overlay of the game.';
 }
 
-class _SetOverlayCommand extends FlameCommand {
-  _SetOverlayCommand(super.out, super.workingDirectory, {required this.active});
-
-  final bool active;
-
+class _SetOverlayCommand(
+  super.out,
+  super.workingDirectory, {
+  required final bool active,
+}) extends FlameCommand {
   @override
   String get name => active ? 'show' : 'hide';
 
@@ -101,9 +102,8 @@ class _SetOverlayCommand extends FlameCommand {
   }
 }
 
-class _OnlyOverlayCommand extends FlameCommand {
-  _OnlyOverlayCommand(super.out, super.workingDirectory);
-
+class _OnlyOverlayCommand(super.out, super.workingDirectory)
+    extends FlameCommand {
   @override
   String get name => 'only';
 

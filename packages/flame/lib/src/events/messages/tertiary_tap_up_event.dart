@@ -10,15 +10,15 @@ import 'package:flutter/gestures.dart';
 ///
 /// The [TertiaryTapUpEvent] will only occur if there was a previous
 /// [TertiaryTapDownEvent].
-class TertiaryTapUpEvent extends PositionEvent<TapUpDetails> {
-  TertiaryTapUpEvent(super.game, TapUpDetails details)
-    : deviceKind = details.kind,
-      super(
+class TertiaryTapUpEvent(super.game, TapUpDetails details)
+    extends PositionEvent<TapUpDetails> {
+  this
+    : super(
         raw: details,
         devicePosition: details.globalPosition.toVector2(),
       );
 
-  final PointerDeviceKind deviceKind;
+  final PointerDeviceKind deviceKind = details.kind;
 
   @override
   String toString() =>

@@ -1,21 +1,13 @@
 part of 'inventory_bloc.dart';
 
-abstract class InventoryEvent extends Equatable {
-  const InventoryEvent();
-}
+abstract class const InventoryEvent() extends Equatable;
 
-class WeaponEquipped extends InventoryEvent {
-  final Weapon weapon;
-
-  const WeaponEquipped(this.weapon);
-
+class const WeaponEquipped(final Weapon weapon) extends InventoryEvent {
   @override
   List<Object?> get props => [weapon];
 }
 
-class NextWeaponEquipped extends InventoryEvent {
-  const NextWeaponEquipped();
-
+class const NextWeaponEquipped() extends InventoryEvent {
   @override
   List<Object?> get props => [];
 }

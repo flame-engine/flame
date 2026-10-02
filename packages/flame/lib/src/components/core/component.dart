@@ -69,12 +69,16 @@ part 'custom_traversal.dart';
 /// You may also need to override [containsLocalPoint] if the component needs to
 /// respond to tap events or similar; the [componentsAtLocation] may also need
 /// to be overridden if you have reimplemented [renderTree].
-class Component {
-  Component({
-    Iterable<Component>? children,
-    int? priority,
-    this.key,
-  }) : _priority = priority ?? 0 {
+class Component({
+  Iterable<Component>? children,
+  int? priority,
+
+  /// A key that can be used to identify this component in the tree.
+  ///
+  /// It can be used to retrieve this component from anywhere in the tree.
+  final ComponentKey? key,
+}) {
+  this {
     _isTraversalBarrier = this is CustomTraversal;
     if (children != null) {
       addAll(children);
@@ -1041,7 +1045,7 @@ class Component {
   /// already added to a component tree since all siblings have to be re-added
   /// to the parent.
   int get priority => _priority;
-  int _priority;
+  int _priority = priority ?? 0;
   set priority(int newPriority) {
     if (_priority != newPriority) {
       _priority = newPriority;
@@ -1455,11 +1459,6 @@ class Component {
   /// the output.
   int? debugCoordinatesPrecision = 0;
 
-  /// A key that can be used to identify this component in the tree.
-  ///
-  /// It can be used to retrieve this component from anywhere in the tree.
-  final ComponentKey? key;
-
   /// The color that the debug output should be rendered with.
   Color debugColor = const Color(0xFFFF00FF);
 
@@ -1509,20 +1508,17 @@ class Component {
   //#endregion
 }
 
-enum ChildrenChangeType { added, removed }
+enum ChildrenChangeType() {
+  added,
+  removed,
+}
 
 /// The lazy [Iterable] returned by [Component.descendants].
-class _DescendantsIterable extends Iterable<Component> {
-  _DescendantsIterable(
-    this._root, {
-    required this.includeSelf,
-    required this.reversed,
-  });
-
-  final Component _root;
-  final bool includeSelf;
-  final bool reversed;
-
+class _DescendantsIterable(
+  final Component _root, {
+  required final bool includeSelf,
+  required final bool reversed,
+}) extends Iterable<Component> {
   @override
   Iterator<Component> get iterator => reversed
       ? _ReversedDescendantsIterator(_root, includeSelf: includeSelf)
@@ -1538,16 +1534,13 @@ class _DescendantsIterable extends Iterable<Component> {
 /// is only created on the following [moveNext], after the caller has processed
 /// the component itself, so a caller may still reorder the children of the
 /// component it just received.
-class _DescendantsIterator implements Iterator<Component> {
-  _DescendantsIterator(Component root, {required bool includeSelf})
-    : _pendingRoot = includeSelf ? root : null,
-      _pendingPush = includeSelf ? null : root;
-
+class _DescendantsIterator(Component root, {required bool includeSelf})
+    implements Iterator<Component> {
   /// The root, while it still has to be emitted.
-  Component? _pendingRoot;
+  Component? _pendingRoot = includeSelf ? root : null;
 
   /// The component whose children iterator has not been pushed yet.
-  Component? _pendingPush;
+  Component? _pendingPush = includeSelf ? null : root;
 
   final List<Iterator<Component>> _stack = [];
   Component? _current;
@@ -1596,14 +1589,13 @@ class _DescendantsIterator implements Iterator<Component> {
 /// keeps the parent of every open iterator on a parallel stack. The root's
 /// children iterator is only created on the first [moveNext], so the tree is
 /// not touched before iteration starts.
-class _ReversedDescendantsIterator implements Iterator<Component> {
-  _ReversedDescendantsIterator(this._root, {required bool includeSelf})
-    : _pendingRoot = includeSelf;
-
-  final Component _root;
+class _ReversedDescendantsIterator(
+  final Component _root, {
+  required bool includeSelf,
+}) implements Iterator<Component> {
   final List<Component> _parents = [];
   final List<Iterator<Component>> _stack = [];
-  bool _pendingRoot;
+  bool _pendingRoot = includeSelf;
   bool _started = false;
   Component? _current;
 

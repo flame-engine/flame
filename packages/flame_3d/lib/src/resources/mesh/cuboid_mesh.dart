@@ -4,13 +4,13 @@ import 'package:flame_3d/resources.dart';
 /// {@template cuboid_mesh}
 /// Represents a Cuboid's geometry with a single surface.
 /// {@endtemplate}
-class CuboidMesh extends Mesh {
+class CuboidMesh({
+  required Vector3 size,
+  Material? material,
+  bool useFaceNormals = true,
+}) extends Mesh {
   /// {@macro cuboid_mesh}
-  CuboidMesh({
-    required Vector3 size,
-    Material? material,
-    bool useFaceNormals = true,
-  }) : size = size.asUnmodifiableView() {
+  this {
     final Vector3(:x, :y, :z) = size / 2;
 
     Vertex vertex({
@@ -178,5 +178,5 @@ class CuboidMesh extends Mesh {
   }
 
   /// The full size of the cuboid along each axis.
-  final Vector3 size;
+  final Vector3 size = size.asUnmodifiableView();
 }

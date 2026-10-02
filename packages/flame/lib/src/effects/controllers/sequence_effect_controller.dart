@@ -3,19 +3,19 @@ import 'package:flame/src/effects/effect.dart';
 
 /// An effect controller that executes a list of other controllers one after
 /// another.
-class SequenceEffectController extends EffectController {
-  SequenceEffectController(List<EffectController> controllers)
+class SequenceEffectController(List<EffectController> controllers)
+    extends EffectController {
+  this
     : assert(controllers.isNotEmpty, 'List of controllers cannot be empty'),
       assert(
         !controllers.any((c) => c.isInfinite),
         'Children controllers cannot be infinite',
       ),
-      children = controllers,
       _currentIndex = 0,
       super.empty();
 
   /// Individual controllers in the sequence.
-  final List<EffectController> children;
+  final List<EffectController> children = controllers;
 
   /// The index of the controller currently being executed. This starts with 0,
   /// and by the end it will be equal to `_children.length - 1`. This variable

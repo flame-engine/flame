@@ -6,12 +6,8 @@ import 'package:jenny/src/structure/expressions/operators/_common.dart';
 ///
 /// The divisor of a modulo must be a positive number. The result of `x % y` is
 /// always a number between 0 and `y`, regardless of the sign of `x`.
-class Modulo extends NumExpression {
-  const Modulo(this._lhs, this._rhs);
-
-  final NumExpression _lhs;
-  final NumExpression _rhs;
-
+class const Modulo(final NumExpression _lhs, final NumExpression _rhs)
+    extends NumExpression {
   /// Static constructor, used by parse.dart
   factory Modulo.make(
     Expression lhs,

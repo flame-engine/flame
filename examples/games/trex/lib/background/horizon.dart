@@ -7,9 +7,7 @@ import 'package:trex_game/background/cloud_manager.dart';
 import 'package:trex_game/obstacle/obstacle_manager.dart';
 import 'package:trex_game/trex_game.dart';
 
-class Horizon extends PositionComponent with HasGameRef<TRexGame> {
-  Horizon() : super();
-
+class Horizon() extends PositionComponent with HasGameRef<TRexGame> {
   static final Vector2 lineSize = Vector2(1200, 24);
   final Queue<SpriteComponent> groundLayers = Queue();
   late final CloudManager cloudManager = CloudManager();

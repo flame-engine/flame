@@ -10,19 +10,18 @@ import 'package:flutter/widgets.dart';
 /// provided in case this functionality needs to be unloaded but the app needs
 /// to keep running.
 /// {@endtemplate}
-class Bgm extends WidgetsBindingObserver {
+class Bgm({AudioCache? audioCache}) extends WidgetsBindingObserver {
+  /// {@macro _bgm}
+  this;
+
   bool _isRegistered = false;
 
   /// The [AudioPlayer] instance that is used to play the audio.
-  AudioPlayer audioPlayer;
+  AudioPlayer audioPlayer = AudioPlayer()
+    ..audioCache = audioCache ?? AudioCache.instance;
 
   /// Whether [Bgm] is playing or not.
   bool isPlaying = false;
-
-  /// {@macro _bgm}
-  Bgm({AudioCache? audioCache})
-    : audioPlayer = AudioPlayer()
-        ..audioCache = audioCache ?? AudioCache.instance;
 
   /// Registers a [WidgetsBinding] observer.
   ///

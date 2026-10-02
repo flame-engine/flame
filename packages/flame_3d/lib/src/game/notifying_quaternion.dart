@@ -14,13 +14,13 @@ import 'package:flutter/foundation.dart';
 ///
 /// Direct modification of this quaternion's [storage] is not allowed.
 /// {@endtemplate}
-class NotifyingQuaternion extends Quaternion with ChangeNotifier {
+class NotifyingQuaternion._() extends Quaternion with ChangeNotifier {
   /// {@macro notifying_quaternion}
   ///
   /// Constructs a quaternion using the raw values [x], [y], [z], and [w].
   factory NotifyingQuaternion(double x, double y, double z, double w) =>
       NotifyingQuaternion._()..setValues(x, y, z, w);
-  NotifyingQuaternion._() : super.fromFloat32List(Float32List(4));
+  this : super.fromFloat32List(Float32List(4));
 
   /// {@macro notifying_quaternion}
   ///

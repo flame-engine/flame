@@ -12,7 +12,8 @@ import 'package:flame_isolate_example/standard/pair.dart';
 import 'package:flame_isolate_example/units/worker.dart';
 import 'package:flutter/foundation.dart';
 
-class WorkerOvermind extends Component
+class WorkerOvermind()
+    extends Component
     with HasGameRef<ColonistsGame>, FlameIsolate {
   final List<Pair<StaticColonistsObject, Vector2>> _queuedTasks = [];
   late Timer _assignTaskInterval;
@@ -151,14 +152,8 @@ class WorkerOvermind extends Component
 }
 
 @immutable
-class _CalculateWorkData {
-  final List<IntVector2> idleWorkerPositions;
-  final List<IntVector2> destinations;
-  final PathFinderData pathFinderData;
-
-  const _CalculateWorkData({
-    required this.idleWorkerPositions,
-    required this.destinations,
-    required this.pathFinderData,
-  });
-}
+class const _CalculateWorkData({
+  required final List<IntVector2> idleWorkerPositions,
+  required final List<IntVector2> destinations,
+  required final PathFinderData pathFinderData,
+});

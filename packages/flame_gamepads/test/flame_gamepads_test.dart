@@ -14,11 +14,9 @@ final platformInterface =
     GamepadsPlatformInterface.instance
         as MethodChannelGamepadsPlatformInterface;
 
-class _TestComponent extends Component with GamepadCallbacks {
-  void Function(NormalizedGamepadEvent event) onEvent;
-
-  _TestComponent(this.onEvent);
-
+class _TestComponent(var void Function(NormalizedGamepadEvent event) onEvent)
+    extends Component
+    with GamepadCallbacks {
   @override
   void onGamepadEvent(NormalizedGamepadEvent event) {
     onEvent(event);

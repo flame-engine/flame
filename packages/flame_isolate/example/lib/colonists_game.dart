@@ -14,10 +14,10 @@ import 'package:flame_isolate_example/units/worker.dart';
 import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 
-class ColonistsGame extends FlameGame with KeyboardEvents {
+class ColonistsGame() extends FlameGame with KeyboardEvents {
   final PositionComponent _cameraPosition = PositionComponent();
   late final GameMap _currentMap;
-  ColonistsGame()
+  this
     : super(
         camera: CameraComponent.withFixedResolution(
           width: 400,

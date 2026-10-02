@@ -8,7 +8,7 @@ import 'package:meta/meta.dart';
 /// [ScrollCallbacks] components in the component tree. It will be attached
 /// to the [FlameGame] instance automatically whenever any
 /// [ScrollCallbacks] components are mounted into the component tree.
-class ScrollDispatcher extends Dispatcher<FlameGame> {
+class ScrollDispatcher() extends Dispatcher<FlameGame> {
   @mustCallSuper
   void onPointerScroll(ScrollEvent event) {
     event.deliverAtPoint(
@@ -45,9 +45,7 @@ class ScrollDispatcher extends Dispatcher<FlameGame> {
 }
 
 /// Unique key for the [ScrollDispatcher] so the game can identify it.
-class ScrollDispatcherKey implements ComponentKey {
-  const ScrollDispatcherKey();
-
+class const ScrollDispatcherKey() implements ComponentKey {
   @override
   int get hashCode => 'ScrollDispatcherKey'.hashCode;
 

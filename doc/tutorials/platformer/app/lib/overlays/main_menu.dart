@@ -2,12 +2,9 @@ import 'package:material_ui/material_ui.dart';
 
 import '../ember_quest.dart';
 
-class MainMenu extends StatelessWidget {
+class const MainMenu({required final EmberQuestGame game, super.key})
+    extends StatelessWidget {
   // Reference to parent game.
-  final EmberQuestGame game;
-
-  const MainMenu({required this.game, super.key});
-
   @override
   Widget build(BuildContext context) {
     const blackTextColor = Color.fromRGBO(0, 0, 0, 1.0);

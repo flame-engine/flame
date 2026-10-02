@@ -9,16 +9,12 @@ import 'package:flame/src/effects/effect_target.dart';
 ///
 /// This could for example be used to make game state changes that happen over
 /// time, but that isn't necessarily visual, like most other effects are.
-class FunctionEffect<T> extends Effect with EffectTarget<T> {
-  FunctionEffect(
-    this.function,
-    super.controller, {
-    super.onComplete,
-    super.key,
-  });
-
-  void Function(T target, double progress) function;
-
+class FunctionEffect<T>(
+  var void Function(T target, double progress) function,
+  super.controller, {
+  super.onComplete,
+  super.key,
+}) extends Effect with EffectTarget<T> {
   @override
   void apply(double progress) {
     function(target, progress);

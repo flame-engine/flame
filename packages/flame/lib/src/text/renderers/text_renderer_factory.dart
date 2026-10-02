@@ -1,6 +1,6 @@
 import 'package:flame/text.dart';
 
-class TextRendererFactory {
+class TextRendererFactory() {
   /// A registry containing default providers for every [TextRenderer] subclass;
   /// used by [createDefault] to create default parameter values.
   ///

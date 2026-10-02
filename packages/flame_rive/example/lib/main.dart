@@ -11,7 +11,7 @@ void main() async {
   runApp(const GameWidget.managed(gameFactory: RiveExampleGame.new));
 }
 
-class RiveExampleGame extends FlameGame {
+class RiveExampleGame() extends FlameGame {
   @override
   Color backgroundColor() => const Color(0xFF444444);
 
@@ -39,8 +39,9 @@ class RiveExampleGame extends FlameGame {
   }
 }
 
-class RewardsComponent extends RiveComponent {
-  RewardsComponent(Artboard artboard, StateMachine? stateMachine)
+class RewardsComponent(Artboard artboard, StateMachine? stateMachine)
+    extends RiveComponent {
+  this
     : super(
         artboard: artboard,
         stateMachine: stateMachine,
@@ -118,13 +119,9 @@ class RewardsComponent extends RiveComponent {
   }
 }
 
-class RewardsArea extends PositionComponent with TapCallbacks, GestureHitboxes {
-  RewardsArea({
-    required this.onTap,
-  });
-
-  final VoidCallback onTap;
-
+class RewardsArea({
+  required final VoidCallback onTap,
+}) extends PositionComponent with TapCallbacks, GestureHitboxes {
   @override
   Future<void> onLoad() async {
     await super.onLoad();

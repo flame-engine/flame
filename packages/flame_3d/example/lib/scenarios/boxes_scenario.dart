@@ -10,7 +10,7 @@ import 'package:flame_3d_example/components/rotating_light.dart';
 import 'package:flame_3d_example/example_game_3d.dart';
 import 'package:flame_3d_example/scenarios/game_scenario.dart';
 
-class BoxesScenario implements GameScenario {
+class BoxesScenario() implements GameScenario {
   @override
   Future<void> onLoad() async {}
 

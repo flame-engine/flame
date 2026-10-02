@@ -35,9 +35,9 @@ void main() {
     final riverpodGameWidgetFinder = find.byType(RiverpodAwareGameWidget);
     expect(riverpodGameWidgetFinder, findsOneWidget);
 
-    final gameWidget =
-        widgetTester.widget(riverpodGameWidgetFinder)
-            as RiverpodAwareGameWidget;
+    final gameWidget = widgetTester.widget(
+      riverpodGameWidgetFinder,
+    ) as RiverpodAwareGameWidget;
 
     // GameWidget contains a FutureBuilder, which calls setState when a Future
     // completes. We therefore need to pump / re-render the widget to ensure

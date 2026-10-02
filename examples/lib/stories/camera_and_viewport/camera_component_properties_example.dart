@@ -5,7 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 
-class CameraComponentPropertiesExample extends FlameGame {
+class CameraComponentPropertiesExample() extends FlameGame {
   static const description = '''
     This example uses FixedSizeViewport which is dynamically sized and 
     positioned based on the size of the game widget.
@@ -21,7 +21,7 @@ class CameraComponentPropertiesExample extends FlameGame {
     Click at any point within the viewport to create a circle there.
   ''';
 
-  CameraComponentPropertiesExample()
+  this
     : super(
         camera:
             CameraComponent(
@@ -75,7 +75,7 @@ class CameraComponentPropertiesExample extends FlameGame {
   }
 }
 
-class ViewportFrame extends Component {
+class ViewportFrame() extends Component {
   final paint = Paint()
     ..style = PaintingStyle.stroke
     ..strokeWidth = 3
@@ -94,7 +94,7 @@ class ViewportFrame extends Component {
   }
 }
 
-class Background extends Component with TapCallbacks {
+class Background() extends Component with TapCallbacks {
   final bgPaint = Paint()..color = const Color(0xffff0000);
   final originPaint = Paint()..color = const Color(0xff19bf57);
   final axisPaint = Paint()
@@ -127,8 +127,8 @@ class Background extends Component with TapCallbacks {
   }
 }
 
-class ExpandingCircle extends CircleComponent {
-  ExpandingCircle(Offset center)
+class ExpandingCircle(Offset center) extends CircleComponent {
+  this
     : super(
         position: Vector2(center.dx, center.dy),
         anchor: Anchor.center,

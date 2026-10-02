@@ -3,7 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flame_riverpod/flame_riverpod.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// ignore: depend_on_referenced_packages, implementation_imports
+// ignore: implementation_imports
 import 'package:riverpod/src/framework.dart';
 
 /// A [GameWidget] that provides access to [Component]s using
@@ -13,30 +13,28 @@ import 'package:riverpod/src/framework.dart';
 /// The corresponding [State] object ([RiverpodAwareGameWidgetState]) assumes
 /// responsibilities associated with ConsumerStatefulElement in
 /// `flutter_riverpod`.
-class RiverpodAwareGameWidget<T extends Game> extends GameWidget<T> {
-  RiverpodAwareGameWidget({
-    required super.game,
-    required this.key,
-    super.textDirection,
-    super.loadingBuilder,
-    super.errorBuilder,
-    super.backgroundBuilder,
-    super.overlayBuilderMap,
-    super.initialActiveOverlays,
-    super.focusNode,
-    super.autofocus,
-    super.mouseCursor,
-    super.addRepaintBoundary,
-  }) : super(key: key);
-
-  @override
-  final GlobalKey<RiverpodAwareGameWidgetState<T>> key;
+class RiverpodAwareGameWidget<T extends Game>({
+  required super.game,
+  @override required final GlobalKey<RiverpodAwareGameWidgetState<T>> key,
+  super.textDirection,
+  super.loadingBuilder,
+  super.errorBuilder,
+  super.backgroundBuilder,
+  super.overlayBuilderMap,
+  super.initialActiveOverlays,
+  super.focusNode,
+  super.autofocus,
+  super.mouseCursor,
+  super.addRepaintBoundary,
+}) extends GameWidget<T> {
+  this : super(key: key);
 
   @override
   GameWidgetState<T> createState() => RiverpodAwareGameWidgetState<T>();
 }
 
-class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T> {
+class RiverpodAwareGameWidgetState<T extends Game>()
+    extends GameWidgetState<T> {
   RiverpodGameMixin get game => widget.game! as RiverpodGameMixin;
 
   bool _isForceBuilding = false;
@@ -159,7 +157,7 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T> {
             // setState call has been replaced with forceBuild,
             // to prevent setState calls while the widget is
             // building, which throws a framework error.
-            (_, __) => forceBuild(),
+            (_, _) => forceBuild(),
           );
         }).read()
         as Res;
@@ -221,7 +219,7 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T> {
       listener,
       onError: onError,
       fireImmediately: fireImmediately,
-      // ignore: invalid_use_of_internal_member, from riverpod
+      // ignore: from riverpod
     );
 
     // Hook-up on onClose to avoid memory leaks.

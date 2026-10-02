@@ -6,15 +6,12 @@ import 'package:flame_3d/src/parser/gltf/gltf_root.dart';
 import 'package:flame_3d/src/parser/gltf/node.dart';
 
 /// The root nodes of a scene.
-class Scene extends GltfNode {
+class Scene({
+  required super.root,
+
   /// The references to each root node.
-  final List<GltfRef<Node>> nodes;
-
-  Scene({
-    required super.root,
-    required this.nodes,
-  });
-
+  required final List<GltfRef<Node>> nodes,
+}) extends GltfNode {
   Scene.parse(
     GltfRoot root,
     Map<String, Object?> map,

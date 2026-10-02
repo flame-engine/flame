@@ -14,9 +14,7 @@ extension Vector4Extension on Vector4 {
   }
 }
 
-class Vector4Utils {
-  Vector4Utils._();
-
+class Vector4Utils._() {
   static Vector4 lerp(Vector4 a, Vector4 b, double t) {
     return a + (b - a).scaled(t);
   }

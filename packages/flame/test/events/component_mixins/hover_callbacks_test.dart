@@ -160,10 +160,7 @@ mixin _HoverInspector on HoverCallbacks {
   }
 }
 
-class _HoverCallbacksComponent extends PositionComponent
-    with HoverCallbacks, _HoverInspector {
-  _HoverCallbacksComponent({
-    super.position,
-    super.size,
-  });
-}
+class _HoverCallbacksComponent({
+  super.position,
+  super.size,
+}) extends PositionComponent with HoverCallbacks, _HoverInspector;

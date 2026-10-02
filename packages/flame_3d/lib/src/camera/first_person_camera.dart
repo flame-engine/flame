@@ -2,24 +2,20 @@ import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/core.dart';
 import 'package:meta/meta.dart';
 
-class FirstPersonCamera extends CameraComponent3D {
-  FirstPersonCamera({
-    required this.following,
-    super.fovY,
-    super.position,
-    super.rotation,
-    super.up,
-    super.projection,
-    super.world,
-    super.viewport,
-    super.viewfinder,
-    super.backdrop,
-    super.hudComponents,
-  });
-
+class FirstPersonCamera({
   /// The point the camera should follow.
-  Vector3 following;
-
+  required var Vector3 following,
+  super.fovY,
+  super.position,
+  super.rotation,
+  super.up,
+  super.projection,
+  super.world,
+  super.viewport,
+  super.viewfinder,
+  super.backdrop,
+  super.hudComponents,
+}) extends CameraComponent3D {
   @override
   @mustCallSuper
   void update(double dt) {

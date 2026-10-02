@@ -19,8 +19,8 @@ void main() {
   });
 }
 
-class _MyComponent extends PositionComponent {
-  _MyComponent() : super(size: Vector2(200, 400));
+class _MyComponent() extends PositionComponent {
+  this : super(size: Vector2(200, 400));
   late final Sprite sprite;
 
   @override

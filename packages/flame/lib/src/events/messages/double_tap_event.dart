@@ -1,5 +1,5 @@
 import 'package:flame/events.dart';
 
-class DoubleTapEvent extends Event<void> {
-  DoubleTapEvent() : super(raw: null);
+class DoubleTapEvent() extends Event<void> {
+  this : super(raw: null);
 }

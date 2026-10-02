@@ -7,11 +7,7 @@ import 'package:jenny/src/yarn_project.dart';
 /// For positive `x` the value is from 0 to 1, for negative `x` the value is
 /// between 0 and -1. For any `x` it should be true that
 /// `x == int(x) + decimal(x)`.
-class DecimalFn extends NumExpression {
-  const DecimalFn(this.arg);
-
-  final NumExpression arg;
-
+class const DecimalFn(final NumExpression arg) extends NumExpression {
   static Expression make(
     List<FunctionArgument> args,
     YarnProject yarnProject,

@@ -6,7 +6,7 @@ import 'package:flame_3d_example/components/rendered_point_light.dart';
 import 'package:flame_3d_example/example_game_3d.dart';
 import 'package:flame_3d_example/scenarios/game_scenario.dart';
 
-class ColorsScenario implements GameScenario {
+class ColorsScenario() implements GameScenario {
   @override
   Future<void> onLoad() async {}
 

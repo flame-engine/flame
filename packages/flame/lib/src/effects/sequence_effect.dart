@@ -46,28 +46,29 @@ EffectController _createController({
 /// [EffectController] as a parameter. This is because the timing of a sequence
 /// effect depends on the timings of individual effects, and cannot be
 /// represented as a regular effect controller.
-class SequenceEffect extends Effect with CustomTraversal {
-  SequenceEffect(
-    List<Effect> effects, {
-    bool alternate = false,
-    bool infinite = false,
-    int repeatCount = 1,
-    super.onComplete,
-    super.key,
-  }) : assert(effects.isNotEmpty, 'The list of effects cannot be empty'),
-       assert(
-         !(infinite && repeatCount != 1),
-         'Parameters infinite and repeatCount cannot be specified '
-         'simultaneously',
-       ),
-       super(
-         _createController(
-           effects: effects,
-           alternate: alternate,
-           infinite: infinite,
-           repeatCount: repeatCount,
-         ),
-       ) {
+class SequenceEffect(
+  List<Effect> effects, {
+  bool alternate = false,
+  bool infinite = false,
+  int repeatCount = 1,
+  super.onComplete,
+  super.key,
+}) extends Effect with CustomTraversal {
+  this
+    : assert(effects.isNotEmpty, 'The list of effects cannot be empty'),
+      assert(
+        !(infinite && repeatCount != 1),
+        'Parameters infinite and repeatCount cannot be specified '
+        'simultaneously',
+      ),
+      super(
+        _createController(
+          effects: effects,
+          alternate: alternate,
+          infinite: infinite,
+          repeatCount: repeatCount,
+        ),
+      ) {
     addAll(effects);
   }
 
@@ -90,18 +91,15 @@ class SequenceEffect extends Effect with CustomTraversal {
 /// The provided implementation returns a value proportional to the number of
 /// effects that has already completed, however this is not used anywhere since
 /// `SequenceEffect.apply()` is empty.
-class _SequenceEffectEffectController extends EffectController {
-  _SequenceEffectEffectController(
-    this.effects, {
-    required this.alternate,
-  }) : super.empty();
-
+class _SequenceEffectEffectController(
   /// The list of children effects.
-  final List<Effect> effects;
+  final List<Effect> effects, {
 
   /// If this flag is true, then after the sequence runs to the end, it will
   /// run again in the reverse order.
-  final bool alternate;
+  required final bool alternate,
+}) extends EffectController {
+  this : super.empty();
 
   /// Index of the currently running effect within the [effects] list. If there
   /// are n effects in total, then this runs as 0, 1, ..., n-1. After that, if

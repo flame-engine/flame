@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame_isolate_example/terrain/terrain.dart';
 import 'package:material_ui/material_ui.dart';
 
-class Grass extends PositionComponent with Terrain {
+class Grass() extends PositionComponent with Terrain {
   static final _color = Paint()..color = const Color(0xff567d46);
   static final _debugColor = Paint()
     ..color = Colors.black.withValues(alpha: 0.5);

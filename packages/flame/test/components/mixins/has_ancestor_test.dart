@@ -35,10 +35,10 @@ void main() {
   });
 }
 
-class _AncestorComponent extends Component {}
+class _AncestorComponent() extends Component;
 
-class _InBetweenComponent extends Component {}
+class _InBetweenComponent() extends Component;
 
-class _DifferentComponent extends Component {}
+class _DifferentComponent() extends Component;
 
-class _TestComponent extends Component with HasAncestor<_AncestorComponent> {}
+class _TestComponent() extends Component with HasAncestor<_AncestorComponent>;

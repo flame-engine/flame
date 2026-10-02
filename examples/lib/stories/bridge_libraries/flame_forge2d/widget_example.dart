@@ -7,7 +7,7 @@ import 'package:material_ui/material_ui.dart';
 
 /// The body shape that a widget is given, which follows the shape that
 /// Material draws it with.
-enum WidgetShape {
+enum WidgetShape() {
   /// A plain box, for the app bar.
   box,
 
@@ -20,12 +20,10 @@ enum WidgetShape {
 }
 
 /// One of the widgets of the counter app, carried by a Forge2D body.
-class FallingWidget {
-  FallingWidget(this.shape);
-
+class FallingWidget(
   /// The shape of the body underneath the widget.
-  final WidgetShape shape;
-
+  final WidgetShape shape,
+) {
   Body? _body;
 
   /// The body that carries the widget, which only exists once the widget has
@@ -38,7 +36,7 @@ class FallingWidget {
   Size size = Size.zero;
 }
 
-class WidgetExample extends Forge2DExampleGame {
+class WidgetExample() extends Forge2DExampleGame {
   static const String description = '''
     This is the app that `flutter create` gives you, except that every widget
     rests on a Forge2D body and drops to the floor when the example starts.
@@ -51,7 +49,7 @@ class WidgetExample extends Forge2DExampleGame {
   /// How many pixels one meter of the physics world is rendered as.
   static const scale = 20.0;
 
-  WidgetExample() : super(metersToPixels: scale, gravity: Vector2(0, 10.0));
+  this : super(metersToPixels: scale, gravity: Vector2(0, 10.0));
 
   final _random = Random();
 
@@ -201,9 +199,7 @@ class WidgetExample extends Forge2DExampleGame {
   }
 }
 
-class BodyWidgetExample extends StatelessWidget {
-  const BodyWidgetExample({super.key});
-
+class const BodyWidgetExample({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GameWidget<WidgetExample>(
@@ -218,16 +214,13 @@ class BodyWidgetExample extends StatelessWidget {
 
 /// The widget tree of the counter app, with every widget positioned by the
 /// body that carries it.
-class CounterAppOverlay extends StatefulWidget {
-  const CounterAppOverlay(this.game, {super.key});
-
-  final WidgetExample game;
-
+class const CounterAppOverlay(final WidgetExample game, {super.key})
+    extends StatefulWidget {
   @override
   State<CounterAppOverlay> createState() => _CounterAppOverlayState();
 }
 
-class _CounterAppOverlayState extends State<CounterAppOverlay> {
+class _CounterAppOverlayState() extends State<CounterAppOverlay> {
   static const _appBarHeight = 56.0;
 
   /// How much of the width the app bar covers. A bar that spans the whole

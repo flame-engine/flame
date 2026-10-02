@@ -318,12 +318,13 @@ void main() {
   });
 }
 
-class _MyComponent extends PositionComponent with HasPaint {}
+class _MyComponent() extends PositionComponent with HasPaint;
 
-enum _MyComponentKeys {
+enum _MyComponentKeys() {
   background,
   foreground,
 }
 
-class _MyComponentWithType extends PositionComponent
-    with HasPaint<_MyComponentKeys> {}
+class _MyComponentWithType()
+    extends PositionComponent
+    with HasPaint<_MyComponentKeys>;

@@ -8,7 +8,8 @@ import 'package:flame/geometry.dart';
 import 'package:flame/palette.dart';
 import 'package:material_ui/material_ui.dart';
 
-class RayTraceExample extends FlameGame
+class RayTraceExample()
+    extends FlameGame
     with HasCollisionDetection, TapCallbacks {
   Paint paint = Paint()..color = Colors.red.withValues(alpha: 0.6);
   bool isClicked = false;

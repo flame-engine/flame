@@ -4,7 +4,8 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/services.dart';
 
-class KeyboardListenerComponentExample extends FlameGame
+class KeyboardListenerComponentExample()
+    extends FlameGame
     with HasKeyboardHandlerComponents {
   static const String description = '''
     Similar to the default Keyboard example, but shows a different

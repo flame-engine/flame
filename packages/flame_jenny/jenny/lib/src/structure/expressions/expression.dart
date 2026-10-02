@@ -1,6 +1,4 @@
-abstract class Expression {
-  const Expression();
-
+abstract class const Expression() {
   dynamic get value;
 
   bool get isNumeric => type == ExpressionType.numeric;
@@ -17,30 +15,24 @@ abstract class Expression {
   }
 }
 
-enum ExpressionType {
+enum ExpressionType() {
   unknown,
   boolean,
   numeric,
   string,
 }
 
-abstract class NumExpression extends Expression {
-  const NumExpression();
-
+abstract class const NumExpression() extends Expression {
   @override
   num get value;
 }
 
-abstract class StringExpression extends Expression {
-  const StringExpression();
-
+abstract class const StringExpression() extends Expression {
   @override
   String get value;
 }
 
-abstract class BoolExpression extends Expression {
-  const BoolExpression();
-
+abstract class const BoolExpression() extends Expression {
   @override
   bool get value;
 }

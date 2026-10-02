@@ -2,12 +2,8 @@ import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/operators/_common.dart';
 
 /// Operator LESS_OR_EQUAL (<=), applies to numeric operands only.
-class LessOrEqual extends BoolExpression {
-  const LessOrEqual(this._lhs, this._rhs);
-
-  final NumExpression _lhs;
-  final NumExpression _rhs;
-
+class const LessOrEqual(final NumExpression _lhs, final NumExpression _rhs)
+    extends BoolExpression {
   /// Static constructor, used by parse.dart
   factory LessOrEqual.make(
     Expression lhs,

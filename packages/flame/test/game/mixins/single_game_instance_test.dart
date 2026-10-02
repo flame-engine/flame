@@ -52,11 +52,11 @@ void main() {
   });
 }
 
-class _DelayedComponent extends Component {
+class _DelayedComponent() extends Component {
   @override
   Future<void> onLoad() async {
     await Future<int?>.delayed(const Duration(milliseconds: 20));
   }
 }
 
-class _SingletonGame extends FlameGame with SingleGameInstance {}
+class _SingletonGame() extends FlameGame with SingleGameInstance;

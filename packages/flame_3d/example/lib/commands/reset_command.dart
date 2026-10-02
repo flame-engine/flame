@@ -1,7 +1,7 @@
 import 'package:flame_3d_example/example_game_3d.dart';
 import 'package:flame_console/flame_console.dart';
 
-class ResetCommand extends FlameConsoleCommand<ExampleGame3D> {
+class ResetCommand() extends FlameConsoleCommand<ExampleGame3D> {
   @override
   String get name => 'reset';
 

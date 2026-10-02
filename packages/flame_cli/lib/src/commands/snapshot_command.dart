@@ -10,8 +10,8 @@ import 'package:io/io.dart';
 import 'package:path/path.dart' as p;
 
 /// Renders the whole game, the world, or a single component, to a PNG image.
-class SnapshotCommand extends FlameCommand {
-  SnapshotCommand(super.out, super.workingDirectory) {
+class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
+  this {
     argParser
       ..addOption(
         'output',
@@ -108,7 +108,7 @@ class SnapshotCommand extends FlameCommand {
             args: {
               'pixelRatio': pixelRatio,
               if (argResults!.flag('world')) 'world': 'true',
-              if (rect != null) 'rect': rect,
+              'rect': ?rect,
             },
           )
         : await connection.call(

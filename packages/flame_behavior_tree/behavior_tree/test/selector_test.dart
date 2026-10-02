@@ -104,14 +104,11 @@ void main() {
   });
 }
 
-class _MockNode extends Mock implements NodeInterface {}
+class _MockNode() extends Mock implements NodeInterface;
 
-class _StatusAfterNTries extends BaseNode implements NodeInterface {
-  _StatusAfterNTries(this.nTries, this.statusAfterTries);
-
-  final int nTries;
-  final NodeStatus statusAfterTries;
-
+class _StatusAfterNTries(final int nTries, final NodeStatus statusAfterTries)
+    extends BaseNode
+    implements NodeInterface {
   var _tickCount = 0;
   int get tickCount => _tickCount;
 

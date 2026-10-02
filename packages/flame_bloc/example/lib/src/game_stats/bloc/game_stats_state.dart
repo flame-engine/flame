@@ -1,23 +1,17 @@
 part of 'game_stats_bloc.dart';
 
-enum GameStatus {
+enum GameStatus() {
   initial,
   respawn,
   respawned,
   gameOver,
 }
 
-class GameStatsState extends Equatable {
-  final int score;
-  final int lives;
-  final GameStatus status;
-
-  const GameStatsState({
-    required this.score,
-    required this.lives,
-    required this.status,
-  });
-
+class const GameStatsState({
+  required final int score,
+  required final int lives,
+  required final GameStatus status,
+}) extends Equatable {
   const GameStatsState.empty()
     : this(
         score: 0,

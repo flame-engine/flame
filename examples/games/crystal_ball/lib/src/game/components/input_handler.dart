@@ -4,9 +4,10 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/services.dart';
 
-class InputHandler extends PositionComponent
+class InputHandler()
+    extends PositionComponent
     with TapCallbacks, HasGameRef<CrystalBallGame> {
-  InputHandler()
+  this
     : super(
         anchor: Anchor.center,
         size: kCameraSize,
@@ -27,7 +28,7 @@ class InputHandler extends PositionComponent
       ),
     );
 
-    return super.onLoad();
+    await super.onLoad();
   }
 
   @override

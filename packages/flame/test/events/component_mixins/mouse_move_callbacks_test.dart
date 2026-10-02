@@ -102,13 +102,11 @@ mixin _MouseMoveInspector on MouseMoveCallbacks {
   }
 }
 
-class _MouseMoveCallbacksComponent extends PositionComponent
-    with MouseMoveCallbacks, _MouseMoveInspector {
-  _MouseMoveCallbacksComponent({
-    super.position,
-    super.size,
-  });
-}
+class _MouseMoveCallbacksComponent({
+  super.position,
+  super.size,
+}) extends PositionComponent with MouseMoveCallbacks, _MouseMoveInspector;
 
-class _MouseMoveCallbacksGame extends FlameGame
-    with MouseMoveCallbacks, _MouseMoveInspector {}
+class _MouseMoveCallbacksGame()
+    extends FlameGame
+    with MouseMoveCallbacks, _MouseMoveInspector;

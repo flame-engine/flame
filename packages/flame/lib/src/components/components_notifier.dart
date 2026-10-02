@@ -11,10 +11,9 @@ import 'package:meta/meta.dart';
 ///
 /// For example, in a Player component, that holds a health variable
 /// you may want to notify changes when that variable has changed.
-class ComponentsNotifier<T extends Component> extends ChangeNotifier {
-  ComponentsNotifier(List<T> initial) : _components = initial;
-
-  final List<T> _components;
+class ComponentsNotifier<T extends Component>(List<T> initial)
+    extends ChangeNotifier {
+  final List<T> _components = initial;
 
   /// The list of components.
   List<T> get components => UnmodifiableListView(_components);

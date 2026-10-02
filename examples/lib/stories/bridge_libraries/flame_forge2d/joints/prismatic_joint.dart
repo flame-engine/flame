@@ -3,7 +3,7 @@ import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/joint_rend
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class PrismaticJointExample extends Forge2DExampleGame {
+class PrismaticJointExample() extends Forge2DExampleGame {
   static const description = '''
     This example shows how to use a `PrismaticJoint`.
 

@@ -5,14 +5,14 @@ import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:material_ui/material_ui.dart' hide Draggable;
 
-class DragCallbacksExample extends Forge2DExampleGame {
+class DragCallbacksExample() extends Forge2DExampleGame {
   static const description = '''
     In this example we use Flame's normal `DragCallbacks` mixin to give impulses
     to a ball when we are dragging it around. If you are interested in dragging
     bodies around, also have a look at the MouseJointExample.
   ''';
 
-  DragCallbacksExample() : super(gravity: Vector2.all(0.0));
+  this : super(gravity: Vector2.all(0.0));
 
   @override
   Future<void> onLoad() async {
@@ -23,8 +23,8 @@ class DragCallbacksExample extends Forge2DExampleGame {
   }
 }
 
-class DraggableBall extends Ball with DragCallbacks {
-  DraggableBall(super.position) : super(radius: 5) {
+class DraggableBall(super.position) extends Ball with DragCallbacks {
+  this : super(radius: 5) {
     originalPaint = Paint()..color = Colors.amber;
     paint = originalPaint;
   }

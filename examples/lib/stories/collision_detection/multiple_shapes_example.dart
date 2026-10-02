@@ -7,11 +7,16 @@ import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
-import 'package:material_ui/material_ui.dart' hide Image, Draggable;
+import 'package:material_ui/material_ui.dart' hide Draggable, Image;
 
-enum Shapes { circle, rectangle, polygon, path }
+enum Shapes() {
+  circle,
+  rectangle,
+  polygon,
+  path,
+}
 
-class MultipleShapesExample extends FlameGame with HasCollisionDetection {
+class MultipleShapesExample() extends FlameGame with HasCollisionDetection {
   static const description = '''
     An example with many hitboxes that move around on the screen and during
     collisions they change color depending on what it is that they have collided
@@ -25,14 +30,14 @@ class MultipleShapesExample extends FlameGame with HasCollisionDetection {
     any direction.
   ''';
 
-  MultipleShapesExample()
+  this
     : super(
         world: MultiShapesWorld(),
         camera: CameraComponent()..viewfinder.anchor = Anchor.topLeft,
       );
 }
 
-class MultiShapesWorld extends World with HasGameRef {
+class MultiShapesWorld() extends World with HasGameRef {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -91,10 +96,14 @@ class MultiShapesWorld extends World with HasGameRef {
   }
 }
 
-abstract class MyCollidable extends PositionComponent
+abstract class MyCollidable(
+  Vector2 position,
+  Vector2 size,
+  final Vector2 velocity,
+  final ScreenHitbox screenHitbox,
+) extends PositionComponent
     with DragCallbacks, CollisionCallbacks, GestureHitboxes {
   double rotationSpeed = 0.0;
-  final Vector2 velocity;
   final delta = Vector2.zero();
   double angleDelta = 0;
   final Color defaultColor = Colors.blue.withValues(alpha: 0.8);
@@ -102,15 +111,9 @@ abstract class MyCollidable extends PositionComponent
   final Color screenColor = Colors.purple.withValues(alpha: 0.8);
 
   late final Paint dragIndicatorPaint;
-  final ScreenHitbox screenHitbox;
   ShapeHitbox? hitbox;
 
-  MyCollidable(
-    Vector2 position,
-    Vector2 size,
-    this.velocity,
-    this.screenHitbox,
-  ) : super(position: position, size: size, anchor: Anchor.center) {
+  this : super(position: position, size: size, anchor: Anchor.center) {
     dragIndicatorPaint = BasicPalette.white.paint();
   }
 
@@ -173,13 +176,13 @@ abstract class MyCollidable extends PositionComponent
   }
 }
 
-class CollidablePolygon extends MyCollidable {
-  CollidablePolygon(
-    Vector2 position,
-    Vector2 size,
-    Vector2 velocity,
-    ScreenHitbox screenHitbox,
-  ) : super(position, size, velocity, screenHitbox) {
+class CollidablePolygon(
+  Vector2 position,
+  Vector2 size,
+  Vector2 velocity,
+  ScreenHitbox screenHitbox,
+) extends MyCollidable {
+  this : super(position, size, velocity, screenHitbox) {
     hitbox = PolygonHitbox.relative(
       [
         Vector2(-1.0, 0.0),
@@ -197,13 +200,13 @@ class CollidablePolygon extends MyCollidable {
   }
 }
 
-class CollidablePath extends MyCollidable {
-  CollidablePath(
-    super.position,
-    super.size,
-    super.velocity,
-    super.screenHitbox,
-  ) {
+class CollidablePath(
+  super.position,
+  super.size,
+  super.velocity,
+  super.screenHitbox,
+) extends MyCollidable {
+  this {
     // The path keeps its aspect ratio within the size, so the hitbox is
     // centered in the component.
     hitbox = PathHitbox(
@@ -215,36 +218,34 @@ class CollidablePath extends MyCollidable {
   }
 }
 
-class CollidableRectangle extends MyCollidable {
-  CollidableRectangle(
-    super.position,
-    super.size,
-    super.velocity,
-    super.screenHitbox,
-  ) {
+class CollidableRectangle(
+  super.position,
+  super.size,
+  super.velocity,
+  super.screenHitbox,
+) extends MyCollidable {
+  this {
     hitbox = RectangleHitbox()..renderShape = true;
     add(hitbox!);
   }
 }
 
-class CollidableCircle extends MyCollidable {
-  CollidableCircle(
-    super.position,
-    super.size,
-    super.velocity,
-    super.screenHitbox,
-  ) {
+class CollidableCircle(
+  super.position,
+  super.size,
+  super.velocity,
+  super.screenHitbox,
+) extends MyCollidable {
+  this {
     hitbox = CircleHitbox()..renderShape = true;
     add(hitbox!);
   }
 }
 
-class SnowmanPart extends CircleHitbox {
+class SnowmanPart(double radius, Vector2 position, final Color hitColor)
+    extends CircleHitbox {
   final startColor = Colors.white.withValues(alpha: 0.8);
-  final Color hitColor;
-
-  SnowmanPart(double radius, Vector2 position, this.hitColor)
-    : super(radius: radius, position: position, anchor: Anchor.center) {
+  this : super(radius: radius, position: position, anchor: Anchor.center) {
     paint.color = startColor;
     renderShape = true;
   }
@@ -269,13 +270,13 @@ class SnowmanPart extends CircleHitbox {
   }
 }
 
-class CollidableSnowman extends MyCollidable {
-  CollidableSnowman(
-    Vector2 position,
-    Vector2 size,
-    Vector2 velocity,
-    ScreenHitbox screenHitbox,
-  ) : super(position, size, velocity, screenHitbox) {
+class CollidableSnowman(
+  Vector2 position,
+  Vector2 size,
+  Vector2 velocity,
+  ScreenHitbox screenHitbox,
+) extends MyCollidable {
+  this : super(position, size, velocity, screenHitbox) {
     rotationSpeed = 0.3;
     anchor = Anchor.topLeft;
     final top = SnowmanPart(

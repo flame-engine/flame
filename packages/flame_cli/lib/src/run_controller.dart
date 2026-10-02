@@ -6,14 +6,12 @@ import 'package:flame_cli/src/project_files.dart';
 
 /// The request that the `reload` and `restart` commands send to `flame run`,
 /// as one line on the control port.
-enum RunRequest {
-  reload('r'),
-  restart('R');
-
-  const RunRequest(this.key);
-
+enum RunRequest(
   /// The key that `flutter run` expects for the request.
-  final String key;
+  final String key,
+) {
+  reload('r'),
+  restart('R'),
 }
 
 /// Manages a `flutter run` [process] that was started by `flame run`.
@@ -31,29 +29,20 @@ enum RunRequest {
 /// `flame run` takes them over, the controller stops writing to the log and
 /// leaves the files alone when it exits, and when the newer run stops it
 /// takes the files back.
-class RunController {
-  RunController({
-    required this.process,
-    required this.projectDirectory,
-    this.input,
-    StringSink? out,
-    StringSink? err,
-    this.responseTimeout = const Duration(minutes: 2),
-    this.ownershipCheckInterval = const Duration(seconds: 1),
-  }) : _out = out ?? stdout,
-       _err = err ?? stderr;
-
-  final Process process;
-  final Directory projectDirectory;
-  final Stream<List<int>>? input;
-  final Duration responseTimeout;
+class RunController({
+  required final Process process,
+  required final Directory projectDirectory,
+  final Stream<List<int>>? input,
+  StringSink? out,
+  StringSink? err,
+  final Duration responseTimeout = const Duration(minutes: 2),
 
   /// How often the control port file is checked to find out whether a newer
   /// `flame run` has taken over the project, or has stopped again.
-  final Duration ownershipCheckInterval;
-
-  final StringSink _out;
-  final StringSink _err;
+  final Duration ownershipCheckInterval = const Duration(seconds: 1),
+}) {
+  final StringSink _out = out ?? stdout;
+  final StringSink _err = err ?? stderr;
 
   final _lines = StreamController<String>.broadcast();
   Future<void> _requests = Future.value();

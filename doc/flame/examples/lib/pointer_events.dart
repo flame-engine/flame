@@ -5,7 +5,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/rendering.dart';
 
-class PointerEventsGame extends FlameGame with TapCallbacks {
+class PointerEventsGame() extends FlameGame with TapCallbacks {
   @override
   Future<void> onLoad() async {
     add(HoverTarget(Vector2(100, 200)));
@@ -19,10 +19,12 @@ class PointerEventsGame extends FlameGame with TapCallbacks {
   }
 }
 
-class HoverTarget extends PositionComponent with HoverCallbacks {
+class HoverTarget(Vector2 position)
+    extends PositionComponent
+    with HoverCallbacks {
   static final Random _random = Random();
 
-  HoverTarget(Vector2 position)
+  this
     : super(
         position: position,
         size: Vector2.all(50),

@@ -3,25 +3,22 @@ import 'package:flame_3d/src/parser/gltf/gltf_root.dart';
 import 'package:flame_3d/src/parser/gltf/texture_info.dart';
 
 /// Material Normal Texture Info.
-class NormalTextureInfo extends TextureInfo {
+class NormalTextureInfo({
+  required super.root,
+  required super.index,
+  required super.texCoord,
+
   /// The scalar parameter applied to each normal vector of the texture.
   ///
   /// This value scales the normal vector in X and Y directions using the
   /// formula:
   ///
-  /// ```
+  /// ```text
   ///   scaledNormal =  normalize((<sampled normal texture value> * 2.0 - 1.0)
   ///                       * vec3(<normal scale>, <normal scale>, 1.0))
   /// ```
-  final double scale;
-
-  NormalTextureInfo({
-    required super.root,
-    required super.index,
-    required super.texCoord,
-    required this.scale,
-  });
-
+  required final double scale,
+}) extends TextureInfo {
   NormalTextureInfo.parse(
     GltfRoot root,
     Map<String, Object?> map,

@@ -7,11 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
-class _SvgPainter extends CustomPainter {
-  final flame_svg.Svg svg;
-
-  _SvgPainter(this.svg);
-
+class _SvgPainter(final flame_svg.Svg svg) extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     svg.render(canvas, Vector2(size.width, size.height));

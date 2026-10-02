@@ -4,9 +4,7 @@ import 'package:flame/src/effects/transform2d_effect.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _MyEffect extends Transform2DEffect {
-  _MyEffect(super.controller);
-
+class _MyEffect(super.controller) extends Transform2DEffect {
   @override
   void apply(double progress) {}
 }

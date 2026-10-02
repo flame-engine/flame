@@ -3,7 +3,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-class _MockImage extends Mock implements Image {}
+class _MockImage() extends Mock implements Image;
 
 void main() {
   group('ImageComposition', () {

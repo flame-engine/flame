@@ -23,14 +23,18 @@ import 'package:meta/meta.dart';
 /// The [SpriteFont] can be either variable-width or monospace. For a monospace
 /// font you can pass the `defaultCharWidth` parameter in the constructor so
 /// that you wouldn't have to specify the width of each glyph.
-class SpriteFont {
-  SpriteFont({
-    required this.source,
-    required this.size,
-    required this.ascent,
-    required List<Glyph> glyphs,
-    double? defaultCharWidth,
-  }) : _data = <int, _Chain>{} {
+class SpriteFont({
+  required final Image source,
+
+  /// The font size, i.e. the height of all characters in the font.
+  required final double size,
+
+  /// The distance from the top of every character to its baseline.
+  required final double ascent,
+  required List<Glyph> glyphs,
+  double? defaultCharWidth,
+}) {
+  this : _data = <int, _Chain>{} {
     for (final glyph in glyphs) {
       var data = _data;
       for (var i = 0; i < glyph.char.length - 1; i++) {
@@ -47,14 +51,6 @@ class SpriteFont {
       chain.glyph = glyph;
     }
   }
-
-  final Image source;
-
-  /// The font size, i.e. the height of all characters in the font.
-  final double size;
-
-  /// The distance from the top of every character to its baseline.
-  final double ascent;
 
   /// Contains information about the characters of the font. The keys in this
   /// map are the characters' code points. If a particular "character" has a
@@ -95,7 +91,7 @@ class SpriteFont {
   }
 }
 
-class _Chain {
+class _Chain() {
   Glyph? glyph;
   Map<int, _Chain>? followOn;
 }

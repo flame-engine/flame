@@ -9,8 +9,9 @@ import 'package:io/io.dart';
 import 'package:path/path.dart' as p;
 
 /// Compares two PNG images, for example two snapshots.
-class DiffCommand extends Command<int> {
-  DiffCommand(this.out, this.workingDirectory) {
+class DiffCommand(final StringSink out, final Directory workingDirectory)
+    extends Command<int> {
+  this {
     argParser
       ..addOption(
         'output',
@@ -33,9 +34,6 @@ class DiffCommand extends Command<int> {
         help: 'Exit with 1 when the images differ, like `git diff`.',
       );
   }
-
-  final StringSink out;
-  final Directory workingDirectory;
 
   @override
   String get name => 'diff';

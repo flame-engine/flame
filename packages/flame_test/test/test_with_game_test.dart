@@ -44,7 +44,7 @@ void main() {
   });
 }
 
-class _RecordedGame extends FlameGame {
+class _RecordedGame() extends FlameGame {
   final List<String> events = [];
 
   @override

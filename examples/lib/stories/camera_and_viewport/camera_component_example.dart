@@ -8,7 +8,7 @@ import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flutter/painting.dart';
 
-class CameraComponentExample extends FlameGame<AntWorld> with DragCallbacks {
+class CameraComponentExample() extends FlameGame<AntWorld> with DragCallbacks {
   static const description = '''
     This example shows how a camera can be dynamically added into a game using
     a CameraComponent.
@@ -17,7 +17,7 @@ class CameraComponentExample extends FlameGame<AntWorld> with DragCallbacks {
     look at the world underneath! 
   ''';
 
-  CameraComponentExample() : super(world: AntWorld());
+  this : super(world: AntWorld());
 
   late final CameraComponent magnifyingGlass;
   late final Vector2 center;
@@ -79,14 +79,13 @@ class CameraComponentExample extends FlameGame<AntWorld> with DragCallbacks {
   }
 }
 
-class Bezel extends PositionComponent {
-  Bezel(this.radius)
+class Bezel(final double radius) extends PositionComponent {
+  this
     : super(
         size: Vector2.all(2 * radius),
         position: Vector2.all(radius),
       );
 
-  final double radius;
   late final Path rim;
   late final Path rimBorder;
   late final Path handle;
@@ -164,7 +163,7 @@ class Bezel extends PositionComponent {
   }
 }
 
-class AntWorld extends World {
+class AntWorld() extends World {
   late final DragonCurve curve;
   late final Rect bgRect;
   final Paint bgPaint = Paint()..color = const Color(0xffeeeeee);
@@ -196,7 +195,7 @@ class AntWorld extends World {
   }
 }
 
-class DragonCurve extends PositionComponent {
+class DragonCurve() extends PositionComponent {
   late final Paint borderPaint;
   late final Paint mainPaint;
   late final Path dragon;
@@ -260,8 +259,8 @@ class DragonCurve extends PositionComponent {
   }
 }
 
-class Ant extends PositionComponent {
-  Ant() : random = Random() {
+class Ant() extends PositionComponent {
+  this : random = Random() {
     size = Vector2(2, 5);
     anchor = const Anchor(0.5, 0.4);
   }
@@ -481,39 +480,29 @@ class Ant extends PositionComponent {
   }
 }
 
-class InsectLeg {
-  InsectLeg(
-    this.x0,
-    this.y0,
-    this.x1,
-    this.y1,
-    this.l1,
-    this.l2,
-    this.l3, {
-    required bool mirrorBendDirection,
-  }) : dir = mirrorBendDirection ? -1 : 1,
-       path = Path(),
-       foot = Vector2.zero() {
+class InsectLeg(
+  /// Place where the leg is attached to the body
+  final double x0,
+  final double y0,
+
+  /// Place on the ground where the ant needs to place its foot
+  final double x1,
+  final double y1,
+
+  /// Lengths of the 3 segments of the leg: [l1] is nearest to the body, [l2]
+  /// is the middle part, and [l3] is the "foot".
+  final double l1,
+  final double l2,
+  final double l3, {
+  required bool mirrorBendDirection,
+}) {
+  this : path = Path(), foot = Vector2.zero() {
     final ok = placeFoot(Vector2(x1, y1));
     assert(ok, 'The foot was not properly placed');
   }
 
-  /// Place where the leg is attached to the body
-  final double x0;
-  final double y0;
-
-  /// Place on the ground where the ant needs to place its foot
-  final double x1;
-  final double y1;
-
-  /// Lengths of the 3 segments of the leg: [l1] is nearest to the body, [l2]
-  /// is the middle part, and [l3] is the "foot".
-  final double l1;
-  final double l2;
-  final double l3;
-
   /// +1 if the leg bends "forward", or -1 if backwards
-  final double dir;
+  final double dir = mirrorBendDirection ? -1 : 1;
 
   /// The leg is drawn as a simple [path] polyline consisting of 3 segments.
   final Path path;

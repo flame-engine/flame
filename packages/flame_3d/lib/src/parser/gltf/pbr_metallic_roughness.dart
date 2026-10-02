@@ -8,11 +8,13 @@ import 'package:flame_3d/src/parser/gltf/texture_info.dart';
 
 /// A set of parameter values that are used to define the metallic-roughness
 /// material model from Physically-Based Rendering (PBR) methodology.
-class PBRMetallicRoughness extends GltfNode {
+class PBRMetallicRoughness({
+  required super.root,
+
   /// The factors for the base color of the material.
   /// This value defines linear multipliers for the sampled texels of the base
   /// color texture.
-  final Vector4? baseColorFactor;
+  required final Vector4? baseColorFactor,
 
   /// The base color texture.
   ///
@@ -25,19 +27,19 @@ class PBRMetallicRoughness extends GltfNode {
   /// The `material.alphaMode` property specifies how alpha is interpreted.
   /// The stored texels **MUST NOT** be premultiplied. When undefined,
   /// the texture **MUST** be sampled as having `1.0` in all components."
-  final TextureInfo? baseColorTexture;
+  required final TextureInfo? baseColorTexture,
 
   /// The factor for the metalness of the material.
   /// This value defines a linear multiplier for the sampled metalness values
   /// of the metallic-roughness texture.
   /// Goes from [0, 1]. Default value is 1.
-  final double metallicFactor;
+  required final double metallicFactor,
 
   /// The factor for the roughness of the material.
   /// This value defines a linear multiplier for the sampled roughness values
   /// of the metallic-roughness texture.
   /// Goes from [0, 1]. Default value is 1.
-  final double roughnessFactor;
+  required final double roughnessFactor,
 
   /// The metallic-roughness texture.
   /// The metalness values are sampled from the B channel.
@@ -47,17 +49,8 @@ class PBRMetallicRoughness extends GltfNode {
   /// metallic-roughness calculations.
   /// When undefined, the texture **MUST** be sampled as having `1.0` in
   /// G and B components."
-  final TextureInfo? metallicRoughnessTexture;
-
-  PBRMetallicRoughness({
-    required super.root,
-    required this.baseColorFactor,
-    required this.baseColorTexture,
-    required this.metallicFactor,
-    required this.roughnessFactor,
-    required this.metallicRoughnessTexture,
-  });
-
+  required final TextureInfo? metallicRoughnessTexture,
+}) extends GltfNode {
   PBRMetallicRoughness.parse(
     GltfRoot root,
     Map<String, Object?> map,

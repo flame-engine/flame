@@ -1,30 +1,14 @@
 import 'package:jenny/src/structure/expressions/expression.dart';
 
-class NumLiteral extends NumExpression {
-  const NumLiteral(this.value);
+class const NumLiteral(@override final num value) extends NumExpression;
 
-  @override
-  final num value;
-}
+class const StringLiteral(@override final String value)
+    extends StringExpression;
 
-class StringLiteral extends StringExpression {
-  const StringLiteral(this.value);
+// ignore: avoid_positional_boolean_parameters
+class const BoolLiteral(@override final bool value) extends BoolExpression;
 
-  @override
-  final String value;
-}
-
-class BoolLiteral extends BoolExpression {
-  // ignore: avoid_positional_boolean_parameters
-  const BoolLiteral(this.value);
-
-  @override
-  final bool value;
-}
-
-class VoidLiteral extends Expression {
-  const VoidLiteral();
-
+class const VoidLiteral() extends Expression {
   @override
   dynamic get value => null;
 }

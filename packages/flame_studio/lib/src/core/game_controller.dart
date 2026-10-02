@@ -8,12 +8,7 @@ final gameControllerProvider =
     );
 
 @immutable
-class _GameState {
-  const _GameState({this.game, this.paused = false});
-
-  final Game? game;
-  final bool paused;
-
+class const _GameState({final Game? game, final bool paused = false}) {
   _GameState copyWith({
     Game? game,
     bool? paused,
@@ -32,8 +27,8 @@ class _GameState {
   int get hashCode => Object.hash(game, paused);
 }
 
-class _GameController extends StateNotifier<_GameState> {
-  _GameController() : super(const _GameState()) {
+class _GameController() extends StateNotifier<_GameState> {
+  this : super(const _GameState()) {
     WidgetsFlutterBinding.ensureInitialized();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final game = _findGame();

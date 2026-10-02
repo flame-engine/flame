@@ -5,12 +5,8 @@ import 'package:jenny/src/structure/expressions/operators/_common.dart';
 ///
 /// The AND operator returns `true` if both of its operands are `true`, and
 /// `false` otherwise.
-class And extends BoolExpression {
-  And(this._lhs, this._rhs);
-
-  final BoolExpression _lhs;
-  final BoolExpression _rhs;
-
+class And(final BoolExpression _lhs, final BoolExpression _rhs)
+    extends BoolExpression {
   /// Static constructor, used by parse.dart.
   factory And.make(
     Expression lhs,

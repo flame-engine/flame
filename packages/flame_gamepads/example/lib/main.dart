@@ -10,13 +10,13 @@ void main() {
   runApp(GameWidget(game: GamepadsGame()));
 }
 
-class GamepadsGame extends FlameGame {
+class GamepadsGame() extends FlameGame {
   PlayerComponent? player;
 
   static const worldSizeX = 16.0 * 28;
   static const worldSizeY = 16.0 * 14;
 
-  GamepadsGame()
+  this
     : super(
         camera: CameraComponent.withFixedResolution(
           width: worldSizeX,
@@ -45,12 +45,10 @@ class GamepadsGame extends FlameGame {
   }
 }
 
-class PlayerComponent extends RectangleComponent with GamepadCallbacks {
-  final double worldSizeX;
-  final double worldSizeY;
-
-  PlayerComponent({required this.worldSizeX, required this.worldSizeY});
-
+class PlayerComponent({
+  required final double worldSizeX,
+  required final double worldSizeY,
+}) extends RectangleComponent with GamepadCallbacks {
   double inputX = 0;
   double inputY = 0;
 

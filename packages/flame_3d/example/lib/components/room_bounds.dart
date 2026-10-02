@@ -5,7 +5,7 @@ import 'package:flame/palette.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/resources.dart';
 
-class RoomBounds extends Component {
+class RoomBounds() extends Component {
   @override
   FutureOr<void> onLoad() {
     addAll([

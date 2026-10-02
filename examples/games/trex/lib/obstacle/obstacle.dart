@@ -3,20 +3,17 @@ import 'package:flame/extensions.dart';
 import 'package:trex_game/obstacle/obstacle_type.dart';
 import 'package:trex_game/trex_game.dart';
 
-class Obstacle extends SpriteComponent with HasGameRef<TRexGame> {
-  Obstacle({
-    required this.settings,
-    required this.groupIndex,
-  }) : super(size: settings.size);
+class Obstacle({
+  required final ObstacleTypeSettings settings,
+  required final int groupIndex,
+}) extends SpriteComponent with HasGameRef<TRexGame> {
+  this : super(size: settings.size);
 
   final double _gapCoefficient = 0.6;
   final double _maxGapCoefficient = 1.5;
 
   bool followingObstacleCreated = false;
   late double gap;
-  final ObstacleTypeSettings settings;
-  final int groupIndex;
-
   bool get isVisible => (x + width) > 0;
 
   @override

@@ -7,12 +7,12 @@ import 'package:flutter/gestures.dart' as flutter;
 ///
 /// This event includes scroll delta information in addition to the position
 /// where the scroll occurred.
-class ScrollEvent extends PositionEvent<flutter.PointerScrollEvent> {
-  ScrollEvent(
-    super.game,
-    flutter.PointerScrollEvent rawEvent,
-  ) : scrollDelta = rawEvent.scrollDelta.toVector2(),
-      super(
+class ScrollEvent(
+  super.game,
+  flutter.PointerScrollEvent rawEvent,
+) extends PositionEvent<flutter.PointerScrollEvent> {
+  this
+    : super(
         raw: rawEvent,
         devicePosition: rawEvent.position.toVector2(),
       );
@@ -21,7 +21,7 @@ class ScrollEvent extends PositionEvent<flutter.PointerScrollEvent> {
   ///
   /// Positive values indicate scrolling down or to the right,
   /// negative values indicate scrolling up or to the left.
-  final Vector2 scrollDelta;
+  final Vector2 scrollDelta = rawEvent.scrollDelta.toVector2();
 
   @override
   String toString() =>

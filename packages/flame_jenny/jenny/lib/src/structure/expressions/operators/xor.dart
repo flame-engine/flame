@@ -5,12 +5,8 @@ import 'package:jenny/src/structure/expressions/operators/_common.dart';
 ///
 /// The XOR operator returns `false` when both of its operands are the same,
 /// and `true` when they are different.
-class Xor extends BoolExpression {
-  Xor(this._lhs, this._rhs);
-
-  final BoolExpression _lhs;
-  final BoolExpression _rhs;
-
+class Xor(final BoolExpression _lhs, final BoolExpression _rhs)
+    extends BoolExpression {
   /// Static constructor, used by parse.dart.
   factory Xor.make(
     Expression lhs,

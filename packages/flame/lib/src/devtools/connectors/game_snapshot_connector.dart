@@ -15,7 +15,7 @@ import 'package:flame/src/devtools/dev_tools_connector.dart';
 /// `world` parameter set to `true`, or a `rect` given as `x,y,width,height`
 /// in world coordinates, the world is rendered directly instead of through
 /// the camera, which also shows the components that are off screen.
-class GameSnapshotConnector extends DevToolsConnector {
+class GameSnapshotConnector() extends DevToolsConnector {
   @override
   void init() {
     registerExtension(
@@ -87,7 +87,7 @@ class GameSnapshotConnector extends DevToolsConnector {
 
     game.render(canvas);
 
-    return _toImage(pictureRecorder, size.x, size.y, pixelRatio);
+    return await _toImage(pictureRecorder, size.x, size.y, pixelRatio);
   }
 
   /// Renders the [rect] of the world of the [game], in world coordinates,
@@ -108,7 +108,7 @@ class GameSnapshotConnector extends DevToolsConnector {
       child.renderTree(canvas);
     }
 
-    return _toImage(pictureRecorder, rect.width, rect.height, pixelRatio);
+    return await _toImage(pictureRecorder, rect.width, rect.height, pixelRatio);
   }
 
   /// The smallest rectangle, in world coordinates, that contains every

@@ -4,7 +4,7 @@ import 'package:flame_isolate_example/constants.dart';
 import 'package:flame_isolate_example/objects/colonists_object.dart';
 import 'package:flame_isolate_example/standard/int_vector2.dart';
 
-class Bread extends StaticColonistsObject {
+class Bread(super.x, super.y) extends StaticColonistsObject {
   @override
   Sprite objectSprite = Sprite(
     Flame.images.fromCache('assets/images/bread.png'),
@@ -12,8 +12,6 @@ class Bread extends StaticColonistsObject {
 
   @override
   IntVector2 tileSize = const IntVector2(1, 1);
-
-  Bread(super.x, super.y);
 
   @override
   String toString() {

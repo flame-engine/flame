@@ -6,66 +6,59 @@ import 'package:flutter/foundation.dart';
 
 export '../sprite_animation.dart';
 
-class SpriteAnimationGroupComponent<T> extends PositionComponent with HasPaint {
-  /// Key with the current playing animation
-  T? _current;
+class SpriteAnimationGroupComponent<T>({
+  /// Map with the available states for this animation group
+  var Map<T, SpriteAnimation>? _animations,
 
+  /// Key with the current playing animation
+  var T? _current,
+  bool? autoResize,
+
+  /// Whether the animation is paused or playing.
+  var bool playing = true,
+
+  /// Map with the mapping each state to the flag removeOnFinish
+  final Map<T, bool> removeOnFinish = const {},
+
+  /// Whether the current animation's ticker should reset to the beginning
+  /// when it becomes current.
+  var bool autoResetTicker = true,
+  Paint? paint,
+  super.position,
+  super.size,
+  super.scale,
+  super.angle,
+  super.nativeAngle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.key,
+}) extends PositionComponent with HasPaint {
   ValueNotifier<T?>? _currentAnimationNotifier;
 
   /// A [ValueNotifier] that notifies when the current animation changes.
   ValueNotifier<T?> get currentAnimationNotifier =>
       _currentAnimationNotifier ??= ValueNotifier<T?>(_current);
 
-  /// Map with the mapping each state to the flag removeOnFinish
-  final Map<T, bool> removeOnFinish;
-
-  /// Map with the available states for this animation group
-  Map<T, SpriteAnimation>? _animations;
-
   /// Map containing animation tickers for each animation state.
-  Map<T, SpriteAnimationTicker>? _animationTickers;
-
-  /// Whether the animation is paused or playing.
-  bool playing;
+  Map<T, SpriteAnimationTicker>? _animationTickers = _animations != null
+      ? Map.fromEntries(
+          _animations.entries
+              .map((e) => MapEntry(e.key, e.value.createTicker()))
+              .toList(),
+        )
+      : null;
 
   /// When set to true, the component is auto-resized to match the
   /// size of current animation sprite.
-  bool _autoResize;
-
-  /// Whether the current animation's ticker should reset to the beginning
-  /// when it becomes current.
-  bool autoResetTicker;
+  bool _autoResize = autoResize ?? size == null;
 
   /// Creates a component with an empty animation which can be set later
-  SpriteAnimationGroupComponent({
-    this._animations,
-    this._current,
-    bool? autoResize,
-    this.playing = true,
-    this.removeOnFinish = const {},
-    this.autoResetTicker = true,
-    Paint? paint,
-    super.position,
-    super.size,
-    super.scale,
-    super.angle,
-    super.nativeAngle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.key,
-  }) : assert(
-         (size == null) == (autoResize ?? size == null),
-         '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
-       ),
-       _autoResize = autoResize ?? size == null,
-       _animationTickers = _animations != null
-           ? Map.fromEntries(
-               _animations.entries
-                   .map((e) => MapEntry(e.key, e.value.createTicker()))
-                   .toList(),
-             )
-           : null {
+  this
+    : assert(
+        (size == null) == (autoResize ?? size == null),
+        '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
+      ) {
     if (paint != null) {
       this.paint = paint;
     }

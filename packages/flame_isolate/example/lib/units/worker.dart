@@ -7,12 +7,10 @@ import 'package:flame_isolate_example/standard/int_vector2.dart';
 import 'package:flame_isolate_example/standard/pair.dart';
 import 'package:flame_isolate_example/units/actions/movable.dart';
 
-class Worker extends SpriteAnimationGroupComponent<MoveDirection>
+class Worker(num x, num y, {@override final double speed = 50})
+    extends SpriteAnimationGroupComponent<MoveDirection>
     with ColonistsObject, HasGameRef<ColonistsGame>, Movable {
-  @override
-  final double speed;
-
-  Worker(num x, num y, {this.speed = 50}) {
+  this {
     super.y = y * Constants.tileSize;
     super.x = x * Constants.tileSize;
     height = Constants.tileSize;

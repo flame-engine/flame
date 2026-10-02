@@ -10,16 +10,14 @@ import 'package:meta/meta.dart';
 /// which keeps track of how much time has passed within this controller. The
 /// effect controller will be considered [completed] when the timer reaches the
 /// [duration] value.
-abstract class DurationEffectController extends EffectController {
-  DurationEffectController(this.duration)
+abstract class DurationEffectController(@override var double duration)
+    extends EffectController {
+  this
     : assert(duration >= 0, 'Duration cannot be negative: $duration'),
       _timer = 0,
       super.empty();
 
   double _timer;
-
-  @override
-  double duration;
 
   @protected
   double get timer => _timer;

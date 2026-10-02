@@ -166,21 +166,18 @@ mixin _ScrollInspector on ScrollCallbacks {
   }
 }
 
-class _ScrollCallbacksComponent extends PositionComponent
-    with ScrollCallbacks, _ScrollInspector {
-  _ScrollCallbacksComponent({
-    super.position,
-    super.size,
-  });
-}
+class _ScrollCallbacksComponent({
+  super.position,
+  super.size,
+}) extends PositionComponent with ScrollCallbacks, _ScrollInspector;
 
-class _ScrollCallbacksGame extends FlameGame
-    with ScrollCallbacks, _ScrollInspector {}
+class _ScrollCallbacksGame()
+    extends FlameGame
+    with ScrollCallbacks, _ScrollInspector;
 
-class _RawScrollCallbacksComponent extends PositionComponent
+class _RawScrollCallbacksComponent({super.position, super.size})
+    extends PositionComponent
     with ScrollCallbacks {
-  _RawScrollCallbacksComponent({super.position, super.size});
-
   bool rawEventReceived = false;
 
   @override

@@ -1,44 +1,29 @@
-// ignore_for_file: unused_element, unused_element_parameter
+// ignore_for_file: unused_element_parameter
 
 import 'dart:ui';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
-enum ObstacleType {
+enum ObstacleType() {
   cactusSmall,
   cactusLarge,
 }
 
-class ObstacleTypeSettings {
-  const ObstacleTypeSettings._internal(
-    this.type, {
-    required this.size,
-    required this.y,
-    required this.allowedAt,
-    required this.multipleAt,
-    required this.minGap,
-    required this.minSpeed,
-    required this.generateHitboxes,
-    this.numFrames,
-    this.frameRate,
-    this.speedOffset,
-  });
-
-  final ObstacleType type;
-  final Vector2 size;
-  final double y;
-  final int allowedAt;
-  final int multipleAt;
-  final double minGap;
-  final double minSpeed;
-  final int? numFrames;
-  final double? frameRate;
-  final double? speedOffset;
-
+class const ObstacleTypeSettings._internal(
+  final ObstacleType type, {
+  required final Vector2 size,
+  required final double y,
+  required final int allowedAt,
+  required final int multipleAt,
+  required final double minGap,
+  required final double minSpeed,
+  required final List<ShapeHitbox> Function() generateHitboxes,
+  final int? numFrames,
+  final double? frameRate,
+  final double? speedOffset,
+}) {
   static const maxGroupSize = 3.0;
-
-  final List<ShapeHitbox> Function() generateHitboxes;
 
   static final cactusSmall = ObstacleTypeSettings._internal(
     ObstacleType.cactusSmall,

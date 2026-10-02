@@ -14,18 +14,11 @@ import 'package:flame/extensions.dart';
 /// 7. Call [clear] to remove all data.
 ///
 /// Use [optimize] to scan the tree and remove unused quadrants.
-class QuadTree<T extends Hitbox<T>> {
-  QuadTree({
-    this.maxObjects = 25,
-    this.maxDepth = 10,
-    this.mainBoxSize = Rect.zero,
-  });
-
-  final int maxObjects;
-  final int maxDepth;
-
-  Rect mainBoxSize;
-
+class QuadTree<T extends Hitbox<T>>({
+  final int maxObjects = 25,
+  final int maxDepth = 10,
+  var Rect mainBoxSize = Rect.zero,
+}) {
   var _rootNode = QuadTreeNode<T>();
   int _nodeLastId = 0;
   final _oldPositionByItem = <ShapeHitbox, Aabb2>{};
@@ -292,18 +285,16 @@ class QuadTree<T extends Hitbox<T>> {
 /// Use [rect] to get node's computed box;
 /// The class might be useful to render debugging info.
 /// See examples for details.
-class QuadTreeNodeDebugInfo {
-  QuadTreeNodeDebugInfo(this.rect, this.node, this.cd);
-
+class QuadTreeNodeDebugInfo(
+  final Rect rect,
+  final QuadTreeNode node,
+  final QuadTreeCollisionDetection cd,
+) {
   factory QuadTreeNodeDebugInfo.init(QuadTreeCollisionDetection cd) {
     final node = cd.broadphase.tree._rootNode;
     final rect = cd.broadphase.tree.mainBoxSize;
     return QuadTreeNodeDebugInfo(rect, node, cd);
   }
-
-  final Rect rect;
-  final QuadTreeNode node;
-  final QuadTreeCollisionDetection cd;
 
   List<ShapeHitbox> get ownElements => node.hitboxes as List<ShapeHitbox>;
 
@@ -331,7 +322,7 @@ class QuadTreeNodeDebugInfo {
   }
 }
 
-class QuadTreeNode<T extends Hitbox<T>> {
+class QuadTreeNode<T extends Hitbox<T>>() {
   final List<QuadTreeNode?> children = List.generate(
     4,
     (index) => null,
@@ -362,14 +353,12 @@ class QuadTreeNode<T extends Hitbox<T>> {
   }
 }
 
-enum _QuadTreeZone {
+enum _QuadTreeZone(final int value) {
   root(-1),
   topLeft(0),
   topRight(1),
   bottomLeft(2),
   bottomRight(3);
-
-  const _QuadTreeZone(this.value);
 
   factory _QuadTreeZone.fromIndex(int i) {
     return switch (i) {
@@ -380,6 +369,4 @@ enum _QuadTreeZone {
       _ => _QuadTreeZone.root,
     };
   }
-
-  final int value;
 }

@@ -2,12 +2,8 @@ import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/operators/_common.dart';
 
 /// Operator MULTIPLY (*), applies to numeric arguments only.
-class Multiply extends NumExpression {
-  const Multiply(this._lhs, this._rhs);
-
-  final NumExpression _lhs;
-  final NumExpression _rhs;
-
+class const Multiply(final NumExpression _lhs, final NumExpression _rhs)
+    extends NumExpression {
   /// Static constructor, used by parse.dart
   factory Multiply.make(
     Expression lhs,

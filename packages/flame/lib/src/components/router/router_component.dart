@@ -27,21 +27,22 @@ import 'package:meta/meta.dart';
 /// rendering, and also stops pointer events. In addition, routes are able to
 /// stop or slow down time for the pages that they control, or to apply visual
 /// effects (via decorators) to those pages.
-class RouterComponent extends Component {
-  RouterComponent({
-    required this.initialRoute,
-    required Map<String, Route> routes,
-    Map<String, RouteFactory>? routeFactories,
-    this.onUnknownRoute,
-    super.key,
-    super.priority = 0x7fffffff,
-  }) : _routes = routes,
-       _routeFactories = routeFactories ?? {} {
-    routes.forEach((name, route) => route.name = name);
-  }
-
+class RouterComponent({
   /// Route that will be placed on the stack in the beginning.
-  final String initialRoute;
+  required final String initialRoute,
+  required final Map<String, Route> _routes,
+  Map<String, RouteFactory>? routeFactories,
+
+  /// Function that will be called to resolve any route names that couldn't be
+  /// resolved via [_routes] or [_routeFactories]. Unlike with routeFactories,
+  /// the route returned by this function will not be cached.
+  final RouteFactory? onUnknownRoute,
+  super.key,
+  super.priority = 0x7fffffff,
+}) extends Component {
+  this {
+    _routes.forEach((name, route) => route.name = name);
+  }
 
   /// The stack of all currently active routes. This stack must not be empty
   /// (it will be populated with the [initialRoute] in the beginning).
@@ -58,7 +59,6 @@ class RouterComponent extends Component {
   /// unique name. This map is initialized in the constructor; in addition, any
   /// routes produced by the [_routeFactories] will also be cached here.
   Map<String, Route> get routes => _routes;
-  final Map<String, Route> _routes;
 
   /// Set of functions that are able to resolve routes dynamically.
   ///
@@ -66,12 +66,7 @@ class RouterComponent extends Component {
   /// "prefix/arg". For such a name, we will call the factory "prefix" with the
   /// argument "arg". The produced route will be cached in the main [_routes]
   /// map, and then built and mounted normally.
-  final Map<String, RouteFactory> _routeFactories;
-
-  /// Function that will be called to resolve any route names that couldn't be
-  /// resolved via [_routes] or [_routeFactories]. Unlike with routeFactories,
-  /// the route returned by this function will not be cached.
-  final RouteFactory? onUnknownRoute;
+  final Map<String, RouteFactory> _routeFactories = routeFactories ?? {};
 
   /// Returns the route that is currently at the top of the stack.
   Route get currentRoute => _routeStack.last;

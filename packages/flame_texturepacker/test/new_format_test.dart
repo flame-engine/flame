@@ -6,7 +6,7 @@ import 'package:flame_texturepacker/flame_texturepacker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _MockCanvas extends Mock implements Canvas {}
+class _MockCanvas() extends Mock implements Canvas;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

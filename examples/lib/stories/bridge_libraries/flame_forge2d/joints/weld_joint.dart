@@ -7,16 +7,17 @@ import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:material_ui/material_ui.dart';
 
-class WeldJointExample extends Forge2DExampleGame {
+class WeldJointExample() extends Forge2DExampleGame {
   static const description = '''
     This example shows how to use a `WeldJoint`. Tap the screen to add a 
     ball to test the bridge built using a `WeldJoint`
   ''';
 
-  WeldJointExample() : super(world: WeldJointWorld());
+  this : super(world: WeldJointWorld());
 }
 
-class WeldJointWorld extends Forge2DWorld
+class WeldJointWorld()
+    extends Forge2DWorld
     with TapCallbacks, HasGameRef<Forge2DGame> {
   final pillarHeight = 20.0;
   final pillarWidth = 5.0;

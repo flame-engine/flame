@@ -150,7 +150,7 @@ void main() {
   });
 }
 
-class _MyKeyboardDetector extends HardwareKeyboardDetector {
+class _MyKeyboardDetector() extends HardwareKeyboardDetector {
   final List<KeyEvent> events = [];
   void Function(KeyEvent)? keyEventHandler;
 

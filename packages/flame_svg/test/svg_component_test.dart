@@ -2,7 +2,7 @@ import 'package:flame_svg/flame_svg.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-class _MockSvg extends Mock implements Svg {}
+class _MockSvg() extends Mock implements Svg;
 
 void main() {
   group('SvgComponent', () {

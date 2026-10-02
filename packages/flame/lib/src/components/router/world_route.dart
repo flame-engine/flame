@@ -5,7 +5,11 @@ import 'package:meta/meta.dart';
 
 /// [WorldRoute] is a class that allows setting the world that a camera is
 /// looking at.
-class WorldRoute extends Route {
+class WorldRoute(
+  final World Function() builder, {
+  final CameraComponent? camera,
+  super.maintainState,
+}) extends Route {
   /// A world route that uses the specified [builder]. This builder will be
   /// registered with the Game's map of world builders when this route is
   /// first activated.
@@ -13,10 +17,8 @@ class WorldRoute extends Route {
   /// The [camera] parameter is optional and can be used to set the camera
   /// that will be used to render the world, if not provided the default camera
   /// will be used.
-  WorldRoute(this.builder, {this.camera, super.maintainState}) : super(null);
+  this : super(null);
 
-  final World Function() builder;
-  final CameraComponent? camera;
   late World? _previousWorld;
   World? world;
 

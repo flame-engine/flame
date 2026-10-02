@@ -138,8 +138,8 @@ mixin _TapCounter on TapCallbacks {
   }
 }
 
-class _IgnoreTapCallbacksComponent extends PositionComponent
+class _IgnoreTapCallbacksComponent({super.position, super.children})
+    extends PositionComponent
     with TapCallbacks, _TapCounter, IgnoreEvents {
-  _IgnoreTapCallbacksComponent({super.position, super.children})
-    : super(size: Vector2.all(10));
+  this : super(size: Vector2.all(10));
 }

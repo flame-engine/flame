@@ -30,20 +30,19 @@ import 'package:meta/meta.dart';
 /// rotating or scaling the [Component3D] will affect the whole
 /// group as if it was a single entity.
 /// {@endtemplate}
-abstract class Component3D extends Component with HasWorldRef<World3D> {
-  final Transform3D transform;
+abstract class Component3D({
+  Vector3? position,
+  Vector3? scale,
+  Quaternion? rotation,
+  List<Component3D> children = const [],
+}) extends Component with HasWorldRef<World3D> {
+  final Transform3D transform = Transform3D()
+    ..position = position ?? Vector3.zero()
+    ..rotation = rotation ?? Quaternion.euler(0, 0, 0)
+    ..scale = scale ?? Vector3.all(1);
 
   /// {@macro component_3d}
-  Component3D({
-    Vector3? position,
-    Vector3? scale,
-    Quaternion? rotation,
-    List<Component3D> children = const [],
-  }) : transform = Transform3D()
-         ..position = position ?? Vector3.zero()
-         ..rotation = rotation ?? Quaternion.euler(0, 0, 0)
-         ..scale = scale ?? Vector3.all(1),
-       super(children: children) {
+  this : super(children: children) {
     this.children.register<Component3D>();
     _childComponents = this.children.query<Component3D>();
     transform.addListener(_onTransformChanged);

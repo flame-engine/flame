@@ -6,7 +6,7 @@ import 'package:flame/game.dart';
 import 'package:flame/rendering.dart';
 import 'package:flutter/widgets.dart';
 
-class DecoratorVsEffectExample extends FlameGame {
+class DecoratorVsEffectExample() extends FlameGame {
   static const String description = '''
 This example demonstrates the difference between using an `Effect` and a
 `Decorator` for group transparency.
@@ -79,11 +79,8 @@ Note how the overlapping area is uniform.
 }
 
 /// A simple decorator that applies opacity to the entire decorated subtree.
-class _GroupOpacityDecorator extends Decorator {
-  _GroupOpacityDecorator(double opacity)
-    : _paint = Paint()..color = Color.fromRGBO(255, 255, 255, opacity);
-
-  final Paint _paint;
+class _GroupOpacityDecorator(double opacity) extends Decorator {
+  final Paint _paint = Paint()..color = Color.fromRGBO(255, 255, 255, opacity);
 
   @override
   void apply(void Function(Canvas) draw, Canvas canvas) {

@@ -8,9 +8,11 @@ import 'package:flame_3d/src/parser/gltf/texture.dart';
 // (used in GLTF as the key for texture coordinate attributes)
 
 /// Reference to a texture.
-class TextureInfo extends GltfNode {
+class TextureInfo({
+  required super.root,
+
   /// The reference to the texture.
-  final GltfRef<Texture> index;
+  required final GltfRef<Texture> index,
 
   /// This integer value is used to construct a string in the format
   /// `TEXCOORD_<set index>`, which is a reference to a key in
@@ -19,14 +21,8 @@ class TextureInfo extends GltfNode {
   ///
   /// A mesh primitive **MUST** have the corresponding texture coordinate
   /// attributes for the material to be applicable to it.
-  final int? texCoord;
-
-  TextureInfo({
-    required super.root,
-    required this.index,
-    this.texCoord,
-  });
-
+  final int? texCoord,
+}) extends GltfNode {
   TextureInfo.parse(
     GltfRoot root,
     Map<String, Object?> map,

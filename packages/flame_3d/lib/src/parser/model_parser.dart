@@ -3,12 +3,12 @@ import 'package:flame_3d/src/parser/glb_parser.dart';
 import 'package:flame_3d/src/parser/gltf_parser.dart';
 import 'package:flame_3d/src/parser/obj_parser.dart';
 
-abstract class ModelParser {
+abstract class ModelParser() {
   Future<Model> parseModel(String filePath);
 
   static Future<Model> parse(String filePath) async {
     final parser = _getParser(filePath);
-    return parser.parseModel(filePath);
+    return await parser.parseModel(filePath);
   }
 
   static ModelParser _getParser(String filePath) {

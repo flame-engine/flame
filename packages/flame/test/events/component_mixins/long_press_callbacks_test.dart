@@ -231,9 +231,9 @@ void _hasDispatcher(FlameGame game) {
   );
 }
 
-class _LongPressComponent extends PositionComponent with LongPressCallbacks {
-  _LongPressComponent({super.position, super.size});
-
+class _LongPressComponent({super.position, super.size})
+    extends PositionComponent
+    with LongPressCallbacks {
   int startCount = 0;
   int moveUpdateCount = 0;
   int endCount = 0;
@@ -263,7 +263,7 @@ class _LongPressComponent extends PositionComponent with LongPressCallbacks {
   }
 }
 
-class _LongPressGame extends FlameGame with LongPressCallbacks {
+class _LongPressGame() extends FlameGame with LongPressCallbacks {
   int startCount = 0;
 
   @override

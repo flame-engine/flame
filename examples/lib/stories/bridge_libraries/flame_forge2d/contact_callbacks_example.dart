@@ -7,7 +7,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class ContactCallbacksExample extends Forge2DExampleGame {
+class ContactCallbacksExample() extends Forge2DExampleGame {
   static const description = '''
     This example shows how `BodyComponent`s can react to collisions with other
     bodies.
@@ -15,11 +15,11 @@ class ContactCallbacksExample extends Forge2DExampleGame {
     balls that it collides with.
   ''';
 
-  ContactCallbacksExample()
-    : super(gravity: Vector2(0, 10.0), world: ContactCallbackWorld());
+  this : super(gravity: Vector2(0, 10.0), world: ContactCallbackWorld());
 }
 
-class ContactCallbackWorld extends Forge2DWorld
+class ContactCallbackWorld()
+    extends Forge2DWorld
     with TapCallbacks, HasGameRef<Forge2DGame> {
   @override
   Future<void> onLoad() async {

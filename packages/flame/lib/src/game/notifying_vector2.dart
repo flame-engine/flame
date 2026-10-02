@@ -10,11 +10,11 @@ import 'package:vector_math/vector_math.dart';
 /// order to avoid resource leaks.
 ///
 /// Direct modification of this vector's [storage] is not allowed.
-class NotifyingVector2 extends Vector2 with ChangeNotifier {
+class NotifyingVector2.zero() extends Vector2 with ChangeNotifier {
   factory NotifyingVector2(double x, double y) =>
       NotifyingVector2.zero()..setValues(x, y);
 
-  NotifyingVector2.zero() : super.zero();
+  this : super.zero();
 
   factory NotifyingVector2.all(double v) => NotifyingVector2.zero()..splat(v);
 

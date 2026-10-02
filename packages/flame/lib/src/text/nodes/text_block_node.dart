@@ -5,11 +5,7 @@ import 'package:flame/text.dart';
 import 'package:flutter/painting.dart' hide TextStyle;
 import 'package:meta/meta.dart';
 
-abstract class TextBlockNode extends BlockNode {
-  TextBlockNode(this.child);
-
-  final InlineTextNode child;
-
+abstract class TextBlockNode(final InlineTextNode child) extends BlockNode {
   @mustCallSuper
   @override
   void fillStyles(DocumentStyle stylesheet, InlineTextStyle parentTextStyle) {

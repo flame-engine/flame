@@ -7,18 +7,16 @@ import 'package:meta/meta.dart';
 
 /// [StaggeredTileLayer] is an isometric map using a staggered axis.
 @internal
-class StaggeredTileLayer extends FlameTileLayer {
-  StaggeredTileLayer({
-    required super.layer,
-    required super.map,
-    required super.destTileSize,
-    required super.tiledAtlas,
-    required super.animationFrames,
-    required super.ignoreFlip,
-    required super.layerPaintFactory,
-    super.filterQuality,
-  });
-
+class StaggeredTileLayer({
+  required super.layer,
+  required super.map,
+  required super.destTileSize,
+  required super.tiledAtlas,
+  required super.animationFrames,
+  required super.ignoreFlip,
+  required super.layerPaintFactory,
+  super.filterQuality,
+}) extends FlameTileLayer {
   @override
   void cacheTiles() {
     final halfDestinationTile = destTileSize / 2;

@@ -88,4 +88,4 @@ void main() {
   });
 }
 
-class _MockSprite extends Mock implements Sprite {}
+class _MockSprite() extends Mock implements Sprite;

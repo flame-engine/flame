@@ -20,15 +20,9 @@ extension DisplacementContextDelta on DisplacementContext {
 /// This class includes properties that describe both positions where the event
 /// has occurred (start and end) and the delta (i.e. displacement) represented
 /// by the event.
-abstract class DisplacementEvent<R>
-    extends LocationContextEvent<DisplacementContext, R> {
-  DisplacementEvent(
-    this._game, {
-    required super.raw,
-    required this.deviceStartPosition,
-    required this.deviceEndPosition,
-  });
-  final Game _game;
+abstract class DisplacementEvent<R>(
+  final Game _game, {
+  required super.raw,
 
   /// Event start position in the coordinate space of the device -- either the
   /// phone, or the browser window, or the app.
@@ -36,8 +30,16 @@ abstract class DisplacementEvent<R>
   /// If the game runs in a full-screen mode, then this would be equal to the
   /// [canvasStartPosition]. Otherwise, the [deviceStartPosition] is the
   /// Flutter-level global position.
-  final Vector2 deviceStartPosition;
+  required final Vector2 deviceStartPosition,
 
+  /// Event end position in the coordinate space of the device -- either the
+  /// phone, or the browser window, or the app.
+  ///
+  /// If the game runs in a full-screen mode, then this would be equal to the
+  /// [canvasEndPosition]. Otherwise, the [deviceEndPosition] is the
+  /// Flutter-level global position.
+  required final Vector2 deviceEndPosition,
+}) extends LocationContextEvent<DisplacementContext, R> {
   /// Event start position in the coordinate space of the game widget, i.e.
   /// relative to the game canvas.
   ///
@@ -53,14 +55,6 @@ abstract class DisplacementEvent<R>
   /// the components via [deliverAtPoint]. It is an error to try to read this
   /// property at other times.
   Vector2 get localStartPosition => renderingTrace.last.start;
-
-  /// Event end position in the coordinate space of the device -- either the
-  /// phone, or the browser window, or the app.
-  ///
-  /// If the game runs in a full-screen mode, then this would be equal to the
-  /// [canvasEndPosition]. Otherwise, the [deviceEndPosition] is the
-  /// Flutter-level global position.
-  final Vector2 deviceEndPosition;
 
   /// Event end position in the coordinate space of the game widget, i.e.
   /// relative to the game canvas.

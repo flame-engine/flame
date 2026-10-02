@@ -8,7 +8,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class RevoluteJointExample extends Forge2DExampleGame {
+class RevoluteJointExample() extends Forge2DExampleGame {
   static const description = '''
     In this example we use a joint to keep a body with several fixtures stuck
     to another body.
@@ -16,11 +16,11 @@ class RevoluteJointExample extends Forge2DExampleGame {
     Tap the screen to add more of these combined bodies.
   ''';
 
-  RevoluteJointExample()
-    : super(gravity: Vector2(0, 10.0), world: RevoluteJointWorld());
+  this : super(gravity: Vector2(0, 10.0), world: RevoluteJointWorld());
 }
 
-class RevoluteJointWorld extends Forge2DWorld
+class RevoluteJointWorld()
+    extends Forge2DWorld
     with TapCallbacks, HasGameRef<Forge2DGame> {
   @override
   Future<void> onLoad() async {
@@ -37,11 +37,7 @@ class RevoluteJointWorld extends Forge2DWorld
   }
 }
 
-class CircleShuffler extends BodyComponent {
-  final Ball ball;
-
-  CircleShuffler(this.ball);
-
+class CircleShuffler(final Ball ball) extends BodyComponent {
   @override
   Body createBody() {
     final bodyDef = BodyDef(

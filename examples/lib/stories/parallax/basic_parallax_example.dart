@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 
-class BasicParallaxExample extends FlameGame {
+class BasicParallaxExample() extends FlameGame {
   static const String description = '''
     Shows the simplest way to use a fullscreen `ParallaxComponent`.
   ''';

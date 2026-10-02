@@ -3,13 +3,13 @@ import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 
-class PriorityExample extends FlameGame {
+class PriorityExample() extends FlameGame {
   static const String description = '''
     On this example, click on the square to bring them to the front by changing
     the priority.
   ''';
 
-  PriorityExample()
+  this
     : super(
         children: [
           Square(Vector2(100, 100)),
@@ -20,9 +20,10 @@ class PriorityExample extends FlameGame {
       );
 }
 
-class Square extends RectangleComponent
+class Square(Vector2 position)
+    extends RectangleComponent
     with HasGameRef<PriorityExample>, TapCallbacks {
-  Square(Vector2 position)
+  this
     : super(
         position: position,
         size: Vector2.all(100),

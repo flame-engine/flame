@@ -8,15 +8,14 @@ import 'package:test/test.dart';
 
 import 'collision_test_helpers.dart';
 
-class _TestBlock extends PositionComponent with CollisionCallbacks {
-  final Vector2 velocity;
+class _TestBlock({
+  required final Vector2 velocity,
+  required super.position,
+  required super.size,
+}) extends PositionComponent with CollisionCallbacks {
   static int collisionCounter = 0;
 
-  _TestBlock({
-    required this.velocity,
-    required super.position,
-    required super.size,
-  }) {
+  this {
     add(CircleHitbox());
   }
 

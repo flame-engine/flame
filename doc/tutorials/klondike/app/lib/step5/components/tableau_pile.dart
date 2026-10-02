@@ -6,8 +6,8 @@ import '../klondike_game.dart';
 import '../pile.dart';
 import 'card.dart';
 
-class TableauPile extends PositionComponent implements Pile {
-  TableauPile({super.position}) : super(size: KlondikeGame.cardSize);
+class TableauPile({super.position}) extends PositionComponent implements Pile {
+  this : super(size: KlondikeGame.cardSize);
 
   /// Which cards are currently placed onto this pile.
   final List<Card> _cards = [];

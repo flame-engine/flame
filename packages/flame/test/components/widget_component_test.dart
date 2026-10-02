@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _TappableComponent extends PositionComponent with TapCallbacks {
+class _TappableComponent() extends PositionComponent with TapCallbacks {
   int tapUpCount = 0;
 
   @override
@@ -19,9 +19,9 @@ class _TappableComponent extends PositionComponent with TapCallbacks {
   }
 }
 
-class _SnapshotComponent extends PositionComponent with Snapshot {}
+class _SnapshotComponent() extends PositionComponent with Snapshot;
 
-class _CameraGame extends FlameGame {
+class _CameraGame() extends FlameGame {
   @override
   Future<void> onLoad() async {
     camera.viewfinder.zoom = 2;
@@ -30,8 +30,8 @@ class _CameraGame extends FlameGame {
   }
 }
 
-class _ClippedCameraGame extends FlameGame {
-  _ClippedCameraGame()
+class _ClippedCameraGame() extends FlameGame {
+  this
     : super(
         camera: CameraComponent.withFixedResolution(width: 400, height: 400),
       );
@@ -59,12 +59,8 @@ Future<void> _pumpGame(WidgetTester tester, FlameGame game) async {
   await tester.pump();
 }
 
-class _Button extends StatelessWidget {
-  const _Button(this.label, this.onPressed);
-
-  final String label;
-  final VoidCallback onPressed;
-
+class const _Button(final String label, final VoidCallback onPressed)
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -73,7 +69,7 @@ class _Button extends StatelessWidget {
   }
 }
 
-class _ResizeCountingGame extends FlameGame {
+class _ResizeCountingGame() extends FlameGame {
   int resizeCount = 0;
 
   @override
@@ -83,7 +79,7 @@ class _ResizeCountingGame extends FlameGame {
   }
 }
 
-class _SplitScreenGame extends FlameGame {
+class _SplitScreenGame() extends FlameGame {
   @override
   Future<void> onLoad() async {
     camera.viewport = FixedSizeViewport(400, 600);
@@ -96,7 +92,7 @@ class _SplitScreenGame extends FlameGame {
   }
 }
 
-class _HidableComponent extends PositionComponent with HasVisibility {}
+class _HidableComponent() extends PositionComponent with HasVisibility;
 
 void main() {
   group('WidgetComponent', () {

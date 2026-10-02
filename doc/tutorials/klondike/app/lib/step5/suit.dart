@@ -1,9 +1,18 @@
 import 'package:flame/sprite.dart';
 import 'package:flutter/foundation.dart';
+
 import 'klondike_game.dart';
 
 @immutable
-class Suit {
+// ignore: prefer_const_constructors_in_immutables
+class Suit._(
+  final int value,
+  final String label,
+  double x,
+  double y,
+  double w,
+  double h,
+) {
   factory Suit.fromInt(int index) {
     assert(
       index >= 0 && index <= 3,
@@ -12,12 +21,7 @@ class Suit {
     return _singletons[index];
   }
 
-  Suit._(this.value, this.label, double x, double y, double w, double h)
-    : sprite = klondikeSprite(x, y, w, h);
-
-  final int value;
-  final String label;
-  final Sprite sprite;
+  final Sprite sprite = klondikeSprite(x, y, w, h);
 
   static final List<Suit> _singletons = [
     Suit._(0, '♥', 1176, 17, 172, 183),

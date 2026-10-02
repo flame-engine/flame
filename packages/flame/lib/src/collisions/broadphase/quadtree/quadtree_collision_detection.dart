@@ -5,23 +5,23 @@ import 'package:flutter/widgets.dart';
 ///
 /// Do not use standard [items] list for components. Instead adds all components
 /// into [QuadTreeBroadphase] class.
-class QuadTreeCollisionDetection
-    extends StandardCollisionDetection<QuadTreeBroadphase> {
-  QuadTreeCollisionDetection({
-    required Rect mapDimensions,
-    required ExternalBroadphaseCheck onComponentTypeCheck,
-    required ExternalMinDistanceCheck minimumDistanceCheck,
-    int maxObjects = 25,
-    int maxDepth = 10,
-  }) : super(
-         broadphase: QuadTreeBroadphase(
-           mainBoxSize: mapDimensions,
-           maxObjects: maxObjects,
-           maxDepth: maxDepth,
-           broadphaseCheck: onComponentTypeCheck,
-           minimumDistanceCheck: minimumDistanceCheck,
-         ),
-       );
+class QuadTreeCollisionDetection({
+  required Rect mapDimensions,
+  required ExternalBroadphaseCheck onComponentTypeCheck,
+  required ExternalMinDistanceCheck minimumDistanceCheck,
+  int maxObjects = 25,
+  int maxDepth = 10,
+}) extends StandardCollisionDetection<QuadTreeBroadphase> {
+  this
+    : super(
+        broadphase: QuadTreeBroadphase(
+          mainBoxSize: mapDimensions,
+          maxObjects: maxObjects,
+          maxDepth: maxDepth,
+          broadphaseCheck: onComponentTypeCheck,
+          minimumDistanceCheck: minimumDistanceCheck,
+        ),
+      );
 
   final _listenerCollisionType = <ShapeHitbox, VoidCallback>{};
   final _scheduledUpdate = <ShapeHitbox>{};

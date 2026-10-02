@@ -9,36 +9,34 @@ import 'package:flame_sprite_fusion/flame_sprite_fusion.dart';
 import 'package:flutter/widgets.dart';
 
 /// A component that renders a tilemap from a sprite fusion.
-class SpriteFusionTilemapComponent extends PositionComponent {
+class SpriteFusionTilemapComponent({
   /// The data of the tilemap.
-  final SpriteFusionTilemapData tilemapData;
+  required final SpriteFusionTilemapData tilemapData,
 
   /// The sprite sheet of the tilemap.
-  final SpriteSheet spriteSheet;
-
+  required final SpriteSheet spriteSheet,
+  bool useAtlas = true,
+  super.position,
+  super.scale,
+  super.angle,
+  super.nativeAngle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.key,
+}) extends PositionComponent {
   /// The sprite batch of the tilemap.
   late final SpriteBatch _spriteBatch;
 
   /// Creates a new [SpriteFusionTilemapComponent] with the given [tilemapData]
   /// and [spriteSheet].
-  SpriteFusionTilemapComponent({
-    required this.tilemapData,
-    required this.spriteSheet,
-    bool useAtlas = true,
-    super.position,
-    super.scale,
-    super.angle,
-    super.nativeAngle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.key,
-  }) : super(
-         size: Vector2(
-           tilemapData.mapWidth * tilemapData.tileSize,
-           tilemapData.mapHeight * tilemapData.tileSize,
-         ),
-       ) {
+  this
+    : super(
+        size: Vector2(
+          tilemapData.mapWidth * tilemapData.tileSize,
+          tilemapData.mapHeight * tilemapData.tileSize,
+        ),
+      ) {
     _spriteBatch = SpriteBatch(spriteSheet.image, useAtlas: useAtlas);
 
     for (final data in tilemapData.layers.reversed) {

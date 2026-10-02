@@ -15,25 +15,24 @@ import 'package:meta/meta.dart';
 /// If you set the position of the component instead of a margin when
 /// initializing the component, the margin to the edge of the screen from that
 /// position will be used.
-class HudMarginComponent extends PositionComponent {
-  HudMarginComponent({
-    this.margin,
-    super.position,
-    super.size,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.key,
-  }) : assert(
-         margin != null || position != null,
-         'Either margin or position must be defined',
-       );
-
+class HudMarginComponent({
   /// Instead of setting a position of the [HudMarginComponent] a margin
   /// from the edges of the viewport can be used instead.
-  EdgeInsets? margin;
+  var EdgeInsets? margin,
+  super.position,
+  super.size,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.key,
+}) extends PositionComponent {
+  this
+    : assert(
+        margin != null || position != null,
+        'Either margin or position must be defined',
+      );
 
   late ReadOnlySizeProvider? _sizeProvider;
 
@@ -41,9 +40,9 @@ class HudMarginComponent extends PositionComponent {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    _sizeProvider =
-        ancestors().firstWhereOrNull((c) => c is ReadOnlySizeProvider)
-            as ReadOnlySizeProvider?;
+    _sizeProvider = ancestors().firstWhereOrNull(
+      (c) => c is ReadOnlySizeProvider,
+    ) as ReadOnlySizeProvider?;
     assert(
       _sizeProvider != null,
       'The parent of a HudMarginComponent needs to provide a size, for example '

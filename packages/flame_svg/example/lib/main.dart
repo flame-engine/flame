@@ -6,7 +6,7 @@ void main() {
   runApp(GameWidget(game: MyGame()));
 }
 
-class MyGame extends FlameGame {
+class MyGame() extends FlameGame {
   late Svg svgInstance;
 
   @override

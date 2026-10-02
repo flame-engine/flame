@@ -3,21 +3,19 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/services.dart';
 
-class MouseMoveEvent extends PositionEvent<PointerHoverEvent> {
-  MouseMoveEvent(
-    this.pointerId,
-    super.game,
-    PointerHoverEvent rawEvent,
-  ) : timestamp = rawEvent.timeStamp,
-      delta = rawEvent.delta.toVector2(),
-      super(
+class MouseMoveEvent(
+  final int pointerId,
+  super.game,
+  PointerHoverEvent rawEvent,
+) extends PositionEvent<PointerHoverEvent> {
+  this
+    : super(
         raw: rawEvent,
         devicePosition: rawEvent.position.toVector2(),
       );
 
-  final int pointerId;
-  final Duration timestamp;
-  final Vector2 delta;
+  final Duration timestamp = rawEvent.timeStamp;
+  final Vector2 delta = rawEvent.delta.toVector2();
 
   static final _nanPoint = Vector2.all(double.nan);
 

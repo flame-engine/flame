@@ -15,14 +15,13 @@ import 'package:path/path.dart' as p;
 /// It runs `flutter create` for the platform folders and the pubspec, writes
 /// the files of the chosen template on top, and adds the Flame packages with
 /// `flutter pub add`, so that the newest compatible versions are used.
-class CreateCommand extends Command<int> {
-  CreateCommand(
-    this.out,
-    this.workingDirectory, {
-    ProcessStarter? startProcess,
-    StringSink? err,
-  }) : _startProcess = startProcess ?? Process.start,
-       _err = err ?? stderr {
+class CreateCommand(
+  final StringSink out,
+  final Directory workingDirectory, {
+  ProcessStarter? startProcess,
+  StringSink? err,
+}) extends Command<int> {
+  this {
     argParser
       ..addOption(
         'project-name',
@@ -69,7 +68,8 @@ class CreateCommand extends Command<int> {
         'flame-version',
         help:
             'The version constraint of the flame package, for example ^1.30.0. '
-            'Defaults to the newest version.',
+            'Defaults to the version the templates are written for.',
+        defaultsTo: _flameConstraint,
       )
       ..addFlag(
         'overwrite',
@@ -77,10 +77,8 @@ class CreateCommand extends Command<int> {
       );
   }
 
-  final StringSink out;
-  final Directory workingDirectory;
-  final ProcessStarter _startProcess;
-  final StringSink _err;
+  final ProcessStarter _startProcess = startProcess ?? Process.start;
+  final StringSink _err = err ?? stderr;
 
   @override
   String get name => 'create';
@@ -156,14 +154,14 @@ class CreateCommand extends Command<int> {
       workingDirectory: directory,
       ignoreFailure: true,
     );
-    final flameVersion = argResults!.option('flame-version');
+    final flameVersion = argResults!.option('flame-version')!;
     await _flutter(
       [
         'pub',
         'add',
-        if (flameVersion == null) 'flame' else 'flame@$flameVersion',
+        'flame@$flameVersion',
         'dev:flame_lint',
-        if (template.hasTests) 'dev:flame_test',
+        if (template.hasTests) 'dev:flame_test@$_flameTestConstraint',
         ...argResults!.multiOption('packages'),
       ],
       'add the Flame packages',
@@ -220,6 +218,12 @@ class CreateCommand extends Command<int> {
     }
   }
 }
+
+/// The version constraints of the Flame packages the templates are written
+/// for, these have to be bumped together with the templates on breaking
+/// releases.
+const _flameConstraint = '^2.0.0-dev.0';
+const _flameTestConstraint = '^3.0.0-dev.0';
 
 const _dartKeywords = {
   'abstract',

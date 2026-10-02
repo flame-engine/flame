@@ -41,17 +41,12 @@ import 'package:jenny/src/structure/line_content.dart';
 /// with parameter `color` around the word "vantablack".
 ///
 /// Inline expressions cannot contain markup attributes.
-class DialogueLine extends DialogueEntry {
-  DialogueLine({
-    required this._content,
-    this._character,
-    this._tags,
-  }) : _value = _content.isConst ? _content.text : null;
-
-  final Character? _character;
-  final List<String>? _tags;
-  final LineContent _content;
-  String? _value;
+class DialogueLine({
+  required final LineContent _content,
+  final Character? _character,
+  final List<String>? _tags,
+}) extends DialogueEntry {
+  String? _value = _content.isConst ? _content.text : null;
 
   /// The content of this Line.
   LineContent? get content => _content;

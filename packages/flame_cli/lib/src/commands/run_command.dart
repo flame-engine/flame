@@ -10,14 +10,13 @@ import 'package:flame_cli/src/run_controller.dart';
 import 'package:io/io.dart';
 
 /// Starts a process, with the same signature as [Process.start].
-typedef ProcessStarter =
-    Future<Process> Function(
-      String executable,
-      List<String> arguments, {
-      String? workingDirectory,
-      bool runInShell,
-      ProcessStartMode mode,
-    });
+typedef ProcessStarter = Future<Process> Function(
+  String executable,
+  List<String> arguments, {
+  String? workingDirectory,
+  bool runInShell,
+  ProcessStartMode mode,
+});
 
 /// Starts `flutter` with [arguments] through [startProcess], and turns a
 /// failure to start it into a [FlameCliException] that tells the user to
@@ -96,26 +95,20 @@ Future<void> forwardOutput(Process process, StringSink out, StringSink err) {
 /// The output of `flutter run` is also written to the log file of the project
 /// for the `logs` command, and `reload` and `restart` requests are accepted
 /// through a [RunController].
-class RunCommand extends Command<int> {
-  RunCommand(
-    this.workingDirectory, {
-    ProcessStarter? startProcess,
-    this.input,
-    this.out,
-    this.err,
-  }) : _startProcess = startProcess ?? Process.start;
-
-  final Directory workingDirectory;
-  final ProcessStarter _startProcess;
-
-  /// Where the output of `flutter run` is mirrored to, the standard output
-  /// and error of this process by default.
-  final StringSink? out;
-  final StringSink? err;
+class RunCommand(
+  final Directory workingDirectory, {
+  ProcessStarter? startProcess,
 
   /// The input of the terminal, which is forwarded to `flutter run` so that
   /// its keys, such as `r` for hot reload, keep working.
-  final Stream<List<int>>? input;
+  final Stream<List<int>>? input,
+
+  /// Where the output of `flutter run` is mirrored to, the standard output
+  /// and error of this process by default.
+  final StringSink? out,
+  final StringSink? err,
+}) extends Command<int> {
+  final ProcessStarter _startProcess = startProcess ?? Process.start;
 
   final _argParser = ArgParser.allowAnything();
 
@@ -168,7 +161,7 @@ class RunCommand extends Command<int> {
       outSink.writeln(helpHeader);
       final process = await _startFlutterRun(['--help']);
       await forwardOutput(process, outSink, errSink);
-      return process.exitCode;
+      return await process.exitCode;
     }
     if (arguments.any((a) => a.startsWith('--vmservice-out-file'))) {
       throw UsageException(
@@ -237,12 +230,10 @@ class RunCommand extends Command<int> {
   }
 }
 
-class _TerminalMode {
-  _TerminalMode({required this.echoMode, required this.lineMode});
-
-  final bool echoMode;
-  final bool lineMode;
-
+class _TerminalMode({
+  required final bool echoMode,
+  required final bool lineMode,
+}) {
   void restore() {
     try {
       stdin

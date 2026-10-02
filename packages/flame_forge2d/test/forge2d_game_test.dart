@@ -2,8 +2,8 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class _TestForge2dGame extends Forge2DGame {
-  _TestForge2dGame() : super(metersToPixels: 4.0, gravity: Vector2(0, -10.0));
+class _TestForge2dGame() extends Forge2DGame {
+  this : super(metersToPixels: 4.0, gravity: Vector2(0, -10.0));
 }
 
 void main() {

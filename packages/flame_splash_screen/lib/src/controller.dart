@@ -3,24 +3,22 @@ import 'package:meta/meta.dart';
 
 /// Controller enables you to start the animation whenever you want with
 /// [autoStart] option and customize animation duration as well.
-class FlameSplashController {
-  FlameSplashController({
-    Duration fadeInDuration = const Duration(milliseconds: 750),
-    Duration waitDuration = const Duration(seconds: 2),
-    Duration fadeOutDuration = const Duration(milliseconds: 450),
-    this.autoStart = true,
-  }) : stepController = FlameSplashControllerStep(0),
-       durations = FlameSplashDurations(
-         fadeInDuration,
-         waitDuration,
-         fadeOutDuration,
-       );
+class FlameSplashController({
+  Duration fadeInDuration = const Duration(milliseconds: 750),
+  Duration waitDuration = const Duration(seconds: 2),
+  Duration fadeOutDuration = const Duration(milliseconds: 450),
 
   /// Defines if you want to start the animations right after widget mount.
-  final bool autoStart;
+  final bool autoStart = true,
+}) {
+  this : stepController = FlameSplashControllerStep(0);
 
   @internal
-  final FlameSplashDurations durations;
+  final FlameSplashDurations durations = FlameSplashDurations(
+    fadeInDuration,
+    waitDuration,
+    fadeOutDuration,
+  );
 
   @internal
   final FlameSplashControllerStep stepController;
@@ -87,7 +85,7 @@ class FlameSplashController {
 }
 
 /// Represents the state of the splash screen.
-enum FlameSplashControllerState {
+enum FlameSplashControllerState() {
   /// Not started yet, but ready to start.
   /// Note that if autoStart is set, this stage will be skipped.
   idle,
@@ -99,21 +97,13 @@ enum FlameSplashControllerState {
   finished,
 }
 
-class FlameSplashControllerStep extends ValueNotifier<int> {
-  FlameSplashControllerStep(super.value);
-}
+class FlameSplashControllerStep(super.value) extends ValueNotifier<int>;
 
-class FlameSplashDurations {
-  const FlameSplashDurations(
-    this.fadeInDuration,
-    this.waitDuration,
-    this.fadeOutDuration,
-  );
-
-  final Duration fadeInDuration;
-  final Duration waitDuration;
-  final Duration fadeOutDuration;
-
+class const FlameSplashDurations(
+  final Duration fadeInDuration,
+  final Duration waitDuration,
+  final Duration fadeOutDuration,
+) {
   Duration get total {
     return fadeInDuration + fadeOutDuration + waitDuration;
   }

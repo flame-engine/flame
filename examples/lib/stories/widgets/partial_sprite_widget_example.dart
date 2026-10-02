@@ -2,22 +2,14 @@ import 'package:flame/extensions.dart';
 import 'package:flame/widgets.dart';
 import 'package:material_ui/material_ui.dart';
 
-class PartialSpriteWidgetExample extends StatelessWidget {
-  const PartialSpriteWidgetExample({
-    required this.width,
-    required this.height,
-    required this.srcPosition,
-    required this.srcSize,
-    required this.anchor,
-    super.key,
-  });
-
-  final double width;
-  final double height;
-  final Vector2 srcPosition;
-  final Vector2 srcSize;
-  final Anchor anchor;
-
+class const PartialSpriteWidgetExample({
+  required final double width,
+  required final double height,
+  required final Vector2 srcPosition,
+  required final Vector2 srcSize,
+  required final Anchor anchor,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(

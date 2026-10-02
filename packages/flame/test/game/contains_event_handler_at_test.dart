@@ -155,29 +155,30 @@ void main() {
   });
 }
 
-mixin _CustomInputCallbacks on Component implements PointerInputCallbacks {}
+mixin _CustomInputCallbacks on Component implements PointerInputCallbacks;
 
-class _TransparentGame extends FlameGame with DeferHitTestToComponents {
+class _TransparentGame() extends FlameGame with DeferHitTestToComponents {
   @override
   Color backgroundColor() => const Color(0x00000000);
 }
 
-class _DeferringGame extends FlameGame with DeferHitTestToComponents {}
+class _DeferringGame() extends FlameGame with DeferHitTestToComponents;
 
-class _DeferringScrollGame extends FlameGame
-    with ScrollCallbacks, DeferHitTestToComponents {}
+class _DeferringScrollGame()
+    extends FlameGame
+    with ScrollCallbacks, DeferHitTestToComponents;
 
-class _Box extends PositionComponent {
-  _Box() : super(position: Vector2.all(10), size: Vector2.all(50));
+class _Box() extends PositionComponent {
+  this : super(position: Vector2.all(10), size: Vector2.all(50));
 }
 
-class _PlainComponent extends _Box {}
+class _PlainComponent() extends _Box;
 
-class _CustomInputComponent extends _Box with _CustomInputCallbacks {}
+class _CustomInputComponent() extends _Box with _CustomInputCallbacks;
 
-class _ScrollComponent extends _Box with ScrollCallbacks {}
+class _ScrollComponent() extends _Box with ScrollCallbacks;
 
-class _LongPressComponent extends _Box with LongPressCallbacks {
+class _LongPressComponent() extends _Box with LongPressCallbacks {
   int longPressCount = 0;
 
   @override

@@ -10,7 +10,7 @@ import 'package:flame_3d/src/parser/model_parser.dart';
 
 /// Parses GLB and GLTF file formats as per specified by:
 /// https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.pdf
-class GlbParser extends ModelParser {
+class GlbParser() extends ModelParser {
   @override
   Future<Model> parseModel(String filePath) async {
     final root = await parseRoot(filePath);
@@ -19,7 +19,7 @@ class GlbParser extends ModelParser {
 
   Future<GltfRoot> parseRoot(String filePath) async {
     final glb = await parseGlb(filePath);
-    return glb.parse();
+    return await glb.parse();
   }
 
   Future<Glb> parseGlb(String filePath) async {
@@ -67,19 +67,12 @@ class GlbParser extends ModelParser {
   }
 }
 
-class Glb {
-  final String prefix;
-  final int version;
-  final int length;
-  final List<GlbChunk> chunks;
-
-  Glb({
-    required this.prefix,
-    required this.version,
-    required this.length,
-    required this.chunks,
-  });
-
+class Glb({
+  required final String prefix,
+  required final int version,
+  required final int length,
+  required final List<GlbChunk> chunks,
+}) {
   Map<String, Object?> jsonChunk() {
     final chunk = chunks.firstWhere((GlbChunk chunk) => chunk.type == 'JSON');
     return jsonDecode(_parseString(chunk.data)) as Map<String, Object?>;
@@ -92,7 +85,7 @@ class Glb {
   Future<GltfRoot> parse() async {
     final json = jsonChunk();
     final chunks = binaryChunks().toList();
-    return GltfRoot.from(
+    return await GltfRoot.from(
       prefix: prefix,
       json: json,
       chunks: chunks,

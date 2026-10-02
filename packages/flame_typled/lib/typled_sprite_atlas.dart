@@ -13,27 +13,22 @@ import 'package:typled/typled.dart';
 /// Loads a Typled atlas definition and its associated image, applying
 /// edge-repeated padding to eliminate "ghost lines" caused by
 /// floating-point texture sampling errors.
-class TypledSpriteAtlas {
+class TypledSpriteAtlas({
   /// The parsed Typled atlas definition.
-  final TypledAtlas atlas;
+  required final TypledAtlas atlas,
 
   /// The tile size in pixels.
-  final double tileSize;
+  required final double tileSize,
 
   /// The atlas image (padded or original depending on configuration).
-  final Image image;
+  required final Image image,
 
   /// Padding added around each tile in the atlas (1px per side,
   /// or 0 if padding is disabled).
-  final int padding;
-
+  required final int padding,
+}) {
   /// Creates a [TypledSpriteAtlas] from a pre-loaded [atlas] and [image].
-  TypledSpriteAtlas({
-    required this.atlas,
-    required this.tileSize,
-    required this.image,
-    required this.padding,
-  });
+  this;
 
   /// Creates a [SpriteBatch] from this atlas image.
   SpriteBatch toBatch({bool useAtlas = false}) {
@@ -193,7 +188,7 @@ class TypledSpriteAtlas {
     }
 
     final picture = recorder.endRecording();
-    return picture.toImage(newWidth, newHeight);
+    return await picture.toImage(newWidth, newHeight);
   }
 
   static Future<TypledAtlas> _loadAtlas(
@@ -215,7 +210,7 @@ extension TypledSpriteAtlasGameExtension on Game {
     String path, {
     bool disablePadding = false,
   }) async {
-    return TypledSpriteAtlas.load(
+    return await TypledSpriteAtlas.load(
       path,
       cache: assets,
       disablePadding: disablePadding,

@@ -9,7 +9,7 @@ import 'package:meta/meta.dart';
 /// [MouseMoveCallbacks] components in the component tree. It will be attached
 /// to the [FlameGame] instance automatically whenever any
 /// [MouseMoveCallbacks] components are mounted into the component tree.
-class MouseMoveDispatcher extends Dispatcher<FlameGame> {
+class MouseMoveDispatcher() extends Dispatcher<FlameGame> {
   /// The record of all components currently being hovered.
   final Set<TaggedComponent<MouseMoveCallbacks>> _records = {};
 
@@ -82,9 +82,7 @@ class MouseMoveDispatcher extends Dispatcher<FlameGame> {
   }
 }
 
-class MouseMoveDispatcherKey implements ComponentKey {
-  const MouseMoveDispatcherKey();
-
+class const MouseMoveDispatcherKey() implements ComponentKey {
   @override
   int get hashCode => 'MouseMoveDispatcherKey'.hashCode;
 

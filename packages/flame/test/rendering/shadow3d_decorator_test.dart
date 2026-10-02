@@ -92,21 +92,18 @@ void main() {
   });
 }
 
-class _DecoratedRectangle extends RectangleComponent {
-  _DecoratedRectangle({
-    super.position,
-    super.size,
-    super.paint,
-    Decorator? decorator,
-  }) {
+class _DecoratedRectangle({
+  super.position,
+  super.size,
+  super.paint,
+  Decorator? decorator,
+}) extends RectangleComponent {
+  this {
     this.decorator.addLast(decorator);
   }
 }
 
-class _Background extends Component {
-  _Background(this.color);
-  final Color color;
-
+class _Background(final Color color) extends Component {
   @override
   void render(Canvas canvas) {
     canvas.drawColor(color, BlendMode.src);

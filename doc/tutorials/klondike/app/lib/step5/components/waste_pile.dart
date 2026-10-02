@@ -4,10 +4,11 @@ import '../klondike_game.dart';
 import '../pile.dart';
 import 'card.dart';
 
-class WastePile extends PositionComponent
+class WastePile({super.position})
+    extends PositionComponent
     with HasGameRef<KlondikeGame>
     implements Pile {
-  WastePile({super.position}) : super(size: KlondikeGame.cardSize);
+  this : super(size: KlondikeGame.cardSize);
 
   final List<Card> _cards = [];
   final Vector2 _fanOffset = Vector2(KlondikeGame.cardWidth * 0.2, 0);

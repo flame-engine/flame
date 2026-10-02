@@ -2,12 +2,8 @@ import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/operators/_common.dart';
 
 /// Operator GREATER_OR_EQUAL (>=), applies to numeric operands only.
-class GreaterOrEqual extends BoolExpression {
-  const GreaterOrEqual(this._lhs, this._rhs);
-
-  final NumExpression _lhs;
-  final NumExpression _rhs;
-
+class const GreaterOrEqual(final NumExpression _lhs, final NumExpression _rhs)
+    extends BoolExpression {
   /// Static constructor, used by parse.dart
   factory GreaterOrEqual.make(
     Expression lhs,

@@ -4,7 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-class _MockCustomPainter extends Mock implements CustomPainter {}
+class _MockCustomPainter() extends Mock implements CustomPainter;
 
 void main() {
   group('CustomPainterComponent', () {

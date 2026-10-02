@@ -1,7 +1,7 @@
-import 'dart:typed_data' show Float64List, Float32List;
+import 'dart:typed_data' show Float32List, Float64List;
 import 'dart:ui';
 
-class MatrixPool {
+class MatrixPool() {
   static final List<Float64List> _pool = [];
   static const int _bufferSize = 16;
 

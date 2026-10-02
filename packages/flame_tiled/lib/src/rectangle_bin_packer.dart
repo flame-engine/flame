@@ -9,14 +9,9 @@ import 'dart:ui';
 /// Light reading:
 ///   * https://en.wikipedia.org/wiki/Rectangle_packing#Packing_different_rectangles_in_a_minimum-area_rectangle
 ///   * https://www.david-colson.com/2020/03/10/exploring-rect-packing.html
-class RectangleBinPacker {
-  final double maxX;
-  final double maxY;
-
+class RectangleBinPacker(final double maxX, final double maxY) {
   /// The bins of free space that we can search.
   late final List<Rect> bins = [Rect.fromLTWH(0, 0, maxX, maxY)];
-
-  RectangleBinPacker(this.maxX, this.maxY);
 
   /// Finds a free space for a rectangle of lengths [width] and [height] in
   /// the atlas.

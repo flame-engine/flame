@@ -6,7 +6,7 @@ import 'package:test/scaffolding.dart';
 
 import 'helpers/mocks.dart';
 
-class _CountingDispatcher extends ContactEventsDispatcher {
+class _CountingDispatcher() extends ContactEventsDispatcher {
   int dispatchCount = 0;
 
   @override

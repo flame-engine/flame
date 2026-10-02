@@ -94,13 +94,9 @@ void main() {
   }
 }
 
-class _IndexRoute extends StatelessWidget {
-  final String page;
-
-  const _IndexRoute({
-    required this.page,
-  });
-
+class const _IndexRoute({
+  required final String page,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Directionality(

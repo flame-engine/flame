@@ -3,9 +3,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/gestures.dart';
 
-class NonPrimaryTapDispatcherKey implements ComponentKey {
-  const NonPrimaryTapDispatcherKey();
-
+class const NonPrimaryTapDispatcherKey() implements ComponentKey {
   @override
   int get hashCode => 'NonPrimaryTapDispatcherKey'.hashCode;
 
@@ -20,7 +18,7 @@ class NonPrimaryTapDispatcherKey implements ComponentKey {
 /// [TertiaryTapCallbacks]. This will be attached to the [FlameGame] instance
 /// automatically whenever any of those callbacks are mounted into the
 /// component tree.
-class NonPrimaryTapDispatcher extends Dispatcher<FlameGame> {
+class NonPrimaryTapDispatcher() extends Dispatcher<FlameGame> {
   final _secondaryComponents = <SecondaryTapCallbacks>{};
   final _tertiaryComponents = <TertiaryTapCallbacks>{};
 

@@ -4,15 +4,11 @@ import 'package:flutter/rendering.dart';
 
 /// [TextPaint] applies a Flutter [TextStyle] to a string of
 /// text, creating a [TextPainterTextElement].
-class TextPaint extends TextRenderer {
-  TextPaint({
-    TextStyle? style,
-    this.textDirection = TextDirection.ltr,
-  }) : style = style ?? defaultTextStyle;
-
-  final TextStyle style;
-  final TextDirection textDirection;
-
+class TextPaint({
+  TextStyle? style,
+  final TextDirection textDirection = TextDirection.ltr,
+}) extends TextRenderer {
+  final TextStyle style = style ?? defaultTextStyle;
   @override
   TextPainterTextElement format(String text) {
     final tp = toTextPainter(text);

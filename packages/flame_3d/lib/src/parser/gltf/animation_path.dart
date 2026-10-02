@@ -1,15 +1,11 @@
 import 'package:flame_3d/src/parser/gltf/gltf_node.dart';
 
 /// The name of the node's TRS property to modify.
-enum AnimationPath {
+enum AnimationPath(final String value) {
   translation('translation'),
   rotation('rotation'),
   scale('scale'),
   weights('weights');
-
-  final String value;
-
-  const AnimationPath(this.value);
 
   static AnimationPath valueOf(String value) {
     return values.firstWhere((e) => e.value == value);

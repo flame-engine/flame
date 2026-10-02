@@ -10,7 +10,7 @@ import 'package:flame_3d/src/parser/obj/surface_tool.dart';
 // These are keywords used in the OBJ syntax.
 // cSpell:ignore usemtl newmtl mtllib
 
-class ObjParser extends ModelParser {
+class ObjParser() extends ModelParser {
   @override
   Future<Model> parseModel(String filePath) async {
     final mesh = await parseMesh(filePath);

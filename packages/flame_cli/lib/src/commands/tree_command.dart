@@ -8,8 +8,8 @@ import 'package:io/io.dart';
 
 /// Prints the component tree of the game, with the id and the attributes of
 /// every component.
-class TreeCommand extends FlameCommand {
-  TreeCommand(super.out, super.workingDirectory) {
+class TreeCommand(super.out, super.workingDirectory) extends FlameCommand {
+  this {
     argParser
       ..addOption(
         'filter',

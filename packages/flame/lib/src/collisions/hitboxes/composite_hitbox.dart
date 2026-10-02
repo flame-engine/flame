@@ -8,15 +8,12 @@ import 'package:flame/components.dart';
 /// [RectangleHitbox]s to follow that hats edges properly, then you can add
 /// those hitboxes to an instance of this class and react to collisions to the
 /// whole hat, instead of for just each hitbox separately.
-class CompositeHitbox extends PositionComponent
-    with CollisionCallbacks, CollisionPassthrough {
-  CompositeHitbox({
-    super.position,
-    super.size,
-    super.scale,
-    super.angle,
-    super.anchor,
-    Iterable<ShapeHitbox>? super.children,
-    super.priority,
-  });
-}
+class CompositeHitbox({
+  super.position,
+  super.size,
+  super.scale,
+  super.angle,
+  super.anchor,
+  Iterable<ShapeHitbox>? super.children,
+  super.priority,
+}) extends PositionComponent with CollisionCallbacks, CollisionPassthrough;

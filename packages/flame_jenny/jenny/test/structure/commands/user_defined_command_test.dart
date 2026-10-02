@@ -218,7 +218,7 @@ void main() {
   });
 }
 
-class _CommandDialogueView extends DialogueView {
+class _CommandDialogueView() extends DialogueView {
   int numCalled = 0;
   String argumentString = '';
   List<dynamic> arguments = <int>[];

@@ -26,14 +26,24 @@ import 'package:meta/meta.dart';
 ///   position: Vector2(100, 100),
 /// )..tint(const Color(0xFFFFD700)); // Gold tint
 /// ```
-class IconComponent extends PositionComponent with HasPaint {
+class IconComponent({
   /// The icon to render.
-  IconData? _icon;
+  var IconData? _icon,
 
   /// The size at which to rasterize the icon. This controls the resolution
   /// of the rasterized image, independent of the component's display [size].
-  double _iconSize;
-
+  var double _iconSize = 64,
+  Paint? paint,
+  super.position,
+  Vector2? size,
+  super.scale,
+  super.angle,
+  super.nativeAngle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.key,
+}) extends PositionComponent with HasPaint {
   /// The rasterized icon image (rendered in white for tinting).
   @visibleForTesting
   Image? image;
@@ -54,20 +64,7 @@ class IconComponent extends PositionComponent with HasPaint {
   /// - [paint]: Optional paint for rendering effects.
   /// - [size]: The display size of the component. Defaults to
   ///   `Vector2.all(iconSize)` if not specified.
-  IconComponent({
-    this._icon,
-    this._iconSize = 64,
-    Paint? paint,
-    super.position,
-    Vector2? size,
-    super.scale,
-    super.angle,
-    super.nativeAngle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.key,
-  }) : super(size: size ?? Vector2.all(_iconSize)) {
+  this : super(size: size ?? Vector2.all(_iconSize)) {
     if (paint != null) {
       this.paint = paint;
     }

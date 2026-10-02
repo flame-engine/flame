@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'package:flutter/gestures.dart';
 
 /// A gesture recognizer that can recognize both individual pointer drags
@@ -12,25 +13,25 @@ import 'package:flutter/gestures.dart';
 ///
 /// Use [hasDrag] and [hasScale] to enable only the features needed. Both
 /// default to false; the dispatcher sets them via enableDrag/enableScale.
-class MultiDragScaleGestureRecognizer extends GestureRecognizer {
+class MultiDragScaleGestureRecognizer({
+  super.debugOwner,
+  super.supportedDevices,
+  AllowedButtonsFilter? allowedButtonsFilter,
+
+  /// The threshold for determining when a scale gesture has occurred.
+  /// Default is 1.05 (5% change in scale).
+  final double scaleThreshold = 1.05,
+}) extends GestureRecognizer {
   /// Create a gesture recognizer for tracking multi-drag and scale gestures.
-  MultiDragScaleGestureRecognizer({
-    super.debugOwner,
-    super.supportedDevices,
-    AllowedButtonsFilter? allowedButtonsFilter,
-    this.scaleThreshold = 1.05,
-  }) : super(
-         allowedButtonsFilter:
-             allowedButtonsFilter ?? _defaultButtonAcceptBehavior,
-       );
+  this
+    : super(
+        allowedButtonsFilter:
+            allowedButtonsFilter ?? _defaultButtonAcceptBehavior,
+      );
 
   // Accept the input if, and only if, [kPrimaryButton] is pressed.
   static bool _defaultButtonAcceptBehavior(int buttons) =>
       buttons == kPrimaryButton;
-
-  /// The threshold for determining when a scale gesture has occurred.
-  /// Default is 1.05 (5% change in scale).
-  final double scaleThreshold;
 
   /// Whether drag callbacks should fire. Controlled by the dispatcher.
   bool hasDrag = false;
@@ -400,13 +401,13 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
 
 /// Groups per-recognizer drag state. Per-pointer state lives in
 /// [_DragPointerState].
-class _DragState {
+class _DragState() {
   final Map<int, _DragPointerState> pointers = {};
   int get count => pointers.length;
 }
 
 /// Groups all scale-tracking state for a [MultiDragScaleGestureRecognizer].
-class _ScaleState {
+class _ScaleState() {
   bool active = false;
   Offset? initialFocalPoint;
   Offset? currentFocalPoint;
@@ -441,21 +442,18 @@ class _ScaleState {
   }
 }
 
-class _DragPointerState {
-  _DragPointerState({
-    required this.recognizer,
-    required PointerDownEvent event,
-  }) : initialPosition = event.position,
-       currentPosition = event.position,
-       kind = event.kind {
+class _DragPointerState({
+  required final MultiDragScaleGestureRecognizer recognizer,
+  required PointerDownEvent event,
+}) {
+  this {
     velocityTracker = VelocityTracker.withKind(kind);
   }
 
-  final MultiDragScaleGestureRecognizer recognizer;
-  final Offset initialPosition;
-  final PointerDeviceKind kind;
+  final Offset initialPosition = event.position;
+  final PointerDeviceKind kind = event.kind;
 
-  Offset currentPosition;
+  Offset currentPosition = event.position;
   late VelocityTracker velocityTracker;
   GestureArenaEntry? _arenaEntry;
   Drag? _drag;
@@ -558,16 +556,9 @@ class _DragPointerState {
   }
 }
 
-class _LineBetweenPointers {
-  _LineBetweenPointers({
-    required this.pointerStartId,
-    required this.pointerStartLocation,
-    required this.pointerEndId,
-    required this.pointerEndLocation,
-  });
-
-  final int pointerStartId;
-  final Offset pointerStartLocation;
-  final int pointerEndId;
-  final Offset pointerEndLocation;
-}
+class _LineBetweenPointers({
+  required final int pointerStartId,
+  required final Offset pointerStartLocation,
+  required final int pointerEndId,
+  required final Offset pointerEndLocation,
+});

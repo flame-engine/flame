@@ -5,12 +5,11 @@ import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _Entity extends PositionedEntity {
-  _Entity({super.behaviors, super.position})
-    : super(size: Vector2.all(16), anchor: Anchor.center);
+class _Entity({super.behaviors, super.position}) extends PositionedEntity {
+  this : super(size: Vector2.all(16), anchor: Anchor.center);
 }
 
-class _TrackingScreenCollisionBehavior
+class _TrackingScreenCollisionBehavior()
     extends ScreenCollisionBehavior<_Entity> {
   bool startCalled = false;
   bool collisionCalled = false;
@@ -37,8 +36,8 @@ class _TrackingScreenCollisionBehavior
   }
 }
 
-class _TestGame extends FlameGame with HasCollisionDetection {
-  _TestGame() : super(children: [ScreenHitbox()]);
+class _TestGame() extends FlameGame with HasCollisionDetection {
+  this : super(children: [ScreenHitbox()]);
 }
 
 void main() {

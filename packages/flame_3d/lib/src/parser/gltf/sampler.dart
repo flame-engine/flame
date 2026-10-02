@@ -5,27 +5,21 @@ import 'package:flame_3d/src/parser/gltf/min_filter.dart';
 import 'package:flame_3d/src/parser/gltf/wrap_mode.dart';
 
 /// Texture sampler properties for filtering and wrapping modes.
-class Sampler extends GltfNode {
+class Sampler({
+  required super.root,
+
   /// Magnification filter.
-  final MagFilter magFilter;
+  required final MagFilter magFilter,
 
   /// Minification filter.
-  final MinFilter minFilter;
+  required final MinFilter minFilter,
 
   /// The wrap mode for the s coordinate.
-  final WrapMode wrapS;
+  required final WrapMode wrapS,
 
   /// The wrap mode for the t coordinate.
-  final WrapMode wrapT;
-
-  Sampler({
-    required super.root,
-    required this.magFilter,
-    required this.minFilter,
-    required this.wrapS,
-    required this.wrapT,
-  });
-
+  required final WrapMode wrapT,
+}) extends GltfNode {
   Sampler.parse(
     GltfRoot root,
     Map<String, Object?> map,

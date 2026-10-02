@@ -2,24 +2,24 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:material_ui/material_ui.dart' hide Image, Draggable;
+import 'package:material_ui/material_ui.dart' hide Draggable, Image;
 
-class CirclesExample extends FlameGame {
+class CirclesExample() extends FlameGame {
   static const description = '''
     This example will create a circle every time you tap on the screen. It will
     have the initial velocity towards the center of the screen and if it touches
     another circle both of them will change color.
   ''';
 
-  CirclesExample()
+  this
     : super(
         camera: CameraComponent.withFixedResolution(width: 600, height: 400),
         world: MyWorld(),
       );
 }
 
-class MyWorld extends World with TapCallbacks, HasCollisionDetection {
-  MyWorld() : super(children: [ScreenHitbox()..debugMode = true]);
+class MyWorld() extends World with TapCallbacks, HasCollisionDetection {
+  this : super(children: [ScreenHitbox()..debugMode = true]);
 
   @override
   void onTapDown(TapDownEvent info) {
@@ -27,10 +27,10 @@ class MyWorld extends World with TapCallbacks, HasCollisionDetection {
   }
 }
 
-class MyCollidable extends PositionComponent
+class MyCollidable({super.position})
+    extends PositionComponent
     with HasGameRef<CirclesExample>, CollisionCallbacks {
-  MyCollidable({super.position})
-    : super(size: Vector2.all(30), anchor: Anchor.center);
+  this : super(size: Vector2.all(30), anchor: Anchor.center);
 
   late Vector2 velocity;
   final _collisionColor = Colors.amber;

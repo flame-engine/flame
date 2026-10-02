@@ -6,9 +6,7 @@ import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
-class MultiDragScaleDispatcherKey implements ComponentKey {
-  const MultiDragScaleDispatcherKey();
-
+class const MultiDragScaleDispatcherKey() implements ComponentKey {
   @override
   int get hashCode => 91604875; // 'MultiDragScaleDispatcherKey' as hashCode
 
@@ -24,7 +22,7 @@ class MultiDragScaleDispatcherKey implements ComponentKey {
 /// Use [enableDrag] and [enableScale] (called via [addDispatcher]) to control
 /// which event types are forwarded to the underlying
 /// [MultiDragScaleGestureRecognizer].
-class MultiDragScaleDispatcher extends Dispatcher<FlameGame> {
+class MultiDragScaleDispatcher() extends Dispatcher<FlameGame> {
   /// The record of all components currently being touched.
   final Set<TaggedComponent<DragCallbacks>> _records = {};
 
@@ -92,9 +90,9 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame> {
     required bool hasScale,
   }) {
     final game = component.findRootGame()!;
-    var dispatcher =
-        game.findByKey(const MultiDragScaleDispatcherKey())
-            as MultiDragScaleDispatcher?;
+    var dispatcher = game.findByKey(
+      const MultiDragScaleDispatcherKey(),
+    ) as MultiDragScaleDispatcher?;
     if (dispatcher == null) {
       dispatcher = MultiDragScaleDispatcher();
       game.registerKey(const MultiDragScaleDispatcherKey(), dispatcher);
@@ -119,9 +117,9 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame> {
     if (game == null) {
       return;
     }
-    final dispatcher =
-        game.findByKey(const MultiDragScaleDispatcherKey())
-            as MultiDragScaleDispatcher?;
+    final dispatcher = game.findByKey(
+      const MultiDragScaleDispatcherKey(),
+    ) as MultiDragScaleDispatcher?;
     if (dispatcher == null) {
       return;
     }
@@ -430,8 +428,11 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame> {
 /// dispatcher, in contrast, is shared by the whole game and needs to tell
 /// pointers apart, so one of these is created per pointer to hold the id and
 /// attach it to every event that follows.
-class _FlameDragAdapter implements Drag {
-  _FlameDragAdapter(this._dispatcher, Offset startPoint) {
+class _FlameDragAdapter(
+  final MultiDragScaleDispatcher _dispatcher,
+  Offset startPoint,
+) implements Drag {
+  this {
     _id = _globalIdCounter++;
     _dispatcher.handleDragStart(
       _id,
@@ -443,7 +444,6 @@ class _FlameDragAdapter implements Drag {
     );
   }
 
-  final MultiDragScaleDispatcher _dispatcher;
   late final int _id;
   static int _globalIdCounter = 0;
 

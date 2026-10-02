@@ -9,11 +9,11 @@ import '../objects/platform_block.dart';
 import '../objects/star.dart';
 import 'water_enemy.dart';
 
-class EmberPlayer extends SpriteAnimationComponent
+class EmberPlayer({
+  required super.position,
+}) extends SpriteAnimationComponent
     with KeyboardHandler, CollisionCallbacks, HasGameRef<EmberQuestGame> {
-  EmberPlayer({
-    required super.position,
-  }) : super(size: Vector2.all(64), anchor: Anchor.center);
+  this : super(size: Vector2.all(64), anchor: Anchor.center);
 
   final Vector2 velocity = Vector2.zero();
   final Vector2 fromAbove = Vector2(0, -1);

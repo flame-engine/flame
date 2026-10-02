@@ -6,7 +6,7 @@ import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flame_behaviors_example/entities/entities.dart';
 import 'package:flame_behaviors_example/main.dart';
 
-class SpawningBehavior extends TappableBehavior<ExampleGame> {
+class SpawningBehavior() extends TappableBehavior<ExampleGame> {
   final _rng = Random();
 
   @override
@@ -46,4 +46,7 @@ class SpawningBehavior extends TappableBehavior<ExampleGame> {
   }
 }
 
-enum Shapes { circle, rectangle }
+enum Shapes() {
+  circle,
+  rectangle,
+}

@@ -28,7 +28,7 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 /// [ContactEventsDispatcher] and provide it to your [Forge2DGame] or
 /// [Forge2DWorld].
 /// {@endtemplate}
-class ContactEventsDispatcher {
+class ContactEventsDispatcher() {
   /// Called by [Forge2DWorld.update] after each physics step, with the
   /// events that were generated during that step.
   void dispatch(ContactEvents contactEvents, SensorEvents sensorEvents) {

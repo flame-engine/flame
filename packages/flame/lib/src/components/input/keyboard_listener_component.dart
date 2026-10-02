@@ -11,17 +11,11 @@ typedef KeyHandlerCallback = bool Function(Set<LogicalKeyboardKey>);
 /// This component is based on [KeyboardHandler], which requires the [FlameGame]
 /// which is used to be mixed with [HasKeyboardHandlerComponents].
 /// {@endtemplate}
-class KeyboardListenerComponent extends Component with KeyboardHandler {
-  /// {@macro keyboard_listener_component}
-  KeyboardListenerComponent({
-    this._keyUp = const {},
-    this._keyDown = const {},
-    super.key,
-  });
-
-  final Map<LogicalKeyboardKey, KeyHandlerCallback> _keyUp;
-  final Map<LogicalKeyboardKey, KeyHandlerCallback> _keyDown;
-
+class KeyboardListenerComponent({
+  final Map<LogicalKeyboardKey, KeyHandlerCallback> _keyUp = const {},
+  final Map<LogicalKeyboardKey, KeyHandlerCallback> _keyDown = const {},
+  super.key,
+}) extends Component with KeyboardHandler {
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     final isUp = event is KeyUpEvent;

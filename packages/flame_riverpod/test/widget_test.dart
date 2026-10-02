@@ -9,9 +9,9 @@ final numberProvider = Provider.autoDispose((ref) {
   return 1;
 });
 
-class MyGame extends FlameGame with RiverpodGameMixin {}
+class MyGame() extends FlameGame with RiverpodGameMixin;
 
-class MyGameWithRefAccess extends FlameGame with RiverpodGameMixin {
+class MyGameWithRefAccess() extends FlameGame with RiverpodGameMixin {
   @override
   void onMount() {
     addToGameWidgetBuild(() {
@@ -21,7 +21,7 @@ class MyGameWithRefAccess extends FlameGame with RiverpodGameMixin {
   }
 }
 
-class EmptyComponent extends Component with RiverpodComponentMixin {
+class EmptyComponent() extends Component with RiverpodComponentMixin {
   @override
   void onLoad() {
     super.onLoad();
@@ -31,7 +31,7 @@ class EmptyComponent extends Component with RiverpodComponentMixin {
   }
 }
 
-class WatchingComponent extends Component with RiverpodComponentMixin {
+class WatchingComponent() extends Component with RiverpodComponentMixin {
   @override
   void onLoad() {
     super.onLoad();

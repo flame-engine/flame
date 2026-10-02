@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _MockAssetBundle extends Mock implements AssetBundle {}
+class _MockAssetBundle() extends Mock implements AssetBundle;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -36,7 +36,7 @@ void main() {
       final bundle = _MockAssetBundle();
       when(
         () => bundle.loadString(any()),
-      ).thenAnswer((_) async => File(atlasPath).readAsString());
+      ).thenAnswer((_) async => await File(atlasPath).readAsString());
       when(() => bundle.load(any())).thenAnswer(
         (_) async => ByteData.sublistView(
           File(atlasImage1).readAsBytesSync(),

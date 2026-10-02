@@ -40,11 +40,9 @@ void main() {
   });
 }
 
-class _LoadException implements Exception {
-  const _LoadException();
-}
+class const _LoadException() implements Exception;
 
-class _FailingLoadComponent extends Component {
+class _FailingLoadComponent() extends Component {
   @override
   Future<void> onLoad() async {
     await Future<void>.delayed(const Duration(milliseconds: 10));

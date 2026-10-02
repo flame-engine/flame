@@ -20,16 +20,16 @@ const _dt = 1.0 / 60;
 /// example, a sorted list shifts elements on every removal, while a tree does
 /// a logarithmic lookup), so a container replacement must be evaluated at
 /// both sizes.
-class ComponentChurnBenchmark extends AsyncBenchmarkBase {
+class ComponentChurnBenchmark({required final int staticPopulation})
+    extends AsyncBenchmarkBase {
   static const _batchSize = 100;
   static const _liveBatches = 5;
   static const _amountTicks = 60;
 
-  final int staticPopulation;
   late final FlameGame _game;
   final Queue<List<Component>> _batches = Queue();
 
-  ComponentChurnBenchmark({required this.staticPopulation})
+  this
     : super(
         'Lifecycle churn '
         '(100 per tick, ${staticPopulation ~/ 1000}k population)',
@@ -75,13 +75,13 @@ class ComponentChurnBenchmark extends AsyncBenchmarkBase {
 /// processed in one tick, then all removed and processed in the next. This
 /// stresses [FlameGame.processLifecycleEvents] with a long event queue, as
 /// happens when levels are loaded and torn down.
-class MassAddRemoveBenchmark extends AsyncBenchmarkBase {
+class MassAddRemoveBenchmark() extends AsyncBenchmarkBase {
   static const _amountComponents = 1000;
   static const _amountCycles = 5;
 
   late final FlameGame _game;
 
-  MassAddRemoveBenchmark() : super('Mass add/remove (1k per cycle)');
+  this : super('Mass add/remove (1k per cycle)');
 
   static Future<void> main() async {
     await MassAddRemoveBenchmark().report();

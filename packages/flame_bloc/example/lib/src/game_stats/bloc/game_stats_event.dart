@@ -1,35 +1,23 @@
 part of 'game_stats_bloc.dart';
 
-abstract class GameStatsEvent extends Equatable {
-  const GameStatsEvent();
-}
+abstract class const GameStatsEvent() extends Equatable;
 
-class ScoreEventAdded extends GameStatsEvent {
-  const ScoreEventAdded(this.score);
-
-  final int score;
-
+class const ScoreEventAdded(final int score) extends GameStatsEvent {
   @override
   List<Object?> get props => [score];
 }
 
-class PlayerDied extends GameStatsEvent {
-  const PlayerDied();
-
+class const PlayerDied() extends GameStatsEvent {
   @override
   List<Object?> get props => [];
 }
 
-class PlayerRespawned extends GameStatsEvent {
-  const PlayerRespawned();
-
+class const PlayerRespawned() extends GameStatsEvent {
   @override
   List<Object?> get props => [];
 }
 
-class GameReset extends GameStatsEvent {
-  const GameReset();
-
+class const GameReset() extends GameStatsEvent {
   @override
   List<Object?> get props => [];
 }

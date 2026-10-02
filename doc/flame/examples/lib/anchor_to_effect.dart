@@ -3,7 +3,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 
-class AnchorToEffectGame extends FlameGame {
+class AnchorToEffectGame() extends FlameGame {
   @override
   Future<void> onLoad() async {
     final flower = Flower(

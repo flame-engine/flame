@@ -1,12 +1,12 @@
 export 'package:vector_math/vector_math.dart'
     show
-        Vector2,
-        Vector3,
-        Vector4,
+        Aabb3,
         Matrix2,
         Matrix3,
         Matrix4,
         Quaternion,
-        Aabb3;
+        Vector2,
+        Vector3,
+        Vector4;
 
 export 'extensions.dart';

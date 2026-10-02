@@ -50,9 +50,7 @@ void main() {
   });
 }
 
-class _Recorder extends Component {
-  _Recorder({super.children});
-
+class _Recorder({super.children}) extends Component {
   final List<double> recordedDts = [];
 
   @override
@@ -61,8 +59,8 @@ class _Recorder extends Component {
   }
 }
 
-class _ScaledRecorder extends _Recorder with CustomTraversal, HasTimeScale {
-  _ScaledRecorder({super.children});
-}
+class _ScaledRecorder({super.children})
+    extends _Recorder
+    with CustomTraversal, HasTimeScale;
 
-class _PausableGame extends FlameGame with HasTimeScale {}
+class _PausableGame() extends FlameGame with HasTimeScale;

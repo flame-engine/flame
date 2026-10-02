@@ -32,4 +32,4 @@ void main() {
   });
 }
 
-class _PaintComponent extends Component with HasPaint {}
+class _PaintComponent() extends Component with HasPaint;

@@ -8,18 +8,16 @@ import 'package:meta/meta.dart';
 /// [HexagonalTileLayer] have hexagonal-shaped tiles and also its overall shape
 /// is like a honeycomb.
 @internal
-class HexagonalTileLayer extends FlameTileLayer {
-  HexagonalTileLayer({
-    required super.layer,
-    required super.map,
-    required super.destTileSize,
-    required super.tiledAtlas,
-    required super.animationFrames,
-    required super.ignoreFlip,
-    required super.layerPaintFactory,
-    super.filterQuality,
-  });
-
+class HexagonalTileLayer({
+  required super.layer,
+  required super.map,
+  required super.destTileSize,
+  required super.tiledAtlas,
+  required super.animationFrames,
+  required super.ignoreFlip,
+  required super.layerPaintFactory,
+  super.filterQuality,
+}) extends FlameTileLayer {
   @override
   void cacheTiles() {
     final halfDestinationTile = destTileSize / 2;

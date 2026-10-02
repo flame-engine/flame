@@ -8,7 +8,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart' hide World;
 import 'package:flutter/services.dart';
-import 'package:material_ui/material_ui.dart' hide Image, Gradient;
+import 'package:material_ui/material_ui.dart' hide Gradient, Image;
 import 'package:padracing/ball.dart';
 import 'package:padracing/car.dart';
 import 'package:padracing/game_colors.dart';
@@ -31,7 +31,7 @@ final List<Map<LogicalKeyboardKey, LogicalKeyboardKey>> playersKeys = [
   },
 ];
 
-class PadRacingGame extends Forge2DGame with KeyboardEvents {
+class PadRacingGame() extends Forge2DGame with KeyboardEvents {
   static const String description = '''
      This is an example game that uses Forge2D to handle the physics.
      In this game you should finish 3 laps in as little time as possible, it can
@@ -41,7 +41,7 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
 
   // The game replaces the built-in camera with its own cameras below, which
   // apply the scaling through their zoom, so one meter is one world unit here.
-  PadRacingGame() : super(gravity: Vector2.zero(), metersToPixels: 1);
+  this : super(gravity: Vector2.zero(), metersToPixels: 1);
 
   @override
   Color backgroundColor() => Colors.black;

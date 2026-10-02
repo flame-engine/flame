@@ -2,9 +2,7 @@ import 'package:flame_bloc_example/src/inventory/bloc/inventory_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_ui/material_ui.dart';
 
-class Inventory extends StatelessWidget {
-  const Inventory({super.key});
-
+class const Inventory({super.key}) extends StatelessWidget {
   Color _mapWeaponColor(Weapon weapon) {
     return switch (weapon) {
       Weapon.bullet => Colors.orange,

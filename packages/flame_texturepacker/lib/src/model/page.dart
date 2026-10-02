@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-class Page {
+class Page() {
   late String textureFile;
   Image? texture;
   late int width;

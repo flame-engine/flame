@@ -84,7 +84,7 @@ class SpriteAnimationWidget extends StatefulWidget {
   State<SpriteAnimationWidget> createState() => _SpriteAnimationWidgetState();
 }
 
-class _SpriteAnimationWidgetState extends State<SpriteAnimationWidget> {
+class _SpriteAnimationWidgetState() extends State<SpriteAnimationWidget> {
   late FutureOr<SpriteAnimation> _animationFuture = widget._animationFuture;
   late SpriteAnimationTicker? _animationTicker = widget._animationTicker;
 
@@ -162,35 +162,26 @@ class _SpriteAnimationWidgetState extends State<SpriteAnimationWidget> {
 
 /// A [StatefulWidget] that render a [SpriteAnimation].
 @visibleForTesting
-class InternalSpriteAnimationWidget extends StatefulWidget {
+class const InternalSpriteAnimationWidget({
   /// The [SpriteAnimation] to be rendered
-  final SpriteAnimation animation;
+  required final SpriteAnimation animation,
 
   /// The [SpriteAnimationTicker] use for updating the [animation].
-  final SpriteAnimationTicker animationTicker;
-
-  /// The positioning [Anchor]
-  final Anchor anchor;
+  required final SpriteAnimationTicker animationTicker,
 
   /// Should the [animation] be playing or not
-  final bool playing;
+  final bool playing = true,
 
-  final Paint? paint;
-
-  const InternalSpriteAnimationWidget({
-    required this.animation,
-    required this.animationTicker,
-    this.playing = true,
-    this.anchor = Anchor.topLeft,
-    this.paint,
-    super.key,
-  });
-
+  /// The positioning [Anchor]
+  final Anchor anchor = Anchor.topLeft,
+  final Paint? paint,
+  super.key,
+}) extends StatefulWidget {
   @override
   State createState() => _InternalSpriteAnimationWidgetState();
 }
 
-class _InternalSpriteAnimationWidgetState
+class _InternalSpriteAnimationWidgetState()
     extends State<InternalSpriteAnimationWidget>
     with SingleTickerProviderStateMixin {
   AnimationController? _controller;

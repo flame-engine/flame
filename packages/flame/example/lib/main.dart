@@ -17,7 +17,7 @@ void main() {
   );
 }
 
-class MyWorld extends World with TapCallbacks {
+class MyWorld() extends World with TapCallbacks {
   @override
   Future<void> onLoad() async {
     add(Square(Vector2.zero()));
@@ -30,7 +30,7 @@ class MyWorld extends World with TapCallbacks {
   }
 }
 
-class Square extends RectangleComponent with TapCallbacks {
+class Square(Vector2 position) extends RectangleComponent with TapCallbacks {
   static const speed = 3;
   static const squareSize = 128.0;
   static const indicatorSize = 6.0;
@@ -38,7 +38,7 @@ class Square extends RectangleComponent with TapCallbacks {
   static final Paint red = BasicPalette.red.paint();
   static final Paint blue = BasicPalette.blue.paint();
 
-  Square(Vector2 position)
+  this
     : super(
         position: position,
         size: Vector2.all(squareSize),

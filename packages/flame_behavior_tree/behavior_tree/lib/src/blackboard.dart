@@ -2,7 +2,7 @@
 ///
 /// The Blackboard provides a centralized location for storing and retrieving
 /// data that needs to be shared between nodes in a behavior tree.
-class Blackboard {
+class Blackboard() {
   final Map<String, dynamic> _data = {};
 
   /// Gets a value from the blackboard.

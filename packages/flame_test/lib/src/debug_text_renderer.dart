@@ -8,21 +8,13 @@ import 'package:flame/text.dart';
 /// Rendering regular text in golden tests is unreliable due to differences in
 /// font definitions across platforms and different algorithms used for anti-
 /// aliasing.
-class DebugTextRenderer extends TextRenderer {
-  DebugTextRenderer({
-    this.color = const Color(0xFFFFFFFF),
-    this.fontSize = 16.0,
-    this.lineHeight = 1.2,
-    this.fontWeight = FontWeight.normal,
-    this.fontStyle = FontStyle.normal,
-  });
-
-  final Color color;
-  final double fontSize;
-  final double lineHeight;
-  final FontWeight fontWeight;
-  final FontStyle fontStyle;
-
+class DebugTextRenderer({
+  final Color color = const Color(0xFFFFFFFF),
+  final double fontSize = 16.0,
+  final double lineHeight = 1.2,
+  final FontWeight fontWeight = FontWeight.normal,
+  final FontStyle fontStyle = FontStyle.normal,
+}) extends TextRenderer {
   @override
   InlineTextElement format(String text) => _DebugTextElement(this, text);
 
@@ -38,8 +30,9 @@ class DebugTextRenderer extends TextRenderer {
   }
 }
 
-class _DebugTextElement extends InlineTextElement {
-  _DebugTextElement(this.style, this.text) {
+class _DebugTextElement(final DebugTextRenderer style, final String text)
+    extends InlineTextElement {
+  this {
     final charWidth = style.fontSize * 1.0;
     final charHeight = style.fontSize;
     paint
@@ -56,8 +49,6 @@ class _DebugTextElement extends InlineTextElement {
     _initRects(charWidth, charHeight);
   }
 
-  final DebugTextRenderer style;
-  final String text;
   final List<Rect> rects = [];
   final Paint paint = Paint();
   @override

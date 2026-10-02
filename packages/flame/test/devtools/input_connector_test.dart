@@ -6,8 +6,8 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _Tapper extends PositionComponent with TapCallbacks {
-  _Tapper() : super(position: Vector2(10, 10), size: Vector2(20, 20));
+class _Tapper() extends PositionComponent with TapCallbacks {
+  this : super(position: Vector2(10, 10), size: Vector2(20, 20));
 
   final taps = <Vector2>[];
 
@@ -15,8 +15,8 @@ class _Tapper extends PositionComponent with TapCallbacks {
   void onTapUp(TapUpEvent event) => taps.add(event.localPosition);
 }
 
-class _Dragger extends PositionComponent with DragCallbacks {
-  _Dragger() : super(size: Vector2(100, 100));
+class _Dragger() extends PositionComponent with DragCallbacks {
+  this : super(size: Vector2(100, 100));
 
   int starts = 0;
   int updates = 0;
@@ -38,9 +38,9 @@ class _Dragger extends PositionComponent with DragCallbacks {
   }
 }
 
-class _KeyGame extends FlameGame with HasKeyboardHandlerComponents {}
+class _KeyGame() extends FlameGame with HasKeyboardHandlerComponents;
 
-class _Listener extends Component with KeyboardHandler {
+class _Listener() extends Component with KeyboardHandler {
   final events = <KeyEvent>[];
   final pressed = <Set<LogicalKeyboardKey>>[];
 

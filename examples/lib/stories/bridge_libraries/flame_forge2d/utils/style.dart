@@ -5,7 +5,7 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 
 /// The palette that the Forge2D examples share, matching the one used by the
 /// Forge2D package's own examples.
-abstract final class ExampleColors {
+abstract final class ExampleColors() {
   static const background = Color(0xFF0B1020);
   static const indigo = Color(0xFF7C9CFF);
   static const sky = Color(0xFF38BDF8);
@@ -100,17 +100,16 @@ mixin GlowingBody on BodyComponent {
 
 /// The base game for the Forge2D examples, which gives them the shared dark
 /// background.
-class Forge2DExampleGame extends Forge2DGame {
-  /// These examples are laid out for a screen that shows tens of meters, so
-  /// they pin the rendering scale they were written for rather than following
-  /// the default. See the package example for a world at the default scale.
-  Forge2DExampleGame({
-    super.world,
-    super.camera,
-    super.gravity,
-    super.metersToPixels = 10,
-  });
-
+///
+/// These examples are laid out for a screen that shows tens of meters, so
+/// they pin the rendering scale they were written for rather than following
+/// the default. See the package example for a world at the default scale.
+class Forge2DExampleGame({
+  super.world,
+  super.camera,
+  super.gravity,
+  super.metersToPixels = 10,
+}) extends Forge2DGame {
   @override
   Color backgroundColor() => ExampleColors.background;
 }

@@ -7,18 +7,16 @@ import 'package:meta/meta.dart';
 /// [OrthogonalTileLayer] is a tile layer that each axis is represented
 /// orthogonally.
 @internal
-class OrthogonalTileLayer extends FlameTileLayer {
-  OrthogonalTileLayer({
-    required super.layer,
-    required super.map,
-    required super.destTileSize,
-    required super.tiledAtlas,
-    required super.animationFrames,
-    required super.ignoreFlip,
-    required super.layerPaintFactory,
-    super.filterQuality,
-  });
-
+class OrthogonalTileLayer({
+  required super.layer,
+  required super.map,
+  required super.destTileSize,
+  required super.tiledAtlas,
+  required super.animationFrames,
+  required super.ignoreFlip,
+  required super.layerPaintFactory,
+  super.filterQuality,
+}) extends FlameTileLayer {
   @override
   void cacheTiles() {
     final size = destTileSize;

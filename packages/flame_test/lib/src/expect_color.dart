@@ -1,4 +1,5 @@
 import 'dart:ui' show Color;
+
 import 'package:test/test.dart';
 
 /// A test helper function that compares two [Color] objects for equality with

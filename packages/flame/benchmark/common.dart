@@ -9,9 +9,7 @@ import 'package:flame/game.dart';
 /// a very different code path than a real game.
 Future<void> mountGame(FlameGame game, {Vector2? size}) async {
   game.onGameResize(size ?? Vector2(800, 600));
-  // ignore: invalid_use_of_internal_member
   await game.load();
-  // ignore: invalid_use_of_internal_member
   game.mount();
   await game.ready();
   game.update(0);

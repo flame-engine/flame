@@ -41,9 +41,7 @@ void main() {
   });
 }
 
-class _OnParentResizeTesterComponent extends PositionComponent {
-  _OnParentResizeTesterComponent();
-
+class _OnParentResizeTesterComponent() extends PositionComponent {
   Vector2? _parentSize;
 
   @override

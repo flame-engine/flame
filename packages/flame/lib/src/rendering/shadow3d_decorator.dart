@@ -19,25 +19,16 @@ import 'package:vector_math/vector_math.dart';
 /// terrain, so many limitations apply. For example, the shadow must fall on
 /// the flat ground, having the sun too high in the sky is undesirable as it
 /// would betray the fact that the component is really flat, etc.
-class Shadow3DDecorator extends Decorator {
-  Shadow3DDecorator({
-    Vector2? base,
-    double? ascent,
-    double? angle,
-    double? xShift,
-    double? yScale,
-    double? blur,
-    double? opacity,
-    Color? baseColor,
-  }) : _base = base?.clone() ?? Vector2.zero(),
-       _ascent = ascent ?? 0,
-       _angle = angle ?? -1.4,
-       _shift = xShift ?? 100.0,
-       _scale = yScale ?? 1.0,
-       _blur = blur ?? 0,
-       _opacity = opacity ?? 0.6,
-       _baseColor = baseColor ?? BasicPalette.black.color;
-
+class Shadow3DDecorator({
+  Vector2? base,
+  double? ascent,
+  double? angle,
+  double? xShift,
+  double? yScale,
+  double? blur,
+  double? opacity,
+  Color? baseColor,
+}) extends Decorator {
   /// Coordinates of the point where the component "touches the ground". If the
   /// component is airborne (i.e. [ascent] is non-zero), then this should be the
   /// coordinate of the point where the component would have touched the ground
@@ -45,7 +36,7 @@ class Shadow3DDecorator extends Decorator {
   ///
   /// This point is in the parent's coordinate space.
   Vector2 get base => _base;
-  final Vector2 _base;
+  final Vector2 _base = base?.clone() ?? Vector2.zero();
   set base(Vector2 value) {
     _base.setFrom(value);
     _transformMatrix = null;
@@ -53,7 +44,7 @@ class Shadow3DDecorator extends Decorator {
 
   /// How high is the component above the ground.
   double get ascent => _ascent;
-  double _ascent;
+  double _ascent = ascent ?? 0;
   set ascent(double value) {
     _ascent = value;
     _transformMatrix = null;
@@ -67,7 +58,7 @@ class Shadow3DDecorator extends Decorator {
   ///
   /// This property should be determined by the meridian position of the sun.
   double get xShift => _shift;
-  double _shift;
+  double _shift = xShift ?? 100.0;
   set xShift(double value) {
     _shift = value;
     _transformMatrix = null;
@@ -78,7 +69,7 @@ class Shadow3DDecorator extends Decorator {
   /// the sky, the scale factor should be less than 1, and when the sun is
   /// lower, the scale factor ought to be greater than 1.
   double get yScale => _scale;
-  double _scale;
+  double _scale = yScale ?? 1.0;
   set yScale(double value) {
     _scale = value;
     _transformMatrix = null;
@@ -90,7 +81,7 @@ class Shadow3DDecorator extends Decorator {
   /// objects. Use positive angles that are slightly above τ/4 to make shadows
   /// that are in front of the objects.
   double get angle => _angle;
-  double _angle;
+  double _angle = angle ?? -1.4;
   set angle(double value) {
     _angle = value;
     _transformMatrix = null;
@@ -106,7 +97,7 @@ class Shadow3DDecorator extends Decorator {
   /// of blur proportional to the height of the object, or dependent on its
   /// ascent above the ground.
   double get blur => _blur;
-  double _blur;
+  double _blur = blur ?? 0;
   set blur(double value) {
     _blur = value;
     _paint = null;
@@ -117,7 +108,7 @@ class Shadow3DDecorator extends Decorator {
   /// a cave). Values close to 0 will make the shadow barely visible, such as
   /// on a cloudy day.
   double get opacity => _opacity;
-  double _opacity;
+  double _opacity = opacity ?? 0.6;
   set opacity(double value) {
     _opacity = value;
     _paint = null;
@@ -125,7 +116,7 @@ class Shadow3DDecorator extends Decorator {
 
   /// Shadow's base color before opacity. This defaults to pitch-black.
   Color get baseColor => _baseColor;
-  Color _baseColor;
+  Color _baseColor = baseColor ?? BasicPalette.black.color;
   set baseColor(Color value) {
     _baseColor = value;
     _paint = null;

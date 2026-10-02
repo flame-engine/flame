@@ -39,7 +39,7 @@ Future<void> testScenario({
   }
 
   if (testName == null) {
-    return testBody();
+    return await testBody();
   } else {
     test(testName, testBody, skip: skip);
   }
@@ -76,8 +76,8 @@ int _calculateIndent(String line) {
   return line.length;
 }
 
-class _TestPlan extends DialogueView {
-  _TestPlan(String input) {
+class _TestPlan(String input) extends DialogueView {
+  this {
     _parse(input);
   }
 
@@ -234,38 +234,26 @@ class _TestPlan extends DialogueView {
   }
 }
 
-class _Line {
-  const _Line(this.character, this.text);
-  final String? character;
-  final String text;
-
+class const _Line(final String? character, final String text) {
   @override
   String toString() => 'Line($character: $text)';
 }
 
-class _Choice {
-  const _Choice(this.options, this.selectionIndex);
-  final List<_Option> options;
-  final int selectionIndex;
-
+class const _Choice(final List<_Option> options, final int selectionIndex) {
   @override
   String toString() => 'Choice($options)';
 }
 
-class _Option {
-  const _Option(this.character, this.text, {required this.enabled});
-  final String? character;
-  final String text;
-  final bool enabled;
-
+class const _Option(
+  final String? character,
+  final String text, {
+  required final bool enabled,
+}) {
   @override
   String toString() => 'Option($character: $text [$enabled])';
 }
 
-class _Command {
-  const _Command(this.name, this.content);
-  final String name;
-  final String content;
+class const _Command(final String name, final String content) {
   @override
   String toString() => 'Command($name, "$content")';
 }

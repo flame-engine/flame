@@ -4,18 +4,19 @@ import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
 
-class Line3D extends MeshComponent {
-  Line3D._({
-    required double radius,
-    required double height,
-    required Material material,
-  }) : super(
-         mesh: CylinderMesh(
-           radius: radius,
-           height: height,
-           material: material,
-         ),
-       );
+class Line3D._({
+  required double radius,
+  required double height,
+  required Material material,
+}) extends MeshComponent {
+  this
+    : super(
+        mesh: CylinderMesh(
+          radius: radius,
+          height: height,
+          material: material,
+        ),
+      );
 
   factory Line3D.generate({
     required Vector3 start,

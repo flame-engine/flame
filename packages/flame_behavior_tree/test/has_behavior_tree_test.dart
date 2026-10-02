@@ -277,13 +277,13 @@ void main() {
   });
 }
 
-class _BehaviorTreeComponent extends Component with HasBehaviorTree {}
+class _BehaviorTreeComponent() extends Component with HasBehaviorTree;
 
-class _MockNode extends Mock implements NodeInterface {}
+class _MockNode() extends Mock implements NodeInterface;
 
 // Test helper nodes for blackboard testing
 
-class _TestTask extends BaseNode {
+class _TestTask() extends BaseNode {
   Object? retrievedValue;
 
   @override
@@ -299,7 +299,7 @@ class _TestTask extends BaseNode {
   }
 }
 
-class _IncrementTask extends BaseNode {
+class _IncrementTask() extends BaseNode {
   @override
   void tick() {
     final current = blackboard?.get<int>('counter') ?? 0;
@@ -308,7 +308,7 @@ class _IncrementTask extends BaseNode {
   }
 }
 
-class _IncrementSharedTask extends BaseNode {
+class _IncrementSharedTask() extends BaseNode {
   @override
   void tick() {
     final current = blackboard?.get<int>('shared') ?? 0;

@@ -79,26 +79,19 @@ void main() {
   });
 }
 
-class _IntContext extends ComponentRenderContext {
-  int value;
+class _IntContext(var int value) extends ComponentRenderContext;
 
-  _IntContext(this.value);
-}
-
-class _ParentWithContext extends Component {
-  final int startingValue;
+class _ParentWithContext({
+  required final int startingValue,
+  super.children,
+}) extends Component {
   late final _IntContext _myContext = _IntContext(startingValue);
-
-  _ParentWithContext({
-    required this.startingValue,
-    super.children,
-  });
 
   @override
   _IntContext get renderContext => _myContext;
 }
 
-class _ChildReadsContext extends Component {
+class _ChildReadsContext() extends Component {
   int? myContext;
 
   @override

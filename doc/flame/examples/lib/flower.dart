@@ -5,16 +5,21 @@ import 'package:flame/events.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/rendering.dart';
 
-enum FlowerPaint { paintId1, paintId2, paintId3, paintId4, paintId5 }
+enum FlowerPaint() {
+  paintId1,
+  paintId2,
+  paintId3,
+  paintId4,
+  paintId5,
+}
 
-class Flower extends PositionComponent
-    with TapCallbacks, HasPaint<FlowerPaint> {
-  Flower({
-    required double size,
-    this._onTap,
-    Decorator? decorator,
-    super.position,
-  }) : super(size: Vector2.all(size), anchor: Anchor.center) {
+class Flower({
+  required double size,
+  final void Function(Flower flower)? _onTap,
+  Decorator? decorator,
+  super.position,
+}) extends PositionComponent with TapCallbacks, HasPaint<FlowerPaint> {
+  this : super(size: Vector2.all(size), anchor: Anchor.center) {
     this.decorator.addLast(decorator);
     final radius = size * 0.38;
     _paths.add(_makePath(radius * 1.4, 6, -0.05, 0.8));
@@ -31,8 +36,6 @@ class Flower extends PositionComponent
   }
 
   final List<Path> _paths = [];
-  final void Function(Flower flower)? _onTap;
-
   Path _makePath(double radius, int n, double sharpness, double f) {
     final radius2 = radius * f;
     final p0 = Vector2(radius, 0)..rotate(0);

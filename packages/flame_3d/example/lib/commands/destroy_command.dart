@@ -8,7 +8,7 @@ import 'package:flame_3d_example/components/room_bounds.dart';
 import 'package:flame_3d_example/example_game_3d.dart';
 import 'package:flame_console/flame_console.dart';
 
-class DestroyCommand extends FlameConsoleCommand<ExampleGame3D> {
+class DestroyCommand() extends FlameConsoleCommand<ExampleGame3D> {
   @override
   String get name => 'destroy';
 

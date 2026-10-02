@@ -7,11 +7,9 @@ import 'package:flame_test/flame_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-class _ParallaxGame extends FlameGame {
+class _ParallaxGame({final Vector2? parallaxSize}) extends FlameGame {
   late final ParallaxComponent parallaxComponent;
-  late final Vector2? parallaxSize;
-
-  _ParallaxGame({this.parallaxSize}) {
+  this {
     onGameResize(Vector2.all(500));
   }
 
@@ -27,9 +25,9 @@ class _ParallaxGame extends FlameGame {
   }
 }
 
-class _MockImages extends Mock implements Images {}
+class _MockImages() extends Mock implements Images;
 
-class _MockImage extends Mock implements Image {
+class _MockImage() extends Mock implements Image {
   @override
   int get height => 100;
 
@@ -37,11 +35,9 @@ class _MockImage extends Mock implements Image {
   int get width => 100;
 }
 
-class _SlowLoadParallaxGame extends FlameGame {
+class _SlowLoadParallaxGame({final Vector2? parallaxSize}) extends FlameGame {
   late final ParallaxComponent parallaxComponent;
-  late final Vector2? parallaxSize;
-
-  _SlowLoadParallaxGame({this.parallaxSize}) {
+  this {
     onGameResize(Vector2.all(500));
   }
 

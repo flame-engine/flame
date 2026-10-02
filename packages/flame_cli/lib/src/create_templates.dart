@@ -3,17 +3,11 @@
 ///
 /// The [files] are relative to the project directory, and `{{name}}` in
 /// their contents is replaced with the project name.
-class CreateTemplate {
-  const CreateTemplate({
-    required this.name,
-    required this.description,
-    required this.files,
-  });
-
-  final String name;
-  final String description;
-  final Map<String, String> files;
-
+class const CreateTemplate({
+  required final String name,
+  required final String description,
+  required final Map<String, String> files,
+}) {
   /// Whether the template comes with tests, and thus needs `flame_test`.
   bool get hasTests => files.keys.any((path) => path.startsWith('test/'));
 
@@ -76,7 +70,7 @@ class MyGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    await world.add(player = Player());
+    world.add(player = Player());
   }
 }
 
@@ -147,7 +141,7 @@ import 'package:flutter/widgets.dart';
 import 'package:{{name}}/my_game.dart';
 
 void main() {
-  runApp(const GameWidget.controlled(gameFactory: MyGame.new));
+  runApp(const GameWidget.managed(gameFactory: MyGame.new));
 }
 ''',
       'lib/my_game.dart': r'''
@@ -175,7 +169,7 @@ class MyGame extends FlameGame<MyWorld>
   Future<void> onLoad() async {
     await super.onLoad();
     scoreText = TextComponent(text: 'Score: 0', position: Vector2.all(16));
-    await camera.viewport.add(scoreText);
+    camera.viewport.add(scoreText);
   }
 
   void collectStar() {
@@ -193,7 +187,7 @@ class MyWorld extends World with TapCallbacks {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    await add(player = Player());
+    add(player = Player());
     spawnStar();
   }
 
@@ -237,7 +231,7 @@ import 'package:{{name}}/star.dart';
 
 /// The square that the player steers around to collect stars.
 class Player extends RectangleComponent
-    with HasGameReference<MyGame>, KeyboardHandler, CollisionCallbacks {
+    with HasGameRef<MyGame>, KeyboardHandler, CollisionCallbacks {
   Player()
     : super(
         size: Vector2.all(48),
@@ -253,7 +247,7 @@ class Player extends RectangleComponent
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    await add(RectangleHitbox());
+    add(RectangleHitbox());
   }
 
   /// Makes the player move towards [target] until it arrives, or until a
@@ -295,13 +289,13 @@ class Player extends RectangleComponent
 
   @override
   void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
     if (other is Star) {
       other.removeFromParent();
-      game.collectStar();
+      gameRef.collectStar();
     }
   }
 }
@@ -319,7 +313,7 @@ class Star extends CircleComponent {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    await add(CircleHitbox());
+    add(CircleHitbox());
   }
 }
 ''',

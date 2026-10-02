@@ -8,15 +8,13 @@ import 'package:tiled/tiled.dart';
 /// `RenderableTiledMap` resolves external tilesets on its own, this is only
 /// needed when parsing a map manually, for example through
 /// [TiledMap.parseTmx].
-class FlameTsxProvider implements ParserProvider {
+class FlameTsxProvider._(
   /// Parsed data for this tsx file.
-  final String data;
+  final String data,
 
   /// Stored filename for corresponding tsx file.
-  final String filename;
-
-  FlameTsxProvider._(this.data, this.filename);
-
+  final String filename,
+) implements ParserProvider {
   @override
   bool canProvide(String path) => path == filename;
 

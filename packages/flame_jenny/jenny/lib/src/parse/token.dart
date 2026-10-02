@@ -3,9 +3,7 @@ import 'package:meta/meta.dart';
 /// [Token] is a unit of output during the lexing stage.
 @internal
 @immutable
-class Token {
-  const Token._(this.type, [this._content]);
-
+class const Token._(final TokenType type, [final String? _content]) {
   const Token.command(String text) : this._(TokenType.command, text);
   const Token.hashtag(String text) : this._(TokenType.hashtag, text);
   const Token.id(String text) : this._(TokenType.id, text);
@@ -80,9 +78,6 @@ class Token {
   static const typeNumber = Token._(TokenType.typeNumber);
   static const typeString = Token._(TokenType.typeString);
 
-  final TokenType type;
-  final String? _content;
-
   bool get isCommand => type == TokenType.command;
   bool get isHashtag => type == TokenType.hashtag;
   bool get isId => type == TokenType.id;
@@ -109,7 +104,7 @@ class Token {
 }
 
 @internal
-enum TokenType {
+enum TokenType() {
   command,
   hashtag,
   id,

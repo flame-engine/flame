@@ -28,11 +28,8 @@ void main() {
 
 const _ascent = 10.0;
 
-class _RecordingTextRenderer extends TextRenderer {
-  _RecordingTextRenderer(this.elements);
-
-  final List<_RecordingTextElement> elements;
-
+class _RecordingTextRenderer(final List<_RecordingTextElement> elements)
+    extends TextRenderer {
   @override
   InlineTextElement format(String text) {
     final element = _RecordingTextElement();
@@ -44,7 +41,7 @@ class _RecordingTextRenderer extends TextRenderer {
   TextRenderer copyWithPaint(Paint paint) => _RecordingTextRenderer(elements);
 }
 
-class _RecordingTextElement extends InlineTextElement {
+class _RecordingTextElement() extends InlineTextElement {
   final translations = <Offset>[];
 
   @override

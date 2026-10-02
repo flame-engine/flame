@@ -9,20 +9,16 @@ import 'package:padracing/game_colors.dart';
 import 'package:padracing/padracing_game.dart';
 import 'package:padracing/wall.dart';
 
-class Ball extends BodyComponent<PadRacingGame> with ContactCallbacks {
-  final double radius;
-  final Vector2 initialPosition;
-  final double rotation;
-  final bool isMovable;
+class Ball({
+  required final Vector2 initialPosition,
+  final double radius = 80.0,
+  final double rotation = 1.0,
+  final bool isMovable = true,
+}) extends BodyComponent<PadRacingGame> with ContactCallbacks {
   final rng = Random();
   late final Paint _shaderPaint;
 
-  Ball({
-    required this.initialPosition,
-    this.radius = 80.0,
-    this.rotation = 1.0,
-    this.isMovable = true,
-  }) : super(priority: 3);
+  this : super(priority: 3);
 
   @override
   Future<void> onLoad() async {

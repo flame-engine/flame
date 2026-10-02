@@ -28,34 +28,27 @@ abstract class NotEqual extends Expression {
 }
 
 /// Operator NOT_EQUAL (!=) for numeric arguments.
-class _NumericNotEqual extends BoolExpression implements NotEqual {
-  const _NumericNotEqual(this._lhs, this._rhs);
-
-  final NumExpression _lhs;
-  final NumExpression _rhs;
-
+class const _NumericNotEqual(final NumExpression _lhs, final NumExpression _rhs)
+    extends BoolExpression
+    implements NotEqual {
   @override
   bool get value => _lhs.value != _rhs.value;
 }
 
 /// Operator NOT_EQUAL (!=) for string arguments.
-class _StringNotEqual extends BoolExpression implements NotEqual {
-  const _StringNotEqual(this._lhs, this._rhs);
-
-  final StringExpression _lhs;
-  final StringExpression _rhs;
-
+class const _StringNotEqual(
+  final StringExpression _lhs,
+  final StringExpression _rhs,
+) extends BoolExpression implements NotEqual {
   @override
   bool get value => _lhs.value != _rhs.value;
 }
 
 /// Operator NOT_EQUAL (!=) for boolean arguments.
-class _BooleanNotEqual extends BoolExpression implements NotEqual {
-  const _BooleanNotEqual(this._lhs, this._rhs);
-
-  final BoolExpression _lhs;
-  final BoolExpression _rhs;
-
+class const _BooleanNotEqual(
+  final BoolExpression _lhs,
+  final BoolExpression _rhs,
+) extends BoolExpression implements NotEqual {
   @override
   bool get value => _lhs.value != _rhs.value;
 }

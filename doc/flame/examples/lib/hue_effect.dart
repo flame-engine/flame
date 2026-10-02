@@ -5,7 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 
-class HueEffectExample extends FlameGame {
+class HueEffectExample() extends FlameGame {
   @override
   Future<void> onLoad() async {
     final ember = EmberPlayer(

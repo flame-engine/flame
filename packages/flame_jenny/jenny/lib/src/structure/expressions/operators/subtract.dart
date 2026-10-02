@@ -25,12 +25,9 @@ abstract class Subtract extends Expression {
 }
 
 /// Operator MINUS (-) for numeric arguments.
-class _NumSubtract extends NumExpression implements Subtract {
-  _NumSubtract(this._lhs, this._rhs);
-
-  final NumExpression _lhs;
-  final NumExpression _rhs;
-
+class _NumSubtract(final NumExpression _lhs, final NumExpression _rhs)
+    extends NumExpression
+    implements Subtract {
   @override
   num get value => _lhs.value - _rhs.value;
 }
@@ -40,12 +37,9 @@ class _NumSubtract extends NumExpression implements Subtract {
 /// In the expression `x - y`, the first occurrence of string `y` is removed
 /// from `x`. For example, `"YarnSpinner" - "n" == "YarSpinner"`. If there is
 /// no string `y` in `x`, then `x` is returned unmodified.
-class _StringSubtract extends StringExpression implements Subtract {
-  _StringSubtract(this._lhs, this._rhs);
-
-  final StringExpression _lhs;
-  final StringExpression _rhs;
-
+class _StringSubtract(final StringExpression _lhs, final StringExpression _rhs)
+    extends StringExpression
+    implements Subtract {
   @override
   String get value {
     final lhsValue = _lhs.value;

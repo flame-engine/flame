@@ -5,27 +5,24 @@ import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _EntityA extends PositionedEntity {
-  _EntityA({super.behaviors}) : super(size: Vector2.all(16));
+class _EntityA({super.behaviors}) extends PositionedEntity {
+  this : super(size: Vector2.all(16));
 }
 
-class _EntityB extends PositionedEntity {
-  _EntityB({super.behaviors}) : super(size: Vector2.all(16));
+class _EntityB({super.behaviors}) extends PositionedEntity {
+  this : super(size: Vector2.all(16));
 }
 
-class _EntityC extends PositionedEntity {
-  _EntityC() : super(size: Vector2.all(16));
+class _EntityC() extends PositionedEntity {
+  this : super(size: Vector2.all(16));
 }
 
-class _EntityD extends Entity {
-  _EntityD();
-}
+class _EntityD() extends Entity;
 
 abstract class _CollisionBehavior<
   A extends Component,
   B extends PositionedEntity
->
-    extends CollisionBehavior<A, B> {
+>() extends CollisionBehavior<A, B> {
   bool onCollisionStartCalled = false;
   bool onCollisionCalled = false;
   bool onCollisionEndCalled = false;
@@ -49,14 +46,14 @@ abstract class _CollisionBehavior<
   }
 }
 
-class _CollisionBehaviorAtoB extends _CollisionBehavior<_EntityB, _EntityA> {}
+class _CollisionBehaviorAtoB() extends _CollisionBehavior<_EntityB, _EntityA>;
 
-class _CollisionBehaviorAtoC extends _CollisionBehavior<_EntityC, _EntityA> {}
+class _CollisionBehaviorAtoC() extends _CollisionBehavior<_EntityC, _EntityA>;
 
-class _CollisionBehaviorAtoComponent
-    extends _CollisionBehavior<PositionComponent, _EntityA> {}
+class _CollisionBehaviorAtoComponent()
+    extends _CollisionBehavior<PositionComponent, _EntityA>;
 
-class _TestGame extends FlameGame with HasCollisionDetection {}
+class _TestGame() extends FlameGame with HasCollisionDetection;
 
 void main() {
   final flameTester = FlameTester(_TestGame.new);

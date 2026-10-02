@@ -1,18 +1,21 @@
 import 'package:behavior_tree/behavior_tree.dart';
 
 /// A decorator node that limits the number of times [child] can be ticked.
-class Limiter extends BaseNode implements NodeInterface {
+class Limiter(
+  /// The child node whose ticks are to be limited.
+  final NodeInterface child,
+
+  /// The max number of times [child] can be ticked.
+  final int limit, {
+  final NodeStatus? _statusAfterLimit,
+}) extends BaseNode implements NodeInterface {
   /// Creates a limiter node for given [child] node and [limit].
   ///
   /// Once this node has been ticked [limit] number of times, it stops ticking
   /// the child node. After this, [status] will keep returning the status of
   /// child the last time it was ticked. This behavior can be overridden by
   /// providing an optional [_statusAfterLimit].
-  Limiter(
-    this.child,
-    this.limit, {
-    this._statusAfterLimit,
-  }) {
+  this {
     setParent(child);
     status = (_tickCount < limit)
         ? child.status
@@ -20,13 +23,6 @@ class Limiter extends BaseNode implements NodeInterface {
   }
 
   var _tickCount = 0;
-  final NodeStatus? _statusAfterLimit;
-
-  /// The child node whose ticks are to be limited.
-  final NodeInterface child;
-
-  /// The max number of times [child] can be ticked.
-  final int limit;
 
   /// Returns the number of times [child] has been ticked.
   int get tickCount => _tickCount;

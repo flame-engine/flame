@@ -9,22 +9,16 @@ import 'package:flame/src/sprite_animation_ticker.dart';
 
 export 'sprite.dart';
 
-class SpriteAnimationFrameData {
+class SpriteAnimationFrameData({
   /// Coordinates of the sprite of this Frame
-  final Vector2 srcPosition;
+  required final Vector2 srcPosition,
 
   /// Size of the sprite of this Frame
-  final Vector2 srcSize;
+  required final Vector2 srcSize,
 
   /// The duration to display it, in seconds.
-  final double stepTime;
-
-  SpriteAnimationFrameData({
-    required this.srcPosition,
-    required this.srcSize,
-    required this.stepTime,
-  });
-}
+  required final double stepTime,
+});
 
 class SpriteAnimationData {
   late List<SpriteAnimationFrameData> frames;
@@ -127,21 +121,25 @@ class SpriteAnimationData {
 }
 
 /// Represents a single sprite animation frame.
-class SpriteAnimationFrame {
+class SpriteAnimationFrame(
   /// The [Sprite] to be displayed.
-  Sprite sprite;
+  var Sprite sprite,
 
   /// The duration to display it, in seconds.
-  double stepTime;
-
-  /// Create based on the parameters.
-  SpriteAnimationFrame(this.sprite, this.stepTime);
-}
+  var double stepTime,
+);
 
 /// Represents a sprite animation, that is, a list of sprites that change with
 /// time.
-class SpriteAnimation {
-  SpriteAnimation(this.frames, {this.loop = true})
+class SpriteAnimation(
+  /// The frames that compose this animation.
+  var List<SpriteAnimationFrame> frames, {
+
+  /// Whether the animation loops after the last sprite of the list, going back
+  /// to the first, or keeps returning the last when done.
+  var bool loop = true,
+}) {
+  this
     : assert(frames.isNotEmpty, 'There must be at least one animation frame'),
       assert(
         frames.every((frame) => frame.stepTime > 0),
@@ -250,13 +248,6 @@ class SpriteAnimation {
     final image = await imagesCache.load(src, package: package);
     return SpriteAnimation.fromFrameData(image, data);
   }
-
-  /// The frames that compose this animation.
-  List<SpriteAnimationFrame> frames = [];
-
-  /// Whether the animation loops after the last sprite of the list, going back
-  /// to the first, or keeps returning the last when done.
-  bool loop = true;
 
   /// Sets a different step time to each frame.
   /// The sizes of the arrays must match.

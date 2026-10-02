@@ -8,8 +8,21 @@ import 'package:flame/geometry.dart';
 import 'package:flame/src/geometry/absolute_transform.dart';
 import 'package:meta/meta.dart';
 
-class PolygonComponent extends ShapeComponent {
-  final List<Vector2> _vertices;
+class PolygonComponent(
+  final List<Vector2> _vertices, {
+  super.position,
+  super.size,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.paint,
+  super.paintLayers,
+  super.key,
+  super.isSolid,
+  bool? shrinkToBounds,
+}) extends ShapeComponent {
   UnmodifiableListView<Vector2> get vertices => UnmodifiableListView(_vertices);
   // These lists are used to minimize the amount of objects that are created,
   // and only change the contained object if the cached absolute transform is
@@ -17,32 +30,17 @@ class PolygonComponent extends ShapeComponent {
   late final List<Vector2> _globalVertices;
   late final List<LineSegment> _lineSegments;
   final Path _path = Path();
-  final bool shrinkToBounds;
-  final bool manuallyPositioned;
+  final bool shrinkToBounds = shrinkToBounds ?? size == null;
+  final bool manuallyPositioned = position != null;
 
   /// With this constructor you create your [PolygonComponent] from positions
   /// anywhere in the 2d-space. It will automatically calculate the [size] of
   /// the Polygon (the bounding box) if no size is given.
-  PolygonComponent(
-    this._vertices, {
-    super.position,
-    super.size,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.paint,
-    super.paintLayers,
-    super.key,
-    super.isSolid,
-    bool? shrinkToBounds,
-  }) : assert(
-         _vertices.length > 2,
-         'Number of vertices are too few to create a polygon',
-       ),
-       shrinkToBounds = shrinkToBounds ?? size == null,
-       manuallyPositioned = position != null {
+  this
+    : assert(
+        _vertices.length > 2,
+        'Number of vertices are too few to create a polygon',
+      ) {
     refreshVertices(newVertices: _vertices);
 
     final verticesLength = _vertices.length;
@@ -339,8 +337,8 @@ class PolygonComponent extends ShapeComponent {
   /// is null return all vertices as [LineSegment]s.
   List<LineSegment> possibleIntersectionVertices(Rect? rect) {
     final rectIntersections = <LineSegment>[];
-    if ((rect?.width == 0 || false) ||
-        (rect?.height == 0 || false) ||
+    if ((rect?.width == 0) ||
+        (rect?.height == 0) ||
         width == 0 ||
         height == 0) {
       return rectIntersections;

@@ -16,7 +16,17 @@ import 'package:meta/meta.dart';
 /// where 0 in x-axis means left, 0 in y-axis means top, 1 in x-axis means right
 /// and 1 in y-axis means bottom.
 @immutable
-class Anchor {
+class const Anchor(
+  /// The relative x position with respect to the object's width;
+  /// 0 means totally to the left (beginning) and 1 means totally to the
+  /// right (end).
+  final double x,
+
+  /// The relative y position with respect to the object's height;
+  /// 0 means totally to the top (beginning) and 1 means totally to the
+  /// bottom (end).
+  final double y,
+) {
   static const Anchor topLeft = Anchor(0.0, 0.0);
   static const Anchor topCenter = Anchor(0.5, 0.0);
   static const Anchor topRight = Anchor(1.0, 0.0);
@@ -27,21 +37,9 @@ class Anchor {
   static const Anchor bottomCenter = Anchor(0.5, 1.0);
   static const Anchor bottomRight = Anchor(1.0, 1.0);
 
-  /// The relative x position with respect to the object's width;
-  /// 0 means totally to the left (beginning) and 1 means totally to the
-  /// right (end).
-  final double x;
-
-  /// The relative y position with respect to the object's height;
-  /// 0 means totally to the top (beginning) and 1 means totally to the
-  /// bottom (end).
-  final double y;
-
   /// Returns [x] and [y] as a Vector2. Note that this is still a relative
   /// fractional representation.
   Vector2 toVector2() => Vector2(x, y);
-
-  const Anchor(this.x, this.y);
 
   /// Take your position [position] that is on this anchor and give back what
   /// that position it would be on in anchor [otherAnchor] with a size of

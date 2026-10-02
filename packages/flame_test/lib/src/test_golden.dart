@@ -14,7 +14,7 @@ import 'package:meta/meta.dart';
 /// captured at the creation of the test. In order to create a golden file, you
 /// first specify its desired name in the [goldenFile] parameter, and then run
 /// the tests using the command
-/// ```
+/// ```sh
 /// flutter test --update-goldens
 /// ```
 ///
@@ -77,17 +77,12 @@ void testGolden(
   );
 }
 
-typedef PrepareFunction =
-    Future<void> Function(
-      FlameGame game,
-      WidgetTester tester,
-    );
+typedef PrepareFunction = Future<void> Function(
+  FlameGame game,
+  WidgetTester tester,
+);
 
-class GameWithBackgroundColor extends FlameGame {
-  final Color _backgroundColor;
-
-  GameWithBackgroundColor(this._backgroundColor);
-
+class GameWithBackgroundColor(final Color _backgroundColor) extends FlameGame {
   @override
   Color backgroundColor() => _backgroundColor;
 }

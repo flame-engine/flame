@@ -6,13 +6,13 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart';
 
-class RemoveEffectExample extends FlameGame {
+class RemoveEffectExample() extends FlameGame {
   static const description = '''
     Click on any circle to apply a RemoveEffect, which will make the circle
     disappear after a 0.5 second delay.
   ''';
 
-  RemoveEffectExample()
+  this
     : super(
         camera: CameraComponent.withFixedResolution(
           width: 400,
@@ -22,7 +22,7 @@ class RemoveEffectExample extends FlameGame {
       );
 }
 
-class _RemoveEffectWorld extends World {
+class _RemoveEffectWorld() extends World {
   @override
   void onLoad() {
     super.onLoad();
@@ -33,9 +33,10 @@ class _RemoveEffectWorld extends World {
   }
 }
 
-class _RandomCircle extends CircleComponent with TapCallbacks {
-  _RandomCircle(double radius, {super.position, super.paint})
-    : super(radius: radius);
+class _RandomCircle(double radius, {super.position, super.paint})
+    extends CircleComponent
+    with TapCallbacks {
+  this : super(radius: radius);
 
   factory _RandomCircle.random(Random rng) {
     final radius = rng.nextDouble() * 30 + 10;

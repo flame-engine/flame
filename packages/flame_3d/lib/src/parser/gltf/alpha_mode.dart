@@ -2,7 +2,7 @@ import 'package:flame_3d/src/parser/gltf/gltf_node.dart';
 
 /// The material's alpha rendering mode enumeration specifying the
 /// interpretation of the alpha value of the base color.
-enum AlphaMode {
+enum AlphaMode(final String value) {
   /// The alpha value is ignored, and the rendered output is fully opaque.
   opaque('OPAQUE'),
 
@@ -16,10 +16,6 @@ enum AlphaMode {
   /// The rendered output is combined with the background using the normal
   /// painting operation (i.e. the Porter and Duff over operator).
   blend('BLEND');
-
-  final String value;
-
-  const AlphaMode(this.value);
 
   static AlphaMode valueOf(String value) {
     return values.firstWhere((e) => e.value == value);

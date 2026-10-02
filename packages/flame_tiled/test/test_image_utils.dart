@@ -17,7 +17,7 @@ Future<Uint8List> renderMapToPng(
   // Map size is now 320 wide, but it has 1 extra tile of height because
   // its actually double-height tiles.
   final image = await picture.toImageSafe(size.x.toInt(), size.y.toInt());
-  return imageToPng(image);
+  return await imageToPng(image);
 }
 
 /// Renders the part of [map] inside [region], which is given in map pixels.
@@ -38,7 +38,7 @@ Future<Uint8List> renderMapRegionToPng(
     region.width.toInt(),
     region.height.toInt(),
   );
-  return imageToPng(image);
+  return await imageToPng(image);
 }
 
 /// Renders the [game] the way it is shown on the screen, through its camera.
@@ -50,7 +50,7 @@ Future<Uint8List> renderGameToPng(FlameGame game) async {
 
   final size = game.canvasSize;
   final image = await picture.toImageSafe(size.x.toInt(), size.y.toInt());
-  return imageToPng(image);
+  return await imageToPng(image);
 }
 
 Future<Uint8List> imageToPng(Image image) async =>

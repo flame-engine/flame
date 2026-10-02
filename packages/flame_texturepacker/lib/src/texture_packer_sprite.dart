@@ -9,9 +9,16 @@ import 'package:flame_texturepacker/src/model/region.dart';
 /// {@template _texture_packer_sprite}
 /// A [Sprite] extracted from a texture packer file.
 /// {@endtemplate}
-class TexturePackerSprite extends Sprite {
+class TexturePackerSprite(
+  /// Region object for [clone] function, don't modify this object properties.
+  final Region region, {
+
+  /// If true, use [Region.originalWidth] and [Region.originalHeight] as size;
+  /// otherwise use [Region.width] and [Region.height] as size.
+  final bool useOriginalSize = true,
+}) extends Sprite {
   /// {@macro _texture_packer_sprite}
-  TexturePackerSprite(this.region, {this.useOriginalSize = true})
+  this
     : super(
         region.page.texture ?? _emptyImage,
         srcPosition: Vector2(region.left, region.top),
@@ -27,13 +34,6 @@ class TexturePackerSprite extends Sprite {
       _decorator = null;
     }
   }
-
-  /// Region object for [clone] function, don't modify this object properties.
-  final Region region;
-
-  /// If true, use [Region.originalWidth] and [Region.originalHeight] as size;
-  /// otherwise use [Region.width] and [Region.height] as size.
-  final bool useOriginalSize;
 
   /// The [Region.degrees] field (angle) represented as radians.
   double get angle => radians(region.degrees.toDouble());

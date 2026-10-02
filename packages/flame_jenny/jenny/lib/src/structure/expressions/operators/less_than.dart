@@ -2,12 +2,8 @@ import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/operators/_common.dart';
 
 /// Operator LESS_THAN (<), applies to numeric operands only.
-class LessThan extends BoolExpression {
-  const LessThan(this._lhs, this._rhs);
-
-  final NumExpression _lhs;
-  final NumExpression _rhs;
-
+class const LessThan(final NumExpression _lhs, final NumExpression _rhs)
+    extends BoolExpression {
   /// Static constructor, used by parse.dart
   factory LessThan.make(
     Expression lhs,

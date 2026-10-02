@@ -7,46 +7,41 @@ export '../sprite_animation.dart';
 
 /// A [PositionComponent] that can have multiple [Sprite]s and render
 /// the one mapped with the [current] key.
-class SpriteGroupComponent<T> extends PositionComponent with HasPaint {
-  /// Key for the current sprite.
-  T? _current;
+class SpriteGroupComponent<T>({
+  /// Map with the available states for this sprite group.
+  var Map<T, Sprite>? _sprites,
 
+  /// Key for the current sprite.
+  var T? _current,
+  bool? autoResize,
+  Paint? paint,
+  super.position,
+  Vector2? size,
+  super.scale,
+  super.angle,
+  super.nativeAngle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.key,
+}) extends PositionComponent with HasPaint {
   ValueNotifier<T?>? _currentSpriteNotifier;
 
   /// A [ValueNotifier] that notifies when the current sprite changes.
   ValueNotifier<T?> get currentSpriteNotifier =>
       _currentSpriteNotifier ??= ValueNotifier<T?>(_current);
 
-  /// Map with the available states for this sprite group.
-  Map<T, Sprite>? _sprites;
-
   /// When set to true, the component is auto-resized to match the
   /// size of current sprite.
-  bool _autoResize;
+  bool _autoResize = autoResize ?? size == null;
 
   /// Creates a component with an empty animation which can be set later.
-  SpriteGroupComponent({
-    Map<T, Sprite>? sprites,
-    T? current,
-    bool? autoResize,
-    Paint? paint,
-    super.position,
-    Vector2? size,
-    super.scale,
-    super.angle,
-    super.nativeAngle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.key,
-  }) : assert(
-         (size == null) == (autoResize ?? size == null),
-         '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
-       ),
-       _current = current,
-       _sprites = sprites,
-       _autoResize = autoResize ?? size == null,
-       super(size: size ?? sprites?[current]?.srcSize) {
+  this
+    : assert(
+        (size == null) == (autoResize ?? size == null),
+        '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
+      ),
+      super(size: size ?? _sprites?[_current]?.srcSize) {
     if (paint != null) {
       this.paint = paint;
     }

@@ -5,24 +5,25 @@ import 'package:flame_behaviors_example/entities/entities.dart';
 import 'package:flame_behaviors_example/entities/rectangle/behaviors/behaviors.dart';
 import 'package:material_ui/material_ui.dart';
 
-class Rectangle extends PositionedEntity with HasPaint {
-  Rectangle({
-    required double rotationSpeed,
-    required Vector2 velocity,
-    super.position,
-    super.size,
-  }) : super(
-         anchor: Anchor.center,
-         behaviors: [
-           PropagatingCollisionBehavior(RectangleHitbox()),
-           RectangleCollidingBehavior(),
-           CircleCollidingBehavior(),
-           ScreenCollidingBehavior(),
-           MovingBehavior(velocity: velocity),
-           RotatingBehavior(rotationSpeed: rotationSpeed),
-           FreezingBehavior(),
-         ],
-       );
+class Rectangle({
+  required double rotationSpeed,
+  required Vector2 velocity,
+  super.position,
+  super.size,
+}) extends PositionedEntity with HasPaint {
+  this
+    : super(
+        anchor: Anchor.center,
+        behaviors: [
+          PropagatingCollisionBehavior(RectangleHitbox()),
+          RectangleCollidingBehavior(),
+          CircleCollidingBehavior(),
+          ScreenCollidingBehavior(),
+          MovingBehavior(velocity: velocity),
+          RotatingBehavior(rotationSpeed: rotationSpeed),
+          FreezingBehavior(),
+        ],
+      );
 
   final defaultColor = Colors.red.withValues(alpha: 0.8);
 

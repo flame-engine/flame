@@ -3,16 +3,13 @@ import 'dart:math';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/effect.dart';
 
-class CombinedEffectController extends EffectController {
-  CombinedEffectController(
-    this.effects, {
-    required this.alternate,
-  }) : _duration = _calculateDuration(effects, alternate),
-       super.empty();
+class CombinedEffectController(
+  final List<Effect> effects, {
+  required final bool alternate,
+}) extends EffectController {
+  this : super.empty();
 
-  final List<Effect> effects;
-  final bool alternate;
-  final double _duration;
+  final double _duration = _calculateDuration(effects, alternate);
 
   double t = 0;
 

@@ -6,9 +6,14 @@ import 'package:flame/game.dart';
 
 import 'klondike_world.dart';
 
-enum Action { newDeal, sameDeal, changeDraw, haveFun }
+enum Action() {
+  newDeal,
+  sameDeal,
+  changeDraw,
+  haveFun,
+}
 
-class KlondikeGame extends FlameGame<KlondikeWorld> {
+class KlondikeGame() extends FlameGame<KlondikeWorld> {
   static const double cardGap = 175.0;
   static const double topGap = 500.0;
   static const double cardWidth = 1000.0;
@@ -29,7 +34,7 @@ class KlondikeGame extends FlameGame<KlondikeWorld> {
   static const int maxInt = 0xFFFFFFFE; // = (2 to the power 32) - 1
 
   // This KlondikeGame constructor also initiates the first KlondikeWorld.
-  KlondikeGame() : super(world: KlondikeWorld());
+  this : super(world: KlondikeWorld());
 
   // These three values persist between games and are starting conditions
   // for the next game to be played in KlondikeWorld. The actual seed is
