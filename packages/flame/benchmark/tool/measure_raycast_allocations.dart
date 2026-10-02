@@ -53,12 +53,12 @@ Future<void> main(List<String> arguments) async {
     // early, and the hits the best.
     for (final kind in ['stubMiss', 'stubHit']) ...[
       for (final count in [1, 5, 100, 500, 1000]) _Case(kind, 'spread', count),
-      for (final count in [20, 100]) _Case(kind, 'dense', count),
+      for (final count in [5, 10, 20, 50, 100]) _Case(kind, 'dense', count),
     ],
     // Real hitboxes, to see the allocations of everything that a ray does.
     for (final kind in ['simple', 'polygons', 'paths', 'mixed']) ...[
       for (final count in [100, 500]) _Case(kind, 'spread', count),
-      _Case(kind, 'dense', 50),
+      for (final count in [20, 50, 100, 200]) _Case(kind, 'dense', count),
     ],
   ].where((c) => c.id.contains(options.filter)).toList();
   if (cases.isEmpty) {
@@ -76,6 +76,10 @@ Future<void> main(List<String> arguments) async {
       'new_objects_per_ray',
       'old_us_per_ray',
       'new_us_per_ray',
+      'old_us_min',
+      'old_us_max',
+      'new_us_min',
+      'new_us_max',
       'old_classes',
       'new_classes',
     ].join(','),
@@ -92,8 +96,8 @@ Future<void> main(List<String> arguments) async {
         'Raycast, old code path vs nearest first, in ${app.description}.\n'
         'objects/ray: exact, from tracing the allocations of ${app.traced} '
         'classes in ${options.traceRays} rays, without what the VM service '
-        'allocates itself. us/ray: median of ${options.reps} timings of '
-        '~${options.seconds} s, with no tracing.\n',
+        'allocates itself. us/ray: median (fastest-slowest) of '
+        '${options.reps} timings of ~${options.seconds} s, with no tracing.\n',
       )
       ..writeln(
         _row([
@@ -168,7 +172,7 @@ const _defaultClasses = [
 const _noiseFloor = 0.02;
 
 String _row(List<String> columns) {
-  const widths = [22, 13, 13, 12, 12, 0];
+  const widths = [22, 13, 13, 25, 25, 0];
   return [
     for (var i = 0; i < columns.length; i++) columns[i].padRight(widths[i]),
   ].join();
@@ -262,6 +266,8 @@ class _CaseResult {
     required this.newCounts,
     required this.oldMicros,
     required this.newMicros,
+    required this.oldRange,
+    required this.newRange,
     required this.truncated,
   });
 
@@ -275,18 +281,29 @@ class _CaseResult {
   final double oldMicros;
   final double newMicros;
 
+  /// The fastest and the slowest of the timings, in microseconds per ray.
+  final (double, double) oldRange;
+  final (double, double) newRange;
+
   /// Whether the VM may have dropped allocation samples.
   final bool truncated;
 
   double _objects(Map<String, int> counts) =>
       counts.values.fold(0, (sum, count) => sum + count) / traceRays;
 
+  static String _timing(double median, (double, double) range) {
+    final (fastest, slowest) = range;
+    final digits = [median, fastest, slowest].map((m) => m.toStringAsFixed(2));
+    final [m, f, s] = digits.toList();
+    return '$m ($f-$s)';
+  }
+
   String row() => _row([
     testCase.id,
     _objects(oldCounts).toStringAsFixed(3),
     _objects(newCounts).toStringAsFixed(3),
-    oldMicros.toStringAsFixed(2),
-    newMicros.toStringAsFixed(2),
+    _timing(oldMicros, oldRange),
+    _timing(newMicros, newRange),
     [
       '${_top(oldCounts, traceRays)} | ${_top(newCounts, traceRays)}',
       if (truncated) '(TRUNCATED: some allocations were not recorded)',
@@ -306,6 +323,10 @@ class _CaseResult {
     _objects(newCounts).toStringAsFixed(4),
     oldMicros.toStringAsFixed(3),
     newMicros.toStringAsFixed(3),
+    oldRange.$1.toStringAsFixed(3),
+    oldRange.$2.toStringAsFixed(3),
+    newRange.$1.toStringAsFixed(3),
+    newRange.$2.toStringAsFixed(3),
     _classes(oldCounts),
     _classes(newCounts),
   ].join(',');
@@ -382,6 +403,14 @@ Future<_CaseResult> _measureCase(
     newCounts: newCounts,
     oldMicros: _median(oldMicros) / timingRays,
     newMicros: _median(newMicros) / timingRays,
+    oldRange: (
+      oldMicros.reduce(min) / timingRays,
+      oldMicros.reduce(max) / timingRays,
+    ),
+    newRange: (
+      newMicros.reduce(min) / timingRays,
+      newMicros.reduce(max) / timingRays,
+    ),
     truncated: truncated,
   );
 }
@@ -445,7 +474,7 @@ class _App {
   static const _sampleBufferLimit = 40000;
 
   /// The fewest rays in a chunk.
-  static const _minChunk = 50;
+  static const _minChunk = 10;
 
   final Process _process;
   final log = <String>[];
