@@ -29,6 +29,9 @@ import 'package:vm_service/vm_service_io.dart';
 ///     --seconds=2        The time that each measurement should take.
 ///     --filter=text      Only the cases whose name has the text.
 ///     --csv=path         Also write the results to a CSV file.
+///     --trace=_List,_Closure
+///                        Instead of measuring, show the stacks that allocate
+///                        objects of these classes, with each code path.
 ///
 /// The first measurements need a profile build, which takes minutes.
 Future<void> main(List<String> arguments) async {
@@ -71,6 +74,10 @@ Future<void> main(List<String> arguments) async {
   ];
   try {
     await app.connect();
+    if (options.trace.isNotEmpty) {
+      await _traceCases(app, cases, options);
+      return;
+    }
     stdout
       ..writeln()
       ..writeln(
@@ -119,6 +126,52 @@ Future<void> main(List<String> arguments) async {
   }
 }
 
+/// Shows which stacks allocate the objects of the classes in `--trace`, for
+/// each case and code path, to find out where the allocations come from.
+Future<void> _traceCases(
+  _App app,
+  List<_Case> cases,
+  _Options options,
+) async {
+  const rays = 20000;
+  for (final testCase in cases) {
+    Future<Map<String, dynamic>> cast(int count, {required bool nearestFirst}) {
+      return app.cast(
+        kind: testCase.kind,
+        scene: testCase.scene,
+        count: testCase.count,
+        rays: count,
+        nearestFirst: nearestFirst,
+      );
+    }
+
+    await cast(0, nearestFirst: false);
+    await cast(rays, nearestFirst: false);
+    await cast(rays, nearestFirst: true);
+    for (final className in options.trace.split(',')) {
+      for (final (label, nearestFirst) in [('old', false), ('new', true)]) {
+        final stacks = await app.traceAllocations(
+          className,
+          () => cast(rays, nearestFirst: nearestFirst),
+        );
+        final counts = <String, int>{};
+        for (final stack in stacks) {
+          counts[stack] = (counts[stack] ?? 0) + 1;
+        }
+        final sorted = counts.entries.toList()
+          ..sort((a, b) => b.value.compareTo(a.value));
+        stdout.writeln(
+          '\n${testCase.id} $label $className: ${stacks.length} allocations '
+          'in $rays rays, ${sorted.length} different stacks',
+        );
+        for (final entry in sorted.take(5)) {
+          stdout.writeln('  ${entry.value}x ${entry.key}');
+        }
+      }
+    }
+  }
+}
+
 String _row(List<String> columns) {
   const widths = [22, 9, 11, 11, 12, 12, 11, 11, 12, 11, 0];
   return [
@@ -145,6 +198,8 @@ class _Options {
           filter = value;
         case 'csv':
           csvPath = value;
+        case 'trace':
+          trace = value;
         default:
           throw ArgumentError('Unknown option: $argument');
       }
@@ -156,6 +211,7 @@ class _Options {
   double seconds = 2;
   String filter = '';
   String? csvPath;
+  String trace = '';
 }
 
 class _Case {
@@ -465,6 +521,46 @@ class _App {
             member.accumulatedSize ?? 0,
           ),
     };
+  }
+
+  /// The stacks, one per object, that allocated the objects of the class while
+  /// [work] ran, as the names of their five innermost functions.
+  Future<List<String>> traceAllocations(
+    String className,
+    Future<void> Function() work,
+  ) async {
+    final service = _service!;
+    final isolateId = _isolateId!;
+    final classes = await service.getClassList(isolateId);
+    final classRef = classes.classes!.firstWhere((c) => c.name == className);
+    final origin = (await service.getVMTimelineMicros()).timestamp!;
+    await service.setTraceClassAllocation(isolateId, classRef.id!, true);
+    try {
+      await work();
+    } finally {
+      await service.setTraceClassAllocation(isolateId, classRef.id!, false);
+    }
+    final samples = await service.getAllocationTraces(
+      isolateId,
+      classId: classRef.id,
+      timeOriginMicros: origin,
+      timeExtentMicros: 10 * 60 * 1000000,
+    );
+    final functions = samples.functions ?? <ProfileFunction>[];
+    String name(int index) {
+      final function = functions[index].function;
+      if (function is FuncRef) {
+        final owner = function.owner;
+        final ownerName = owner is ClassRef ? '${owner.name}.' : '';
+        return '$ownerName${function.name}';
+      }
+      return function is NativeFunction ? function.name ?? '?' : '$function';
+    }
+
+    return [
+      for (final sample in samples.samples ?? <CpuSample>[])
+        (sample.stack ?? <int>[]).take(5).map(name).join(' < '),
+    ];
   }
 
   /// The (objects, bytes) of the class that are alive after a GC.
