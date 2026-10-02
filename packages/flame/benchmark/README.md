@@ -73,6 +73,10 @@ the benchmark results are printed above it.
 - `ray_intersection_benchmark.dart`: `rayIntersection` on polygon hitboxes
   that are sampled from a concave and from a convex `Path` contour, with one
   precomputed ray for each hitbox in every tick.
+- `raycast_benchmark.dart`: `raycast` in a static scene of simple, polygon,
+  path and mixed hitboxes, comparing the old code path with
+  `StandardCollisionDetection.nearestFirstRaycast`, and printing the time per
+  ray, the speedup and whether both find the same hits.
 - `transform2d_benchmark.dart`: the `Transform2D` hot paths: matrix
   recalculation after position and angle changes, point conversion, matrix
   assignment, and copying transforms.

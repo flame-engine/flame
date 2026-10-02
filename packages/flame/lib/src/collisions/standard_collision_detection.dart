@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
+import 'package:meta/meta.dart';
 
 /// The default implementation of [CollisionDetection].
 /// Checks whether any [ShapeHitbox]s in [items] collide with each other and
@@ -68,8 +69,139 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
 
   static final _temporaryRayAabb = Aabb2();
 
+  /// Whether [raycast] visits the hitboxes from the nearest to the farthest
+  /// and stops as soon as the best hit so far is nearer than the next hitbox,
+  /// instead of calling [ShapeHitbox.rayIntersection] on all of the hitboxes
+  /// that the ray may reach.
+  ///
+  /// The result is the same, except for the choice between hitboxes hit at
+  /// exactly the same distance, but it saves work when many hitboxes have an
+  /// expensive [ShapeHitbox.rayIntersection], like polygons or paths. This is
+  /// off by default while it is being evaluated.
+  @experimental
+  static bool nearestFirstRaycast = false;
+
+  /// The hitboxes that a ray may reach, ordered by [_RayCandidate.distance],
+  /// kept between calls to not allocate per ray.
+  static final _candidates = <_RayCandidate>[];
+  static final _candidatePool = <_RayCandidate>[];
+
   @override
   RaycastResult<ShapeHitbox>? raycast(
+    Ray2 ray, {
+    double? maxDistance,
+    bool Function(ShapeHitbox candidate)? hitboxFilter,
+    List<ShapeHitbox>? ignoreHitboxes,
+    RaycastResult<ShapeHitbox>? out,
+  }) {
+    if (nearestFirstRaycast) {
+      return _raycastNearestFirst(
+        ray,
+        maxDistance: maxDistance,
+        hitboxFilter: hitboxFilter,
+        ignoreHitboxes: ignoreHitboxes,
+        out: out,
+      );
+    }
+    return _raycastAll(
+      ray,
+      maxDistance: maxDistance,
+      hitboxFilter: hitboxFilter,
+      ignoreHitboxes: ignoreHitboxes,
+      out: out,
+    );
+  }
+
+  RaycastResult<ShapeHitbox>? _raycastNearestFirst(
+    Ray2 ray, {
+    double? maxDistance,
+    bool Function(ShapeHitbox candidate)? hitboxFilter,
+    List<ShapeHitbox>? ignoreHitboxes,
+    RaycastResult<ShapeHitbox>? out,
+  }) {
+    var finalResult = out?..reset();
+    final limit = maxDistance ?? double.infinity;
+    _candidates.clear();
+    for (final item in items) {
+      if (ignoreHitboxes?.contains(item) ?? false) {
+        continue;
+      }
+      if (hitboxFilter != null && !hitboxFilter(item)) {
+        continue;
+      }
+      final entry = _entryDistance(ray, item.aabb);
+      if (entry == null || entry > limit) {
+        continue;
+      }
+      if (_candidates.length == _candidatePool.length) {
+        _candidatePool.add(_RayCandidate());
+      }
+      _candidatePool[_candidates.length]
+        ..distance = entry
+        ..hitbox = item;
+      _candidates.add(_candidatePool[_candidates.length]);
+    }
+    _candidates.sort((a, b) => a.distance.compareTo(b.distance));
+    for (final candidate in _candidates) {
+      // A hit can not be nearer than the entry point to its box.
+      if ((finalResult?.isActive ?? false) &&
+          finalResult!.distance! <= candidate.distance) {
+        break;
+      }
+      final currentResult = candidate.hitbox!.rayIntersection(
+        ray,
+        out: _temporaryRaycastResult,
+      );
+      final possiblyFirstResult = !(finalResult?.isActive ?? false);
+      if (currentResult != null &&
+          (possiblyFirstResult ||
+              currentResult.distance! < finalResult!.distance!) &&
+          currentResult.distance! <= limit) {
+        if (finalResult == null) {
+          finalResult = currentResult.clone();
+        } else {
+          finalResult.setFrom(currentResult);
+        }
+      }
+    }
+    // Do not keep the hitboxes alive through the pool.
+    for (final candidate in _candidates) {
+      candidate.hitbox = null;
+    }
+    return (finalResult?.isActive ?? false) ? finalResult : null;
+  }
+
+  /// The distance along the [ray] at which it enters [box], or 0 if it starts
+  /// inside of it, or null if it does not reach it.
+  static double? _entryDistance(Ray2 ray, Aabb2 box) {
+    var entry = 0.0;
+    var exit = double.infinity;
+    final origin = ray.origin;
+    final direction = ray.direction;
+    if (direction.x == 0) {
+      if (origin.x < box.min.x || origin.x > box.max.x) {
+        return null;
+      }
+    } else {
+      final a = (box.min.x - origin.x) / direction.x;
+      final b = (box.max.x - origin.x) / direction.x;
+      entry = math.max(entry, math.min(a, b));
+      exit = math.min(exit, math.max(a, b));
+    }
+    if (direction.y == 0) {
+      if (origin.y < box.min.y || origin.y > box.max.y) {
+        return null;
+      }
+    } else {
+      final a = (box.min.y - origin.y) / direction.y;
+      final b = (box.max.y - origin.y) / direction.y;
+      entry = math.max(entry, math.min(a, b));
+      exit = math.min(exit, math.max(a, b));
+    }
+    return entry <= exit ? entry : null;
+  }
+
+  RaycastResult<ShapeHitbox>? _raycastAll(
     Ray2 ray, {
     double? maxDistance,
     bool Function(ShapeHitbox candidate)? hitboxFilter,
@@ -222,4 +354,11 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
       ..min.setValues(math.min(x1, x2), math.min(y1, y2))
       ..max.setValues(math.max(x1, x2), math.max(y1, y2));
   }
+}
+
+/// A hitbox that a ray may reach, with the distance at which the ray enters
+/// the bounding box of the hitbox.
+class _RayCandidate {
+  double distance = 0;
+  ShapeHitbox? hitbox;
 }
