@@ -99,7 +99,6 @@ void main() {
         'alien2': TestPaths.alien2,
         'setup': TestPaths.setup,
         'recycle': TestPaths.recycle,
-        'spaceship': TestPaths.spaceship,
       };
 
       shapes.forEach((name, build) {
