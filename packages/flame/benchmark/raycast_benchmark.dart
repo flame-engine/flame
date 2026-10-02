@@ -1,21 +1,9 @@
-import 'dart:math';
-import 'dart:ui';
-
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:flame/collisions.dart';
-import 'package:flame/components.dart';
-import 'package:flame/game.dart';
-import 'package:flame/geometry.dart';
 
-import 'common.dart';
+import 'raycast_scene.dart';
 
-const _raysPerRun = 200;
-const _worldWidth = 800.0;
-const _worldHeight = 600.0;
-
-/// The kinds of hitboxes of the scene, from the cheapest to the most
-/// expensive to intersect with a ray.
-enum HitboxKind { simple, polygons, paths, mixed }
+const _raysPerRun = raycastRaysPerRun;
 
 /// The number of different rotations of the scene when it rotates.
 const _phases = 8;
@@ -46,9 +34,7 @@ class RaycastBenchmark extends AsyncBenchmarkBase {
   final bool nearestFirst;
   final bool rotate;
 
-  late final _RaycastGame _game;
-  late final List<Ray2> _rays;
-  late final List<PositionComponent> _components;
+  late final RaycastScenery _scenery;
   late final List<double> _baseAngles;
   final _result = RaycastResult<ShapeHitbox>();
   var _phase = 0;
@@ -57,23 +43,9 @@ class RaycastBenchmark extends AsyncBenchmarkBase {
   @override
   Future<void> setup() async {
     // The same scene and rays for both code paths.
-    final random = Random(69420);
-    _game = _RaycastGame();
-    await mountGame(_game, size: Vector2(_worldWidth, _worldHeight));
-    _components = [for (var i = 0; i < count; i++) _component(random, i)];
-    _baseAngles = [for (final component in _components) component.angle];
-    _game.world.addAll(_components);
-    await _game.ready();
-    _game.update(0);
-    _rays = [
-      for (var i = 0; i < _raysPerRun; i++)
-        Ray2(
-          origin: Vector2(
-            random.nextDouble() * _worldWidth,
-            random.nextDouble() * _worldHeight,
-          ),
-          direction: (Vector2.random(random) - Vector2.all(0.5))..normalize(),
-        ),
+    _scenery = await RaycastScenery.create(kind: kind, count: count);
+    _baseAngles = [
+      for (final component in _scenery.components) component.angle,
     ];
     StandardCollisionDetection.nearestFirstRaycast = nearestFirst;
   }
@@ -85,15 +57,15 @@ class RaycastBenchmark extends AsyncBenchmarkBase {
 
   @override
   Future<void> run() async {
-    final detection = _game.world.collisionDetection;
+    final detection = _scenery.detection;
     if (rotate) {
       _phase = (_phase + 1) % _phases;
-      for (var i = 0; i < _components.length; i++) {
-        _components[i].angle = _baseAngles[i] + _phase * _phaseAngle;
+      for (var i = 0; i < _scenery.components.length; i++) {
+        _scenery.components[i].angle = _baseAngles[i] + _phase * _phaseAngle;
       }
     }
     var hits = 0;
-    for (final ray in _rays) {
+    for (final ray in _scenery.rays) {
       if (detection.raycast(ray, out: _result) != null) {
         hits++;
       }
@@ -105,79 +77,7 @@ class RaycastBenchmark extends AsyncBenchmarkBase {
   /// the work from being optimized away and to check that both code paths
   /// agree. It is null for the phases that did not run.
   List<int?> get hitsByPhase => _hitsByPhase;
-
-  PositionComponent _component(Random random, int index) {
-    final size = 30 + random.nextDouble() * 50;
-    final hitbox = switch (kind) {
-      HitboxKind.simple => _simple(random, index, size),
-      HitboxKind.polygons => _polygon(size),
-      HitboxKind.paths => _path(size),
-      HitboxKind.mixed => switch (index % 4) {
-        0 || 1 => _simple(random, index, size),
-        2 => _polygon(size),
-        _ => _path(size),
-      },
-    };
-    return PositionComponent(
-      position: Vector2(
-        random.nextDouble() * _worldWidth,
-        random.nextDouble() * _worldHeight,
-      ),
-      angle: random.nextDouble() * 2 * pi,
-      size: Vector2.all(size),
-      anchor: Anchor.center,
-      children: [hitbox],
-    );
-  }
-
-  ShapeHitbox _simple(Random random, int index, double size) {
-    return index.isEven
-        ? RectangleHitbox(
-            size: Vector2.all(size),
-            collisionType: CollisionType.inactive,
-          )
-        : CircleHitbox(
-            radius: size / 2,
-            collisionType: CollisionType.inactive,
-          );
-  }
-
-  ShapeHitbox _polygon(double size) {
-    return PolygonHitbox(
-      _starVertices(size),
-      collisionType: CollisionType.inactive,
-    );
-  }
-
-  ShapeHitbox _path(double size) {
-    final vertices = _starVertices(size);
-    final path = Path()..moveTo(vertices.first.x, vertices.first.y);
-    for (final vertex in vertices.skip(1)) {
-      path.lineTo(vertex.x, vertex.y);
-    }
-    return PathHitbox(
-      path: path..close(),
-      collisionType: CollisionType.inactive,
-    );
-  }
-
-  /// The vertices of a concave star with 24 vertices.
-  List<Vector2> _starVertices(double size) {
-    return [
-      for (var i = 0; i < 24; i++)
-        Vector2(
-          size / 2 + (i.isEven ? size / 2 : size / 5) * cos(i * pi / 12),
-          size / 2 + (i.isEven ? size / 2 : size / 5) * sin(i * pi / 12),
-        ),
-    ];
-  }
 }
-
-class _RaycastGame extends FlameGame<_RaycastWorld> {
-  _RaycastGame() : super(world: _RaycastWorld());
-}
-
-class _RaycastWorld extends World with HasCollisionDetection {}
 
 /// Runs the benchmark for the old and the new code path in all the cases, and
 /// prints a table with the time per ray and the speedup.
@@ -189,7 +89,7 @@ Future<void> main() async {
   print(
     'kind      hitboxes  rotate  old [us/ray]  new [us/ray]  speedup  hits',
   );
-  for (final kind in HitboxKind.values) {
+  for (final kind in HitboxKind.shapes) {
     for (final count in counts) {
       for (final rotate in [false, true]) {
         final old = RaycastBenchmark(
