@@ -10,10 +10,9 @@ import 'package:meta/meta.dart';
 ///
 /// The element owns the laid out [TextPainter]; call [dispose] once the
 /// element is no longer needed to release it.
-class ParagraphTextElement extends TextElement {
-  /// Wraps a [textPainter] that has already had `layout` called on it.
-  ParagraphTextElement(this._textPainter);
-
+///
+/// Wraps a text painter that has already had `layout` called on it.
+class ParagraphTextElement(final TextPainter _textPainter) extends TextElement {
   /// Lays out [text] within [maxWidth] and wraps the resulting painter.
   ParagraphTextElement.layout(
     InlineSpan text, {
@@ -28,7 +27,6 @@ class ParagraphTextElement extends TextElement {
          )..layout(maxWidth: maxWidth),
        );
 
-  final TextPainter _textPainter;
   Offset _offset = Offset.zero;
 
   @visibleForTesting

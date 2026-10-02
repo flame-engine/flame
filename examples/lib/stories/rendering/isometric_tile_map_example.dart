@@ -6,7 +6,9 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 
-class IsometricTileMapExample extends FlameGame with MouseMoveCallbacks {
+class IsometricTileMapExample({required final bool halfSize})
+    extends FlameGame
+    with MouseMoveCallbacks {
   static const String description = '''
     Shows an example of how to use the `IsometricTileMapComponent`.\n\n
     Move the mouse over the board to see a selector appearing on the tiles.
@@ -21,14 +23,11 @@ class IsometricTileMapExample extends FlameGame with MouseMoveCallbacks {
   final originColor = Paint()..color = const Color(0xFFFF00FF);
   final originColor2 = Paint()..color = const Color(0xFFAA55FF);
 
-  final bool halfSize;
   late final tileHeight = scale * (halfSize ? 8.0 : 16.0);
   late final suffix = halfSize ? '-short' : '';
 
   late IsometricTileMapComponent base;
   late Selector selector;
-
-  IsometricTileMapExample({required this.halfSize});
 
   @override
   Future<void> onLoad() async {
@@ -83,10 +82,10 @@ class IsometricTileMapExample extends FlameGame with MouseMoveCallbacks {
   }
 }
 
-class Selector extends SpriteComponent {
+class Selector(double s, Image image) extends SpriteComponent {
   bool show = true;
 
-  Selector(double s, Image image)
+  this
     : super(
         sprite: Sprite(image, srcSize: Vector2.all(32.0)),
         size: Vector2.all(s),

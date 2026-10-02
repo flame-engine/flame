@@ -3,7 +3,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart';
 
-class CustomPainterExample extends FlameGame with TapCallbacks {
+class CustomPainterExample() extends FlameGame with TapCallbacks {
   static const description = '''
     Example demonstration of how to use the CustomPainterComponent.
 
@@ -27,9 +27,7 @@ class CustomPainterExample extends FlameGame with TapCallbacks {
   }
 }
 
-class CustomPainterExampleWidget extends StatelessWidget {
-  const CustomPainterExampleWidget({super.key});
-
+class const CustomPainterExampleWidget({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GameWidget.managed(
@@ -65,7 +63,7 @@ class CustomPainterExampleWidget extends StatelessWidget {
   }
 }
 
-class PlayerCustomPainter extends CustomPainter {
+class PlayerCustomPainter() extends CustomPainter {
   late final facePaint = Paint()..color = Colors.yellow;
 
   late final eyesPaint = Paint()..color = Colors.black;
@@ -110,7 +108,8 @@ class PlayerCustomPainter extends CustomPainter {
   }
 }
 
-class Player extends CustomPainterComponent
+class Player()
+    extends CustomPainterComponent
     with HasGameRef<CustomPainterExample> {
   static const speed = 150;
 

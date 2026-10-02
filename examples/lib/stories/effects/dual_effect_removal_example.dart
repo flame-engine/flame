@@ -4,7 +4,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart';
 
-class DualEffectRemovalExample extends FlameGame with TapCallbacks {
+class DualEffectRemovalExample() extends FlameGame with TapCallbacks {
   static const String description = '''
     In this example we show how a dual effect can be used and removed.
     To remove an effect, tap anywhere on the screen and the first tap will

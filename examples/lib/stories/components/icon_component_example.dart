@@ -6,7 +6,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart' show IconData;
 
-class IconComponentExample extends FlameGame {
+class IconComponentExample() extends FlameGame {
   static const String description = '''
     In this example we showcase the `IconComponent`, which renders Flutter
     `IconData` as Flame components. The icons are rasterized to images on load,

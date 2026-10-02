@@ -2,17 +2,15 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
-class JoystickPlayer extends SpriteComponent
+class JoystickPlayer(final JoystickComponent joystick)
+    extends SpriteComponent
     with HasGameRef, CollisionCallbacks {
   /// Pixels/s
   double maxSpeed = 300.0;
   late final Vector2 _lastSize = size.clone();
   late final Transform2D _lastTransform = transform.clone();
 
-  final JoystickComponent joystick;
-
-  JoystickPlayer(this.joystick)
-    : super(size: Vector2.all(100.0), anchor: Anchor.center);
+  this : super(size: Vector2.all(100.0), anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {

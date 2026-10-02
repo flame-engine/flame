@@ -6,11 +6,11 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _MockCanvas extends Mock implements Canvas {}
+class _MockCanvas() extends Mock implements Canvas;
 
-class _FakeImage extends Fake implements Image {}
+class _FakeImage() extends Fake implements Image;
 
-class _AutoBatchGroup extends PositionComponent with HasAutoBatchedChildren {}
+class _AutoBatchGroup() extends PositionComponent with HasAutoBatchedChildren;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

@@ -5,7 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/rendering.dart';
 
-class DecoratorShadowGame extends FlameGame {
+class DecoratorShadowGame() extends FlameGame {
   @override
   Color backgroundColor() => const Color(0xFFC7C7C7);
 
@@ -52,7 +52,7 @@ class DecoratorShadowGame extends FlameGame {
   }
 }
 
-class Grid extends Component {
+class Grid() extends Component {
   final paint = Paint()
     ..color = const Color(0xffa9a9a9)
     ..style = PaintingStyle.stroke

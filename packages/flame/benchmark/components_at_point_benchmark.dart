@@ -13,13 +13,11 @@ const _gameSize = 800.0;
 /// (tap down + tap up delivery). Represents pre-PR behavior where the game
 /// caught all events without checking which component was hit.
 /// See PR: https://github.com/flame-engine/flame/pull/3815
-class BaselineBenchmark extends AsyncBenchmarkBase {
-  final Random random;
-
+class BaselineBenchmark(final Random random) extends AsyncBenchmarkBase {
   late final FlameGame _game;
   late final List<Vector2> _positions;
 
-  BaselineBenchmark(this.random) : super('Baseline (no hit test)');
+  this : super('Baseline (no hit test)');
 
   static Future<void> main() async {
     final r = Random(69420);
@@ -58,13 +56,11 @@ class BaselineBenchmark extends AsyncBenchmarkBase {
 /// Benchmarks the real flow: containsEventHandlerAt (hit test with early-stop
 /// and caching) followed by two componentsAtPoint calls (tap down replays
 /// from cache, tap up does a real traversal).
-class CachedHitTestBenchmark extends AsyncBenchmarkBase {
-  final Random random;
-
+class CachedHitTestBenchmark(final Random random) extends AsyncBenchmarkBase {
   late final FlameGame _game;
   late final List<Vector2> _positions;
 
-  CachedHitTestBenchmark(this.random) : super('Hit Test + Delivery (cached)');
+  this : super('Hit Test + Delivery (cached)');
 
   static Future<void> main() async {
     final r = Random(69420);
@@ -106,14 +102,11 @@ class CachedHitTestBenchmark extends AsyncBenchmarkBase {
 
 /// Benchmarks the flow without cache: componentsAtPoint called 3 times
 /// per tap (hit test scan + tap down delivery + tap up delivery).
-class UncachedHitTestBenchmark extends AsyncBenchmarkBase {
-  final Random random;
-
+class UncachedHitTestBenchmark(final Random random) extends AsyncBenchmarkBase {
   late final FlameGame _game;
   late final List<Vector2> _positions;
 
-  UncachedHitTestBenchmark(this.random)
-    : super('Hit Test + Delivery (uncached)');
+  this : super('Hit Test + Delivery (uncached)');
 
   static Future<void> main() async {
     final r = Random(69420);
@@ -225,7 +218,7 @@ List<Vector2> _generatePositions(Random random) {
   );
 }
 
-class _TappableComponent extends PositionComponent with TapCallbacks {}
+class _TappableComponent() extends PositionComponent with TapCallbacks;
 
 Future<void> main() async {
   final r1 = Random(69420);

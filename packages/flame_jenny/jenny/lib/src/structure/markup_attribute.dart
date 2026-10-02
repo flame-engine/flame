@@ -1,28 +1,25 @@
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:meta/meta.dart';
 
-class MarkupAttribute {
-  MarkupAttribute(
-    this._name,
-    int startTextPosition,
-    int endTextPosition, [
-    int startSubIndex = 0,
-    int endSubIndex = 1,
-    Map<String, Expression>? parameters,
-  ]) : _startTextPosition = startTextPosition + startSubIndex * _subFactor,
-       _endTextPosition = endTextPosition + endSubIndex * _subFactor,
-       _start = 0,
-       _end = 0,
-       _parameterExpressions = parameters,
-       _parameterValues = parameters == null ? null : <String, dynamic>{} {
+class MarkupAttribute(
+  final String _name,
+  int startTextPosition,
+  int endTextPosition, [
+  int startSubIndex = 0,
+  int endSubIndex = 1,
+  Map<String, Expression>? parameters,
+]) {
+  this : _start = 0, _end = 0 {
     reset();
   }
 
-  final String _name;
-  final double _startTextPosition;
-  final double _endTextPosition;
-  final Map<String, Expression>? _parameterExpressions;
-  final Map<String, dynamic>? _parameterValues;
+  final double _startTextPosition =
+      startTextPosition + startSubIndex * _subFactor;
+  final double _endTextPosition = endTextPosition + endSubIndex * _subFactor;
+  final Map<String, Expression>? _parameterExpressions = parameters;
+  final Map<String, dynamic>? _parameterValues = parameters == null
+      ? null
+      : <String, dynamic>{};
   int _start;
   int _end;
 

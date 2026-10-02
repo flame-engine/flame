@@ -5,12 +5,14 @@ import 'package:flame_3d_example/components/player.dart';
 import 'package:flame_3d_example/components/simple_hud.dart';
 import 'package:flame_3d_example/example_game_3d.dart';
 
-class ExampleCamera3D extends CameraComponent3D with HasGameRef<ExampleGame3D> {
+class ExampleCamera3D()
+    extends CameraComponent3D
+    with HasGameRef<ExampleGame3D> {
   CameraMode _mode = CameraMode.player;
   double distance = 5.0;
   Vector2 delta = Vector2.zero();
 
-  ExampleCamera3D()
+  this
     : super(
         position: Vector3(0, 2, 4),
         projection: CameraProjection.perspective,
@@ -73,7 +75,7 @@ class ExampleCamera3D extends CameraComponent3D with HasGameRef<ExampleGame3D> {
   static const double _cameraLinearSpeed = 12.0;
 }
 
-enum CameraMode {
+enum CameraMode() {
   drag,
   player,
 }

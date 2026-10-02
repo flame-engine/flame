@@ -5,14 +5,14 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 
-class BenchmarkExample extends FlameGame {
+class BenchmarkExample() extends FlameGame {
   static const description = '''
 See how many SpriteAnimationComponent's your platform can handle before it
 starts to drop in FPS, this is without any sprite batching and such.
 100 animation components are added per tap.
   ''';
 
-  BenchmarkExample() : super(world: BenchmarkWorld());
+  this : super(world: BenchmarkWorld());
 
   final emberSize = Vector2.all(20);
   late final TextComponent emberCounter;
@@ -43,7 +43,8 @@ starts to drop in FPS, this is without any sprite batching and such.
   }
 }
 
-class BenchmarkWorld extends World
+class BenchmarkWorld()
+    extends World
     with TapCallbacks, HasGameRef<BenchmarkExample> {
   final Random random = Random();
 

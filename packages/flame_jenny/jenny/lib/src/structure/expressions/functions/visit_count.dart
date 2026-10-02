@@ -3,12 +3,8 @@ import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/functions/_common.dart';
 import 'package:jenny/src/yarn_project.dart';
 
-class VisitCountFn extends NumExpression {
-  VisitCountFn(this._node, this._yarn);
-
-  final StringExpression _node;
-  final YarnProject _yarn;
-
+class VisitCountFn(final StringExpression _node, final YarnProject _yarn)
+    extends NumExpression {
   static Expression make(
     List<FunctionArgument> args,
     YarnProject yarnProject,

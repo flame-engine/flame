@@ -12,9 +12,7 @@ extension Vector3Extension on Vector3 {
   }
 }
 
-class Vector3Utils {
-  Vector3Utils._();
-
+class Vector3Utils._() {
   static Vector3 lerp(Vector3 a, Vector3 b, double t) {
     return a + (b - a).scaled(t);
   }

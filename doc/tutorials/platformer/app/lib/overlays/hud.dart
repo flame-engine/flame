@@ -4,17 +4,15 @@ import 'package:material_ui/material_ui.dart';
 import '../ember_quest.dart';
 import 'heart.dart';
 
-class Hud extends PositionComponent with HasGameRef<EmberQuestGame> {
-  Hud({
-    super.position,
-    super.size,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority = 5,
-  });
-
+class Hud({
+  super.position,
+  super.size,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority = 5,
+}) extends PositionComponent with HasGameRef<EmberQuestGame> {
   late TextComponent _scoreTextComponent;
 
   @override
@@ -53,7 +51,7 @@ class Hud extends PositionComponent with HasGameRef<EmberQuestGame> {
       );
     }
 
-    return super.onLoad();
+    await super.onLoad();
   }
 
   @override

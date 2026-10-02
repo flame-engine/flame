@@ -1,10 +1,10 @@
 import 'dart:ui' show Rect;
 
 /// A mutable version of [Rect] for tile map animations.
-class MutableRect extends Rect {
+class MutableRect.fromLTRB(this.left, this.top, this.right, this.bottom)
+    extends Rect {
   /// Construct a rectangle from its left, top, right, and bottom edges.
-  MutableRect.fromLTRB(this.left, this.top, this.right, this.bottom)
-    : super.fromLTRB(left, top, right, bottom);
+  this : super.fromLTRB(left, top, right, bottom);
 
   /// Create a new instance from [other].
   factory MutableRect.fromRect(Rect other) =>

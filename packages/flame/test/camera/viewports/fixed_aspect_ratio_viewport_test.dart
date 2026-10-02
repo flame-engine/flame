@@ -104,7 +104,7 @@ void main() {
   });
 }
 
-class _MyWorld extends World {
+class _MyWorld() extends World {
   @override
   void render(Canvas canvas) {
     canvas.drawColor(const Color(0xFF777777), BlendMode.src);

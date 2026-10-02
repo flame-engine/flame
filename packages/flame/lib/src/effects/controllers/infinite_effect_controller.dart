@@ -2,13 +2,10 @@ import 'package:flame/effects.dart';
 
 /// Effect controller that wraps a [child] effect controller and repeats it
 /// infinitely.
-class InfiniteEffectController extends EffectController
+class InfiniteEffectController(final EffectController _child)
+    extends EffectController
     with HasSingleChildEffectController {
-  InfiniteEffectController(EffectController child)
-    : _child = child,
-      super.empty();
-
-  final EffectController _child;
+  this : super.empty();
 
   @override
   EffectController get child => _child;

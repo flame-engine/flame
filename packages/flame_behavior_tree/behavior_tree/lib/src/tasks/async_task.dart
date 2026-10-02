@@ -8,12 +8,9 @@ typedef AsyncTaskCallback = Future<NodeStatus> Function();
 /// While the callback is executing, this node will report [status] as
 /// [NodeStatus.running]. Once the callback finishes, the status will be updated
 /// to the returned value of the callback.
-class AsyncTask extends BaseNode implements NodeInterface {
-  /// Creates an async task node for given [callback].
-  AsyncTask(AsyncTaskCallback callback) : _callback = callback;
-
-  final AsyncTaskCallback _callback;
-
+class AsyncTask(final AsyncTaskCallback _callback)
+    extends BaseNode
+    implements NodeInterface {
   @override
   void tick() {
     if (status != NodeStatus.running) {

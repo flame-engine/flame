@@ -6,7 +6,7 @@ import 'package:flame/geometry.dart';
 import 'package:flame/rendering.dart';
 import 'package:flutter/rendering.dart';
 
-class RouterGame extends FlameGame {
+class RouterGame() extends FlameGame {
   late final RouterComponent router;
 
   @override
@@ -25,8 +25,8 @@ class RouterGame extends FlameGame {
   }
 }
 
-class StartPage extends Component with HasGameRef<RouterGame> {
-  StartPage() {
+class StartPage() extends Component with HasGameRef<RouterGame> {
+  this {
     addAll([
       _logo = TextComponent(
         text: 'Your Game',
@@ -67,31 +67,22 @@ class StartPage extends Component with HasGameRef<RouterGame> {
   }
 }
 
-class Background extends Component {
-  Background(this.color);
-  final Color color;
-
+class Background(final Color color) extends Component {
   @override
   void render(Canvas canvas) {
     canvas.drawColor(color, BlendMode.srcATop);
   }
 }
 
-class RoundedButton extends PositionComponent with TapCallbacks {
-  RoundedButton({
-    required this.text,
-    required this.action,
-    required Color color,
-    required Color borderColor,
-    super.position,
-    super.anchor = Anchor.center,
-  }) : _textDrawable = TextPaint(
-         style: const TextStyle(
-           fontSize: 20,
-           color: Color(0xFF000000),
-           fontWeight: FontWeight.w800,
-         ),
-       ).toTextPainter(text) {
+class RoundedButton({
+  required final String text,
+  required final void Function() action,
+  required Color color,
+  required Color borderColor,
+  super.position,
+  super.anchor = Anchor.center,
+}) extends PositionComponent with TapCallbacks {
+  this {
     size = Vector2(150, 40);
     _textOffset = Offset(
       (size.x - _textDrawable.width) / 2,
@@ -105,9 +96,13 @@ class RoundedButton extends PositionComponent with TapCallbacks {
       ..color = borderColor;
   }
 
-  final String text;
-  final void Function() action;
-  final TextPainter _textDrawable;
+  final TextPainter _textDrawable = TextPaint(
+    style: const TextStyle(
+      fontSize: 20,
+      color: Color(0xFF000000),
+      fontWeight: FontWeight.w800,
+    ),
+  ).toTextPainter(text);
   late final Offset _textOffset;
   late final RRect _rrect;
   late final Paint _borderPaint;
@@ -137,8 +132,10 @@ class RoundedButton extends PositionComponent with TapCallbacks {
   }
 }
 
-abstract class SimpleButton extends PositionComponent with TapCallbacks {
-  SimpleButton(this._iconPath, {super.position}) : super(size: Vector2.all(40));
+abstract class SimpleButton(final Path _iconPath, {super.position})
+    extends PositionComponent
+    with TapCallbacks {
+  this : super(size: Vector2.all(40));
 
   final Paint _borderPaint = Paint()
     ..style = PaintingStyle.stroke
@@ -147,8 +144,6 @@ abstract class SimpleButton extends PositionComponent with TapCallbacks {
     ..style = PaintingStyle.stroke
     ..color = const Color(0xffaaaaaa)
     ..strokeWidth = 7;
-  final Path _iconPath;
-
   void action();
 
   @override
@@ -177,8 +172,8 @@ abstract class SimpleButton extends PositionComponent with TapCallbacks {
   }
 }
 
-class BackButton extends SimpleButton with HasGameRef<RouterGame> {
-  BackButton()
+class BackButton() extends SimpleButton with HasGameRef<RouterGame> {
+  this
     : super(
         Path()
           ..moveTo(22, 8)
@@ -193,8 +188,8 @@ class BackButton extends SimpleButton with HasGameRef<RouterGame> {
   void action() => gameRef.router.pop();
 }
 
-class PauseButton extends SimpleButton with HasGameRef<RouterGame> {
-  PauseButton()
+class PauseButton() extends SimpleButton with HasGameRef<RouterGame> {
+  this
     : super(
         Path()
           ..moveTo(14, 10)
@@ -217,7 +212,7 @@ class PauseButton extends SimpleButton with HasGameRef<RouterGame> {
   }
 }
 
-class Level1Page extends DecoratedWorld with HasGameRef {
+class Level1Page() extends DecoratedWorld with HasGameRef {
   @override
   Future<void> onLoad() async {
     addAll([
@@ -264,7 +259,7 @@ class Level1Page extends DecoratedWorld with HasGameRef {
   }
 }
 
-class Level2Page extends DecoratedWorld with HasGameRef {
+class Level2Page() extends DecoratedWorld with HasGameRef {
   @override
   Future<void> onLoad() async {
     addAll([
@@ -321,17 +316,13 @@ class Level2Page extends DecoratedWorld with HasGameRef {
   }
 }
 
-class Planet extends PositionComponent {
-  Planet({
-    required this.radius,
-    required this.color,
-    super.position,
-    super.children,
-  }) : _paint = Paint()..color = color;
-
-  final double radius;
-  final Color color;
-  final Paint _paint;
+class Planet({
+  required final double radius,
+  required final Color color,
+  super.position,
+  super.children,
+}) extends PositionComponent {
+  final Paint _paint = Paint()..color = color;
 
   @override
   void render(Canvas canvas) {
@@ -339,24 +330,21 @@ class Planet extends PositionComponent {
   }
 }
 
-class Orbit extends PositionComponent {
-  Orbit({
-    required this.radius,
-    required this.planet,
-    required this.revolutionPeriod,
-    double initialAngle = 0,
-  }) : _paint = Paint()
-         ..style = PaintingStyle.stroke
-         ..color = const Color(0x888888aa),
-       _angle = initialAngle {
+class Orbit({
+  required final double radius,
+  required final Planet planet,
+  required final double revolutionPeriod,
+  double initialAngle = 0,
+}) extends PositionComponent {
+  this
+    : _paint = Paint()
+        ..style = PaintingStyle.stroke
+        ..color = const Color(0x888888aa) {
     add(planet);
   }
 
-  final double radius;
-  final double revolutionPeriod;
-  final Planet planet;
   final Paint _paint;
-  double _angle;
+  double _angle = initialAngle;
 
   @override
   void render(Canvas canvas) {
@@ -370,8 +358,8 @@ class Orbit extends PositionComponent {
   }
 }
 
-class PauseRoute extends Route {
-  PauseRoute() : super(PausePage.new, transparent: true);
+class PauseRoute() extends Route {
+  this : super(PausePage.new, transparent: true);
 
   @override
   void onPush(Route? previousRoute) {
@@ -391,7 +379,7 @@ class PauseRoute extends Route {
   }
 }
 
-class PausePage extends Component with TapCallbacks, HasGameRef<RouterGame> {
+class PausePage() extends Component with TapCallbacks, HasGameRef<RouterGame> {
   @override
   Future<void> onLoad() async {
     final game = findGame()!;
@@ -421,7 +409,7 @@ class PausePage extends Component with TapCallbacks, HasGameRef<RouterGame> {
   void onTapUp(TapUpEvent event) => gameRef.router.pop();
 }
 
-class DecoratedWorld extends World with CustomTraversal, HasTimeScale {
+class DecoratedWorld() extends World with CustomTraversal, HasTimeScale {
   PaintDecorator? decorator;
 
   @override

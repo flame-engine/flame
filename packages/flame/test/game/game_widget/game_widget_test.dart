@@ -8,23 +8,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
-class _Wrapper extends StatefulWidget {
-  const _Wrapper({
-    required this.child,
-    this.open = false,
-  });
-
-  final Widget child;
-  final bool open;
-
+class const _Wrapper({
+  required final Widget child,
+  final bool open = false,
+}) extends StatefulWidget {
   @override
   State<_Wrapper> createState() => _WrapperState();
 }
 
-class _GameWithKeyboardEvents extends FlameGame with KeyboardEvents {
+class _GameWithKeyboardEvents() extends FlameGame with KeyboardEvents {
   final List<LogicalKeyboardKey> keyEvents = [];
-
-  _GameWithKeyboardEvents();
 
   @override
   KeyEventResult onKeyEvent(
@@ -36,7 +29,7 @@ class _GameWithKeyboardEvents extends FlameGame with KeyboardEvents {
   }
 }
 
-class _WrapperState extends State<_Wrapper> {
+class _WrapperState() extends State<_Wrapper> {
   late bool _open;
 
   @override
@@ -66,7 +59,7 @@ class _WrapperState extends State<_Wrapper> {
   }
 }
 
-class _MyGame extends FlameGame {
+class _MyGame() extends FlameGame {
   bool onAttachCalled = false;
   bool onDetachCalled = false;
 
@@ -607,16 +600,12 @@ void main() {
   });
 }
 
-class _SlowComponent extends Component {
-  _SlowComponent(this.loadCompleter);
-
-  final Completer<void> loadCompleter;
-
+class _SlowComponent(final Completer<void> loadCompleter) extends Component {
   @override
   Future<void> onLoad() => loadCompleter.future;
 }
 
-class _SlowLoadingGame extends FlameGame {
+class _SlowLoadingGame() extends FlameGame {
   final childLoadCompleter = Completer<void>();
   final grandChildLoadCompleter = Completer<void>();
   late final _SlowComponent slowChild;
@@ -629,10 +618,7 @@ class _SlowLoadingGame extends FlameGame {
   }
 }
 
-class _GatedLoadGame extends FlameGame {
-  _GatedLoadGame(this.loadGate);
-
-  final Completer<void> loadGate;
+class _GatedLoadGame(final Completer<void> loadGate) extends FlameGame {
   int onMountCount = 0;
 
   @override
@@ -644,7 +630,7 @@ class _GatedLoadGame extends FlameGame {
   }
 }
 
-class _GameWithBuildContextCheck extends FlameGame {
+class _GameWithBuildContextCheck() extends FlameGame {
   BuildContext? buildContextDuringOnLoad;
 
   @override
@@ -653,7 +639,7 @@ class _GameWithBuildContextCheck extends FlameGame {
   }
 }
 
-class _ComponentWithBuildContextCheck extends Component {
+class _ComponentWithBuildContextCheck() extends Component {
   BuildContext? buildContextDuringOnLoad;
 
   @override
@@ -662,7 +648,7 @@ class _ComponentWithBuildContextCheck extends Component {
   }
 }
 
-class _GameWithComponentBuildContextCheck extends FlameGame {
+class _GameWithComponentBuildContextCheck() extends FlameGame {
   final component = _ComponentWithBuildContextCheck();
 
   @override

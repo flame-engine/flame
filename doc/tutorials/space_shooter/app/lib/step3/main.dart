@@ -8,7 +8,7 @@ void main() {
   runApp(GameWidget(game: SpaceShooterGame()));
 }
 
-class SpaceShooterGame extends FlameGame with DragCallbacks {
+class SpaceShooterGame() extends FlameGame with DragCallbacks {
   late Player player;
 
   @override
@@ -35,9 +35,10 @@ class SpaceShooterGame extends FlameGame with DragCallbacks {
   }
 }
 
-class Player extends SpriteAnimationComponent
+class Player()
+    extends SpriteAnimationComponent
     with HasGameRef<SpaceShooterGame> {
-  Player()
+  this
     : super(
         size: Vector2(100, 150),
         anchor: Anchor.center,

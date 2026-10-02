@@ -8,7 +8,7 @@ void main() {
   runApp(GameWidget(game: GlowEffectExample()));
 }
 
-class GlowEffectExample extends FlameGame with TapCallbacks {
+class GlowEffectExample() extends FlameGame with TapCallbacks {
   static const String description = '''
     In this example we show how the `GlowEffect` can be used.
   ''';

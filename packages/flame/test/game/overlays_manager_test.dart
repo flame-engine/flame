@@ -16,8 +16,8 @@ void main() {
           GameWidget(
             game: FlameGame(),
             overlayBuilderMap: {
-              'first!': (_, __) => Container(key: key1),
-              'second': (_, __) => Container(key: key2),
+              'first!': (_, _) => Container(key: key1),
+              'second': (_, _) => Container(key: key2),
             },
             initialActiveOverlays: const ['first!'],
           ),
@@ -42,8 +42,8 @@ void main() {
               },
             ),
             overlayBuilderMap: {
-              'first!': (_, __) => Container(key: key1),
-              'second': (_, __) => Container(key: key2),
+              'first!': (_, _) => Container(key: key1),
+              'second': (_, _) => Container(key: key2),
             },
           ),
         );
@@ -64,8 +64,8 @@ void main() {
           GameWidget(
             game: game,
             overlayBuilderMap: {
-              'first!': (_, __) => Container(key: key1),
-              'second': (_, __) => Container(key: key2),
+              'first!': (_, _) => Container(key: key1),
+              'second': (_, _) => Container(key: key2),
             },
           ),
         );

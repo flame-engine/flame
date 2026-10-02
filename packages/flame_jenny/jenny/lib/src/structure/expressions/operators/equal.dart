@@ -28,34 +28,26 @@ abstract class Equal extends Expression {
 }
 
 /// Operator EQUAL (==) for numeric arguments.
-class _NumericEqual extends BoolExpression implements Equal {
-  const _NumericEqual(this._lhs, this._rhs);
-
-  final NumExpression _lhs;
-  final NumExpression _rhs;
-
+class const _NumericEqual(final NumExpression _lhs, final NumExpression _rhs)
+    extends BoolExpression
+    implements Equal {
   @override
   bool get value => _lhs.value == _rhs.value;
 }
 
 /// Operator EQUAL (==) for string arguments.
-class _StringEqual extends BoolExpression implements Equal {
-  const _StringEqual(this._lhs, this._rhs);
-
-  final StringExpression _lhs;
-  final StringExpression _rhs;
-
+class const _StringEqual(
+  final StringExpression _lhs,
+  final StringExpression _rhs,
+) extends BoolExpression implements Equal {
   @override
   bool get value => _lhs.value == _rhs.value;
 }
 
 /// Operator EQUAL (==) for boolean arguments.
-class _BooleanEqual extends BoolExpression implements Equal {
-  const _BooleanEqual(this._lhs, this._rhs);
-
-  final BoolExpression _lhs;
-  final BoolExpression _rhs;
-
+class const _BooleanEqual(final BoolExpression _lhs, final BoolExpression _rhs)
+    extends BoolExpression
+    implements Equal {
   @override
   bool get value => _lhs.value == _rhs.value;
 }

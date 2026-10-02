@@ -1,6 +1,6 @@
 import 'package:flame_3d/core.dart';
 
-class JointsInfo {
+class JointsInfo() {
   /// Joints per surface index
   Map<int, List<Matrix4>> jointTransformsPerSurface = {};
 

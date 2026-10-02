@@ -16,19 +16,14 @@ import 'package:flame/src/math/random_fallback.dart';
 /// a [Transform2D] that contains translations, rotations, and uniform scaling.
 /// Under a generic projection, a circle would turn into an ellipse, however,
 /// this is currently not implemented.
-class Circle extends Shape {
-  Circle(Vector2 center, double radius)
-    : assert(radius >= 0, 'Radius cannot be negative: $radius'),
-      _center = center.clone(),
-      _radius = radius;
+class Circle(Vector2 center, var double _radius) extends Shape {
+  this : assert(_radius >= 0, 'Radius cannot be negative: $_radius');
 
   @override
   Vector2 get center => _center;
-  final Vector2 _center;
+  final Vector2 _center = center.clone();
 
   double get radius => _radius;
-  double _radius;
-
   @override
   Aabb2 get aabb => _aabb ??= _calculateAabb();
   Aabb2? _aabb;

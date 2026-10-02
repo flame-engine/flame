@@ -4,9 +4,7 @@ import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
 import 'package:flame_3d/src/graphics/joints_info.dart';
 
-class RenderContext3D extends RenderContext {
-  RenderContext3D(super.device);
-
+class RenderContext3D(super.device) extends RenderContext {
   Matrix4 get model => _modelMatrix;
   final Matrix4 _modelMatrix = Matrix4.zero();
 
@@ -99,7 +97,7 @@ class RenderContext3D extends RenderContext {
   }
 }
 
-class _DrawEntry {
+class _DrawEntry() {
   double distance = 0;
   Object3D? object;
 }

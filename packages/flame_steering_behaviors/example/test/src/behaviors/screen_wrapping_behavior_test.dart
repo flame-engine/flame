@@ -8,10 +8,10 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
 
-class _MockScreenHitbox extends Mock implements ScreenHitbox {}
+class _MockScreenHitbox() extends Mock implements ScreenHitbox;
 
-class _TestEntity extends PositionedEntity {
-  _TestEntity({super.position}) : super(size: Vector2.all(50));
+class _TestEntity({super.position}) extends PositionedEntity {
+  this : super(size: Vector2.all(50));
 }
 
 void main() {

@@ -8,27 +8,22 @@ import 'package:flame_3d/src/parser/gltf/gltf_root.dart';
 /// accessor values.
 /// The number of indices is equal to `accessor.sparse.count`. Indices **MUST**
 /// strictly increase.
-class SparseAccessorIndices extends GltfNode {
+class SparseAccessorIndices({
+  required super.root,
+
   /// The reference to the buffer view with sparse indices.
   /// The referenced buffer view **MUST NOT** have its `target` or `byteStride`
   /// properties defined.
   /// The buffer view and the optional `byteOffset` **MUST** be aligned to the
   /// `componentType` byte length."
-  final GltfRef<BufferView> bufferView;
+  required final GltfRef<BufferView> bufferView,
 
   /// The offset relative to the start of the buffer view in bytes.
-  final int byteOffset;
+  required final int byteOffset,
 
   /// The indices data type.
-  final ComponentType componentType;
-
-  SparseAccessorIndices({
-    required super.root,
-    required this.bufferView,
-    required this.byteOffset,
-    required this.componentType,
-  });
-
+  required final ComponentType componentType,
+}) extends GltfNode {
   SparseAccessorIndices.parse(
     GltfRoot root,
     Map<String, Object?> map,

@@ -20,7 +20,7 @@ import 'package:meta/meta.dart';
 ///
 /// Methods [update] and [render] need to be implemented in order to connect
 /// your class with the internal game loop.
-abstract mixin class Game {
+abstract mixin class Game() {
   /// The cache of all images loaded into the game. This defaults to the global
   /// [Flame.images] cache, but you can replace it with a new cache instance if
   /// needed.
@@ -114,7 +114,7 @@ abstract mixin class Game {
         return true;
       }(),
     );
-    return _onLoadFuture;
+    return await _onLoadFuture;
   }
 
   /// To be used for tests that needs to evaluate the game after it has been
@@ -406,7 +406,7 @@ abstract mixin class Game {
   /// [overlays].remove.
   ///
   /// For example:
-  /// ```
+  /// ```dart
   /// final pauseOverlayIdentifier = 'PauseMenu';
   /// overlays.add(pauseOverlayIdentifier); // marks 'PauseMenu' to be rendered.
   /// overlays.remove(pauseOverlayIdentifier); // hides 'PauseMenu'.

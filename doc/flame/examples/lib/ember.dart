@@ -3,16 +3,12 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 
-class EmberPlayer extends SpriteAnimationComponent with TapCallbacks {
-  EmberPlayer({
-    required super.size,
-    super.position,
-    this._onTap,
-  });
-
+class EmberPlayer({
+  required super.size,
+  super.position,
+  final void Function(EmberPlayer player)? _onTap,
+}) extends SpriteAnimationComponent with TapCallbacks {
   Vector2 velocity = Vector2(0, 0);
-  final void Function(EmberPlayer player)? _onTap;
-
   @override
   Future<void> onLoad() async {
     animation = SpriteAnimation.fromFrameData(

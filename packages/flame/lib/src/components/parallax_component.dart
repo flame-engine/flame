@@ -56,11 +56,18 @@ extension ParallaxComponentExtension on FlameGame {
 /// Most of the time you want to add the [ParallaxComponent] as a child to the
 /// viewport: `game.camera.viewport.add(parallaxComponent);`, since you want it
 /// to be static to the rest of the game.
-class ParallaxComponent<T extends FlameGame> extends PositionComponent
-    with HasGameRef<T> {
-  bool isFullscreen = true;
-  Parallax? _parallax;
-
+class ParallaxComponent<T extends FlameGame>({
+  var Parallax? _parallax,
+  super.position,
+  Vector2? size,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.key,
+}) extends PositionComponent with HasGameRef<T> {
+  bool isFullscreen = size == null && !(_parallax?.isSized ?? false);
   Parallax? get parallax => _parallax;
   set parallax(Parallax? p) {
     _parallax = p;
@@ -68,21 +75,10 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
   }
 
   /// Creates a component with an empty parallax which can be set later.
-  ParallaxComponent({
-    Parallax? parallax,
-    super.position,
-    Vector2? size,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.key,
-  }) : _parallax = parallax,
-       isFullscreen = size == null && !(parallax?.isSized ?? false),
-       super(
-         size: size ?? ((parallax?.isSized ?? false) ? parallax?.size : null),
-       );
+  this
+    : super(
+        size: size ?? ((_parallax?.isSized ?? false) ? _parallax?.size : null),
+      );
 
   @mustCallSuper
   @override

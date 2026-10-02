@@ -2,23 +2,18 @@ import 'package:flame/components.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A widget that rebuilds every time the given [notifier] changes.
-class ComponentsNotifierBuilder<T extends Component> extends StatefulWidget {
-  const ComponentsNotifierBuilder({
-    required this.notifier,
-    required this.builder,
-    super.key,
-  });
-
-  final ComponentsNotifier<T> notifier;
-  final Widget Function(BuildContext, ComponentsNotifier<T>) builder;
-
+class const ComponentsNotifierBuilder<T extends Component>({
+  required final ComponentsNotifier<T> notifier,
+  required final Widget Function(BuildContext, ComponentsNotifier<T>) builder,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _ComponentsNotifierBuilderState<T>();
   }
 }
 
-class _ComponentsNotifierBuilderState<T extends Component>
+class _ComponentsNotifierBuilderState<T extends Component>()
     extends State<ComponentsNotifierBuilder<T>> {
   @override
   void initState() {

@@ -1,5 +1,3 @@
-library flame_fire_atlas;
-
 import 'dart:convert';
 
 import 'package:archive/archive.dart';
@@ -25,30 +23,24 @@ extension FireAtlasExtensions on Game {
 /// Represents the basic information of a selection inside a fire atlas file,
 /// containing its [id] and its coordinates and dimensions.
 /// {@endtemplate}
-class Selection {
+class Selection({
   /// The id of the selection.
-  String id;
+  required var String id,
 
   /// The horizontal coordinate of the selection.
-  int x;
+  required var int x,
 
   /// The vertical coordinate of the selection.
-  int y;
+  required var int y,
 
   /// The width of the selection.
-  int w;
+  required var int w,
 
   /// The height of the selection.
-  int h;
-
+  required var int h,
+}) {
   /// {@macro _selection}
-  Selection({
-    required this.id,
-    required this.x,
-    required this.y,
-    required this.w,
-    required this.h,
-  });
+  this;
 
   /// Creates a [Selection] from [json].
   factory Selection.fromJson(Map<String, dynamic> json) {
@@ -86,11 +78,14 @@ class Selection {
 /// Check [SpriteSelection] for [Sprite] based selections, and
 /// [AnimationSelection] for [SpriteAnimation] based selections.
 /// {@endtemplate}
-abstract class BaseSelection {
-  final Selection _info;
+abstract class BaseSelection(
+  final Selection _info, {
 
+  /// A group that this selection belongs to.
+  final String? group,
+}) {
   /// {@macro _base_selection}
-  BaseSelection(this._info, {this.group});
+  this;
 
   /// The id of the selection.
   String get id => _info.id;
@@ -106,9 +101,6 @@ abstract class BaseSelection {
 
   /// The height of the selection.
   int get h => _info.h;
-
-  /// A group that this selection belongs to.
-  final String? group;
 
   /// The selection information.
   Selection get selection => _info;
@@ -136,12 +128,12 @@ abstract class BaseSelection {
 /// {@template _sprite_selection}
 /// Represents a specific selection of Flame [Sprite]s.
 /// {@endtemplate}
-class SpriteSelection extends BaseSelection {
+class SpriteSelection({
+  required Selection info,
+  super.group,
+}) extends BaseSelection {
   /// {@macro _sprite_selection}
-  SpriteSelection({
-    required Selection info,
-    super.group,
-  }) : super(info);
+  this : super(info);
 
   /// Creates a [SpriteSelection] from [json].
   factory SpriteSelection.fromJson(Map<String, dynamic> json) {
@@ -172,24 +164,21 @@ class SpriteSelection extends BaseSelection {
 /// {@template _animation_selection}
 /// Represents a specific selection of Flame [Sprite]s as an animation.
 /// {@endtemplate}
-class AnimationSelection extends BaseSelection {
+class AnimationSelection({
+  required Selection info,
+
   /// The number of frames of this animation.
-  int frameCount;
+  required var int frameCount,
 
   /// The time between each frame.
-  double stepTime;
+  required var double stepTime,
 
   /// If the animation is looping or not.
-  bool loop;
-
+  required var bool loop,
+  super.group,
+}) extends BaseSelection {
   /// {@macro _animation_selection}
-  AnimationSelection({
-    required Selection info,
-    required this.frameCount,
-    required this.stepTime,
-    required this.loop,
-    super.group,
-  }) : super(info);
+  this : super(info);
 
   /// Creates a [AnimationSelection] from [json].
   factory AnimationSelection.fromJson(Map<String, dynamic> json) {
@@ -244,31 +233,27 @@ class AnimationSelection extends BaseSelection {
 /// [SpriteAnimation]s.
 ///
 /// Use [getSprite] and [getAnimation] to retrieve mapped assets.
-class FireAtlas {
+class FireAtlas({
   /// Id of the FireAtlas, mainly used by the Fire Atlas Editor for file
   /// identification.
-  String id;
+  required var String id,
 
   /// The width of the tile.
-  double tileWidth;
+  required var double tileWidth,
 
   /// The height of the tile.
-  double tileHeight;
+  required var double tileHeight,
 
   /// Stores the asset data once this instance has loaded.
-  String? imageData;
-  Image? _image;
-
+  required var String? imageData,
+}) {
   /// Creates a FireAtlas instance.
   ///
   /// This constructor is often used internally; to load a FireAtlas instance
   /// into you game, check [loadAsset].
-  FireAtlas({
-    required this.id,
-    required this.tileWidth,
-    required this.tileHeight,
-    required this.imageData,
-  });
+  this;
+
+  Image? _image;
 
   /// Holds all the selections of this file.
   Map<String, BaseSelection> selections = {};

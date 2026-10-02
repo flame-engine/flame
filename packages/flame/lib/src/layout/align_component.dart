@@ -45,21 +45,33 @@ import 'package:flutter/widgets.dart';
 ///   ),
 /// );
 /// ```
-class AlignComponent extends PositionComponent {
+class AlignComponent({
+  PositionComponent? child,
+  Anchor alignment = Anchor.topLeft,
+
+  /// If `null`, then the component's width will be equal to the width of the
+  /// parent. Otherwise, the width will be equal to the child's width multiplied
+  /// by this factor.
+  final double? widthFactor,
+
+  /// If `null`, then the component's height will be equal to the height of the
+  /// parent. Otherwise, the height will be equal to the child's height
+  /// multiplied by this factor.
+  final double? heightFactor,
+
+  /// If `false` (default), then the child's `anchor` will be kept equal to the
+  /// [alignment] value. If `true`, then the [child] will be allowed to have
+  /// its own `anchor` value independent from the parent.
+  final bool keepChildAnchor = false,
+  super.priority,
+}) extends PositionComponent {
   /// Creates a component that keeps its [child] positioned according to the
   /// [alignment] within this component's bounding box.
   ///
   /// More precisely, the child will be placed at [alignment] relative position
   /// within the current component's bounding box. The child's anchor will also
   /// be set to the [alignment], unless [keepChildAnchor] parameter is true.
-  AlignComponent({
-    PositionComponent? child,
-    Anchor alignment = Anchor.topLeft,
-    this.widthFactor,
-    this.heightFactor,
-    this.keepChildAnchor = false,
-    super.priority,
-  }) {
+  this {
     this.alignment = alignment;
     this.child = child;
   }
@@ -94,21 +106,6 @@ class AlignComponent extends PositionComponent {
     _updateChildAnchor();
     _updateChildPosition();
   }
-
-  /// If `null`, then the component's width will be equal to the width of the
-  /// parent. Otherwise, the width will be equal to the child's width multiplied
-  /// by this factor.
-  final double? widthFactor;
-
-  /// If `null`, then the component's height will be equal to the height of the
-  /// parent. Otherwise, the height will be equal to the child's height
-  /// multiplied by this factor.
-  final double? heightFactor;
-
-  /// If `false` (default), then the child's `anchor` will be kept equal to the
-  /// [alignment] value. If `true`, then the [child] will be allowed to have
-  /// its own `anchor` value independent from the parent.
-  final bool keepChildAnchor;
 
   @override
   set size(Vector2 value) {

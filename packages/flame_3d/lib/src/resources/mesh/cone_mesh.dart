@@ -9,18 +9,18 @@ import 'package:flame_3d/resources.dart';
 ///
 /// The default texture mapping follows the standard arrangement of the circular
 /// base on the top left quadrant and the flattened side on the bottom half.
-class ConeMesh extends Mesh {
+class ConeMesh({
+  required double radius,
+  required double height,
+  required Material material,
+  int segments = 32,
+}) extends Mesh {
   /// Creates a conical mesh with a circular base of radius [radius] on the x-z
   /// plane and a height of [height] pointing upwards parallel to the y-axis.
   ///
   /// You can optionally specify the number of segments used for the
   /// triangulation (the higher, the more "high-res" the cone will be).
-  ConeMesh({
-    required double radius,
-    required double height,
-    required Material material,
-    int segments = 32,
-  }) {
+  this {
     _addBaseSurface(
       radius: radius,
       material: material,

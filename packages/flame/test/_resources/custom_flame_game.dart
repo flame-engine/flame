@@ -1,15 +1,10 @@
 import 'package:flame/game.dart';
 
-class CustomFlameGame extends FlameGame {
-  CustomFlameGame({
-    super.children,
-    this._onLoad,
-    this._onMount,
-  });
-
-  final Future<void>? Function(FlameGame)? _onLoad;
-  final void Function(FlameGame)? _onMount;
-
+class CustomFlameGame({
+  super.children,
+  final Future<void>? Function(FlameGame)? _onLoad,
+  final void Function(FlameGame)? _onMount,
+}) extends FlameGame {
   @override
   Future<void>? onLoad() => _onLoad?.call(this);
 

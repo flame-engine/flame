@@ -29,9 +29,7 @@ import 'package:meta/meta.dart';
 /// The functions must be added to the YarnProject before parsing the yarn
 /// scripts, since the parser would throw an error if it sees a function which
 /// it does not recognize.
-class FunctionStorage {
-  FunctionStorage();
-
+class FunctionStorage() {
   /// The central repository of all functions registered in this
   /// function storage.
   final Map<String, Udf> _functions = {};
@@ -142,19 +140,19 @@ class FunctionStorage {
 /// This wrapper encapsulates the knowledge about the function signature, and
 /// is capable of executing the underlying function given a plain list of
 @internal
-class Udf {
-  Udf(this.name, Type returnType, List<Type> types, this._wrappedFn)
-    : _returnType = _convertReturnType(returnType),
-      _argumentTypes = _convertArgumentTypes(types),
-      _nOptionalArguments = _countOptionalArguments(types),
-      _preparedArguments = List<dynamic>.filled(types.length, null);
-
-  final String name;
-  final ExpressionType _returnType;
-  final List<_Type> _argumentTypes;
-  final int _nOptionalArguments;
-  final dynamic Function(List<dynamic>) _wrappedFn;
-  final List<dynamic> _preparedArguments;
+class Udf(
+  final String name,
+  Type returnType,
+  List<Type> types,
+  final dynamic Function(List<dynamic>) _wrappedFn,
+) {
+  final ExpressionType _returnType = _convertReturnType(returnType);
+  final List<_Type> _argumentTypes = _convertArgumentTypes(types);
+  final int _nOptionalArguments = _countOptionalArguments(types);
+  final List<dynamic> _preparedArguments = List<dynamic>.filled(
+    types.length,
+    null,
+  );
 
   ExpressionType get returnType => _returnType;
 
@@ -192,7 +190,6 @@ class Udf {
       final argType = args[i].expression.type;
       final expectedType = _argumentTypes[i + i0];
       final typesAreCompatible =
-          false ||
           (argType == ExpressionType.boolean &&
               expectedType == _Type.boolean) ||
           (argType == ExpressionType.numeric &&
@@ -285,7 +282,6 @@ class Udf {
     var nOptionalArguments = 0;
     for (final type in types) {
       final isOptional =
-          false ||
           (type == _maybeInt) ||
           (type == _maybeBool) ||
           (type == _maybeDouble) ||
@@ -306,7 +302,7 @@ class Udf {
 }
 
 /// Similar to `ExpressionType`, but also allows `integer` and `double`.
-enum _Type {
+enum _Type() {
   boolean,
   integer,
   double,

@@ -32,11 +32,9 @@ List<Wall> createWalls(Vector2 size) {
   ];
 }
 
-class Wall extends BodyComponent<PadRacingGame> {
-  Wall(this._position, this.size) : super(priority: 3);
-
-  final Vector2 _position;
-  final Vector2 size;
+class Wall(final Vector2 _position, final Vector2 size)
+    extends BodyComponent<PadRacingGame> {
+  this : super(priority: 3);
 
   final Random rng = Random();
   late final Image _image;

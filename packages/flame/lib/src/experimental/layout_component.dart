@@ -1,30 +1,27 @@
 import 'package:flame/components.dart';
 
-enum LayoutAxis {
-  x(0),
-  y(1);
-
-  const LayoutAxis(this.axisIndex);
-
+enum LayoutAxis(
   /// Necessary for use with LinearLayoutComponent's Direction
-  final int axisIndex;
+  final int axisIndex,
+) {
+  x(0),
+  y(1),
 }
 
-abstract class LayoutComponent extends PositionComponent {
-  LayoutComponent({
-    required super.key,
-    required super.position,
-    required Vector2? size,
-    required super.anchor,
-    required super.priority,
-    super.children,
-  }) : _layoutSizeX = size?.x,
-       _layoutSizeY = size?.y {
+abstract class LayoutComponent({
+  required super.key,
+  required super.position,
+  required Vector2? size,
+  required super.anchor,
+  required super.priority,
+  super.children,
+}) extends PositionComponent {
+  this {
     resetSize();
   }
 
-  double? _layoutSizeX;
-  double? _layoutSizeY;
+  double? _layoutSizeX = size?.x;
+  double? _layoutSizeY = size?.y;
 
   double? get layoutSizeX => _layoutSizeX;
   double? get layoutSizeY => _layoutSizeY;

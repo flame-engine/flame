@@ -18,12 +18,17 @@ import 'package:flame/src/math/random_fallback.dart';
 ///
 /// The edges of a [Rectangle] can also coincide: the left edge can coincide
 /// with the right edge, and the top side with the bottom.
-class Rectangle extends Shape {
+class Rectangle.fromLTRB(
+  var double _left,
+  var double _top,
+  var double _right,
+  var double _bottom,
+) extends Shape {
   /// Constructs the [Rectangle] from left, top, right and bottom edges.
   ///
   /// If the edges are given in the wrong order (e.g. `left` is to the right
   /// from `right`), then they will be swapped.
-  Rectangle.fromLTRB(this._left, this._top, this._right, this._bottom) {
+  this {
     if (_left > _right) {
       final tmp = _left;
       _left = _right;
@@ -59,11 +64,6 @@ class Rectangle extends Shape {
       center + halfSize,
     );
   }
-
-  double _left;
-  double _top;
-  double _right;
-  double _bottom;
 
   double get left => _left;
   double get right => _right;

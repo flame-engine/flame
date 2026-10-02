@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _MockAssetBundle extends Mock implements AssetBundle {}
+class _MockAssetBundle() extends Mock implements AssetBundle;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -252,12 +252,10 @@ void main() {
   });
 }
 
-class _ManifestAssetBundle extends CachingAssetBundle {
-  _ManifestAssetBundle(this.assetPaths, this.pixelBytes);
-
-  final List<String> assetPaths;
-  final Uint8List pixelBytes;
-
+class _ManifestAssetBundle(
+  final List<String> assetPaths,
+  final Uint8List pixelBytes,
+) extends CachingAssetBundle {
   final List<String> loadedKeys = [];
 
   @override
@@ -272,7 +270,7 @@ class _ManifestAssetBundle extends CachingAssetBundle {
   }
 }
 
-class _MockImage extends Mock implements Image {
+class _MockImage() extends Mock implements Image {
   int disposedCount = 0;
 
   @override

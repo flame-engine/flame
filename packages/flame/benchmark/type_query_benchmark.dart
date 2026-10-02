@@ -18,7 +18,7 @@ const _dt = 1.0 / 60;
 /// registered queries while reading one query per tick. A children-container
 /// replacement must keep both the cache-maintenance and the query-read cost
 /// at least this fast.
-class TypeQueryChurnBenchmark extends AsyncBenchmarkBase {
+class TypeQueryChurnBenchmark() extends AsyncBenchmarkBase {
   static const _amountStatic = 1000;
   static const _batchSize = 50;
   static const _liveBatches = 5;
@@ -28,7 +28,7 @@ class TypeQueryChurnBenchmark extends AsyncBenchmarkBase {
   late final FlameGame _game;
   final Queue<List<Component>> _batches = Queue();
 
-  TypeQueryChurnBenchmark() : super('Type-query churn (2 registered queries)');
+  this : super('Type-query churn (2 registered queries)');
 
   static Future<void> main() async {
     await TypeQueryChurnBenchmark().report();
@@ -79,11 +79,11 @@ class TypeQueryChurnBenchmark extends AsyncBenchmarkBase {
   }
 }
 
-class _MarkedComponent extends Component {
+class _MarkedComponent() extends Component {
   final int marker = 1;
 }
 
-class _PlainComponent extends Component {}
+class _PlainComponent() extends Component;
 
 Future<void> main() async {
   await TypeQueryChurnBenchmark.main();

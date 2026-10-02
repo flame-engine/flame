@@ -11,20 +11,21 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/animation.dart';
 
-class TheBall extends PositionComponent
+class TheBall({
+  required Vector2 super.position,
+}) extends PositionComponent
     with CollisionCallbacks, HasGameRef<CrystalBallGame> {
-  TheBall({
-    required Vector2 super.position,
-  }) : super(
-         anchor: Anchor.center,
-         priority: 100000,
-         children: [
-           CircleHitbox(
-             radius: kPlayerRadius,
-             anchor: Anchor.center,
-           ),
-         ],
-       );
+  this
+    : super(
+        anchor: Anchor.center,
+        priority: 100000,
+        children: [
+          CircleHitbox(
+            radius: kPlayerRadius,
+            anchor: Anchor.center,
+          ),
+        ],
+      );
 
   final Vector2 velocity = Vector2.zero();
 

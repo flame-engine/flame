@@ -9,58 +9,46 @@ import 'dart:typed_data';
 /// The particles at indices `0` to `length - 1` are alive. Removing a
 /// particle swaps the last live particle into its slot, so iteration while
 /// removing must not advance the index after a removal.
-class ParticleBuffer {
-  /// Creates a buffer with room for [capacity] simultaneous particles.
-  ParticleBuffer(this.capacity)
-    : assert(capacity > 0, 'capacity must be positive'),
-      posX = Float32List(capacity),
-      posY = Float32List(capacity),
-      velX = Float32List(capacity),
-      velY = Float32List(capacity),
-      age = Float32List(capacity),
-      invLifespan = Float32List(capacity),
-      baseSize = Float32List(capacity),
-      size = Float32List(capacity),
-      rotation = Float32List(capacity),
-      spin = Float32List(capacity),
-      color = Int32List(capacity);
-
+class ParticleBuffer(
   /// The maximum number of simultaneous particles.
-  final int capacity;
+  final int capacity,
+) {
+  /// Creates a buffer with room for [capacity] simultaneous particles.
+  this : assert(capacity > 0, 'capacity must be positive');
 
   /// The x position, in the emitter's local coordinate system.
-  final Float32List posX;
+  final Float32List posX = Float32List(capacity);
 
   /// The y position, in the emitter's local coordinate system.
-  final Float32List posY;
+  final Float32List posY = Float32List(capacity);
 
   /// The x velocity, in local units per second.
-  final Float32List velX;
+  final Float32List velX = Float32List(capacity);
 
   /// The y velocity, in local units per second.
-  final Float32List velY;
+  final Float32List velY = Float32List(capacity);
 
   /// Time in seconds since the particle spawned.
-  final Float32List age;
+  final Float32List age = Float32List(capacity);
 
   /// The reciprocal of the particle's lifespan; `age[i] * invLifespan[i]`
   /// is the life progress from 0 (spawn) to 1 (death).
-  final Float32List invLifespan;
+  final Float32List invLifespan = Float32List(capacity);
 
   /// The size the particle had when it spawned, in local units.
-  final Float32List baseSize;
+  final Float32List baseSize = Float32List(capacity);
 
   /// The current rendered size (width and height) in local units.
-  final Float32List size;
+  final Float32List size = Float32List(capacity);
 
   /// The current rotation in radians.
-  final Float32List rotation;
+  final Float32List rotation = Float32List(capacity);
 
   /// The angular velocity in radians per second.
-  final Float32List spin;
+  final Float32List spin = Float32List(capacity);
 
   /// The current color as a 32-bit ARGB value.
-  final Int32List color;
+  final Int32List color = Int32List(capacity);
 
   int _length = 0;
 

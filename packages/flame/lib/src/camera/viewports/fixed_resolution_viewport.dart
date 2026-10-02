@@ -13,15 +13,12 @@ import 'package:flame/src/effects/provider_interfaces.dart';
 /// This viewport will automatically adjust its size and position when the
 /// game canvas changes in size. At the same time, manually changing the size
 /// of this viewport is not supported.
-class FixedResolutionViewport extends FixedAspectRatioViewport
-    implements ReadOnlyScaleProvider {
-  FixedResolutionViewport({
-    required this.resolution,
-    super.children,
-  }) : super(aspectRatio: resolution.x / resolution.y);
-
+class FixedResolutionViewport({
   /// The resolution that the viewport should adhere to.
-  final Vector2 resolution;
+  required final Vector2 resolution,
+  super.children,
+}) extends FixedAspectRatioViewport implements ReadOnlyScaleProvider {
+  this : super(aspectRatio: resolution.x / resolution.y);
 
   @override
   Vector2 get virtualSize => resolution;

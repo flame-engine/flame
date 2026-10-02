@@ -5,14 +5,11 @@ import 'package:flame/components.dart';
 import 'package:padracing/car.dart';
 import 'package:padracing/tire.dart';
 
-class Trail extends Component with HasPaint {
-  Trail({
-    required this.car,
-    required this.tire,
-  }) : super(priority: 1);
-
-  final Car car;
-  final Tire tire;
+class Trail({
+  required final Car car,
+  required final Tire tire,
+}) extends Component with HasPaint {
+  this : super(priority: 1);
 
   final trail = <Offset>[];
   final _trailLength = 30;

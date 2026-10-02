@@ -18,9 +18,7 @@ final gameInstance = RefExampleGame();
 final GlobalKey<RiverpodAwareGameWidgetState> gameWidgetKey =
     GlobalKey<RiverpodAwareGameWidgetState>();
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+class const MyApp({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -41,9 +39,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class FlutterCountingComponent extends ConsumerWidget {
-  const FlutterCountingComponent({super.key});
-
+class const FlutterCountingComponent({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textStyle = Theme.of(
@@ -67,7 +63,7 @@ class FlutterCountingComponent extends ConsumerWidget {
   }
 }
 
-class RefExampleGame extends FlameGame with RiverpodGameMixin {
+class RefExampleGame() extends FlameGame with RiverpodGameMixin {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -76,7 +72,8 @@ class RefExampleGame extends FlameGame with RiverpodGameMixin {
   }
 }
 
-class RiverpodAwareTextComponent extends PositionComponent
+class RiverpodAwareTextComponent()
+    extends PositionComponent
     with RiverpodComponentMixin {
   late TextComponent textComponent;
   int currentValue = 0;

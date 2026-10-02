@@ -6,7 +6,7 @@ import 'package:flame/src/devtools/dev_tools_connector.dart';
 /// The [GameLoopConnector] is responsible for reporting and setting the
 /// pause/running state of the game and stepping the game forwards or backwards
 /// from the devtools extension.
-class GameLoopConnector extends DevToolsConnector {
+class GameLoopConnector() extends DevToolsConnector {
   @override
   void init() {
     // Get whether the game is currently paused or not.

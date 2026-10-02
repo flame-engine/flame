@@ -12,25 +12,25 @@ export '../sprite.dart';
 /// will rasterize its sprite when loaded and will automatically
 /// manage the disposal of the rasterized image when removed.
 /// {@endtemplate}
-class RasterSpriteComponent extends SpriteComponent {
-  /// {@macro raster_sprite_component}
-  RasterSpriteComponent({
-    required this.baseSprite,
-    this.images,
-    super.autoResize,
-    super.paint,
-    super.position,
-    super.size,
-    super.scale,
-    super.angle,
-    super.nativeAngle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.bleed,
-    super.key,
-  });
+class RasterSpriteComponent({
+  /// The base sprite to be rasterized.
+  required final Sprite baseSprite,
 
+  /// The [Images] cache used to store the rasterized image.
+  final Images? images,
+  super.autoResize,
+  super.paint,
+  super.position,
+  super.size,
+  super.scale,
+  super.angle,
+  super.nativeAngle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.bleed,
+  super.key,
+}) extends SpriteComponent {
   RasterSpriteComponent.fromImage(
     Image image, {
     Vector2? srcPosition,
@@ -66,12 +66,6 @@ class RasterSpriteComponent extends SpriteComponent {
          bleed: bleed,
          key: key,
        );
-
-  /// The base sprite to be rasterized.
-  final Sprite baseSprite;
-
-  /// The [Images] cache used to store the rasterized image.
-  final Images? images;
 
   @mustCallSuper
   @override

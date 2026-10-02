@@ -12,8 +12,8 @@ import 'package:flutter/foundation.dart';
 /// service extensions which makes it possible for the devtools extension to
 /// communicate with your interface. Then the [initGame] method will be called
 /// every time a new game is set in the service.
-abstract class DevToolsConnector {
-  DevToolsConnector() {
+abstract class DevToolsConnector() {
+  this {
     init();
   }
 

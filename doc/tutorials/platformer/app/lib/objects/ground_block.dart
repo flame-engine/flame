@@ -7,17 +7,14 @@ import 'package:material_ui/material_ui.dart';
 import '../ember_quest.dart';
 import '../managers/segment_manager.dart';
 
-class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
-  final Vector2 gridPosition;
-  double xOffset;
-
+class GroundBlock({
+  required final Vector2 gridPosition,
+  required var double xOffset,
+}) extends SpriteComponent with HasGameRef<EmberQuestGame> {
   final UniqueKey _blockKey = UniqueKey();
   final Vector2 velocity = Vector2.zero();
 
-  GroundBlock({
-    required this.gridPosition,
-    required this.xOffset,
-  }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft);
+  this : super(size: Vector2.all(64), anchor: Anchor.bottomLeft);
 
   @override
   Future<void> onLoad() async {

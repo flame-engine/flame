@@ -10,13 +10,11 @@ const _amountTicks = 500;
 
 /// Benchmarks collision detection with simple flat hitboxes (no hierarchy).
 /// All components are direct children of the game world.
-class FlatCollisionBenchmark extends AsyncBenchmarkBase {
-  final Random random;
-
+class FlatCollisionBenchmark(final Random random) extends AsyncBenchmarkBase {
   late final FlameGame _game;
   late final List<_MovingBlock> _blocks;
 
-  FlatCollisionBenchmark(this.random) : super('Flat collision detection');
+  this : super('Flat collision detection');
 
   static Future<void> main() async {
     final r = Random(69420);
@@ -55,13 +53,10 @@ class FlatCollisionBenchmark extends AsyncBenchmarkBase {
 /// Benchmarks collision detection with nested hierarchies where children have
 /// hitboxes and parents have non-uniform scale/rotation. This exercises the
 /// globalVertices() and AABB computation code paths.
-class NestedCollisionBenchmark extends AsyncBenchmarkBase {
-  final Random random;
-
+class NestedCollisionBenchmark(final Random random) extends AsyncBenchmarkBase {
   late final FlameGame _game;
 
-  NestedCollisionBenchmark(this.random)
-    : super('Nested hierarchy collision detection');
+  this : super('Nested hierarchy collision detection');
 
   static Future<void> main() async {
     final r = Random(69420);
@@ -110,13 +105,11 @@ class NestedCollisionBenchmark extends AsyncBenchmarkBase {
 
 /// Benchmarks globalVertices() calls directly for polygon components in
 /// hierarchies with non-uniform scale and rotation.
-class GlobalVerticesBenchmark extends AsyncBenchmarkBase {
-  final Random random;
-
+class GlobalVerticesBenchmark(final Random random) extends AsyncBenchmarkBase {
   late final FlameGame _game;
   late final List<RectangleHitbox> _hitboxes;
 
-  GlobalVerticesBenchmark(this.random) : super('globalVertices() computation');
+  this : super('globalVertices() computation');
 
   static Future<void> main() async {
     final r = Random(69420);
@@ -167,16 +160,14 @@ class GlobalVerticesBenchmark extends AsyncBenchmarkBase {
   }
 }
 
-class _CollisionGame extends FlameGame with HasCollisionDetection {}
+class _CollisionGame() extends FlameGame with HasCollisionDetection;
 
-class _MovingBlock extends PositionComponent with CollisionCallbacks {
-  final Vector2 velocity;
-
-  _MovingBlock({
-    required super.position,
-    required super.size,
-    required this.velocity,
-  }) {
+class _MovingBlock({
+  required super.position,
+  required super.size,
+  required final Vector2 velocity,
+}) extends PositionComponent with CollisionCallbacks {
+  this {
     add(RectangleHitbox());
   }
 

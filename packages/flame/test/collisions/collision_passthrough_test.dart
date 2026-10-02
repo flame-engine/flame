@@ -5,8 +5,8 @@ import 'package:test/test.dart';
 
 import 'collision_test_helpers.dart';
 
-class _Passthrough extends TestBlock with CollisionPassthrough {
-  _Passthrough() : super(Vector2.zero(), Vector2.all(10));
+class _Passthrough() extends TestBlock with CollisionPassthrough {
+  this : super(Vector2.zero(), Vector2.all(10));
 }
 
 void main() {

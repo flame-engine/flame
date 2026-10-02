@@ -238,8 +238,7 @@ Map<String, dynamic> _reflect(String stage) {
     slots[name] = {
       'group': group,
       'binding': binding,
-      if (samplers['${name}Sampler'] case final sampler?)
-        'samplerBinding': sampler,
+      'samplerBinding': ?samplers['${name}Sampler'],
     };
   }
   return slots;
@@ -275,7 +274,7 @@ Map<String, List<(String, String)>> _parseStructs(String wgsl) {
   var align = 0;
   final offsets = <String, int>{};
   for (final (name, type) in fields) {
-    final (size: size, align: fieldAlign) = _sizeAlign(type, structs);
+    final (:size, align: fieldAlign) = _sizeAlign(type, structs);
     offset = _roundUp(offset, fieldAlign);
     offsets[name] = offset;
     offset += size;
@@ -303,7 +302,7 @@ Map<String, List<(String, String)>> _parseStructs(String wgsl) {
   // matCxR<f32>: C columns, each a `vecR<f32>` padded to its own alignment.
   if (RegExp(r'^mat(\d)x(\d)<f32>$').firstMatch(type) case final m?) {
     final columns = int.parse(m.group(1)!);
-    final (size: columnSize, align: align) = _sizeAlign(
+    final (size: columnSize, :align) = _sizeAlign(
       'vec${m.group(2)}<f32>',
       structs,
     );
@@ -312,7 +311,7 @@ Map<String, List<(String, String)>> _parseStructs(String wgsl) {
 
   // array<E, N>: N elements on a stride of `roundUp(sizeof E, alignof E)`.
   if (RegExp(r'^array<(.+),\s*(\d+)>$').firstMatch(type) case final m?) {
-    final (size: elementSize, align: align) = _sizeAlign(
+    final (size: elementSize, :align) = _sizeAlign(
       m.group(1)!.trim(),
       structs,
     );

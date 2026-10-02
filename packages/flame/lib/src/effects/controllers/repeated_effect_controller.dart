@@ -5,22 +5,19 @@ import 'package:flame/effects.dart';
 /// The [repeatCount] must be positive, and [child] controller cannot be
 /// infinite. The child controller will be reset after each iteration (except
 /// the last).
-class RepeatedEffectController extends EffectController
-    with HasSingleChildEffectController {
-  RepeatedEffectController(EffectController child, this.repeatCount)
+class RepeatedEffectController(
+  final EffectController _child,
+  final int repeatCount,
+) extends EffectController with HasSingleChildEffectController {
+  this
     : assert(repeatCount > 0, 'repeatCount must be positive'),
-      assert(!child.isInfinite, 'child cannot be infinite'),
-      _child = child,
-      _remainingCount = repeatCount,
+      assert(!_child.isInfinite, 'child cannot be infinite'),
       super.empty();
-
-  final EffectController _child;
-  final int repeatCount;
 
   /// How many iterations this controller has remaining. When this reaches 0
   /// the controller is considered completed.
   int get remainingIterationsCount => _remainingCount;
-  int _remainingCount;
+  int _remainingCount = repeatCount;
 
   @override
   EffectController get child => _child;

@@ -2,7 +2,7 @@ import 'package:behavior_tree/behavior_tree.dart';
 import 'package:meta/meta.dart';
 
 /// A base class for all the nodes.
-abstract class BaseNode implements NodeInterface {
+abstract class BaseNode() implements NodeInterface {
   NodeStatus _status = NodeStatus.notStarted;
 
   /// The parent node in the behavior tree.

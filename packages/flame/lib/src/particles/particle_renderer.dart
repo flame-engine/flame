@@ -9,7 +9,7 @@ import 'package:flame/src/particles/particle_buffer.dart';
 ///
 /// Extend [TextureParticleRenderer] for batched texture rendering, or extend
 /// this class (or use [CallbackParticleRenderer]) for full canvas access.
-abstract class ParticleRenderer {
+abstract class ParticleRenderer() {
   /// Called once when the owning component loads. Override to prepare
   /// textures or other resources.
   FutureOr<void> onLoad() {}
@@ -24,14 +24,11 @@ abstract class ParticleRenderer {
 ///
 /// Nothing is batched, so this is slower than the texture renderers; prefer
 /// those for large particle counts.
-class CallbackParticleRenderer extends ParticleRenderer {
-  /// Creates a renderer that calls [renderCallback] every frame.
-  CallbackParticleRenderer(this.renderCallback);
-
+class CallbackParticleRenderer(
   /// Called every frame with the canvas, already transformed to the emitter
   /// component's local coordinate system, and the live particles.
-  final void Function(Canvas canvas, ParticleBuffer particles) renderCallback;
-
+  final void Function(Canvas canvas, ParticleBuffer particles) renderCallback,
+) extends ParticleRenderer {
   @override
   void render(Canvas canvas, ParticleBuffer particles) {
     renderCallback(canvas, particles);
@@ -47,21 +44,21 @@ class CallbackParticleRenderer extends ParticleRenderer {
 /// current size. The particle's color tints the texture through
 /// [BlendMode.modulate], so white texture pixels take on the particle color
 /// exactly.
-abstract class TextureParticleRenderer extends ParticleRenderer {
+abstract class TextureParticleRenderer({BlendMode? blendMode, Paint? paint})
+    extends ParticleRenderer {
   /// Creates a texture renderer.
   ///
   /// [blendMode] controls how particles composite onto the canvas; use
   /// [BlendMode.plus] for additive glow effects. [paint] can be provided to
   /// customize other paint properties.
-  TextureParticleRenderer({BlendMode? blendMode, Paint? paint})
-    : paint = paint ?? Paint() {
+  this {
     if (blendMode != null) {
       this.paint.blendMode = blendMode;
     }
   }
 
   /// The paint used for the batched draw call.
-  final Paint paint;
+  final Paint paint = paint ?? Paint();
 
   /// The texture to draw, or null while the renderer has not loaded yet.
   Image? get texture;

@@ -7,25 +7,25 @@ import 'package:flutter/rendering.dart' show EdgeInsets;
 ///
 /// Note: You have to set the [button] in [onLoad] if you are not passing it in
 /// through the constructor.
-class HudButtonComponent extends ButtonComponent
-    with HasGameRef, ComponentViewportMargin {
-  HudButtonComponent({
-    super.button,
-    super.buttonDown,
-    EdgeInsets? margin,
-    Function()? super.onPressed,
-    Function()? super.onReleased,
-    Function()? super.onCancelled,
-    super.position,
-    Vector2? size,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-  }) : super(
-         size: size ?? button?.size,
-       ) {
+class HudButtonComponent({
+  super.button,
+  super.buttonDown,
+  EdgeInsets? margin,
+  Function()? super.onPressed,
+  Function()? super.onReleased,
+  Function()? super.onCancelled,
+  super.position,
+  Vector2? size,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority,
+}) extends ButtonComponent with HasGameRef, ComponentViewportMargin {
+  this
+    : super(
+        size: size ?? button?.size,
+      ) {
     this.margin = margin;
   }
 }

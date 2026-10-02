@@ -5,12 +5,10 @@ import 'package:jenny/src/structure/commands/command.dart';
 import 'package:jenny/src/structure/line_content.dart';
 import 'package:meta/meta.dart';
 
-class UserDefinedCommand extends Command {
-  UserDefinedCommand(this.name, this._content);
-
-  @override
-  final String name;
-  final LineContent _content;
+class UserDefinedCommand(
+  @override final String name,
+  final LineContent _content,
+) extends Command {
   late String _argumentString;
   late List<dynamic>? _arguments;
 

@@ -280,10 +280,8 @@ mixin HasAutoBatchedChildren on Component {
 ///
 /// Reused frame-to-frame: cleared and re-populated on each render pass via
 /// [flush].
-class _BatchAccumulator {
-  _BatchAccumulator(Image atlas) : batch = SpriteBatch(atlas);
-
-  final SpriteBatch batch;
+class _BatchAccumulator(Image atlas) {
+  final SpriteBatch batch = SpriteBatch(atlas);
 
   void accumulate(Rect source, RSTransform transform, Color color) {
     batch.addTransform(source: source, transform: transform, color: color);
@@ -301,10 +299,4 @@ class _BatchAccumulator {
 }
 
 /// Internal struct for batching info extracted from a component.
-class _BatchInfo {
-  _BatchInfo(this.image, this.sourceRect, this.color);
-
-  final Image image;
-  final Rect sourceRect;
-  final Color color;
-}
+class _BatchInfo(final Image image, final Rect sourceRect, final Color color);

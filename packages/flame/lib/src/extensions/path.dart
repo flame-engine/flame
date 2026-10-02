@@ -300,15 +300,13 @@ extension PathMetricExtension on PathMetric {
 /// out to be too far ahead is kept in [_ahead] until the walk reaches it. The
 /// indices of the corners and of the points where the contour reaches its
 /// bounds are collected in [anchors].
-class _ContourSampler {
-  _ContourSampler(this._metric, this._step, this._maxDeviation);
-
+class _ContourSampler(
+  final PathMetric _metric,
+  final double _step,
+  final double _maxDeviation,
+) {
   static const _maxStepsPerStride = 32;
   static const _subdivisionsPerStep = 4;
-
-  final PathMetric _metric;
-  final double _step;
-  final double _maxDeviation;
 
   final List<Offset> points = [];
   final List<int> anchors = [];

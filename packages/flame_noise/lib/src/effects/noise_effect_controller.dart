@@ -14,20 +14,18 @@ import 'package:flutter/animation.dart' show Curve, Curves;
 /// example, putting into a `MoveEffect.by` will create a shake motion, where
 /// the magnitude and the direction of shaking is controlled by the effect's
 /// `offset`.
-class NoiseEffectController extends DurationEffectController {
+class NoiseEffectController({
+  required double duration,
+  final Curve taperingCurve = Curves.easeInOutCubic,
+  Noise2? noise,
+}) extends DurationEffectController {
   /// Square root of 2 is used as the y-offset for noise sampling to avoid
   /// landing on integer lattice points where Perlin noise returns 0.
   static const _noiseYOffset = sqrt2;
 
-  final Curve taperingCurve;
-  final Noise2 noise;
+  final Noise2 noise = noise ?? PerlinNoise();
 
-  NoiseEffectController({
-    required double duration,
-    this.taperingCurve = Curves.easeInOutCubic,
-    Noise2? noise,
-  }) : noise = noise ?? PerlinNoise(),
-       super(duration);
+  this : super(duration);
 
   @override
   double get progress {

@@ -2,7 +2,7 @@ import 'package:jenny/src/errors.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/variables.dart';
 
-class VariableStorage {
+class VariableStorage() {
   final Map<String, dynamic> variables = <String, dynamic>{};
 
   int get length => variables.length;

@@ -7,10 +7,7 @@ import 'package:meta/meta.dart';
 /// A helper class used to control the visibility of overlays on a [Game]
 /// instance. See [Game.overlays].
 @internal
-class OverlayManager {
-  OverlayManager(this._game);
-
-  final Game _game;
+class OverlayManager(final Game _game) {
   final List<_OverlayData> _activeOverlays = [];
   final Map<String, OverlayBuilderFunction> _builders = {};
 
@@ -150,19 +147,16 @@ class OverlayManager {
   }
 }
 
-typedef OverlayBuilderFunction =
-    Widget Function(
-      BuildContext context,
-      Game game,
-    );
+typedef OverlayBuilderFunction = Widget Function(
+  BuildContext context,
+  Game game,
+);
 
 @immutable
-class _OverlayData {
-  final int priority;
-  final String name;
-
-  const _OverlayData({required this.priority, required this.name});
-
+class const _OverlayData({
+  required final int priority,
+  required final String name,
+}) {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

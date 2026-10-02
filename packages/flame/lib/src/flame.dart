@@ -1,5 +1,3 @@
-library flame;
-
 import 'package:flame/src/cache/assets_cache.dart';
 import 'package:flame/src/cache/images.dart';
 import 'package:flame/src/device.dart';
@@ -11,7 +9,7 @@ import 'package:flutter/services.dart';
 /// You can access shared instances of [AssetsCache], [Images] and [Device].
 /// Most games should need only one instance of each, and should use this class
 /// to manage that reference.
-class Flame {
+class Flame() {
   /// Flame asset bundle, defaults to the root bundle but can be globally
   /// changed.
   static AssetBundle bundle = rootBundle;

@@ -10,7 +10,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
-enum _ButtonState {
+enum _ButtonState() {
   up,
   down,
 }
@@ -445,21 +445,13 @@ Future<void> main() async {
 
 /// This is used to test [SpriteButtonComponent] without using the constructor
 /// and setting properties in [onLoad] of an extending class instead.
-class _CustomSpriteButtonComponent extends SpriteButtonComponent {
-  final Sprite customButton;
-  final Sprite customButtonDown;
-  final void Function()? customOnPressed;
-  final Vector2? customPosition;
-  final Vector2? customSize;
-
-  _CustomSpriteButtonComponent({
-    required this.customButton,
-    required this.customButtonDown,
-    this.customOnPressed,
-    this.customPosition,
-    this.customSize,
-  });
-
+class _CustomSpriteButtonComponent({
+  required final Sprite customButton,
+  required final Sprite customButtonDown,
+  final void Function()? customOnPressed,
+  final Vector2? customPosition,
+  final Vector2? customSize,
+}) extends SpriteButtonComponent {
   @override
   Future<void> onLoad() async {
     position = customPosition ?? Vector2(0.0, 0.0);
@@ -469,13 +461,9 @@ class _CustomSpriteButtonComponent extends SpriteButtonComponent {
   }
 }
 
-class _SimpleStatelessWidget extends StatelessWidget {
-  const _SimpleStatelessWidget({
-    required this._build,
-  });
-
-  final Widget Function(BuildContext) _build;
-
+class const _SimpleStatelessWidget({
+  required final Widget Function(BuildContext) _build,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) => _build(context);
 }

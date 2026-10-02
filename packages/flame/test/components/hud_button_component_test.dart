@@ -167,7 +167,7 @@ void main() {
   });
 }
 
-class _CustomHudButtonComponent extends HudButtonComponent {
+class _CustomHudButtonComponent() extends HudButtonComponent {
   @override
   Future<void> onLoad() async {
     super.onLoad();

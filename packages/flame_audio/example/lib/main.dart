@@ -17,7 +17,7 @@ void main() {
 /// 2. Uses a custom AudioPool for extremely efficient audio loading and pooling
 /// for tapping elsewhere.
 /// 3. Uses the Bgm utility for background music.
-class AudioGame extends FlameGame with TapCallbacks {
+class AudioGame() extends FlameGame with TapCallbacks {
   static final Paint black = BasicPalette.black.paint();
   static final Paint gray = const PaletteEntry(Color(0xFFCCCCCC)).paint();
   static final TextPaint text = TextPaint(

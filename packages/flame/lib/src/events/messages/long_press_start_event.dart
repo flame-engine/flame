@@ -7,18 +7,20 @@ import 'package:flutter/gestures.dart';
 /// to be recognized as a long press).
 ///
 /// This is a [PositionEvent], where the position is the point of contact.
-class LongPressStartEvent extends PositionEvent<LongPressStartDetails> {
-  LongPressStartEvent(this.pointerId, super.game, LongPressStartDetails details)
-    : super(
-        raw: details,
-        devicePosition: details.globalPosition.toVector2(),
-      );
-
+class LongPressStartEvent(
   /// The unique identifier for this long press gesture.
   ///
   /// Subsequent move update, end, or cancel events will carry the same
   /// pointer id.
-  final int pointerId;
+  final int pointerId,
+  super.game,
+  LongPressStartDetails details,
+) extends PositionEvent<LongPressStartDetails> {
+  this
+    : super(
+        raw: details,
+        devicePosition: details.globalPosition.toVector2(),
+      );
 
   @override
   String toString() =>

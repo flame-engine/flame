@@ -3,7 +3,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart';
 
-class OverlaysExample extends FlameGame with TapCallbacks {
+class OverlaysExample() extends FlameGame with TapCallbacks {
   static const String description = '''
     In this example we show how the overlays system can be used.\n\n
     If you tap the canvas the game will start and if you tap it again it will
@@ -94,9 +94,7 @@ Widget _secondaryMenuBuilder(BuildContext buildContext, OverlaysExample game) {
   );
 }
 
-class OverlaysExampleWidget extends StatelessWidget {
-  const OverlaysExampleWidget({super.key});
-
+class const OverlaysExampleWidget({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GameWidget<OverlaysExample>.managed(

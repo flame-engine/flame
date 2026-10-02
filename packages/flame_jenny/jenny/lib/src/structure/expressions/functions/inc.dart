@@ -4,11 +4,7 @@ import 'package:jenny/src/yarn_project.dart';
 
 /// Function `inc(x)` increases `x` towards next integer. It is equal to `x + 1`
 /// if `x` is already integer, or `ceil(x)` if `x` is not integer.
-class IncFn extends NumExpression {
-  const IncFn(this.arg);
-
-  final NumExpression arg;
-
+class const IncFn(final NumExpression arg) extends NumExpression {
   static Expression make(
     List<FunctionArgument> args,
     YarnProject yarnProject,

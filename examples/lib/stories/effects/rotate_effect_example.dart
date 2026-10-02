@@ -7,7 +7,7 @@ import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flutter/animation.dart';
 
-class RotateEffectExample extends FlameGame {
+class RotateEffectExample() extends FlameGame {
   static const description = '''
     The outer rim rotates at a different speed forward and reverse, and
     uses the "ease" animation curve.
@@ -17,7 +17,7 @@ class RotateEffectExample extends FlameGame {
     add small amounts of wobble, creating quasi-chaotic movement.
   ''';
 
-  RotateEffectExample()
+  this
     : super(
         camera: CameraComponent.withFixedResolution(
           width: 400,
@@ -27,7 +27,7 @@ class RotateEffectExample extends FlameGame {
       );
 }
 
-class _RotateEffectWorld extends World {
+class _RotateEffectWorld() extends World {
   @override
   void onLoad() {
     final compass = Compass(size: 200);
@@ -77,10 +77,9 @@ class _RotateEffectWorld extends World {
   }
 }
 
-class Compass extends PositionComponent {
-  Compass({required double size})
-    : _radius = size / 2,
-      super(
+class Compass({required double size}) extends PositionComponent {
+  this
+    : super(
         size: Vector2.all(size),
         anchor: Anchor.center,
       );
@@ -88,7 +87,7 @@ class Compass extends PositionComponent {
   late PositionComponent arrow;
   late PositionComponent rim;
 
-  final double _radius;
+  final double _radius = size / 2;
   final _bgPaint = Paint()..color = const Color(0xffeacb31);
   final _marksPaint = Paint()
     ..color = const Color(0xFF7F6D36)
@@ -128,15 +127,14 @@ class Compass extends PositionComponent {
   }
 }
 
-class CompassArrow extends PositionComponent {
-  CompassArrow({required double width, required double radius})
-    : assert(width <= radius, 'The width is larger than the radius'),
-      _radius = radius,
-      _width = width,
-      super(size: Vector2(width, 2 * radius), anchor: Anchor.center);
+class CompassArrow({
+  required final double _width,
+  required final double _radius,
+}) extends PositionComponent {
+  this
+    : assert(_width <= _radius, 'The width is larger than the radius'),
+      super(size: Vector2(_width, 2 * _radius), anchor: Anchor.center);
 
-  final double _radius;
-  final double _width;
   late final Path _northPath;
   late final Path _southPath;
   final _northPaint = Paint()..color = const Color(0xff387fcb);
@@ -163,19 +161,16 @@ class CompassArrow extends PositionComponent {
   }
 }
 
-class CompassRim extends PositionComponent {
-  CompassRim({required double radius, required double width})
-    : assert(radius > width, 'The width is larger than the radius'),
-      _radius = radius,
-      _width = width,
+class CompassRim({required final double _radius, required final double _width})
+    extends PositionComponent {
+  this
+    : assert(_radius > _width, 'The width is larger than the radius'),
       super(
-        size: Vector2.all(2 * radius),
+        size: Vector2.all(2 * _radius),
         anchor: Anchor.center,
       );
 
   static const int numberOfNotches = 144;
-  final double _radius;
-  final double _width;
   late final Path _marksPath;
   final _bgPaint = Paint()
     ..style = PaintingStyle.stroke

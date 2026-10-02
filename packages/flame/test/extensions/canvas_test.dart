@@ -77,10 +77,10 @@ void main() {
   });
 }
 
-class _MocktailCanvas extends Mock implements Canvas {}
+class _MocktailCanvas() extends Mock implements Canvas;
 
-abstract class _DrawerFunction {
+abstract class _DrawerFunction() {
   void call(Canvas _);
 }
 
-class _MocktailDrawFunction extends Mock implements _DrawerFunction {}
+class _MocktailDrawFunction() extends Mock implements _DrawerFunction;

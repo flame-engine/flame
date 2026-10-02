@@ -59,7 +59,7 @@ void main() {
   });
 }
 
-class _DtRecorder extends Component {
+class _DtRecorder() extends Component {
   final List<double> recordedDts = [];
 
   @override
@@ -68,19 +68,19 @@ class _DtRecorder extends Component {
   }
 }
 
-class _PlainBarrier extends Component with CustomTraversal {
-  _PlainBarrier({super.children});
-}
+class _PlainBarrier({super.children}) extends Component with CustomTraversal;
 
-class _HalfSpeedBarrier extends Component with CustomTraversal {
-  _HalfSpeedBarrier({super.children});
-
+class _HalfSpeedBarrier({super.children})
+    extends Component
+    with CustomTraversal {
   @override
   void updateSubtree(double dt) => super.updateSubtree(dt / 2);
 }
 
-class _FrozenBarrier extends _DtRecorder with CustomTraversal {
-  _FrozenBarrier({List<Component>? children}) {
+class _FrozenBarrier({List<Component>? children})
+    extends _DtRecorder
+    with CustomTraversal {
+  this {
     if (children != null) {
       addAll(children);
     }

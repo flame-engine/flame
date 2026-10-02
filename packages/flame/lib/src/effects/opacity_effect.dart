@@ -6,16 +6,16 @@ import 'package:flame/effects.dart';
 /// This effect applies incremental changes to the component's opacity, and
 /// requires that any other effect or update logic applied to the same component
 /// also used incremental updates.
-class OpacityEffect extends Effect with EffectTarget<OpacityProvider> {
+class OpacityEffect.by(
+  double offset,
+  super.controller, {
+  OpacityProvider? target,
+  super.onComplete,
+  super.key,
+}) extends Effect with EffectTarget<OpacityProvider> {
   /// This constructor will set the opacity in relation to it's current opacity
   /// over time.
-  OpacityEffect.by(
-    double offset,
-    super.controller, {
-    OpacityProvider? target,
-    super.onComplete,
-    super.key,
-  }) : _opacityOffset = offset {
+  this {
     this.target = target;
   }
 
@@ -66,7 +66,7 @@ class OpacityEffect extends Effect with EffectTarget<OpacityProvider> {
     );
   }
 
-  double _opacityOffset;
+  double _opacityOffset = offset;
   double _roundingError = 0.0;
 
   @override
@@ -89,19 +89,18 @@ class OpacityEffect extends Effect with EffectTarget<OpacityProvider> {
 }
 
 /// Implementation class for [OpacityEffect.to]
-class _OpacityToEffect extends OpacityEffect {
-  final double _targetOpacity;
-
-  _OpacityToEffect(
-    this._targetOpacity,
-    EffectController controller, {
-    super.target,
-    super.onComplete,
-    super.key,
-  }) : super.by(
-         0.0,
-         controller,
-       );
+class _OpacityToEffect(
+  final double _targetOpacity,
+  EffectController controller, {
+  super.target,
+  super.onComplete,
+  super.key,
+}) extends OpacityEffect {
+  this
+    : super.by(
+        0.0,
+        controller,
+      );
 
   @override
   void onStart() {

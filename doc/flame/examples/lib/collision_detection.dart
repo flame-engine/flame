@@ -5,7 +5,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart' hide Image;
 
-class CollisionDetectionGame extends FlameGame with HasCollisionDetection {
+class CollisionDetectionGame() extends FlameGame with HasCollisionDetection {
   @override
   Future<void> onLoad() async {
     final emberPlayer = EmberPlayer(
@@ -30,12 +30,14 @@ class CollisionDetectionGame extends FlameGame with HasCollisionDetection {
   }
 }
 
-class RectangleCollidable extends PositionComponent with CollisionCallbacks {
+class RectangleCollidable(Vector2 position)
+    extends PositionComponent
+    with CollisionCallbacks {
   final _collisionStartColor = Colors.amber;
   final _defaultColor = Colors.cyan;
   late ShapeHitbox hitbox;
 
-  RectangleCollidable(Vector2 position)
+  this
     : super(
         position: position,
         size: Vector2.all(50),

@@ -24,7 +24,12 @@ const _amountTicks = 20;
 const _worldSize = 800.0;
 
 /// The subject is the shape under test, the other is what it collides with.
-enum ShapeKind { circle, rectangle, polygon, path }
+enum ShapeKind() {
+  circle,
+  rectangle,
+  polygon,
+  path,
+}
 
 /// The anchor points of [TestPaths.flame], which is
 /// what a hand-written polygon of that shape would look like.
@@ -42,15 +47,14 @@ final _flameVertices = [
 ];
 const _flameBounds = Rect.fromLTRB(4, 3, 62, 65);
 
-class PathCollisionBenchmark extends AsyncBenchmarkBase {
-  final Random random;
-  final ShapeKind subject;
-  final ShapeKind other;
-
+class PathCollisionBenchmark(
+  final Random random,
+  final ShapeKind subject,
+  final ShapeKind other,
+) extends AsyncBenchmarkBase {
   late final FlameGame _game;
 
-  PathCollisionBenchmark(this.random, this.subject, this.other)
-    : super('${subject.name} vs ${other.name}');
+  this : super('${subject.name} vs ${other.name}');
 
   @override
   Future<void> setup() async {
@@ -86,21 +90,19 @@ class PathCollisionBenchmark extends AsyncBenchmarkBase {
   }
 }
 
-class _CollisionGame extends FlameGame with HasCollisionDetection {}
+class _CollisionGame() extends FlameGame with HasCollisionDetection;
 
-class _MovingShape extends PositionComponent with CollisionCallbacks {
-  final Vector2 velocity;
-  final double rotationSpeed;
+class _MovingShape({
+  required ShapeKind kind,
+  required ShapeKind partnerKind,
+  required super.position,
+  required super.size,
+  required final Vector2 velocity,
+  required final double rotationSpeed,
+}) extends PositionComponent with CollisionCallbacks {
   late final ShapeHitbox hitbox;
 
-  _MovingShape({
-    required ShapeKind kind,
-    required ShapeKind partnerKind,
-    required super.position,
-    required super.size,
-    required this.velocity,
-    required this.rotationSpeed,
-  }) : super(anchor: Anchor.center) {
+  this : super(anchor: Anchor.center) {
     hitbox = switch (kind) {
       ShapeKind.circle => _Circle(),
       ShapeKind.rectangle => _Rectangle(),
@@ -138,9 +140,9 @@ mixin _PartnerFilter on ShapeHitbox {
   }
 }
 
-class _Circle extends CircleHitbox with _PartnerFilter {}
+class _Circle() extends CircleHitbox with _PartnerFilter;
 
-class _Rectangle extends RectangleHitbox with _PartnerFilter {}
+class _Rectangle() extends RectangleHitbox with _PartnerFilter;
 
 class _Polygon extends PolygonHitbox with _PartnerFilter {
   _Polygon(super.vertices, {super.anchor, super.position});

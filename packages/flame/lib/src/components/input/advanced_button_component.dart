@@ -15,27 +15,34 @@ import 'package:flutter/foundation.dart';
 /// Note: You have to set the skins that you want to use ([defaultSkin],
 /// [downSkin], [hoverSkin], [disabledSkin], [defaultLabel]) in [onLoad]
 /// if you are not passing them in through the constructor.
-class AdvancedButtonComponent extends PositionComponent
-    with HoverCallbacks, TapCallbacks {
-  AdvancedButtonComponent({
-    this.onPressed,
-    this.onReleased,
-    this.onCancelled,
-    this.onChangeState,
-    PositionComponent? defaultSkin,
-    PositionComponent? downSkin,
-    PositionComponent? hoverSkin,
-    PositionComponent? disabledSkin,
-    PositionComponent? defaultLabel,
-    PositionComponent? disabledLabel,
-    super.size,
-    super.position,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-  }) {
+class AdvancedButtonComponent({
+  /// Callback for what should happen when the button is pressed.
+  var void Function()? onPressed,
+
+  /// Callback for what should happen when the button is released.
+  var void Function()? onReleased,
+
+  /// Callback for what should happen when the tap is cancelled, for example
+  /// when the pointer is dragged outside of the button before it is released.
+  var void Function()? onCancelled,
+
+  /// Callback when button state changes
+  var void Function(ButtonState state)? onChangeState,
+  PositionComponent? defaultSkin,
+  PositionComponent? downSkin,
+  PositionComponent? hoverSkin,
+  PositionComponent? disabledSkin,
+  PositionComponent? defaultLabel,
+  PositionComponent? disabledLabel,
+  super.size,
+  super.position,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority,
+}) extends PositionComponent with HoverCallbacks, TapCallbacks {
+  this {
     this.defaultSkin = defaultSkin;
     this.downSkin = downSkin;
     this.hoverSkin = hoverSkin;
@@ -44,19 +51,6 @@ class AdvancedButtonComponent extends PositionComponent
     this.disabledLabel = disabledLabel;
     size.addListener(_updateSizes);
   }
-
-  /// Callback for what should happen when the button is pressed.
-  void Function()? onPressed;
-
-  /// Callback for what should happen when the button is released.
-  void Function()? onReleased;
-
-  /// Callback for what should happen when the tap is cancelled, for example
-  /// when the pointer is dragged outside of the button before it is released.
-  void Function()? onCancelled;
-
-  /// Callback when button state changes
-  void Function(ButtonState state)? onChangeState;
 
   @mustCallSuper
   @override
@@ -265,7 +259,7 @@ class AdvancedButtonComponent extends PositionComponent
   }
 }
 
-enum ButtonState {
+enum ButtonState() {
   up,
   upAndSelected,
   down,
@@ -274,8 +268,6 @@ enum ButtonState {
   hoverAndSelected,
   disabled,
   disabledAndSelected;
-
-  const ButtonState();
 
   bool get isDefault {
     return this == ButtonState.up;

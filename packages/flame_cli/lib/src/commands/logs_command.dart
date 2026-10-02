@@ -8,8 +8,9 @@ import 'package:flame_cli/src/project_files.dart';
 import 'package:io/io.dart';
 
 /// Prints the output of the `flutter run` that `flame run` started.
-class LogsCommand extends Command<int> {
-  LogsCommand(this.out, this.workingDirectory) {
+class LogsCommand(final StringSink out, final Directory workingDirectory)
+    extends Command<int> {
+  this {
     argParser
       ..addOption(
         'lines',
@@ -26,9 +27,6 @@ class LogsCommand extends Command<int> {
             'pressed.',
       );
   }
-
-  final StringSink out;
-  final Directory workingDirectory;
 
   @override
   String get name => 'logs';

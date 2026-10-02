@@ -10,7 +10,7 @@ void main() async {
   runApp(const GameWidget.managed(gameFactory: SpineExample.new));
 }
 
-class SpineExample extends FlameGame with TapCallbacks {
+class SpineExample() extends FlameGame with TapCallbacks {
   late final SpineComponent spineboy;
 
   final states = [

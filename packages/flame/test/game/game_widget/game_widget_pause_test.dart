@@ -3,21 +3,16 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
-class _Wrapper extends StatefulWidget {
-  const _Wrapper({
-    required this.child,
-    // ignore: unused_element, unused_element_parameter
-    this.small = false,
-  });
-
-  final Widget child;
-  final bool small;
-
+class const _Wrapper({
+  required final Widget child,
+  // ignore: unused_element_parameter
+  final bool small = false,
+}) extends StatefulWidget {
   @override
   State<_Wrapper> createState() => _WrapperState();
 }
 
-class _WrapperState extends State<_Wrapper> {
+class _WrapperState() extends State<_Wrapper> {
   late bool _small;
 
   @override
@@ -51,7 +46,7 @@ class _WrapperState extends State<_Wrapper> {
   }
 }
 
-class _MyGame extends FlameGame {
+class _MyGame() extends FlameGame {
   int updateCount = 0;
   int renderCount = 0;
   double timePassed = 0;

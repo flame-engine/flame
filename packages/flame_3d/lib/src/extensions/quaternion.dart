@@ -22,9 +22,7 @@ extension QuaternionExtension on Quaternion {
   }
 }
 
-final class QuaternionUtils {
-  QuaternionUtils._();
-
+final class QuaternionUtils._() {
   static Quaternion slerp(
     Quaternion q0,
     Quaternion q1,

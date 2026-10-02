@@ -4,9 +4,9 @@ import 'package:flame_isolate/flame_isolate.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class _TestGame extends FlameGame with FlameIsolate {}
+class _TestGame() extends FlameGame with FlameIsolate;
 
-class _IsolateComponent extends Component with FlameIsolate {}
+class _IsolateComponent() extends Component with FlameIsolate;
 
 void main() {
   testWithGame<_TestGame>(

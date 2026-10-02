@@ -7,18 +7,23 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _PaintComponent extends Component with HasPaint {}
+class _PaintComponent() extends Component with HasPaint;
 
-class _CustomPaintComponent<T extends Object> extends Component
+class _CustomPaintComponent<T extends Object>(Map<T, Paint> paints)
+    extends Component
     with HasPaint<T> {
-  _CustomPaintComponent(Map<T, Paint> paints) {
+  this {
     for (final p in paints.entries) {
       setPaint(p.key, p.value);
     }
   }
 }
 
-enum _PaintTypes { paint1, paint2, paint3 }
+enum _PaintTypes() {
+  paint1,
+  paint2,
+  paint3,
+}
 
 void main() {
   const epsilon = 0.004; // 1/255, since alpha only holds 8 bits

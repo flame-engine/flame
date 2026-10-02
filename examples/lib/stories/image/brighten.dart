@@ -2,13 +2,9 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 
-class ImageBrightnessExample extends FlameGame {
-  ImageBrightnessExample({
-    required this.brightness,
-  });
-
-  final double brightness;
-
+class ImageBrightnessExample({
+  required final double brightness,
+}) extends FlameGame {
   static const String description = '''
      Shows how a dart:ui `Image` can be brightened using Flame Image extensions.
      Use the properties on the side to change the brightness of the image.

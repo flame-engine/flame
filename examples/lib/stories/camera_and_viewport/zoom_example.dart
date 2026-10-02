@@ -2,7 +2,8 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 
-class ZoomExample extends FlameGame
+class ZoomExample()
+    extends FlameGame
     with ScrollCallbacks, ScaleCallbacks, DragCallbacks {
   static const String description = '''
     On web: use scroll to zoom in and out.\n

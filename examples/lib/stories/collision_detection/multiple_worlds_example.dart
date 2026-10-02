@@ -7,7 +7,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart';
 
-class MultipleWorldsExample extends FlameGame {
+class MultipleWorldsExample() extends FlameGame {
   static const description = '''
     This example shows how multiple worlds can have discrete collision
     detection.
@@ -34,11 +34,9 @@ class MultipleWorldsExample extends FlameGame {
   }
 }
 
-class CollisionDetectionWorld extends World with HasCollisionDetection {}
+class CollisionDetectionWorld() extends World with HasCollisionDetection;
 
-class CollidableEmber extends Ember with CollisionCallbacks {
-  CollidableEmber({super.position});
-
+class CollidableEmber({super.position}) extends Ember with CollisionCallbacks {
   static final Random _rng = Random();
   int get index =>
       (position.x.isNegative ? 1 : 0) + (position.y.isNegative ? 2 : 0);

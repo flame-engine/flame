@@ -15,28 +15,26 @@ import 'package:flame_3d/resources.dart';
 /// - Emissive/self-lit surfaces
 /// - Sky boxes and debug rendering
 /// {@endtemplate}
-class UnlitMaterial extends Material {
-  /// {@macro unlit_material}
-  UnlitMaterial({
-    this.albedoColor = const Color(0xFFFFFFFF),
-    Texture? albedoTexture,
-  }) : albedoTexture = albedoTexture ?? Texture.standard,
-       super(
-         vertexShader: VertexShader.fromAsset(
-           'packages/flame_3d/assets/shaders/unlit_material.shaderbundle',
-           slots: ['VertexInfo', 'JointMatrices'],
-         ),
-         fragmentShader: FragmentShader.fromAsset(
-           'packages/flame_3d/assets/shaders/unlit_material.shaderbundle',
-           slots: ['albedoTexture', 'Material'],
-         ),
-       );
-
+class UnlitMaterial({
   /// The material's base color, multiplied with [albedoTexture].
-  Color albedoColor;
+  var Color albedoColor = const Color(0xFFFFFFFF),
+  Texture? albedoTexture,
+}) extends Material {
+  /// {@macro unlit_material}
+  this
+    : super(
+        vertexShader: VertexShader.fromAsset(
+          'packages/flame_3d/assets/shaders/unlit_material.shaderbundle',
+          slots: ['VertexInfo', 'JointMatrices'],
+        ),
+        fragmentShader: FragmentShader.fromAsset(
+          'packages/flame_3d/assets/shaders/unlit_material.shaderbundle',
+          slots: ['albedoTexture', 'Material'],
+        ),
+      );
 
   /// The texture to render. Multiplied by [albedoColor].
-  Texture albedoTexture;
+  Texture albedoTexture = albedoTexture ?? Texture.standard;
 
   @override
   void apply(covariant RenderContext3D context) {

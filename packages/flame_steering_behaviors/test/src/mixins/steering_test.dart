@@ -7,11 +7,11 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
 
-class _TestBehavior extends Behavior<SteerableEntity> with Steering {}
+class _TestBehavior() extends Behavior<SteerableEntity> with Steering;
 
-class _MockSteeringCore extends Mock implements SteeringCore {}
+class _MockSteeringCore() extends Mock implements SteeringCore;
 
-class _FakeSteerable extends Fake implements Steerable {}
+class _FakeSteerable() extends Fake implements Steerable;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

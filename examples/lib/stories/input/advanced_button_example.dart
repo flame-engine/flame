@@ -3,7 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/painting.dart';
 
-class AdvancedButtonExample extends FlameGame {
+class AdvancedButtonExample() extends FlameGame {
   static const String description =
       '''This example shows how you can use a button with different states''';
 
@@ -27,7 +27,7 @@ class AdvancedButtonExample extends FlameGame {
   }
 }
 
-class ToggleButton extends ToggleButtonComponent {
+class ToggleButton() extends ToggleButtonComponent {
   @override
   Future<void> onLoad() async {
     super.onLoad();
@@ -72,7 +72,7 @@ class ToggleButton extends ToggleButtonComponent {
   }
 }
 
-class DefaultButton extends AdvancedButtonComponent {
+class DefaultButton() extends AdvancedButtonComponent {
   @override
   Future<void> onLoad() async {
     super.onLoad();
@@ -90,7 +90,7 @@ class DefaultButton extends AdvancedButtonComponent {
   }
 }
 
-class DisableButton extends AdvancedButtonComponent {
+class DisableButton() extends AdvancedButtonComponent {
   @override
   Future<void> onLoad() async {
     super.onLoad();
@@ -105,7 +105,7 @@ class DisableButton extends AdvancedButtonComponent {
   }
 }
 
-class RoundedRectComponent extends PositionComponent with HasPaint {
+class RoundedRectComponent() extends PositionComponent with HasPaint {
   @override
   void render(Canvas canvas) {
     canvas.drawRRect(

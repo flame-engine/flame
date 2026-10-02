@@ -7,13 +7,10 @@ import 'package:flame_3d/resources.dart';
 /// Base material [Resource], it holds the shader library that should be used
 /// for the material.
 /// {@endtemplate}
-abstract class Material extends Resource<GpuPipeline> {
-  /// {@macro material}
-  Material({
-    required this._vertexShader,
-    required this._fragmentShader,
-  });
-
+abstract class Material({
+  required var Shader _vertexShader,
+  required var Shader _fragmentShader,
+}) extends Resource<GpuPipeline> {
   static Material defaultMaterial = SpatialMaterial()
     ..albedoColor = const Color(0xFFFF00FF);
 
@@ -26,14 +23,12 @@ abstract class Material extends Resource<GpuPipeline> {
   }
 
   Shader get vertexShader => _vertexShader;
-  Shader _vertexShader;
   set vertexShader(Shader shader) {
     _vertexShader = shader;
     recreateResource = true;
   }
 
   Shader get fragmentShader => _fragmentShader;
-  Shader _fragmentShader;
   set fragmentShader(Shader shader) {
     _fragmentShader = shader;
     recreateResource = true;

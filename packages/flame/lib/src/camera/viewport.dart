@@ -18,17 +18,15 @@ import 'package:meta/meta.dart';
 ///
 /// A viewport establishes its own local coordinate system, with the origin at
 /// the top left corner of the viewport's bounding box.
-abstract class Viewport extends Component
+abstract class Viewport({
+  super.children,
+  super.key,
+}) extends Component
     implements
         AnchorProvider,
         PositionProvider,
         SizeProvider,
         CoordinateTransform {
-  Viewport({
-    super.children,
-    super.key,
-  });
-
   final Vector2 _size = Vector2.zero();
   bool _isInitialized = false;
 

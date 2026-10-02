@@ -5,7 +5,7 @@ import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 import 'package:material_ui/material_ui.dart';
 
-class SpriteBatchBleedExample extends FlameGame {
+class SpriteBatchBleedExample() extends FlameGame {
   static const String description = '''
     In this example we show how `bleed` can be used to prevent edge artifacts
     (seams) between tiles when rendering with `SpriteBatch`.

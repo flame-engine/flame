@@ -5,4 +5,4 @@ import 'package:flame/src/events/callbacks/input_callbacks.dart';
 /// hit-testing.
 ///
 /// Non-positional input, such as keyboard, implements [InputCallbacks].
-abstract interface class PointerInputCallbacks implements InputCallbacks {}
+abstract interface class PointerInputCallbacks() implements InputCallbacks;

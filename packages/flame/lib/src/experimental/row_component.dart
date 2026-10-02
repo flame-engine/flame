@@ -31,16 +31,16 @@ import 'package:flutter/rendering.dart';
 ///   ],
 /// );
 /// ```
-class RowComponent extends LinearLayoutComponent {
-  RowComponent({
-    super.key,
-    super.mainAxisAlignment = MainAxisAlignment.start,
-    super.crossAxisAlignment = CrossAxisAlignment.start,
-    super.gap = 0.0,
-    super.size,
-    super.position,
-    super.anchor,
-    super.priority,
-    super.children,
-  }) : super(direction: Direction.horizontal);
+class RowComponent({
+  super.key,
+  super.mainAxisAlignment = MainAxisAlignment.start,
+  super.crossAxisAlignment = CrossAxisAlignment.start,
+  super.gap = 0.0,
+  super.size,
+  super.position,
+  super.anchor,
+  super.priority,
+  super.children,
+}) extends LinearLayoutComponent {
+  this : super(direction: Direction.horizontal);
 }

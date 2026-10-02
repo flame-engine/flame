@@ -1,15 +1,16 @@
 import 'dart:ui' as ui;
+
 import 'package:flame/cache.dart';
 import 'package:flame_texturepacker/flame_texturepacker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _MockAssetBundle extends Mock implements AssetBundle {}
+class _MockAssetBundle() extends Mock implements AssetBundle;
 
-class _MockImages extends Mock implements Images {}
+class _MockImages() extends Mock implements Images;
 
-class FakeImage extends Mock implements ui.Image {}
+class FakeImage() extends Mock implements ui.Image;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

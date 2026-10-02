@@ -5,7 +5,7 @@ import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart
 import 'package:flame/components.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class FilterJointExample extends Forge2DExampleGame {
+class FilterJointExample() extends Forge2DExampleGame {
   static const description = '''
     This example shows how to use a `FilterJoint`, which doesn't constrain the
     bodies at all: its only purpose is to stop two specific bodies from
@@ -15,11 +15,10 @@ class FilterJointExample extends Forge2DExampleGame {
     through each other, while the pair on the right collides as usual.
   ''';
 
-  FilterJointExample()
-    : super(gravity: Vector2(0, 10.0), world: FilterJointWorld());
+  this : super(gravity: Vector2(0, 10.0), world: FilterJointWorld());
 }
 
-class FilterJointWorld extends Forge2DWorld with HasGameRef<Forge2DGame> {
+class FilterJointWorld() extends Forge2DWorld with HasGameRef<Forge2DGame> {
   @override
   Future<void> onLoad() async {
     await super.onLoad();

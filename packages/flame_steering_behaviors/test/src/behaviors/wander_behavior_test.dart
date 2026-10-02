@@ -8,7 +8,7 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
 
-class _MockRandom extends Mock implements Random {}
+class _MockRandom() extends Mock implements Random;
 
 const _startAngle = 90 * degrees2Radians;
 const _randomValue = 0.25;

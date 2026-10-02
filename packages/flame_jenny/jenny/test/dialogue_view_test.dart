@@ -207,13 +207,11 @@ void main() {
   });
 }
 
-class _DefaultDialogueView extends DialogueView {}
+class _DefaultDialogueView() extends DialogueView;
 
-class _RecordingDialogueView extends DialogueView {
-  _RecordingDialogueView([this.waitDuration = Duration.zero]);
+class _RecordingDialogueView([final Duration waitDuration = Duration.zero])
+    extends DialogueView {
   final List<String> events = [];
-  final Duration waitDuration;
-
   @override
   FutureOr<void> onDialogueStart() {
     events.add('onDialogueStart');
@@ -285,11 +283,11 @@ class _RecordingDialogueView extends DialogueView {
   }
 }
 
-class _SomeOtherBaseClass {}
+class _SomeOtherBaseClass();
 
-class _RecordingDialogueViewAsMixin extends _SomeOtherBaseClass
+class _RecordingDialogueViewAsMixin()
+    extends _SomeOtherBaseClass
     with DialogueView {
-  _RecordingDialogueViewAsMixin();
   final List<String> events = [];
 
   @override
@@ -360,7 +358,7 @@ class _RecordingDialogueViewAsMixin extends _SomeOtherBaseClass
   }
 }
 
-class _InterruptingCow extends DialogueView {
+class _InterruptingCow() extends DialogueView {
   @override
   FutureOr<bool> onLineStart(DialogueLine line) async {
     dialogueRunner!.sendSignal("I'm a banana!");

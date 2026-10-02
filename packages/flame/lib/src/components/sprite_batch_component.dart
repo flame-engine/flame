@@ -4,23 +4,16 @@ import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/sprite_batch.dart';
 import 'package:meta/meta.dart';
 
-class SpriteBatchComponent extends Component {
-  SpriteBatch? spriteBatch;
-  BlendMode? blendMode;
-  Rect? cullRect;
-  Paint? paint;
-
-  /// Creates a component with an empty sprite batch which can be set later
-  SpriteBatchComponent({
-    this.spriteBatch,
-    this.blendMode,
-    this.cullRect,
-    this.paint,
-    super.key,
-    super.children,
-    super.priority,
-  });
-
+/// A component that renders a [SpriteBatch], which can also be set later.
+class SpriteBatchComponent({
+  var SpriteBatch? spriteBatch,
+  var BlendMode? blendMode,
+  var Rect? cullRect,
+  var Paint? paint,
+  super.key,
+  super.children,
+  super.priority,
+}) extends Component {
   @override
   @mustCallSuper
   void onMount() {

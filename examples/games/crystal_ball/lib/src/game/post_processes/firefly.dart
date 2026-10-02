@@ -6,16 +6,11 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/post_process.dart';
 
-class FireflyPostProcess extends PostProcess {
-  FireflyPostProcess({
-    required this.fragmentProgram,
-    required this.world,
-    super.pixelRatio,
-  });
-
-  final FragmentProgram fragmentProgram;
-  final CrystalBallGameWorld world;
-
+class FireflyPostProcess({
+  required final FragmentProgram fragmentProgram,
+  required final CrystalBallGameWorld world,
+  super.pixelRatio,
+}) extends PostProcess {
   late final FragmentShader shader = fragmentProgram.fragmentShader();
 
   double time = 0;

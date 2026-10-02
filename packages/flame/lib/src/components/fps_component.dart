@@ -5,16 +5,12 @@ import 'package:flame/components.dart';
 /// The [FpsComponent] is a non-visual component which you can get the current
 /// fps of the game with by calling [fps], once the component has been added to
 /// the component tree.
-class FpsComponent extends Component {
-  FpsComponent({
-    this.windowSize = 60,
-    super.key,
-  });
-
+class FpsComponent({
   /// The sliding window size, i.e. the number of game ticks over which the fps
   /// measure will be averaged.
-  final int windowSize;
-
+  final int windowSize = 60,
+  super.key,
+}) extends Component {
   /// The queue of the recent game tick durations.
   /// The length of this queue will not exceed [windowSize].
   final Queue<double> window = Queue();

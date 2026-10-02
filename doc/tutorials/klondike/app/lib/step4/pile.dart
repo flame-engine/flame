@@ -1,6 +1,6 @@
 import 'components/card.dart';
 
-abstract class Pile {
+abstract class Pile() {
   /// Returns true if the [card] can be taken away from this pile and moved
   /// somewhere else.
   bool canMoveCard(Card card);

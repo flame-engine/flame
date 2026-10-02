@@ -4,11 +4,7 @@ import 'package:jenny/src/yarn_project.dart';
 
 /// Function `dec(x)` decreases `x` towards previous integer. It is equal to
 /// `x - 1` if `x` is already integer, or `floor(x)` if `x` is not integer.
-class DecFn extends NumExpression {
-  const DecFn(this.arg);
-
-  final NumExpression arg;
-
+class const DecFn(final NumExpression arg) extends NumExpression {
   static Expression make(
     List<FunctionArgument> args,
     YarnProject yarnProject,

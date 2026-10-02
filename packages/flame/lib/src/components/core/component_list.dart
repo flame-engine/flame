@@ -17,12 +17,10 @@ part of 'component.dart';
 ///
 /// Components of a specific type can be retrieved in constant time with
 /// [query], once the type has been registered with [register].
-class ComponentList extends Iterable<Component> {
-  ComponentList({this.strictMode = false, this.comparator});
-
+class ComponentList({
   /// Whether calling [query] for an unregistered type throws an error
   /// (`true`), or registers the type on first use (`false`).
-  final bool strictMode;
+  final bool strictMode = false,
 
   /// An optional custom ordering, replacing the default ordering by
   /// [Component.priority]. Supply one via [Component.createComponentList].
@@ -31,8 +29,8 @@ class ComponentList extends Iterable<Component> {
   /// their insertion order. If the values that the comparator reads change
   /// after insertion, call [Component.rebalanceChildren] to restore the
   /// ordering (priority changes on mounted components do this automatically).
-  final Comparator<Component>? comparator;
-
+  final Comparator<Component>? comparator,
+}) extends Iterable<Component> {
   /// The relative order of [a] and [b]: by the custom [comparator] if one
   /// was supplied, otherwise by [Component.priority].
   int _compareOrder(Component a, Component b) {
@@ -405,11 +403,9 @@ int _partitionPoint<T>(List<T> list, bool Function(T element) isBefore) {
   return low;
 }
 
-class _ComponentListIterator implements Iterator<Component> {
-  _ComponentListIterator(this._list) : _shiftCount = _list._shiftCount;
-
-  final ComponentList _list;
-  final int _shiftCount;
+class _ComponentListIterator(final ComponentList _list)
+    implements Iterator<Component> {
+  final int _shiftCount = _list._shiftCount;
   int _index = -1;
   Component? _current;
 
@@ -439,11 +435,8 @@ class _ComponentListIterator implements Iterator<Component> {
   }
 }
 
-class _ReversedComponentListView extends Iterable<Component> {
-  _ReversedComponentListView(this._list);
-
-  final ComponentList _list;
-
+class _ReversedComponentListView(final ComponentList _list)
+    extends Iterable<Component> {
   @override
   int get length => _list._length;
 
@@ -457,15 +450,10 @@ class _ReversedComponentListView extends Iterable<Component> {
   Iterator<Component> get iterator => _ReversedComponentListIterator(_list);
 }
 
-class _ReversedComponentListIterator implements Iterator<Component> {
-  _ReversedComponentListIterator(ComponentList list)
-    : _list = list,
-      _shiftCount = list._shiftCount,
-      _index = list._elements.length;
-
-  final ComponentList _list;
-  final int _shiftCount;
-  int _index;
+class _ReversedComponentListIterator(final ComponentList _list)
+    implements Iterator<Component> {
+  final int _shiftCount = _list._shiftCount;
+  int _index = _list._elements.length;
   Component? _current;
 
   @override
@@ -496,11 +484,7 @@ class _ReversedComponentListIterator implements Iterator<Component> {
 
 /// A cached, always up-to-date result of `query<C>()`: the subset of the
 /// elements that are of type [C], in the same order as the main list.
-class _QueryCache<C extends Component> {
-  _QueryCache(this.data);
-
-  final List<C> data;
-
+class _QueryCache<C extends Component>(final List<C> data) {
   bool check(Component component) => component is C;
 
   /// Inserts [component] into [data], keeping it ordered consistently with

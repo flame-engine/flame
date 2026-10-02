@@ -5,7 +5,7 @@ import 'package:flame/src/devtools/dev_tools_connector.dart';
 
 /// The [ComponentCountConnector] is responsible for reporting the component
 /// count of the game to the devtools extension.
-class ComponentCountConnector extends DevToolsConnector {
+class ComponentCountConnector() extends DevToolsConnector {
   @override
   void init() {
     // Get the amount of components in the tree.

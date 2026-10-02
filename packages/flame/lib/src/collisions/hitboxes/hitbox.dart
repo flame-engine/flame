@@ -4,7 +4,7 @@ import 'package:flame/extensions.dart';
 /// The [Hitbox] is the default building block to determine whether two objects
 /// have collided with each other. [ShapeHitbox] is the default implementation
 /// used in FCS.
-abstract class Hitbox<T extends Hitbox<T>>
+abstract class Hitbox<T extends Hitbox<T>>()
     implements GenericCollisionCallbacks<T> {
   /// Whether the hitbox should:
   ///   * [CollisionType.active] - actively collide with other hitboxes.

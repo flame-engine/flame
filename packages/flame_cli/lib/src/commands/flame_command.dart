@@ -12,8 +12,11 @@ typedef GameConnector = Future<FlameConnection> Function(String uri);
 ///
 /// The game is found through the `--uri` option, or if that isn't given,
 /// through the file that `flame run` writes the URI of the game to.
-abstract class FlameCommand extends Command<int> {
-  FlameCommand(this.out, this.workingDirectory) {
+abstract class FlameCommand(
+  final StringSink out,
+  final Directory workingDirectory,
+) extends Command<int> {
+  this {
     argParser.addOption(
       'uri',
       abbr: 'u',
@@ -23,9 +26,6 @@ abstract class FlameCommand extends Command<int> {
           '`flame run`.',
     );
   }
-
-  final StringSink out;
-  final Directory workingDirectory;
 
   /// Validates the options, before a connection to the game is made.
   void validate() {}
@@ -65,7 +65,7 @@ Future<FlameConnection> connectToGame(
     uriOption: uriOption,
   );
   if (file == null) {
-    return connect(uri);
+    return await connect(uri);
   }
 
   try {

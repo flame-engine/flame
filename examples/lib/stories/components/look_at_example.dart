@@ -10,7 +10,8 @@ import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 
-class LookAtExample extends FlameGame<_TapWorld>
+class LookAtExample()
+    extends FlameGame<_TapWorld>
     with HasKeyboardHandlerComponents {
   static const description =
       'This example demonstrates how a component can be '
@@ -20,7 +21,7 @@ class LookAtExample extends FlameGame<_TapWorld>
       'oriented in the desired direction if the image is not facing the '
       'correct direction.';
 
-  LookAtExample() : super(world: _TapWorld());
+  this : super(world: _TapWorld());
 
   late List<_ChopperParent> _choppers;
 
@@ -66,7 +67,8 @@ class LookAtExample extends FlameGame<_TapWorld>
   }
 }
 
-class _TapWorld extends World
+class _TapWorld()
+    extends World
     with TapCallbacks, KeyboardHandler, HasGameRef<LookAtExample> {
   final CircleComponent target = CircleComponent(
     radius: 5,
@@ -130,14 +132,13 @@ class _TapWorld extends World
   }
 }
 
-class _ChopperParent extends PositionComponent with HasGameRef<LookAtExample> {
-  final PositionComponent chopper;
+class _ChopperParent({
+  required super.position,
+  required final PositionComponent chopper,
+}) extends PositionComponent with HasGameRef<LookAtExample> {
   late TextBoxComponent textBox;
 
-  _ChopperParent({
-    required super.position,
-    required this.chopper,
-  }) : super(children: [chopper]);
+  this : super(children: [chopper]);
 
   @override
   FutureOr<void> onLoad() {

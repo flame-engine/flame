@@ -5,12 +5,13 @@ import 'package:flame/image_composition.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:meta/meta.dart';
 
-class HasCollidablesGame extends FlameGame with HasCollisionDetection {}
+class HasCollidablesGame() extends FlameGame with HasCollisionDetection;
 
-class HasQuadTreeCollidablesGame extends FlameGame
-    with HasQuadTreeCollisionDetection {}
+class HasQuadTreeCollidablesGame()
+    extends FlameGame
+    with HasQuadTreeCollisionDetection;
 
-class CollisionDetectionWorld extends World with HasCollisionDetection {}
+class CollisionDetectionWorld() extends World with HasCollisionDetection;
 
 @isTest
 void testCollisionDetectionGame(
@@ -49,17 +50,15 @@ Future<void> runCollisionTestRegistry(
   }
 }
 
-class TestHitbox extends RectangleHitbox {
+class TestHitbox([var String? name]) extends RectangleHitbox {
   int startCounter = 0;
   int onCollisionCounter = 0;
   int endCounter = 0;
-  String? name;
-
-  TestHitbox([this.name]) {
-    onCollisionCallback = (_, __) {
+  this {
+    onCollisionCallback = (_, _) {
       onCollisionCounter++;
     };
-    onCollisionStartCallback = (_, __) {
+    onCollisionStartCallback = (_, _) {
       startCounter++;
     };
     onCollisionEndCallback = (_) {
@@ -75,16 +74,17 @@ class TestHitbox extends RectangleHitbox {
   }
 }
 
-class CompositeTestHitbox extends CompositeHitbox {
+class CompositeTestHitbox({super.size, super.children})
+    extends CompositeHitbox {
   int startCounter = 0;
   int onCollisionCounter = 0;
   int endCounter = 0;
 
-  CompositeTestHitbox({super.size, super.children}) {
-    onCollisionCallback = (_, __) {
+  this {
+    onCollisionCallback = (_, _) {
       onCollisionCounter++;
     };
-    onCollisionStartCallback = (_, __) {
+    onCollisionStartCallback = (_, _) {
       startCounter++;
     };
     onCollisionEndCallback = (_) {
@@ -93,27 +93,25 @@ class CompositeTestHitbox extends CompositeHitbox {
   }
 }
 
-class TestBlock extends PositionComponent with CollisionCallbacks {
-  String? name;
+class TestBlock(
+  Vector2 position,
+  Vector2 size, {
+  CollisionType type = CollisionType.active,
+  bool addTestHitbox = true,
+  super.children,
+  var String? name,
+  final bool Function(PositionComponent other)? _onComponentTypeCheck,
+}) extends PositionComponent with CollisionCallbacks {
   final hitbox = TestHitbox();
   int startCounter = 0;
   int onCollisionCounter = 0;
   int endCounter = 0;
 
-  final bool Function(PositionComponent other)? _onComponentTypeCheck;
-
-  TestBlock(
-    Vector2 position,
-    Vector2 size, {
-    CollisionType type = CollisionType.active,
-    bool addTestHitbox = true,
-    super.children,
-    this.name,
-    this._onComponentTypeCheck,
-  }) : super(
-         position: position,
-         size: size,
-       ) {
+  this
+    : super(
+        position: position,
+        size: size,
+      ) {
     children.register<ShapeHitbox>();
     if (addTestHitbox) {
       add(hitbox..collisionType = type);
@@ -176,10 +174,8 @@ class TestBlock extends PositionComponent with CollisionCallbacks {
   }
 }
 
-class Water extends PositionComponent {
-  Water({super.position, super.size, super.children});
-}
+class Water({super.position, super.size, super.children})
+    extends PositionComponent;
 
-class Brick extends PositionComponent {
-  Brick({super.position, super.size, super.children});
-}
+class Brick({super.position, super.size, super.children})
+    extends PositionComponent;

@@ -10,7 +10,7 @@ import 'package:flame/src/devtools/dev_tools_connector.dart';
 ///
 /// The `priority` attribute can be set on any component, the other attributes
 /// only on a [PositionComponent].
-class PositionComponentAttributesConnector extends DevToolsConnector {
+class PositionComponentAttributesConnector() extends DevToolsConnector {
   @override
   void init() {
     registerExtension(

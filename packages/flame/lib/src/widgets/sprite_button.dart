@@ -76,7 +76,7 @@ class SpriteButton extends StatelessWidget {
   }) : _buttonsFuture = [
          sprite,
          pressedSprite,
-         if (disabledSprite != null) disabledSprite,
+         ?disabledSprite,
        ];
 
   SpriteButton.future({
@@ -100,7 +100,7 @@ class SpriteButton extends StatelessWidget {
   }) : _buttonsFuture = Future.wait([
          sprite,
          pressedSprite,
-         if (disabledSprite != null) disabledSprite,
+         ?disabledSprite,
        ]);
 
   /// Loads the images from the asset [path] and [pressedPath] and renders
@@ -247,33 +247,22 @@ class SpriteButton extends StatelessWidget {
 }
 
 @visibleForTesting
-class InternalSpriteButton extends StatefulWidget {
-  final void Function()? onPressed;
-  final Widget? label;
-  final Sprite sprite;
-  final Sprite pressedSprite;
-  final Sprite? disabledSprite;
-  final EdgeInsets pressedInsets;
-  final double width;
-  final double height;
-
-  const InternalSpriteButton({
-    required this.onPressed,
-    required this.sprite,
-    required this.pressedSprite,
-    this.disabledSprite,
-    this.pressedInsets = const EdgeInsets.only(top: 5),
-    this.label,
-    this.width = 200,
-    this.height = 50,
-    super.key,
-  });
-
+class const InternalSpriteButton({
+  required final void Function()? onPressed,
+  required final Sprite sprite,
+  required final Sprite pressedSprite,
+  final Sprite? disabledSprite,
+  final EdgeInsets pressedInsets = const EdgeInsets.only(top: 5),
+  final Widget? label,
+  final double width = 200,
+  final double height = 50,
+  super.key,
+}) extends StatefulWidget {
   @override
   State createState() => _ButtonState();
 }
 
-class _ButtonState extends State<InternalSpriteButton> {
+class _ButtonState() extends State<InternalSpriteButton> {
   bool _pressed = false;
 
   @override
@@ -326,11 +315,7 @@ class _ButtonState extends State<InternalSpriteButton> {
   }
 }
 
-class _ButtonPainter extends CustomPainter {
-  final Sprite _sprite;
-
-  _ButtonPainter(this._sprite);
-
+class _ButtonPainter(final Sprite _sprite) extends CustomPainter {
   @override
   bool shouldRepaint(_ButtonPainter old) => old._sprite != _sprite;
 

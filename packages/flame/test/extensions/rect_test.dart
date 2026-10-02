@@ -264,4 +264,4 @@ void main() {
   });
 }
 
-class _MockRect extends Mock implements Rect {}
+class _MockRect() extends Mock implements Rect;

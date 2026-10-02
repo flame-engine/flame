@@ -14,8 +14,8 @@ import 'package:meta/meta.dart';
 /// and [addOrphanedCommand], depending on the arity of the function
 /// that needs to be invoked. All user-defined commands need to be declared
 /// before parsing any Yarn scripts.
-class CommandStorage {
-  CommandStorage() : _commands = {};
+class CommandStorage() {
+  this : _commands = {};
 
   final Map<String, _Cmd?> _commands;
 
@@ -163,19 +163,19 @@ class CommandStorage {
 
 /// A wrapper around Dart function, which allows that function to be invoked
 /// dynamically from the Yarn runtime.
-class _Cmd {
-  _Cmd(this.name, List<Type> types, this._wrappedFn)
-    : _signature = _unpackTypes(types),
-      _arguments = List<dynamic>.filled(types.length, null) {
+class _Cmd(
+  final String name,
+  List<Type> types,
+  final FutureOr<void> Function(List<dynamic>) _wrappedFn,
+) {
+  this {
     numTrailingBooleans = _signature.reversed
         .takeWhile((type) => type == _Type.boolean)
         .length;
   }
 
-  final String name;
-  final List<_Type> _signature;
-  final FutureOr<void> Function(List<dynamic>) _wrappedFn;
-  final List<dynamic> _arguments;
+  final List<_Type> _signature = _unpackTypes(types);
+  final List<dynamic> _arguments = List<dynamic>.filled(types.length, null);
   late final int numTrailingBooleans;
 
   FutureOr<void> run(List<dynamic> arguments) {
@@ -265,10 +265,7 @@ class _Cmd {
 }
 
 @visibleForTesting
-class ArgumentsLexer {
-  ArgumentsLexer(this.text);
-
-  final String text;
+class ArgumentsLexer(final String text) {
   int position = 0;
   List<_ModeFn> modeStack = [];
   List<String> tokens = [];
@@ -386,7 +383,7 @@ class ArgumentsLexer {
 typedef _ModeFn = bool Function();
 
 /// Similar to `ExpressionType`, but also allows `integer`.
-enum _Type {
+enum _Type() {
   boolean,
   integer,
   double,

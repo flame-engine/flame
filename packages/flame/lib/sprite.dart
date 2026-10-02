@@ -2,7 +2,7 @@
 /// {@canonicalFor sprite_animation.SpriteAnimationData}
 /// {@canonicalFor sprite_animation.SpriteAnimationFrame}
 /// {@canonicalFor sprite_animation.SpriteAnimationFrameData}
-library sprite;
+library;
 
 export 'src/sprite.dart';
 export 'src/sprite_animation.dart';

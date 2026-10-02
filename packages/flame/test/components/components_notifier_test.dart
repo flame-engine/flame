@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class _Enemy extends PositionComponent with Notifier {}
+class _Enemy() extends PositionComponent with Notifier;
 
 void main() {
   group('ComponentsNotifier', () {

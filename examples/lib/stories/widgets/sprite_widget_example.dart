@@ -1,22 +1,14 @@
 import 'package:flame/widgets.dart';
 import 'package:material_ui/material_ui.dart';
 
-class SpriteWidgetExample extends StatelessWidget {
-  const SpriteWidgetExample({
-    required this.width,
-    required this.height,
-    required this.angle,
-    required this.anchor,
-    required this.paint,
-    super.key,
-  });
-
-  final double width;
-  final double height;
-  final double angle;
-  final Anchor anchor;
-  final Paint? paint;
-
+class const SpriteWidgetExample({
+  required final double width,
+  required final double height,
+  required final double angle,
+  required final Anchor anchor,
+  required final Paint? paint,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,20 +25,13 @@ class SpriteWidgetExample extends StatelessWidget {
   }
 }
 
-class SizedSpriteWidgetExample extends StatelessWidget {
-  const SizedSpriteWidgetExample({
-    required this.size,
-    required this.angle,
-    required this.anchor,
-    required this.paint,
-    super.key,
-  });
-
-  final Size size;
-  final double angle;
-  final Anchor anchor;
-  final Paint? paint;
-
+class const SizedSpriteWidgetExample({
+  required final Size size,
+  required final double angle,
+  required final Anchor anchor,
+  required final Paint? paint,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(

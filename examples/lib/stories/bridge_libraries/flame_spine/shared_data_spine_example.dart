@@ -4,7 +4,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_spine/flame_spine.dart';
 
-class SharedDataSpineExample extends FlameGame with TapCallbacks {
+class SharedDataSpineExample() extends FlameGame with TapCallbacks {
   static const String description = '''
     This example shows how to preload assets and share data between Spine
     components.

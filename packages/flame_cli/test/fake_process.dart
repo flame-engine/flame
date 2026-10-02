@@ -4,8 +4,8 @@ import 'dart:io';
 
 /// A [Process] whose output is controlled by the test, and whose input is
 /// recorded.
-class FakeProcess implements Process {
-  FakeProcess({int? exitCode}) {
+class FakeProcess({int? exitCode}) implements Process {
+  this {
     if (exitCode != null) {
       exit(exitCode);
     }
@@ -58,11 +58,8 @@ class FakeProcess implements Process {
   }
 }
 
-class _InputConsumer implements StreamConsumer<List<int>> {
-  _InputConsumer(this.buffer);
-
-  final StringBuffer buffer;
-
+class _InputConsumer(final StringBuffer buffer)
+    implements StreamConsumer<List<int>> {
   @override
   Future<void> addStream(Stream<List<int>> stream) {
     return stream.forEach((bytes) => buffer.write(utf8.decode(bytes)));

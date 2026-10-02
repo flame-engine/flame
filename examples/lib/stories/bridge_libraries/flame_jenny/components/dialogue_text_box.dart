@@ -2,8 +2,8 @@ import 'package:examples/stories/bridge_libraries/flame_jenny/commons/commons.da
 import 'package:flame/components.dart';
 import 'package:material_ui/material_ui.dart';
 
-class DialogueTextBox extends TextBoxComponent {
-  DialogueTextBox({required super.text})
+class DialogueTextBox({required super.text}) extends TextBoxComponent {
+  this
     : super(
         position: Vector2(16, 16),
         size: Vector2(704, 96),

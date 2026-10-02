@@ -6,7 +6,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/post_process.dart';
 
-class PostProcessGame extends FlameGame {
+class PostProcessGame() extends FlameGame {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -24,7 +24,7 @@ class PostProcessGame extends FlameGame {
   }
 }
 
-class PixelationPostProcess extends PostProcess {
+class PixelationPostProcess() extends PostProcess {
   @override
   Future<void> onLoad() async {
     await super.onLoad();

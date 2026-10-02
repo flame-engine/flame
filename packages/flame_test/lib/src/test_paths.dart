@@ -10,7 +10,7 @@ import 'package:flame/extensions.dart';
 /// in size and position. [byIndex] and [byName] return them fitted into a
 /// given size, with their aspect ratio kept, and centered on the origin. Only
 /// [roundRect] takes its size directly, so it is never scaled by them.
-abstract final class TestPaths {
+abstract final class TestPaths() {
   static final _paths = <(String, Path Function(Size))>[
     ('roundRect', roundRect),
     ('flame', (_) => flame()),

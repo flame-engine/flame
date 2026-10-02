@@ -7,7 +7,7 @@ import 'package:flame/palette.dart';
 import 'package:flame/text.dart';
 import 'package:material_ui/material_ui.dart';
 
-class TextExample extends FlameGame {
+class TextExample() extends FlameGame {
   static const String description = '''
     In this example we show different ways of rendering text.
   ''';
@@ -145,26 +145,27 @@ final _shaded = TextPaint(
   ),
 );
 
-class MyTextBox extends TextBoxComponent {
+class MyTextBox(
+  String text, {
+  super.align,
+  super.size,
+  double? timePerChar,
+  double? margins,
+}) extends TextBoxComponent {
   late Paint bgPaint;
   late Rect bgRect;
 
-  MyTextBox(
-    String text, {
-    super.align,
-    super.size,
-    double? timePerChar,
-    double? margins,
-  }) : super(
-         text: text,
-         textRenderer: _box,
-         boxConfig: TextBoxConfig(
-           maxWidth: 400,
-           timePerChar: timePerChar ?? 0.05,
-           growingBox: true,
-           margins: EdgeInsets.all(margins ?? 25),
-         ),
-       );
+  this
+    : super(
+        text: text,
+        textRenderer: _box,
+        boxConfig: TextBoxConfig(
+          maxWidth: 400,
+          timePerChar: timePerChar ?? 0.05,
+          growingBox: true,
+          margins: EdgeInsets.all(margins ?? 25),
+        ),
+      );
 
   @override
   Future<void> onLoad() {
@@ -185,17 +186,17 @@ class MyTextBox extends TextBoxComponent {
   }
 }
 
-class MyScrollTextBox extends ScrollTextBoxComponent {
+class MyScrollTextBox(
+  String text, {
+  required super.size,
+  super.boxConfig,
+  super.position,
+  super.anchor,
+}) extends ScrollTextBoxComponent {
   late Paint bgPaint;
   late Rect backgroundRect;
 
-  MyScrollTextBox(
-    String text, {
-    required super.size,
-    super.boxConfig,
-    super.position,
-    super.anchor,
-  }) : super(text: text, textRenderer: _box);
+  this : super(text: text, textRenderer: _box);
 
   @override
   FutureOr<void> onLoad() {

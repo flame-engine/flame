@@ -6,9 +6,10 @@ import 'package:flame_3d/resources.dart';
 /// {@template color_texture}
 /// A texture that holds a single color. By default it creates a 1x1 texture.
 /// {@endtemplate}
-class ColorTexture extends Texture {
+class ColorTexture(Color color, {super.width = 1, super.height = 1})
+    extends Texture {
   /// {@macro color_texture}
-  ColorTexture(Color color, {super.width = 1, super.height = 1})
+  this
     : super(
         Uint32List.fromList(
           List.filled(

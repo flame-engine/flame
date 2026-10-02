@@ -13,7 +13,7 @@ import 'package:flutter/painting.dart' show InlineSpan;
 /// * CustomTextNode - applies arbitrary attributes to a span of text
 /// * GroupTextNode - collection of multiple [InlineTextNode]'s to be joined one
 ///                   after the other.
-abstract class InlineTextNode extends TextNode<InlineTextStyle> {
+abstract class InlineTextNode() extends TextNode<InlineTextStyle> {
   @override
   late InlineTextStyle style;
 

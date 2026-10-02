@@ -32,14 +32,16 @@ import 'package:flame/components.dart';
 /// parent, so you don't need to manually release them. Simply call
 /// [Component.removeFromParent] when the component should be destroyed, and it
 /// will be automatically returned to the pool for reuse.
-class ComponentPool<T extends Component> {
-  final T Function() _factory;
-  final List<T> _available = [];
+class ComponentPool<T extends Component>({
+  required final T Function() _factory,
 
   /// The maximum number of components that can be stored in the pool. If the
   /// pool reaches this limit, additional components released back to the pool
   /// will be discarded.
-  final int maxSize;
+  final int maxSize = 100,
+  int initialSize = 0,
+}) {
+  final List<T> _available = [];
 
   /// Creates a new component pool with the specified factory, maximum size, and
   /// initial size. The [_factory] is a function that creates new instances of
@@ -49,11 +51,7 @@ class ComponentPool<T extends Component> {
   ///
   /// If the [initialSize] exceeds the [maxSize], only [maxSize] components
   /// will be created and added to the pool.
-  ComponentPool({
-    required this._factory,
-    this.maxSize = 100,
-    int initialSize = 0,
-  }) {
+  this {
     for (var i = 0; i < initialSize && i < maxSize; i++) {
       _available.add(_factory());
     }

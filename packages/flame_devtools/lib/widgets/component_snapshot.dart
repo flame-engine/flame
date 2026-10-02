@@ -5,19 +5,15 @@ import 'package:flame/widgets.dart';
 import 'package:flame_devtools/repository.dart';
 import 'package:flutter/material.dart' hide Image;
 
-class ComponentSnapshot extends StatefulWidget {
-  const ComponentSnapshot({
-    required this.id,
-    super.key,
-  });
-
-  final int id;
-
+class const ComponentSnapshot({
+  required final int id,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<ComponentSnapshot> createState() => _ComponentSnapshotState();
 }
 
-class _ComponentSnapshotState extends State<ComponentSnapshot> {
+class _ComponentSnapshotState() extends State<ComponentSnapshot> {
   late Future<String?> _snapshot;
 
   @override
@@ -60,19 +56,15 @@ class _ComponentSnapshotState extends State<ComponentSnapshot> {
 /// is removed or when [base64] changes, without going through the global Flame
 /// images cache, so the same component id can show different snapshots over
 /// time without serving a stale cached frame.
-class Base64Image extends StatefulWidget {
-  const Base64Image({
-    required this.base64,
-    super.key,
-  });
-
-  final String base64;
-
+class const Base64Image({
+  required final String base64,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<Base64Image> createState() => _Base64ImageState();
 }
 
-class _Base64ImageState extends State<Base64Image> {
+class _Base64ImageState() extends State<Base64Image> {
   late Future<ui.Image> _imageFuture;
   ui.Image? _image;
   var _decodeGeneration = 0;

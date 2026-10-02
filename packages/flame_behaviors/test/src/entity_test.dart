@@ -4,11 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../helpers/helpers.dart';
 
-class _TestEntity extends Entity {
-  _TestEntity({super.behaviors});
-}
+class _TestEntity({super.behaviors}) extends Entity;
 
-class _TestBehavior extends Behavior<_TestEntity> {}
+class _TestBehavior() extends Behavior<_TestEntity>;
 
 void main() {
   group('Entity', () {

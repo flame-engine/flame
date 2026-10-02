@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
-class ResizingRectangle extends RectangleComponent {
-  ResizingRectangle()
+class ResizingRectangle() extends RectangleComponent {
+  this
     : super(
         paint: Paint()..color = const Color(0xFFFE4813),
       );
@@ -17,8 +17,8 @@ class ResizingRectangle extends RectangleComponent {
   }
 }
 
-class ResizeExampleGame extends FlameGame {
-  ResizeExampleGame() : super(children: [ResizingRectangle()]);
+class ResizeExampleGame() extends FlameGame {
+  this : super(children: [ResizingRectangle()]);
 
   static const description = '''
     This example shows how to react to the game being resized.

@@ -3,39 +3,42 @@ import 'package:flame/input.dart';
 import 'package:flame/text.dart';
 import 'package:material_ui/material_ui.dart';
 
-class FlatButton extends ButtonComponent {
-  FlatButton(
-    String text, {
-    super.size,
-    super.onReleased,
-    super.position,
-  }) : super(
-         button: ButtonBackground(const Color(0xffece8a3)),
-         buttonDown: ButtonBackground(Colors.red),
-         children: [
-           TextComponent(
-             text: text,
-             textRenderer: TextPaint(
-               style: TextStyle(
-                 fontSize: 0.5 * size!.y,
-                 fontWeight: FontWeight.bold,
-                 color: const Color(0xffdbaf58),
-               ),
-             ),
-             position: size / 2.0,
-             anchor: Anchor.center,
-           ),
-         ],
-         anchor: Anchor.center,
-       );
+class FlatButton(
+  String text, {
+  super.size,
+  super.onReleased,
+  super.position,
+}) extends ButtonComponent {
+  this
+    : super(
+        button: ButtonBackground(const Color(0xffece8a3)),
+        buttonDown: ButtonBackground(Colors.red),
+        children: [
+          TextComponent(
+            text: text,
+            textRenderer: TextPaint(
+              style: TextStyle(
+                fontSize: 0.5 * size!.y,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xffdbaf58),
+              ),
+            ),
+            position: size / 2.0,
+            anchor: Anchor.center,
+          ),
+        ],
+        anchor: Anchor.center,
+      );
 }
 
-class ButtonBackground extends PositionComponent with HasAncestor<FlatButton> {
+class ButtonBackground(Color color)
+    extends PositionComponent
+    with HasAncestor<FlatButton> {
   final _paint = Paint()..style = PaintingStyle.stroke;
 
   late double cornerRadius;
 
-  ButtonBackground(Color color) {
+  this {
     _paint.color = color;
   }
 

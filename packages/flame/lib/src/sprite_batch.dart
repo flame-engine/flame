@@ -35,41 +35,16 @@ extension SpriteBatchExtension on Game {
 /// A single item in a SpriteBatch.
 ///
 /// Holds all the important information of a batch item.
-class BatchItem {
-  BatchItem({
-    required this.source,
-    required this.transform,
-    Color? color,
-    this.flip = false,
-    this.bleed = 0,
-  }) : assert(bleed >= 0, 'Bleed must be non-negative'),
-       color = color ?? const Color(0x00000000),
-       paint = Paint()..color = color ?? const Color(0x00000000),
-       destination = bleed > 0
-           ? Rect.fromLTWH(
-               -bleed,
-               -bleed,
-               source.width + bleed * 2,
-               source.height + bleed * 2,
-             )
-           : Offset.zero & source.size;
-
+class BatchItem({
   /// The source rectangle on the [SpriteBatch.atlas].
-  Rect source;
-
-  /// The destination rectangle for the Canvas, used in the non-atlas rendering
-  /// path.
-  ///
-  /// It will be transformed by [matrix]. When [bleed] is greater than zero,
-  /// this rect extends [bleed] pixels in each direction beyond the source
-  /// size to prevent edge artifacts in the non-atlas rendering path.
-  Rect destination;
+  required var Rect source,
 
   /// The transform values for this batch item.
-  RSTransform transform;
+  required var RSTransform transform,
+  Color? color,
 
   /// The flip value for this batch item.
-  bool flip;
+  var bool flip = false,
 
   /// The bleed value for this batch item in pixels.
   ///
@@ -82,10 +57,27 @@ class BatchItem {
   /// For non-square source rects this means the shorter axis is scaled
   /// slightly more than the requested [bleed]. The non-atlas path always
   /// expands by exactly [bleed] pixels on every side.
-  double bleed;
+  var double bleed = 0,
+}) {
+  this : assert(bleed >= 0, 'Bleed must be non-negative');
+
+  /// The destination rectangle for the Canvas, used in the non-atlas rendering
+  /// path.
+  ///
+  /// It will be transformed by [matrix]. When [bleed] is greater than zero,
+  /// this rect extends [bleed] pixels in each direction beyond the source
+  /// size to prevent edge artifacts in the non-atlas rendering path.
+  Rect destination = bleed > 0
+      ? Rect.fromLTWH(
+          -bleed,
+          -bleed,
+          source.width + bleed * 2,
+          source.height + bleed * 2,
+        )
+      : Offset.zero & source.size;
 
   /// The color of the batch item (used for building the drawAtlas color list).
-  Color color;
+  Color color = color ?? const Color(0x00000000);
 
   /// Fallback matrix for the web.
   ///
@@ -118,11 +110,11 @@ class BatchItem {
   void _invalidateMatrix() => _cachedMatrix = null;
 
   /// Paint object used for the web.
-  Paint paint;
+  Paint paint = Paint()..color = color ?? const Color(0x00000000);
 }
 
 @internal
-enum FlippedAtlasStatus {
+enum FlippedAtlasStatus() {
   /// There is no need to generate a flipped atlas yet.
   none,
 
@@ -153,17 +145,32 @@ enum FlippedAtlasStatus {
 /// To activate this mode, pass in `useAtlas = false` to the constructor or
 /// load method that you are using and each [BatchItem] will be rendered using
 /// the [Canvas.drawImageRect] method instead.
-class SpriteBatch {
-  SpriteBatch(
-    this.atlas, {
-    this.defaultTransform,
-    this.useAtlas = true,
-    this.defaultColor,
-    this.defaultBlendMode,
-    this._imageCache,
-    this._imageKey,
-  });
+class SpriteBatch(
+  /// The atlas used by the [SpriteBatch].
+  var Image atlas, {
 
+  /// The default transform, used when a transform was not supplied for a
+  /// [BatchItem].
+  final RSTransform? defaultTransform,
+
+  /// Whether to use [Canvas.drawAtlas] or not.
+  final bool useAtlas = true,
+
+  /// The default color, used as a background color for a [BatchItem] on web.
+  ///
+  /// Note: The drawAtlas color list uses [_defaultColor]
+  /// unless an explicit per-item color is provided.
+  final Color? defaultColor,
+
+  /// The default blend mode, used for blending a batch item.
+  final BlendMode? defaultBlendMode,
+
+  /// The image cache used by the [SpriteBatch] to store image assets.
+  final Images? _imageCache,
+
+  /// The root key use by the [SpriteBatch] to store image assets.
+  final String? _imageKey,
+}) {
   /// Takes the full path of an image, and optional arguments for the
   /// SpriteBatch.
   ///
@@ -244,17 +251,8 @@ class SpriteBatch {
     _freeHandles.addFirst(handle);
   }
 
-  /// The atlas used by the [SpriteBatch].
-  Image atlas;
-
-  /// The image cache used by the [SpriteBatch] to store image assets.
-  final Images? _imageCache;
-
   /// When the [_imageCache] isn't specified, the global [Flame.images] is used.
   Images get imageCache => _imageCache ?? Flame.images;
-
-  /// The root key use by the [SpriteBatch] to store image assets.
-  final String? _imageKey;
 
   /// When the [_imageKey] isn't specified [imageKey] will return either the key
   /// for the [atlas] stored in [imageCache] or a key generated from the
@@ -264,19 +262,6 @@ class SpriteBatch {
       imageCache.findKeyForImage(atlas) ??
       'image[${identityHashCode(atlas)}]';
 
-  /// The default color, used as a background color for a [BatchItem] on web.
-  ///
-  /// Note: The drawAtlas color list uses [_defaultColor]
-  /// unless an explicit per-item color is provided.
-  final Color? defaultColor;
-
-  /// The default transform, used when a transform was not supplied for a
-  /// [BatchItem].
-  final RSTransform? defaultTransform;
-
-  /// The default blend mode, used for blending a batch item.
-  final BlendMode? defaultBlendMode;
-
   /// The width of the [atlas].
   int get width => atlas.width;
 
@@ -285,9 +270,6 @@ class SpriteBatch {
 
   /// The size of the [atlas].
   Vector2 get size => atlas.size;
-
-  /// Whether to use [Canvas.drawAtlas] or not.
-  final bool useAtlas;
 
   /// Does this batch contain any operations?
   bool get isEmpty => _batchItems.isEmpty;

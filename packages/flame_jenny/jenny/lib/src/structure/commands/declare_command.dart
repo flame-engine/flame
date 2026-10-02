@@ -13,14 +13,12 @@ import 'package:jenny/src/structure/commands/command.dart';
 /// parsing, and will never be seen by a dialogue runner.
 ///
 /// The command itself can take one of the several forms:
-/// ```
+/// ```yarn
 /// <<declare $variable = 7>>
 /// <<declare $variable as Number>>  // initial value will be 0
 /// <<declare $variable = 7 as Number>>
 /// ```
-class DeclareCommand extends Command {
-  const DeclareCommand();
-
+class const DeclareCommand() extends Command {
   @override
   String get name => 'declare';
 

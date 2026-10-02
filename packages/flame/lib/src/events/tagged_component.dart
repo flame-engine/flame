@@ -11,11 +11,10 @@ import 'package:meta/meta.dart';
 /// components.
 @internal
 @immutable
-class TaggedComponent<T extends Component> {
-  const TaggedComponent(this.pointerId, this.component);
-  final int pointerId;
-  final T component;
-
+class const TaggedComponent<T extends Component>(
+  final int pointerId,
+  final T component,
+) {
   @override
   int get hashCode => Object.hash(pointerId, component);
 

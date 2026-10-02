@@ -8,14 +8,12 @@ void main() {
   runApp(const MaterialApp(home: MyGameApp()));
 }
 
-class MyGameApp extends StatefulWidget {
-  const MyGameApp({super.key});
-
+class const MyGameApp({super.key}) extends StatefulWidget {
   @override
   State<MyGameApp> createState() => _MyGameAppState();
 }
 
-class _MyGameAppState extends State<MyGameApp> {
+class _MyGameAppState() extends State<MyGameApp> {
   late final MyGame _game;
 
   @override

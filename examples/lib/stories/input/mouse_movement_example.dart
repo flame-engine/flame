@@ -4,7 +4,7 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:material_ui/material_ui.dart';
 
-class MouseMovementExample extends FlameGame with MouseMoveCallbacks {
+class MouseMovementExample() extends FlameGame with MouseMoveCallbacks {
   static const String description = '''
     In this example we show how you can use `MouseMoveCallbacks`.\n\n
     Move around the mouse on the canvas and the white square will follow it and

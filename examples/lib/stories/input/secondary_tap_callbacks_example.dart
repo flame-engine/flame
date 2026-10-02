@@ -5,7 +5,7 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:material_ui/material_ui.dart';
 
-class SecondaryTapCallbacksExample extends FlameGame {
+class SecondaryTapCallbacksExample() extends FlameGame {
   static const String description = '''
     In this example we show how to listen to both primary (left) and
     secondary (right) tap events using the `TapCallbacks` and
@@ -20,7 +20,8 @@ class SecondaryTapCallbacksExample extends FlameGame {
   }
 }
 
-class TappableSquare extends RectangleComponent
+class TappableSquare({Vector2? position})
+    extends RectangleComponent
     with TapCallbacks, SecondaryTapCallbacks {
   static final Paint _red = BasicPalette.red.paint();
   static final Paint _blue = BasicPalette.blue.paint();
@@ -30,7 +31,7 @@ class TappableSquare extends RectangleComponent
 
   int counter = 0;
 
-  TappableSquare({Vector2? position})
+  this
     : super(
         position: position ?? Vector2.all(100),
         size: Vector2.all(100),

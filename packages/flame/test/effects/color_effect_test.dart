@@ -4,7 +4,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
-class _PaintComponent extends Component with HasPaint {}
+class _PaintComponent() extends Component with HasPaint;
 
 void main() {
   group('ColorEffect', () {

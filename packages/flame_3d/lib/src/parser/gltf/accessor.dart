@@ -9,22 +9,24 @@ import 'package:flame_3d/src/parser/gltf/sparse_accessor.dart';
 
 /// A untyped GLTF accessor; it is typically wrapped into a specific accessor
 /// type on the data model. This provides the backing implementation.
-class RawAccessor extends GltfNode {
+class RawAccessor({
+  required super.root,
+
   /// The reference to the buffer view.
   /// When undefined, the accessor **MUST** be initialized with zeros; `sparse`
   /// property or extensions **MAY** override zeros with actual values.
-  final GltfRef<BufferView> bufferView;
+  required final GltfRef<BufferView> bufferView,
 
   /// The offset relative to the start of the buffer view in bytes.
   ///
   /// This **MUST** be a multiple of the size of the component datatype.
   /// This property **MUST NOT** be defined when `bufferView` is undefined.
-  final int byteOffset;
+  required final int byteOffset,
 
   /// The datatype of the accessor's components.
   /// UNSIGNED_INT type **MUST NOT** be used for any accessor that is not
   /// referenced by `mesh.primitive.indices`.
-  final ComponentType componentType;
+  required final ComponentType componentType,
 
   /// Specifies whether integer data values are normalized (`true`) to [0, 1]
   /// (for unsigned types) or to [-1, 1] (for signed types) when they are
@@ -32,15 +34,15 @@ class RawAccessor extends GltfNode {
   ///
   /// This property **MUST NOT** be set to `true` for accessors with `FLOAT` or
   /// `UNSIGNED_INT` component type.
-  final bool normalized;
+  required final bool normalized,
 
   /// The number of elements referenced by this accessor, not to be confused
   /// with the number of bytes or number of components.
-  final int count;
+  required final int count,
 
   /// Specifies if the accessor's elements are scalars, vectors, or matrices.
   /// This should match the type used for a [TypedAccessor].
-  final AccessorType type;
+  required final AccessorType type,
 
   /// Maximum value of each component in this accessor.
   /// Array elements **MUST** be treated as having the same data type as
@@ -56,7 +58,7 @@ class RawAccessor extends GltfNode {
   ///
   /// When the accessor is sparse, this property **MUST** contain maximum
   /// values of accessor data with sparse substitution applied.
-  final List<double>? max;
+  required final List<double>? max,
 
   /// Minimum value of each component in this accessor.
   ///
@@ -73,11 +75,11 @@ class RawAccessor extends GltfNode {
   ///
   /// When the accessor is sparse, this property **MUST** contain minimum
   /// values of accessor data with sparse substitution applied.
-  final List<double>? min;
+  required final List<double>? min,
 
   /// Sparse storage of elements that deviate from their initialization value.
-  final SparseAccessor? sparse;
-
+  required final SparseAccessor? sparse,
+}) extends GltfNode {
   Iterable<num> data() sync* {
     final buffer = bufferView.get();
     final bytes = buffer.data();
@@ -158,19 +160,6 @@ class RawAccessor extends GltfNode {
   );
   Matrix4Accessor asMatrix4() => Matrix4Accessor(root: root, accessor: this);
 
-  RawAccessor({
-    required super.root,
-    required this.bufferView,
-    required this.byteOffset,
-    required this.componentType,
-    required this.normalized,
-    required this.count,
-    required this.type,
-    required this.max,
-    required this.min,
-    required this.sparse,
-  });
-
   RawAccessor.parse(
     GltfRoot root,
     Map<String, Object?> map,
@@ -188,13 +177,11 @@ class RawAccessor extends GltfNode {
       );
 }
 
-abstract class TypedAccessor<T> extends GltfNode {
-  final RawAccessor rawAccessor;
-
-  TypedAccessor({
-    required super.root,
-    required RawAccessor accessor,
-  }) : rawAccessor = accessor;
+abstract class TypedAccessor<T>({
+  required super.root,
+  required RawAccessor accessor,
+}) extends GltfNode {
+  final RawAccessor rawAccessor = accessor;
 
   List<T> typedData();
 
@@ -206,12 +193,10 @@ abstract class TypedAccessor<T> extends GltfNode {
   }
 }
 
-class IntAccessor extends TypedAccessor<int> {
-  IntAccessor({
-    required super.root,
-    required super.accessor,
-  });
-
+class IntAccessor({
+  required super.root,
+  required super.accessor,
+}) extends TypedAccessor<int> {
   @override
   List<int> typedData() {
     _checkAccessorType(AccessorType.scalar);
@@ -219,12 +204,10 @@ class IntAccessor extends TypedAccessor<int> {
   }
 }
 
-class FloatAccessor extends TypedAccessor<double> {
-  FloatAccessor({
-    required super.root,
-    required super.accessor,
-  });
-
+class FloatAccessor({
+  required super.root,
+  required super.accessor,
+}) extends TypedAccessor<double> {
   @override
   List<double> typedData() {
     _checkAccessorType(AccessorType.scalar);
@@ -232,12 +215,10 @@ class FloatAccessor extends TypedAccessor<double> {
   }
 }
 
-class Vector2Accessor extends TypedAccessor<Vector2> {
-  Vector2Accessor({
-    required super.root,
-    required super.accessor,
-  });
-
+class Vector2Accessor({
+  required super.root,
+  required super.accessor,
+}) extends TypedAccessor<Vector2> {
   @override
   List<Vector2> typedData() {
     _checkAccessorType(AccessorType.vec2);
@@ -248,12 +229,10 @@ class Vector2Accessor extends TypedAccessor<Vector2> {
   }
 }
 
-class Vector3Accessor extends TypedAccessor<Vector3> {
-  Vector3Accessor({
-    required super.root,
-    required super.accessor,
-  });
-
+class Vector3Accessor({
+  required super.root,
+  required super.accessor,
+}) extends TypedAccessor<Vector3> {
   @override
   List<Vector3> typedData() {
     _checkAccessorType(AccessorType.vec3);
@@ -264,12 +243,10 @@ class Vector3Accessor extends TypedAccessor<Vector3> {
   }
 }
 
-class Vector4Accessor extends TypedAccessor<Vector4> {
-  Vector4Accessor({
-    required super.root,
-    required super.accessor,
-  });
-
+class Vector4Accessor({
+  required super.root,
+  required super.accessor,
+}) extends TypedAccessor<Vector4> {
   @override
   List<Vector4> typedData() {
     _checkAccessorType(AccessorType.vec4);
@@ -280,12 +257,10 @@ class Vector4Accessor extends TypedAccessor<Vector4> {
   }
 }
 
-class QuaternionAccessor extends TypedAccessor<Quaternion> {
-  QuaternionAccessor({
-    required super.root,
-    required super.accessor,
-  });
-
+class QuaternionAccessor({
+  required super.root,
+  required super.accessor,
+}) extends TypedAccessor<Quaternion> {
   @override
   List<Quaternion> typedData() {
     _checkAccessorType(AccessorType.vec4);
@@ -296,12 +271,10 @@ class QuaternionAccessor extends TypedAccessor<Quaternion> {
   }
 }
 
-class Matrix4Accessor extends TypedAccessor<Matrix4> {
-  Matrix4Accessor({
-    required super.root,
-    required super.accessor,
-  });
-
+class Matrix4Accessor({
+  required super.root,
+  required super.accessor,
+}) extends TypedAccessor<Matrix4> {
   @override
   List<Matrix4> typedData() {
     _checkAccessorType(AccessorType.mat4);

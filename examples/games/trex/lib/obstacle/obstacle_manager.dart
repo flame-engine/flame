@@ -6,9 +6,7 @@ import 'package:trex_game/obstacle/obstacle.dart';
 import 'package:trex_game/obstacle/obstacle_type.dart';
 import 'package:trex_game/trex_game.dart';
 
-class ObstacleManager extends Component with HasGameRef<TRexGame> {
-  ObstacleManager();
-
+class ObstacleManager() extends Component with HasGameRef<TRexGame> {
   ListQueue<ObstacleType> history = ListQueue();
   static const int maxObstacleDuplication = 2;
 

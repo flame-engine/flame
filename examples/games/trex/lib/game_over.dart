@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:trex_game/trex_game.dart';
 
-class GameOverPanel extends Component {
+class GameOverPanel() extends Component {
   bool visible = false;
 
   @override
@@ -20,8 +20,8 @@ class GameOverPanel extends Component {
   }
 }
 
-class GameOverText extends SpriteComponent with HasGameRef<TRexGame> {
-  GameOverText() : super(size: Vector2(382, 25), anchor: Anchor.center);
+class GameOverText() extends SpriteComponent with HasGameRef<TRexGame> {
+  this : super(size: Vector2(382, 25), anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {
@@ -40,8 +40,8 @@ class GameOverText extends SpriteComponent with HasGameRef<TRexGame> {
   }
 }
 
-class GameOverRestart extends SpriteComponent with HasGameRef<TRexGame> {
-  GameOverRestart() : super(size: Vector2(72, 64), anchor: Anchor.center);
+class GameOverRestart() extends SpriteComponent with HasGameRef<TRexGame> {
+  this : super(size: Vector2(72, 64), anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {

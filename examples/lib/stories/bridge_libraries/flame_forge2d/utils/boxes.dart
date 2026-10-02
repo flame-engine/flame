@@ -5,19 +5,14 @@ import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class Box extends BodyComponent with GlowingBody {
-  final Vector2 startPosition;
-  final double width;
-  final double height;
-  final BodyType bodyType;
-
-  Box({
-    required this.startPosition,
-    required this.width,
-    required this.height,
-    this.bodyType = BodyType.dynamic,
-    Color? color,
-  }) {
+class Box({
+  required final Vector2 startPosition,
+  required final double width,
+  required final double height,
+  final BodyType bodyType = BodyType.dynamic,
+  Color? color,
+}) extends BodyComponent with GlowingBody {
+  this {
     paint = Paint()..color = color ?? randomColor();
   }
 
@@ -46,17 +41,15 @@ class Box extends BodyComponent with GlowingBody {
   }
 }
 
-class DraggableBox extends Box with DragCallbacks {
+class DraggableBox({
+  required super.startPosition,
+  required super.width,
+  required super.height,
+}) extends Box with DragCallbacks {
   MouseJoint? mouseJoint;
   MouseJointRenderer? _jointRenderer;
   late final groundBody = world.createBody(BodyDef());
   bool _destroyJoint = false;
-
-  DraggableBox({
-    required super.startPosition,
-    required super.width,
-    required super.height,
-  });
 
   @override
   void update(double dt) {

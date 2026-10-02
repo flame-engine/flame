@@ -15,14 +15,12 @@ import 'package:flame/src/effects/provider_interfaces.dart';
 /// This effect applies incremental changes to the component's scale, and
 /// requires that any other effect or update logic applied to the same component
 /// also used incremental updates.
-class ScaleEffect extends Effect with EffectTarget<ScaleProvider> {
-  ScaleEffect.by(
-    Vector2 scaleFactor,
-    super.controller, {
-    super.onComplete,
-    super.key,
-  }) : _scaleFactor = scaleFactor.clone();
-
+class ScaleEffect.by(
+  Vector2 scaleFactor,
+  super.controller, {
+  super.onComplete,
+  super.key,
+}) extends Effect with EffectTarget<ScaleProvider> {
   factory ScaleEffect.to(
     Vector2 targetScale,
     EffectController controller, {
@@ -35,7 +33,7 @@ class ScaleEffect extends Effect with EffectTarget<ScaleProvider> {
     key: key,
   );
 
-  final Vector2 _scaleFactor;
+  final Vector2 _scaleFactor = scaleFactor.clone();
   late Vector2 _scaleDelta;
 
   @override
@@ -54,19 +52,19 @@ class ScaleEffect extends Effect with EffectTarget<ScaleProvider> {
 }
 
 /// Implementation class for [ScaleEffect.to]
-class _ScaleToEffect extends ScaleEffect {
-  final Vector2 _targetScale;
+class _ScaleToEffect(
+  Vector2 targetScale,
+  EffectController controller, {
+  super.onComplete,
+  super.key,
+}) extends ScaleEffect {
+  final Vector2 _targetScale = targetScale.clone();
 
-  _ScaleToEffect(
-    Vector2 targetScale,
-    EffectController controller, {
-    super.onComplete,
-    super.key,
-  }) : _targetScale = targetScale.clone(),
-       super.by(
-         Vector2.zero(),
-         controller,
-       );
+  this
+    : super.by(
+        Vector2.zero(),
+        controller,
+      );
 
   @override
   void onStart() {

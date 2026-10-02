@@ -10,15 +10,10 @@ import 'package:flutter/services.dart' show CachingAssetBundle;
 /// `assets/images/map.png` and `assets/tiles/map.tmx` resolve to
 /// `test/assets/...`, so fixtures can be laid out flat regardless of the
 /// directory a test addresses them through.
-class TestAssetBundle extends CachingAssetBundle {
-  TestAssetBundle({
-    required this.imageNames,
-    required this.stringNames,
-  });
-
-  final List<String> imageNames;
-  final List<String> stringNames;
-
+class TestAssetBundle({
+  required final List<String> imageNames,
+  required final List<String> stringNames,
+}) extends CachingAssetBundle {
   static const _roots = ['assets/images/', 'assets/tiles/', 'assets/'];
 
   /// Collapses `..` segments, the way a real asset layout would already have

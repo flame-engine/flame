@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 
-class AdvancedParallaxExample extends FlameGame {
+class AdvancedParallaxExample() extends FlameGame {
   static const String description = '''
     Shows how to create a parallax with different velocity deltas on each layer.
   ''';

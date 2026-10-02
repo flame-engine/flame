@@ -18,19 +18,13 @@ import 'package:meta/meta.dart';
 ///
 /// Its [children] are the widgets hosted by the [WidgetComponent]s that are
 /// currently mounted in the game, each wrapped in a [WidgetComponentHost].
-class RenderGameWidget extends MultiChildRenderObjectWidget {
-  const RenderGameWidget({
-    required this.game,
-    required this.addRepaintBoundary,
-    required this.behavior,
-    super.children,
-    super.key,
-  });
-
-  final Game game;
-  final bool addRepaintBoundary;
-  final HitTestBehavior behavior;
-
+class const RenderGameWidget({
+  required final Game game,
+  required final bool addRepaintBoundary,
+  required final HitTestBehavior behavior,
+  super.children,
+  super.key,
+}) extends MultiChildRenderObjectWidget {
   @override
   RenderBox createRenderObject(BuildContext context) {
     return GameRenderBox(
@@ -51,22 +45,16 @@ class RenderGameWidget extends MultiChildRenderObjectWidget {
   }
 }
 
-class GameRenderBox extends RenderBox
+class GameRenderBox(
+  var Game _game,
+  var BuildContext buildContext, {
+  required var bool _isRepaintBoundary,
+  var HitTestBehavior behavior = HitTestBehavior.opaque,
+}) extends RenderBox
     with
         ContainerRenderObjectMixin<RenderBox, WidgetComponentParentData>,
         WidgetsBindingObserver {
-  GameRenderBox(
-    this._game,
-    this.buildContext, {
-    required this._isRepaintBoundary,
-    this.behavior = HitTestBehavior.opaque,
-  });
-
   GameLoop? gameLoop;
-
-  BuildContext buildContext;
-
-  Game _game;
 
   Game get game => _game;
 
@@ -87,8 +75,6 @@ class GameRenderBox extends RenderBox
     }
   }
 
-  bool _isRepaintBoundary;
-
   set isRepaintBoundary(bool value) {
     if (_isRepaintBoundary == value) {
       return;
@@ -99,8 +85,6 @@ class GameRenderBox extends RenderBox
 
   @override
   bool get isRepaintBoundary => _isRepaintBoundary;
-
-  HitTestBehavior behavior;
 
   final Map<WidgetComponent, RenderBox> _childByComponent = {};
 
@@ -418,22 +402,15 @@ class GameRenderBox extends RenderBox
   }
 }
 
-class _PaintedWidget {
-  _PaintedWidget({
-    required this.component,
-    required this.child,
-    required this.clip,
-    required this.localTransform,
-  });
-
-  final WidgetComponent component;
-  final RenderBox child;
+class _PaintedWidget({
+  required final WidgetComponent component,
+  required final RenderBox child,
 
   /// The clip that was active when the widget was painted, in the coordinate
   /// space of the canvas the game was rendered on.
-  final Rect clip;
+  required final Rect clip,
 
   /// The transform from the widget's coordinates to the local coordinates of
   /// the [GameRenderBox].
-  final Matrix4 localTransform;
-}
+  required final Matrix4 localTransform,
+});

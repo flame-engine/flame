@@ -4,7 +4,7 @@ import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flame_behaviors_example/behaviors/behaviors.dart';
 import 'package:material_ui/material_ui.dart';
 
-class ExampleGame extends FlameGame with EntityMixin, HasCollisionDetection {
+class ExampleGame() extends FlameGame with EntityMixin, HasCollisionDetection {
   @override
   Future<void> onLoad() async {
     add(FpsTextComponent(position: Vector2.zero()));
@@ -13,7 +13,7 @@ class ExampleGame extends FlameGame with EntityMixin, HasCollisionDetection {
     // Game-specific behaviors
     add(SpawningBehavior());
 
-    return super.onLoad();
+    await super.onLoad();
   }
 }
 

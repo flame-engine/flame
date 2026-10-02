@@ -2,7 +2,7 @@ import 'package:flame_3d/core.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_node.dart';
 
 /// Interpolation algorithm.
-enum AnimationInterpolation {
+enum AnimationInterpolation(final String value) {
   /// The animated values are linearly interpolated between keyframes.
   /// When targeting a rotation, spherical linear interpolation (slerp)
   /// **SHOULD** be used to interpolate quaternions.
@@ -22,10 +22,6 @@ enum AnimationInterpolation {
   /// a spline vertex, and an out-tangent.
   /// There **MUST** be at least two keyframes when using this interpolation.
   cubicSpline('CUBICSPLINE'); // cSpell:ignore CUBICSPLINE
-
-  final String value;
-
-  const AnimationInterpolation(this.value);
 
   static AnimationInterpolation valueOf(String value) {
     return values.firstWhere((e) => e.value == value);

@@ -11,21 +11,19 @@ import 'package:material_ui/material_ui.dart' hide Image;
 export '../nine_tile_box.dart';
 export '../sprite.dart';
 
-class _Painter extends CustomPainter {
-  final Image image;
-  final double tileSize;
-  final double destTileSize;
+class _Painter({
+  required final Image image,
+  required final double tileSize,
+  required final double destTileSize,
+}) extends CustomPainter {
   late final non_widget.NineTileBox _nineTileBox;
 
-  _Painter({
-    required this.image,
-    required this.tileSize,
-    required this.destTileSize,
-  }) : _nineTileBox = non_widget.NineTileBox(
-         Sprite(image),
-         tileSize: tileSize.toInt(),
-         destTileSize: destTileSize.toInt(),
-       );
+  this
+    : _nineTileBox = non_widget.NineTileBox(
+        Sprite(image),
+        tileSize: tileSize.toInt(),
+        destTileSize: destTileSize.toInt(),
+      );
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -100,7 +98,7 @@ class NineTileBoxWidget extends StatefulWidget {
   State<NineTileBoxWidget> createState() => _NineTileBoxWidgetState();
 }
 
-class _NineTileBoxWidgetState extends State<NineTileBoxWidget> {
+class _NineTileBoxWidgetState() extends State<NineTileBoxWidget> {
   late FutureOr<Image> _imageFuture = widget._imageFuture;
 
   @override
@@ -146,28 +144,16 @@ class _NineTileBoxWidgetState extends State<NineTileBoxWidget> {
 }
 
 @visibleForTesting
-class InternalNineTileBox extends StatelessWidget {
-  final Image image;
-  final double tileSize;
-  final double destTileSize;
-  final double? width;
-  final double? height;
-
-  final Widget? child;
-
-  final EdgeInsetsGeometry? padding;
-
-  const InternalNineTileBox({
-    required this.image,
-    required this.tileSize,
-    required this.destTileSize,
-    this.child,
-    this.width,
-    this.height,
-    this.padding,
-    super.key,
-  });
-
+class const InternalNineTileBox({
+  required final Image image,
+  required final double tileSize,
+  required final double destTileSize,
+  final Widget? child,
+  final double? width,
+  final double? height,
+  final EdgeInsetsGeometry? padding,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(

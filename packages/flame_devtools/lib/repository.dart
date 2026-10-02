@@ -1,7 +1,7 @@
 import 'package:devtools_extensions/devtools_extensions.dart';
 import 'package:flame/devtools.dart';
 
-abstract final class Repository {
+abstract final class Repository() {
   static Future<ComponentTreeNode> getComponentTree() async {
     final componentTreeResponse = await serviceManager
         .callServiceExtensionOnMainIsolate(
@@ -134,12 +134,10 @@ abstract final class Repository {
   }
 }
 
-class Overlays {
-  final List<String> registered;
-  final List<String> active;
-
-  Overlays({required this.registered, required this.active});
-
+class Overlays({
+  required final List<String> registered,
+  required final List<String> active,
+}) {
   factory Overlays.fromJson(Map<String, dynamic> json) {
     return Overlays(
       registered: List<String>.from(json['overlays'] as List),
@@ -148,25 +146,15 @@ class Overlays {
   }
 }
 
-class PositionComponentAttributes {
-  final double x;
-  final double y;
-  final double width;
-  final double height;
-  final double angle;
-  final double scaleX;
-  final double scaleY;
-
-  PositionComponentAttributes({
-    required this.x,
-    required this.y,
-    required this.width,
-    required this.height,
-    required this.angle,
-    required this.scaleX,
-    required this.scaleY,
-  });
-
+class PositionComponentAttributes({
+  required final double x,
+  required final double y,
+  required final double width,
+  required final double height,
+  required final double angle,
+  required final double scaleX,
+  required final double scaleY,
+}) {
   factory PositionComponentAttributes.fromJson(Map<String, dynamic> json) {
     return PositionComponentAttributes(
       x: (json['x'] as num).toDouble(),

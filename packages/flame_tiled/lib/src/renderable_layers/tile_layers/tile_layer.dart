@@ -31,9 +31,17 @@ import 'package:meta/meta.dart';
 ///
 /// {@endtemplate}
 @internal
-abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
+abstract class FlameTileLayer({
+  required super.layer,
+  required super.map,
+  required super.destTileSize,
+  required final TiledAtlas tiledAtlas,
+  required final Map<Tile, TileFrames> animationFrames,
+  required final bool ignoreFlip,
+  required var Paint Function(double opacity) layerPaintFactory,
+  super.filterQuality,
+}) extends RenderableLayer<TileLayer> {
   late Paint _layerPaint = layerPaintFactory(opacity);
-  final TiledAtlas tiledAtlas;
 
   /// Cached transform of every tile, indexed as
   /// `transforms[x - originX][y - originY]` for the Tiled tile `(x, y)`.
@@ -49,21 +57,6 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
   int originX = 0;
   int originY = 0;
   final animations = <TileAnimation>[];
-  final Map<Tile, TileFrames> animationFrames;
-  final bool ignoreFlip;
-  Paint Function(double opacity) layerPaintFactory;
-
-  FlameTileLayer({
-    required super.layer,
-    required super.map,
-    required super.destTileSize,
-    required this.tiledAtlas,
-    required this.animationFrames,
-    required this.ignoreFlip,
-    required this.layerPaintFactory,
-    super.filterQuality,
-  });
-
   @override
   void onOpacityChanged() {
     _layerPaint = layerPaintFactory(opacity);

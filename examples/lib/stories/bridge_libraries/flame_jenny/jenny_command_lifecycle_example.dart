@@ -6,7 +6,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/services.dart';
 import 'package:jenny/jenny.dart';
 
-class JennyCommandLifecycleExample extends FlameGame {
+class JennyCommandLifecycleExample() extends FlameGame {
   static const String description = '''
 This is an example of how the lifecycle methods relating to user-defined
 commands work.

@@ -10,17 +10,13 @@ import 'package:flame/src/geometry/ray2.dart';
 ///
 /// NOTE: This class might be subject to breaking changes in an upcoming
 /// version, to make it possible to calculate the values lazily.
-class RaycastResult<T extends Hitbox<T>> {
-  RaycastResult({
-    this._hitbox,
-    Ray2? reflectionRay,
-    Vector2? normal,
-    double? distance,
-    this._isInsideHitbox = false,
-  }) : _reflectionRay = reflectionRay ?? Ray2.zero(),
-       _normal = normal ?? Vector2.zero(),
-       _distance = distance ?? double.maxFinite;
-
+class RaycastResult<T extends Hitbox<T>>({
+  var T? _hitbox,
+  Ray2? reflectionRay,
+  Vector2? normal,
+  double? distance,
+  var bool _isInsideHitbox = false,
+}) {
   /// Whether this result has active results in it.
   ///
   /// This is used so that the objects in there can continue to live even when
@@ -29,20 +25,17 @@ class RaycastResult<T extends Hitbox<T>> {
 
   /// Whether the origin of the ray was inside the hitbox.
   bool get isInsideHitbox => _isInsideHitbox;
-  bool _isInsideHitbox;
-
-  T? _hitbox;
   T? get hitbox => isActive ? _hitbox : null;
 
-  final Ray2 _reflectionRay;
+  final Ray2 _reflectionRay = reflectionRay ?? Ray2.zero();
   Ray2? get reflectionRay => isActive ? _reflectionRay : null;
 
   Vector2? get intersectionPoint => reflectionRay?.origin;
 
-  double _distance;
+  double _distance = distance ?? double.maxFinite;
   double? get distance => isActive ? _distance : null;
 
-  final Vector2 _normal;
+  final Vector2 _normal = normal ?? Vector2.zero();
   Vector2? get normal => isActive ? _normal : null;
 
   void reset() => _hitbox = null;

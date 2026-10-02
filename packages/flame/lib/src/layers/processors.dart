@@ -1,23 +1,19 @@
 import 'dart:ui';
 
-abstract class LayerProcessor {
+abstract class LayerProcessor() {
   void process(Picture pic, Canvas canvas);
 }
 
-class ShadowProcessor extends LayerProcessor {
-  final Paint _shadowPaint;
-
-  final Offset offset;
-
-  ShadowProcessor({
-    this.offset = const Offset(10, 10),
-    double opacity = 0.9,
-    Color color = const Color(0xFF000000),
-  }) : _shadowPaint = Paint()
-         ..colorFilter = ColorFilter.mode(
-           color.withValues(alpha: opacity),
-           BlendMode.srcATop,
-         );
+class ShadowProcessor({
+  final Offset offset = const Offset(10, 10),
+  double opacity = 0.9,
+  Color color = const Color(0xFF000000),
+}) extends LayerProcessor {
+  final Paint _shadowPaint = Paint()
+    ..colorFilter = ColorFilter.mode(
+      color.withValues(alpha: opacity),
+      BlendMode.srcATop,
+    );
 
   @override
   void process(Picture pic, Canvas canvas) {

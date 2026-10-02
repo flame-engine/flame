@@ -27,15 +27,11 @@ const _dt = 1.0 / 60;
 ///
 /// Each run performs roughly one million component visits, so the reported
 /// times are comparable across shapes and between the two passes.
-abstract class _TraversalBenchmark extends AsyncBenchmarkBase {
-  _TraversalBenchmark(
-    super.name, {
-    required this.ticks,
-    required this.renderPass,
-  });
-
-  final int ticks;
-  final bool renderPass;
+abstract class _TraversalBenchmark(
+  super.name, {
+  required final int ticks,
+  required final bool renderPass,
+}) extends AsyncBenchmarkBase {
   late final FlameGame _game;
   late final Canvas _canvas;
 
@@ -67,10 +63,11 @@ abstract class _TraversalBenchmark extends AsyncBenchmarkBase {
 }
 
 /// 10k components in a single children container.
-class WideTreeBenchmark extends _TraversalBenchmark {
+class WideTreeBenchmark({required super.renderPass})
+    extends _TraversalBenchmark {
   static const _amountChildren = 10000;
 
-  WideTreeBenchmark({required super.renderPass})
+  this
     : super(
         '${renderPass ? 'Render' : 'Update'} wide tree (10k x 1)',
         ticks: 100,
@@ -89,11 +86,12 @@ class WideTreeBenchmark extends _TraversalBenchmark {
 }
 
 /// 1k parents with 10 children each: many small children containers.
-class NestedTreeBenchmark extends _TraversalBenchmark {
+class NestedTreeBenchmark({required super.renderPass})
+    extends _TraversalBenchmark {
   static const _amountParents = 1000;
   static const _amountChildren = 10;
 
-  NestedTreeBenchmark({required super.renderPass})
+  this
     : super(
         '${renderPass ? 'Render' : 'Update'} nested tree (1k x 10)',
         ticks: 90,
@@ -119,11 +117,12 @@ class NestedTreeBenchmark extends _TraversalBenchmark {
 }
 
 /// A chain 100 levels deep where every level also holds 9 leaf children.
-class DeepTreeBenchmark extends _TraversalBenchmark {
+class DeepTreeBenchmark({required super.renderPass})
+    extends _TraversalBenchmark {
   static const _depth = 100;
   static const _leavesPerLevel = 9;
 
-  DeepTreeBenchmark({required super.renderPass})
+  this
     : super(
         '${renderPass ? 'Render' : 'Update'} deep tree (100 levels)',
         ticks: 1000,
@@ -142,7 +141,7 @@ class DeepTreeBenchmark extends _TraversalBenchmark {
       next = Component(
         children: [
           ...List.generate(_leavesPerLevel, (_) => Component()),
-          if (next != null) next,
+          ?next,
         ],
       );
     }
@@ -155,12 +154,12 @@ class DeepTreeBenchmark extends _TraversalBenchmark {
 /// traversal through [HasTimeScale] (with the time scale left at 1.0, so
 /// the traversal work stays identical and only the barrier indirection is
 /// measured).
-class BarrierTreeUpdateBenchmark extends _TraversalBenchmark {
+class BarrierTreeUpdateBenchmark() extends _TraversalBenchmark {
   static const _amountParents = 1000;
   static const _amountChildren = 10;
   static const _barrierInterval = 10;
 
-  BarrierTreeUpdateBenchmark()
+  this
     : super(
         'Update barrier tree (1k x 10, 10% time-scaled)',
         ticks: 90,
@@ -185,9 +184,9 @@ class BarrierTreeUpdateBenchmark extends _TraversalBenchmark {
   }
 }
 
-class _TimeScaledParent extends Component with CustomTraversal, HasTimeScale {
-  _TimeScaledParent({super.children});
-}
+class _TimeScaledParent({super.children})
+    extends Component
+    with CustomTraversal, HasTimeScale;
 
 Future<void> main() async {
   await WideTreeBenchmark.main();

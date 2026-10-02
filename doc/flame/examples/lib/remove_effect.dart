@@ -4,7 +4,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 
-class RemoveEffectGame extends FlameGame with TapCallbacks {
+class RemoveEffectGame() extends FlameGame with TapCallbacks {
   static const double delayTime = 3;
   late EmberPlayer ember;
   late TextComponent textComponent;

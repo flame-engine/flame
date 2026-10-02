@@ -3,12 +3,8 @@ import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/operators/_common.dart';
 
 /// Operator DIVIDE (/), applies to numeric arguments only.
-class Divide extends NumExpression {
-  const Divide(this._lhs, this._rhs);
-
-  final NumExpression _lhs;
-  final NumExpression _rhs;
-
+class const Divide(final NumExpression _lhs, final NumExpression _rhs)
+    extends NumExpression {
   /// Static constructor, used by parse.dart
   factory Divide.make(
     Expression lhs,

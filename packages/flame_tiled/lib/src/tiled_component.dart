@@ -16,14 +16,20 @@ import 'package:tiled/tiled.dart';
 /// Sprite Batches. The map, and the layers of the map, are children of this
 /// component.
 /// {@endtemplate}
-class TiledComponent<T extends FlameGame> extends PositionComponent
-    with HasGameRef<T> {
+class TiledComponent<T extends FlameGame>(
   /// The map that this component renders, which is a child of this component.
   ///
   /// A map holds the state of its layers, so it can only belong to one
   /// [TiledComponent] at a time.
-  final RenderableTiledMap tileMap;
-
+  final RenderableTiledMap tileMap, {
+  super.position,
+  super.scale,
+  super.angle,
+  super.anchor,
+  Iterable<Component>? children,
+  super.priority,
+  super.key,
+}) extends PositionComponent with HasGameRef<T> {
   /// This property **cannot** be reassigned at runtime. To make the
   /// [PositionComponent] larger or smaller, change its [scale].
   @override
@@ -46,20 +52,12 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
   }
 
   /// {@macro _tiled_component}
-  TiledComponent(
-    this.tileMap, {
-    super.position,
-    super.scale,
-    super.angle,
-    super.anchor,
-    Iterable<Component>? children,
-    super.priority,
-    super.key,
-  }) : assert(
-         tileMap.parent == null,
-         'A RenderableTiledMap can only belong to one TiledComponent',
-       ),
-       super(size: tileMap.size) {
+  this
+    : assert(
+        tileMap.parent == null,
+        'A RenderableTiledMap can only belong to one TiledComponent',
+      ),
+      super(size: tileMap.size) {
     add(tileMap);
     if (children != null) {
       addAll(children);

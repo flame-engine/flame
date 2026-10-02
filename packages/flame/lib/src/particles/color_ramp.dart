@@ -5,13 +5,13 @@ import 'dart:ui';
 ///
 /// The gradient is baked into a lookup table when constructed, so evaluating
 /// it per particle per frame is a single array read.
-class ColorRamp {
+class ColorRamp(List<Color> colors, {List<double>? stops}) {
   /// Creates a ramp that interpolates through [colors] over the particle's
   /// lifetime.
   ///
   /// [stops] optionally positions each color on the 0...1 life progress
   /// axis; when omitted the colors are spaced evenly.
-  ColorRamp(List<Color> colors, {List<double>? stops})
+  this
     : assert(colors.isNotEmpty, 'colors must not be empty'),
       assert(
         stops == null || stops.length == colors.length,

@@ -50,35 +50,29 @@ Expression makeIfFn(
   }
 }
 
-class _IfFnBoolean extends BoolExpression {
-  _IfFnBoolean(this._condition, this._then, this._else);
-
-  final BoolExpression _condition;
-  final BoolExpression _then;
-  final BoolExpression _else;
-
+class _IfFnBoolean(
+  final BoolExpression _condition,
+  final BoolExpression _then,
+  final BoolExpression _else,
+) extends BoolExpression {
   @override
   bool get value => _condition.value ? _then.value : _else.value;
 }
 
-class _IfFnNumeric extends NumExpression {
-  _IfFnNumeric(this._condition, this._then, this._else);
-
-  final BoolExpression _condition;
-  final NumExpression _then;
-  final NumExpression _else;
-
+class _IfFnNumeric(
+  final BoolExpression _condition,
+  final NumExpression _then,
+  final NumExpression _else,
+) extends NumExpression {
   @override
   num get value => _condition.value ? _then.value : _else.value;
 }
 
-class _IfFnString extends StringExpression {
-  _IfFnString(this._condition, this._then, this._else);
-
-  final BoolExpression _condition;
-  final StringExpression _then;
-  final StringExpression _else;
-
+class _IfFnString(
+  final BoolExpression _condition,
+  final StringExpression _then,
+  final StringExpression _else,
+) extends StringExpression {
   @override
   String get value => _condition.value ? _then.value : _else.value;
 }

@@ -15,14 +15,13 @@ import 'package:path/path.dart' as p;
 /// It runs `flutter create` for the platform folders and the pubspec, writes
 /// the files of the chosen template on top, and adds the Flame packages with
 /// `flutter pub add`, so that the newest compatible versions are used.
-class CreateCommand extends Command<int> {
-  CreateCommand(
-    this.out,
-    this.workingDirectory, {
-    ProcessStarter? startProcess,
-    StringSink? err,
-  }) : _startProcess = startProcess ?? Process.start,
-       _err = err ?? stderr {
+class CreateCommand(
+  final StringSink out,
+  final Directory workingDirectory, {
+  ProcessStarter? startProcess,
+  StringSink? err,
+}) extends Command<int> {
+  this {
     argParser
       ..addOption(
         'project-name',
@@ -77,10 +76,8 @@ class CreateCommand extends Command<int> {
       );
   }
 
-  final StringSink out;
-  final Directory workingDirectory;
-  final ProcessStarter _startProcess;
-  final StringSink _err;
+  final ProcessStarter _startProcess = startProcess ?? Process.start;
+  final StringSink _err = err ?? stderr;
 
   @override
   String get name => 'create';

@@ -33,18 +33,19 @@ import 'package:tiled/tiled.dart';
 /// is recalculated whenever the map is rendered, so move a layer by changing
 /// [offsetX] and [offsetY] instead of [position].
 /// {@endtemplate}
-abstract class RenderableLayer<T extends Layer> extends PositionComponent {
+abstract class RenderableLayer<T extends Layer>({
   /// The Tiled layer that this component renders.
-  final T layer;
-
-  /// The target size for each tile of the map.
-  final Vector2 destTileSize;
+  required final T layer,
 
   /// The map that [layer] belongs to.
-  final TiledMap map;
+  required final TiledMap map,
 
+  /// The target size for each tile of the map.
+  required final Vector2 destTileSize,
+  FilterQuality? filterQuality,
+}) extends PositionComponent {
   /// The [FilterQuality] that should be used by all the layers.
-  final FilterQuality filterQuality;
+  final FilterQuality filterQuality = filterQuality ?? FilterQuality.none;
 
   /// The horizontal offset of this layer, relative to its parent, scaled to
   /// [destTileSize].
@@ -55,12 +56,7 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent {
   late double offsetY = layer.offsetY * scaleY;
 
   /// {@macro renderable_layer}
-  RenderableLayer({
-    required this.layer,
-    required this.map,
-    required this.destTileSize,
-    FilterQuality? filterQuality,
-  }) : filterQuality = filterQuality ?? FilterQuality.none {
+  this {
     position.setValues(offsetX, offsetY);
   }
 
@@ -91,7 +87,7 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent {
         layerPaintFactory: layerPaintFactory,
       );
     } else if (layer is ImageLayer) {
-      return FlameImageLayer.load(
+      return await FlameImageLayer.load(
         layer: layer,
         map: map,
         destTileSize: destTileSize,
@@ -226,13 +222,11 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent {
 /// It is still added to the component tree so that its offset and parallax
 /// factor propagate to any components that are added to it.
 @internal
-class UnsupportedLayer extends RenderableLayer {
-  UnsupportedLayer({
-    required super.layer,
-    required super.map,
-    required super.destTileSize,
-  });
-
+class UnsupportedLayer({
+  required super.layer,
+  required super.map,
+  required super.destTileSize,
+}) extends RenderableLayer {
   @override
   void refreshCache() {}
 }

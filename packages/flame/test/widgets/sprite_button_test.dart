@@ -8,7 +8,7 @@ import 'package:mocktail/mocktail.dart';
 
 import 'loading_widget.dart';
 
-class _MockImages extends Mock implements Images {}
+class _MockImages() extends Mock implements Images;
 
 Future<void> main() async {
   TestWidgetsFlutterBinding.ensureInitialized();

@@ -7,7 +7,7 @@ import 'package:mocktail/mocktail.dart';
 
 import '../fixtures/fixture_reader.dart';
 
-class _MockAssetBundle extends Mock implements AssetBundle {}
+class _MockAssetBundle() extends Mock implements AssetBundle;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

@@ -4,12 +4,12 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 
-enum RobotState {
+enum RobotState() {
   idle,
   running,
 }
 
-class AnimationGroupExample extends FlameGame with TapCallbacks {
+class AnimationGroupExample() extends FlameGame with TapCallbacks {
   static const description = '''
     This example shows how to create a component that can be switched between
     different states to change the animation that is playing.\n\n

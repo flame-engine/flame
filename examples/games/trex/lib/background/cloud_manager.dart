@@ -3,7 +3,7 @@ import 'package:flame/extensions.dart';
 import 'package:trex_game/background/cloud.dart';
 import 'package:trex_game/trex_game.dart';
 
-class CloudManager extends PositionComponent with HasGameRef<TRexGame> {
+class CloudManager() extends PositionComponent with HasGameRef<TRexGame> {
   final double cloudFrequency = 0.5;
   final int maxClouds = 20;
   final double bgCloudSpeed = 0.2;

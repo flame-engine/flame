@@ -32,7 +32,7 @@ void main() {
   });
 }
 
-class _CustomTextRenderer extends TextRenderer {
+class _CustomTextRenderer() extends TextRenderer {
   @override
   InlineTextElement format(String text) {
     return _CustomTextElement();
@@ -44,7 +44,7 @@ class _CustomTextRenderer extends TextRenderer {
   }
 }
 
-class _CustomTextElement extends InlineTextElement {
+class _CustomTextElement() extends InlineTextElement {
   @override
   LineMetrics get metrics => LineMetrics();
 

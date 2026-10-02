@@ -2,23 +2,17 @@ import 'package:flame_studio/src/core/theme.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ToolbarButton extends ConsumerStatefulWidget {
-  const ToolbarButton({
-    required this.icon,
-    this.onClick,
-    this.disabled = false,
-    super.key,
-  });
-
-  final void Function()? onClick;
-  final Path icon;
-  final bool disabled;
-
+class const ToolbarButton({
+  required final Path icon,
+  final void Function()? onClick,
+  final bool disabled = false,
+  super.key,
+}) extends ConsumerStatefulWidget {
   @override
   ToolbarButtonState createState() => ToolbarButtonState();
 }
 
-class ToolbarButtonState extends ConsumerState<ToolbarButton> {
+class ToolbarButtonState() extends ConsumerState<ToolbarButton> {
   bool _isHovered = false;
   bool _isActive = false;
 
@@ -68,28 +62,20 @@ class ToolbarButtonState extends ConsumerState<ToolbarButton> {
   }
 }
 
-enum _ToolbarButtonRenderState {
+enum _ToolbarButtonRenderState() {
   disabled,
   active,
   hovered,
   normal,
 }
 
-class _ToolbarButtonPainter extends CustomPainter {
-  _ToolbarButtonPainter(
-    this.icon,
-    this.theme, {
-    required this.isDisabled,
-    required this.isHovered,
-    required this.isActive,
-  });
-
-  final bool isDisabled;
-  final bool isHovered;
-  final bool isActive;
-  final Path icon;
-  final Theme theme;
-
+class _ToolbarButtonPainter(
+  final Path icon,
+  final Theme theme, {
+  required final bool isDisabled,
+  required final bool isHovered,
+  required final bool isActive,
+}) extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final scale = size.height / 20.0;

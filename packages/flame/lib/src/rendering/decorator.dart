@@ -27,7 +27,7 @@ import 'package:meta/meta.dart';
 /// - [Rotate3DDecorator]
 /// - [Shadow3DDecorator]
 /// - [Transform2DDecorator]
-class Decorator {
+class Decorator() {
   /// The next decorator in the chain, or null if there is none.
   Decorator? _next;
 

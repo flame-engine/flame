@@ -2,9 +2,7 @@ import 'package:flame_bloc_example/src/game_stats/bloc/game_stats_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_ui/material_ui.dart';
 
-class GameStat extends StatelessWidget {
-  const GameStat({super.key});
-
+class const GameStat({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<GameStatsBloc, GameStatsState>(

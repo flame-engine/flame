@@ -8,7 +8,7 @@ import 'package:flame/game.dart';
 import 'package:flame_isolate/flame_isolate.dart';
 import 'package:material_ui/material_ui.dart';
 
-class SimpleIsolateExample extends FlameGame {
+class SimpleIsolateExample() extends FlameGame {
   static const String description = '''
     This example showcases a simple FlameIsolate example, making it easy to 
     continually run heavy load without stutter.
@@ -57,18 +57,15 @@ class SimpleIsolateExample extends FlameGame {
   }
 }
 
-enum ComputeType {
+enum ComputeType(final String description) {
   isolate('Running in isolate'),
-  synchronous('Running synchronously');
-
-  final String description;
-
-  const ComputeType(this.description);
+  synchronous('Running synchronously'),
 }
 
-class CalculatePrimeNumber extends PositionComponent
+class CalculatePrimeNumber()
+    extends PositionComponent
     with TapCallbacks, FlameIsolate {
-  CalculatePrimeNumber() : super(anchor: Anchor.center);
+  this : super(anchor: Anchor.center);
 
   ComputeType computeType = ComputeType.isolate;
   late Timer _interval;

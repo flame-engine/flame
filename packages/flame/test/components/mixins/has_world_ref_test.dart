@@ -7,7 +7,7 @@ import 'package:flame_test/flame_test.dart' show testWithGame;
 import 'package:flutter_test/flutter_test.dart' show group;
 import 'package:test/expect.dart' show expect;
 
-class _ParentComponent extends Component {
+class _ParentComponent() extends Component {
   bool wasRemoved = false;
 
   @override
@@ -17,7 +17,7 @@ class _ParentComponent extends Component {
   }
 }
 
-class _ChildComponent extends _ParentComponent with HasWorldRef<World> {}
+class _ChildComponent() extends _ParentComponent with HasWorldRef<World>;
 
 void main() {
   group('HasWorldRef', () {

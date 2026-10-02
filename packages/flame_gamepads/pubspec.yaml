@@ -12,8 +12,8 @@ topics:
   - gamepads
 
 environment:
-  sdk: ">=3.12.0 <4.0.0"
-  flutter: ">=3.44.0"
+  sdk: ">=3.13.0 <4.0.0"
+  flutter: ">=3.47.0"
 
 dependencies:
   flame: ^2.0.0-dev.0

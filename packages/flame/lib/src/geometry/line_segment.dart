@@ -6,14 +6,7 @@ import 'package:flame/src/math/solve_quadratic.dart';
 
 /// A [LineSegment] represent a segment of an infinitely long line, it is the
 /// segment between the [from] and [to] vectors (inclusive).
-class LineSegment {
-  final Vector2 from;
-  final Vector2 to;
-
-  /// Creates a [LineSegment] given a start ([from]) point and an end ([to])
-  /// point.
-  LineSegment(this.from, this.to);
-
+class LineSegment(final Vector2 from, final Vector2 to) {
   /// Creates a [LineSegment] starting at a given a [start] point and following
   /// a certain [direction] for a given [length].
   LineSegment.withLength({

@@ -69,7 +69,7 @@ void main() {
   });
 }
 
-class _GameWithMouseCursorSetDuringOnLoad extends FlameGame {
+class _GameWithMouseCursorSetDuringOnLoad() extends FlameGame {
   @override
   Future<void>? onLoad() {
     mouseCursor = SystemMouseCursors.alias;

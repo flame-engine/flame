@@ -4,12 +4,12 @@ import 'package:flame_3d/resources.dart';
 /// {@template plane_mesh}
 /// Represents a 2D Plane's geometry with a single surface.
 /// {@endtemplate}
-class PlaneMesh extends Mesh {
+class PlaneMesh({
+  required Vector2 size,
+  Material? material,
+}) extends Mesh {
   /// {@macro plane_mesh}
-  PlaneMesh({
-    required Vector2 size,
-    Material? material,
-  }) {
+  this {
     final Vector2(:x, :y) = size / 2;
 
     final vertices = [

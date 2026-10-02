@@ -3,9 +3,7 @@ import 'package:flame_studio/src/widgets/toolbar/toolbar_button.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class NextFrameButton extends ConsumerWidget {
-  const NextFrameButton({super.key});
-
+class const NextFrameButton({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(gameControllerProvider);

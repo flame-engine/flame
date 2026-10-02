@@ -7,9 +7,7 @@ import 'package:flame_bloc_example/src/inventory/view/inventory.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_ui/material_ui.dart';
 
-class GamePage extends StatelessWidget {
-  const GamePage({super.key});
-
+class const GamePage({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,9 +22,7 @@ class GamePage extends StatelessWidget {
   }
 }
 
-class GameView extends StatelessWidget {
-  const GameView({super.key});
-
+class const GameView({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Column(
@@ -45,9 +41,7 @@ class GameView extends StatelessWidget {
   }
 }
 
-class Game extends StatelessWidget {
-  const Game({super.key});
-
+class const Game({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GameWidget(

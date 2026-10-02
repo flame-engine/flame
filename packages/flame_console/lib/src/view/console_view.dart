@@ -24,41 +24,25 @@ import 'package:terminui/terminui.dart';
 ///     ),
 ///   },
 /// )
-class FlameConsoleView<G extends FlameGame> extends StatefulWidget {
-  const FlameConsoleView({
-    required this.game,
-    required this.onClose,
-    this.customCommands,
-    this.repository,
-    this.containerBuilder,
-    this.cursorBuilder,
-    this.cursorColor,
-    this.historyBuilder,
-    this.textStyle,
-    super.key,
-  });
-
-  final G game;
-  final List<FlameConsoleCommand<G>>? customCommands;
-  final VoidCallback onClose;
-  final TerminuiRepository? repository;
-
-  final ContainerBuilder? containerBuilder;
-  final WidgetBuilder? cursorBuilder;
-  final HistoryBuilder? historyBuilder;
-
-  final Color? cursorColor;
-  final TextStyle? textStyle;
-
+class const FlameConsoleView<G extends FlameGame>({
+  required final G game,
+  required final VoidCallback onClose,
+  final List<FlameConsoleCommand<G>>? customCommands,
+  final TerminuiRepository? repository,
+  final ContainerBuilder? containerBuilder,
+  final WidgetBuilder? cursorBuilder,
+  final Color? cursorColor,
+  final HistoryBuilder? historyBuilder,
+  final TextStyle? textStyle,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<FlameConsoleView> createState() => _ConsoleViewState();
 }
 
-class _ConsoleKeyboardHandler extends Component with KeyboardHandler {
-  _ConsoleKeyboardHandler(this._onKeyEvent);
-
-  final KeyEventResult Function(KeyEvent, Set<LogicalKeyboardKey>) _onKeyEvent;
-
+class _ConsoleKeyboardHandler(
+  final KeyEventResult Function(KeyEvent, Set<LogicalKeyboardKey>) _onKeyEvent,
+) extends Component with KeyboardHandler {
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     _onKeyEvent(event, keysPressed);
@@ -66,7 +50,7 @@ class _ConsoleKeyboardHandler extends Component with KeyboardHandler {
   }
 }
 
-class _ConsoleViewState extends State<FlameConsoleView> {
+class _ConsoleViewState() extends State<FlameConsoleView> {
   late final List<FlameConsoleCommand> _commandList = [
     ...FlameConsoleCommands.commands,
     if (widget.customCommands != null) ...widget.customCommands!,

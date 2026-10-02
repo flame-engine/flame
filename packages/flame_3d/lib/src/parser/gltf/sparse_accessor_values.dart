@@ -10,21 +10,17 @@ import 'package:flame_3d/src/parser/gltf/gltf_root.dart';
 /// The elements have the same component type as the base accessor.
 /// The elements are tightly packed. Data **MUST** be aligned following the
 /// same rules as the base accessor.
-class SparseAccessorValues extends GltfNode {
+class SparseAccessorValues({
+  required super.root,
+
   /// The index of the bufferView with sparse values.
   /// The referenced buffer view **MUST NOT** have its `target` or `byteStride`
   /// properties defined.
-  final GltfRef<BufferView> bufferView;
+  required final GltfRef<BufferView> bufferView,
 
   /// The offset relative to the start of the bufferView in bytes.
-  final int byteOffset;
-
-  SparseAccessorValues({
-    required super.root,
-    required this.bufferView,
-    required this.byteOffset,
-  });
-
+  required final int byteOffset,
+}) extends GltfNode {
   SparseAccessorValues.parse(
     GltfRoot root,
     Map<String, Object?> map,

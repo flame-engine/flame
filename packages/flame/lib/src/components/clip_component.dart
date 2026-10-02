@@ -9,22 +9,17 @@ typedef ShapeBuilder = Shape Function(Vector2 size);
 /// {@template clip_component}
 /// A component that will clip its content.
 /// {@endtemplate}
-class ClipComponent extends PositionComponent {
-  /// {@macro clip_component}
-  ///
-  /// Clips the canvas based its shape and size.
-  ClipComponent({
-    required this._builder,
-    super.position,
-    super.size,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.key,
-  });
-
+class ClipComponent({
+  required final ShapeBuilder _builder,
+  super.position,
+  super.size,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.key,
+}) extends PositionComponent {
   /// {@macro circle_clip_component}
   ///
   /// Clips the canvas in the form of a circle based on its size.
@@ -100,8 +95,6 @@ class ClipComponent extends PositionComponent {
 
   late Path _path;
   late Shape _shape;
-  final ShapeBuilder _builder;
-
   @override
   Future<void> onLoad() async {
     _prepare();

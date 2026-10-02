@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:meta/meta.dart';
 
-enum ButtonState {
+enum ButtonState() {
   up,
   down,
 }
@@ -16,30 +16,25 @@ enum ButtonState {
 ///
 /// Note: You have to set the [button] in [onLoad] if you are not passing it in
 /// through the constructor.
-class SpriteButtonComponent extends SpriteGroupComponent<ButtonState>
-    with TapCallbacks {
-  SpriteButtonComponent({
-    Sprite? button,
-    this._buttonDown,
-    this.onPressed,
-    super.position,
-    Vector2? size,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-  }) : _button = button,
-       super(
-         current: ButtonState.up,
-         size: size ?? button?.originalSize,
-       );
+class SpriteButtonComponent({
+  var Sprite? _button,
+  var Sprite? _buttonDown,
 
   /// Callback for what should happen when the button is pressed.
-  void Function()? onPressed;
-
-  Sprite? _button;
-  Sprite? _buttonDown;
+  var void Function()? onPressed,
+  super.position,
+  Vector2? size,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority,
+}) extends SpriteGroupComponent<ButtonState> with TapCallbacks {
+  this
+    : super(
+        current: ButtonState.up,
+        size: size ?? _button?.originalSize,
+      );
 
   Sprite get button => _button!;
   Sprite get buttonDown => _buttonDown ?? button;

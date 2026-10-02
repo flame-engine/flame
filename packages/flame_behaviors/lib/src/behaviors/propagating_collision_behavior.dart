@@ -11,11 +11,7 @@ import 'package:flutter/foundation.dart';
 abstract class CollisionBehavior<
   Collider extends Component,
   Parent extends EntityMixin
->
-    extends Behavior<Parent> {
-  /// {@macro collision_behavior}
-  CollisionBehavior({super.children, super.priority, super.key});
-
+>({super.children, super.priority, super.key}) extends Behavior<Parent> {
   /// Check if the given component is an instance of [Collider].
   bool isValid(Component c) => c is Collider;
 
@@ -68,14 +64,13 @@ abstract class CollisionBehavior<
 /// [PositionedEntity] which does exactly that but any kind of position
 /// component will work.
 /// {@endtemplate}
-class PropagatingCollisionBehavior<Parent extends EntityMixin>
-    extends Behavior<Parent>
-    with CollisionCallbacks {
+class PropagatingCollisionBehavior<Parent extends EntityMixin>(
+  final ShapeHitbox _hitbox, {
+  super.priority,
+  super.key,
+}) extends Behavior<Parent> with CollisionCallbacks {
   /// {@macro propagating_collision_behavior}
-  PropagatingCollisionBehavior(this._hitbox, {super.priority, super.key})
-    : super(children: [_hitbox]);
-
-  final ShapeHitbox _hitbox;
+  this : super(children: [_hitbox]);
 
   @override
   @mustCallSuper

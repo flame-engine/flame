@@ -3,9 +3,10 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 
-class TappableEmber extends Ember with TapCallbacks {
-  TappableEmber({required Vector2 position, required Vector2 size})
-    : super(position: position, size: size);
+class TappableEmber({required Vector2 position, required Vector2 size})
+    extends Ember
+    with TapCallbacks {
+  this : super(position: position, size: size);
 
   @override
   bool onTapDown(TapDownEvent event) {
@@ -14,9 +15,8 @@ class TappableEmber extends Ember with TapCallbacks {
   }
 }
 
-class ClipComponentExample extends FlameGame {
-  static const String description =
-      '''Tap on the objects to increase their size and see how the clip component
+class ClipComponentExample() extends FlameGame {
+  static const String description = '''Tap on the objects to increase their size and see how the clip component
 works.''';
 
   late final _embers = <TappableEmber>[

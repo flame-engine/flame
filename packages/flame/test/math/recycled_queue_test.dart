@@ -426,11 +426,7 @@ void main() {
   });
 }
 
-class _Int implements Disposable {
-  _Int([this.value]);
-
-  int? value;
-
+class _Int([var int? value]) implements Disposable {
   @override
   void dispose() => value = null;
 

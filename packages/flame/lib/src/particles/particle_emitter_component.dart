@@ -37,63 +37,49 @@ import 'package:flame/src/particles/particle_renderer.dart';
 /// the component moves all live particles with it. Set [worldSpace] to true
 /// to leave already-spawned particles behind instead, which is what trails
 /// and exhaust effects want.
-class ParticleEmitterComponent extends PositionComponent {
-  /// Creates a particle emitter component.
-  ///
-  /// [emitter] describes what to spawn and how it behaves; [renderer]
-  /// describes how it is drawn. When [removeOnFinish] is true (the
-  /// default), the component removes itself once emission has naturally
-  /// finished and the last particle has died; endless emitters are never
-  /// removed automatically. Pass a seeded [random] for deterministic
-  /// behavior.
-  ParticleEmitterComponent({
-    required this.emitter,
-    required this.renderer,
-    this.removeOnFinish = true,
-    this.worldSpace = false,
-    bool emitting = true,
-    Random? random,
-    super.position,
-    super.size,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.key,
-  }) : // `this._emitting` requires Dart 3.12, but the minimum SDK is 3.11.
-       // ignore: prefer_initializing_formals
-       _emitting = emitting,
-       random = random ?? Random(),
-       _buffer = ParticleBuffer(emitter.maxParticles),
-       _burstFired = List.filled(emitter.bursts.length, false);
-
+///
+/// [emitter] describes what to spawn and how it behaves; [renderer]
+/// describes how it is drawn. When [removeOnFinish] is true (the
+/// default), the component removes itself once emission has naturally
+/// finished and the last particle has died; endless emitters are never
+/// removed automatically. Pass a seeded [random] for deterministic
+/// behavior.
+class ParticleEmitterComponent({
   /// The description of what to spawn and how particles behave.
-  final ParticleEmitter emitter;
+  required final ParticleEmitter emitter,
 
   /// The renderer that draws the live particles.
-  final ParticleRenderer renderer;
+  required final ParticleRenderer renderer,
 
   /// Whether the component removes itself once emission has finished and no
   /// particles are alive.
-  bool removeOnFinish;
+  var bool removeOnFinish = true,
 
   /// When true, live particles keep their world position while the
   /// component moves, so a moving emitter leaves a trail behind.
   ///
   /// Only translation is compensated: ancestors of the component (and the
   /// component itself) should not be rotated or scaled.
-  final bool worldSpace;
-
+  final bool worldSpace = false,
+  var bool _emitting = true,
+  Random? random,
+  super.position,
+  super.size,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.key,
+}) extends PositionComponent {
   /// The random source used for all sampling; seed it for determinism.
-  final Random random;
+  final Random random = random ?? Random();
 
-  final ParticleBuffer _buffer;
-  final List<bool> _burstFired;
+  final ParticleBuffer _buffer = ParticleBuffer(emitter.maxParticles);
+  final List<bool> _burstFired = List.filled(emitter.bursts.length, false);
   final Vector2 _sampledPosition = Vector2.zero();
   Vector2? _lastAbsolutePosition;
 
-  bool _emitting;
   bool _completed = false;
   double _clock = 0;
   double _emitDebt = 0;

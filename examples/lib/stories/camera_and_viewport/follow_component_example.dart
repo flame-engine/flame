@@ -12,7 +12,8 @@ import 'package:flame/input.dart';
 import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 
-class FollowComponentExample extends FlameGame
+class FollowComponentExample({required final Vector2 viewportResolution})
+    extends FlameGame
     with HasCollisionDetection, HasKeyboardHandlerComponents {
   static const String description = '''
     Move around with W, A, S, D and notice how the camera follows the ember 
@@ -23,7 +24,7 @@ class FollowComponentExample extends FlameGame
     respects the camera transformation.
   ''';
 
-  FollowComponentExample({required this.viewportResolution})
+  this
     : super(
         camera: CameraComponent.withFixedResolution(
           width: viewportResolution.x,
@@ -32,8 +33,6 @@ class FollowComponentExample extends FlameGame
       );
 
   late MovableEmber ember;
-  final Vector2 viewportResolution;
-
   @override
   Future<void> onLoad() async {
     world.add(Map());
@@ -47,7 +46,8 @@ class FollowComponentExample extends FlameGame
   }
 }
 
-class MovableEmber extends Ember<FollowComponentExample>
+class MovableEmber()
+    extends Ember<FollowComponentExample>
     with CollisionCallbacks, KeyboardHandler {
   static const double speed = 300;
   static final TextPaint textRenderer = TextPaint(
@@ -60,7 +60,7 @@ class MovableEmber extends Ember<FollowComponentExample>
   late final maxPosition = Vector2.all(Map.size - size.x / 2);
   late final minPosition = -maxPosition;
 
-  MovableEmber() : super(priority: 2);
+  this : super(priority: 2);
 
   @override
   Future<void> onLoad() async {
@@ -132,7 +132,7 @@ class MovableEmber extends Ember<FollowComponentExample>
   }
 }
 
-class Map extends Component {
+class Map() extends Component {
   static const double size = 1500;
   static const Rect _bounds = Rect.fromLTRB(-size, -size, size, size);
   static final Rectangle bounds = Rectangle.fromLTRB(-size, -size, size, size);
@@ -148,7 +148,7 @@ class Map extends Component {
   late final List<Paint> _paintPool;
   late final List<Rect> _rectPool;
 
-  Map() : super(priority: 0) {
+  this : super(priority: 0) {
     _paintPool = List<Paint>.generate(
       (size / 50).ceil(),
       (_) => PaintExtension.random(rng: _rng)
@@ -180,8 +180,10 @@ class Map extends Component {
   }
 }
 
-class Rock extends SpriteComponent with HasGameRef, TapCallbacks {
-  Rock(Vector2 position)
+class Rock(Vector2 position)
+    extends SpriteComponent
+    with HasGameRef, TapCallbacks {
+  this
     : super(
         position: position,
         size: Vector2.all(50),

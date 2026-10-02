@@ -18,17 +18,16 @@ import 'package:vector_math/vector_math.dart';
 /// allows it to be combined with other [AnchorEffect]s. When several
 /// [AnchorByEffect]s are applied to the same target simultaneously, the anchor
 /// is moved by the vector sum of offsets from all effects.
-class AnchorByEffect extends AnchorEffect {
-  AnchorByEffect(
-    Vector2 offset,
-    EffectController controller, {
-    AnchorProvider? target,
-    void Function()? onComplete,
-    super.key,
-  }) : _offset = offset.clone(),
-       super(controller, target, onComplete: onComplete);
+class AnchorByEffect(
+  Vector2 offset,
+  EffectController controller, {
+  AnchorProvider? target,
+  void Function()? onComplete,
+  super.key,
+}) extends AnchorEffect {
+  this : super(controller, target, onComplete: onComplete);
 
-  final Vector2 _offset;
+  final Vector2 _offset = offset.clone();
 
   @override
   void apply(double progress) {

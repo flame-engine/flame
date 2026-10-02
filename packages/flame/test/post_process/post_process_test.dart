@@ -5,11 +5,7 @@ import 'package:flame/post_process.dart';
 import 'package:test/test.dart';
 import 'package:vector_math/vector_math.dart';
 
-class _CallbackPostProcess extends PostProcess {
-  _CallbackPostProcess(this.callback);
-
-  final void Function() callback;
-
+class _CallbackPostProcess(final void Function() callback) extends PostProcess {
   @override
   void postProcess(Vector2 size, Canvas canvas) {
     renderSubtree(canvas);

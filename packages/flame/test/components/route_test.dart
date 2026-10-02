@@ -515,19 +515,15 @@ void main() {
   });
 }
 
-class _CustomRoute extends Route {
-  _CustomRoute({
-    Component Function()? builder,
-    super.transparent,
-    super.maintainState,
-    this._onPush,
-    this._onPop,
-    this._build,
-  }) : super(builder);
-
-  final void Function(Route, Route?)? _onPush;
-  final void Function(Route, Route)? _onPop;
-  final Component Function(Route)? _build;
+class _CustomRoute({
+  Component Function()? builder,
+  super.transparent,
+  super.maintainState,
+  final void Function(Route, Route?)? _onPush,
+  final void Function(Route, Route)? _onPop,
+  final Component Function(Route)? _build,
+}) extends Route {
+  this : super(builder);
 
   @override
   void onPush(Route? route) => _onPush?.call(this, route);
@@ -539,7 +535,7 @@ class _CustomRoute extends Route {
   Component build() => _build?.call(this) ?? super.build();
 }
 
-class _TimerComponent extends Component {
+class _TimerComponent() extends Component {
   double elapsedTime = 0;
 
   @override
@@ -548,14 +544,12 @@ class _TimerComponent extends Component {
   }
 }
 
-class _ColoredComponent extends PositionComponent {
-  _ColoredComponent({
-    required Color color,
-    super.position,
-    super.size,
-  }) : _paint = Paint()..color = color;
-
-  final Paint _paint;
+class _ColoredComponent({
+  required Color color,
+  super.position,
+  super.size,
+}) extends PositionComponent {
+  final Paint _paint = Paint()..color = color;
 
   @override
   void render(Canvas canvas) {
@@ -563,12 +557,12 @@ class _ColoredComponent extends PositionComponent {
   }
 }
 
-class _HeavyComponent extends PositionComponent {
+class _HeavyComponent() extends PositionComponent {
   Duration dummyTime = const Duration(seconds: 3);
   Completer<void> completer = Completer();
   @override
   FutureOr<void> onLoad() async {
     await completer.future;
-    return super.onLoad();
+    await super.onLoad();
   }
 }

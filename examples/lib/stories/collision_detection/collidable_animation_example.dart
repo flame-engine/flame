@@ -6,7 +6,9 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 
-class CollidableAnimationExample extends FlameGame with HasCollisionDetection {
+class CollidableAnimationExample()
+    extends FlameGame
+    with HasCollisionDetection {
   static const description = '''
     In this example you can see four animated birds which are flying straight
     along the same route until they hit either another bird or the wall, which
@@ -52,21 +54,19 @@ class CollidableAnimationExample extends FlameGame with HasCollisionDetection {
   }
 }
 
-class AnimatedComponent extends SpriteAnimationComponent
-    with CollisionCallbacks, HasGameRef {
-  final Vector2 velocity;
-
-  AnimatedComponent(
-    this.velocity,
-    Vector2 position,
-    Vector2 size, {
-    double angle = -pi / 4,
-  }) : super(
-         position: position,
-         size: size,
-         angle: angle,
-         anchor: Anchor.center,
-       );
+class AnimatedComponent(
+  final Vector2 velocity,
+  Vector2 position,
+  Vector2 size, {
+  double angle = -pi / 4,
+}) extends SpriteAnimationComponent with CollisionCallbacks, HasGameRef {
+  this
+    : super(
+        position: position,
+        size: size,
+        angle: angle,
+        anchor: Anchor.center,
+      );
 
   @override
   Future<void> onLoad() async {

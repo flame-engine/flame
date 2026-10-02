@@ -3,39 +3,33 @@ import 'dart:ui' hide FragmentShader;
 import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
 
-class SpatialMaterial extends Material {
-  SpatialMaterial({
-    this.albedoColor = const Color(0xFFFFFFFF),
-    Texture? albedoTexture,
-    this.metallic = 0.8,
-    this.roughness = 0.6,
-  }) : albedoTexture = albedoTexture ?? Texture.standard,
-       super(
-         vertexShader: VertexShader.fromAsset(
-           'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
-           slots: ['VertexInfo', 'JointMatrices'],
-         ),
-         fragmentShader: FragmentShader.fromAsset(
-           'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
-           slots: [
-             'albedoTexture',
-             'Material',
-             'AmbientLight',
-             'Lights',
-             'Camera',
-           ],
-         ),
-       );
-
+class SpatialMaterial({
   /// The material's base color.
-  Color albedoColor;
+  var Color albedoColor = const Color(0xFFFFFFFF),
+  Texture? albedoTexture,
+  var double metallic = 0.8,
+  var double roughness = 0.6,
+}) extends Material {
+  this
+    : super(
+        vertexShader: VertexShader.fromAsset(
+          'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
+          slots: ['VertexInfo', 'JointMatrices'],
+        ),
+        fragmentShader: FragmentShader.fromAsset(
+          'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
+          slots: [
+            'albedoTexture',
+            'Material',
+            'AmbientLight',
+            'Lights',
+            'Camera',
+          ],
+        ),
+      );
 
   /// The texture that will be multiplied by [albedoColor].
-  Texture albedoTexture;
-
-  double metallic;
-
-  double roughness;
+  Texture albedoTexture = albedoTexture ?? Texture.standard;
 
   @override
   void apply(covariant RenderContext3D context) {

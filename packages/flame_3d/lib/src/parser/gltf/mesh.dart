@@ -7,20 +7,16 @@ import 'package:flame_3d/src/parser/gltf/primitive.dart';
 /// A set of primitives to be rendered.
 ///
 /// Its global transform is defined by a node that references it.
-class Mesh extends GltfNode {
+class Mesh({
+  required super.root,
+
   /// An array of primitives, each defining geometry to be rendered.
-  final List<Primitive> primitives;
+  required final List<Primitive> primitives,
 
   /// Array of weights to be applied to the morph targets.
   /// The number of array elements **MUST** match the number of morph targets
-  final List<double>? weights;
-
-  Mesh({
-    required super.root,
-    required this.primitives,
-    required this.weights,
-  });
-
+  required final List<double>? weights,
+}) extends GltfNode {
   Mesh.parse(
     GltfRoot root,
     Map<String, Object?> map,

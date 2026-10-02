@@ -17,7 +17,7 @@ void main() {
   );
 }
 
-class KenneyWorld extends World with TapCallbacks {
+class KenneyWorld() extends World with TapCallbacks {
   late final XmlSpriteSheet spritesheet;
 
   @override

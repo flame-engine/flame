@@ -12,20 +12,18 @@ import 'package:flame/experimental.dart';
 ///
 /// Setting [child] automatically manages removing the old child from this
 /// component, as well as adding the new child to this component.
-abstract class SingleLayoutComponent extends LayoutComponent {
-  SingleLayoutComponent({
-    required super.key,
-    required super.position,
-    required super.anchor,
-    required super.priority,
-    required super.size,
-    required this.inflateChild,
-    required PositionComponent? child,
-  }) {
+abstract class SingleLayoutComponent({
+  required super.key,
+  required super.position,
+  required super.anchor,
+  required super.priority,
+  required super.size,
+  required final bool inflateChild,
+  required PositionComponent? child,
+}) extends LayoutComponent {
+  this {
     this.child = child;
   }
-
-  final bool inflateChild;
 
   PositionComponent? _child;
 

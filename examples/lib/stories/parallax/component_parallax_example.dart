@@ -5,7 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 
-class ComponentParallaxExample extends FlameGame {
+class ComponentParallaxExample() extends FlameGame {
   static const String description = '''
     Shows how to do initiation and loading of assets from within an extended
     `ParallaxComponent`. This example uses a `FixedResolutionViewport` which
@@ -21,7 +21,8 @@ class ComponentParallaxExample extends FlameGame {
   }
 }
 
-class MyParallaxComponent extends ParallaxComponent<ComponentParallaxExample> {
+class MyParallaxComponent()
+    extends ParallaxComponent<ComponentParallaxExample> {
   @override
   Future<void> onLoad() async {
     parallax = await gameRef.loadParallax(

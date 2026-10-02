@@ -7,7 +7,9 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 
-class StaticComponentsExample extends FlameGame with ScrollCallbacks {
+class StaticComponentsExample({
+  required Vector2 viewportResolution,
+}) extends FlameGame with ScrollCallbacks {
   static const description = '''
   This example shows a parallax which is attached to the viewport (behind the
   world), four Flame logos that are added to the world, and a player added to
@@ -22,15 +24,14 @@ class StaticComponentsExample extends FlameGame with ScrollCallbacks {
 
   late final ParallaxComponent myParallax;
 
-  StaticComponentsExample({
-    required Vector2 viewportResolution,
-  }) : super(
-         camera: CameraComponent.withFixedResolution(
-           width: viewportResolution.x,
-           height: viewportResolution.y,
-         ),
-         world: _StaticComponentWorld(),
-       );
+  this
+    : super(
+        camera: CameraComponent.withFixedResolution(
+          width: viewportResolution.x,
+          height: viewportResolution.y,
+        ),
+        world: _StaticComponentWorld(),
+      );
 
   @override
   void onScroll(ScrollEvent event) {
@@ -66,7 +67,8 @@ class StaticComponentsExample extends FlameGame with ScrollCallbacks {
   }
 }
 
-class _StaticComponentWorld extends World
+class _StaticComponentWorld()
+    extends World
     with HasGameRef<StaticComponentsExample>, TapCallbacks, DoubleTapCallbacks {
   late SpriteComponent player;
   @override
@@ -124,7 +126,7 @@ class _StaticComponentWorld extends World
   }
 }
 
-class MyParallaxComponent extends ParallaxComponent {
+class MyParallaxComponent() extends ParallaxComponent {
   @override
   Future<void> onLoad() async {
     parallax = await gameRef.loadParallax(

@@ -7,7 +7,7 @@ import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class AnimatedBodyExample extends Forge2DExampleGame {
+class AnimatedBodyExample() extends Forge2DExampleGame {
   static const String description = '''
     In this example we show how to add an animated chopper, which is created
     with a SpriteAnimationComponent, on top of a BodyComponent.
@@ -15,14 +15,15 @@ class AnimatedBodyExample extends Forge2DExampleGame {
     Tap the screen to add more choppers.
   ''';
 
-  AnimatedBodyExample()
+  this
     : super(
         gravity: Vector2.zero(),
         world: AnimatedBodyWorld(),
       );
 }
 
-class AnimatedBodyWorld extends Forge2DWorld
+class AnimatedBodyWorld()
+    extends Forge2DWorld
     with TapCallbacks, HasGameRef<Forge2DGame> {
   late Image chopper;
   late SpriteAnimation animation;
@@ -59,14 +60,13 @@ class AnimatedBodyWorld extends Forge2DWorld
   }
 }
 
-class ChopperBody extends BodyComponent {
-  final Vector2 _position;
-  final Vector2 size;
+class ChopperBody(
+  final Vector2 _position,
+  PositionComponent component,
+) extends BodyComponent {
+  final Vector2 size = component.size;
 
-  ChopperBody(
-    this._position,
-    PositionComponent component,
-  ) : size = component.size {
+  this {
     renderBody = false;
     add(component);
   }

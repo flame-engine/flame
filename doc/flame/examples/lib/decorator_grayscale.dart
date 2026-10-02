@@ -2,7 +2,7 @@ import 'package:doc_flame_examples/flower.dart';
 import 'package:flame/game.dart';
 import 'package:flame/rendering.dart';
 
-class DecoratorGrayscaleGame extends FlameGame {
+class DecoratorGrayscaleGame() extends FlameGame {
   @override
   Future<void> onLoad() async {
     var step = 0;

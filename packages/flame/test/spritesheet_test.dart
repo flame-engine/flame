@@ -5,7 +5,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _MockImage extends Mock implements Image {}
+class _MockImage() extends Mock implements Image;
 
 void main() {
   group('SpriteSheet', () {

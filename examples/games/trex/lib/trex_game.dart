@@ -13,9 +13,14 @@ import 'package:trex_game/background/horizon.dart';
 import 'package:trex_game/game_over.dart';
 import 'package:trex_game/player.dart';
 
-enum GameState { playing, intro, gameOver }
+enum GameState() {
+  playing,
+  intro,
+  gameOver,
+}
 
-class TRexGame extends FlameGame
+class TRexGame()
+    extends FlameGame
     with KeyboardEvents, TapCallbacks, HasCollisionDetection {
   static const String description = '''
     A game similar to the game in chrome that you get to play while offline.

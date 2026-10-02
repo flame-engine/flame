@@ -13,18 +13,18 @@ import 'package:flutter/scheduler.dart';
 /// ...
 /// gameLoop.dispose();
 /// ```
-class GameLoop {
-  GameLoop(this.callback) {
-    _ticker = Ticker(_tick);
-  }
-
+class GameLoop(
   /// Function to be called on every Flutter rendering frame.
   ///
   /// This function takes a single parameter `dt`, which is the amount of time
   /// passed since the previous invocation of this function. The time is
   /// measured in seconds, with microsecond precision. The argument will be
   /// equal to 0 on first invocation of the callback.
-  void Function(double dt) callback;
+  var void Function(double dt) callback,
+) {
+  this {
+    _ticker = Ticker(_tick);
+  }
 
   /// Total amount of time passed since the game loop was started.
   ///

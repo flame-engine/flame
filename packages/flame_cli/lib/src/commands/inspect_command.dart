@@ -6,8 +6,8 @@ import 'package:flame_cli/src/json_output.dart';
 import 'package:io/io.dart';
 
 /// Prints information about a single component.
-class InspectCommand extends FlameCommand {
-  InspectCommand(super.out, super.workingDirectory) {
+class InspectCommand(super.out, super.workingDirectory) extends FlameCommand {
+  this {
     argParser.addFlag(
       'json',
       negatable: false,

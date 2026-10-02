@@ -5,8 +5,8 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_svg/flame_svg.dart';
 
-class Player extends SvgComponent with HasGameRef<SvgComponentExample> {
-  Player() : super(priority: 3, size: Vector2(106, 146), anchor: Anchor.center);
+class Player() extends SvgComponent with HasGameRef<SvgComponentExample> {
+  this : super(priority: 3, size: Vector2(106, 146), anchor: Anchor.center);
 
   Vector2? destination;
 
@@ -33,8 +33,8 @@ class Player extends SvgComponent with HasGameRef<SvgComponentExample> {
   }
 }
 
-class Background extends SvgComponent with HasGameRef<SvgComponentExample> {
-  Background()
+class Background() extends SvgComponent with HasGameRef<SvgComponentExample> {
+  this
     : super(
         priority: 1,
         size: Vector2(745, 415),
@@ -49,8 +49,10 @@ class Background extends SvgComponent with HasGameRef<SvgComponentExample> {
   }
 }
 
-class Balloons extends SvgComponent with HasGameRef<SvgComponentExample> {
-  Balloons({super.position})
+class Balloons({super.position})
+    extends SvgComponent
+    with HasGameRef<SvgComponentExample> {
+  this
     : super(
         priority: 2,
         size: Vector2(75, 125),
@@ -67,7 +69,7 @@ class Balloons extends SvgComponent with HasGameRef<SvgComponentExample> {
   }
 }
 
-class SvgComponentExample extends FlameGame {
+class SvgComponentExample() extends FlameGame {
   static const description = '''
       Simple game showcasing how to use SVGs inside a flame game. This game 
       uses several SVGs for its graphics. Click or touch the screen to make the 
@@ -75,7 +77,7 @@ class SvgComponentExample extends FlameGame {
       clicked position.
   ''';
 
-  SvgComponentExample()
+  this
     : super(
         camera: CameraComponent.withFixedResolution(
           width: 400,
@@ -85,7 +87,7 @@ class SvgComponentExample extends FlameGame {
       );
 }
 
-class _SvgComponentWorld extends World with TapCallbacks, DoubleTapCallbacks {
+class _SvgComponentWorld() extends World with TapCallbacks, DoubleTapCallbacks {
   late Player player;
 
   @override

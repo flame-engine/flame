@@ -18,9 +18,7 @@ void main() {
   runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
-
+class const MainApp({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -39,7 +37,7 @@ class MainApp extends StatelessWidget {
   }
 }
 
-class GameWorld extends World with HasGameRef {
+class GameWorld() extends World with HasGameRef {
   @override
   Future<void> onLoad() async {
     gameRef.camera.moveTo(Vector2(gameWidth * 0.5, gameHeight * 0.5));
@@ -70,9 +68,10 @@ class GameWorld extends World with HasGameRef {
   }
 }
 
-class Door extends RectangleComponent with TapCallbacks {
-  Door({super.position, super.size, super.anchor})
-    : super(paint: BasicPalette.brown.paint());
+class Door({super.position, super.size, super.anchor})
+    extends RectangleComponent
+    with TapCallbacks {
+  this : super(paint: BasicPalette.brown.paint());
 
   bool isOpen = false;
   bool _isInProgress = false;
@@ -115,14 +114,14 @@ class Door extends RectangleComponent with TapCallbacks {
   }
 }
 
-class Agent extends PositionComponent with HasBehaviorTree {
-  Agent({required this.door, required this.house, required Vector2 position})
-    : _startPosition = position.clone(),
-      super(position: position);
+class Agent({
+  required final Door door,
+  required final PositionComponent house,
+  required Vector2 position,
+}) extends PositionComponent with HasBehaviorTree {
+  this : super(position: position);
 
-  final Door door;
-  final PositionComponent house;
-  final Vector2 _startPosition;
+  final Vector2 _startPosition = position.clone();
 
   @override
   Future<void> onLoad() async {
@@ -240,7 +239,7 @@ class Agent extends PositionComponent with HasBehaviorTree {
 
 // Custom behavior tree nodes that use the blackboard
 
-class CheckMovingCondition extends BaseNode {
+class CheckMovingCondition() extends BaseNode {
   @override
   void tick() {
     final isMoving = blackboard?.get<bool>('isMoving') ?? false;
@@ -248,7 +247,7 @@ class CheckMovingCondition extends BaseNode {
   }
 }
 
-class CheckWantsToGoOutsideCondition extends BaseNode {
+class CheckWantsToGoOutsideCondition() extends BaseNode {
   @override
   void tick() {
     final wantsToGoOutside = blackboard?.get<bool>('wantsToGoOutside') ?? false;
@@ -256,7 +255,7 @@ class CheckWantsToGoOutsideCondition extends BaseNode {
   }
 }
 
-class CheckIsInsideCondition extends BaseNode {
+class CheckIsInsideCondition() extends BaseNode {
   @override
   void tick() {
     final isInside = blackboard?.get<bool>('isInside') ?? false;
@@ -264,7 +263,7 @@ class CheckIsInsideCondition extends BaseNode {
   }
 }
 
-class CheckIsOutsideCondition extends BaseNode {
+class CheckIsOutsideCondition() extends BaseNode {
   @override
   void tick() {
     final isInside = blackboard?.get<bool>('isInside') ?? false;
@@ -272,20 +271,14 @@ class CheckIsOutsideCondition extends BaseNode {
   }
 }
 
-class CheckIfDoorIsOpenCondition extends BaseNode {
-  CheckIfDoorIsOpenCondition(this.door);
-  final Door door;
-
+class CheckIfDoorIsOpenCondition(final Door door) extends BaseNode {
   @override
   void tick() {
     status = door.isOpen ? NodeStatus.success : NodeStatus.failure;
   }
 }
 
-class KnockTheDoorTask extends BaseNode {
-  KnockTheDoorTask(this.door);
-  final Door door;
-
+class KnockTheDoorTask(final Door door) extends BaseNode {
   @override
   void tick() {
     door.knock();
@@ -293,11 +286,10 @@ class KnockTheDoorTask extends BaseNode {
   }
 }
 
-class WalkTowardsDoorInsideTask extends BaseNode {
-  WalkTowardsDoorInsideTask({required this.door, required this.agent});
-  final Door door;
-  final Agent agent;
-
+class WalkTowardsDoorInsideTask({
+  required final Door door,
+  required final Agent agent,
+}) extends BaseNode {
   @override
   void tick() {
     final isAtTheDoor = blackboard?.get<bool>('isAtTheDoor') ?? false;
@@ -324,11 +316,8 @@ class WalkTowardsDoorInsideTask extends BaseNode {
   }
 }
 
-class StepOutTheDoorTask extends BaseNode {
-  StepOutTheDoorTask({required this.door, required this.agent});
-  final Door door;
-  final Agent agent;
-
+class StepOutTheDoorTask({required final Door door, required final Agent agent})
+    extends BaseNode {
   @override
   void tick() {
     final isInside = blackboard?.get<bool>('isInside') ?? false;
@@ -353,14 +342,10 @@ class StepOutTheDoorTask extends BaseNode {
   }
 }
 
-class WalkTowardsInitialPositionTask extends BaseNode {
-  WalkTowardsInitialPositionTask({
-    required this.startPosition,
-    required this.agent,
-  });
-  final Vector2 startPosition;
-  final Agent agent;
-
+class WalkTowardsInitialPositionTask({
+  required final Vector2 startPosition,
+  required final Agent agent,
+}) extends BaseNode {
   @override
   void tick() {
     final isAtTheDoor = blackboard?.get<bool>('isAtTheDoor') ?? false;
@@ -389,11 +374,10 @@ class WalkTowardsInitialPositionTask extends BaseNode {
   }
 }
 
-class WalkTowardsDoorOutsideTask extends BaseNode {
-  WalkTowardsDoorOutsideTask({required this.door, required this.agent});
-  final Door door;
-  final Agent agent;
-
+class WalkTowardsDoorOutsideTask({
+  required final Door door,
+  required final Agent agent,
+}) extends BaseNode {
   @override
   void tick() {
     final isAtTheDoor = blackboard?.get<bool>('isAtTheDoor') ?? false;
@@ -418,11 +402,10 @@ class WalkTowardsDoorOutsideTask extends BaseNode {
   }
 }
 
-class WalkTowardsCenterOfTheHouseTask extends BaseNode {
-  WalkTowardsCenterOfTheHouseTask({required this.house, required this.agent});
-  final PositionComponent house;
-  final Agent agent;
-
+class WalkTowardsCenterOfTheHouseTask({
+  required final PositionComponent house,
+  required final Agent agent,
+}) extends BaseNode {
   @override
   void tick() {
     final isAtCenterOfHouse =

@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
-class DebugExample extends FlameGame {
+class DebugExample() extends FlameGame {
   static const String description = '''
     In this example we show what you will see when setting `debugMode = true`
     and add the `FPSTextComponent` to your game.
@@ -37,13 +37,15 @@ class DebugExample extends FlameGame {
   }
 }
 
-class LogoComponent extends SpriteComponent with HasGameRef<DebugExample> {
+class LogoComponent(Sprite sprite)
+    extends SpriteComponent
+    with HasGameRef<DebugExample> {
   static const int speed = 150;
 
   int xDirection = 1;
   int yDirection = 1;
 
-  LogoComponent(Sprite sprite) : super(sprite: sprite, size: sprite.srcSize);
+  this : super(sprite: sprite, size: sprite.srcSize);
 
   @override
   void update(double dt) {

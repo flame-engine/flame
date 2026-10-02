@@ -1,7 +1,7 @@
 import 'package:flame_3d/src/parser/gltf/gltf_node.dart';
 
 /// The topology type of primitives to render.
-enum PrimitiveMode {
+enum PrimitiveMode(final int value) {
   points(0),
   lines(1),
   lineLoop(2),
@@ -9,10 +9,6 @@ enum PrimitiveMode {
   triangles(4),
   triangleStrip(5),
   triangleFan(6);
-
-  final int value;
-
-  const PrimitiveMode(this.value);
 
   static PrimitiveMode valueOf(int value) {
     return values.firstWhere((e) => e.value == value);

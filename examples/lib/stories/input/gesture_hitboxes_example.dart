@@ -8,9 +8,14 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart';
 
-enum Shapes { circle, rectangle, polygon, path }
+enum Shapes() {
+  circle,
+  rectangle,
+  polygon,
+  path,
+}
 
-class GestureHitboxesExample extends FlameGame {
+class GestureHitboxesExample() extends FlameGame {
   static const description = '''
     Tap to create a PositionComponent with a randomly shaped hitbox.
     You can then hover over to shapes to see that they receive the hover events
@@ -18,10 +23,11 @@ class GestureHitboxesExample extends FlameGame {
     it is removed.
   ''';
 
-  GestureHitboxesExample() : super(world: _GestureHitboxesWorld());
+  this : super(world: _GestureHitboxesWorld());
 }
 
-class _GestureHitboxesWorld extends World
+class _GestureHitboxesWorld()
+    extends World
     with TapCallbacks, HasGameRef<GestureHitboxesExample> {
   final _rng = Random();
 
@@ -82,16 +88,15 @@ class _GestureHitboxesWorld extends World
   }
 }
 
-class MyPathComponent extends PathComponent
-    with TapCallbacks, HoverCallbacks, GestureHitboxes {
+class MyPathComponent({
+  required super.path,
+  super.position,
+  super.scale,
+  super.angle,
+}) extends PathComponent with TapCallbacks, HoverCallbacks, GestureHitboxes {
   late final Color baseColor;
 
-  MyPathComponent({
-    required super.path,
-    super.position,
-    super.scale,
-    super.angle,
-  }) : super(anchor: .center) {
+  this : super(anchor: .center) {
     // The hitbox follows the same path, and it is rendered so that you can
     // see the polygons that receive the gestures.
     add(
@@ -124,17 +129,16 @@ class MyPathComponent extends PathComponent
   }
 }
 
-class MyShapeComponent extends PositionComponent
+class MyShapeComponent({
+  required final ShapeHitbox hitbox,
+  super.position,
+  super.size,
+  super.angle,
+}) extends PositionComponent
     with TapCallbacks, HoverCallbacks, GestureHitboxes {
-  final ShapeHitbox hitbox;
   late final Color baseColor;
 
-  MyShapeComponent({
-    required this.hitbox,
-    super.position,
-    super.size,
-    super.angle,
-  }) : super(anchor: Anchor.center);
+  this : super(anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {

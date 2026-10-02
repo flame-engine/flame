@@ -7,11 +7,7 @@ import 'package:jenny/src/yarn_project.dart';
 ///
 /// If `x` is numeric, then the value 0 becomes `false` and all other values
 /// become `true`.
-class BoolFn extends BoolExpression {
-  const BoolFn(this._arg);
-
-  final Expression _arg;
-
+class const BoolFn(final Expression _arg) extends BoolExpression {
   /// Static constructor to be used in parse.dart.
   static Expression make(
     List<FunctionArgument> args,

@@ -9,40 +9,36 @@ import 'package:flame/extensions.dart';
 /// The [LineMetrics] box surrounding a piece of text is not necessarily tight:
 /// there's usually some amount of space above and below the text glyphs to
 /// improve legibility of multi-line text.
-class LineMetrics {
-  LineMetrics({
-    this._left = 0,
-    this._baseline = 0,
-    this._width = 0,
-    double? ascent,
-    double? descent,
-    double? height,
-  }) : _ascent = ascent ?? (height == null ? 0 : height - (descent ?? 0)),
-       _descent =
-           descent ?? (height == null ? 0 : height - (ascent ?? height)) {
+class LineMetrics({
+  var double _left = 0,
+  var double _baseline = 0,
+  var double _width = 0,
+  double? ascent,
+  double? descent,
+  double? height,
+}) {
+  this {
     _updateSize();
   }
 
   /// X-coordinate of the left edge of the box.
   double get left => _left;
-  double _left;
 
   /// Y-coordinate of the baseline of the box. When several line fragments are
   /// placed next to each other, their baselines will match.
   double get baseline => _baseline;
-  double _baseline;
 
   /// The total width of the box.
   double get width => _width;
-  double _width;
 
   /// The distance from the baseline to the top of the box.
   double get ascent => _ascent;
-  double _ascent;
+  double _ascent = ascent ?? (height == null ? 0 : height - (descent ?? 0));
 
   /// The distance from the baseline to the bottom of the box.
   double get descent => _descent;
-  double _descent;
+  double _descent =
+      descent ?? (height == null ? 0 : height - (ascent ?? height));
 
   double get right => left + width;
   double get top => baseline - ascent;

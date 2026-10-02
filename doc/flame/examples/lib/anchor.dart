@@ -5,7 +5,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 
-class AnchorGame extends FlameGame {
+class AnchorGame() extends FlameGame {
   final _parentAnchorText = TextComponent(position: Vector2.all(5));
   final _childAnchorText = TextComponent(position: Vector2(5, 30));
 
@@ -50,13 +50,11 @@ class AnchorGame extends FlameGame {
   }
 }
 
-class _AnchoredRectangle extends RectangleComponent with TapCallbacks {
-  _AnchoredRectangle({
-    super.position,
-    super.size,
-    super.paint,
-  });
-
+class _AnchoredRectangle({
+  super.position,
+  super.size,
+  super.paint,
+}) extends RectangleComponent with TapCallbacks {
   @override
   void onTapDown(TapDownEvent event) {
     var index = Anchor.values.indexOf(anchor) + 1;

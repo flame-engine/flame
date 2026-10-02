@@ -5,7 +5,7 @@ import 'package:flame/text.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
-class HardwareKeyboardExample extends FlameGame {
+class HardwareKeyboardExample() extends FlameGame {
   static const String description = '''
     This example uses the HardwareKeyboardDetector mixin in order to keep
     track of which keys on a keyboard are currently pressed.
@@ -45,7 +45,8 @@ class HardwareKeyboardExample extends FlameGame {
   }
 }
 
-class MyKeyboardDetector extends HardwareKeyboardDetector
+class MyKeyboardDetector()
+    extends HardwareKeyboardDetector
     with HasGameRef<HardwareKeyboardExample> {
   @override
   void onKeyEvent(KeyEvent event) {
@@ -205,8 +206,9 @@ class MyKeyboardDetector extends HardwareKeyboardDetector
   };
 }
 
-class KeyboardKey extends PositionComponent {
-  KeyboardKey({required this.text, super.position}) {
+class KeyboardKey({required final String text, super.position})
+    extends PositionComponent {
+  this {
     textElement = textRenderer.format(text);
     width = textElement.metrics.width + padding.x;
     height = textElement.metrics.height + padding.y;
@@ -217,7 +219,6 @@ class KeyboardKey extends PositionComponent {
     rect = RRect.fromLTRBR(0, 0, width, height, const Radius.circular(8));
   }
 
-  final String text;
   late final InlineTextElement textElement;
   late final RRect rect;
 

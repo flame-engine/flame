@@ -2,36 +2,27 @@ import 'package:flame_splash_screen/flame_splash_screen.dart';
 import 'package:flutter/widgets.dart';
 
 /// A stateful widget to show a splash screen animation for flame games
-class FlameSplashScreen extends StatefulWidget {
-  /// Creates a [FlameSplashScreen].
-  const FlameSplashScreen({
-    required this.onFinish,
-    required this.theme,
-    this.showBefore,
-    this.showAfter,
-    this.controller,
-    super.key,
-  });
-
-  /// Gives extra controller over the splash animation.
-  final FlameSplashController? controller;
+class const FlameSplashScreen({
+  /// The only required option, callback to be invoked when animation finished
+  required final ValueChanged<BuildContext> onFinish,
 
   /// Enables to set a different theme other than the default.
-  final FlameSplashTheme theme;
-
-  /// The only required option, callback to be invoked when animation finished
-  final ValueChanged<BuildContext> onFinish;
+  required final FlameSplashTheme theme,
 
   /// Adds an extra step to the animation showing a widget, can be other logo.
   ///
   /// Shown before flame logo.
-  final WidgetBuilder? showBefore;
+  final WidgetBuilder? showBefore,
 
   /// Adds an extra step to the animation showing a widget, can be other logo.
   ///
   /// Shown after flame logo.
-  final WidgetBuilder? showAfter;
+  final WidgetBuilder? showAfter,
 
+  /// Gives extra controller over the splash animation.
+  final FlameSplashController? controller,
+  super.key,
+}) extends StatefulWidget {
   @override
   FlameSplashScreenState createState() => FlameSplashScreenState();
 }
@@ -39,7 +30,7 @@ class FlameSplashScreen extends StatefulWidget {
 /// The state for the [FlameSplashScreen] that holds the [controller] for
 /// controlling the animation durations and whether it should automatically
 /// start. Also contains the list of steps that it should animate through.
-class FlameSplashScreenState extends State<FlameSplashScreen> {
+class FlameSplashScreenState() extends State<FlameSplashScreen> {
   /// The [controller] for controlling the animation durations and whether it
   /// should automatically start.
   late FlameSplashController controller;
@@ -112,21 +103,17 @@ class FlameSplashScreenState extends State<FlameSplashScreen> {
   }
 }
 
-class _SplashScreenStep extends StatefulWidget {
-  const _SplashScreenStep({
-    required this.builder,
-    required this.durations,
-    super.key,
-  });
-
-  final WidgetBuilder builder;
-  final FlameSplashDurations durations;
-
+class const _SplashScreenStep({
+  required final WidgetBuilder builder,
+  required final FlameSplashDurations durations,
+  super.key,
+}) extends StatefulWidget {
   @override
   __SplashScreenStepState createState() => __SplashScreenStepState();
 }
 
-class __SplashScreenStepState extends State<_SplashScreenStep>
+class __SplashScreenStepState()
+    extends State<_SplashScreenStep>
     with TickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> opacityAnimation;

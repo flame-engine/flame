@@ -3,17 +3,11 @@
 ///
 /// The [files] are relative to the project directory, and `{{name}}` in
 /// their contents is replaced with the project name.
-class CreateTemplate {
-  const CreateTemplate({
-    required this.name,
-    required this.description,
-    required this.files,
-  });
-
-  final String name;
-  final String description;
-  final Map<String, String> files;
-
+class const CreateTemplate({
+  required final String name,
+  required final String description,
+  required final Map<String, String> files,
+}) {
   /// Whether the template comes with tests, and thus needs `flame_test`.
   bool get hasTests => files.keys.any((path) => path.startsWith('test/'));
 

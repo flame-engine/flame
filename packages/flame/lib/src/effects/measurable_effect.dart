@@ -7,7 +7,7 @@ import 'package:flame/src/effects/controllers/speed_effect_controller.dart';
 ///
 /// Use this interface for any effect that you want to be compatible with the
 /// [SpeedEffectController].
-abstract class MeasurableEffect {
+abstract class MeasurableEffect() {
   /// Calculate the "measure" of the effect, which is the effect's distance
   /// from min to max progress. The "measure" is any property for which the
   /// notion of _speed_ is well-defined.

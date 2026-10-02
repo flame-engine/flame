@@ -121,4 +121,4 @@ void main() {
   });
 }
 
-class _HitboxComponent extends PositionComponent with GestureHitboxes {}
+class _HitboxComponent() extends PositionComponent with GestureHitboxes;

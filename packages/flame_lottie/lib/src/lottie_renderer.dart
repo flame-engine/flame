@@ -3,39 +3,34 @@ import 'package:flame/game.dart';
 import 'package:flutter/rendering.dart';
 import 'package:lottie/lottie.dart';
 
-class LottieRenderer {
-  final LottieDrawable drawable;
-  final EffectController _controller;
+class LottieRenderer({
+  required LottieComposition composition,
+  required double progress,
+  required NotifyingVector2 size,
+  EffectController? controller,
+  double? duration,
+  bool? repeating,
+  final Alignment? alignment,
+  final BoxFit? fit,
+  LottieDelegates? delegates,
+  bool? enableMergePaths,
+  FrameRate? frameRate,
+}) {
+  final LottieDrawable drawable =
+      LottieDrawable(composition, frameRate: frameRate)
+        ..setProgress(progress)
+        ..delegates = delegates
+        ..enableMergePaths = enableMergePaths ?? false;
+  final EffectController _controller =
+      controller ??
+      EffectController(
+        duration: duration ?? composition.duration.inMilliseconds / 1000,
+        infinite: repeating ?? false,
+      );
 
-  final BoxFit? fit;
-  final Alignment? alignment;
+  Rect boundingRect = size.toRect();
 
-  Rect boundingRect;
-
-  LottieRenderer({
-    required LottieComposition composition,
-    required double progress,
-    required NotifyingVector2 size,
-    EffectController? controller,
-    double? duration,
-    bool? repeating,
-    this.alignment,
-    this.fit,
-    LottieDelegates? delegates,
-    bool? enableMergePaths,
-    FrameRate? frameRate,
-  }) : assert(progress >= 0.0 && progress <= 1.0),
-       boundingRect = size.toRect(),
-       drawable = LottieDrawable(composition, frameRate: frameRate)
-         ..setProgress(progress)
-         ..delegates = delegates
-         ..enableMergePaths = enableMergePaths ?? false,
-       _controller =
-           controller ??
-           EffectController(
-             duration: duration ?? composition.duration.inMilliseconds / 1000,
-             infinite: repeating ?? false,
-           ) {
+  this : assert(progress >= 0.0 && progress <= 1.0) {
     size.addListener(() {
       boundingRect = size.toRect();
     });

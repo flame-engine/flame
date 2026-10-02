@@ -5,10 +5,12 @@ import 'package:flame_3d/src/parser/gltf/gltf_root.dart';
 import 'package:flame_3d/src/parser/gltf/node.dart';
 
 /// The descriptor of the animated property.
-class AnimationTarget extends GltfNode {
+class AnimationTarget({
+  required super.root,
+
   /// The reference to the node to animate. When undefined, the animated object
   /// **MAY** be defined by an extension.
-  final GltfRef<Node> node;
+  required final GltfRef<Node> node,
 
   /// The name of the node's TRS property to animate, or the `weights` of the
   /// Morph Targets it instantiates.
@@ -18,14 +20,8 @@ class AnimationTarget extends GltfNode {
   /// (x, y, z, w), where w is the scalar.
   /// For the `scale` property, the values are the scaling factors along the
   /// X, Y, and Z axes.
-  final AnimationPath path;
-
-  AnimationTarget({
-    required super.root,
-    required this.node,
-    required this.path,
-  });
-
+  required final AnimationPath path,
+}) extends GltfNode {
   AnimationTarget.parse(
     GltfRoot root,
     Map<String, Object?> map,

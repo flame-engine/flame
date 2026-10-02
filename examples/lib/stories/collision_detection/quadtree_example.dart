@@ -8,14 +8,13 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/layers.dart';
 import 'package:flutter/services.dart';
-import 'package:material_ui/material_ui.dart' hide Image, Draggable;
+import 'package:material_ui/material_ui.dart' hide Draggable, Image;
 
 const tileSize = 8.0;
 
-class QuadTreeExample extends FlameGame
+class QuadTreeExample()
+    extends FlameGame
     with HasQuadTreeCollisionDetection, KeyboardEvents, ScrollCallbacks {
-  QuadTreeExample();
-
   static const description = '''
 In this example the standard "Sweep and Prune" algorithm is replaced by  
 "Quad Tree". Quad Tree is often a more efficient approach of handling collisions,
@@ -199,14 +198,12 @@ Press T button to toggle player to collide with other objects.
 
 //#region Player
 
-class Player extends SpriteComponent
+class Player({
+  required super.position,
+  required super.size,
+  required super.priority,
+}) extends SpriteComponent
     with CollisionCallbacks, HasGameRef<QuadTreeExample> {
-  Player({
-    required super.position,
-    required super.size,
-    required super.priority,
-  });
-
   bool canMoveLeft = true;
   bool canMoveRight = true;
   bool canMoveTop = true;
@@ -263,15 +260,15 @@ class Player extends SpriteComponent
   }
 }
 
-class Bullet extends PositionComponent with CollisionCallbacks, HasPaint {
-  Bullet({required super.position, required this.displacement}) {
+class Bullet({required super.position, required final Vector2 displacement})
+    extends PositionComponent
+    with CollisionCallbacks, HasPaint {
+  this {
     paint.color = Colors.deepOrange;
     priority = 10;
     size = Vector2.all(1);
     add(RectangleHitbox());
   }
-
-  final Vector2 displacement;
 
   @override
   void render(Canvas canvas) {
@@ -309,14 +306,14 @@ class Bullet extends PositionComponent with CollisionCallbacks, HasPaint {
 
 //#region Environment
 
-class Brick extends SpriteComponent
+class Brick({
+  required super.position,
+  required super.size,
+  required super.priority,
+  required super.sprite,
+}) extends SpriteComponent
     with CollisionCallbacks, GameCollidable, CustomTraversal, UpdateOnce {
-  Brick({
-    required super.position,
-    required super.size,
-    required super.priority,
-    required super.sprite,
-  }) {
+  this {
     initCenter();
     initCollision();
   }
@@ -331,14 +328,14 @@ class Brick extends SpriteComponent
   }
 }
 
-class Water extends SpriteComponent
+class Water({
+  required super.position,
+  required super.size,
+  required super.priority,
+  required super.sprite,
+}) extends SpriteComponent
     with CollisionCallbacks, GameCollidable, CustomTraversal, UpdateOnce {
-  Water({
-    required super.position,
-    required super.size,
-    required super.priority,
-    required super.sprite,
-  }) {
+  this {
     initCenter();
     initCollision();
   }
@@ -375,9 +372,7 @@ mixin UpdateOnce on CustomTraversal {
   }
 }
 
-class StaticLayer extends PreRenderedLayer {
-  StaticLayer();
-
+class StaticLayer() extends PreRenderedLayer {
   List<PositionComponent> components = [];
 
   @override
@@ -392,19 +387,17 @@ class StaticLayer extends PreRenderedLayer {
   }
 }
 
-class LayerComponent extends PositionComponent {
-  LayerComponent(this.layer);
-
-  StaticLayer layer;
-
+class LayerComponent(var StaticLayer layer) extends PositionComponent {
   @override
   void render(Canvas canvas) {
     layer.render(canvas);
   }
 }
 
-class QuadTreeDebugComponent extends PositionComponent with HasPaint {
-  QuadTreeDebugComponent(QuadTreeCollisionDetection cd) {
+class QuadTreeDebugComponent(QuadTreeCollisionDetection cd)
+    extends PositionComponent
+    with HasPaint {
+  this {
     dbg = QuadTreeNodeDebugInfo.init(cd);
     paint.color = Colors.blue;
     paint.style = PaintingStyle.stroke;

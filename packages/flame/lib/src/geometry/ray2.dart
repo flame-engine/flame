@@ -7,15 +7,16 @@ import 'package:meta/meta.dart';
 /// A ray in the 2d plane.
 ///
 /// The [direction] should be normalized.
-class Ray2 {
-  Ray2({required this.origin, required Vector2 direction}) {
+class Ray2({
+  /// The point where the ray originates from.
+  required var Vector2 origin,
+  required Vector2 direction,
+}) {
+  this {
     this.direction = direction;
   }
 
   Ray2.zero() : this(origin: Vector2.zero(), direction: Vector2(1, 0));
-
-  /// The point where the ray originates from.
-  Vector2 origin;
 
   /// The normalized direction of the ray.
   ///

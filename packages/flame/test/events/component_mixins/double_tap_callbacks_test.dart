@@ -161,9 +161,10 @@ void main() {
   });
 }
 
-class _DoubleTapCallbacksComponent extends PositionComponent
+class _DoubleTapCallbacksComponent()
+    extends PositionComponent
     with DoubleTapCallbacks {
-  _DoubleTapCallbacksComponent() {
+  this {
     anchor = Anchor.center;
     size = Vector2.all(10);
   }

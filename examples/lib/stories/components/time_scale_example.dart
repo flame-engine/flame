@@ -9,12 +9,13 @@ import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/rendering.dart';
 
-class TimeScaleExample extends FlameGame
+class TimeScaleExample()
+    extends FlameGame
     with HasTimeScale, HasCollisionDetection {
   static const description =
       'This example shows how time scale can be used to control game speed.';
 
-  TimeScaleExample()
+  this
     : super(
         camera: CameraComponent.withFixedResolution(
           width: 640,
@@ -64,7 +65,7 @@ class TimeScaleExample extends FlameGame
       ),
       gameSpeedText,
     ]);
-    return super.onLoad();
+    await super.onLoad();
   }
 
   @override
@@ -74,20 +75,17 @@ class TimeScaleExample extends FlameGame
   }
 }
 
-class _Chopper extends SpriteAnimationComponent
+class _Chopper({
+  super.animation,
+  super.position,
+  super.size,
+  super.angle,
+  super.anchor,
+}) extends SpriteAnimationComponent
     with HasGameRef<TimeScaleExample>, CollisionCallbacks {
-  _Chopper({
-    super.animation,
-    super.position,
-    super.size,
-    super.angle,
-    super.anchor,
-  }) : _moveDirection = Vector2(0, 1)..rotate(angle ?? 0),
-       _initialPosition = position?.clone() ?? Vector2.zero();
-
-  final Vector2 _moveDirection;
+  final Vector2 _moveDirection = Vector2(0, 1)..rotate(angle ?? 0);
   final _speed = 80.0;
-  final Vector2 _initialPosition;
+  final Vector2 _initialPosition = position?.clone() ?? Vector2.zero();
   late final _timer = TimerComponent(
     period: 2,
     onTick: _reset,
@@ -98,7 +96,7 @@ class _Chopper extends SpriteAnimationComponent
   Future<void> onLoad() async {
     add(CircleHitbox());
     add(_timer);
-    return super.onLoad();
+    await super.onLoad();
   }
 
   @override

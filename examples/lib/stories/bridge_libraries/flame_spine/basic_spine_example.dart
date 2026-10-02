@@ -3,7 +3,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_spine/flame_spine.dart';
 
-class FlameSpineExample extends FlameGame with TapCallbacks {
+class FlameSpineExample() extends FlameGame with TapCallbacks {
   static const String description = '''
     This example shows how to load a Spine animation. Tap on the screen to try
     different states of the animation.

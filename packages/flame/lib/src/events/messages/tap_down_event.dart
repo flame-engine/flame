@@ -9,22 +9,24 @@ import 'package:flutter/gestures.dart';
 ///
 /// In order for a component to be eligible to receive this event, it must add
 /// the [TapCallbacks] mixin.
-class TapDownEvent extends PositionEvent<TapDownDetails> {
-  TapDownEvent(this.pointerId, super.game, TapDownDetails details)
-    : deviceKind = details.kind ?? PointerDeviceKind.unknown,
-      super(
-        raw: details,
-        devicePosition: details.globalPosition.toVector2(),
-      );
-
+class TapDownEvent(
   /// The unique identifier of the tap event.
   ///
   /// Subsequent [TapUpEvent] or [TapCancelEvent] will carry the same pointer
   /// id. This allows distinguishing multiple taps that may occur simultaneously
   /// on the same component.
-  final int pointerId;
+  final int pointerId,
+  super.game,
+  TapDownDetails details,
+) extends PositionEvent<TapDownDetails> {
+  this
+    : super(
+        raw: details,
+        devicePosition: details.globalPosition.toVector2(),
+      );
 
-  final PointerDeviceKind deviceKind;
+  final PointerDeviceKind deviceKind =
+      details.kind ?? PointerDeviceKind.unknown;
 
   @override
   String toString() =>

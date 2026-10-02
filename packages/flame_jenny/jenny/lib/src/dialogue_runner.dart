@@ -31,17 +31,15 @@ import 'package:meta/meta.dart';
 /// output of a `DialogueRunner`, therefore, is a stream of dialogue statements
 /// that need to be presented to the player. Such presentation, is handled by
 /// [DialogueView]s.
-class DialogueRunner {
-  /// Creates a `DialogueRunner` for executing the [yarnProject]. The dialogue
-  /// will be delivered to all the provided [_dialogueViews]. Each of these
-  /// dialogue views may only be assigned to a single `DialogueRunner` at a
-  /// time.
-  DialogueRunner({
-    required YarnProject yarnProject,
-    required this._dialogueViews,
-  }) : project = yarnProject;
-
-  final List<DialogueView> _dialogueViews;
+///
+/// Creates a `DialogueRunner` for executing the [project]. The dialogue
+/// will be delivered to all the provided `dialogueViews`. Each of these
+/// dialogue views may only be assigned to a single `DialogueRunner` at a
+/// time.
+class DialogueRunner({
+  required YarnProject yarnProject,
+  required final List<DialogueView> _dialogueViews,
+}) {
   _LineDeliveryPipeline? _linePipeline;
   Node? _currentNode;
   NodeIterator? _currentIterator;
@@ -49,7 +47,7 @@ class DialogueRunner {
   String? _nextNode;
 
   /// The `YarnProject` that this dialogue runner is executing.
-  final YarnProject project;
+  final YarnProject project = yarnProject;
 
   /// Starts the dialogue with the node [nodeName], and returns a future that
   /// completes once the dialogue finishes running. While this future is
@@ -252,14 +250,17 @@ class DialogueRunner {
   }
 }
 
-class _LineDeliveryPipeline {
-  _LineDeliveryPipeline(this.line, this.views)
-    : _completer = Completer(),
-      _futures = List.generate(views.length, (i) => null, growable: false);
+class _LineDeliveryPipeline(
+  final DialogueLine line,
+  final List<DialogueView> views,
+) {
+  this : _completer = Completer();
 
-  final DialogueLine line;
-  final List<DialogueView> views;
-  final List<FutureOr<void>> _futures;
+  final List<FutureOr<void>> _futures = List.generate(
+    views.length,
+    (i) => null,
+    growable: false,
+  );
   final Completer<void> _completer;
   int _numPendingFutures = 0;
   bool _interrupted = false;
@@ -271,7 +272,6 @@ class _LineDeliveryPipeline {
     for (var i = 0; i < views.length; i++) {
       final maybeFuture = views[i].onLineStart(line);
       if (maybeFuture is Future) {
-        // ignore: cast_nullable_to_non_nullable
         final future = maybeFuture as Future<bool>;
         _futures[i] = future.then((_) => startCompleted(i));
         _numPendingFutures++;
@@ -305,7 +305,6 @@ class _LineDeliveryPipeline {
     for (var i = 0; i < views.length; i++) {
       final maybeFuture = views[i].onLineFinish(line);
       if (maybeFuture is Future) {
-        // ignore: unnecessary_cast
         final future = maybeFuture as Future<void>;
         _futures[i] = future.then((_) => finishCompleted(i));
         _numPendingFutures++;

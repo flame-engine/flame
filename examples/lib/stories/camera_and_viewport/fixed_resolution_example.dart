@@ -6,7 +6,7 @@ import 'package:flame/palette.dart';
 import 'package:flame/text.dart';
 import 'package:material_ui/material_ui.dart';
 
-class FixedResolutionExample extends FlameGame with ScrollCallbacks {
+class FixedResolutionExample() extends FlameGame with ScrollCallbacks {
   static const description = '''
     This example shows how to create a viewport with a fixed resolution.
     It is useful when you want the visible part of the game to be the same on
@@ -20,7 +20,7 @@ class FixedResolutionExample extends FlameGame with ScrollCallbacks {
 
   static const zoomPerScrollUnit = 0.05;
 
-  FixedResolutionExample()
+  this
     : super(
         camera: CameraComponent.withFixedResolution(width: 600, height: 1024),
         world: FixedResolutionWorld(),
@@ -64,7 +64,8 @@ class FixedResolutionExample extends FlameGame with ScrollCallbacks {
   }
 }
 
-class FixedResolutionWorld extends World
+class FixedResolutionWorld()
+    extends World
     with HasGameRef, TapCallbacks, DoubleTapCallbacks {
   final red = BasicPalette.red.paint();
 
@@ -101,14 +102,14 @@ class FixedResolutionWorld extends World
   }
 }
 
-class Background extends PositionComponent {
+class Background() extends PositionComponent {
   @override
   int priority = -1;
 
   late Paint white;
   late final Rect hugeRect;
 
-  Background() : super(size: Vector2.all(100000), anchor: Anchor.center);
+  this : super(size: Vector2.all(100000), anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {
@@ -122,32 +123,33 @@ class Background extends PositionComponent {
   }
 }
 
-class TextButton extends ButtonComponent {
-  TextButton({
-    required String text,
-    required super.position,
-    super.anchor,
-    TextRenderer? textRenderer,
-  }) : super(
-         button: RectangleComponent(
-           size: Vector2(200, 100),
-           paint: Paint()
-             ..color = Colors.orange
-             ..strokeWidth = 2
-             ..style = PaintingStyle.stroke,
-         ),
-         buttonDown: RectangleComponent(
-           size: Vector2(200, 100),
-           paint: Paint()
-             ..color = BasicPalette.orange.color.withValues(alpha: 0.5),
-         ),
-         children: [
-           TextComponent(
-             text: text,
-             textRenderer: textRenderer,
-             position: Vector2(100, 50),
-             anchor: Anchor.center,
-           ),
-         ],
-       );
+class TextButton({
+  required String text,
+  required super.position,
+  super.anchor,
+  TextRenderer? textRenderer,
+}) extends ButtonComponent {
+  this
+    : super(
+        button: RectangleComponent(
+          size: Vector2(200, 100),
+          paint: Paint()
+            ..color = Colors.orange
+            ..strokeWidth = 2
+            ..style = PaintingStyle.stroke,
+        ),
+        buttonDown: RectangleComponent(
+          size: Vector2(200, 100),
+          paint: Paint()
+            ..color = BasicPalette.orange.color.withValues(alpha: 0.5),
+        ),
+        children: [
+          TextComponent(
+            text: text,
+            textRenderer: textRenderer,
+            position: Vector2(100, 50),
+            anchor: Anchor.center,
+          ),
+        ],
+      );
 }

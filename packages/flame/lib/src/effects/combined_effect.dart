@@ -17,28 +17,29 @@ import 'package:flame/effects.dart';
 /// infinitely. This is equivalent to setting `repeatCount = infinity`. If both
 /// the `infinite` and the `repeatCount` parameters are given, then `infinite`
 /// takes precedence.
-class CombinedEffect extends Effect with CustomTraversal {
-  CombinedEffect(
-    List<Effect> effects, {
-    bool alternate = false,
-    bool infinite = false,
-    int repeatCount = 1,
-    super.onComplete,
-    super.key,
-  }) : assert(effects.isNotEmpty, 'The list of effects cannot be empty'),
-       assert(
-         !(infinite && repeatCount != 1),
-         'Parameters infinite and repeatCount cannot be specified '
-         'simultaneously',
-       ),
-       super(
-         _createController(
-           effects: effects,
-           alternate: alternate,
-           infinite: infinite,
-           repeatCount: repeatCount,
-         ),
-       ) {
+class CombinedEffect(
+  List<Effect> effects, {
+  bool alternate = false,
+  bool infinite = false,
+  int repeatCount = 1,
+  super.onComplete,
+  super.key,
+}) extends Effect with CustomTraversal {
+  this
+    : assert(effects.isNotEmpty, 'The list of effects cannot be empty'),
+      assert(
+        !(infinite && repeatCount != 1),
+        'Parameters infinite and repeatCount cannot be specified '
+        'simultaneously',
+      ),
+      super(
+        _createController(
+          effects: effects,
+          alternate: alternate,
+          infinite: infinite,
+          repeatCount: repeatCount,
+        ),
+      ) {
     addAll(effects);
   }
 

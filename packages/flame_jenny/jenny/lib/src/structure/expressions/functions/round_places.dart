@@ -5,12 +5,8 @@ import 'package:jenny/src/structure/expressions/functions/_common.dart';
 import 'package:jenny/src/yarn_project.dart';
 
 /// Function `round_places(x, n)` will round `x` to `n` decimal places.
-class RoundPlacesFn extends NumExpression {
-  const RoundPlacesFn(this.arg, this.places);
-
-  final NumExpression arg;
-  final NumExpression places;
-
+class const RoundPlacesFn(final NumExpression arg, final NumExpression places)
+    extends NumExpression {
   static Expression make(
     List<FunctionArgument> args,
     YarnProject yarnProject,

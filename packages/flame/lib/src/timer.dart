@@ -9,26 +9,22 @@ import 'dart:ui';
 /// NOTE: You can change the [period], but keep in mind that the timer
 /// won't start automatically if the period is raised and the timer currently
 /// is stopped.
-class Timer {
-  double period;
-  VoidCallback? onTick;
-  bool repeat;
+class Timer({
+  required var double period,
+  var VoidCallback? onTick,
+  var bool repeat = false,
+  bool autoStart = true,
+  final int? tickCount,
+}) {
   double _current = 0;
-  bool _running;
-  final int? tickCount;
+  bool _running = autoStart;
   int _currentTick = 0;
 
-  Timer({
-    required this.period,
-    this.onTick,
-    this.repeat = false,
-    bool autoStart = true,
-    this.tickCount,
-  }) : assert(
-         tickCount == null || tickCount > 0,
-         'tickCount must be null or bigger than 0',
-       ),
-       _running = autoStart;
+  this
+    : assert(
+        tickCount == null || tickCount > 0,
+        'tickCount must be null or bigger than 0',
+      );
 
   /// The current amount of seconds that has passed on this iteration
   double get current => _current;

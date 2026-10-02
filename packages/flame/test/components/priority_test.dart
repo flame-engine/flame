@@ -259,12 +259,12 @@ void main() {
   });
 }
 
-class _PriorityComponent extends Component {
-  _PriorityComponent(int priority) : super(priority: priority);
+class _PriorityComponent(int priority) extends Component {
+  this : super(priority: priority);
 }
 
-class _ParentWithReorderSpy extends Component {
-  _ParentWithReorderSpy(int priority) : super(priority: priority);
+class _ParentWithReorderSpy(int priority) extends Component {
+  this : super(priority: priority);
 
   int callCount = 0;
 

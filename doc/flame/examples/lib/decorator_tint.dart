@@ -4,7 +4,7 @@ import 'package:doc_flame_examples/flower.dart';
 import 'package:flame/game.dart';
 import 'package:flame/rendering.dart';
 
-class DecoratorTintGame extends FlameGame {
+class DecoratorTintGame() extends FlameGame {
   @override
   Future<void> onLoad() async {
     var step = 0;

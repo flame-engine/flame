@@ -61,14 +61,11 @@ void main() {
   });
 }
 
-class _RectComponent extends Component {
+class _RectComponent() extends Component {
   Rect rect = Rect.zero;
 }
 
-class _TopLeftCorner implements PositionProvider {
-  _TopLeftCorner(this.target);
-  _RectComponent target;
-
+class _TopLeftCorner(var _RectComponent target) implements PositionProvider {
   @override
   Vector2 get position => Vector2(target.rect.left, target.rect.top);
 

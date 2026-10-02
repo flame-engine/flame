@@ -6,14 +6,14 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/math.dart';
 
-class SpawnComponentExample extends FlameGame {
+class SpawnComponentExample() extends FlameGame {
   static const String description =
       'Tap on the screen to start spawning Embers within different shapes.';
 
-  SpawnComponentExample() : super(world: SpawnComponentWorld());
+  this : super(world: SpawnComponentWorld());
 }
 
-class SpawnComponentWorld extends World with TapCallbacks {
+class SpawnComponentWorld() extends World with TapCallbacks {
   @override
   void onTapDown(TapDownEvent info) {
     final shapeType = Shapes.values.random();
@@ -54,7 +54,7 @@ class SpawnComponentWorld extends World with TapCallbacks {
   }
 }
 
-enum Shapes {
+enum Shapes() {
   rectangle,
   circle,
   polygon,

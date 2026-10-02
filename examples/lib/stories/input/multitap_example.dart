@@ -4,7 +4,7 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 
 /// Includes an example including advanced detectors
-class MultitapExample extends FlameGame with TapCallbacks {
+class MultitapExample() extends FlameGame with TapCallbacks {
   static const String description = '''
     In this example we showcase the multi touch capabilities
     Touch multiple places on the screen and you will see multiple squares drawn,

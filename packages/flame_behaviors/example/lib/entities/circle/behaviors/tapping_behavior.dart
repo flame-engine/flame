@@ -8,7 +8,7 @@ import 'package:flame_behaviors_example/entities/entities.dart';
 /// It does so simply by existing: the tap is delivered to this behavior, and
 /// since it does not set `continuePropagation`, it never reaches the game-level
 /// SpawningBehavior underneath.
-class TappingBehavior extends TappableBehavior<Circle> {
+class TappingBehavior() extends TappableBehavior<Circle> {
   @override
   void onTapDown(TapDownEvent event) {}
 }

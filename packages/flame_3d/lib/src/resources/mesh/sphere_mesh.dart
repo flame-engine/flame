@@ -6,13 +6,14 @@ import 'package:flame_3d/resources.dart';
 /// {@template sphere_mesh}
 /// Represents a Sphere's geometry with a single surface.
 /// {@endtemplate}
-class SphereMesh extends Mesh {
+class SphereMesh({
+  /// The radius of the sphere.
+  required final double radius,
+  int segments = 64,
+  Material? material,
+}) extends Mesh {
   /// {@macro sphere_mesh}
-  SphereMesh({
-    required this.radius,
-    int segments = 64,
-    Material? material,
-  }) {
+  this {
     final vertices = <Vertex>[];
     for (var i = 0; i <= segments; i++) {
       final theta = i * (2 * math.pi) / segments;
@@ -56,7 +57,4 @@ class SphereMesh extends Mesh {
       ),
     );
   }
-
-  /// The radius of the sphere.
-  final double radius;
 }

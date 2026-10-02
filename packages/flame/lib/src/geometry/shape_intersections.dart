@@ -7,7 +7,7 @@ import 'package:flame/geometry.dart';
 abstract class Intersections<
   T1 extends ShapeComponent,
   T2 extends ShapeComponent
-> {
+>() {
   List<Vector2> intersect(T1 shapeA, T2 shapeB, {Rect? overlappingRect});
 
   bool supportsShapes(ShapeComponent shapeA, ShapeComponent shapeB) {
@@ -81,7 +81,7 @@ Vector2? _vertexOf(PathComponent path) {
   return path.globalPolygons().firstOrNull?.first;
 }
 
-class PathPathIntersections
+class PathPathIntersections()
     extends Intersections<PathComponent, PathComponent> {
   /// Returns the intersection points of the edges of all the polygons of
   /// [pathA] and [pathB].
@@ -102,7 +102,7 @@ class PathPathIntersections
   }
 }
 
-class PathPolygonIntersections
+class PathPolygonIntersections()
     extends Intersections<PathComponent, PolygonComponent> {
   /// Returns the intersection points of the edges of all the polygons of
   /// [path] and the edges of [polygon].
@@ -128,7 +128,7 @@ class PathPolygonIntersections
   }
 }
 
-class CirclePathIntersections
+class CirclePathIntersections()
     extends Intersections<CircleComponent, PathComponent> {
   /// Returns the intersection points of [circle] and the edges of all the
   /// polygons of [path].
@@ -158,7 +158,7 @@ class CirclePathIntersections
   }
 }
 
-class PolygonPolygonIntersections
+class PolygonPolygonIntersections()
     extends Intersections<PolygonComponent, PolygonComponent> {
   /// Returns the intersection points of [polygonA] and [polygonB]
   /// The polygons can be either convex or concave
@@ -202,7 +202,7 @@ class PolygonPolygonIntersections
   }
 }
 
-class CirclePolygonIntersections
+class CirclePolygonIntersections()
     extends Intersections<CircleComponent, PolygonComponent> {
   @override
   List<Vector2> intersect(
@@ -245,7 +245,7 @@ class CirclePolygonIntersections
   static const double _circleBoundsEpsilon = 0.01;
 }
 
-class CircleCircleIntersections
+class CircleCircleIntersections()
     extends Intersections<CircleComponent, CircleComponent> {
   @override
   List<Vector2> intersect(

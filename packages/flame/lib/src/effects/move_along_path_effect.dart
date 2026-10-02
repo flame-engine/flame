@@ -23,21 +23,20 @@ import 'package:flame/src/effects/provider_interfaces.dart';
 /// follows the path so that it is always oriented tangent to the path. When
 /// using this flag, make sure that the effect is applied to a target that
 /// actually supports rotations.
-class MoveAlongPathEffect extends MoveEffect {
-  MoveAlongPathEffect(
-    Path path,
-    EffectController controller, {
-    bool absolute = false,
-    bool oriented = false,
-    PositionProvider? target,
-    super.onComplete,
-    super.key,
-  }) : _isAbsolute = absolute,
-       _followDirection = oriented,
-       super(
-         controller,
-         target,
-       ) {
+class MoveAlongPathEffect(
+  Path path,
+  EffectController controller, {
+  bool absolute = false,
+  bool oriented = false,
+  PositionProvider? target,
+  super.onComplete,
+  super.key,
+}) extends MoveEffect {
+  this
+    : super(
+        controller,
+        target,
+      ) {
     final metrics = path.computeMetrics().toList();
     if (metrics.length != 1) {
       throw ArgumentError(
@@ -53,11 +52,11 @@ class MoveAlongPathEffect extends MoveEffect {
   /// put onto the start of the path and then follow that path. If false, the
   /// path is considered _relative_, i.e. this path is added as an offset to
   /// the current position of the target.
-  final bool _isAbsolute;
+  final bool _isAbsolute = absolute;
 
   /// If true, then not only the target's position will follow the path, but
   /// also the target's angle of rotation.
-  final bool _followDirection;
+  final bool _followDirection = oriented;
 
   /// The path that the target will follow.
   late final PathMetric _pathMetric;

@@ -10,12 +10,12 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 ///
 /// The line runs between the two anchor points, with a dot on each anchor.
 /// The renderer removes itself once the joint is destroyed.
-class JointRenderer extends Component {
-  JointRenderer({required this.joint, Color? color, super.priority = -1})
-    : color = color ?? ExampleColors.slate;
-
-  final Joint joint;
-  final Color color;
+class JointRenderer({
+  required final Joint joint,
+  Color? color,
+  super.priority = -1,
+}) extends Component {
+  final Color color = color ?? ExampleColors.slate;
 
   static const _anchorRadius = 0.22;
 
@@ -58,9 +58,8 @@ class JointRenderer extends Component {
 
 /// Draws a [MouseJoint] from the body it drags to the target it is pulling
 /// towards, which is what makes the joint's spring visible.
-class MouseJointRenderer extends JointRenderer {
-  MouseJointRenderer({required MouseJoint super.joint, super.color});
-
+class MouseJointRenderer({required MouseJoint super.joint, super.color})
+    extends JointRenderer {
   MouseJoint get mouseJoint => joint as MouseJoint;
 
   @override
@@ -86,21 +85,17 @@ class MouseJointRenderer extends JointRenderer {
 
 /// Draws the axis of a [PrismaticJoint] between its lower and upper limit, so
 /// that the range the body can travel is visible.
-class PrismaticJointRenderer extends JointRenderer {
-  PrismaticJointRenderer({
-    required PrismaticJoint super.joint,
-    required this.axis,
-    required this.anchor,
-    super.color,
-  });
-
-  PrismaticJoint get prismaticJoint => joint as PrismaticJoint;
+class PrismaticJointRenderer({
+  required PrismaticJoint super.joint,
 
   /// The axis that the joint moves along, in world coordinates.
-  final Vector2 axis;
+  required final Vector2 axis,
 
   /// The point that the axis passes through, in world coordinates.
-  final Vector2 anchor;
+  required final Vector2 anchor,
+  super.color,
+}) extends JointRenderer {
+  PrismaticJoint get prismaticJoint => joint as PrismaticJoint;
 
   final Vector2 _lower = Vector2.zero();
   final Vector2 _upper = Vector2.zero();

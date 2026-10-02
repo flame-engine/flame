@@ -101,6 +101,6 @@ lines.''',
   });
 }
 
-class _MockOnCompleteCallback extends Mock {
+class _MockOnCompleteCallback() extends Mock {
   void call();
 }

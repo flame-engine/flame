@@ -2,13 +2,13 @@ import 'package:flutter/widgets.dart';
 
 /// This widget builds up the Flame logo composed of 3 layers,
 /// that are rendered via separate PNG files under the assets directory.
-class AnimatedLogo extends AnimatedWidget {
+class const AnimatedLogo({
+  required Animation<double> animation,
+  super.key,
+}) extends AnimatedWidget {
   /// Create this widget providing the animation parameter to control
   /// the opacity of the flame.
-  const AnimatedLogo({
-    required Animation<double> animation,
-    super.key,
-  }) : super(listenable: animation);
+  this : super(listenable: animation);
 
   @override
   Widget build(BuildContext context) {
@@ -39,16 +39,14 @@ class AnimatedLogo extends AnimatedWidget {
 
 /// Creates and controls an [AnimatedLogo], making sure to provide the required
 /// animation and to properly dispose of itself after usage.
-class LogoComposite extends StatefulWidget {
-  /// Creates a [LogoComposite].
-  const LogoComposite({super.key});
-
+class const LogoComposite({super.key}) extends StatefulWidget {
   @override
   LogoCompositeState createState() => LogoCompositeState();
 }
 
 /// The state holding the state of the animated logo and its controller.
-class LogoCompositeState extends State<LogoComposite>
+class LogoCompositeState()
+    extends State<LogoComposite>
     with SingleTickerProviderStateMixin {
   /// The state of the animated logo.
   late Animation<double> animation;
@@ -103,26 +101,21 @@ Widget _logoBuilder(BuildContext context) {
 /// Wraps the splash screen layout options.
 /// There is two predefined themes [FlameSplashTheme.dark] and
 /// [FlameSplashTheme.white].
-class FlameSplashTheme {
-  /// Creates a customized theme. [logoBuilder] returns the widget that will be
-  /// rendered in place of main step of the animation.
-  const FlameSplashTheme({
-    required this.backgroundDecoration,
-    required this.logoBuilder,
-    this.constraints = const BoxConstraints.expand(),
-  });
-
+///
+/// Creates a customized theme. [logoBuilder] returns the widget that will be
+/// rendered in place of main step of the animation.
+class const FlameSplashTheme({
   /// Decoration to be applied to the widget underneath the Flame logo.
   /// It can be used to set the background color, among other parameters.
-  final BoxDecoration backgroundDecoration;
+  required final BoxDecoration backgroundDecoration,
 
   /// A lambda to build the widget representing the logo itself.
   /// By default this will be wired to use the [LogoComposite] widget.
-  final WidgetBuilder logoBuilder;
+  required final WidgetBuilder logoBuilder,
 
   /// Th constraints of the outside box, defaults to [BoxConstraints.expand].
-  final BoxConstraints constraints;
-
+  final BoxConstraints constraints = const BoxConstraints.expand(),
+}) {
   /// One of the two default themes provided; this is optimal of light mode
   /// apps.
   static FlameSplashTheme white = const FlameSplashTheme(

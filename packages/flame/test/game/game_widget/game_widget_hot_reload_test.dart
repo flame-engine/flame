@@ -5,7 +5,7 @@ import 'package:flame/game.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
-class _HotReloadGame extends FlameGame {
+class _HotReloadGame() extends FlameGame {
   int hotReloadCount = 0;
 
   @override
@@ -15,7 +15,7 @@ class _HotReloadGame extends FlameGame {
   }
 }
 
-class _HotReloadComponent extends Component {
+class _HotReloadComponent() extends Component {
   int hotReloadCount = 0;
 
   @override
@@ -25,7 +25,7 @@ class _HotReloadComponent extends Component {
   }
 }
 
-class _AsyncLoadComponent extends Component {
+class _AsyncLoadComponent() extends Component {
   final Completer<void> loadCompleter = Completer<void>();
   int hotReloadCount = 0;
 

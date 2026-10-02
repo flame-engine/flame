@@ -99,28 +99,18 @@ class ModelNode {
 }
 
 /// A single join inside a [ModelNode].
-class ModelJoint {
-  final int nodeIndex;
-  final Matrix4 inverseBindMatrix;
-
-  ModelJoint({
-    required this.nodeIndex,
-    required this.inverseBindMatrix,
-  });
-}
+class ModelJoint({
+  required final int nodeIndex,
+  required final Matrix4 inverseBindMatrix,
+});
 
 /// A post-processed node including the final transforms after animations are
 /// applied.
-class ProcessedNode {
-  final ModelNode node;
-  final Matrix4 combinedTransform;
+class ProcessedNode({
+  required final ModelNode node,
+  required final Matrix4 combinedTransform,
+  required final Map<int, List<Matrix4>> jointTransforms,
+}) {
   // for each surface within the node's mesh, a list of up to 4 joint transforms
   // with localized indexes according to the surface's localJoints
-  final Map<int, List<Matrix4>> jointTransforms;
-
-  ProcessedNode({
-    required this.node,
-    required this.combinedTransform,
-    required this.jointTransforms,
-  });
 }

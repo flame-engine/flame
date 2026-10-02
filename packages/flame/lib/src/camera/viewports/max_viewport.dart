@@ -7,9 +7,7 @@ import 'package:vector_math/vector_math.dart';
 /// The default viewport, which is as big as the game canvas allows.
 ///
 /// This viewport does not perform any clipping.
-class MaxViewport extends Viewport {
-  MaxViewport({super.children});
-
+class MaxViewport({super.children}) extends Viewport {
   @override
   @mustCallSuper
   void onLoad() {

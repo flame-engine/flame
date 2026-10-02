@@ -1,9 +1,5 @@
 import 'dart:math';
 
-// TODO(spydon): Remove this import once Flutter 3.35.0 is the minimum version.
-// ignore: unnecessary_import
-import 'package:flame/extensions.dart';
-// ignore: unnecessary_import
 import 'package:flame_3d/core.dart';
 import 'package:flame_3d/model.dart';
 import 'package:flame_3d/src/parser/gltf/animation_interpolation.dart';
@@ -39,12 +35,12 @@ abstract class AnimationSpline<T> {
 }
 
 /// An animation spline over the position of a transformation (translation).
-class TranslationAnimationSpline extends AnimationSpline<Vector3> {
-  TranslationAnimationSpline.from({
-    required super.interpolation,
-    required super.times,
-    required super.values,
-  }) : super.from();
+class TranslationAnimationSpline.from({
+  required super.interpolation,
+  required super.times,
+  required super.values,
+}) extends AnimationSpline<Vector3> {
+  this : super.from();
 
   @override
   Vector3 lerp(Vector3 a, Vector3 b, double t) {
@@ -58,12 +54,12 @@ class TranslationAnimationSpline extends AnimationSpline<Vector3> {
 }
 
 /// An animation spline over the angle of a transformation (rotation).
-class RotationAnimationSpline extends AnimationSpline<Quaternion> {
-  RotationAnimationSpline.from({
-    required super.interpolation,
-    required super.times,
-    required super.values,
-  }) : super.from();
+class RotationAnimationSpline.from({
+  required super.interpolation,
+  required super.times,
+  required super.values,
+}) extends AnimationSpline<Quaternion> {
+  this : super.from();
 
   @override
   Quaternion lerp(Quaternion a, Quaternion b, double t) {
@@ -77,12 +73,12 @@ class RotationAnimationSpline extends AnimationSpline<Quaternion> {
 }
 
 /// An animation spline over the scale of a transformation (scaling).
-class ScaleAnimationSpline extends AnimationSpline<Vector3> {
-  ScaleAnimationSpline.from({
-    required super.interpolation,
-    required super.times,
-    required super.values,
-  }) : super.from();
+class ScaleAnimationSpline.from({
+  required super.interpolation,
+  required super.times,
+  required super.values,
+}) extends AnimationSpline<Vector3> {
+  this : super.from();
 
   @override
   Vector3 lerp(Vector3 a, Vector3 b, double t) {
@@ -96,13 +92,10 @@ class ScaleAnimationSpline extends AnimationSpline<Vector3> {
 }
 
 /// Allows sampling of an animation by interpolating keyframes.
-class AnimationController<T> {
-  final AnimationSpline<T> animation;
-  final double lastTime;
-
-  AnimationController({
-    required this.animation,
-  }) : lastTime = animation.values.last.time;
+class AnimationController<T>({
+  required final AnimationSpline<T> animation,
+}) {
+  final double lastTime = animation.values.last.time;
 
   T sample(double time) {
     final values = animation.values;
@@ -138,13 +131,10 @@ class AnimationController<T> {
 
 /// Groups the animations of a single node in a [Model], which can be
 /// controlled by multiple animation channels.
-class NodeAnimation {
-  final List<AnimationController> channels;
-  final double lastTime;
-
-  NodeAnimation({
-    required this.channels,
-  }) : lastTime = channels.map((e) => e.lastTime).reduce(max);
+class NodeAnimation({
+  required final List<AnimationController> channels,
+}) {
+  final double lastTime = channels.map((e) => e.lastTime).reduce(max);
 
   void sampleInto(double time, Matrix4 matrix) {
     for (final channel in channels) {
@@ -154,13 +144,9 @@ class NodeAnimation {
 }
 
 /// Groups the animations for all nodes of a [Model].
-class ModelAnimation {
-  final String? name;
-  final Map<int, NodeAnimation> nodes;
-  final double lastTime;
-
-  ModelAnimation({
-    required this.name,
-    required this.nodes,
-  }) : lastTime = nodes.values.map((e) => e.lastTime).reduce(max);
+class ModelAnimation({
+  required final String? name,
+  required final Map<int, NodeAnimation> nodes,
+}) {
+  final double lastTime = nodes.values.map((e) => e.lastTime).reduce(max);
 }

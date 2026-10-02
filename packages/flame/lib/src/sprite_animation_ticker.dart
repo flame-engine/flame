@@ -4,12 +4,7 @@ import 'package:flame/components.dart';
 import 'package:meta/meta.dart';
 
 /// A helper class to make the [spriteAnimation] tick.
-class SpriteAnimationTicker {
-  SpriteAnimationTicker(this.spriteAnimation);
-
-  // The current sprite animation.
-  final SpriteAnimation spriteAnimation;
-
+class SpriteAnimationTicker(final SpriteAnimation spriteAnimation) {
   /// Index of the current frame that should be displayed.
   int currentIndex = 0;
 

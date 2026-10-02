@@ -1,12 +1,12 @@
 import 'package:bloc/bloc.dart';
 
-enum InventoryState {
+enum InventoryState() {
   sword,
   bow,
 }
 
-class InventoryCubit extends Cubit<InventoryState> {
-  InventoryCubit() : super(InventoryState.sword);
+class InventoryCubit() extends Cubit<InventoryState> {
+  this : super(InventoryState.sword);
 
   void selectBow() {
     emit(InventoryState.bow);

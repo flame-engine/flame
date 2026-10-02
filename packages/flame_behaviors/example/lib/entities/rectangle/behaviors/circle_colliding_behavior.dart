@@ -3,7 +3,7 @@ import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flame_behaviors_example/entities/entities.dart';
 import 'package:material_ui/material_ui.dart';
 
-class CircleCollidingBehavior extends CollisionBehavior<Circle, Rectangle> {
+class CircleCollidingBehavior() extends CollisionBehavior<Circle, Rectangle> {
   final _collisionColor = Colors.green.withValues(alpha: 0.8);
 
   @override

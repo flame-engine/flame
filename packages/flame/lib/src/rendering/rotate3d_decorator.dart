@@ -7,35 +7,29 @@ import 'package:flame/src/rendering/decorator.dart';
 ///
 /// The angles of rotation can be changed dynamically, allowing you to rotate
 /// the content continuously at the desired angular speeds.
-class Rotate3DDecorator extends Decorator {
-  Rotate3DDecorator({
-    Vector2? center,
-    this.angleX = 0.0,
-    this.angleY = 0.0,
-    this.angleZ = 0.0,
-    this.perspective = 0.001,
-  }) : center = center ?? Vector2.zero();
-
-  /// The center of rotation, in the **parent** coordinate space.
-  Vector2 center;
+class Rotate3DDecorator({
+  Vector2? center,
 
   /// Angle of rotation around the X axis. This rotation is usually described as
   /// "vertical".
-  double angleX;
+  var double angleX = 0.0,
 
   /// Angle of rotation around the Y axis. This rotation is typically described
   /// as "horizontal".
-  double angleY;
+  var double angleY = 0.0,
 
   /// Angle of rotation around the Z axis. This is a regular "2D" rotation
   /// because it occurs entirely inside the plane in which the component is
   /// normally drawn.
-  double angleZ;
+  var double angleZ = 0.0,
 
   /// The strength of the perspective effect. In other words, how much the
   /// elements that are "behind" the canvas are shrunk, and those in front of
   /// it are expanded.
-  double perspective;
+  var double perspective = 0.001,
+}) extends Decorator {
+  /// The center of rotation, in the **parent** coordinate space.
+  Vector2 center = center ?? Vector2.zero();
 
   /// Returns `true` if the component is currently being rendered from its
   /// back side, and `false` if it shows the front side.

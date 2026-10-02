@@ -7,18 +7,16 @@ import 'package:meta/meta.dart';
 /// [IsometricTileLayer] is the tile layer that has an isometric view.
 /// You can see the details in the [https://en.wikipedia.org/wiki/Isometric_video_game_graphics].
 @internal
-class IsometricTileLayer extends FlameTileLayer {
-  IsometricTileLayer({
-    required super.layer,
-    required super.map,
-    required super.destTileSize,
-    required super.tiledAtlas,
-    required super.animationFrames,
-    required super.ignoreFlip,
-    required super.layerPaintFactory,
-    super.filterQuality,
-  });
-
+class IsometricTileLayer({
+  required super.layer,
+  required super.map,
+  required super.destTileSize,
+  required super.tiledAtlas,
+  required super.animationFrames,
+  required super.ignoreFlip,
+  required super.layerPaintFactory,
+  super.filterQuality,
+}) extends FlameTileLayer {
   @override
   void cacheTiles() {
     final halfDestinationTile = destTileSize / 2;

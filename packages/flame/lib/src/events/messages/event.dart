@@ -10,17 +10,15 @@ import 'package:meta/meta.dart';
 ///
 /// The type parameter [R] represents the type of the original Flutter raw event
 /// that triggered this Flame event.
-abstract class Event<R> {
+abstract class Event<R>({
   /// The original Flutter raw event that triggered this Flame event.
-  R raw;
-
+  required var R raw,
+}) {
   /// If this flag is false (default), the event will be delivered to the first
   /// component that can handle it. If that component sets this flag to true,
   /// the event will propagate further down the component tree to other eligible
   /// components.
   bool continuePropagation = false;
-
-  Event({required this.raw});
 
   @internal
   void deliverToComponents<T extends Component>(

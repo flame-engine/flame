@@ -15,13 +15,10 @@ import 'package:meta/meta.dart';
 /// The primary feature of this component is that it allows [Component3D]s to
 /// render directly to a [GraphicsDevice] instead of the regular rendering.
 /// {@endtemplate}
-class World3D extends flame.World with flame.HasGameRef<FlameGame3D> {
-  /// {@macro world_3d}
-  World3D({
-    super.children,
-    super.priority,
-  });
-
+class World3D({
+  super.children,
+  super.priority,
+}) extends flame.World with flame.HasGameRef<FlameGame3D> {
   final List<Light> _lights = [];
 
   RenderContext3D get context => gameRef.context;

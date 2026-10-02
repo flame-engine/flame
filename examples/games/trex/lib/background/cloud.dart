@@ -3,9 +3,10 @@ import 'package:flame/extensions.dart';
 import 'package:trex_game/background/cloud_manager.dart';
 import 'package:trex_game/trex_game.dart';
 
-class Cloud extends SpriteComponent
+class Cloud({required Vector2 position})
+    extends SpriteComponent
     with ParentIsA<CloudManager>, HasGameRef<TRexGame> {
-  Cloud({required Vector2 position})
+  this
     : super(
         position: position,
         size: initialSize,

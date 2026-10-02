@@ -7,7 +7,7 @@ import 'package:meta/meta.dart';
 ///
 /// Equality is based on unordered pair identity: {A, B} == {B, A}.
 @immutable
-abstract class CollisionProspect<T> {
+abstract class const CollisionProspect<T>() {
   T get a;
   T get b;
 

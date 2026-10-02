@@ -7,19 +7,15 @@ import 'package:flame_3d/src/model/model.dart';
 
 /// A component wrapper over a 3D [Model], using the [AnimationState] to keep
 /// track and manage its animations.
-class ModelComponent extends Object3D {
-  final Model model;
-
+class ModelComponent({
+  required final Model model,
+  super.position,
+  super.rotation,
+  super.scale,
+  super.children,
+}) extends Object3D {
   final Set<int> _hiddenNodes = {};
   final AnimationState _animation = AnimationState();
-
-  ModelComponent({
-    required this.model,
-    super.position,
-    super.rotation,
-    super.scale,
-    super.children,
-  });
 
   @override
   Aabb3? computeLocalAabb() => model.aabb;

@@ -4,7 +4,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart';
 
-class OverlappingTapCallbacksExample extends FlameGame {
+class OverlappingTapCallbacksExample() extends FlameGame {
   static const String description = '''
     In this example we show you that events can choose to continue propagating
     to underlying components. The middle green square continue to propagate the
@@ -24,8 +24,11 @@ class OverlappingTapCallbacksExample extends FlameGame {
   }
 }
 
-class TapCallbacksSquare extends RectangleComponent with TapCallbacks {
-  TapCallbacksSquare({Vector2? position, this.continuePropagation = false})
+class TapCallbacksSquare({
+  Vector2? position,
+  final bool continuePropagation = false,
+}) extends RectangleComponent with TapCallbacks {
+  this
     : super(
         position: position ?? Vector2.all(100),
         size: Vector2.all(100),
@@ -33,8 +36,6 @@ class TapCallbacksSquare extends RectangleComponent with TapCallbacks {
             ? (Paint()..color = Colors.green.withValues(alpha: 0.9))
             : PaintExtension.random(withAlpha: 0.9, base: 100),
       );
-
-  final bool continuePropagation;
 
   @override
   void onTapDown(TapDownEvent event) {

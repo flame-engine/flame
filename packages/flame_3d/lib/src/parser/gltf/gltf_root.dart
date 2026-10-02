@@ -22,10 +22,10 @@ import 'package:flame_3d/src/parser/gltf/skin.dart';
 import 'package:flame_3d/src/parser/gltf/texture.dart';
 
 /// The root schema of a GLTF file.
-class GltfRoot {
+class GltfRoot._({
   /// Path prefix used to resolve relative paths.
-  final String _prefix;
-
+  required final String _prefix,
+}) {
   late final List<Buffer> buffers;
   late final List<BufferView> bufferViews;
   late final List<RawAccessor> accessors;
@@ -45,17 +45,13 @@ class GltfRoot {
 
   late final List<GlbChunk> chunks;
 
-  GltfRoot._({
-    required this._prefix,
-  });
-
   Future<Uint8List> readChunk(GltfRef<Buffer> ref) async {
     if (chunks.isNotEmpty) {
       final chunk = chunks[ref.index];
       return chunk.data;
     }
     final buffer = ref.get();
-    return readChunkFrom(buffer.uri!);
+    return await readChunkFrom(buffer.uri!);
   }
 
   Future<Uint8List> readChunkFrom(String uri) async {
@@ -72,35 +68,34 @@ class GltfRoot {
       throw Exception('Unsupported data URI: $uri');
     } else {
       final path = '$_prefix/$uri';
-      return Flame.assets.readBinaryFile(path);
+      return await Flame.assets.readBinaryFile(path);
     }
   }
 
   T resolve<T extends GltfNode>(int index) {
     return switch (T) {
-          const (Scene) => scenes[index],
-          const (Node) => nodes[index],
-          const (Mesh) => meshes[index],
-          const (Material) => materials[index],
-          const (Camera) => cameras[index],
-          const (Skin) => skins[index],
-          const (BufferView) => bufferViews[index],
-          const (Buffer) => buffers[index],
-          const (Texture) => textures[index],
-          const (Animation) => animations[index],
-          const (Sampler) => samplers[index],
-          const (Image) => images[index],
-          const (IntAccessor) => accessors[index].asInt(),
-          const (FloatAccessor) => accessors[index].asFloat(),
-          const (Vector2Accessor) => accessors[index].asVector2(),
-          const (Vector3Accessor) => accessors[index].asVector3(),
-          const (Vector4Accessor) => accessors[index].asVector4(),
-          const (QuaternionAccessor) => accessors[index].asQuaternion(),
-          const (Matrix4Accessor) => accessors[index].asMatrix4(),
-          const (RawAccessor) => accessors[index],
-          _ => throw UnimplementedError('Cannot resolve type $T'),
-        }
-        as T;
+      const (Scene) => scenes[index],
+      const (Node) => nodes[index],
+      const (Mesh) => meshes[index],
+      const (Material) => materials[index],
+      const (Camera) => cameras[index],
+      const (Skin) => skins[index],
+      const (BufferView) => bufferViews[index],
+      const (Buffer) => buffers[index],
+      const (Texture) => textures[index],
+      const (Animation) => animations[index],
+      const (Sampler) => samplers[index],
+      const (Image) => images[index],
+      const (IntAccessor) => accessors[index].asInt(),
+      const (FloatAccessor) => accessors[index].asFloat(),
+      const (Vector2Accessor) => accessors[index].asVector2(),
+      const (Vector3Accessor) => accessors[index].asVector3(),
+      const (Vector4Accessor) => accessors[index].asVector4(),
+      const (QuaternionAccessor) => accessors[index].asQuaternion(),
+      const (Matrix4Accessor) => accessors[index].asMatrix4(),
+      const (RawAccessor) => accessors[index],
+      _ => throw UnimplementedError('Cannot resolve type $T'),
+    } as T;
   }
 
   static Future<GltfRoot> from({

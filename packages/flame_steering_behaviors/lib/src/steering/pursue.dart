@@ -6,19 +6,13 @@ import 'package:flame_steering_behaviors/flame_steering_behaviors.dart';
 /// {@template pursue}
 /// Pursue steering algorithm.
 /// {@endtemplate}
-class Pursue extends SteeringCore {
-  /// {@macro pursue}
-  const Pursue(
-    this.target, {
-    required this.maxPrediction,
-  });
-
+class const Pursue(
   /// The target to pursue.
-  final ReadOnlyPositionProvider target;
+  final ReadOnlyPositionProvider target, {
 
   /// The maximum prediction time.
-  final double maxPrediction;
-
+  required final double maxPrediction,
+}) extends SteeringCore {
   @override
   Vector2 getSteering(Steerable parent) {
     final displacement = target.position - parent.position;

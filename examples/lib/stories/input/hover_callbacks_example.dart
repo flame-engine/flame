@@ -4,13 +4,13 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart';
 
-class HoverCallbacksExample extends FlameGame {
+class HoverCallbacksExample() extends FlameGame {
   static const String description = '''
     This example shows how to use `HoverCallbacks`s.\n\n
     Add more squares by clicking and hover them to change their color.
   ''';
 
-  HoverCallbacksExample() : super(world: HoverCallbacksWorld());
+  this : super(world: HoverCallbacksWorld());
 
   @override
   Future<void> onLoad() async {
@@ -19,7 +19,7 @@ class HoverCallbacksExample extends FlameGame {
   }
 }
 
-class HoverCallbacksWorld extends World with TapCallbacks {
+class HoverCallbacksWorld() extends World with TapCallbacks {
   @override
   Future<void> onLoad() async {
     add(HoverSquare(Vector2(200, 500)));
@@ -32,11 +32,13 @@ class HoverCallbacksWorld extends World with TapCallbacks {
   }
 }
 
-class HoverSquare extends RectangleComponent with HoverCallbacks {
+class HoverSquare(Vector2 position)
+    extends RectangleComponent
+    with HoverCallbacks {
   static final Paint _white = Paint()..color = const Color(0xFFFFFFFF);
   static final Paint _grey = Paint()..color = const Color(0xFFA5A5A5);
 
-  HoverSquare(Vector2 position)
+  this
     : super(
         position: position,
         size: Vector2.all(100),

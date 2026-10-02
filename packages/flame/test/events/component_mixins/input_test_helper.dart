@@ -91,21 +91,14 @@ mixin ScaleCounter on ScaleCallbacks {
   }
 }
 
-class DragWithCallbacksComponent extends PositionComponent with DragCallbacks {
-  DragWithCallbacksComponent({
-    this._onDragStart,
-    this._onDragUpdate,
-    this._onDragEnd,
-    this._onDragCancel,
-    super.position,
-    super.size,
-  });
-
-  final void Function(DragStartEvent)? _onDragStart;
-  final void Function(DragUpdateEvent)? _onDragUpdate;
-  final void Function(DragEndEvent)? _onDragEnd;
-  final void Function(DragCancelEvent)? _onDragCancel;
-
+class DragWithCallbacksComponent({
+  final void Function(DragStartEvent)? _onDragStart,
+  final void Function(DragUpdateEvent)? _onDragUpdate,
+  final void Function(DragEndEvent)? _onDragEnd,
+  final void Function(DragCancelEvent)? _onDragCancel,
+  super.position,
+  super.size,
+}) extends PositionComponent with DragCallbacks {
   @override
   void onDragStart(DragStartEvent event) {
     super.onDragStart(event);
@@ -130,20 +123,13 @@ class DragWithCallbacksComponent extends PositionComponent with DragCallbacks {
   }
 }
 
-class ScaleWithCallbacksComponent extends PositionComponent
-    with ScaleCallbacks {
-  ScaleWithCallbacksComponent({
-    this._onScaleStart,
-    this._onScaleUpdate,
-    this._onScaleEnd,
-    super.position,
-    super.size,
-  });
-
-  final void Function(ScaleStartEvent)? _onScaleStart;
-  final void Function(ScaleUpdateEvent)? _onScaleUpdate;
-  final void Function(ScaleEndEvent)? _onScaleEnd;
-
+class ScaleWithCallbacksComponent({
+  final void Function(ScaleStartEvent)? _onScaleStart,
+  final void Function(ScaleUpdateEvent)? _onScaleUpdate,
+  final void Function(ScaleEndEvent)? _onScaleEnd,
+  super.position,
+  super.size,
+}) extends PositionComponent with ScaleCallbacks {
   @override
   void onScaleStart(ScaleStartEvent event) {
     super.onScaleStart(event);
@@ -162,37 +148,29 @@ class ScaleWithCallbacksComponent extends PositionComponent
   }
 }
 
-class ScaleDragCallbacksComponent extends PositionComponent
-    with ScaleCallbacks, DragCallbacks, ScaleCounter, DragCounter {}
+class ScaleDragCallbacksComponent()
+    extends PositionComponent
+    with ScaleCallbacks, DragCallbacks, ScaleCounter, DragCounter;
 
-class ScaleDragCallbacksGame extends FlameGame
-    with ScaleCallbacks, DragCallbacks, ScaleCounter, DragCounter {}
+class ScaleDragCallbacksGame()
+    extends FlameGame
+    with ScaleCallbacks, DragCallbacks, ScaleCounter, DragCounter;
 
-class SimpleScaleDragCallbacksComponent extends PositionComponent
-    with ScaleCallbacks, DragCallbacks {
-  SimpleScaleDragCallbacksComponent({super.size});
-}
+class SimpleScaleDragCallbacksComponent({super.size})
+    extends PositionComponent
+    with ScaleCallbacks, DragCallbacks;
 
-class ScaleDragWithCallbacksComponent extends PositionComponent
+class ScaleDragWithCallbacksComponent({
+  final void Function(ScaleStartEvent)? _onScaleStart,
+  final void Function(ScaleUpdateEvent)? _onScaleUpdate,
+  final void Function(ScaleEndEvent)? _onScaleEnd,
+  final void Function(DragStartEvent)? _onDragStart,
+  final void Function(DragUpdateEvent)? _onDragUpdate,
+  final void Function(DragEndEvent)? _onDragEnd,
+  super.position,
+  super.size,
+}) extends PositionComponent
     with ScaleCallbacks, DragCallbacks, ScaleCounter, DragCounter {
-  ScaleDragWithCallbacksComponent({
-    this._onScaleStart,
-    this._onScaleUpdate,
-    this._onScaleEnd,
-    this._onDragStart,
-    this._onDragUpdate,
-    this._onDragEnd,
-    super.position,
-    super.size,
-  });
-
-  final void Function(ScaleStartEvent)? _onScaleStart;
-  final void Function(ScaleUpdateEvent)? _onScaleUpdate;
-  final void Function(ScaleEndEvent)? _onScaleEnd;
-  final void Function(DragStartEvent)? _onDragStart;
-  final void Function(DragUpdateEvent)? _onDragUpdate;
-  final void Function(DragEndEvent)? _onDragEnd;
-
   @override
   void onScaleStart(ScaleStartEvent event) {
     super.onScaleStart(event);
@@ -403,30 +381,32 @@ extension ZoomTesting on WidgetTester {
   }
 }
 
-class ScaleCallbacksComponent extends PositionComponent
-    with ScaleCallbacks, ScaleCounter {}
+class ScaleCallbacksComponent()
+    extends PositionComponent
+    with ScaleCallbacks, ScaleCounter;
 
-class ScaleCallbacksGame extends FlameGame with ScaleCallbacks, ScaleCounter {}
+class ScaleCallbacksGame() extends FlameGame with ScaleCallbacks, ScaleCounter;
 
-class SimpleScaleCallbacksComponent extends PositionComponent
-    with ScaleCallbacks {
-  SimpleScaleCallbacksComponent({super.size});
-}
+class SimpleScaleCallbacksComponent({super.size})
+    extends PositionComponent
+    with ScaleCallbacks;
 
-class SimpleDragCallbacksComponent extends PositionComponent
-    with DragCallbacks {
-  SimpleDragCallbacksComponent({super.size});
-}
+class SimpleDragCallbacksComponent({super.size})
+    extends PositionComponent
+    with DragCallbacks;
 
-class DragCallbacksComponent extends PositionComponent
-    with DragCallbacks, DragCounter {}
+class DragCallbacksComponent()
+    extends PositionComponent
+    with DragCallbacks, DragCounter;
 
-class DragCallbacksGame extends FlameGame with DragCallbacks, DragCounter {}
+class DragCallbacksGame() extends FlameGame with DragCallbacks, DragCounter;
 
 /// An ancestor that starts out passing events through, but can be made to
 /// swallow them partway through a gesture by setting [ignoreEvents].
-class EventGate extends PositionComponent with IgnoreEvents {
-  EventGate({super.position, super.size, super.children}) {
+class EventGate({super.position, super.size, super.children})
+    extends PositionComponent
+    with IgnoreEvents {
+  this {
     ignoreEvents = false;
   }
 }

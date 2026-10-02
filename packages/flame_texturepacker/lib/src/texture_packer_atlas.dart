@@ -1,5 +1,3 @@
-library flame_texturepacker;
-
 import 'package:collection/collection.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
@@ -11,13 +9,10 @@ import 'package:flame_texturepacker/src/texture_packer_sprite.dart';
 ///
 /// This class provides methods to load and query sprites from a texture atlas
 /// created by TexturePacker or similar tools.
-class TexturePackerAtlas {
+class TexturePackerAtlas(
   /// List of all sprites contained in this atlas.
-  final List<TexturePackerSprite> sprites;
-
-  /// Creates a new [TexturePackerAtlas] with the given [sprites].
-  TexturePackerAtlas(this.sprites);
-
+  final List<TexturePackerSprite> sprites,
+) {
   /// Creates a [TexturePackerAtlas] from parsed atlas data.
   ///
   /// [atlasData] - The parsed atlas data containing pages and regions

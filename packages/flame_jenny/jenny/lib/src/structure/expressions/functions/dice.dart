@@ -4,12 +4,8 @@ import 'package:jenny/src/structure/expressions/functions/_common.dart';
 import 'package:jenny/src/yarn_project.dart';
 
 /// Function `dice(n)` returns a random integer between 1 and `n`, inclusive.
-class DiceFn extends NumExpression {
-  const DiceFn(this._n, this._yarn);
-
-  final NumExpression _n;
-  final YarnProject _yarn;
-
+class const DiceFn(final NumExpression _n, final YarnProject _yarn)
+    extends NumExpression {
   static Expression make(
     List<FunctionArgument> args,
     YarnProject yarnProject,

@@ -9,14 +9,10 @@ import 'package:flame_3d/src/parser/gltf/gltf_root.dart';
 ///   (`POSITION`, `NORMAL`, or `TANGENT`); and
 /// * each value is the index of the accessor containing the attribute
 ///   displacements' data.
-class MorphTarget extends GltfNode {
-  Map<MorphTargetType, GltfRef<RawAccessor>> attributes = {};
-
-  MorphTarget({
-    required super.root,
-    required this.attributes,
-  });
-
+class MorphTarget({
+  required super.root,
+  required var Map<MorphTargetType, GltfRef<RawAccessor>> attributes,
+}) extends GltfNode {
   MorphTarget.parse(
     GltfRoot root,
     Map<String, Object?> map,
@@ -31,14 +27,10 @@ class MorphTarget extends GltfNode {
       );
 }
 
-enum MorphTargetType {
+enum MorphTargetType(final String value) {
   position('POSITION'),
   normal('NORMAL'),
   tangent('TANGENT');
-
-  final String value;
-
-  const MorphTargetType(this.value);
 
   static MorphTargetType valueOf(String value) {
     return values.firstWhere((e) => e.value == value);

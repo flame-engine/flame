@@ -21,4 +21,4 @@ void main() {
   });
 }
 
-class _MockPicture extends Mock implements Picture {}
+class _MockPicture() extends Mock implements Picture;

@@ -5,11 +5,11 @@ import 'package:flame/events.dart';
 ///
 /// This may happen if the pointer moves too far before the long press
 /// duration elapses, or if the gesture is otherwise interrupted.
-class LongPressCancelEvent extends Event<void> {
-  LongPressCancelEvent(this.pointerId) : super(raw: null);
-
+class LongPressCancelEvent(
   /// The id of the gesture that was cancelled.
-  final int pointerId;
+  final int pointerId,
+) extends Event<void> {
+  this : super(raw: null);
 
   @override
   String toString() => 'LongPressCancelEvent(pointerId: $pointerId)';

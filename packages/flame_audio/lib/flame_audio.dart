@@ -13,7 +13,10 @@ typedef BgmFactory = Bgm Function({required AudioCache audioCache});
 ///
 /// You can use as a helper to very simply play a sound or a background music.
 /// Alternatively you can create your own instances and control them yourself.
-class FlameAudio {
+class FlameAudio() {
+  /// Creates a [FlameAudio] instance.
+  this;
+
   /// The factory used to create the global [AudioCache] instance.
   ///
   /// Useful to override the default [AudioCache] constructor in testing
@@ -150,7 +153,7 @@ class FlameAudio {
   }) async {
     audioContext ??= _defaultAudioContext;
     final path = package == null ? sound : 'packages/$package/$sound';
-    return AudioPool.create(
+    return await AudioPool.create(
       source: AssetSource(path),
       audioCache: audioCache,
       minPlayers: minPlayers,

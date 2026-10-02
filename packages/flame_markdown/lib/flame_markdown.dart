@@ -12,7 +12,10 @@ import 'package:markdown/markdown.dart';
 /// code blocks, images, and inline HTML.
 /// It is also possible that some otherwise valid markdown nestings of
 /// block and inline-type elements are not currently supported.
-class FlameMarkdown {
+class FlameMarkdown() {
+  /// Creates a [FlameMarkdown] instance.
+  this;
+
   /// Converts a markdown string to a [DocumentRoot] from Flame.
   ///
   /// This uses the `markdown` package to parse the markdown string
@@ -64,21 +67,20 @@ class FlameMarkdown {
     }
 
     return switch (element.tag) {
-          'span' => child,
-          'h1' => HeaderNode(child, level: 1),
-          'h2' => HeaderNode(child, level: 2),
-          'h3' => HeaderNode(child, level: 3),
-          'h4' => HeaderNode(child, level: 4),
-          'h5' => HeaderNode(child, level: 5),
-          'h6' => HeaderNode(child, level: 6),
-          'p' => ParagraphNode(child),
-          'em' || 'i' => ItalicTextNode(child),
-          'strong' || 'b' => BoldTextNode(child),
-          'code' => CodeTextNode(child),
-          'del' => StrikethroughTextNode(child),
-          _ => throw Exception('Unknown element tag: ${element.tag}'),
-        }
-        as TextNode;
+      'span' => child,
+      'h1' => HeaderNode(child, level: 1),
+      'h2' => HeaderNode(child, level: 2),
+      'h3' => HeaderNode(child, level: 3),
+      'h4' => HeaderNode(child, level: 4),
+      'h5' => HeaderNode(child, level: 5),
+      'h6' => HeaderNode(child, level: 6),
+      'p' => ParagraphNode(child),
+      'em' || 'i' => ItalicTextNode(child),
+      'strong' || 'b' => BoldTextNode(child),
+      'code' => CodeTextNode(child),
+      'del' => StrikethroughTextNode(child),
+      _ => throw Exception('Unknown element tag: ${element.tag}'),
+    } as TextNode;
   }
 
   static PlainTextNode _convertText(Text text) {

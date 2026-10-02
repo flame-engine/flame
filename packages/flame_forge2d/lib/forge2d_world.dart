@@ -8,29 +8,24 @@ import 'package:forge2d/forge2d.dart' as forge2d;
 /// [BodyComponent]s and normal Flame components.
 ///
 /// Wraps the world class that comes from Forge2D ([forge2d.World]).
-class Forge2DWorld extends World {
-  /// Creates a [Forge2DWorld] with the given [gravity], which defaults to
-  /// [defaultGravity].
-  ///
-  /// A [definition] can be passed to configure the underlying physics world.
-  /// Be aware that [WorldDef.gravity] uses the y-up Box2D convention with a
-  /// default of (0, -10), while Flame's y-axis points down, so set its
-  /// gravity explicitly (or use the [gravity] argument, which takes
-  /// precedence) when you provide a definition.
-  Forge2DWorld({
-    Vector2? gravity,
-    forge2d.WorldDef? definition,
-    ContactEventsDispatcher? contactEventsDispatcher,
-    super.children,
-  }) : _gravity = gravity ?? definition?.gravity ?? defaultGravity,
-       _definition = definition,
-       contactEventsDispatcher =
-           contactEventsDispatcher ?? ContactEventsDispatcher();
-
+///
+/// Creates a [Forge2DWorld] with the given [gravity], which defaults to
+/// [defaultGravity].
+///
+/// A `definition` can be passed to configure the underlying physics world.
+/// Be aware that [WorldDef.gravity] uses the y-up Box2D convention with a
+/// default of (0, -10), while Flame's y-axis points down, so set its
+/// gravity explicitly (or use the [gravity] argument, which takes
+/// precedence) when you provide a definition.
+class Forge2DWorld({
+  Vector2? gravity,
+  final forge2d.WorldDef? _definition,
+  ContactEventsDispatcher? contactEventsDispatcher,
+  super.children,
+}) extends World {
   static final Vector2 defaultGravity = Vector2(0, 10.0);
 
-  Vector2 _gravity;
-  final forge2d.WorldDef? _definition;
+  Vector2 _gravity = gravity ?? _definition?.gravity ?? defaultGravity;
   forge2d.World? _physicsWorld;
 
   /// The underlying Forge2D physics world.
@@ -73,7 +68,8 @@ class Forge2DWorld extends World {
 
   /// Routes the contact and sensor events that the physics world generated
   /// during a step to the [ContactCallbacks] in the involved userData.
-  final ContactEventsDispatcher contactEventsDispatcher;
+  final ContactEventsDispatcher contactEventsDispatcher =
+      contactEventsDispatcher ?? ContactEventsDispatcher();
 
   /// The number of sub-steps that the physics world performs for each
   /// [update].

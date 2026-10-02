@@ -9,7 +9,7 @@ import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:material_ui/material_ui.dart';
 
-class LookAtSmoothExample extends FlameGame {
+class LookAtSmoothExample() extends FlameGame {
   static const description =
       'This example demonstrates how a component can be '
       'made to smoothly rotate towards a target using the angleTo method. '
@@ -18,7 +18,7 @@ class LookAtSmoothExample extends FlameGame {
       'oriented in the desired direction if the image is not facing the '
       'correct direction.';
 
-  LookAtSmoothExample() : super(world: _TapWorld());
+  this : super(world: _TapWorld());
 
   late SpriteAnimationComponent _chopper1;
   late SpriteAnimationComponent _chopper2;
@@ -94,7 +94,7 @@ class LookAtSmoothExample extends FlameGame {
   }
 }
 
-class _TapWorld extends World with TapCallbacks {
+class _TapWorld() extends World with TapCallbacks {
   bool _isRotating = false;
 
   final CircleComponent _targetComponent = CircleComponent(

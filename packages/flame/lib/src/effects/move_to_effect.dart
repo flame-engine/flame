@@ -19,18 +19,18 @@ import 'package:vector_math/vector_math.dart';
 /// will end up moving the target towards point A+B. A more interesting
 /// combination of move effects is to have a [MoveToEffect], together with one
 /// or more [MoveByEffect]s that produce oscillating motion.
-class MoveToEffect extends MoveEffect {
-  MoveToEffect(
-    Vector2 destination,
-    EffectController controller, {
-    PositionProvider? target,
-    void Function()? onComplete,
-    super.key,
-  }) : _destination = destination.clone(),
-       _offset = Vector2.zero(),
-       super(controller, target, onComplete: onComplete);
+class MoveToEffect(
+  Vector2 destination,
+  EffectController controller, {
+  PositionProvider? target,
+  void Function()? onComplete,
+  super.key,
+}) extends MoveEffect {
+  this
+    : _offset = Vector2.zero(),
+      super(controller, target, onComplete: onComplete);
 
-  final Vector2 _destination;
+  final Vector2 _destination = destination.clone();
   final Vector2 _offset;
 
   @override

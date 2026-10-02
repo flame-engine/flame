@@ -54,19 +54,29 @@ Paint _defaultLayerPaintFactory(double opacity) =>
 /// and [update].
 ///
 /// {@endtemplate}
-class RenderableTiledMap extends Component {
+class RenderableTiledMap(
   /// [TiledMap] instance for this map.
-  final TiledMap map;
+  final TiledMap map,
 
   /// The top level layers of the map, in the same order as [TiledMap.layers].
   ///
   /// The layers nested in a group layer are the children of that group's
   /// [RenderableLayer].
-  final List<RenderableLayer> renderableLayers;
+  final List<RenderableLayer> renderableLayers,
 
   /// The target size for each tile in the tiled map.
-  final Vector2 destTileSize;
+  final Vector2 destTileSize, {
 
+  /// The camera that the parallax factors of the layers are calculated
+  /// against.
+  ///
+  /// When this is null, which is the default, the camera that is currently
+  /// rendering the map is used, falling back to the camera of the game when
+  /// the map is not rendered through a camera. It only needs to be set when
+  /// the map is rendered outside of a game.
+  var CameraComponent? camera,
+  final Map<Tile, TileFrames> animationFrames = const {},
+}) extends Component {
   /// The size of the rendered map, see [TiledComponent.computeSize].
   late final Vector2 size = TiledComponent.computeSize(
     map.orientation,
@@ -78,28 +88,11 @@ class RenderableTiledMap extends Component {
     map.staggerAxis,
   );
 
-  /// The camera that the parallax factors of the layers are calculated
-  /// against.
-  ///
-  /// When this is null, which is the default, the camera that is currently
-  /// rendering the map is used, falling back to the camera of the game when
-  /// the map is not rendered through a camera. It only needs to be set when
-  /// the map is rendered outside of a game.
-  CameraComponent? camera;
-
   /// Paint for the map's background color, if there is one
   late final Paint? _backgroundPaint;
 
-  final Map<Tile, TileFrames> animationFrames;
-
   /// {@macro _renderable_tiled_map}
-  RenderableTiledMap(
-    this.map,
-    this.renderableLayers,
-    this.destTileSize, {
-    this.camera,
-    this.animationFrames = const {},
-  }) {
+  this {
     _refreshCache();
 
     final backgroundColor = map.backgroundColor?.toColor();
@@ -328,7 +321,7 @@ class RenderableTiledMap extends Component {
   }) async {
     final mapPath = package == null ? fileName : 'packages/$package/$fileName';
     final contents = await (bundle ?? Flame.bundle).loadString(mapPath);
-    return fromString(
+    return await fromString(
       contents,
       destTileSize,
       atlasMaxX: atlasMaxX,
@@ -381,7 +374,7 @@ class RenderableTiledMap extends Component {
       contents,
       (path) => (bundle ?? Flame.bundle).loadString('$tsxDirectory$path'),
     );
-    return fromTiledMap(
+    return await fromTiledMap(
       map,
       destTileSize,
       atlasMaxX: atlasMaxX,

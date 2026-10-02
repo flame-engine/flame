@@ -11,10 +11,9 @@ import 'objects/platform_block.dart';
 import 'objects/star.dart';
 import 'overlays/hud.dart';
 
-class EmberQuestGame extends FlameGame
+class EmberQuestGame()
+    extends FlameGame
     with HasCollisionDetection, HasKeyboardHandlerComponents {
-  EmberQuestGame();
-
   late EmberPlayer _ember;
   late double lastBlockXPosition = 0.0;
   late UniqueKey lastBlockKey;

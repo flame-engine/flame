@@ -7,7 +7,7 @@ import 'package:meta/meta.dart';
 
 /// Parent data for the children of [GameRenderBox], linking each child render
 /// box to the [WidgetComponent] that hosts it.
-class WidgetComponentParentData extends ContainerBoxParentData<RenderBox> {
+class WidgetComponentParentData() extends ContainerBoxParentData<RenderBox> {
   WidgetComponent? component;
 
   /// The transform from the child's coordinates to the local coordinates of
@@ -22,16 +22,11 @@ class WidgetComponentParentData extends ContainerBoxParentData<RenderBox> {
 /// Wraps the widget of a [WidgetComponent] so that the [GameRenderBox] knows
 /// which component a child render box belongs to.
 @internal
-class WidgetComponentParentDataWidget
-    extends ParentDataWidget<WidgetComponentParentData> {
-  const WidgetComponentParentDataWidget({
-    required this.component,
-    required super.child,
-    super.key,
-  });
-
-  final WidgetComponent component;
-
+class const WidgetComponentParentDataWidget({
+  required final WidgetComponent component,
+  required super.child,
+  super.key,
+}) extends ParentDataWidget<WidgetComponentParentData> {
   @override
   void applyParentData(RenderObject renderObject) {
     final parentData = renderObject.parentData! as WidgetComponentParentData;
@@ -51,16 +46,15 @@ class WidgetComponentParentDataWidget
 /// rebuilding the whole `GameWidget`, and excludes the subtree from focus and
 /// semantics while the component is not being painted.
 @internal
-class WidgetComponentHost extends StatefulWidget {
-  const WidgetComponentHost({required this.component, super.key});
-
-  final WidgetComponent component;
-
+class const WidgetComponentHost({
+  required final WidgetComponent component,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<WidgetComponentHost> createState() => _WidgetComponentHostState();
 }
 
-class _WidgetComponentHostState extends State<WidgetComponentHost> {
+class _WidgetComponentHostState() extends State<WidgetComponentHost> {
   bool _rebuildScheduled = false;
 
   @override

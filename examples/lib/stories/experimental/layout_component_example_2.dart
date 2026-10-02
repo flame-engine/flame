@@ -7,26 +7,18 @@ import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart';
 
-class LayoutComponentExample2 extends FlameGame with DragCallbacks {
-  LayoutComponentExample2({
-    required this.direction,
-    required this.mainAxisAlignment,
-    required this.crossAxisAlignment,
-    required this.gap,
-    required this.demoSize,
-  });
-
+class LayoutComponentExample2({
+  required final Direction direction,
+  required final MainAxisAlignment mainAxisAlignment,
+  required final CrossAxisAlignment crossAxisAlignment,
+  required final double gap,
+  required final LayoutComponentExampleSize demoSize,
+}) extends FlameGame with DragCallbacks {
   static const String description = '''
 This example demonstrates the various behaviors of LayoutComponents.
 Press the pen button on the floating group of icons on the upper right to see
 the various ways you can change this layout.
   ''';
-
-  final Direction direction;
-  final MainAxisAlignment mainAxisAlignment;
-  final CrossAxisAlignment crossAxisAlignment;
-  final double gap;
-  final LayoutComponentExampleSize demoSize;
 
   @override
   FutureOr<void> onLoad() {
@@ -67,16 +59,16 @@ the various ways you can change this layout.
   bool get debugMode => true;
 }
 
-class LayoutDemo2 extends LinearLayoutComponent {
-  LayoutDemo2({
-    required super.direction,
-    required super.crossAxisAlignment,
-    required super.mainAxisAlignment,
-    required super.gap,
-    required super.position,
-    super.size,
-    super.key,
-  }) : super(anchor: Anchor.topLeft, priority: 0, children: []);
+class LayoutDemo2({
+  required super.direction,
+  required super.crossAxisAlignment,
+  required super.mainAxisAlignment,
+  required super.gap,
+  required super.position,
+  super.size,
+  super.key,
+}) extends LinearLayoutComponent {
+  this : super(anchor: Anchor.topLeft, priority: 0, children: []);
 
   @override
   FutureOr<void> onLoad() {

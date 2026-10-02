@@ -7,35 +7,30 @@ import 'package:meta/meta.dart';
 ///
 /// Note: You have to set the [button] in [onLoad] if you are not passing it in
 /// through the constructor.
-class ButtonComponent extends PositionComponent with TapCallbacks {
-  PositionComponent? button;
-  PositionComponent? buttonDown;
+class ButtonComponent({
+  var PositionComponent? button,
+  var PositionComponent? buttonDown,
 
   /// Callback for what should happen when the button is pressed.
-  void Function()? onPressed;
+  var void Function()? onPressed,
 
   /// Callback for what should happen when the button is released.
-  void Function()? onReleased;
+  var void Function()? onReleased,
 
   /// Callback for what should happen when the button is cancelled.
-  void Function()? onCancelled;
-
-  ButtonComponent({
-    this.button,
-    this.buttonDown,
-    this.onPressed,
-    this.onReleased,
-    this.onCancelled,
-    super.position,
-    Vector2? size,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-  }) : super(
-         size: size ?? button?.size,
-       );
+  var void Function()? onCancelled,
+  super.position,
+  Vector2? size,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority,
+}) extends PositionComponent with TapCallbacks {
+  this
+    : super(
+        size: size ?? button?.size,
+      );
 
   @override
   @mustCallSuper

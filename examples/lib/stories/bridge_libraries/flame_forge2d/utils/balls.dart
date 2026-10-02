@@ -4,21 +4,18 @@ import 'package:flame/palette.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:material_ui/material_ui.dart';
 
-class Ball extends BodyComponent with ContactCallbacks, GlowingBody {
+class Ball(
+  final Vector2 _position, {
+  final double radius = 2,
+  final BodyType bodyType = BodyType.dynamic,
+  Color? color,
+}) extends BodyComponent with ContactCallbacks, GlowingBody {
   late Paint originalPaint;
   bool giveNudge = false;
-  final double radius;
-  final BodyType bodyType;
-  final Vector2 _position;
   double _timeSinceNudge = 0.0;
   static const double _minNudgeRest = 2.0;
 
-  Ball(
-    this._position, {
-    this.radius = 2,
-    this.bodyType = BodyType.dynamic,
-    Color? color,
-  }) {
+  this {
     originalPaint = Paint()..color = color ?? randomColor();
     paint = originalPaint;
   }
@@ -84,8 +81,8 @@ class Ball extends BodyComponent with ContactCallbacks, GlowingBody {
   }
 }
 
-class WhiteBall extends Ball with ContactCallbacks {
-  WhiteBall(super.position) {
+class WhiteBall(super.position) extends Ball with ContactCallbacks {
+  this {
     originalPaint = BasicPalette.white.paint();
     paint = originalPaint;
   }

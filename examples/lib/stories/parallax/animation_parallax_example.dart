@@ -3,7 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 import 'package:flutter/painting.dart';
 
-class AnimationParallaxExample extends FlameGame {
+class AnimationParallaxExample() extends FlameGame {
   static const String description = '''
     Shows how to use animations in a `ParallaxComponent`.
   ''';

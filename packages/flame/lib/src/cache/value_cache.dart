@@ -1,12 +1,10 @@
 /// Used for caching calculated values, the cache is determined to be valid by
 /// comparing a list of values that can be of any type and is compared to the
 /// values that was last used when the cache was updated.
-class ValueCache<T> {
+class ValueCache<T>() {
   T? value;
 
   List<dynamic> _lastValidCacheValues = <dynamic>[];
-
-  ValueCache();
 
   bool isCacheValid<F>(List<F> validCacheValues) {
     if (value == null) {

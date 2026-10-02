@@ -8,7 +8,9 @@ import 'package:flame_bloc_example/src/game/components/player.dart';
 import 'package:flame_bloc_example/src/game_stats/bloc/game_stats_bloc.dart';
 import 'package:flame_bloc_example/src/inventory/bloc/inventory_bloc.dart';
 
-class GameStatsController extends Component with HasGameRef<SpaceShooterGame> {
+class GameStatsController()
+    extends Component
+    with HasGameRef<SpaceShooterGame> {
   @override
   Future<void>? onLoad() async {
     add(
@@ -25,17 +27,12 @@ class GameStatsController extends Component with HasGameRef<SpaceShooterGame> {
   }
 }
 
-class SpaceShooterGame extends FlameGame
+class SpaceShooterGame({
+  required final GameStatsBloc statsBloc,
+  required final InventoryBloc inventoryBloc,
+}) extends FlameGame
     with DragCallbacks, HasCollisionDetection, HasKeyboardHandlerComponents {
   late PlayerComponent player;
-
-  final GameStatsBloc statsBloc;
-  final InventoryBloc inventoryBloc;
-
-  SpaceShooterGame({
-    required this.statsBloc,
-    required this.inventoryBloc,
-  });
 
   @override
   Future<void> onLoad() async {

@@ -935,21 +935,23 @@ void main() {
   );
 }
 
-class _SingleDragComponent extends PositionComponent
+class _SingleDragComponent()
+    extends PositionComponent
     with DragCallbacks, DragCounter {
   @override
   bool get allowsMultiPointerDrag => false;
 }
 
-class _SingleDragScaleComponent extends PositionComponent
+class _SingleDragScaleComponent()
+    extends PositionComponent
     with DragCallbacks, DragCounter, ScaleCallbacks, ScaleCounter {
   @override
   bool get allowsMultiPointerDrag => false;
 }
 
-class _TapCounterComponent extends PositionComponent with TapCallbacks {
-  _TapCounterComponent({super.position, super.size});
-
+class _TapCounterComponent({super.position, super.size})
+    extends PositionComponent
+    with TapCallbacks {
   int nTapDown = 0;
   int nTapUp = 0;
   int nTapCancel = 0;

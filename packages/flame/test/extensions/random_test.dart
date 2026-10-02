@@ -67,4 +67,4 @@ void main() {
   });
 }
 
-class _MockRandom extends Mock implements Random {}
+class _MockRandom() extends Mock implements Random;

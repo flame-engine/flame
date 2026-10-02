@@ -6,7 +6,7 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:material_ui/material_ui.dart';
 
-class LevelsExample extends FlameGame {
+class LevelsExample() extends FlameGame {
   static const String description = '''
     In this example we showcase how you can utilize World components as levels.
     Press the different buttons in the bottom to change levels and press in the
@@ -14,7 +14,7 @@ class LevelsExample extends FlameGame {
     meanwhile the one called Resettable always resets.
   ''';
 
-  LevelsExample() : super(world: ResettableLevel());
+  this : super(world: ResettableLevel());
 
   late final TextComponent header;
 
@@ -58,7 +58,7 @@ class LevelsExample extends FlameGame {
   }
 }
 
-class ResettableLevel extends Level {
+class ResettableLevel() extends Level {
   @override
   Future<void> onLoad() async {
     add(
@@ -73,7 +73,7 @@ class ResettableLevel extends Level {
   }
 }
 
-class Level1 extends Level {
+class Level1() extends Level {
   @override
   Future<void> onLoad() async {
     add(Ember());
@@ -81,7 +81,7 @@ class Level1 extends Level {
   }
 }
 
-class Level2 extends Level {
+class Level2() extends Level {
   @override
   Future<void> onLoad() async {
     add(Ember(position: Vector2(-100, 0)));
@@ -90,7 +90,7 @@ class Level2 extends Level {
   }
 }
 
-class Level3 extends Level {
+class Level3() extends Level {
   @override
   Future<void> onLoad() async {
     add(Ember(position: Vector2(-100, -50)));
@@ -100,15 +100,16 @@ class Level3 extends Level {
   }
 }
 
-class Level extends World with HasGameRef<LevelsExample>, TapCallbacks {
+class Level() extends World with HasGameRef<LevelsExample>, TapCallbacks {
   @override
   void onTapDown(TapDownEvent event) {
     add(Ember(position: event.localPosition));
   }
 }
 
-class LevelButton extends ButtonComponent {
-  LevelButton(String text, {super.onPressed, super.position})
+class LevelButton(String text, {super.onPressed, super.position})
+    extends ButtonComponent {
+  this
     : super(
         button: ButtonBackground(Colors.white),
         buttonDown: ButtonBackground(Colors.orangeAccent),
@@ -124,8 +125,10 @@ class LevelButton extends ButtonComponent {
       );
 }
 
-class ButtonBackground extends PositionComponent with HasAncestor<LevelButton> {
-  ButtonBackground(Color color) {
+class ButtonBackground(Color color)
+    extends PositionComponent
+    with HasAncestor<LevelButton> {
+  this {
     _paint.color = color;
   }
 

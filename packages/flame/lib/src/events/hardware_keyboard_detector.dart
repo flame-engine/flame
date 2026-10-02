@@ -31,13 +31,11 @@ import 'package:flutter/services.dart';
 /// Use [pauseKeyEvents] property to temporarily halt/resume the delivery of
 /// [onKeyEvent]s. The events will also stop being delivered when the component
 /// is removed from the component tree.
-class HardwareKeyboardDetector extends Component {
-  HardwareKeyboardDetector({this._onKeyEvent});
-
+class HardwareKeyboardDetector({final void Function(KeyEvent)? _onKeyEvent})
+    extends Component {
   final List<PhysicalKeyboardKey> _physicalKeys = [];
   Set<LogicalKeyboardKey> _logicalKeys = {};
   bool _pause = true;
-  final void Function(KeyEvent)? _onKeyEvent;
 
   /// The list of keys that are currently being pressed on the keyboard (or a
   /// keyboard-like device). The keys are listed in the order in which they

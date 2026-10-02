@@ -182,14 +182,13 @@ void main() {
       out: out,
       err: err,
       workingDirectory: directory,
-      startProcess:
-          (
-            _,
-            _, {
-            workingDirectory,
-            runInShell = false,
-            mode = ProcessStartMode.normal,
-          }) async => FakeProcess(exitCode: 1),
+      startProcess: (
+        _,
+        _, {
+        workingDirectory,
+        runInShell = false,
+        mode = ProcessStartMode.normal,
+      }) async => FakeProcess(exitCode: 1),
     );
 
     expect(await runner.run(['create', 'my_game']), ExitCode.software.code);

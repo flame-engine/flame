@@ -7,32 +7,21 @@ import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart';
 
-class LayoutComponentExample1 extends FlameGame with DragCallbacks {
-  LayoutComponentExample1({
-    required this.direction,
-    required this.mainAxisAlignment,
-    required this.crossAxisAlignment,
-    required this.gap,
-    required this.demoSize,
-    required this.padding,
-    required this.expandedMode,
-    required this.paddingInflateChild,
-  });
-
+class LayoutComponentExample1({
+  required final Direction direction,
+  required final MainAxisAlignment mainAxisAlignment,
+  required final CrossAxisAlignment crossAxisAlignment,
+  required final double gap,
+  required final LayoutComponentExampleSize demoSize,
+  required final EdgeInsets padding,
+  required final bool expandedMode,
+  required final bool paddingInflateChild,
+}) extends FlameGame with DragCallbacks {
   static const String description = '''
 This example demonstrates the various behaviors of LayoutComponents.
 Press the pen button on the floating group of icons on the upper right to see
 the various ways you can change this layout.
   ''';
-
-  final Direction direction;
-  final MainAxisAlignment mainAxisAlignment;
-  final CrossAxisAlignment crossAxisAlignment;
-  final double gap;
-  final LayoutComponentExampleSize demoSize;
-  final EdgeInsets padding;
-  final bool expandedMode;
-  final bool paddingInflateChild;
 
   @override
   FutureOr<void> onLoad() {
@@ -77,21 +66,19 @@ the various ways you can change this layout.
   bool get debugMode => true;
 }
 
-class LayoutDemo1 extends LinearLayoutComponent {
-  LayoutDemo1({
-    required super.direction,
-    required super.crossAxisAlignment,
-    required super.mainAxisAlignment,
-    required super.gap,
-    required super.position,
-    required this._padding,
-    required this._expandedMode,
-    required this.paddingInflateChild,
-    super.size,
-    super.key,
-  }) : super(anchor: Anchor.topLeft, priority: 0, children: []);
-
-  bool _expandedMode = false;
+class LayoutDemo1({
+  required super.direction,
+  required super.crossAxisAlignment,
+  required super.mainAxisAlignment,
+  required super.gap,
+  required super.position,
+  required var EdgeInsets _padding,
+  required var bool _expandedMode,
+  required final bool paddingInflateChild,
+  super.size,
+  super.key,
+}) extends LinearLayoutComponent {
+  this : super(anchor: Anchor.topLeft, priority: 0, children: []);
 
   bool get expandedMode => _expandedMode;
 
@@ -107,16 +94,12 @@ class LayoutDemo1 extends LinearLayoutComponent {
     );
   }
 
-  EdgeInsets _padding = EdgeInsets.zero;
-
   EdgeInsets get padding => _padding;
 
   set padding(EdgeInsets value) {
     _padding = value;
     paddingComponent?.padding = padding;
   }
-
-  final bool paddingInflateChild;
 
   @override
   FutureOr<void> onLoad() {

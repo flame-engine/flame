@@ -6,9 +6,9 @@ import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:material_ui/material_ui.dart' show Colors, Paint, Canvas;
+import 'package:material_ui/material_ui.dart' show Canvas, Colors, Paint;
 
-class RaycastExample extends Forge2DExampleGame with MouseMoveCallbacks {
+class RaycastExample() extends Forge2DExampleGame with MouseMoveCallbacks {
   static const String description = '''
     This example shows how ray casts can be used to find the nearest and
     farthest shapes.
@@ -23,7 +23,7 @@ class RaycastExample extends Forge2DExampleGame with MouseMoveCallbacks {
   Box? nearestBox;
   Box? farthestBox;
 
-  RaycastExample() : super(gravity: Vector2.zero());
+  this : super(gravity: Vector2.zero());
 
   @override
   Future<void> onLoad() async {
@@ -121,11 +121,8 @@ class RaycastExample extends Forge2DExampleGame with MouseMoveCallbacks {
   }
 }
 
-class LineComponent extends Component {
-  LineComponent(this.points, this.paint);
-
-  final List<Vector2> points;
-  final Paint paint;
+class LineComponent(final List<Vector2> points, final Paint paint)
+    extends Component {
   final Path path = Path();
 
   @override
@@ -150,11 +147,7 @@ class LineComponent extends Component {
   }
 }
 
-class Box extends BodyComponent {
-  Box(this.initialPosition);
-
-  final Vector2 initialPosition;
-
+class Box(final Vector2 initialPosition) extends BodyComponent {
   @override
   Body createBody() {
     final bodyDef = BodyDef(position: initialPosition);

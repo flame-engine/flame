@@ -2,9 +2,7 @@ import 'dart:math';
 
 /// [TapConfig] is used to expose specific configurations
 /// related to the tap dispatcher.
-final class TapConfig {
-  TapConfig._();
-
+final class TapConfig._() {
   static double _longTapDelay = _defaultLongTapDelay;
 
   /// The delay (in seconds) after which a tap is considered a long tap.

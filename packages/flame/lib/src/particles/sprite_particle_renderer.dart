@@ -9,19 +9,18 @@ import 'package:flame/src/sprite.dart';
 /// The sprite is drawn centered on the particle, scaled so its width matches
 /// the particle's current size, and tinted by the emitter's `colorOverLife`
 /// ramp (untinted when unset).
-class SpriteParticleRenderer extends TextureParticleRenderer {
-  /// Renders every particle as [sprite].
-  SpriteParticleRenderer(this.sprite, {super.blendMode, super.paint});
-
+class SpriteParticleRenderer(
+  /// The sprite drawn for every particle.
+  final Sprite sprite, {
+  super.blendMode,
+  super.paint,
+}) extends TextureParticleRenderer {
   /// Renders every particle as the full [image].
   SpriteParticleRenderer.fromImage(
     Image image, {
     BlendMode? blendMode,
     Paint? paint,
   }) : this(Sprite(image), blendMode: blendMode, paint: paint);
-
-  /// The sprite drawn for every particle.
-  final Sprite sprite;
 
   @override
   Image get texture => sprite.image;

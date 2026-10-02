@@ -5,25 +5,16 @@ import 'package:flame/components.dart';
 
 /// A component where all event handlers can be provided as parameters in the
 /// constructor.
-class CustomComponent extends Component {
-  CustomComponent({
-    this._onGameResize,
-    this._onLoad,
-    this._onMount,
-    this._onRemove,
-    this._onUpdate,
-    this._onRender,
-    super.priority,
-    super.children,
-  });
-
-  final void Function(CustomComponent, Vector2)? _onGameResize;
-  final FutureOr<void> Function(CustomComponent)? _onLoad;
-  final void Function(CustomComponent)? _onMount;
-  final void Function(CustomComponent)? _onRemove;
-  final void Function(CustomComponent, double)? _onUpdate;
-  final void Function(CustomComponent, Canvas)? _onRender;
-
+class CustomComponent({
+  final void Function(CustomComponent, Vector2)? _onGameResize,
+  final FutureOr<void> Function(CustomComponent)? _onLoad,
+  final void Function(CustomComponent)? _onMount,
+  final void Function(CustomComponent)? _onRemove,
+  final void Function(CustomComponent, double)? _onUpdate,
+  final void Function(CustomComponent, Canvas)? _onRender,
+  super.priority,
+  super.children,
+}) extends Component {
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);

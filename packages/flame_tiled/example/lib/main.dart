@@ -13,7 +13,7 @@ void main() {
 
 /// Scrolls the layer that it is added to, which makes the repeating snow
 /// image layer of the example map fall.
-class SnowScroller extends Component with ParentIsA<RenderableLayer> {
+class SnowScroller() extends Component with ParentIsA<RenderableLayer> {
   double _elapsed = 0;
 
   @override
@@ -25,10 +25,10 @@ class SnowScroller extends Component with ParentIsA<RenderableLayer> {
   }
 }
 
-class TiledGame extends FlameGame {
+class TiledGame() extends FlameGame {
   late TiledComponent mapComponent;
 
-  TiledGame()
+  this
     : super(
         camera: CameraComponent.withFixedResolution(
           width: 16 * 28,

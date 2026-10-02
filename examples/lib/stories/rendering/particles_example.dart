@@ -7,7 +7,7 @@ import 'package:flame/geometry.dart';
 import 'package:flame/particles.dart';
 import 'package:material_ui/material_ui.dart' hide Image;
 
-class ParticlesExample extends FlameGame {
+class ParticlesExample() extends FlameGame {
   static const String description = '''
     Showcases the declarative particle system. Every effect is built from
     ParticleEmitterComponents: reusable ParticleEmitter presets describe what
@@ -369,12 +369,14 @@ class ParticlesExample extends FlameGame {
 }
 
 /// Moves its emitter child along a Lissajous-like path.
-class _OrbitingEmitter extends PositionComponent {
-  _OrbitingEmitter({required this.orbit, required PositionComponent child}) {
+class _OrbitingEmitter({
+  required final Vector2 orbit,
+  required PositionComponent child,
+}) extends PositionComponent {
+  this {
     add(child);
   }
 
-  final Vector2 orbit;
   late final Vector2 _center = position.clone();
   double _time = 0;
 
@@ -391,8 +393,10 @@ class _OrbitingEmitter extends PositionComponent {
 
 /// Displays the frame rate and the total number of live particles across
 /// all emitters, refreshed a few times per second.
-class _StatsText extends TextComponent with HasGameRef {
-  _StatsText({super.position, super.anchor})
+class _StatsText({super.position, super.anchor})
+    extends TextComponent
+    with HasGameRef {
+  this
     : super(
         textRenderer: TextPaint(
           style: const TextStyle(color: Colors.white70, fontSize: 13),

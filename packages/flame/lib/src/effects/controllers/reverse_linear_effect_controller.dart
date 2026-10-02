@@ -4,10 +4,8 @@ import 'package:flame/src/effects/controllers/duration_effect_controller.dart';
 ///
 /// The [duration] can also be 0, in which case the effect will jump from 1 to 0
 /// instantaneously.
-class ReverseLinearEffectController extends DurationEffectController {
-  ReverseLinearEffectController(super.duration);
-
-  // If duration is 0, `completed` will be true, and division by 0 avoided.
+class ReverseLinearEffectController(super.duration)
+    extends DurationEffectController {
   @override
   double get progress => completed ? 0 : 1 - (timer / duration);
 }

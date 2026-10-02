@@ -1,28 +1,20 @@
 /// A class that holds the data of a tile from a sprite fusion map.
-class SpriteFusionTileData {
+class SpriteFusionTileData({
   /// The id of the tile.
   ///
   /// This is also the index position of the tile in the tileset, starting at 0,
   /// from left to right, top to bottom.
-  final int id;
+  required final int id,
 
   /// The x position of the tile in tile units.
-  final int x;
+  required final int x,
 
   /// The y position of the tile in tile units.
-  final int y;
+  required final int y,
 
   /// The attributes of the tile.
-  final Map<String, dynamic>? attributes;
-
-  /// Creates a new instance of [SpriteFusionTileData].
-  SpriteFusionTileData({
-    required this.id,
-    required this.x,
-    required this.y,
-    this.attributes,
-  });
-
+  final Map<String, dynamic>? attributes,
+}) {
   /// Creates a new instance of [SpriteFusionTileData] from a map.
   factory SpriteFusionTileData.fromMap(Map<String, dynamic> map) {
     return SpriteFusionTileData(

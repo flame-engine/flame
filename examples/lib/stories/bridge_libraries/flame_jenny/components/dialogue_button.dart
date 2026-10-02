@@ -3,18 +3,13 @@ import 'package:flame/components.dart';
 import 'package:flame/input.dart';
 import 'package:material_ui/material_ui.dart';
 
-class DialogueButton extends SpriteButtonComponent {
-  DialogueButton({
-    required super.position,
-    required this.assetPath,
-    required this.text,
-    required super.onPressed,
-    super.anchor = Anchor.center,
-  });
-
-  final String text;
-  final String assetPath;
-
+class DialogueButton({
+  required super.position,
+  required final String assetPath,
+  required final String text,
+  required super.onPressed,
+  super.anchor = Anchor.center,
+}) extends SpriteButtonComponent {
   @override
   Future<void> onLoad() async {
     button = await Sprite.load(assetPath);

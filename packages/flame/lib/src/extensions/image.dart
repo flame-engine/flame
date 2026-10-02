@@ -73,7 +73,7 @@ extension ImageExtension on Image {
       newPixelData[i + 3] = pixelData[i + 3];
     }
 
-    return fromPixels(newPixelData, width, height);
+    return await fromPixels(newPixelData, width, height);
   }
 
   /// Returns the bounding [Rect] of the image.
@@ -91,7 +91,7 @@ extension ImageExtension on Image {
   }) async {
     assert(amount >= 0 && amount <= 1);
 
-    return transformPixels(
+    return await transformPixels(
       (color) => color.darken(amount),
       reversePremultipliedAlpha: reversePremultipliedAlpha,
     );
@@ -106,7 +106,7 @@ extension ImageExtension on Image {
   }) async {
     assert(amount >= 0 && amount <= 1);
 
-    return transformPixels(
+    return await transformPixels(
       (color) => color.brighten(amount),
       reversePremultipliedAlpha: reversePremultipliedAlpha,
     );

@@ -2,25 +2,20 @@ import 'package:flame/components.dart';
 
 import '../ember_quest.dart';
 
-enum HeartState {
+enum HeartState() {
   available,
   unavailable,
 }
 
-class HeartHealthComponent extends SpriteGroupComponent<HeartState>
-    with HasGameRef<EmberQuestGame> {
-  final int heartNumber;
-
-  HeartHealthComponent({
-    required this.heartNumber,
-    required super.position,
-    required super.size,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.priority,
-  });
-
+class HeartHealthComponent({
+  required final int heartNumber,
+  required super.position,
+  required super.size,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.priority,
+}) extends SpriteGroupComponent<HeartState> with HasGameRef<EmberQuestGame> {
   @override
   Future<void> onLoad() async {
     await super.onLoad();

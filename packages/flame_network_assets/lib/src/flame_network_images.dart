@@ -9,12 +9,12 @@ import 'package:flutter/rendering.dart';
 /// {@macro flame_network_assets}
 ///
 /// {@endtemplate}
-class FlameNetworkImages extends FlameNetworkAssets<Image> {
+class FlameNetworkImages({
+  super.get,
+  super.getAppDirectory,
+  super.cacheInMemory,
+  super.cacheInStorage,
+}) extends FlameNetworkAssets<Image> {
   /// {@macro flame_network_images}
-  FlameNetworkImages({
-    super.get,
-    super.getAppDirectory,
-    super.cacheInMemory,
-    super.cacheInStorage,
-  }) : super(decodeAsset: decodeImageFromList);
+  this : super(decodeAsset: decodeImageFromList);
 }

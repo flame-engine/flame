@@ -1,19 +1,20 @@
 import 'dart:ui';
+
 import 'package:flame/effects.dart';
 
 /// This effect controller invokes the [callback] function and then immediately
 /// finishes. Use it as part of a more complex effect to insert callbacks at
 /// certain parts of that effect.
-class CallbackController extends DurationEffectController {
+class CallbackController(
+  final VoidCallback callback, {
+  required final double _progress,
+}) extends DurationEffectController {
   /// Creates a controller that invokes the given [callback] function.
   /// The [_progress] parameter specifies the progress level of the effect at
   /// the time when the callback is invoked. It is the responsibility of the
   /// user to ensure that this progress level is contiguous with respect to the
   /// progress of the overall effect.
-  CallbackController(this.callback, {required this._progress}) : super(0.0);
-
-  final VoidCallback callback;
-  final double _progress;
+  this : super(0.0);
 
   @override
   double get progress => _progress;

@@ -230,8 +230,8 @@ void main() {
 }
 
 /// Simple rectangle with default size 80x60.
-class _Rect extends PositionComponent {
-  _Rect() : super(size: Vector2(80, 60));
+class _Rect() extends PositionComponent {
+  this : super(size: Vector2(80, 60));
 
   @override
   void render(Canvas canvas) {

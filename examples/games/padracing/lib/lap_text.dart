@@ -1,15 +1,15 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:material_ui/material_ui.dart' hide Image, Gradient;
+import 'package:material_ui/material_ui.dart' hide Gradient, Image;
 import 'package:padracing/car.dart';
 import 'package:padracing/padracing_game.dart';
 
-class LapText extends PositionComponent with HasGameRef<PadRacingGame> {
-  LapText({required this.car, required Vector2 position})
-    : super(position: position);
+class LapText({required final Car car, required Vector2 position})
+    extends PositionComponent
+    with HasGameRef<PadRacingGame> {
+  this : super(position: position);
 
-  final Car car;
   late final ValueNotifier<int> lapNotifier = car.lapNotifier;
   late final TextComponent _timePassedComponent;
 

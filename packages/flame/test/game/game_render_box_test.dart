@@ -5,9 +5,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _MockFlameGame extends Mock implements FlameGame {}
+class _MockFlameGame() extends Mock implements FlameGame;
 
-class _MockBuildContext extends Mock implements BuildContext {}
+class _MockBuildContext() extends Mock implements BuildContext;
 
 final _nodesNeedingCompositingBitsUpdate = <RenderObject>[];
 

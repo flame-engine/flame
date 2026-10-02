@@ -5,7 +5,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 
-class EffectControllersExample extends FlameGame {
+class EffectControllersExample() extends FlameGame {
   static const description = '''
     This page demonstrates application of various non-standard effect 
     controllers.
@@ -20,7 +20,7 @@ class EffectControllersExample extends FlameGame {
     delayed.
   ''';
 
-  EffectControllersExample()
+  this
     : super(
         camera: CameraComponent.withFixedResolution(
           width: 400,
@@ -30,7 +30,7 @@ class EffectControllersExample extends FlameGame {
       );
 }
 
-class _EffectControllerWorld extends World {
+class _EffectControllerWorld() extends World {
   @override
   void onLoad() {
     add(

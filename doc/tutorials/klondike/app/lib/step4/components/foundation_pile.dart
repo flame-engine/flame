@@ -7,12 +7,12 @@ import '../pile.dart';
 import '../suit.dart';
 import 'card.dart';
 
-class FoundationPile extends PositionComponent implements Pile {
-  FoundationPile(int intSuit, {super.position})
-    : suit = Suit.fromInt(intSuit),
-      super(size: KlondikeGame.cardSize);
+class FoundationPile(int intSuit, {super.position})
+    extends PositionComponent
+    implements Pile {
+  this : super(size: KlondikeGame.cardSize);
 
-  final Suit suit;
+  final Suit suit = Suit.fromInt(intSuit);
   final List<Card> _cards = [];
 
   //#region Pile API

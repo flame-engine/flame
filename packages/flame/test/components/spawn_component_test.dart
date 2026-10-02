@@ -546,4 +546,4 @@ void main() {
   });
 }
 
-class _CountComponent extends PositionComponent {}
+class _CountComponent() extends PositionComponent;

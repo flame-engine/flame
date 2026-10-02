@@ -12,9 +12,7 @@ import 'package:flame/text.dart';
 /// [DocumentStyle] at the root.
 ///
 /// The tree of [FlameTextStyle]s is roughly equivalent to a CSS stylesheet.
-abstract class FlameTextStyle {
-  const FlameTextStyle();
-
+abstract class const FlameTextStyle() {
   /// Creates a new [FlameTextStyle], preferring the properties of [other]
   /// if present, falling back to the properties of `this`.
   FlameTextStyle copyWith(covariant FlameTextStyle other);

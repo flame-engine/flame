@@ -4,11 +4,11 @@ import 'package:flame/components.dart';
 import 'package:rogue_shooter/components/enemy_component.dart';
 import 'package:rogue_shooter/rogue_shooter_game.dart';
 
-class EnemyCreator extends TimerComponent with HasGameRef<RogueShooterGame> {
+class EnemyCreator() extends TimerComponent with HasGameRef<RogueShooterGame> {
   final Random random = Random();
   final _halfWidth = EnemyComponent.initialSize.x / 2;
 
-  EnemyCreator() : super(period: 0.05, repeat: true) {
+  this : super(period: 0.05, repeat: true) {
     timer.onTick = _spawn;
   }
 

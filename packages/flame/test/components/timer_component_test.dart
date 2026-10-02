@@ -4,10 +4,10 @@ import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _MyTimerComponent extends TimerComponent {
+class _MyTimerComponent() extends TimerComponent {
   int count = 0;
 
-  _MyTimerComponent()
+  this
     : super(
         period: 1,
         repeat: true,
@@ -21,10 +21,10 @@ class _MyTimerComponent extends TimerComponent {
   }
 }
 
-class _MyTickOnLoadTimerComponent extends TimerComponent {
+class _MyTickOnLoadTimerComponent() extends TimerComponent {
   int count = 0;
 
-  _MyTickOnLoadTimerComponent()
+  this
     : super(
         period: 1,
         repeat: true,
@@ -39,8 +39,8 @@ class _MyTickOnLoadTimerComponent extends TimerComponent {
   }
 }
 
-class _NonRepeatingTimerComponent extends TimerComponent {
-  _NonRepeatingTimerComponent()
+class _NonRepeatingTimerComponent() extends TimerComponent {
+  this
     : super(
         period: 1,
         repeat: false,

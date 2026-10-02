@@ -4,14 +4,12 @@ import 'package:flame/palette.dart';
 import 'package:flame/text.dart';
 import 'package:material_ui/material_ui.dart';
 
-class MenuButton extends ButtonComponent {
-  MenuButton({
-    required super.position,
-    required super.onPressed,
-    required this.text,
-  }) : super(size: Vector2(128, 42));
-
-  late String text;
+class MenuButton({
+  required super.position,
+  required super.onPressed,
+  required var String text,
+}) extends ButtonComponent {
+  this : super(size: Vector2(128, 42));
 
   final Paint white = BasicPalette.white.paint();
   final TextPaint topTextPaint = TextPaint(

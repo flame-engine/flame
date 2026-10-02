@@ -2,9 +2,10 @@ import 'package:flame/components.dart';
 
 import 'package:flame_bloc_example/src/game/game.dart';
 
-class ExplosionComponent extends SpriteAnimationComponent
+class ExplosionComponent(double x, double y)
+    extends SpriteAnimationComponent
     with HasGameRef<SpaceShooterGame> {
-  ExplosionComponent(double x, double y)
+  this
     : super(
         position: Vector2(x, y),
         size: Vector2.all(50),

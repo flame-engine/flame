@@ -3,7 +3,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 
-class OpacityToEffectGame extends FlameGame {
+class OpacityToEffectGame() extends FlameGame {
   bool reset = false;
 
   @override

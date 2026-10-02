@@ -5,9 +5,7 @@ import 'package:flame_cli/src/flame_connection.dart';
 import 'package:io/io.dart';
 
 /// Pauses the game loop.
-class PauseCommand extends FlameCommand {
-  PauseCommand(super.out, super.workingDirectory);
-
+class PauseCommand(super.out, super.workingDirectory) extends FlameCommand {
   @override
   String get name => 'pause';
 
@@ -28,9 +26,7 @@ class PauseCommand extends FlameCommand {
 }
 
 /// Resumes the game loop.
-class ResumeCommand extends FlameCommand {
-  ResumeCommand(super.out, super.workingDirectory);
-
+class ResumeCommand(super.out, super.workingDirectory) extends FlameCommand {
   @override
   String get name => 'resume';
 
@@ -49,8 +45,8 @@ class ResumeCommand extends FlameCommand {
 }
 
 /// Advances the paused game by a number of frames.
-class StepCommand extends FlameCommand {
-  StepCommand(super.out, super.workingDirectory) {
+class StepCommand(super.out, super.workingDirectory) extends FlameCommand {
+  this {
     argParser
       ..addOption(
         'time',

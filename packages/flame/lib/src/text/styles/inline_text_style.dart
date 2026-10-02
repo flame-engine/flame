@@ -7,49 +7,28 @@ import 'package:meta/meta.dart';
 /// Note: the fields on this class are equivalent to the fields on Flutter's
 /// [TextStyle] class; check its documentation for more details.
 @immutable
-class InlineTextStyle extends FlameTextStyle {
-  InlineTextStyle({
-    this.color,
-    this.fontFamily,
-    this.fontSize,
-    this.fontScale,
-    this.fontWeight,
-    this.fontStyle,
-    this.letterSpacing,
-    this.wordSpacing,
-    this.height,
-    this.leadingDistribution,
-    this.shadows,
-    this.fontFeatures,
-    this.fontVariations,
-    this.decoration,
-    this.decorationColor,
-    this.decorationStyle,
-    this.decorationThickness,
-    this.background,
-    this.foreground,
-  });
-
-  final Color? color;
-  final String? fontFamily;
-  final double? fontSize;
-  final double? fontScale;
-  final FontWeight? fontWeight;
-  final FontStyle? fontStyle;
-  final double? letterSpacing;
-  final double? wordSpacing;
-  final double? height;
-  final TextLeadingDistribution? leadingDistribution;
-  final List<Shadow>? shadows;
-  final List<FontFeature>? fontFeatures;
-  final List<FontVariation>? fontVariations;
-  final TextDecoration? decoration;
-  final Color? decorationColor;
-  final TextDecorationStyle? decorationStyle;
-  final double? decorationThickness;
-  final Paint? background;
-  final Paint? foreground;
-
+// ignore: prefer_const_constructors_in_immutables
+class InlineTextStyle({
+  final Color? color,
+  final String? fontFamily,
+  final double? fontSize,
+  final double? fontScale,
+  final FontWeight? fontWeight,
+  final FontStyle? fontStyle,
+  final double? letterSpacing,
+  final double? wordSpacing,
+  final double? height,
+  final TextLeadingDistribution? leadingDistribution,
+  final List<Shadow>? shadows,
+  final List<FontFeature>? fontFeatures,
+  final List<FontVariation>? fontVariations,
+  final TextDecoration? decoration,
+  final Color? decorationColor,
+  final TextDecorationStyle? decorationStyle,
+  final double? decorationThickness,
+  final Paint? background,
+  final Paint? foreground,
+}) extends FlameTextStyle {
   late final TextRenderer renderer = asTextRenderer();
 
   @override

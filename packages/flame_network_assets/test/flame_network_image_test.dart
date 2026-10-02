@@ -7,20 +7,20 @@ import 'package:material_ui/material_ui.dart' hide Image;
 import 'package:mocktail/mocktail.dart';
 import 'package:path/path.dart' as path;
 
-abstract class __MockHttpClient {
+abstract class __MockHttpClient() {
   Future<FlameAssetResponse> get(
     String url, {
     Map<String, String>? headers,
   });
 }
 
-class _MockHttpClient extends Mock implements __MockHttpClient {}
+class _MockHttpClient() extends Mock implements __MockHttpClient;
 
-abstract class __MockPathProvider {
+abstract class __MockPathProvider() {
   Future<Directory> getAppDirectory();
 }
 
-class _MockPathProvider extends Mock implements __MockPathProvider {}
+class _MockPathProvider() extends Mock implements __MockPathProvider;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

@@ -4,16 +4,11 @@ import 'package:crystal_ball/src/game/game.dart';
 import 'package:flame/components.dart';
 import 'package:flame/post_process.dart';
 
-class WaterPostProcess extends PostProcess {
-  WaterPostProcess({
-    required this.fragmentProgram,
-    required this.world,
-    super.pixelRatio,
-  });
-
-  final FragmentProgram fragmentProgram;
-  final CrystalBallGameWorld world;
-
+class WaterPostProcess({
+  required final FragmentProgram fragmentProgram,
+  required final CrystalBallGameWorld world,
+  super.pixelRatio,
+}) extends PostProcess {
   late final FragmentShader shader = fragmentProgram.fragmentShader();
 
   double time = 0;

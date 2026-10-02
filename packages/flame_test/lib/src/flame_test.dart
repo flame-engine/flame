@@ -60,59 +60,48 @@ extension FlameGameExtension on Component {
 typedef GameCreateFunction<T extends Game> = T Function();
 typedef VerifyFunction<T extends Game> = dynamic Function(T);
 
-typedef GameWidgetCreateFunction<T extends Game> =
-    GameWidget<T> Function(
-      T game,
-    );
-typedef WidgetVerifyFunction<T extends Game> =
-    Future<void> Function(
-      T,
-      WidgetTester,
-    );
-typedef WidgetSetupFunction<T extends Game> =
-    Future<void> Function(
-      T,
-      WidgetTester,
-    );
-typedef PumpWidgetFunction<T extends Game> =
-    Future<void> Function(
-      GameWidget<T>,
-      WidgetTester tester,
-    );
+typedef GameWidgetCreateFunction<T extends Game> = GameWidget<T> Function(
+  T game,
+);
+typedef WidgetVerifyFunction<T extends Game> = Future<void> Function(
+  T,
+  WidgetTester,
+);
+typedef WidgetSetupFunction<T extends Game> = Future<void> Function(
+  T,
+  WidgetTester,
+);
+typedef PumpWidgetFunction<T extends Game> = Future<void> Function(
+  GameWidget<T>,
+  WidgetTester tester,
+);
 
 /// Customize this class with your specific Game type [T] and a custom
 /// provider `() -> T`, plus some additional configurations including a game
 /// widget builder [createGameWidget], a custom [pumpWidget] function and a
 /// custom [gameSize].
-class GameTester<T extends Game> {
+class GameTester<T extends Game>(
   /// Use [createGame] to create your game instance.
-  final GameCreateFunction<T> createGame;
+  final GameCreateFunction<T> createGame, {
+
+  /// Override the game size to be provided during `onGameResize`.
+  /// By default it will be a 500x500 square.
+  final Vector2? gameSize,
 
   /// Use [createGameWidget] to create the [GameWidget]. If omitted,
   /// the game instance returned by [createGame] will be wrapped into
   /// an empty [GameWidget] instance.
-  final GameWidgetCreateFunction<T>? createGameWidget;
+  final GameWidgetCreateFunction<T>? createGameWidget,
 
   /// Use [pumpWidget] to define your own function to pump widgets into
   /// the Flutter test environment. When omitted, [testGameWidget] simply
   /// will pass the created game widget instance to the test.
-  final PumpWidgetFunction<T>? pumpWidget;
-
-  /// Override the game size to be provided during `onGameResize`.
-  /// By default it will be a 500x500 square.
-  final Vector2? gameSize;
-
+  final PumpWidgetFunction<T>? pumpWidget,
+}) {
   /// If true, the game will be brought into the "fully ready" state (meaning
   /// all its pending lifecycle events will be resolved) before the start of
   /// the test.
   bool makeReady = true;
-
-  GameTester(
-    this.createGame, {
-    this.gameSize,
-    this.createGameWidget,
-    this.pumpWidget,
-  });
 
   /// Creates a [Game] specific test case with given [description]
   /// which runs inside the Flutter test environment.
@@ -183,14 +172,12 @@ class GameTester<T extends Game> {
 /// provider `() -> T`, plus some additional configurations including a game
 /// widget builder [createGameWidget], a custom [pumpWidget] function and a
 /// custom [gameSize].
-class FlameTester<T extends FlameGame> extends GameTester<T> {
-  FlameTester(
-    super.createGame, {
-    super.gameSize,
-    super.createGameWidget,
-    super.pumpWidget,
-  });
-}
+class FlameTester<T extends FlameGame>(
+  super.createGame, {
+  super.gameSize,
+  super.createGameWidget,
+  super.pumpWidget,
+}) extends GameTester<T>;
 
 /// Default instance of Flame Tester to be used when you don't care about
 /// changing any configuration.

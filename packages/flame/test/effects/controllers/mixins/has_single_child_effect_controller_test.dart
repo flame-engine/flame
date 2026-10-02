@@ -38,16 +38,13 @@ void main() {
   });
 }
 
-class _TestEffectController extends _MockEffectController
+class _TestEffectController(final _MockEffectController _child)
+    extends _MockEffectController
     with HasSingleChildEffectController<_MockEffectController> {
-  _TestEffectController(_MockEffectController child) : _child = child;
-
-  final _MockEffectController _child;
-
   @override
   _MockEffectController get child => _child;
 }
 
-class _MockEffectController extends Mock implements EffectController {}
+class _MockEffectController() extends Mock implements EffectController;
 
-class _MockEffect extends Mock implements Effect {}
+class _MockEffect() extends Mock implements Effect;

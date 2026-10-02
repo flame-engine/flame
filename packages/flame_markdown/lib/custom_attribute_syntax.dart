@@ -2,7 +2,7 @@ import 'package:markdown/markdown.dart';
 
 // cSpell:ignore charcode.dart (file name from another package)
 // NOTE: values obtained from file `charcode.dart` from the markdown package
-class _Chars {
+class _Chars() {
   /// Character `[`.
   static const int leftBracket = 0x5B;
 
@@ -25,9 +25,9 @@ class _Chars {
 ///
 /// This is based on the standard Link markdown parser (which matches the
 /// `[text](url)` and `[text][ref]` syntaxes).
-class CustomAttributeSyntax extends LinkSyntax {
+class CustomAttributeSyntax() extends LinkSyntax {
   /// Creates a new custom attribute syntax.
-  CustomAttributeSyntax()
+  this
     : super(
         pattern: r'\[',
         startCharacter: _Chars.leftBracket,

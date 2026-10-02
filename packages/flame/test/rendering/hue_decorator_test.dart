@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'dart:ui';
+
 import 'package:flame/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -40,7 +41,7 @@ void main() {
   });
 }
 
-class _MockCanvas extends Fake implements Canvas {
+class _MockCanvas() extends Fake implements Canvas {
   bool saveLayerCalled = false;
   bool restoreCalled = false;
 

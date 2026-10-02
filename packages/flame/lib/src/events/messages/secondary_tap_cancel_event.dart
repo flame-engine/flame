@@ -13,8 +13,8 @@ import 'package:flame/events.dart';
 ///
 /// The [SecondaryTapCancelEvent] will only occur if there was a previous
 /// [SecondaryTapDownEvent].
-class SecondaryTapCancelEvent extends Event<void> {
-  SecondaryTapCancelEvent() : super(raw: null);
+class SecondaryTapCancelEvent() extends Event<void> {
+  this : super(raw: null);
 
   @override
   String toString() => 'SecondaryTapCancel()';

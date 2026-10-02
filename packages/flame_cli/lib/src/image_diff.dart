@@ -3,25 +3,18 @@ import 'dart:math';
 import 'package:image/image.dart' as img;
 
 /// The result of comparing two images with [diffImages].
-class ImageDiff {
-  ImageDiff({
-    required this.differingPixels,
-    required this.totalPixels,
-    required this.bounds,
-    required this.image,
-  });
-
-  final int differingPixels;
-  final int totalPixels;
+class ImageDiff({
+  required final int differingPixels,
+  required final int totalPixels,
 
   /// The smallest rectangle that contains all the differing pixels, as
   /// `(left, top, width, height)`, or null if the images are identical.
-  final ({int left, int top, int width, int height})? bounds;
+  required final ({int left, int top, int width, int height})? bounds,
 
   /// The differing pixels in red on top of a dimmed version of the second
   /// image.
-  final img.Image image;
-
+  required final img.Image image,
+}) {
   double get percentage => differingPixels / totalPixels * 100;
 
   /// A one line description of the difference.

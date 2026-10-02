@@ -7,20 +7,15 @@ import 'package:flame_tiled/src/mutable_rect.dart';
 /// This works because SpriteBatch holds a list of [Rect]. Those rectangles
 /// are usually immutable, but flame_tile uses a mutable rectangle to update
 /// the offsets in the image atlas.
-class TileAnimation {
-  /// Frames of the animation loop.
-  final TileFrames frames;
-
+class TileAnimation(
   /// Rectangle that gets updated for each new frame in the animation.
-  final MutableRect batchedSource;
+  final MutableRect batchedSource,
 
+  /// Frames of the animation loop.
+  final TileFrames frames,
+) {
   /// Current frame counter.
   int frame = 0;
-
-  TileAnimation(
-    this.batchedSource,
-    this.frames,
-  );
 
   void update(double dt) {
     if (frame != frames.frame) {
@@ -31,20 +26,18 @@ class TileAnimation {
 }
 
 /// Records the list of frames for a tile so that it can be reused.
-class TileFrames {
+class TileFrames(
   /// Rectangles for each frame in the animation.
-  final List<Rect> sources;
+  final List<Rect> sources,
 
   /// Duration, in seconds, for each frame in the animation.
-  final List<double> durations;
-
+  final List<double> durations,
+) {
   /// Current frame lifetime.
   double frameTime = 0.0;
 
   /// Current frame counter for all frames sharing this animation.
   int frame = 0;
-
-  TileFrames(this.sources, this.durations);
 
   void update(double dt) {
     frameTime += dt;

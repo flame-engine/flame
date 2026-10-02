@@ -4,9 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart';
 
-class KeysExampleWidget extends StatefulWidget {
-  const KeysExampleWidget({super.key});
-
+class const KeysExampleWidget({super.key}) extends StatefulWidget {
   static const String description = '''
       Showcases how component keys can be used to find components
       from a flame game instance.
@@ -18,7 +16,7 @@ class KeysExampleWidget extends StatefulWidget {
   State<KeysExampleWidget> createState() => _KeysExampleWidgetState();
 }
 
-class _KeysExampleWidgetState extends State<KeysExampleWidget> {
+class _KeysExampleWidgetState() extends State<KeysExampleWidget> {
   late final KeysExampleGame game = KeysExampleGame();
 
   void selectHero(ComponentKey key) {
@@ -68,7 +66,7 @@ class _KeysExampleWidgetState extends State<KeysExampleWidget> {
   }
 }
 
-class KeysExampleGame extends FlameGame {
+class KeysExampleGame() extends FlameGame {
   @override
   FutureOr<void> onLoad() async {
     await super.onLoad();
@@ -100,13 +98,13 @@ class KeysExampleGame extends FlameGame {
   }
 }
 
-class SelectableClass extends SpriteComponent {
-  SelectableClass({
-    super.position,
-    super.size,
-    super.key,
-    super.sprite,
-  }) : super(paint: Paint()..color = Colors.white.withValues(alpha: 0.5));
+class SelectableClass({
+  super.position,
+  super.size,
+  super.key,
+  super.sprite,
+}) extends SpriteComponent {
+  this : super(paint: Paint()..color = Colors.white.withValues(alpha: 0.5));
 
   bool _selected = false;
   bool get selected => _selected;

@@ -5,7 +5,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/animation.dart';
 
-class ColorEffectExample extends FlameGame {
+class ColorEffectExample() extends FlameGame {
   bool reset = false;
 
   @override

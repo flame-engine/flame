@@ -5,11 +5,12 @@ import 'package:rogue_shooter/components/enemy_component.dart';
 import 'package:rogue_shooter/components/explosion_component.dart';
 import 'package:rogue_shooter/rogue_shooter_game.dart';
 
-class PlayerComponent extends SpriteAnimationComponent
+class PlayerComponent()
+    extends SpriteAnimationComponent
     with HasGameRef<RogueShooterGame>, CollisionCallbacks {
   late TimerComponent bulletCreator;
 
-  PlayerComponent() : super(size: Vector2(50, 75), anchor: Anchor.center);
+  this : super(size: Vector2(50, 75), anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {

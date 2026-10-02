@@ -13,7 +13,7 @@ import 'package:flutter/services.dart';
 /// Positions are in canvas coordinates, the same ones that a snapshot of the
 /// game uses, and the events are delivered through the same dispatchers that
 /// real input goes through.
-class InputConnector extends DevToolsConnector {
+class InputConnector() extends DevToolsConnector {
   @override
   void init() {
     registerExtension(

@@ -8,12 +8,10 @@ import 'package:flutter/services.dart' show AssetBundle;
 ///
 /// Files are addressed by their full path, exactly as declared in the
 /// `pubspec.yaml`, for example `assets/levels/level1.json`.
-class AssetsCache {
-  AssetsCache({AssetBundle? bundle}) : bundle = bundle ?? Flame.bundle;
-
+class AssetsCache({AssetBundle? bundle}) {
   /// The [AssetBundle] from which assets are loaded.
   /// defaults to [Flame.bundle].
-  AssetBundle bundle;
+  AssetBundle bundle = bundle ?? Flame.bundle;
 
   final Map<String, _Asset<dynamic>> _files = {};
 
@@ -122,19 +120,10 @@ class AssetsCache {
   }
 }
 
-sealed class _Asset<T> {
-  T value;
-  _Asset(this.value);
-}
+sealed class _Asset<T>(var T value);
 
-class _StringAsset extends _Asset<String> {
-  _StringAsset(super.value);
-}
+class _StringAsset(super.value) extends _Asset<String>;
 
-class _BinaryAsset extends _Asset<Uint8List> {
-  _BinaryAsset(super.value);
-}
+class _BinaryAsset(super.value) extends _Asset<Uint8List>;
 
-class _JsonAsset extends _Asset<Map<String, dynamic>> {
-  _JsonAsset(super.value);
-}
+class _JsonAsset(super.value) extends _Asset<Map<String, dynamic>>;

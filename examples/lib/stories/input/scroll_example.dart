@@ -4,7 +4,7 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:material_ui/material_ui.dart';
 
-class ScrollExample extends FlameGame with ScrollCallbacks {
+class ScrollExample() extends FlameGame with ScrollCallbacks {
   static const String description = '''
     In this example we show how to use `ScrollCallbacks`.\n\n
     Scroll over the colored squares to scale them. Scroll anywhere else on the
@@ -35,8 +35,10 @@ class ScrollExample extends FlameGame with ScrollCallbacks {
   }
 }
 
-class ScrollableSquare extends RectangleComponent with ScrollCallbacks {
-  ScrollableSquare({required Paint paint, required Vector2 position})
+class ScrollableSquare({required Paint paint, required Vector2 position})
+    extends RectangleComponent
+    with ScrollCallbacks {
+  this
     : super(
         position: position,
         size: Vector2.all(100),

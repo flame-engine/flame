@@ -3,11 +3,11 @@ import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _TestEntity extends PositionedEntity {
-  _TestEntity({super.behaviors}) : super(size: Vector2.all(32));
+class _TestEntity({super.behaviors}) extends PositionedEntity {
+  this : super(size: Vector2.all(32));
 }
 
-class _TestBehavior extends Behavior<_TestEntity> {}
+class _TestBehavior() extends Behavior<_TestEntity>;
 
 void main() {
   group('Behavior', () {

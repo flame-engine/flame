@@ -3,12 +3,7 @@ import 'package:flame/components.dart';
 import 'package:quiver/core.dart';
 
 @immutable
-class IntVector2 {
-  final int x;
-  final int y;
-
-  const IntVector2(this.x, this.y);
-
+class const IntVector2(final int x, final int y) {
   /// Manhattan distance on a square grid
   int distanceTo(IntVector2 b) {
     return (x - b.x).abs() + (y - b.y).abs();

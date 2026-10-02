@@ -15,17 +15,18 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/post_process.dart';
 
-class CrystalBallGame extends FlameGame<CrystalBallGameWorld>
+class CrystalBallGame({
+  required final PreloadedPrograms preloadedPrograms,
+}) extends FlameGame<CrystalBallGameWorld>
     with HasKeyboardHandlerComponents, HasCollisionDetection {
-  CrystalBallGame({
-    required this.preloadedPrograms,
-  }) : super(
-         camera: CameraComponent.withFixedResolution(
-           width: kCameraSize.x,
-           height: kCameraSize.y,
-         ),
-         world: CrystalBallGameWorld(),
-       ) {
+  this
+    : super(
+        camera: CameraComponent.withFixedResolution(
+          width: kCameraSize.x,
+          height: kCameraSize.y,
+        ),
+        world: CrystalBallGameWorld(),
+      ) {
     camera.postProcess = PostProcessGroup(
       postProcesses: [
         PostProcessSequentialGroup(
@@ -59,15 +60,14 @@ class CrystalBallGame extends FlameGame<CrystalBallGameWorld>
     return super.onLoad();
   }
 
-  final PreloadedPrograms preloadedPrograms;
   late final InputHandler inputHandler;
 }
 
-class CrystalBallGameWorld extends World {
-  CrystalBallGameWorld({
-    super.children,
-    super.key,
-  }) {
+class CrystalBallGameWorld({
+  super.children,
+  super.key,
+}) extends World {
+  this {
     addAll([
       BallGlow(),
       theBall = TheBall(position: Vector2.zero()),

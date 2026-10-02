@@ -9,14 +9,15 @@ import 'package:flame_3d/src/parser/gltf/pbr_metallic_roughness.dart';
 import 'package:flame_3d/src/parser/gltf/texture_info.dart';
 
 /// The material appearance of a primitive.
-class Material extends GltfNode {
-  final String? name;
+class Material({
+  required super.root,
+  required final String? name,
 
   /// A set of parameter values that are used to define the metallic-roughness
   /// material model from Physically Based Rendering (PBR) methodology.
   /// When undefined, all the default values of `pbrMetallicRoughness` **MUST**
   /// apply.
-  final PBRMetallicRoughness? pbrMetallicRoughness;
+  required final PBRMetallicRoughness? pbrMetallicRoughness,
 
   /// The tangent space normal texture. The texture encodes RGB components with
   /// linear transfer function.
@@ -26,7 +27,7 @@ class Material extends GltfNode {
   /// toward the viewer.
   /// If a fourth component (A) is present, it **MUST** be ignored.
   /// When undefined, the material does not have a tangent space normal texture.
-  final NormalTextureInfo? normalTexture;
+  required final NormalTextureInfo? normalTexture,
 
   /// The occlusion texture. The occlusion values are linearly sampled from the
   /// R channel.
@@ -35,7 +36,7 @@ class Material extends GltfNode {
   /// If other channels are present (GBA), they **MUST** be ignored for
   /// occlusion calculations.
   /// When undefined, the material does not have an occlusion texture.
-  final OcclusionTextureInfo? occlusionTexture;
+  required final OcclusionTextureInfo? occlusionTexture,
 
   /// The emissive texture. It controls the color and intensity of the light
   /// being emitted by the material.
@@ -44,15 +45,15 @@ class Material extends GltfNode {
   /// If a fourth component (A) is present, it **MUST** be ignored.
   /// When undefined, the texture **MUST** be sampled as having `1.0` in RGB
   /// components.
-  final TextureInfo? emissiveTexture;
+  required final TextureInfo? emissiveTexture,
 
   /// The factors for the emissive color of the material. This value defines
   /// linear multipliers for the sampled texels of the emissive texture.
-  final Vector3 emissiveFactor;
+  required final Vector3 emissiveFactor,
 
   /// The material's alpha rendering mode enumeration specifying the
   /// interpretation of the alpha value of the base color.
-  final AlphaMode alphaMode;
+  required final AlphaMode alphaMode,
 
   /// Specifies whether the material is double sided. When this value is false,
   /// back-face culling is enabled.
@@ -60,20 +61,8 @@ class Material extends GltfNode {
   /// lighting is enabled.
   /// The back-face **MUST** have its normals reversed before the lighting
   /// equation is evaluated.
-  final bool doubleSided;
-
-  Material({
-    required super.root,
-    required this.name,
-    required this.pbrMetallicRoughness,
-    required this.normalTexture,
-    required this.occlusionTexture,
-    required this.emissiveTexture,
-    required this.emissiveFactor,
-    required this.alphaMode,
-    required this.doubleSided,
-  });
-
+  required final bool doubleSided,
+}) extends GltfNode {
   Material.parse(
     GltfRoot root,
     Map<String, Object?> map,

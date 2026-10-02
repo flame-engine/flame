@@ -61,7 +61,7 @@ void main() {
 
         final component = FlameBlocListener<PlayerCubit, PlayerState>(
           onNewState: states.add,
-          listenWhen: (_, __) => false,
+          listenWhen: (_, _) => false,
         );
         await provider.ensureAdd(component);
 

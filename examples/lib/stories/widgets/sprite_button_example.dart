@@ -2,16 +2,11 @@ import 'package:flame/extensions.dart';
 import 'package:flame/widgets.dart';
 import 'package:flutter/widgets.dart';
 
-class SpriteButtonExample extends StatelessWidget {
-  const SpriteButtonExample({
-    required this.width,
-    required this.height,
-    super.key,
-  });
-
-  final double width;
-  final double height;
-
+class const SpriteButtonExample({
+  required final double width,
+  required final double height,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(

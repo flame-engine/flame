@@ -4,8 +4,8 @@ import 'package:flame_steering_behaviors_example/src/entities/entities.dart';
 
 const relativeValue = 16.0;
 
-class ExampleGame extends FlameGame with HasCollisionDetection {
-  ExampleGame()
+class ExampleGame() extends FlameGame with HasCollisionDetection {
+  this
     : super(
         children: [
           FpsTextComponent(position: Vector2.zero()),

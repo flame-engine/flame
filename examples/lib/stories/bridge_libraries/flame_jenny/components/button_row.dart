@@ -2,8 +2,8 @@ import 'package:examples/stories/bridge_libraries/flame_jenny/components/dialogu
 import 'package:flame/components.dart';
 import 'package:jenny/jenny.dart';
 
-class ButtonRow extends PositionComponent {
-  ButtonRow({required super.size}) : super(position: Vector2(0, 96));
+class ButtonRow({required super.size}) extends PositionComponent {
+  this : super(position: Vector2(0, 96));
 
   void removeButtons() {
     final buttonList = children.query<DialogueButton>();
@@ -59,11 +59,11 @@ class ButtonRow extends PositionComponent {
     addAll(optionButtons);
   }
 
-  void showCloseButton(Function() onClose) {
+  void showCloseButton(void Function() onClose) {
     final closeButton = DialogueButton(
       assetPath: 'assets/images/green_button_sqr.png',
       text: 'Close',
-      onPressed: () => onClose(),
+      onPressed: onClose,
       position: Vector2(size.x / 2, 0),
     );
     add(closeButton);

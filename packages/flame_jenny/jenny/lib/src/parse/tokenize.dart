@@ -28,8 +28,8 @@ List<Token> tokenize(String input, {int addErrorTokenAtIndex = -2}) {
 ///     newline tokens;
 ///   - The lexer is deterministic: given the same input, it should always
 ///     produce the same output.
-class _Lexer {
-  _Lexer(this.text, this.addErrorTokenAtIndex)
+class _Lexer(final String text, final int addErrorTokenAtIndex) {
+  this
     : position = 0,
       lineNumber = 1,
       lineStart = 0,
@@ -43,11 +43,9 @@ class _Lexer {
                 nodeTargetingCommands.length,
       );
 
-  final String text;
   final List<Token> tokens;
   final List<_ModeFn> modeStack;
   final List<int> indentStack;
-  final int addErrorTokenAtIndex;
 
   /// Current parsing position, an offset within the [text].
   int position;
@@ -230,8 +228,7 @@ class _Lexer {
   bool modeCommand() {
     return eatWhitespace() ||
         (eatCommandName() &&
-            (false || // subsequent mode will depend on the command type
-                (simpleCommands.contains(tokens.last)) ||
+            ((simpleCommands.contains(tokens.last)) ||
                 (bareExpressionCommands.contains(tokens.last) &&
                     pushToken(Token.startExpression, position) &&
                     pushMode(modeCommandExpression)) ||

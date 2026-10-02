@@ -12,9 +12,7 @@ extension Vector2Extension on Vector2 {
   }
 }
 
-final class Vector2Utils {
-  Vector2Utils._();
-
+final class Vector2Utils._() {
   static Vector2 lerp(Vector2 a, Vector2 b, double t) {
     return a + (b - a).scaled(t);
   }

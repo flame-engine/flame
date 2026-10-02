@@ -3,11 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
-class _MyGame extends FlameGame {
-  final List<String> events;
-
-  _MyGame(this.events);
-
+class _MyGame(final List<String> events) extends FlameGame {
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
@@ -32,7 +28,7 @@ class _MyGame extends FlameGame {
   }
 }
 
-class _TitlePage extends StatelessWidget {
+class const _TitlePage() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,11 +42,7 @@ class _TitlePage extends StatelessWidget {
   }
 }
 
-class _GamePage extends StatelessWidget {
-  const _GamePage(this.events);
-
-  final List<String> events;
-
+class const _GamePage(final List<String> events) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,32 +69,24 @@ class _GamePage extends StatelessWidget {
   }
 }
 
-class _MyApp extends StatelessWidget {
-  final List<String> events;
-
-  const _MyApp(this.events);
-
+class const _MyApp(final List<String> events) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-        '/': (_) => _TitlePage(),
+        '/': (_) => const _TitlePage(),
         '/game': (_) => _GamePage(events),
       },
     );
   }
 }
 
-class _MyContainer extends StatefulWidget {
-  final List<String> events;
-
-  const _MyContainer(this.events);
-
+class const _MyContainer(final List<String> events) extends StatefulWidget {
   @override
   State<_MyContainer> createState() => _MyContainerState();
 }
 
-class _MyContainerState extends State<_MyContainer> {
+class _MyContainerState() extends State<_MyContainer> {
   double size = 300;
 
   late final game = _MyGame(widget.events);

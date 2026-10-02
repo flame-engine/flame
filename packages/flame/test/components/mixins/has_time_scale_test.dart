@@ -145,12 +145,13 @@ void main() {
   });
 }
 
-class _GameWithTimeScale extends FlameGame with HasTimeScale {}
+class _GameWithTimeScale() extends FlameGame with HasTimeScale;
 
-class _ComponentWithTimeScale extends Component
-    with CustomTraversal, HasTimeScale {}
+class _ComponentWithTimeScale()
+    extends Component
+    with CustomTraversal, HasTimeScale;
 
-class _MovingComponent extends PositionComponent {
+class _MovingComponent() extends PositionComponent {
   final speed = 1.0;
   @override
   void update(double dt) => position.setValues(position.x + speed * dt, 0);

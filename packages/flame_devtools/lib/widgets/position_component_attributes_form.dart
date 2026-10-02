@@ -4,14 +4,10 @@ import 'package:flame_devtools/widgets/incremental_number_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PositionComponentAttributesForm extends ConsumerWidget {
-  const PositionComponentAttributesForm({
-    required this.componentId,
-    super.key,
-  });
-
-  final int componentId;
-
+class const PositionComponentAttributesForm({
+  required final int componentId,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final attributesData = ref.watch(

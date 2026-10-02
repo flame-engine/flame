@@ -2,20 +2,13 @@ import 'dart:async';
 
 import 'package:material_ui/material_ui.dart';
 
-class BaseFutureBuilder<T> extends StatelessWidget {
-  final FutureOr<T> future;
-  final Widget Function(BuildContext, T) builder;
-  final WidgetBuilder? errorBuilder;
-  final WidgetBuilder? loadingBuilder;
-
-  const BaseFutureBuilder({
-    required this.future,
-    required this.builder,
-    this.loadingBuilder,
-    this.errorBuilder,
-    super.key,
-  });
-
+class const BaseFutureBuilder<T>({
+  required final FutureOr<T> future,
+  required final Widget Function(BuildContext, T) builder,
+  final WidgetBuilder? loadingBuilder,
+  final WidgetBuilder? errorBuilder,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (future is Future<T>) {

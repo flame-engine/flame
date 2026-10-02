@@ -5,7 +5,7 @@ import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 import 'package:material_ui/material_ui.dart';
 
-class SpriteBatchLoadExample extends FlameGame {
+class SpriteBatchLoadExample() extends FlameGame {
   static const String description = '''
     In this example we do the same thing as in the normal sprite batch example,
     but in this example the logic and loading is moved into a component that
@@ -18,9 +18,10 @@ class SpriteBatchLoadExample extends FlameGame {
   }
 }
 
-class MySpriteBatchComponent extends SpriteBatchComponent
+class MySpriteBatchComponent()
+    extends SpriteBatchComponent
     with HasGameRef<SpriteBatchLoadExample> {
-  MySpriteBatchComponent()
+  this
     : super(
         blendMode: BlendMode.srcOver,
       );

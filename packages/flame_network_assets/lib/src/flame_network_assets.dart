@@ -10,11 +10,10 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
 /// Function signature used by Flame Network Assets to fetch assets.
-typedef GetAssetFunction =
-    Future<FlameAssetResponse> Function(
-      String url, {
-      Map<String, String>? headers,
-    });
+typedef GetAssetFunction = Future<FlameAssetResponse> Function(
+  String url, {
+  Map<String, String>? headers,
+});
 
 /// Function signature used by Flame Network Assets to decode assets from a
 /// raw format.
@@ -67,7 +66,18 @@ typedef GetAppDirectoryFunction = Future<Directory> Function();
 /// argument on the constructor.
 ///
 /// {@endtemplate}
-abstract class FlameNetworkAssets<T> {
+abstract class FlameNetworkAssets<T>({
+  required DecodeAssetFunction<T> decodeAsset,
+  EncodeAssetFunction<T>? encodeAsset,
+  GetAssetFunction? get,
+  GetAppDirectoryFunction? getAppDirectory,
+
+  /// Flag indicating if files will be cached in memory.
+  final bool cacheInMemory = true,
+
+  /// Flag indicating if files will be cached in the local storage.
+  final bool cacheInStorage = true,
+}) {
   /// {@macro flame_network_assets}
   ///
   /// - [decodeAsset] a [DecodeAssetFunction] responsible for decoding the asset
@@ -83,16 +93,7 @@ abstract class FlameNetworkAssets<T> {
   /// (true by default).
   /// - [cacheInStorage] will not cache assets in the file system when false,
   /// (true by default).
-  FlameNetworkAssets({
-    required DecodeAssetFunction<T> decodeAsset,
-    EncodeAssetFunction<T>? encodeAsset,
-    GetAssetFunction? get,
-    GetAppDirectoryFunction? getAppDirectory,
-    this.cacheInMemory = true,
-    this.cacheInStorage = true,
-  }) : _isWeb = kIsWeb,
-       _decode = decodeAsset,
-       _encode = encodeAsset {
+  this : _isWeb = kIsWeb {
     _get =
         get ??
         (
@@ -110,14 +111,8 @@ abstract class FlameNetworkAssets<T> {
 
   late final GetAssetFunction _get;
   late final GetAppDirectoryFunction _getAppDirectory;
-  final DecodeAssetFunction<T> _decode;
-  final EncodeAssetFunction<T>? _encode;
-
-  /// Flag indicating if files will be cached in memory.
-  final bool cacheInMemory;
-
-  /// Flag indicating if files will be cached in the local storage.
-  final bool cacheInStorage;
+  final DecodeAssetFunction<T> _decode = decodeAsset;
+  final EncodeAssetFunction<T>? _encode = encodeAsset;
 
   final bool _isWeb;
 

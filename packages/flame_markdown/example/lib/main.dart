@@ -15,7 +15,7 @@ void main() {
 
 /// This example game showcases the use of the FlameMarkdown package
 /// to render rich-text components using a simple markdown syntax.
-class MarkdownGame extends FlameGame {
+class MarkdownGame() extends FlameGame {
   @override
   Future<void> onLoad() async {
     final markdown = await Flame.assets.readFile('assets/fire_and_ice.md');

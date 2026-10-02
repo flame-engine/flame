@@ -2,16 +2,15 @@ import 'package:flame/effects.dart';
 
 /// An effect controller that waits for [delay] seconds before running the
 /// child controller. While waiting, the progress will be reported at 0.
-class DelayedEffectController extends EffectController
-    with HasSingleChildEffectController {
-  DelayedEffectController(EffectController child, {required this.delay})
+class DelayedEffectController(
+  final EffectController _child, {
+  required final double delay,
+}) extends EffectController with HasSingleChildEffectController {
+  this
     : assert(delay >= 0, 'Delay must be non-negative: $delay'),
-      _child = child,
       _timer = 0,
       super.empty();
 
-  final EffectController _child;
-  final double delay;
   double _timer;
 
   @override

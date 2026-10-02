@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flame/effects.dart';
 import 'package:test/test.dart';
 
-class _MyRandom implements Random {
+class _MyRandom() implements Random {
   double value = 0.5;
 
   @override
@@ -16,8 +16,8 @@ class _MyRandom implements Random {
   int nextInt(int max) => 1;
 }
 
-class _MyRandomVariable extends RandomVariable {
-  _MyRandomVariable() : super(null);
+class _MyRandomVariable() extends RandomVariable {
+  this : super(null);
   double value = 1.23;
 
   @override

@@ -13,15 +13,13 @@ import 'package:flame/src/effects/measurable_effect.dart';
 ///   - the [speed] cannot be zero (or negative),
 ///   - the [child] controller must be a [DurationEffectController],
 ///   - the parent effect must be a [MeasurableEffect].
-class SpeedEffectController extends EffectController
+class SpeedEffectController(
+  final DurationEffectController _child, {
+  required final double speed,
+}) extends EffectController
     with HasSingleChildEffectController<DurationEffectController> {
-  SpeedEffectController(DurationEffectController child, {required this.speed})
-    : assert(speed > 0, 'Speed must be positive: $speed'),
-      _child = child,
-      super.empty();
+  this : assert(speed > 0, 'Speed must be positive: $speed'), super.empty();
 
-  final DurationEffectController _child;
-  final double speed;
   MeasurableEffect? _parentEffect;
 
   /// Note that this controller's [started] property is true even if the

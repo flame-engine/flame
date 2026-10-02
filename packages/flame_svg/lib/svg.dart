@@ -9,7 +9,13 @@ import 'package:flutter/widgets.dart' show WidgetsBinding;
 import 'package:flutter_svg/flutter_svg.dart';
 
 /// A [Svg] to be rendered on a Flame [Game].
-class Svg {
+class Svg(
+  /// The [PictureInfo] that this [Svg] represents.
+  final PictureInfo pictureInfo, {
+  double? pixelRatio,
+  var bool _fixedRatio = false,
+  var int _cacheSize = defaultCacheSize,
+}) {
   /// Creates an [Svg] with the received [pictureInfo].
   /// Default [pixelRatio] is the device pixel ratio.
   /// Setting [fixedRatio] to `true` ensures the cache uses one entry
@@ -17,32 +23,20 @@ class Svg {
   /// Default [cacheSize] is [defaultCacheSize], which is 10 as previously;
   /// specifying [unlimitedCacheSize] is the same as using a [Map] instead
   /// of a [MemoryCache].
-  Svg(
-    this.pictureInfo, {
-    double? pixelRatio,
-    bool fixedRatio = false,
-    int cacheSize = defaultCacheSize,
-  }) : pixelRatio =
-           pixelRatio ??
-           WidgetsBinding
-               .instance
-               .platformDispatcher
-               .views
-               .first
-               .devicePixelRatio {
-    _fixedRatio = fixedRatio;
-    _cacheSize = cacheSize;
-    assert(_cacheSize >= 1, 'The cache size must support at least one slot.');
+  this
+    : assert(
+        _cacheSize >= 1,
+        'The cache size must support at least one slot.',
+      ) {
     _imageCache = MemoryCache(
       cacheSize: _cacheSize >= 1 ? _cacheSize : defaultCacheSize,
     );
   }
 
-  /// The [PictureInfo] that this [Svg] represents.
-  final PictureInfo pictureInfo;
-
   /// The pixel ratio that this [Svg] is rendered based on.
-  final double pixelRatio;
+  final double pixelRatio =
+      pixelRatio ??
+      WidgetsBinding.instance.platformDispatcher.views.first.devicePixelRatio;
 
   /// Whether we're using a fixed ratio for the cache keys (default: false).
   bool get fixedRatio => _fixedRatio;
@@ -50,8 +44,6 @@ class Svg {
     _emptyCache();
     _fixedRatio = fixed;
   }
-
-  late bool _fixedRatio;
 
   /// The current cache size (default 10): changing the size also empties it.
   int get cacheSize => _cacheSize;
@@ -63,8 +55,6 @@ class Svg {
       _imageCache = MemoryCache(cacheSize: _cacheSize);
     }
   }
-
-  late int _cacheSize;
 
   /// The number of images currently used by the cache.
   int get cacheUsage => _imageCache.size;
@@ -85,7 +75,7 @@ class Svg {
   }) async {
     cache ??= Flame.assets;
     final svgString = await cache.readFile(fileName, package: package);
-    return Svg.loadFromString(
+    return await Svg.loadFromString(
       svgString,
       pixelRatio: pixelRatio,
       fixedRatio: fixedRatio,

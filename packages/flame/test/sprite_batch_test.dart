@@ -9,7 +9,7 @@ import 'package:mocktail/mocktail.dart';
 
 import '_resources/load_image.dart';
 
-class _MockImage extends Mock implements Image {}
+class _MockImage() extends Mock implements Image;
 
 void main() {
   group('SpriteBatch', () {

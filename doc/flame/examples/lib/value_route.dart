@@ -7,7 +7,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 
-class ValueRouteExample extends FlameGame {
+class ValueRouteExample() extends FlameGame {
   late final RouterComponent router;
 
   @override
@@ -20,7 +20,7 @@ class ValueRouteExample extends FlameGame {
   }
 }
 
-class HomePage extends Component with HasGameRef<ValueRouteExample> {
+class HomePage() extends Component with HasGameRef<ValueRouteExample> {
   @override
   Future<void> onLoad() async {
     add(
@@ -46,8 +46,8 @@ class HomePage extends Component with HasGameRef<ValueRouteExample> {
   }
 }
 
-class RateRoute extends ValueRoute<int> with HasGameRef<ValueRouteExample> {
-  RateRoute() : super(value: -1, transparent: true);
+class RateRoute() extends ValueRoute<int> with HasGameRef<ValueRouteExample> {
+  this : super(value: -1, transparent: true);
 
   @override
   Component build() {
@@ -80,20 +80,23 @@ class RateRoute extends ValueRoute<int> with HasGameRef<ValueRouteExample> {
   }
 }
 
-class DialogBackground extends RectangleComponent with TapCallbacks {
-  DialogBackground({super.position, super.size, super.children})
+class DialogBackground({super.position, super.size, super.children})
+    extends RectangleComponent
+    with TapCallbacks {
+  this
     : super(
         anchor: Anchor.center,
         paint: Paint()..color = const Color(0xee858585),
       );
 }
 
-class Star extends PositionComponent with TapCallbacks {
-  Star({required this.value, required this.radius, super.position})
-    : super(size: Vector2.all(2 * radius), anchor: Anchor.center);
+class Star({
+  required final int value,
+  required final double radius,
+  super.position,
+}) extends PositionComponent with TapCallbacks {
+  this : super(size: Vector2.all(2 * radius), anchor: Anchor.center);
 
-  final int value;
-  final double radius;
   final Path path = Path();
   final Paint borderPaint = Paint()
     ..style = PaintingStyle.stroke

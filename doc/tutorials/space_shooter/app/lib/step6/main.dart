@@ -10,7 +10,8 @@ void main() {
   runApp(GameWidget(game: SpaceShooterGame()));
 }
 
-class SpaceShooterGame extends FlameGame
+class SpaceShooterGame()
+    extends FlameGame
     with DragCallbacks, HasCollisionDetection {
   late Player player;
 
@@ -60,9 +61,10 @@ class SpaceShooterGame extends FlameGame
   }
 }
 
-class Player extends SpriteAnimationComponent
+class Player()
+    extends SpriteAnimationComponent
     with HasGameRef<SpaceShooterGame> {
-  Player()
+  this
     : super(
         size: Vector2(100, 150),
         anchor: Anchor.center,
@@ -117,14 +119,14 @@ class Player extends SpriteAnimationComponent
   }
 }
 
-class Bullet extends SpriteAnimationComponent
-    with HasGameRef<SpaceShooterGame> {
-  Bullet({
-    super.position,
-  }) : super(
-         size: Vector2(25, 50),
-         anchor: Anchor.center,
-       );
+class Bullet({
+  super.position,
+}) extends SpriteAnimationComponent with HasGameRef<SpaceShooterGame> {
+  this
+    : super(
+        size: Vector2(25, 50),
+        anchor: Anchor.center,
+      );
 
   @override
   Future<void> onLoad() async {
@@ -158,14 +160,15 @@ class Bullet extends SpriteAnimationComponent
   }
 }
 
-class Enemy extends SpriteAnimationComponent
+class Enemy({
+  super.position,
+}) extends SpriteAnimationComponent
     with HasGameRef<SpaceShooterGame>, CollisionCallbacks {
-  Enemy({
-    super.position,
-  }) : super(
-         size: Vector2.all(enemySize),
-         anchor: Anchor.center,
-       );
+  this
+    : super(
+        size: Vector2.all(enemySize),
+        anchor: Anchor.center,
+      );
 
   static const enemySize = 50.0;
 
@@ -211,15 +214,15 @@ class Enemy extends SpriteAnimationComponent
   }
 }
 
-class Explosion extends SpriteAnimationComponent
-    with HasGameRef<SpaceShooterGame> {
-  Explosion({
-    super.position,
-  }) : super(
-         size: Vector2.all(150),
-         anchor: Anchor.center,
-         removeOnFinish: true,
-       );
+class Explosion({
+  super.position,
+}) extends SpriteAnimationComponent with HasGameRef<SpaceShooterGame> {
+  this
+    : super(
+        size: Vector2.all(150),
+        anchor: Anchor.center,
+        removeOnFinish: true,
+      );
 
   @override
   Future<void> onLoad() async {

@@ -2,11 +2,8 @@ import 'package:flame/text.dart';
 import 'package:flutter/painting.dart' show InlineSpan, TextSpan;
 
 /// An [InlineTextNode] to group other [InlineTextNode]s.
-class GroupTextNode extends InlineTextNode {
-  GroupTextNode(this.children);
-
-  final List<InlineTextNode> children;
-
+class GroupTextNode(final List<InlineTextNode> children)
+    extends InlineTextNode {
   @override
   void fillStyles(DocumentStyle stylesheet, InlineTextStyle parentTextStyle) {
     style = parentTextStyle;

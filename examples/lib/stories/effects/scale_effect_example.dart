@@ -9,7 +9,7 @@ import 'package:flame/geometry.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/animation.dart';
 
-class ScaleEffectExample extends FlameGame with TapCallbacks {
+class ScaleEffectExample() extends FlameGame with TapCallbacks {
   static const String description = '''
     In this example you can tap the screen and the component will scale up or
     down, depending on its current state.
@@ -73,8 +73,8 @@ class ScaleEffectExample extends FlameGame with TapCallbacks {
   }
 }
 
-class Star extends PositionComponent {
-  Star() {
+class Star() extends PositionComponent {
+  this {
     const smallR = 15.0;
     const bigR = 30.0;
     shape = Path()..moveTo(bigR, 0);

@@ -5,7 +5,7 @@ import 'package:flame_kenney_xml/flame_kenney_xml.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
-class _MockImage extends Mock implements Image {
+class _MockImage() extends Mock implements Image {
   @override
   int get width => 100;
 
@@ -13,14 +13,14 @@ class _MockImage extends Mock implements Image {
   int get height => 100;
 }
 
-class _MockImages extends Mock implements Images {
+class _MockImages() extends Mock implements Images {
   @override
   Future<Image> load(String fileName, {String? key, String? package}) async {
     return _MockImage();
   }
 }
 
-class _MockAssetsCache extends Mock implements AssetsCache {
+class _MockAssetsCache() extends Mock implements AssetsCache {
   @override
   Future<String> readFile(String fileName, {String? package}) async {
     return '''

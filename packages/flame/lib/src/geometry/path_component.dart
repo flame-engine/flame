@@ -15,7 +15,29 @@ import 'package:meta/meta.dart';
 /// [PolygonComponent.fromPath] follows a single contour, and they decide
 /// whether a point is inside of the component. Their vertices are available
 /// in [polygons].
-class PathComponent extends ShapeComponent {
+class PathComponent({
+  required Path path,
+
+  /// The step used when sampling the contours of the [path].
+  final double sampling = 1.0,
+
+  /// The tolerance used when simplifying the sampled contours; if not given,
+  /// it is half the [sampling].
+  final double? tolerance,
+
+  /// Whether the polygons that lie inside of the largest one are left out.
+  final bool filter = true,
+  super.position,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.key,
+  super.paint,
+  super.paintLayers,
+  super.isSolid,
+}) extends ShapeComponent {
   /// With this constructor you create a [PathComponent] from all the contours
   /// of the [path].
   ///
@@ -28,23 +50,7 @@ class PathComponent extends ShapeComponent {
   /// not become polygons. When [filter] is true, the polygons whose vertices
   /// all lie inside of the largest polygon are left out too, since they are
   /// details of the shape that it already covers, like the eyes of a face.
-  PathComponent({
-    required Path path,
-    this.sampling = 1.0,
-    this.tolerance,
-    this.filter = true,
-    super.position,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.key,
-    super.paint,
-    super.paintLayers,
-    super.isSolid,
-  }) : path = path.toOrigin,
-       super(size: path.getBounds().size.toVector2()) {
+  this : super(size: path.getBounds().size.toVector2()) {
     _polygons = _polygonsOf(
       this.path,
       sampling: sampling,
@@ -72,17 +78,7 @@ class PathComponent extends ShapeComponent {
   }
 
   /// The path to display, already rooted at the origin.
-  final Path path;
-
-  /// The step used when sampling the contours of the [path].
-  final double sampling;
-
-  /// The tolerance used when simplifying the sampled contours; if not given,
-  /// it is half the [sampling].
-  final double? tolerance;
-
-  /// Whether the polygons that lie inside of the largest one are left out.
-  final bool filter;
+  final Path path = path.toOrigin;
 
   late final List<List<Vector2>> _polygons;
 
@@ -195,8 +191,8 @@ class PathComponent extends ShapeComponent {
   /// if [rect] is null return all edges as [LineSegment]s.
   List<LineSegment> possibleIntersectionVertices(Rect? rect) {
     final rectIntersections = <LineSegment>[];
-    if ((rect?.width == 0 || false) ||
-        (rect?.height == 0 || false) ||
+    if ((rect?.width == 0) ||
+        (rect?.height == 0) ||
         width == 0 ||
         height == 0) {
       return rectIntersections;

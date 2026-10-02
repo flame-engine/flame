@@ -8,31 +8,31 @@ import 'package:lottie/lottie.dart';
 
 /// A Flame [Component] which renders a [Lottie] animation using the already
 /// existing Flutter library [lottie](https://pub.dev/packages/lottie).
-class LottieComponent extends PositionComponent with HasPaint {
+class LottieComponent(
+  LottieComposition composition, {
+  EffectController? controller,
+  double? progress,
+  LottieDelegates? delegates,
+  bool? enableMergePaths,
+  FrameRate? frameRate,
+  double? duration,
+  bool? repeating,
+  Alignment alignment = Alignment.center,
+  BoxFit? fit = BoxFit.contain,
+  super.position,
+  super.size,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.key,
+}) extends PositionComponent with HasPaint {
   late final LottieRenderer _renderer;
 
   /// The [controller] drives the [Lottie] animation. In case none is specified
   /// it will be created implicitly in the [LottieRenderer].
-  LottieComponent(
-    LottieComposition composition, {
-    EffectController? controller,
-    double? progress,
-    LottieDelegates? delegates,
-    bool? enableMergePaths,
-    FrameRate? frameRate,
-    double? duration,
-    bool? repeating,
-    Alignment alignment = Alignment.center,
-    BoxFit? fit = BoxFit.contain,
-    super.position,
-    super.size,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.key,
-  }) {
+  this {
     _renderer = LottieRenderer(
       composition: composition,
       progress: progress ?? 0.0,

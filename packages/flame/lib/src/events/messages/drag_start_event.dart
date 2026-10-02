@@ -6,22 +6,24 @@ import 'package:flutter/gestures.dart';
 /// gesture on the game canvas.
 ///
 /// This is a [PositionEvent], where the position is the point of touch.
-class DragStartEvent extends PositionEvent<DragStartDetails> {
-  DragStartEvent(this.pointerId, super.game, DragStartDetails details)
-    : deviceKind = details.kind ?? PointerDeviceKind.unknown,
-      super(
-        raw: details,
-        devicePosition: details.globalPosition.toVector2(),
-      );
-
+class DragStartEvent(
   /// The unique identifier of the drag event.
   ///
   /// Subsequent [DragUpdateEvent] or [DragEndEvent] will carry the same pointer
   /// id. This allows distinguishing multiple drags that may occur at the same
   /// time on the same component.
-  final int pointerId;
+  final int pointerId,
+  super.game,
+  DragStartDetails details,
+) extends PositionEvent<DragStartDetails> {
+  this
+    : super(
+        raw: details,
+        devicePosition: details.globalPosition.toVector2(),
+      );
 
-  final PointerDeviceKind deviceKind;
+  final PointerDeviceKind deviceKind =
+      details.kind ?? PointerDeviceKind.unknown;
 
   @override
   String toString() =>

@@ -3,7 +3,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 
-class RotateAroundEffectGame extends FlameGame {
+class RotateAroundEffectGame() extends FlameGame {
   bool reset = false;
 
   @override

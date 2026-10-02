@@ -7,7 +7,8 @@ import 'package:flame/src/collisions/hitboxes/rectangle_hitbox.dart';
 
 /// This component is used to detect hitboxes colliding into the edges of the
 /// viewport of the game.
-class ScreenHitbox<T extends FlameGame> extends PositionComponent
+class ScreenHitbox<T extends FlameGame>()
+    extends PositionComponent
     with CollisionCallbacks, HasGameRef<T> {
   bool _hasWorldAncestor = false;
   @override

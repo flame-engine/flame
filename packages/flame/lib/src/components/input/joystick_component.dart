@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/widgets.dart';
 
-enum JoystickDirection {
+enum JoystickDirection() {
   up,
   upLeft,
   upRight,
@@ -16,11 +16,19 @@ enum JoystickDirection {
   idle,
 }
 
-class JoystickComponent extends PositionComponent
+class JoystickComponent({
+  final PositionComponent? knob,
+  final PositionComponent? background,
+  super.position,
+  EdgeInsets? margin,
+  double? size,
+  double? knobRadius,
+  Anchor super.anchor = Anchor.center,
+  super.children,
+  super.priority,
+  super.key,
+}) extends PositionComponent
     with HasGameRef, ComponentViewportMargin, DragCallbacks {
-  late final PositionComponent? knob;
-  late final PositionComponent? background;
-
   /// The percentage `[0.0, 1.0]` the knob is dragged from the center to the
   /// edge.
   double intensity = 0.0;
@@ -43,29 +51,19 @@ class JoystickComponent extends PositionComponent
   /// The position where the knob rests.
   late Vector2 _baseKnobPosition;
 
-  JoystickComponent({
-    this.knob,
-    this.background,
-    super.position,
-    EdgeInsets? margin,
-    double? size,
-    double? knobRadius,
-    Anchor super.anchor = Anchor.center,
-    super.children,
-    super.priority,
-    super.key,
-  }) : assert(
-         size != null || background != null,
-         'Either size or background must be defined',
-       ),
-       assert(
-         (knob?.position.isZero() ?? true) &&
-             (background?.position.isZero() ?? true),
-         'Positions should not be set for the knob or the background',
-       ),
-       super(
-         size: background?.size ?? Vector2.all(size ?? 0),
-       ) {
+  this
+    : assert(
+        size != null || background != null,
+        'Either size or background must be defined',
+      ),
+      assert(
+        (knob?.position.isZero() ?? true) &&
+            (background?.position.isZero() ?? true),
+        'Positions should not be set for the knob or the background',
+      ),
+      super(
+        size: background?.size ?? Vector2.all(size ?? 0),
+      ) {
     this.margin = margin;
     this.knobRadius = knobRadius ?? this.size.x / 2;
   }

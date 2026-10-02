@@ -8,30 +8,27 @@ import 'package:flutter/gestures.dart';
 /// This is a [DisplacementEvent] whose start/end positions represent a
 /// frame-to-frame delta, matching the semantics of `DragUpdateEvent`.
 /// Use [localDelta] to move a component to follow the pointer.
-class LongPressMoveUpdateEvent
-    extends DisplacementEvent<LongPressMoveUpdateDetails> {
+class LongPressMoveUpdateEvent(
+  /// The unique identifier for this long press gesture.
+  final int pointerId,
+  super.game,
+  LongPressMoveUpdateDetails details, {
+  required Offset previousGlobalPosition,
+}) extends DisplacementEvent<LongPressMoveUpdateDetails> {
   /// Creates a [LongPressMoveUpdateEvent].
   ///
   /// [previousGlobalPosition] is the global position from the previous
   /// move-update (or the start position for the first update). This is used
   /// to compute the frame-to-frame delta.
-  LongPressMoveUpdateEvent(
-    this.pointerId,
-    super.game,
-    LongPressMoveUpdateDetails details, {
-    required Offset previousGlobalPosition,
-  }) : offsetFromOrigin = details.offsetFromOrigin.toVector2(),
-       super(
-         raw: details,
-         deviceStartPosition: previousGlobalPosition.toVector2(),
-         deviceEndPosition: details.globalPosition.toVector2(),
-       );
-
-  /// The unique identifier for this long press gesture.
-  final int pointerId;
+  this
+    : super(
+        raw: details,
+        deviceStartPosition: previousGlobalPosition.toVector2(),
+        deviceEndPosition: details.globalPosition.toVector2(),
+      );
 
   /// The offset from the initial long press contact point.
-  final Vector2 offsetFromOrigin;
+  final Vector2 offsetFromOrigin = details.offsetFromOrigin.toVector2();
 
   @override
   String toString() =>
