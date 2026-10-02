@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -81,10 +82,49 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
   @experimental
   static bool nearestFirstRaycast = false;
 
-  /// The hitboxes that a ray may reach, ordered by [_RayCandidate.distance],
-  /// kept between calls to not allocate per ray.
-  static final _candidates = <_RayCandidate>[];
-  static final _candidatePool = <_RayCandidate>[];
+  /// The hitboxes that a ray may reach, and the distances at which the ray
+  /// enters their boxes, as a binary min-heap by distance, so that the nearest
+  /// can be taken out first without sorting them all. They are kept between
+  /// calls, and only grow, to not allocate for each ray.
+  static var _heapDistances = Float64List(32);
+  static var _heapHitboxes = List<ShapeHitbox?>.filled(32, null);
+  static var _heapSize = 0;
+
+  static void _heapAdd(double distance, ShapeHitbox hitbox) {
+    if (_heapSize == _heapDistances.length) {
+      final capacity = _heapSize * 2;
+      _heapDistances = Float64List(capacity)
+        ..setRange(0, _heapSize, _heapDistances);
+      _heapHitboxes = List<ShapeHitbox?>.filled(capacity, null)
+        ..setRange(0, _heapSize, _heapHitboxes);
+    }
+    _heapDistances[_heapSize] = distance;
+    _heapHitboxes[_heapSize] = hitbox;
+    _heapSize++;
+  }
+
+  /// Moves the entry at [index] down until its children are not nearer.
+  static void _heapSiftDown(int index) {
+    final distance = _heapDistances[index];
+    final hitbox = _heapHitboxes[index];
+    final half = _heapSize >> 1;
+    var hole = index;
+    while (hole < half) {
+      var child = 2 * hole + 1;
+      if (child + 1 < _heapSize &&
+          _heapDistances[child + 1] < _heapDistances[child]) {
+        child++;
+      }
+      if (_heapDistances[child] >= distance) {
+        break;
+      }
+      _heapDistances[hole] = _heapDistances[child];
+      _heapHitboxes[hole] = _heapHitboxes[child];
+      hole = child;
+    }
+    _heapDistances[hole] = distance;
+    _heapHitboxes[hole] = hitbox;
+  }
 
   @override
   RaycastResult<ShapeHitbox>? raycast(
@@ -121,52 +161,63 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
   }) {
     var finalResult = out?..reset();
     final limit = maxDistance ?? double.infinity;
-    _candidates.clear();
-    for (final item in items) {
-      if (ignoreHitboxes?.contains(item) ?? false) {
-        continue;
+    _heapSize = 0;
+    var candidates = 0;
+    try {
+      for (final item in items) {
+        if (ignoreHitboxes?.contains(item) ?? false) {
+          continue;
+        }
+        if (hitboxFilter != null && !hitboxFilter(item)) {
+          continue;
+        }
+        final entry = _entryDistance(ray, item.aabb);
+        if (entry < 0 || entry > limit) {
+          continue;
+        }
+        _heapAdd(entry, item);
       }
-      if (hitboxFilter != null && !hitboxFilter(item)) {
-        continue;
+      candidates = _heapSize;
+      for (var index = (_heapSize >> 1) - 1; index >= 0; index--) {
+        _heapSiftDown(index);
       }
-      final entry = _entryDistance(ray, item.aabb);
-      if (entry < 0 || entry > limit) {
-        continue;
-      }
-      if (_candidates.length == _candidatePool.length) {
-        _candidatePool.add(_RayCandidate());
-      }
-      _candidatePool[_candidates.length]
-        ..distance = entry
-        ..hitbox = item;
-      _candidates.add(_candidatePool[_candidates.length]);
-    }
-    _candidates.sort((a, b) => a.distance.compareTo(b.distance));
-    for (final candidate in _candidates) {
-      // A hit can not be nearer than the entry point to its box.
-      if ((finalResult?.isActive ?? false) &&
-          finalResult!.distance! <= candidate.distance) {
-        break;
-      }
-      final currentResult = candidate.hitbox!.rayIntersection(
-        ray,
-        out: _temporaryRaycastResult,
-      );
-      final possiblyFirstResult = !(finalResult?.isActive ?? false);
-      if (currentResult != null &&
-          (possiblyFirstResult ||
-              currentResult.distance! < finalResult!.distance!) &&
-          currentResult.distance! <= limit) {
-        if (finalResult == null) {
-          finalResult = currentResult.clone();
-        } else {
-          finalResult.setFrom(currentResult);
+      // Takes the hitboxes out from the nearest to the farthest. Most of the
+      // time the loop ends after a few, so the rest are never ordered.
+      while (_heapSize > 0) {
+        final entry = _heapDistances[0];
+        // A hit can not be nearer than the entry point to its box.
+        if ((finalResult?.isActive ?? false) &&
+            finalResult!.distance! <= entry) {
+          break;
+        }
+        final hitbox = _heapHitboxes[0]!;
+        _heapSize--;
+        if (_heapSize > 0) {
+          _heapDistances[0] = _heapDistances[_heapSize];
+          _heapHitboxes[0] = _heapHitboxes[_heapSize];
+          _heapSiftDown(0);
+        }
+        final currentResult = hitbox.rayIntersection(
+          ray,
+          out: _temporaryRaycastResult,
+        );
+        final possiblyFirstResult = !(finalResult?.isActive ?? false);
+        if (currentResult != null &&
+            (possiblyFirstResult ||
+                currentResult.distance! < finalResult!.distance!) &&
+            currentResult.distance! <= limit) {
+          if (finalResult == null) {
+            finalResult = currentResult.clone();
+          } else {
+            finalResult.setFrom(currentResult);
+          }
         }
       }
-    }
-    // Do not keep the hitboxes alive through the pool.
-    for (final candidate in _candidates) {
-      candidate.hitbox = null;
+    } finally {
+      // Do not keep the hitboxes alive through the heap, also if one of the
+      // callbacks throws.
+      _heapHitboxes.fillRange(0, math.max(candidates, _heapSize), null);
+      _heapSize = 0;
     }
     return (finalResult?.isActive ?? false) ? finalResult : null;
   }
@@ -356,12 +407,4 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
       ..min.setValues(math.min(x1, x2), math.min(y1, y2))
       ..max.setValues(math.max(x1, x2), math.max(y1, y2));
   }
-}
-
-/// A hitbox that a ray may reach, with the distance at which the ray enters
-/// the bounding box of the hitbox.
-// ignore: use_primary_constructors
-class _RayCandidate {
-  double distance = 0;
-  ShapeHitbox? hitbox;
 }

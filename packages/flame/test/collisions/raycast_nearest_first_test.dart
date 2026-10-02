@@ -187,6 +187,77 @@ void main() {
       expect(misses, greaterThan(20));
     });
 
+    testCollisionDetectionGame('finds the same hits with many candidates', (
+      game,
+    ) async {
+      // Big hitboxes, so that a ray reaches hundreds of them, which makes the
+      // heap that orders them grow several times.
+      final random = Random(6);
+      ShapeHitbox big(int index) {
+        if (index.isEven) {
+          return RectangleHitbox(
+            position: Vector2(
+              random.nextDouble() * 800 - 200,
+              random.nextDouble() * 600 - 200,
+            ),
+            size: Vector2(
+              150 + random.nextDouble() * 350,
+              150 + random.nextDouble() * 350,
+            ),
+          );
+        }
+        return PathHitbox(
+          path: _star(),
+          position: Vector2(
+            random.nextDouble() * 800,
+            random.nextDouble() * 600,
+          ),
+          angle: random.nextDouble() * 2 * pi,
+        );
+      }
+
+      final hitboxes = [for (var i = 0; i < 300; i++) big(i)];
+      _addAll(game, hitboxes);
+      await game.ready();
+      var hits = 0;
+      for (final ray in _rays(random, 300)) {
+        final maxDistance = random.nextBool()
+            ? null
+            : 50 + random.nextDouble() * 400;
+        final (expected, actual) = _both(
+          game.collisionDetection,
+          ray,
+          maxDistance: maxDistance,
+        );
+        _expectSame(actual, expected);
+        hits += expected == null ? 0 : 1;
+      }
+      expect(hits, greaterThan(100));
+    });
+
+    testCollisionDetectionGame('does not keep hitboxes after a ray', (
+      game,
+    ) async {
+      final hitbox = RectangleHitbox(
+        position: Vector2(100, 0),
+        size: Vector2.all(100),
+      );
+      _addAll(game, [hitbox]);
+      await game.ready();
+      StandardCollisionDetection.nearestFirstRaycast = true;
+      final ray = Ray2(origin: Vector2(0, 50), direction: Vector2(1, 0));
+      expect(game.collisionDetection.raycast(ray), isNotNull);
+      // Even if a callback throws, a later ray works.
+      expect(
+        () => game.collisionDetection.raycast(
+          ray,
+          hitboxFilter: (_) => throw StateError('callback'),
+        ),
+        throwsStateError,
+      );
+      expect(game.collisionDetection.raycast(ray)!.hitbox, same(hitbox));
+    });
+
     testCollisionDetectionGame('finds the same hits for axis aligned rays', (
       game,
     ) async {
