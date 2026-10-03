@@ -37,7 +37,12 @@ enum HitboxKind {
 
   /// Like [stubMiss], but each hitbox is hit where the ray enters its box, the
   /// nearest that a hit can be.
-  stubHit;
+  stubHit,
+
+  /// Circles placed so that the rays cross their boxes but miss them, which
+  /// is the cheapest miss of a built-in hitbox. The rays and the circles do
+  /// not depend on the [RaycastScene].
+  circlesMiss;
 
   /// The kinds that are real shapes.
   static const shapes = [simple, polygons, paths, mixed];
@@ -85,6 +90,9 @@ class RaycastScenery {
     final random = Random(69420);
     final game = RaycastGame();
     await mountGame(game, size: Vector2(_worldWidth, _worldHeight));
+    if (kind == HitboxKind.circlesMiss) {
+      return await _circlesMiss(game, count);
+    }
     final components = [
       for (var i = 0; i < count; i++) _component(random, i, kind, scene),
     ];
@@ -99,6 +107,61 @@ class RaycastScenery {
             random.nextDouble() * _worldHeight,
           ),
           direction: (Vector2.random(random) - Vector2.all(0.5))..normalize(),
+        ),
+    ];
+    return RaycastScenery._(game, components, rays);
+  }
+
+  /// The distance between the parallel lines that the rays of [_circlesMiss]
+  /// follow.
+  static const _lineSpacing = 40.0;
+
+  /// The radius of the circles of [_circlesMiss], so that the lines on both
+  /// sides of a circle, at half of [_lineSpacing] from its center, cross its
+  /// box, which they do up to the radius times the square root of 2, and miss
+  /// it.
+  static const _missRadius = 0.42 * _lineSpacing;
+
+  /// Rays that follow 4 parallel diagonal lines, and [count] circles in the 3
+  /// gaps between the lines, so that each ray crosses the boxes of the circles
+  /// in the gaps next to its line, and hits none of them.
+  static Future<RaycastScenery> _circlesMiss(
+    RaycastGame game,
+    int count,
+  ) async {
+    final along = Vector2(1, 1)..normalize();
+    final across = Vector2(-1, 1)..normalize();
+    final start = Vector2(100, 50);
+    Vector2 point(double u, double v) =>
+        start + along.scaled(u) + across.scaled(v);
+    const gaps = 3;
+    final perGap = (count / gaps).ceil();
+    final spacing = 600 / perGap;
+    final components = [
+      for (var i = 0; i < count; i++)
+        PositionComponent(
+          position: point(
+            50 + (i ~/ gaps) * spacing,
+            (i % gaps + 0.5) * _lineSpacing,
+          ),
+          size: Vector2.all(2 * _missRadius),
+          anchor: Anchor.center,
+          children: [
+            CircleHitbox(
+              radius: _missRadius,
+              collisionType: CollisionType.inactive,
+            ),
+          ],
+        ),
+    ];
+    game.world.addAll(components);
+    await game.ready();
+    game.update(0);
+    final rays = [
+      for (var i = 0; i < raycastRaysPerRun; i++)
+        Ray2(
+          origin: point(0, (i % (gaps + 1)) * _lineSpacing),
+          direction: along.clone(),
         ),
     ];
     return RaycastScenery._(game, components, rays);
@@ -123,6 +186,7 @@ class RaycastScenery {
       },
       HitboxKind.stubMiss => _StubHitbox(size, hits: false),
       HitboxKind.stubHit => _StubHitbox(size, hits: true),
+      HitboxKind.circlesMiss => throw ArgumentError.value(kind),
     };
     return PositionComponent(
       position: Vector2(

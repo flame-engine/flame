@@ -55,6 +55,11 @@ Future<void> main(List<String> arguments) async {
       for (final count in [1, 5, 100, 500, 1000]) _Case(kind, 'spread', count),
       for (final count in [5, 10, 20, 50, 100]) _Case(kind, 'dense', count),
     ],
+    // Circles whose boxes the rays cross without hitting them, the cheapest
+    // miss of a built-in hitbox, where the nearest first one stops early the
+    // least.
+    for (final count in [5, 10, 20, 50, 100])
+      _Case('circlesMiss', 'dense', count),
     // Real hitboxes, to see the allocations of everything that a ray does.
     for (final kind in ['simple', 'polygons', 'paths', 'mixed']) ...[
       for (final count in [100, 500]) _Case(kind, 'spread', count),
