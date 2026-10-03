@@ -70,7 +70,13 @@ void main() {
         project,
       ],
       ['pub', 'remove', 'flutter_lints'],
-      ['pub', 'add', 'flame', 'dev:flame_lint', 'dev:flame_test'],
+      [
+        'pub',
+        'add',
+        'flame@^2.0.0-dev.0',
+        'dev:flame_lint',
+        'dev:flame_test@^3.0.0-dev.0',
+      ],
     ]);
     expect(callDirectories, [directory.path, project, project]);
     expect(read('lib/main.dart'), contains('class MyGame extends FlameGame'));

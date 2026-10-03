@@ -68,7 +68,8 @@ class CreateCommand(
         'flame-version',
         help:
             'The version constraint of the flame package, for example ^1.30.0. '
-            'Defaults to the newest version.',
+            'Defaults to the version the templates are written for.',
+        defaultsTo: _flameConstraint,
       )
       ..addFlag(
         'overwrite',
@@ -153,14 +154,14 @@ class CreateCommand(
       workingDirectory: directory,
       ignoreFailure: true,
     );
-    final flameVersion = argResults!.option('flame-version');
+    final flameVersion = argResults!.option('flame-version')!;
     await _flutter(
       [
         'pub',
         'add',
-        if (flameVersion == null) 'flame' else 'flame@$flameVersion',
+        'flame@$flameVersion',
         'dev:flame_lint',
-        if (template.hasTests) 'dev:flame_test',
+        if (template.hasTests) 'dev:flame_test@$_flameTestConstraint',
         ...argResults!.multiOption('packages'),
       ],
       'add the Flame packages',
@@ -217,6 +218,12 @@ class CreateCommand(
     }
   }
 }
+
+/// The version constraints of the Flame packages the templates are written
+/// for, these have to be bumped together with the templates on breaking
+/// releases.
+const _flameConstraint = '^2.0.0-dev.0';
+const _flameTestConstraint = '^3.0.0-dev.0';
 
 const _dartKeywords = {
   'abstract',
