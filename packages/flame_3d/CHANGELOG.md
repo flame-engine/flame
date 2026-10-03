@@ -9,6 +9,15 @@
  - **BREAKING** **FEAT**: Rename GameWidget.controlled to GameWidget.managed ([#3961](https://github.com/flame-engine/flame/issues/3961)). ([d99224e5](https://github.com/flame-engine/flame/commit/d99224e5e23c16c86d6d26bf8a807d31c4b4bbc4))
  - **BREAKING** **CHORE**: Rename HasWorldReference to HasWorldRef for consistency with HasGameRef ([#4039](https://github.com/flame-engine/flame/issues/4039)). ([cced5ccd](https://github.com/flame-engine/flame/commit/cced5ccd6fd241deb5f097c77181964d4307e3b8))
 
+## 0.3.2
+
+ - **FIX**: Republish flame_3d with the Flutter 3.47.0 constraint. ([b883d818](https://github.com/flame-engine/flame/commit/b883d818e3e6239587ed30b021a68809f2182607))
+
+## 0.3.1
+
+ - **FIX**: Require Flutter 3.47.0 or newer for flame_3d. ([f9d12195](https://github.com/flame-engine/flame/commit/f9d1219508dbd0d0a14b3f3c52b9618462c03cfb))
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([3bf30496](https://github.com/flame-engine/flame/commit/3bf304968867101cdb17aa02927b205bf46f664f))
+
 ## 0.3.0
 
 > Note: This release has breaking changes.
