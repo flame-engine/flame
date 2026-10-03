@@ -22,11 +22,19 @@ flutter test benchmark/priority_change_benchmark.dart
 
 The `flutter test` runner executes in JIT mode with asserts enabled, which is
 fine for comparing before/after numbers on the same machine. For
-release-representative numbers, run on a device instead:
+release-representative numbers, a suite needs to run as an app in a profile or
+release build. This package has no platform runner, so the app runs from the
+`examples` directory, which has a macOS one. `raycast_benchmark_app.dart` does
+this for `raycast_benchmark.dart`, printing the same table and exiting:
 
 ```console
-flutter run --release -t benchmark/main.dart -d <device>
+cd examples
+flutter build macos --release -t ../packages/flame/benchmark/raycast_benchmark_app.dart
+build/macos/Build/Products/Release/examples.app/Contents/MacOS/examples
 ```
+
+Running the binary prints the table straight to the terminal, and the app exits
+when it is done. Use `--profile` instead of `--release` for a profile build.
 
 Note that `flutter test` prints `No tests ran` at the end; that is expected,
 the benchmark results are printed above it.
@@ -77,6 +85,7 @@ the benchmark results are printed above it.
   path and mixed hitboxes, comparing the old code path with
   `StandardCollisionDetection.nearestFirstRaycast`, and printing the time per
   ray, the speedup and whether both find the same hits.
+  `raycast_benchmark_app.dart` runs it in a profile or release build.
 - `transform2d_benchmark.dart`: the `Transform2D` hot paths: matrix
   recalculation after position and angle changes, point conversion, matrix
   assignment, and copying transforms.
