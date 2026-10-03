@@ -1,8 +1,10 @@
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
+import 'package:meta/meta.dart';
 
 /// The default implementation of [CollisionDetection].
 /// Checks whether any [ShapeHitbox]s in [items] collide with each other and
@@ -68,8 +70,198 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
 
   static final _temporaryRayAabb = Aabb2();
 
+  /// Whether [raycast] visits the hitboxes from the nearest to the farthest
+  /// and stops as soon as the best hit so far is nearer than the next hitbox,
+  /// instead of calling [ShapeHitbox.rayIntersection] on all of the hitboxes
+  /// that the ray may reach.
+  ///
+  /// The result is the same, except for the choice between hitboxes hit at
+  /// exactly the same distance, but it saves work when many hitboxes have an
+  /// expensive [ShapeHitbox.rayIntersection], like polygons or paths. This is
+  /// off by default while it is being evaluated.
+  ///
+  /// It is slower only when the ray crosses the boxes of many hitboxes whose
+  /// [ShapeHitbox.rayIntersection] returns `null` without doing any work, as
+  /// it has to sort them for nothing. Hitboxes that rays should go through,
+  /// like trigger zones, are better left out with the `hitboxFilter` of
+  /// [raycast], which skips them before any work, than with a
+  /// [ShapeHitbox.rayIntersection] that always returns `null`.
+  @experimental
+  static bool nearestFirstRaycast = false;
+
+  /// The hitboxes that a ray may reach, and the distances at which the ray
+  /// enters their boxes, as a binary min-heap by distance, so that the nearest
+  /// can be taken out first without sorting them all. They are kept between
+  /// calls, and only grow, to not allocate for each ray.
+  static var _heapDistances = Float64List(32);
+  static var _heapHitboxes = List<ShapeHitbox?>.filled(32, null);
+  static var _heapSize = 0;
+
+  static void _heapAdd(double distance, ShapeHitbox hitbox) {
+    if (_heapSize == _heapDistances.length) {
+      final capacity = _heapSize * 2;
+      _heapDistances = Float64List(capacity)
+        ..setRange(0, _heapSize, _heapDistances);
+      _heapHitboxes = List<ShapeHitbox?>.filled(capacity, null)
+        ..setRange(0, _heapSize, _heapHitboxes);
+    }
+    _heapDistances[_heapSize] = distance;
+    _heapHitboxes[_heapSize] = hitbox;
+    _heapSize++;
+  }
+
+  /// Moves the entry at [index] down until its children are not nearer.
+  static void _heapSiftDown(int index) {
+    final distance = _heapDistances[index];
+    final hitbox = _heapHitboxes[index];
+    final half = _heapSize >> 1;
+    var hole = index;
+    while (hole < half) {
+      var child = 2 * hole + 1;
+      if (child + 1 < _heapSize &&
+          _heapDistances[child + 1] < _heapDistances[child]) {
+        child++;
+      }
+      if (_heapDistances[child] >= distance) {
+        break;
+      }
+      _heapDistances[hole] = _heapDistances[child];
+      _heapHitboxes[hole] = _heapHitboxes[child];
+      hole = child;
+    }
+    _heapDistances[hole] = distance;
+    _heapHitboxes[hole] = hitbox;
+  }
+
   @override
   RaycastResult<ShapeHitbox>? raycast(
+    Ray2 ray, {
+    double? maxDistance,
+    bool Function(ShapeHitbox candidate)? hitboxFilter,
+    List<ShapeHitbox>? ignoreHitboxes,
+    RaycastResult<ShapeHitbox>? out,
+  }) {
+    if (nearestFirstRaycast) {
+      return _raycastNearestFirst(
+        ray,
+        maxDistance: maxDistance,
+        hitboxFilter: hitboxFilter,
+        ignoreHitboxes: ignoreHitboxes,
+        out: out,
+      );
+    }
+    return _raycastAll(
+      ray,
+      maxDistance: maxDistance,
+      hitboxFilter: hitboxFilter,
+      ignoreHitboxes: ignoreHitboxes,
+      out: out,
+    );
+  }
+
+  RaycastResult<ShapeHitbox>? _raycastNearestFirst(
+    Ray2 ray, {
+    double? maxDistance,
+    bool Function(ShapeHitbox candidate)? hitboxFilter,
+    List<ShapeHitbox>? ignoreHitboxes,
+    RaycastResult<ShapeHitbox>? out,
+  }) {
+    var finalResult = out?..reset();
+    final limit = maxDistance ?? double.infinity;
+    _heapSize = 0;
+    var candidates = 0;
+    try {
+      for (final item in items) {
+        if (ignoreHitboxes?.contains(item) ?? false) {
+          continue;
+        }
+        if (hitboxFilter != null && !hitboxFilter(item)) {
+          continue;
+        }
+        final entry = _entryDistance(ray, item.aabb);
+        if (entry < 0 || entry > limit) {
+          continue;
+        }
+        _heapAdd(entry, item);
+      }
+      candidates = _heapSize;
+      for (var index = (_heapSize >> 1) - 1; index >= 0; index--) {
+        _heapSiftDown(index);
+      }
+      // Takes the hitboxes out from the nearest to the farthest. Most of the
+      // time the loop ends after a few, so the rest are never ordered.
+      while (_heapSize > 0) {
+        final entry = _heapDistances[0];
+        // A hit can not be nearer than the entry point to its box.
+        if ((finalResult?.isActive ?? false) &&
+            finalResult!.distance! <= entry) {
+          break;
+        }
+        final hitbox = _heapHitboxes[0]!;
+        _heapSize--;
+        if (_heapSize > 0) {
+          _heapDistances[0] = _heapDistances[_heapSize];
+          _heapHitboxes[0] = _heapHitboxes[_heapSize];
+          _heapSiftDown(0);
+        }
+        final currentResult = hitbox.rayIntersection(
+          ray,
+          out: _temporaryRaycastResult,
+        );
+        final possiblyFirstResult = !(finalResult?.isActive ?? false);
+        if (currentResult != null &&
+            (possiblyFirstResult ||
+                currentResult.distance! < finalResult!.distance!) &&
+            currentResult.distance! <= limit) {
+          if (finalResult == null) {
+            finalResult = currentResult.clone();
+          } else {
+            finalResult.setFrom(currentResult);
+          }
+        }
+      }
+    } finally {
+      // Do not keep the hitboxes alive through the heap, also if one of the
+      // callbacks throws.
+      _heapHitboxes.fillRange(0, math.max(candidates, _heapSize), null);
+      _heapSize = 0;
+    }
+    return (finalResult?.isActive ?? false) ? finalResult : null;
+  }
+
+  /// The distance along the [ray] at which it enters [box], or 0 if it starts
+  /// inside of it, or -1 if it does not reach it. It does not return a
+  /// nullable double for that, as it would be allocated for every hitbox.
+  @pragma('vm:prefer-inline')
+  static double _entryDistance(Ray2 ray, Aabb2 box) {
+    var entry = 0.0;
+    var exit = double.infinity;
+    final origin = ray.origin;
+    final direction = ray.direction;
+    if (direction.x == 0) {
+      if (origin.x < box.min.x || origin.x > box.max.x) {
+        return -1;
+      }
+    } else {
+      final a = (box.min.x - origin.x) / direction.x;
+      final b = (box.max.x - origin.x) / direction.x;
+      entry = math.max(entry, math.min(a, b));
+      exit = math.min(exit, math.max(a, b));
+    }
+    if (direction.y == 0) {
+      if (origin.y < box.min.y || origin.y > box.max.y) {
+        return -1;
+      }
+    } else {
+      final a = (box.min.y - origin.y) / direction.y;
+      final b = (box.max.y - origin.y) / direction.y;
+      entry = math.max(entry, math.min(a, b));
+      exit = math.min(exit, math.max(a, b));
+    }
+    return entry <= exit ? entry : -1;
+  }
+
+  RaycastResult<ShapeHitbox>? _raycastAll(
     Ray2 ray, {
     double? maxDistance,
     bool Function(ShapeHitbox candidate)? hitboxFilter,
