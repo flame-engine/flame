@@ -79,6 +79,13 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
   /// exactly the same distance, but it saves work when many hitboxes have an
   /// expensive [ShapeHitbox.rayIntersection], like polygons or paths. This is
   /// off by default while it is being evaluated.
+  ///
+  /// It is slower only when the ray crosses the boxes of many hitboxes whose
+  /// [ShapeHitbox.rayIntersection] returns `null` without doing any work, as
+  /// it has to sort them for nothing. Hitboxes that rays should go through,
+  /// like trigger zones, are better left out with the `hitboxFilter` of
+  /// [raycast], which skips them before any work, than with a
+  /// [ShapeHitbox.rayIntersection] that always returns `null`.
   @experimental
   static bool nearestFirstRaycast = false;
 
