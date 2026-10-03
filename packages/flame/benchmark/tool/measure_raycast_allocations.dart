@@ -36,7 +36,7 @@ import 'package:vm_service/vm_service_io.dart';
 ///     --seconds=2          The time that each timing should take.
 ///     --trace-rays=20000   The rays that the allocations are counted for.
 ///     --classes=a,b        More classes to count, by name.
-///     --filter=text        Only the cases whose name has the text.
+///     --filter=a,b         Only the cases whose name has one of the texts.
 ///     --csv=path           Also write the results to a CSV file.
 ///     --trace=_List,_Double
 ///                          Instead of measuring, show the stacks that
@@ -60,7 +60,7 @@ Future<void> main(List<String> arguments) async {
       for (final count in [100, 500]) _Case(kind, 'spread', count),
       for (final count in [20, 50, 100, 200]) _Case(kind, 'dense', count),
     ],
-  ].where((c) => c.id.contains(options.filter)).toList();
+  ].where((c) => options.filter.split(',').any(c.id.contains)).toList();
   if (cases.isEmpty) {
     stdout.writeln('No case matches "${options.filter}".');
     return;
