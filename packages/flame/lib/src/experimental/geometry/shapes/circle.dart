@@ -61,7 +61,7 @@ class Circle(Vector2 center, var double _radius) extends Shape {
       if (target is Circle) {
         target._center.setFrom(newCenter);
         target._radius = newRadius;
-        _aabb = null;
+        target._aabb = null;
         return target;
       } else {
         return Circle(newCenter, newRadius);
