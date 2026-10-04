@@ -35,6 +35,7 @@ dev_dependencies:
     sdk: flutter
   mocktail: ^1.0.4
   test: any
+  vm_service: ^15.0.0
 
 screenshots:
   - description: The Flame logo.

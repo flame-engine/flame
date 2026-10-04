@@ -5,9 +5,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-// ignore: depend_on_referenced_packages
 import 'package:vm_service/vm_service.dart';
-// ignore: depend_on_referenced_packages
 import 'package:vm_service/vm_service_io.dart';
 
 /// Measures what `StandardCollisionDetection.raycast` allocates with the old
