@@ -1,5 +1,7 @@
 // ignore_for_file: use_primary_constructors
 
+import 'dart:typed_data';
+
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:flame/collisions.dart';
 
@@ -40,7 +42,7 @@ class RaycastBenchmark extends AsyncBenchmarkBase {
   late final List<double> _baseAngles;
   final _result = RaycastResult<ShapeHitbox>();
   var _phase = 0;
-  final _hitsByPhase = List<int?>.filled(_phases, null);
+  final _distancesByPhase = List<Float64List?>.filled(_phases, null);
 
   @override
   Future<void> setup() async {
@@ -61,19 +63,19 @@ class RaycastBenchmark extends AsyncBenchmarkBase {
         _scenery.components[i].angle = _baseAngles[i] + _phase * _phaseAngle;
       }
     }
-    var hits = 0;
-    for (final ray in _scenery.rays) {
-      if (detection.raycast(ray, out: _result) != null) {
-        hits++;
-      }
+    final distances = _distancesByPhase[_phase] ??= Float64List(_raysPerRun);
+    final rays = _scenery.rays;
+    for (var i = 0; i < _raysPerRun; i++) {
+      final hit = detection.raycast(rays[i], out: _result);
+      distances[i] = hit == null ? -1 : hit.distance!;
     }
-    _hitsByPhase[_phase] = hits;
   }
 
-  /// The number of rays that hit something in each phase of the scene, to keep
-  /// the work from being optimized away and to check that both code paths
-  /// agree. It is null for the phases that did not run.
-  List<int?> get hitsByPhase => _hitsByPhase;
+  /// The distance at which each ray hit something in each phase of the scene,
+  /// or -1 where it hit nothing, to keep the work from being optimized away
+  /// and to check that both code paths find the same hits. It is null for the
+  /// phases that did not run.
+  List<Float64List?> get distancesByPhase => _distancesByPhase;
 }
 
 /// Runs the benchmark for the old and the new code path in all the cases, and
@@ -105,15 +107,17 @@ Future<void> main() async {
         final newMicros = await nearest.measure();
         final oldPerRay = oldMicros / _raysPerRun;
         final newPerRay = newMicros / _raysPerRun;
-        // Compare the phases that both code paths ran.
+        // Compare the hit of every ray in the phases that both code paths ran.
         var phasesCompared = 0;
         var same = true;
         for (var phase = 0; phase < _phases; phase++) {
-          final a = old.hitsByPhase[phase];
-          final b = nearest.hitsByPhase[phase];
+          final a = old.distancesByPhase[phase];
+          final b = nearest.distancesByPhase[phase];
           if (a != null && b != null) {
             phasesCompared++;
-            same &= a == b;
+            for (var i = 0; i < _raysPerRun; i++) {
+              same &= (a[i] - b[i]).abs() <= 1e-9;
+            }
           }
         }
         // ignore: avoid_print
