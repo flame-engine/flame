@@ -23,7 +23,8 @@ typedef EffectBuilder = Effect Function(TickContext context);
 /// ```
 ///
 /// The node fails if the effect gets removed before it completed, which
-/// happens for example when its target is removed from the game.
+/// happens for example when its target is removed from the game, also if that
+/// happens before the effect was mounted.
 class PlayEffect(
   /// Creates the effect to play every time the node starts.
   this.builder, {
@@ -64,7 +65,13 @@ class PlayEffect(
     if (_isComplete) {
       return Status.success;
     }
-    return _effect!.isRemoved ? Status.failure : Status.running;
+    // An effect that was removed before it was mounted has no parent but is
+    // never marked as removed, and one that is removed while it is mounted is
+    // only marked as removed when the removal is processed.
+    final effect = _effect!;
+    final isGone =
+        effect.parent == null || effect.isRemoving || effect.isRemoved;
+    return isGone ? Status.failure : Status.running;
   }
 
   @override

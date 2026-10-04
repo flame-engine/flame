@@ -103,6 +103,51 @@ void main() {
       expect(tree.tick(0), Status.failure);
     });
 
+    testWithFlameGame('fails if the effect is removed before it was mounted', (
+      game,
+    ) async {
+      final component = await _addAgent(game);
+      late Effect effect;
+      final tree = BehaviorTree(
+        PlayEffect((_) {
+          return effect = MoveEffect.by(
+            Vector2(10, 0),
+            EffectController(duration: 1),
+          );
+        }),
+        owner: component,
+      );
+
+      expect(tree.tick(0), Status.running);
+      // The effect has not been mounted yet, so this only detaches it.
+      effect.removeFromParent();
+
+      expect(tree.tick(0), Status.failure);
+    });
+
+    testWithFlameGame('fails as soon as the removal of the effect is pending', (
+      game,
+    ) async {
+      final component = await _addAgent(game);
+      late Effect effect;
+      final tree = BehaviorTree(
+        PlayEffect((_) {
+          return effect = MoveEffect.by(
+            Vector2(10, 0),
+            EffectController(duration: 1),
+          );
+        }),
+        owner: component,
+      );
+      tree.tick(0);
+      game.update(0.1);
+
+      // The effect is only marked as removed in the next update.
+      effect.removeFromParent();
+
+      expect(tree.tick(0), Status.failure);
+    });
+
     testWithFlameGame('needs a component as owner if there is no target', (
       game,
     ) async {
