@@ -11,6 +11,14 @@ void main() {
       expect(node.lastStatus, isNull);
     });
 
+    test('has no name by default, and one can be set', () {
+      final node = ScriptedNode.always(Status.success);
+      expect(node.name, isNull);
+
+      node.name = 'a node';
+      expect(node.name, 'a node');
+    });
+
     test('tick returns and remembers the status', () {
       final node = ScriptedNode.always(Status.failure);
       expect(node.tick(context()), Status.failure);
