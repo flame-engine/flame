@@ -38,7 +38,9 @@ build and copy the changes to `packages/flame/extension/devtools`.
 To develop things from the Flame side, create a new `DevToolsConnector` which
 registers the new extension end points so that you can communicate with Flame
 from the devtools extension. Don't forget to add the new connector to the
-list of connectors in the `DevToolsService` class.
+list of connectors in the `DevToolsService` class. A package that is built on
+top of Flame, like `flame_behavior_tree`, can add its connector with
+`DevToolsService.instance.registerConnector` instead, when it is first needed.
 
 The service extensions can also be called by other tools than this
 extension. For example, the `snapshot` command in `flame_cli` uses the
