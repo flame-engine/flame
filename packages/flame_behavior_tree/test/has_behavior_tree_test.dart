@@ -141,6 +141,37 @@ void main() {
       });
     });
 
+    testWithFlameGame('ticks right away when it is mounted again', (
+      game,
+    ) async {
+      var ticks = 0;
+      final component = _BehaviorTreeComponent()
+        ..tickInterval = 1
+        ..behaviorTree = BehaviorTree(
+          Task((_) {
+            ticks++;
+            return Status.success;
+          }),
+        );
+      await game.ensureAdd(component);
+
+      game.update(0.25);
+      expect(ticks, 1);
+      // Not yet ticked again, but time has been collected.
+      game.update(0.25);
+      expect(ticks, 1);
+
+      component.removeFromParent();
+      await game.ready();
+      await game.ensureAdd(component);
+
+      // The first tick is not delayed, and does not use the time of before.
+      game.update(0.25);
+      expect(ticks, 2);
+      game.update(0.25);
+      expect(ticks, 2);
+    });
+
     group('lifecycle', () {
       testWithFlameGame('aborts the tree when the component is removed', (
         game,

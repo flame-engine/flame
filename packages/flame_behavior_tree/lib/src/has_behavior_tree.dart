@@ -91,6 +91,9 @@ mixin HasBehaviorTree on Component {
   @mustCallSuper
   void onRemove() {
     _behaviorTree?.abort();
+    // A component that is mounted again starts with a tick, like a new one.
+    _accumulated = 0;
+    _hasTicked = false;
     super.onRemove();
   }
 }
