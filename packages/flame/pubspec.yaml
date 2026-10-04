@@ -18,6 +18,7 @@ environment:
   flutter: ">=3.47.0"
 
 dependencies:
+  clock: ^1.1.1
   collection: ^1.18.0
   flutter:
     sdk: flutter

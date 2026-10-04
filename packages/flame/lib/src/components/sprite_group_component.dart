@@ -24,7 +24,7 @@ class SpriteGroupComponent<T>({
   super.children,
   super.priority,
   super.key,
-}) extends PositionComponent with HasPaint {
+}) extends PositionComponent with HasPaint, ImageRetainer {
   ValueNotifier<T?>? _currentSpriteNotifier;
 
   /// A [ValueNotifier] that notifies when the current sprite changes.
@@ -87,8 +87,13 @@ class SpriteGroupComponent<T>({
     if (_sprites != value) {
       _sprites = value;
       _resizeToSprite();
+      updateRetainedImages();
     }
   }
+
+  @override
+  Iterable<Image> get retainedImages =>
+      _sprites?.values.map((sprite) => sprite.image) ?? const [];
 
   /// Updates the sprite for the given key.
   void updateSprite(T key, Sprite sprite) {
@@ -99,6 +104,7 @@ class SpriteGroupComponent<T>({
     );
     _sprites?[key] = sprite;
     _resizeToSprite();
+    updateRetainedImages();
   }
 
   /// Sets the given value of autoResize flag.
@@ -125,6 +131,7 @@ class SpriteGroupComponent<T>({
       _current != null,
       'You have to set current in either the constructor or in onLoad',
     );
+    super.onMount();
   }
 
   @mustCallSuper

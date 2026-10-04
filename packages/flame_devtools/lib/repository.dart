@@ -115,6 +115,24 @@ abstract final class Repository() {
     );
   }
 
+  static Future<ImageCacheInfo> getImageCache() async {
+    final imageCacheResponse = await serviceManager
+        .callServiceExtensionOnMainIsolate(
+          'ext.flame_devtools.getImageCache',
+        );
+    return ImageCacheInfo.fromJson(imageCacheResponse.json!);
+  }
+
+  /// Collects the unused images in the game's image cache and returns the
+  /// estimated number of bytes that were freed.
+  static Future<int> collectImages() async {
+    final collectResponse = await serviceManager
+        .callServiceExtensionOnMainIsolate(
+          'ext.flame_devtools.collectImages',
+        );
+    return collectResponse.json!['freed_bytes'] as int;
+  }
+
   /// Sets the [attribute] of the component with the given [id], where
   /// `priority` can be set on any component and the other attributes only on
   /// position components.

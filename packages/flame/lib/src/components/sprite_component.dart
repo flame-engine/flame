@@ -25,7 +25,7 @@ class SpriteComponent({
   super.priority,
   var double? bleed,
   super.key,
-}) extends PositionComponent with HasPaint {
+}) extends PositionComponent with HasPaint, ImageRetainer {
   /// When set to true, the component is auto-resized to match the
   /// size of underlying sprite.
   bool _autoResize = autoResize ?? size == null;
@@ -104,6 +104,13 @@ class SpriteComponent({
   set sprite(Sprite? value) {
     _sprite = value;
     _resizeToSprite();
+    updateRetainedImages();
+  }
+
+  @override
+  Iterable<Image> get retainedImages {
+    final sprite = _sprite;
+    return sprite == null ? const [] : [sprite.image];
   }
 
   @override
@@ -113,6 +120,7 @@ class SpriteComponent({
       sprite != null,
       'You have to set the sprite in either the constructor or in onLoad',
     );
+    super.onMount();
   }
 
   @mustCallSuper
