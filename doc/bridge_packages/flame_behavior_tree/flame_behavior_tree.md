@@ -57,13 +57,15 @@ returns one of three `Status` values:
 - `Status.failure`: it could not.
 - `Status.running`: it is not done yet and wants to be ticked again.
 
-Nodes do their work in `Task` nodes. Everything else decides which of them get to run:
+The nodes that do something are the leaf nodes, like `Task`, `Condition` and `MoveTo`, which have
+no children. Composite nodes decide which of their children get to run:
 
 - A `Sequence` ticks its children in order, for as long as they succeed. It fails as soon as a child
   fails, and succeeds when all of them have succeeded.
 - A `Selector` ticks its children in order until one of them does not fail. It succeeds as soon as
   a child succeeds, and fails when all of them have failed.
-- A `Condition` is a `Task` that checks something, and never returns `Status.running`.
+
+A `Condition` is a leaf node that checks something, and never returns `Status.running`.
 
 The nodes get a `TickContext` when they are ticked. It has the time since the previous tick as
 `dt`, the `blackboard`, and the `owner`.
