@@ -30,7 +30,7 @@ import 'package:vm_service/vm_service_io.dart';
 /// Options:
 ///
 ///     --device=macos       The device to run on. It needs to be a desktop one.
-///     --reps=3             The timings of each code path in each case.
+///     --repetitions=3      The timings of each code path in each case.
 ///     --seconds=2          The time that each timing should take.
 ///     --trace-rays=20000   The rays that the allocations are counted for.
 ///     --classes=a,b        More classes to count, by name.
@@ -77,12 +77,12 @@ Future<void> main(List<String> arguments) async {
       'trace_rays',
       'old_objects_per_ray',
       'new_objects_per_ray',
-      'old_us_per_ray',
-      'new_us_per_ray',
-      'old_us_min',
-      'old_us_max',
-      'new_us_min',
-      'new_us_max',
+      'old_microseconds_per_ray',
+      'new_microseconds_per_ray',
+      'old_microseconds_min',
+      'old_microseconds_max',
+      'new_microseconds_min',
+      'new_microseconds_max',
       'old_classes',
       'new_classes',
     ].join(','),
@@ -99,16 +99,17 @@ Future<void> main(List<String> arguments) async {
         'Raycast, old code path vs nearest first, in ${app.description}.\n'
         'objects/ray: exact, from tracing the allocations of ${app.traced} '
         'classes in ${options.traceRays} rays, without what the VM service '
-        'allocates itself. us/ray: median (fastest-slowest) of '
-        '${options.reps} timings of ~${options.seconds} s, with no tracing.\n',
+        'allocates itself. microseconds/ray: median (fastest-slowest) of '
+        '${options.repetitions} timings of ~${options.seconds} s, with no '
+        'tracing.\n',
       )
       ..writeln(
         _row([
           'case',
-          'old obj/ray',
-          'new obj/ray',
-          'old us/ray',
-          'new us/ray',
+          'old objects/ray',
+          'new objects/ray',
+          'old microseconds/ray',
+          'new microseconds/ray',
           'objects/ray of each class: old | new',
         ]),
       );
@@ -175,7 +176,7 @@ const _defaultClasses = [
 const _noiseFloor = 0.02;
 
 String _row(List<String> columns) {
-  const widths = [22, 13, 13, 25, 25, 0];
+  const widths = [22, 17, 17, 25, 25, 0];
   return [
     for (var i = 0; i < columns.length; i++) columns[i].padRight(widths[i]),
   ].join();
@@ -192,8 +193,8 @@ class _Options {
       switch (match.group(1)) {
         case 'device':
           device = value;
-        case 'reps':
-          reps = int.parse(value);
+        case 'repetitions':
+          repetitions = int.parse(value);
         case 'seconds':
           seconds = double.parse(value);
         case 'trace-rays':
@@ -213,7 +214,7 @@ class _Options {
   }
 
   String device = 'macos';
-  int reps = 3;
+  int repetitions = 3;
   double seconds = 2;
   int traceRays = 20000;
   List<String> extraClasses = [];
@@ -363,7 +364,7 @@ Future<_CaseResult> _measureCase(
   // The time, with no tracing. The code paths take turns.
   final oldMicros = <int>[];
   final newMicros = <int>[];
-  for (var rep = 0; rep < options.reps; rep++) {
+  for (var repetition = 0; repetition < options.repetitions; repetition++) {
     oldMicros.add(
       (await cast(timingRays, nearestFirst: false))['micros'] as int,
     );

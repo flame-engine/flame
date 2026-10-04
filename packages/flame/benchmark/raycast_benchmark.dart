@@ -86,7 +86,8 @@ Future<void> main() async {
   print('Raycast: old code path vs nearest first ($_raysPerRun rays per run)');
   // ignore: avoid_print
   print(
-    'kind      hitboxes  rotate  old [us/ray]  new [us/ray]  speedup  hits',
+    'kind      hitboxes  rotate  old [microseconds/ray]  new [microseconds/ray]'
+    '  speedup  hits',
   );
   for (final kind in HitboxKind.shapes) {
     for (final count in counts) {
@@ -124,8 +125,8 @@ Future<void> main() async {
         print(
           '${kind.name.padRight(10)}${'$count'.padRight(10)}'
           '${(rotate ? 'yes' : 'no').padRight(8)}'
-          '${oldPerRay.toStringAsFixed(2).padRight(14)}'
-          '${newPerRay.toStringAsFixed(2).padRight(14)}'
+          '${oldPerRay.toStringAsFixed(2).padRight(24)}'
+          '${newPerRay.toStringAsFixed(2).padRight(24)}'
           '${'${(oldPerRay / newPerRay).toStringAsFixed(2)}x'.padRight(9)}'
           '${same && phasesCompared > 0 ? 'same' : 'DIFFERENT'} '
           '($phasesCompared phases)',
