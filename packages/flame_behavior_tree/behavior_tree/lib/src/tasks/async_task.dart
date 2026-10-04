@@ -26,7 +26,9 @@ class AsyncTask(this.callback) extends Node {
     final run = ++_run;
     _result = null;
     _error = null;
-    callback(context).then(
+    // Future.sync makes an error that the callback throws before it returns a
+    // future follow the same path as an error of the future itself.
+    Future.sync(() => callback(context)).then(
       (status) {
         if (run == _run) {
           _result = status;

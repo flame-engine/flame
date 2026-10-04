@@ -135,6 +135,15 @@ void main() {
       expect(task.tick(context()), Status.success);
     });
 
+    test('rethrows an error that the callback throws directly', () async {
+      final task = AsyncTask((_) => throw StateError('boom'));
+
+      // It does not throw from the tick that started the callback.
+      expect(task.tick(context()), Status.running);
+      await pumpEventQueue();
+      expect(() => task.tick(context()), throwsStateError);
+    });
+
     test('rethrows errors from the next tick', () async {
       final task = AsyncTask((_) async => throw StateError('boom'));
       task.tick(context());
