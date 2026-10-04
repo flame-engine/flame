@@ -11,7 +11,7 @@ void main() {
 
 /// A 3D skeleton walking between two regular 2D Flame layers: a parallax
 /// background behind it and an animated sprite in front of it.
-class ExampleGame extends FlameGame {
+class ExampleGame() extends FlameGame {
   @override
   Future<void> onLoad() async {
     final parallax = await loadParallaxComponent(
@@ -45,8 +45,8 @@ class ExampleGame extends FlameGame {
 /// The 3D object. It fills the whole game area and renders with a transparent
 /// background, so the parallax behind it stays visible. Dragging rotates the
 /// model.
-class Skeleton extends Component3D with DragCallbacks {
-  Skeleton()
+class Skeleton() extends Component3D with DragCallbacks {
+  this
     : super(
         anchor: Anchor.center,
         // The model is about 2.2 units tall with its feet at the origin.
@@ -97,8 +97,8 @@ class Skeleton extends Component3D with DragCallbacks {
 
 /// A regular sprite animation walking back and forth across the model, in
 /// front of it.
-class Ember extends SpriteAnimationComponent with HasGameRef {
-  Ember()
+class Ember() extends SpriteAnimationComponent with HasGameRef {
+  this
     : super(
         size: Vector2.all(96),
         anchor: Anchor.bottomCenter,

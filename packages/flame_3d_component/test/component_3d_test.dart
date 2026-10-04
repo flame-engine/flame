@@ -7,14 +7,12 @@ import 'package:flutter_test/flutter_test.dart';
 
 /// A [Component3D] that records the scene calls instead of touching the GPU,
 /// which is not available under `flutter test`.
-class _RecordingComponent3D extends Component3D {
-  _RecordingComponent3D({
-    this.ready = true,
-    super.camera,
-    super.size,
-    super.pixelRatio,
-  });
-
+class _RecordingComponent3D({
+  this.ready = true,
+  super.camera,
+  super.size,
+  super.pixelRatio,
+}) extends Component3D {
   final bool ready;
   final List<double> updates = [];
   final List<Rect> viewports = [];

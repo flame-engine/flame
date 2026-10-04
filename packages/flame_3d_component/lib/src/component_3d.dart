@@ -25,34 +25,9 @@ import 'package:flutter_scene/scene.dart'
 /// Rendering goes through Flutter GPU, which has to be enabled on every
 /// native platform (for example with `flutter run --enable-flutter-gpu`).
 /// Frames are skipped while the engine is not ready to render.
-class Component3D extends PositionComponent {
-  /// Creates a [Component3D].
-  ///
-  /// A new empty [Scene] is created on first use when [scene] is omitted, and
-  /// a default [PerspectiveCamera] is used when [camera] is omitted.
-  Component3D({
-    this._scene,
-    Camera? camera,
-    this.pixelRatio,
-    super.position,
-    super.size,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.key,
-  }) : camera = camera ?? PerspectiveCamera();
-
-  Scene? _scene;
-
-  /// The scene that is rendered by this component.
-  ///
-  /// Created on first access when no scene was passed to the constructor.
-  Scene get scene => _scene ??= Scene();
-
-  /// The camera whose view of [scene] is rendered.
-  Camera camera;
+class Component3D({
+  var Scene? _scene,
+  Camera? camera,
 
   /// The logical to physical pixel multiplier for the offscreen render
   /// target.
@@ -61,7 +36,29 @@ class Component3D extends PositionComponent {
   /// canvas is used, so the scene stays sharp when the Flame camera zooms in.
   /// Set a smaller value to trade fidelity for performance, or a larger one
   /// to render at a higher resolution than the screen.
-  double? pixelRatio;
+  var double? pixelRatio,
+  super.position,
+  super.size,
+  super.scale,
+  super.angle,
+  super.anchor,
+  super.children,
+  super.priority,
+  super.key,
+}) extends PositionComponent {
+  /// Creates a [Component3D].
+  ///
+  /// A new empty [Scene] is created on first use when [scene] is omitted, and
+  /// a default [PerspectiveCamera] is used when [camera] is omitted.
+  this;
+
+  /// The scene that is rendered by this component.
+  ///
+  /// Created on first access when no scene was passed to the constructor.
+  Scene get scene => _scene ??= Scene();
+
+  /// The camera whose view of [scene] is rendered.
+  Camera camera = camera ?? PerspectiveCamera();
 
   /// The root [Node] of [scene].
   Node get root => scene.root;
