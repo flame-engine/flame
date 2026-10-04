@@ -258,6 +258,36 @@ void main() {
       expect(game.collisionDetection.raycast(ray)!.hitbox, same(hitbox));
     });
 
+    testCollisionDetectionGame('casts rays from inside of a hitbox filter', (
+      game,
+    ) async {
+      final near = RectangleHitbox(
+        position: Vector2(100, 0),
+        size: Vector2.all(100),
+      );
+      final far = RectangleHitbox(
+        position: Vector2(300, 0),
+        size: Vector2.all(100),
+      );
+      _addAll(game, [near, far]);
+      await game.ready();
+      StandardCollisionDetection.nearestFirstRaycast = true;
+      final ray = Ray2(origin: Vector2(0, 50), direction: Vector2(1, 0));
+      final nested = <ShapeHitbox?>[];
+      final result = game.collisionDetection.raycast(
+        ray,
+        hitboxFilter: (hitbox) {
+          // A ray cast while another is, which must not disturb the outer one.
+          nested.add(game.collisionDetection.raycast(ray)?.hitbox);
+          return true;
+        },
+      );
+      expect(result!.hitbox, same(near));
+      expect(result.distance, closeTo(100, 1e-9));
+      expect(nested, hasLength(2));
+      expect(nested, everyElement(same(near)));
+    });
+
     testCollisionDetectionGame('finds the same hits for axis aligned rays', (
       game,
     ) async {

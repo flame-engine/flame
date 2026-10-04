@@ -89,49 +89,15 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
   @experimental
   static bool nearestFirstRaycast = false;
 
-  /// The hitboxes that a ray may reach, and the distances at which the ray
-  /// enters their boxes, as a binary min-heap by distance, so that the nearest
-  /// can be taken out first without sorting them all. They are kept between
-  /// calls, and only grow, to not allocate for each ray.
-  static var _heapDistances = Float64List(32);
-  static var _heapHitboxes = List<ShapeHitbox?>.filled(32, null);
-  static var _heapSize = 0;
+  /// The hitboxes that a ray may reach, ordered by the distance at which the
+  /// ray enters their boxes. They are kept between the rays of this instance,
+  /// to not allocate for each ray.
+  final _candidates = _RaycastCandidates();
 
-  static void _heapAdd(double distance, ShapeHitbox hitbox) {
-    if (_heapSize == _heapDistances.length) {
-      final capacity = _heapSize * 2;
-      _heapDistances = Float64List(capacity)
-        ..setRange(0, _heapSize, _heapDistances);
-      _heapHitboxes = List<ShapeHitbox?>.filled(capacity, null)
-        ..setRange(0, _heapSize, _heapHitboxes);
-    }
-    _heapDistances[_heapSize] = distance;
-    _heapHitboxes[_heapSize] = hitbox;
-    _heapSize++;
-  }
-
-  /// Moves the entry at [index] down until its children are not nearer.
-  static void _heapSiftDown(int index) {
-    final distance = _heapDistances[index];
-    final hitbox = _heapHitboxes[index];
-    final half = _heapSize >> 1;
-    var hole = index;
-    while (hole < half) {
-      var child = 2 * hole + 1;
-      if (child + 1 < _heapSize &&
-          _heapDistances[child + 1] < _heapDistances[child]) {
-        child++;
-      }
-      if (_heapDistances[child] >= distance) {
-        break;
-      }
-      _heapDistances[hole] = _heapDistances[child];
-      _heapHitboxes[hole] = _heapHitboxes[child];
-      hole = child;
-    }
-    _heapDistances[hole] = distance;
-    _heapHitboxes[hole] = hitbox;
-  }
+  /// Whether a nearest first raycast of this instance is running, so that one
+  /// started from inside of it, by a hitbox filter or by a
+  /// [ShapeHitbox.rayIntersection], does not take over its [_candidates].
+  bool _isCastingNearestFirst = false;
 
   @override
   RaycastResult<ShapeHitbox>? raycast(
@@ -168,8 +134,9 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
   }) {
     var finalResult = out?..reset();
     final limit = maxDistance ?? double.infinity;
-    _heapSize = 0;
-    var candidates = 0;
+    final isNested = _isCastingNearestFirst;
+    final candidates = isNested ? _RaycastCandidates() : _candidates;
+    _isCastingNearestFirst = true;
     try {
       for (final item in items) {
         if (ignoreHitboxes?.contains(item) ?? false) {
@@ -182,28 +149,18 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
         if (entry < 0 || entry > limit) {
           continue;
         }
-        _heapAdd(entry, item);
+        candidates.add(entry, item);
       }
-      candidates = _heapSize;
-      for (var index = (_heapSize >> 1) - 1; index >= 0; index--) {
-        _heapSiftDown(index);
-      }
+      candidates.order();
       // Takes the hitboxes out from the nearest to the farthest. Most of the
       // time the loop ends after a few, so the rest are never ordered.
-      while (_heapSize > 0) {
-        final entry = _heapDistances[0];
+      while (candidates.isNotEmpty) {
         // A hit can not be nearer than the entry point to its box.
         if ((finalResult?.isActive ?? false) &&
-            finalResult!.distance! <= entry) {
+            finalResult!.distance! <= candidates.nearestDistance) {
           break;
         }
-        final hitbox = _heapHitboxes[0]!;
-        _heapSize--;
-        if (_heapSize > 0) {
-          _heapDistances[0] = _heapDistances[_heapSize];
-          _heapHitboxes[0] = _heapHitboxes[_heapSize];
-          _heapSiftDown(0);
-        }
+        final hitbox = candidates.removeNearest();
         final currentResult = hitbox.rayIntersection(
           ray,
           out: _temporaryRaycastResult,
@@ -221,10 +178,12 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
         }
       }
     } finally {
-      // Do not keep the hitboxes alive through the heap, also if one of the
-      // callbacks throws.
-      _heapHitboxes.fillRange(0, math.max(candidates, _heapSize), null);
-      _heapSize = 0;
+      // Do not keep the hitboxes alive through the candidates, also if one of
+      // the callbacks throws.
+      candidates.clear();
+      if (!isNested) {
+        _isCastingNearestFirst = false;
+      }
     }
     return (finalResult?.isActive ?? false) ? finalResult : null;
   }
@@ -413,5 +372,92 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
     _temporaryRayAabb
       ..min.setValues(math.min(x1, x2), math.min(y1, y2))
       ..max.setValues(math.max(x1, x2), math.max(y1, y2));
+  }
+}
+
+/// The hitboxes that a ray may reach, and the distances at which the ray
+/// enters their boxes, as a binary min-heap by distance, so that the nearest
+/// can be taken out first without ordering them all. It only grows, so that
+/// it does not allocate for each ray when it is kept between them.
+class _RaycastCandidates() {
+  var _distances = Float64List(32);
+  var _hitboxes = List<ShapeHitbox?>.filled(32, null);
+
+  /// The number of candidates that have not been taken out.
+  var _length = 0;
+
+  /// The most candidates there have been since the last [clear], which is
+  /// how many entries of [_hitboxes] may be set.
+  var _added = 0;
+
+  bool get isNotEmpty => _length > 0;
+
+  /// The number of hitboxes that are still referenced.
+  int get retained => _hitboxes.where((hitbox) => hitbox != null).length;
+
+  /// Adds a candidate at the end, without keeping the order, which [order]
+  /// restores for all of them at once.
+  void add(double distance, ShapeHitbox hitbox) {
+    if (_length == _distances.length) {
+      final capacity = _length * 2;
+      _distances = Float64List(capacity)..setRange(0, _length, _distances);
+      _hitboxes = List<ShapeHitbox?>.filled(capacity, null)
+        ..setRange(0, _length, _hitboxes);
+    }
+    _distances[_length] = distance;
+    _hitboxes[_length] = hitbox;
+    _length++;
+    _added = math.max(_added, _length);
+  }
+
+  /// Orders the candidates so that the nearest is first.
+  void order() {
+    for (var index = (_length >> 1) - 1; index >= 0; index--) {
+      _siftDown(index);
+    }
+  }
+
+  /// The distance of the nearest candidate, which must exist.
+  double get nearestDistance => _distances[0];
+
+  /// Takes the nearest candidate out, which must exist.
+  ShapeHitbox removeNearest() {
+    final hitbox = _hitboxes[0]!;
+    _length--;
+    if (_length > 0) {
+      _distances[0] = _distances[_length];
+      _hitboxes[0] = _hitboxes[_length];
+      _siftDown(0);
+    }
+    return hitbox;
+  }
+
+  /// Takes all of the candidates out and drops the references to them.
+  void clear() {
+    _hitboxes.fillRange(0, _added, null);
+    _length = 0;
+    _added = 0;
+  }
+
+  /// Moves the entry at [index] down until its children are not nearer.
+  void _siftDown(int index) {
+    final distance = _distances[index];
+    final hitbox = _hitboxes[index];
+    final half = _length >> 1;
+    var hole = index;
+    while (hole < half) {
+      var child = 2 * hole + 1;
+      if (child + 1 < _length && _distances[child + 1] < _distances[child]) {
+        child++;
+      }
+      if (_distances[child] >= distance) {
+        break;
+      }
+      _distances[hole] = _distances[child];
+      _hitboxes[hole] = _hitboxes[child];
+      hole = child;
+    }
+    _distances[hole] = distance;
+    _hitboxes[hole] = hitbox;
   }
 }
