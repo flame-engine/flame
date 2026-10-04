@@ -23,12 +23,14 @@ class SwitchTreeExample() extends BehaviorTreeGame {
 
   @override
   void onLoad() {
+    final agent = _Agent();
     world.addAll([
       caption(
         'Tap the agent to switch its behavior.',
         position: Vector2(12, 12),
       ),
-      _Agent(),
+      agent,
+      TreeView(agent, position: Vector2(12, 200)),
     ]);
   }
 }

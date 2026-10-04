@@ -31,16 +31,8 @@ class TapArea({required Vector2 size, required this.onTap})
   void onTapDown(TapDownEvent event) => onTap(event.localPosition);
 }
 
-final _titleStyle = TextPaint(
-  style: const TextStyle(
-    color: Colors.white,
-    fontSize: 13,
-    fontFamily: 'monospace',
-  ),
-);
-
 final _captionStyle = TextPaint(
-  style: const TextStyle(color: Colors.white60, fontSize: 11),
+  style: const TextStyle(color: Colors.white60, fontSize: 10),
 );
 
 /// Creates a text with the style used for the explanations in the examples.
@@ -57,129 +49,93 @@ TextComponent caption(
   );
 }
 
+/// Creates a plain colored circle, which is what most of the characters in the
+/// examples are made of.
+CircleComponent dot(Color color, {required Vector2 position, double r = 10}) {
+  return CircleComponent(
+    radius: r,
+    position: position,
+    anchor: Anchor.center,
+    paint: Paint()..color = color,
+  );
+}
+
+final _labels = Expando<String>();
+
+/// Gives [node] a [label], which is shown next to it in a [TreeView].
+///
+/// Returns [node], so that it can be used right where the node is created.
+T named<T extends Node>(String label, T node) {
+  _labels[node] = label;
+  return node;
+}
+
+/// Shows the behavior tree of a component, and what its nodes are doing.
+///
+/// A node is bold and yellow while it is running. Otherwise it has the color
+/// of the last status that it returned: green for success and red for failure,
+/// or grey if it has not been ticked, or was aborted.
+class TreeView(this.owner, {required Vector2 position})
+    extends PositionComponent {
+  this : super(position: position);
+
+  final HasBehaviorTree owner;
+
+  final _paints = <(Color, bool), TextPaint>{};
+
+  static const _lineHeight = 12.0;
+  static const _indent = 12.0;
+
+  TextPaint _paint(Color color, {required bool bold}) {
+    return _paints[(color, bold)] ??= TextPaint(
+      style: TextStyle(
+        color: color,
+        fontSize: 10,
+        fontFamily: 'monospace',
+        fontWeight: bold ? FontWeight.bold : FontWeight.normal,
+        height: 1,
+      ),
+    );
+  }
+
+  @override
+  void render(Canvas canvas) {
+    _captionStyle.render(
+      canvas,
+      'Behavior tree (bold yellow: running, green: success, red: failure)',
+      Vector2.zero(),
+    );
+    var line = 1;
+    void draw(Node node, int depth) {
+      final color = statusColor(
+        node.isRunning ? Status.running : node.lastStatus,
+      );
+      final label = _labels[node];
+      final text = '${node.runtimeType}${label == null ? '' : '  $label'}';
+      _paint(color, bold: node.isRunning).render(
+        canvas,
+        '● $text',
+        Vector2(depth * _indent, line * _lineHeight + 4),
+      );
+      line++;
+      final children = switch (node) {
+        Composite() => node.children,
+        Decorator() => [node.child],
+        _ => const <Node>[],
+      };
+      children.forEach((child) => draw(child, depth + 1));
+    }
+
+    draw(owner.behaviorTree.root, 0);
+  }
+}
+
 /// The color that is used to show a [Status] in the examples.
 Color statusColor(Status? status) {
   return switch (status) {
-    Status.success => Colors.green,
-    Status.failure => Colors.red,
-    Status.running => Colors.amber,
-    null => Colors.grey,
+    Status.success => const Color(0xFF30D158),
+    Status.failure => const Color(0xFFFF453A),
+    Status.running => const Color(0xFFFFD60A),
+    null => const Color(0xFF8E8E93),
   };
-}
-
-/// Where the agent of a [TreeLane] starts and ends its trips.
-const laneAgentStart = 20.0;
-const laneAgentEnd = exampleWidth - 20;
-
-/// A row that runs one behavior tree and shows what its root node returns.
-///
-/// The light on the right shows the [Status] that the root node returned most
-/// recently. It is held for a moment, so that statuses that only last for a
-/// single tick can still be noticed.
-///
-/// A lane can have an [agent], a small circle on a track, for the nodes that
-/// need something to play with.
-class TreeLane({
-  required this.title,
-  required this.explanation,
-  required this.build,
-  this.hasAgent = false,
-}) extends PositionComponent with HasBehaviorTree {
-  this : super(size: Vector2(exampleWidth, hasAgent ? 84 : 52));
-
-  /// The code that is shown for this lane.
-  final String title;
-
-  /// A short explanation of what the lane shows.
-  final String explanation;
-
-  /// Creates the root node of the tree for this lane.
-  final Node Function(TreeLane lane) build;
-
-  final bool hasAgent;
-
-  /// The circle on the track, only available if [hasAgent] is true.
-  late final CircleComponent agent;
-
-  /// The time, in seconds, since the lane started running.
-  double time = 0;
-
-  late final CircleComponent _light;
-  late final TextComponent _statusText;
-  Status? _shown;
-  double _hold = 0;
-
-  @override
-  Future<void> onLoad() async {
-    _light = CircleComponent(
-      radius: 7,
-      position: Vector2(width - 20, 14),
-      anchor: Anchor.center,
-      paint: Paint()..color = statusColor(null),
-    );
-    _statusText = TextComponent(
-      text: 'not started',
-      position: Vector2(width - 34, 14),
-      anchor: Anchor.centerRight,
-      textRenderer: _captionStyle,
-    );
-    addAll([
-      TextComponent(
-        text: title,
-        position: Vector2(12, 6),
-        textRenderer: _titleStyle,
-      ),
-      caption(explanation, position: Vector2(12, 26)),
-      _light,
-      _statusText,
-      RectangleComponent(
-        position: Vector2(0, height - 1),
-        size: Vector2(width, 1),
-        paint: Paint()..color = Colors.white12,
-      ),
-    ]);
-
-    if (hasAgent) {
-      agent = CircleComponent(
-        radius: 8,
-        anchor: Anchor.center,
-        position: Vector2(laneAgentStart, 62),
-        paint: Paint()..color = Colors.cyan,
-      );
-      addAll([
-        RectangleComponent(
-          position: Vector2(laneAgentStart, 61),
-          size: Vector2(laneAgentEnd - laneAgentStart, 2),
-          paint: Paint()..color = Colors.white24,
-        ),
-        agent,
-      ]);
-    }
-
-    behaviorTree = BehaviorTree(build(this), owner: this);
-  }
-
-  @override
-  void update(double dt) {
-    time += dt;
-    super.update(dt);
-
-    _hold -= dt;
-    final status = behaviorTree.lastStatus;
-    if (status != _shown && _hold <= 0) {
-      _shown = status;
-      _hold = 0.3;
-      _light.paint.color = statusColor(status);
-      _statusText.text = status?.name ?? 'not started';
-    }
-  }
-}
-
-/// Stacks [lanes] below each other, starting at [top].
-void addLanes(Component parent, List<TreeLane> lanes, {double top = 0}) {
-  var y = top;
-  for (final lane in lanes) {
-    parent.add(lane..position = Vector2(0, y));
-    y += lane.height;
-  }
 }

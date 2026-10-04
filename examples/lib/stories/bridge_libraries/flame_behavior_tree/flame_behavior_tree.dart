@@ -1,12 +1,13 @@
 import 'package:examples/commons/commons.dart';
 import 'package:examples/commons/example_use_case.dart';
 import 'package:examples/stories/bridge_libraries/flame_behavior_tree/basic_example.dart';
-import 'package:examples/stories/bridge_libraries/flame_behavior_tree/decorators_example.dart';
-import 'package:examples/stories/bridge_libraries/flame_behavior_tree/leaf_nodes_example.dart';
-import 'package:examples/stories/bridge_libraries/flame_behavior_tree/memory_example.dart';
-import 'package:examples/stories/bridge_libraries/flame_behavior_tree/parallel_example.dart';
+import 'package:examples/stories/bridge_libraries/flame_behavior_tree/race_example.dart';
+import 'package:examples/stories/bridge_libraries/flame_behavior_tree/robot_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_behavior_tree/switch_tree_example.dart';
+import 'package:examples/stories/bridge_libraries/flame_behavior_tree/thief_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_behavior_tree/tick_interval_example.dart';
+import 'package:examples/stories/bridge_libraries/flame_behavior_tree/traffic_example.dart';
+import 'package:examples/stories/bridge_libraries/flame_behavior_tree/turret_example.dart';
 import 'package:flame/game.dart';
 import 'package:widgetbook/widgetbook.dart';
 
@@ -25,28 +26,34 @@ WidgetbookComponent flameBehaviorTreeStories() {
         info: BasicExample.description,
       ),
       ExampleUseCase(
-        name: 'Leaf nodes',
-        builder: (_) => GameWidget(game: LeafNodesExample()),
-        codeLink: _link('leaf_nodes_example.dart'),
-        info: LeafNodesExample.description,
+        name: 'Robot (leaf nodes)',
+        builder: (_) => GameWidget(game: RobotExample()),
+        codeLink: _link('robot_example.dart'),
+        info: RobotExample.description,
       ),
       ExampleUseCase(
-        name: 'Sequence memory',
-        builder: (_) => GameWidget(game: MemoryExample()),
-        codeLink: _link('memory_example.dart'),
-        info: MemoryExample.description,
+        name: 'Traffic (sequence memory)',
+        builder: (_) => GameWidget(game: TrafficExample()),
+        codeLink: _link('traffic_example.dart'),
+        info: TrafficExample.description,
       ),
       ExampleUseCase(
-        name: 'Decorators',
-        builder: (_) => GameWidget(game: DecoratorsExample()),
-        codeLink: _link('decorators_example.dart'),
-        info: DecoratorsExample.description,
+        name: 'Turret (Cooldown, Repeat, Inverter)',
+        builder: (_) => GameWidget(game: TurretExample()),
+        codeLink: _link('turret_example.dart'),
+        info: TurretExample.description,
       ),
       ExampleUseCase(
-        name: 'Parallel',
-        builder: (_) => GameWidget(game: ParallelExample()),
-        codeLink: _link('parallel_example.dart'),
-        info: ParallelExample.description,
+        name: 'Thief (RetryOnFailure, TimeLimit, AlwaysSucceed)',
+        builder: (_) => GameWidget(game: ThiefExample()),
+        codeLink: _link('thief_example.dart'),
+        info: ThiefExample.description,
+      ),
+      ExampleUseCase(
+        name: 'Race (Parallel)',
+        builder: (_) => GameWidget(game: RaceExample()),
+        codeLink: _link('race_example.dart'),
+        info: RaceExample.description,
       ),
       ExampleUseCase(
         name: 'Tick interval',

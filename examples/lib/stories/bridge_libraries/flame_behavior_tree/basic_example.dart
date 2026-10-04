@@ -4,77 +4,104 @@ import 'package:flame/effects.dart';
 import 'package:flame_behavior_tree/flame_behavior_tree.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// Where the agent should go, or not set if it has nowhere to go.
-const _destination = BlackboardKey<Vector2>('destination');
+/// Where the bone is, if there is one.
+const _bonePosition = BlackboardKey<Vector2>('bonePosition');
 
 class BasicExample() extends BehaviorTreeGame {
-  this : super(height: 300);
+  this : super(height: 340);
 
   static const String description = '''
-    This is the smallest useful behavior tree. The agent is a component with
-    the `HasBehaviorTree` mixin, and the tree says: "if there is somewhere to
-    go, go there, otherwise pulse yellow".
+    This is a small behavior tree for a dog. Tap anywhere to throw a bone, and
+    the dog fetches it and eats it. When there is no bone, the dog just pulses
+    yellow.
 
-    Tap anywhere to send the agent there. Tapping while it is already moving
-    makes it change its mind straight away.
+    The tree is shown below the dog, and you can see which of its nodes is
+    running at any moment. A selector tries its children in order until one
+    does not fail, and a sequence runs its children in order until one does not
+    succeed. So the tree reads: "if there is a bone, run to it and eat it,
+    otherwise pulse".
 
-    The tap puts the destination on the blackboard, which is how the game talks
-    to the tree. The nodes in the tree read it from there.
+    The tap puts the position of the bone on the blackboard, which is how the
+    game talks to the tree. The nodes of the tree read it from there.
   ''';
 
   @override
   void onLoad() {
-    final agent = _Agent();
+    final dog = _Dog();
     world.addAll([
-      TapArea(
-        size: Vector2(exampleWidth, 300),
-        onTap: (position) {
-          agent.blackboard.set(_destination, position);
-          // The agent might be in the middle of a trip to an older
-          // destination. Aborting the tree makes it start over, and the
-          // `MoveTo` below reads the new destination again.
-          agent.behaviorTree.abort();
-        },
-      ),
-      caption(
-        'Tap anywhere to send the agent there.',
-        position: Vector2(12, 12),
-      ),
-      agent,
+      TapArea(size: Vector2(exampleWidth, 230), onTap: dog.throwBone),
+      caption('Tap anywhere to throw a bone.', position: Vector2(12, 12)),
+      dog,
+      TreeView(dog, position: Vector2(12, 240)),
     ]);
   }
 }
 
-class _Agent() extends CircleComponent with HasBehaviorTree {
+class _Dog() extends CircleComponent with HasBehaviorTree {
   this
     : super(
         radius: 12,
-        position: Vector2(exampleWidth / 2, 150),
+        position: Vector2(exampleWidth / 2, 130),
         anchor: Anchor.center,
         paint: Paint()..color = Colors.cyan,
       );
 
+  Component? _bone;
+
+  void throwBone(Vector2 position) {
+    _bone?.removeFromParent();
+    _bone = RectangleComponent(
+      position: position,
+      size: Vector2(16, 7),
+      anchor: Anchor.center,
+      paint: Paint()..color = Colors.white,
+    );
+    parent!.add(_bone!);
+    blackboard.set(_bonePosition, position);
+    // The dog might be running to an older bone. Aborting the tree makes it
+    // start over, so the `MoveTo` reads the position of the new bone.
+    behaviorTree.abort();
+  }
+
+  void eatBone() {
+    _bone?.removeFromParent();
+    _bone = null;
+    blackboard.remove(_bonePosition);
+  }
+
   @override
   void onLoad() {
     behaviorTree = BehaviorTree(
-      // A selector tries its children in order until one does not fail. It is
-      // reactive, so that it re-checks the first child on every tick and stops
-      // pulsing as soon as there is a destination.
+      // This selector is reactive, so it checks its first child on every tick.
+      // That makes the dog stop pulsing as soon as a bone appears.
       Selector(reactive: true, [
-        // A sequence runs its children in order until one does not succeed.
-        Sequence([
-          Condition((context) => context.blackboard.has(_destination)),
-          MoveTo((context) => context.get(_destination), speed: 120),
-          Task((context) {
-            context.blackboard.remove(_destination);
-            return Status.success;
-          }),
-        ]),
-        // Nowhere to go, so pulse. `PlayEffect` is done when the effect is.
-        PlayEffect(
-          (context) => ColorEffect(
-            Colors.yellow,
-            EffectController(duration: 0.5, alternate: true),
+        named(
+          'fetch the bone',
+          Sequence([
+            named(
+              'is there a bone?',
+              Condition((context) => context.blackboard.has(_bonePosition)),
+            ),
+            named(
+              'run to it',
+              MoveTo((context) => context.get(_bonePosition), speed: 140),
+            ),
+            named(
+              'eat it',
+              Task((context) {
+                context.owner<_Dog>().eatBone();
+                return Status.success;
+              }),
+            ),
+          ]),
+        ),
+        named(
+          'nothing to do, pulse',
+          PlayEffect(
+            (context) => ColorEffect(
+              Colors.yellow,
+              EffectController(duration: 0.5, alternate: true),
+            ),
           ),
         ),
       ]),

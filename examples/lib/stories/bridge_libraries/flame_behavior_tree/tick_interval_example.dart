@@ -59,7 +59,7 @@ class _IntervalButton(this._agent) extends TextComponent with TapCallbacks {
         textRenderer: TextPaint(
           style: const TextStyle(
             color: Colors.lightBlueAccent,
-            fontSize: 13,
+            fontSize: 11,
             decoration: TextDecoration.underline,
           ),
         ),
