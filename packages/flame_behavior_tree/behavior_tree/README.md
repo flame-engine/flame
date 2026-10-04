@@ -124,6 +124,10 @@ context.set(target, enemy);
 `get` throws a `StateError` that names the key if the value was never set and the key has no
 `initial`. Keys are compared by identity, so declare each of them once and share it.
 
+`set` throws an `ArgumentError` if the value is not of the type of the key. Be careful with number
+literals: for a `BlackboardKey<double>` use `0.0`, because Dart lets a plain `0` through at compile
+time.
+
 
 ### The owner
 

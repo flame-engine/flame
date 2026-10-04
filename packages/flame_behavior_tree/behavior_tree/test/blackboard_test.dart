@@ -40,6 +40,27 @@ void main() {
       expect(blackboard.get(mana), 50);
     });
 
+    test('set rejects a value of the wrong type', () {
+      const progress = BlackboardKey<double>('progress');
+      final blackboard = Blackboard();
+
+      // The compiler infers `num` here and lets the int through.
+      expect(() => blackboard.set(progress, 0), throwsArgumentError);
+      expect(blackboard.has(progress), isFalse);
+
+      blackboard.set(progress, 0.0);
+      expect(blackboard.get(progress), 0.0);
+    });
+
+    test('set accepts null for nullable keys only', () {
+      final blackboard = Blackboard()..set(target, null);
+      expect(blackboard.get(target), isNull);
+      expect(
+        () => blackboard.set(health, null as dynamic),
+        throwsArgumentError,
+      );
+    });
+
     test('getOrNull returns null for missing keys', () {
       final blackboard = Blackboard();
       expect(blackboard.getOrNull(health), isNull);

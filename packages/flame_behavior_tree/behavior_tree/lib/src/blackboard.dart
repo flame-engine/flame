@@ -19,6 +19,13 @@ class const BlackboardKey<T>(this.name, {this.initial}) {
   /// Whether this key has an [initial] value.
   bool get hasInitial => initial != null;
 
+  /// Whether [value] is of the type of this key.
+  ///
+  /// This is a runtime check that also catches what the compiler does not,
+  /// because the type parameter of a key can be widened when it is passed
+  /// around. For example `set(doubleKey, 0)` compiles, but stores an int.
+  bool accepts(Object? value) => value is T;
+
   @override
   String toString() => 'BlackboardKey<$T>($name)';
 }
@@ -59,7 +66,18 @@ class Blackboard() {
   }
 
   /// Stores [value] for [key], replacing any previous value.
+  ///
+  /// Throws an [ArgumentError] if [value] is not of the type of [key]. Watch
+  /// out for number literals, a `BlackboardKey<double>` needs `0.0` and not
+  /// `0`.
   void set<T>(BlackboardKey<T> key, T value) {
+    if (!key.accepts(value)) {
+      throw ArgumentError.value(
+        value,
+        'value',
+        'Cannot be stored for $key because it is a ${value.runtimeType}.',
+      );
+    }
     _data[key] = value;
   }
 
