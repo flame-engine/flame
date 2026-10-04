@@ -49,12 +49,7 @@ class RaycastBenchmark extends AsyncBenchmarkBase {
     _baseAngles = [
       for (final component in _scenery.components) component.angle,
     ];
-    StandardCollisionDetection.nearestFirstRaycast = nearestFirst;
-  }
-
-  @override
-  Future<void> teardown() async {
-    StandardCollisionDetection.nearestFirstRaycast = false;
+    _scenery.detection.nearestFirstRaycast = nearestFirst;
   }
 
   @override

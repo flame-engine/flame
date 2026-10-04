@@ -14,6 +14,24 @@ import 'package:meta/meta.dart';
 /// passing in another [Broadphase] to the constructor.
 class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
   B? broadphase,
+
+  /// Whether [raycast] visits the hitboxes from the nearest to the farthest
+  /// and stops as soon as the best hit so far is nearer than the next hitbox,
+  /// instead of calling [ShapeHitbox.rayIntersection] on all of the hitboxes
+  /// that the ray may reach.
+  ///
+  /// The result is the same, except for the choice between hitboxes hit at
+  /// exactly the same distance, but it saves work when many hitboxes have an
+  /// expensive [ShapeHitbox.rayIntersection], like polygons or paths. This is
+  /// off by default while it is being evaluated.
+  ///
+  /// It is slower only when the ray crosses the boxes of many hitboxes whose
+  /// [ShapeHitbox.rayIntersection] returns `null` without doing any work, as
+  /// it has to sort them for nothing. Hitboxes that rays should go through,
+  /// like trigger zones, are better left out with the `hitboxFilter` of
+  /// [raycast], which skips them before any work, than with a
+  /// [ShapeHitbox.rayIntersection] that always returns `null`.
+  @experimental var bool nearestFirstRaycast = false,
 }) extends CollisionDetection<ShapeHitbox, B> {
   this : super(broadphase: broadphase ?? Sweep<ShapeHitbox>() as B);
 
@@ -70,25 +88,6 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
 
   static final _temporaryRayAabb = Aabb2();
 
-  /// Whether [raycast] visits the hitboxes from the nearest to the farthest
-  /// and stops as soon as the best hit so far is nearer than the next hitbox,
-  /// instead of calling [ShapeHitbox.rayIntersection] on all of the hitboxes
-  /// that the ray may reach.
-  ///
-  /// The result is the same, except for the choice between hitboxes hit at
-  /// exactly the same distance, but it saves work when many hitboxes have an
-  /// expensive [ShapeHitbox.rayIntersection], like polygons or paths. This is
-  /// off by default while it is being evaluated.
-  ///
-  /// It is slower only when the ray crosses the boxes of many hitboxes whose
-  /// [ShapeHitbox.rayIntersection] returns `null` without doing any work, as
-  /// it has to sort them for nothing. Hitboxes that rays should go through,
-  /// like trigger zones, are better left out with the `hitboxFilter` of
-  /// [raycast], which skips them before any work, than with a
-  /// [ShapeHitbox.rayIntersection] that always returns `null`.
-  @experimental
-  static bool nearestFirstRaycast = false;
-
   /// The hitboxes that a ray may reach, ordered by the distance at which the
   /// ray enters their boxes. They are kept between the rays of this instance,
   /// to not allocate for each ray.
@@ -139,10 +138,7 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
     _isCastingNearestFirst = true;
     try {
       for (final item in items) {
-        if (ignoreHitboxes?.contains(item) ?? false) {
-          continue;
-        }
-        if (hitboxFilter != null && !hitboxFilter(item)) {
+        if (!_isCandidate(item, hitboxFilter, ignoreHitboxes)) {
           continue;
         }
         final entry = _entryDistance(ray, item.aabb);
@@ -165,17 +161,7 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
           ray,
           out: _temporaryRaycastResult,
         );
-        final possiblyFirstResult = !(finalResult?.isActive ?? false);
-        if (currentResult != null &&
-            (possiblyFirstResult ||
-                currentResult.distance! < finalResult!.distance!) &&
-            currentResult.distance! <= limit) {
-          if (finalResult == null) {
-            finalResult = currentResult.clone();
-          } else {
-            finalResult.setFrom(currentResult);
-          }
-        }
+        finalResult = _nearer(finalResult, currentResult, limit);
       }
     } finally {
       // Do not keep the hitboxes alive through the candidates, also if one of
@@ -228,15 +214,11 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
     RaycastResult<ShapeHitbox>? out,
   }) {
     var finalResult = out?..reset();
+    final limit = maxDistance ?? double.infinity;
     _updateRayAabb(ray, maxDistance);
     for (final item in items) {
-      if (ignoreHitboxes?.contains(item) ?? false) {
+      if (!_isCandidate(item, hitboxFilter, ignoreHitboxes)) {
         continue;
-      }
-      if (hitboxFilter != null) {
-        if (!hitboxFilter(item)) {
-          continue;
-        }
       }
       if (!item.aabb.intersectsWithAabb2(_temporaryRayAabb)) {
         continue;
@@ -245,19 +227,44 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
         ray,
         out: _temporaryRaycastResult,
       );
-      final possiblyFirstResult = !(finalResult?.isActive ?? false);
-      if (currentResult != null &&
-          (possiblyFirstResult ||
-              currentResult.distance! < finalResult!.distance!) &&
-          currentResult.distance! <= (maxDistance ?? double.infinity)) {
-        if (finalResult == null) {
-          finalResult = currentResult.clone();
-        } else {
-          finalResult.setFrom(currentResult);
-        }
-      }
+      finalResult = _nearer(finalResult, currentResult, limit);
     }
     return (finalResult?.isActive ?? false) ? finalResult : null;
+  }
+
+  /// Whether a ray may hit [hitbox], by the `hitboxFilter` and the
+  /// `ignoreHitboxes` arguments of [raycast].
+  @pragma('vm:prefer-inline')
+  static bool _isCandidate(
+    ShapeHitbox hitbox,
+    bool Function(ShapeHitbox candidate)? hitboxFilter,
+    List<ShapeHitbox>? ignoreHitboxes,
+  ) {
+    if (ignoreHitboxes?.contains(hitbox) ?? false) {
+      return false;
+    }
+    return hitboxFilter == null || hitboxFilter(hitbox);
+  }
+
+  /// The nearer of [best], the best hit so far, and [current], a hit that is
+  /// only taken when it is not farther than [maxDistance]. It is written into
+  /// [best] when there is one, and otherwise cloned, as [current] is reused.
+  @pragma('vm:prefer-inline')
+  static RaycastResult<ShapeHitbox>? _nearer(
+    RaycastResult<ShapeHitbox>? best,
+    RaycastResult<ShapeHitbox>? current,
+    double maxDistance,
+  ) {
+    if (current == null || current.distance! > maxDistance) {
+      return best;
+    }
+    if (best == null) {
+      return current.clone();
+    }
+    if (!best.isActive || current.distance! < best.distance!) {
+      best.setFrom(current);
+    }
+    return best;
   }
 
   @override

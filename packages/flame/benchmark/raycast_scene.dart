@@ -79,8 +79,9 @@ class RaycastScenery {
   final List<PositionComponent> components;
   final List<Ray2> rays;
 
-  CollisionDetection<ShapeHitbox, Broadphase<ShapeHitbox>> get detection =>
-      game.world.collisionDetection;
+  StandardCollisionDetection<Broadphase<ShapeHitbox>> get detection =>
+      game.world.collisionDetection
+          as StandardCollisionDetection<Broadphase<ShapeHitbox>>;
 
   static Future<RaycastScenery> create({
     required HitboxKind kind,

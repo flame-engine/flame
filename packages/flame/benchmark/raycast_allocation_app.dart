@@ -69,7 +69,7 @@ Future<developer.ServiceExtensionResponse> _handle(
   final detection = scenery.detection;
   final result = RaycastResult<ShapeHitbox>();
   final sceneRays = scenery.rays;
-  StandardCollisionDetection.nearestFirstRaycast = nearestFirst;
+  detection.nearestFirstRaycast = nearestFirst;
   var hits = 0;
   final watch = Stopwatch()..start();
   for (var i = 0; i < rays; i++) {
@@ -79,7 +79,7 @@ Future<developer.ServiceExtensionResponse> _handle(
     }
   }
   final micros = watch.elapsedMicroseconds;
-  StandardCollisionDetection.nearestFirstRaycast = false;
+  detection.nearestFirstRaycast = false;
   return developer.ServiceExtensionResponse.result(
     jsonEncode({
       'hits': hits,
