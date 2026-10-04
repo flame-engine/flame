@@ -46,12 +46,6 @@ class Component3D({
   super.priority,
   super.key,
 }) extends PositionComponent {
-  /// Creates a [Component3D].
-  ///
-  /// A new empty [Scene] is created on first use when [scene] is omitted, and
-  /// a default [PerspectiveCamera] is used when [camera] is omitted.
-  this;
-
   /// The scene that is rendered by this component.
   ///
   /// Created on first access when no scene was passed to the constructor.
