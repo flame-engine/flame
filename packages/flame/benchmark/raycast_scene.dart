@@ -263,30 +263,8 @@ class _StubHitbox extends RectangleHitbox {
       out?.reset();
       return null;
     }
-    final box = aabb;
-    var entry = 0.0;
-    var exit = double.infinity;
-    if (ray.direction.x == 0) {
-      if (ray.origin.x < box.min.x || ray.origin.x > box.max.x) {
-        return null;
-      }
-    } else {
-      final a = (box.min.x - ray.origin.x) / ray.direction.x;
-      final b = (box.max.x - ray.origin.x) / ray.direction.x;
-      entry = max(entry, min(a, b));
-      exit = min(exit, max(a, b));
-    }
-    if (ray.direction.y == 0) {
-      if (ray.origin.y < box.min.y || ray.origin.y > box.max.y) {
-        return null;
-      }
-    } else {
-      final a = (box.min.y - ray.origin.y) / ray.direction.y;
-      final b = (box.max.y - ray.origin.y) / ray.direction.y;
-      entry = max(entry, min(a, b));
-      exit = min(exit, max(a, b));
-    }
-    if (entry > exit) {
+    final entry = ray.entryDistanceToAabb2(aabb);
+    if (entry < 0) {
       return null;
     }
     return out!..setWith(

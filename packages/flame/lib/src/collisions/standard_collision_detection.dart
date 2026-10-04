@@ -141,7 +141,7 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
         if (!_isCandidate(item, hitboxFilter, ignoreHitboxes)) {
           continue;
         }
-        final entry = _entryDistance(ray, item.aabb);
+        final entry = ray.entryDistanceToAabb2(item.aabb);
         if (entry < 0 || entry > limit) {
           continue;
         }
@@ -172,38 +172,6 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
       }
     }
     return (finalResult?.isActive ?? false) ? finalResult : null;
-  }
-
-  /// The distance along the [ray] at which it enters [box], or 0 if it starts
-  /// inside of it, or -1 if it does not reach it. It does not return a
-  /// nullable double for that, as it would be allocated for every hitbox.
-  @pragma('vm:prefer-inline')
-  static double _entryDistance(Ray2 ray, Aabb2 box) {
-    var entry = 0.0;
-    var exit = double.infinity;
-    final origin = ray.origin;
-    final direction = ray.direction;
-    if (direction.x == 0) {
-      if (origin.x < box.min.x || origin.x > box.max.x) {
-        return -1;
-      }
-    } else {
-      final a = (box.min.x - origin.x) / direction.x;
-      final b = (box.max.x - origin.x) / direction.x;
-      entry = math.max(entry, math.min(a, b));
-      exit = math.min(exit, math.max(a, b));
-    }
-    if (direction.y == 0) {
-      if (origin.y < box.min.y || origin.y > box.max.y) {
-        return -1;
-      }
-    } else {
-      final a = (box.min.y - origin.y) / direction.y;
-      final b = (box.max.y - origin.y) / direction.y;
-      entry = math.max(entry, math.min(a, b));
-      exit = math.min(exit, math.max(a, b));
-    }
-    return entry <= exit ? entry : -1;
   }
 
   RaycastResult<ShapeHitbox>? _raycastAll(
