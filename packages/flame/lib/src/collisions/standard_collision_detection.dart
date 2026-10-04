@@ -98,6 +98,11 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
   /// [ShapeHitbox.rayIntersection], does not take over its [_candidates].
   bool _isCastingNearestFirst = false;
 
+  /// The number of hitboxes that are still referenced by the candidates of
+  /// the last nearest first [raycast], which is 0 once it has returned.
+  @visibleForTesting
+  int get retainedRaycastCandidates => _candidates.retained;
+
   @override
   RaycastResult<ShapeHitbox>? raycast(
     Ray2 ray, {

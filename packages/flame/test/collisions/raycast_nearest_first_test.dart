@@ -248,24 +248,42 @@ void main() {
     testCollisionDetectionGame('does not keep hitboxes after a ray', (
       game,
     ) async {
-      final hitbox = RectangleHitbox(
+      final near = RectangleHitbox(
         position: Vector2(100, 0),
         size: Vector2.all(100),
       );
-      _addAll(game, [hitbox]);
+      final far = RectangleHitbox(
+        position: Vector2(300, 0),
+        size: Vector2.all(100),
+      );
+      _addAll(game, [near, far]);
       await game.ready();
-      _detection(game).nearestFirstRaycast = true;
+      final detection = _detection(game)..nearestFirstRaycast = true;
       final ray = Ray2(origin: Vector2(0, 50), direction: Vector2(1, 0));
-      expect(game.collisionDetection.raycast(ray), isNotNull);
-      // Even if a callback throws, a later ray works.
+      // The far hitbox is never tested, as the near hit is nearer than its
+      // box, so it has to be dropped without being taken out.
+      expect(detection.raycast(ray)!.hitbox, same(near));
+      expect(detection.retainedRaycastCandidates, 0);
+      // Even if a callback throws, the hitboxes already gathered are dropped
+      // and a later ray works.
+      var filtered = 0;
       expect(
-        () => game.collisionDetection.raycast(
+        () => detection.raycast(
           ray,
-          hitboxFilter: (_) => throw StateError('callback'),
+          hitboxFilter: (_) {
+            if (filtered++ == 1) {
+              expect(detection.retainedRaycastCandidates, 1);
+              throw StateError('callback');
+            }
+            return true;
+          },
         ),
         throwsStateError,
       );
-      expect(game.collisionDetection.raycast(ray)!.hitbox, same(hitbox));
+      expect(filtered, 2);
+      expect(detection.retainedRaycastCandidates, 0);
+      expect(detection.raycast(ray)!.hitbox, same(near));
+      expect(detection.retainedRaycastCandidates, 0);
     });
 
     testCollisionDetectionGame('casts rays from inside of a hitbox filter', (
