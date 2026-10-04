@@ -132,18 +132,21 @@ void main() {
     });
 
     group('collect', () {
-      test('disposes images that are not retained once the grace period passed', () async {
-        final cache = Images();
-        cache.add('a', await generateImage(2, 2));
-        cache.add('b', await generateImage(3, 3));
+      test(
+        'disposes images that are not retained once the grace period passed',
+        () async {
+          final cache = Images();
+          cache.add('a', await generateImage(2, 2));
+          cache.add('b', await generateImage(3, 3));
 
-        final freed = later(const Duration(seconds: 10), cache.collect);
+          final freed = later(const Duration(seconds: 10), cache.collect);
 
-        expect(freed, 16 + 36);
-        expect(cache.containsKey('a'), isFalse);
-        expect(cache.containsKey('b'), isFalse);
-        expect(cache.sizeBytes, 0);
-      });
+          expect(freed, 16 + 36);
+          expect(cache.containsKey('a'), isFalse);
+          expect(cache.containsKey('b'), isFalse);
+          expect(cache.sizeBytes, 0);
+        },
+      );
 
       test('keeps images that were used within the grace period', () async {
         final cache = Images();

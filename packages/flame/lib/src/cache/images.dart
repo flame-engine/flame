@@ -286,7 +286,8 @@ class Images({AssetBundle? bundle, int? maxSizeBytes}) {
     final imagePaths = manifest.listAssets().where((path) {
       return path.startsWith(directory) && path.toLowerCase().contains(pattern);
     });
-    return loadAll(imagePaths.toList());
+    final images = await loadAll(imagePaths.toList());
+    return images;
   }
 
   /// Whether the cache contains the specified [key] or not.
@@ -339,7 +340,8 @@ class Images({AssetBundle? bundle, int? maxSizeBytes}) {
   Future<Image> _fetchToMemory(String path) async {
     final data = await bundle.load(path);
     final bytes = Uint8List.view(data.buffer);
-    return decodeImageFromList(bytes);
+    final image = await decodeImageFromList(bytes);
+    return image;
   }
 
   /// Whether [asset] is the entry that the cache currently holds for its key.
