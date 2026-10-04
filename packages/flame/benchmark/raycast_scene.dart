@@ -40,8 +40,9 @@ enum HitboxKind {
   stubHit,
 
   /// Circles placed so that the rays cross their boxes but miss them, which
-  /// is the cheapest miss of a built-in hitbox. The rays and the circles do
-  /// not depend on the [RaycastScene].
+  /// is the cheapest miss of a built-in hitbox, so the ordering of the
+  /// candidates is most of the work. The rays and the circles do not depend
+  /// on the [RaycastScene].
   circlesMiss;
 
   /// The kinds that are real shapes.
@@ -71,7 +72,7 @@ class RaycastWorld extends World with HasCollisionDetection {}
 
 /// A scene of hitboxes in a [RaycastGame], and rays to cast against it. The
 /// scene and the rays only depend on the arguments, so the same scene can be
-/// built to compare ways to cast rays.
+/// built again to compare runs.
 class RaycastScenery {
   RaycastScenery._(this.game, this.components, this.rays);
 

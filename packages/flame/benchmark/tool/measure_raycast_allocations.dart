@@ -8,9 +8,8 @@ import 'dart:math';
 import 'package:vm_service/vm_service.dart';
 import 'package:vm_service/vm_service_io.dart';
 
-/// Measures what `StandardCollisionDetection.raycast` allocates with the old
-/// code path and with the nearest first one (`nearestFirstRaycast`), and how
-/// long it takes, in AOT code, with no manual steps.
+/// Measures what `StandardCollisionDetection.raycast` allocates, and how long
+/// it takes, in AOT code, with no manual steps.
 ///
 /// It runs `benchmark/raycast_allocation_app.dart` in a profile build, with
 /// `flutter run --machine`, connects to its VM service, and for each case asks
@@ -30,7 +29,7 @@ import 'package:vm_service/vm_service_io.dart';
 /// Options:
 ///
 ///     --device=macos       The device to run on. It needs to be a desktop one.
-///     --repetitions=3      The timings of each code path in each case.
+///     --repetitions=3      The timings of each case.
 ///     --seconds=2          The time that each timing should take.
 ///     --trace-rays=20000   The rays that the allocations are counted for.
 ///     --classes=a,b        More classes to count, by name.
@@ -38,24 +37,23 @@ import 'package:vm_service/vm_service_io.dart';
 ///     --csv=path           Also write the results to a CSV file.
 ///     --trace=_List,_Double
 ///                          Instead of measuring, show the stacks that
-///                          allocate objects of these classes, with each code
-///                          path.
+///                          allocate objects of these classes.
 ///
-/// The first measurements need a profile build, which takes minutes.
+/// The first measurements need a profile build, which takes minutes. To
+/// compare a change, run it on both branches.
 Future<void> main(List<String> arguments) async {
   final options = _Options(arguments);
   final cases = [
     // Rectangles that do not allocate in rayIntersection, to see what the
     // code that casts the rays allocates, with a few to many hitboxes. The
-    // misses are the worst case for the nearest first one, as it never stops
-    // early, and the hits the best.
+    // misses are the worst case, as the search never stops early, and the
+    // hits the best.
     for (final kind in ['stubMiss', 'stubHit']) ...[
       for (final count in [1, 5, 100, 500, 1000]) _Case(kind, 'spread', count),
       for (final count in [5, 10, 20, 50, 100]) _Case(kind, 'dense', count),
     ],
     // Circles whose boxes the rays cross without hitting them, the cheapest
-    // miss of a built-in hitbox, where the nearest first one stops early the
-    // least.
+    // miss of a built-in hitbox, where the search stops early the least.
     for (final count in [5, 10, 20, 50, 100])
       _Case('circlesMiss', 'dense', count),
     // Real hitboxes, to see the allocations of everything that a ray does.
@@ -75,16 +73,11 @@ Future<void> main(List<String> arguments) async {
       'case',
       'timing_rays',
       'trace_rays',
-      'old_objects_per_ray',
-      'new_objects_per_ray',
-      'old_microseconds_per_ray',
-      'new_microseconds_per_ray',
-      'old_microseconds_min',
-      'old_microseconds_max',
-      'new_microseconds_min',
-      'new_microseconds_max',
-      'old_classes',
-      'new_classes',
+      'objects_per_ray',
+      'microseconds_per_ray',
+      'microseconds_min',
+      'microseconds_max',
+      'classes',
     ].join(','),
   ];
   try {
@@ -96,7 +89,7 @@ Future<void> main(List<String> arguments) async {
     stdout
       ..writeln()
       ..writeln(
-        'Raycast, old code path vs nearest first, in ${app.description}.\n'
+        'Raycast in ${app.description}.\n'
         'objects/ray: exact, from tracing the allocations of ${app.traced} '
         'classes in ${options.traceRays} rays, without what the VM service '
         'allocates itself. microseconds/ray: median (fastest-slowest) of '
@@ -106,11 +99,9 @@ Future<void> main(List<String> arguments) async {
       ..writeln(
         _row([
           'case',
-          'old objects/ray',
-          'new objects/ray',
-          'old microseconds/ray',
-          'new microseconds/ray',
-          'objects/ray of each class: old | new',
+          'objects/ray',
+          'microseconds/ray',
+          'objects/ray of each class',
         ]),
       );
     for (final testCase in cases) {
@@ -176,7 +167,7 @@ const _defaultClasses = [
 const _noiseFloor = 0.02;
 
 String _row(List<String> columns) {
-  const widths = [22, 17, 17, 25, 25, 0];
+  const widths = [22, 13, 25, 0];
   return [
     for (var i = 0; i < columns.length; i++) columns[i].padRight(widths[i]),
   ].join();
@@ -266,55 +257,47 @@ class _CaseResult {
     required this.testCase,
     required this.traceRays,
     required this.timingRays,
-    required this.oldCounts,
-    required this.newCounts,
-    required this.oldMicros,
-    required this.newMicros,
-    required this.oldRange,
-    required this.newRange,
+    required this.counts,
+    required this.micros,
+    required this.range,
     required this.truncated,
   });
 
   final _Case testCase;
   final int traceRays;
   final int timingRays;
-  final Map<String, int> oldCounts;
-  final Map<String, int> newCounts;
+  final Map<String, int> counts;
 
   /// The microseconds per ray.
-  final double oldMicros;
-  final double newMicros;
+  final double micros;
 
   /// The fastest and the slowest of the timings, in microseconds per ray.
-  final (double, double) oldRange;
-  final (double, double) newRange;
+  final (double, double) range;
 
   /// Whether the VM may have dropped allocation samples.
   final bool truncated;
 
-  double _objects(Map<String, int> counts) =>
+  double get _objects =>
       counts.values.fold(0, (sum, count) => sum + count) / traceRays;
 
-  static String _timing(double median, (double, double) range) {
+  String get _timing {
     final (fastest, slowest) = range;
-    final digits = [median, fastest, slowest].map((m) => m.toStringAsFixed(2));
+    final digits = [micros, fastest, slowest].map((m) => m.toStringAsFixed(2));
     final [m, f, s] = digits.toList();
     return '$m ($f-$s)';
   }
 
   String row() => _row([
     testCase.id,
-    _objects(oldCounts).toStringAsFixed(3),
-    _objects(newCounts).toStringAsFixed(3),
-    _timing(oldMicros, oldRange),
-    _timing(newMicros, newRange),
+    _objects.toStringAsFixed(3),
+    _timing,
     [
-      '${_top(oldCounts, traceRays)} | ${_top(newCounts, traceRays)}',
+      _top(counts, traceRays),
       if (truncated) '(TRUNCATED: some allocations were not recorded)',
     ].join('  '),
   ]);
 
-  String _classes(Map<String, int> counts) => counts.entries
+  String get _classes => counts.entries
       .where((e) => e.value / traceRays >= _noiseFloor)
       .map((e) => '${e.key}:${(e.value / traceRays).toStringAsFixed(4)}')
       .join(';');
@@ -323,16 +306,11 @@ class _CaseResult {
     testCase.id,
     timingRays,
     traceRays,
-    _objects(oldCounts).toStringAsFixed(4),
-    _objects(newCounts).toStringAsFixed(4),
-    oldMicros.toStringAsFixed(3),
-    newMicros.toStringAsFixed(3),
-    oldRange.$1.toStringAsFixed(3),
-    oldRange.$2.toStringAsFixed(3),
-    newRange.$1.toStringAsFixed(3),
-    newRange.$2.toStringAsFixed(3),
-    _classes(oldCounts),
-    _classes(newCounts),
+    _objects.toStringAsFixed(4),
+    micros.toStringAsFixed(3),
+    range.$1.toStringAsFixed(3),
+    range.$2.toStringAsFixed(3),
+    _classes,
   ].join(',');
 }
 
@@ -341,86 +319,49 @@ Future<_CaseResult> _measureCase(
   _Case testCase,
   _Options options,
 ) async {
-  Future<Map<String, dynamic>> cast(int rays, {required bool nearestFirst}) {
+  Future<Map<String, dynamic>> cast(int rays) {
     return app.cast(
       kind: testCase.kind,
       scene: testCase.scene,
       count: testCase.count,
       rays: rays,
-      nearestFirst: nearestFirst,
     );
   }
 
   // Builds the scene, warms up and finds out how many rays take some seconds.
-  await cast(0, nearestFirst: false);
-  await cast(20000, nearestFirst: false);
-  await cast(20000, nearestFirst: true);
-  final calibration = await cast(20000, nearestFirst: false);
+  await cast(0);
+  await cast(20000);
+  final calibration = await cast(20000);
   final microsPerRay = (calibration['micros'] as int) / 20000;
   final timingRays = (options.seconds * 1e6 / max(microsPerRay, 0.01))
       .clamp(20000, 5000000)
       .round();
 
-  // The time, with no tracing. The code paths take turns.
-  final oldMicros = <int>[];
-  final newMicros = <int>[];
+  // The time, with no tracing.
+  final micros = <int>[];
   for (var repetition = 0; repetition < options.repetitions; repetition++) {
-    oldMicros.add(
-      (await cast(timingRays, nearestFirst: false))['micros'] as int,
-    );
-    newMicros.add(
-      (await cast(timingRays, nearestFirst: true))['micros'] as int,
-    );
+    micros.add((await cast(timingRays))['micros'] as int);
   }
 
   // The objects allocated, with tracing, and with no rays as the control.
-  var truncated = false;
-  Future<Map<String, int>> count({
-    required int rays,
-    required bool nearestFirst,
-  }) async {
-    final counted = await app.countAllocations(
-      rays,
-      (chunk) => cast(chunk, nearestFirst: nearestFirst),
-    );
-    truncated |= counted.truncated;
-    return counted.counts;
-  }
-
-  final controlLong = await app.countAllocations(
+  final control = await app.countAllocations(
     options.traceRays,
-    (chunk) => cast(0, nearestFirst: false),
+    (chunk) => cast(0),
   );
-  final oldCounts = _minus(
-    await count(rays: options.traceRays, nearestFirst: false),
-    controlLong.counts,
-  );
-  final newCounts = _minus(
-    await count(rays: options.traceRays, nearestFirst: true),
-    controlLong.counts,
-  );
+  final counted = await app.countAllocations(options.traceRays, cast);
   return _CaseResult(
     testCase: testCase,
     traceRays: options.traceRays,
     timingRays: timingRays,
-    oldCounts: oldCounts,
-    newCounts: newCounts,
-    oldMicros: _median(oldMicros) / timingRays,
-    newMicros: _median(newMicros) / timingRays,
-    oldRange: (
-      oldMicros.reduce(min) / timingRays,
-      oldMicros.reduce(max) / timingRays,
-    ),
-    newRange: (
-      newMicros.reduce(min) / timingRays,
-      newMicros.reduce(max) / timingRays,
-    ),
-    truncated: truncated,
+    counts: _minus(counted.counts, control.counts),
+    micros: _median(micros) / timingRays,
+    range: (micros.reduce(min) / timingRays, micros.reduce(max) / timingRays),
+    truncated: counted.truncated || control.truncated,
   );
 }
 
 /// Shows which stacks allocate the objects of the classes in `--trace`, for
-/// each case and code path, to find out where the allocations come from.
+/// each case, to find out where the allocations come from.
 Future<void> _traceCases(
   _App app,
   List<_Case> cases,
@@ -428,38 +369,31 @@ Future<void> _traceCases(
 ) async {
   const rays = 20000;
   for (final testCase in cases) {
-    Future<Map<String, dynamic>> cast(int count, {required bool nearestFirst}) {
+    Future<Map<String, dynamic>> cast(int count) {
       return app.cast(
         kind: testCase.kind,
         scene: testCase.scene,
         count: testCase.count,
         rays: count,
-        nearestFirst: nearestFirst,
       );
     }
 
-    await cast(0, nearestFirst: false);
-    await cast(rays, nearestFirst: false);
-    await cast(rays, nearestFirst: true);
+    await cast(0);
+    await cast(rays);
     for (final className in options.trace.split(',')) {
-      for (final (label, nearestFirst) in [('old', false), ('new', true)]) {
-        final stacks = await app.traceAllocations(
-          className,
-          () => cast(rays, nearestFirst: nearestFirst),
-        );
-        final counts = <String, int>{};
-        for (final stack in stacks) {
-          counts[stack] = (counts[stack] ?? 0) + 1;
-        }
-        final sorted = counts.entries.toList()
-          ..sort((a, b) => b.value.compareTo(a.value));
-        stdout.writeln(
-          '\n${testCase.id} $label $className: ${stacks.length} allocations '
-          'in $rays rays, ${sorted.length} different stacks',
-        );
-        for (final entry in sorted.take(5)) {
-          stdout.writeln('  ${entry.value}x ${entry.key}');
-        }
+      final stacks = await app.traceAllocations(className, () => cast(rays));
+      final counts = <String, int>{};
+      for (final stack in stacks) {
+        counts[stack] = (counts[stack] ?? 0) + 1;
+      }
+      final sorted = counts.entries.toList()
+        ..sort((a, b) => b.value.compareTo(a.value));
+      stdout.writeln(
+        '\n${testCase.id} $className: ${stacks.length} allocations '
+        'in $rays rays, ${sorted.length} different stacks',
+      );
+      for (final entry in sorted.take(5)) {
+        stdout.writeln('  ${entry.value}x ${entry.key}');
       }
     }
   }
@@ -573,7 +507,6 @@ class _App {
       scene: 'spread',
       count: 1,
       rays: 1,
-      nearestFirst: false,
     );
     if (check['profileMode'] != true) {
       throw StateError('The app is not a profile build: $check');
@@ -601,7 +534,6 @@ class _App {
     required String scene,
     required int count,
     required int rays,
-    required bool nearestFirst,
   }) async {
     final response = await _service!.callServiceExtension(
       'ext.flame.raycast',
@@ -611,7 +543,6 @@ class _App {
         'scene': scene,
         'count': '$count',
         'rays': '$rays',
-        'nearestFirst': '$nearestFirst',
       },
     );
     return response.json!;

@@ -14,24 +14,6 @@ import 'package:meta/meta.dart';
 /// passing in another [Broadphase] to the constructor.
 class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
   B? broadphase,
-
-  /// Whether [raycast] visits the hitboxes from the nearest to the farthest
-  /// and stops as soon as the best hit so far is nearer than the next hitbox,
-  /// instead of calling [ShapeHitbox.rayIntersection] on all of the hitboxes
-  /// that the ray may reach.
-  ///
-  /// The result is the same, except for the choice between hitboxes hit at
-  /// exactly the same distance, but it saves work when many hitboxes have an
-  /// expensive [ShapeHitbox.rayIntersection], like polygons or paths. This is
-  /// off by default while it is being evaluated.
-  ///
-  /// It is slower only when the ray crosses the boxes of many hitboxes whose
-  /// [ShapeHitbox.rayIntersection] returns `null` without doing any work, as
-  /// it has to sort them for nothing. Hitboxes that rays should go through,
-  /// like trigger zones, are better left out with the `hitboxFilter` of
-  /// [raycast], which skips them before any work, than with a
-  /// [ShapeHitbox.rayIntersection] that always returns `null`.
-  @experimental var bool nearestFirstRaycast = false,
 }) extends CollisionDetection<ShapeHitbox, B> {
   this : super(broadphase: broadphase ?? Sweep<ShapeHitbox>() as B);
 
@@ -86,23 +68,34 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
 
   static final _temporaryRaycastResult = RaycastResult<ShapeHitbox>();
 
-  static final _temporaryRayAabb = Aabb2();
-
   /// The hitboxes that a ray may reach, ordered by the distance at which the
   /// ray enters their boxes. They are kept between the rays of this instance,
   /// to not allocate for each ray.
   final _candidates = _RaycastCandidates();
 
-  /// Whether a nearest first raycast of this instance is running, so that one
-  /// started from inside of it, by a hitbox filter or by a
+  /// Whether a [raycast] of this instance is running, so that one started
+  /// from inside of it, by a hitbox filter or by a
   /// [ShapeHitbox.rayIntersection], does not take over its [_candidates].
-  bool _isCastingNearestFirst = false;
+  bool _isCasting = false;
 
   /// The number of hitboxes that are still referenced by the candidates of
-  /// the last nearest first [raycast], which is 0 once it has returned.
+  /// the last [raycast], which is 0 once it has returned.
   @visibleForTesting
   int get retainedRaycastCandidates => _candidates.retained;
 
+  /// Casts the [ray] and returns the nearest hit, if any.
+  ///
+  /// The hitboxes are visited from the nearest to the farthest, by the point
+  /// where the ray enters their bounding boxes, and the search stops as soon
+  /// as the best hit so far is nearer than the next hitbox, so that most
+  /// hitboxes never have their [ShapeHitbox.rayIntersection] called. Between
+  /// hitboxes hit at exactly the same distance, the one whose box is entered
+  /// first wins.
+  ///
+  /// Hitboxes that rays should go through, like trigger zones, are best left
+  /// out with [hitboxFilter], which skips them before any work, rather than
+  /// with a [ShapeHitbox.rayIntersection] that always returns `null`, as such
+  /// hitboxes still have to be ordered.
   @override
   RaycastResult<ShapeHitbox>? raycast(
     Ray2 ray, {
@@ -111,36 +104,11 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
     List<ShapeHitbox>? ignoreHitboxes,
     RaycastResult<ShapeHitbox>? out,
   }) {
-    if (nearestFirstRaycast) {
-      return _raycastNearestFirst(
-        ray,
-        maxDistance: maxDistance,
-        hitboxFilter: hitboxFilter,
-        ignoreHitboxes: ignoreHitboxes,
-        out: out,
-      );
-    }
-    return _raycastAll(
-      ray,
-      maxDistance: maxDistance,
-      hitboxFilter: hitboxFilter,
-      ignoreHitboxes: ignoreHitboxes,
-      out: out,
-    );
-  }
-
-  RaycastResult<ShapeHitbox>? _raycastNearestFirst(
-    Ray2 ray, {
-    double? maxDistance,
-    bool Function(ShapeHitbox candidate)? hitboxFilter,
-    List<ShapeHitbox>? ignoreHitboxes,
-    RaycastResult<ShapeHitbox>? out,
-  }) {
     var finalResult = out?..reset();
     final limit = maxDistance ?? double.infinity;
-    final isNested = _isCastingNearestFirst;
+    final isNested = _isCasting;
     final candidates = isNested ? _RaycastCandidates() : _candidates;
-    _isCastingNearestFirst = true;
+    _isCasting = true;
     try {
       for (final item in items) {
         if (!_isCandidate(item, hitboxFilter, ignoreHitboxes)) {
@@ -173,34 +141,8 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
       // the callbacks throws.
       candidates.clear();
       if (!isNested) {
-        _isCastingNearestFirst = false;
+        _isCasting = false;
       }
-    }
-    return (finalResult?.isActive ?? false) ? finalResult : null;
-  }
-
-  RaycastResult<ShapeHitbox>? _raycastAll(
-    Ray2 ray, {
-    double? maxDistance,
-    bool Function(ShapeHitbox candidate)? hitboxFilter,
-    List<ShapeHitbox>? ignoreHitboxes,
-    RaycastResult<ShapeHitbox>? out,
-  }) {
-    var finalResult = out?..reset();
-    final limit = maxDistance ?? double.infinity;
-    _updateRayAabb(ray, maxDistance);
-    for (final item in items) {
-      if (!_isCandidate(item, hitboxFilter, ignoreHitboxes)) {
-        continue;
-      }
-      if (!item.aabb.intersectsWithAabb2(_temporaryRayAabb)) {
-        continue;
-      }
-      final currentResult = item.rayIntersection(
-        ray,
-        out: _temporaryRaycastResult,
-      );
-      finalResult = _nearer(finalResult, currentResult, limit);
     }
     return (finalResult?.isActive ?? false) ? finalResult : null;
   }
@@ -327,31 +269,6 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
         break;
       }
     }
-  }
-
-  /// Computes an axis-aligned bounding box for a [ray].
-  ///
-  /// When [maxDistance] is provided, this will be the bounding box around
-  /// the origin of the ray and its ending point. When [maxDistance]
-  /// is `null`, the bounding box will encompass the whole quadrant
-  /// of space, from the ray's origin to infinity.
-  void _updateRayAabb(Ray2 ray, double? maxDistance) {
-    final x1 = ray.origin.x;
-    final y1 = ray.origin.y;
-    double x2;
-    double y2;
-
-    if (maxDistance != null) {
-      x2 = ray.origin.x + ray.direction.x * maxDistance;
-      y2 = ray.origin.y + ray.direction.y * maxDistance;
-    } else {
-      x2 = ray.direction.x > 0 ? double.infinity : double.negativeInfinity;
-      y2 = ray.direction.y > 0 ? double.infinity : double.negativeInfinity;
-    }
-
-    _temporaryRayAabb
-      ..min.setValues(math.min(x1, x2), math.min(y1, y2))
-      ..max.setValues(math.max(x1, x2), math.max(y1, y2));
   }
 }
 

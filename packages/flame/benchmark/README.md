@@ -42,11 +42,10 @@ the benchmark results are printed above it.
 
 ## Measuring allocations
 
-The time per ray does not tell how much a code path allocates, and the
-allocations of AOT code differ from the ones of `flutter test`. The tool
-`tool/measure_raycast_allocations.dart` measures what `raycast` allocates with
-the old code path and with `nearestFirstRaycast`, in a profile build, with no
-manual steps:
+The time per ray does not tell how much is allocated, and the allocations of
+AOT code differ from the ones of `flutter test`. The tool
+`tool/measure_raycast_allocations.dart` measures what `raycast` allocates, in a
+profile build, with no manual steps:
 
 ```console
 dart run benchmark/tool/measure_raycast_allocations.dart
@@ -60,7 +59,7 @@ counted by tracing the allocations of the classes that a raycast allocates,
 and the time per ray is measured by the app without tracing. The options of
 the tool, like the device, the number of timings and a filter on the cases,
 are documented at the top of the file. The first run makes a profile build,
-which takes minutes.
+which takes minutes. To compare a change, run it on both branches.
 
 
 ## Suites
@@ -104,19 +103,17 @@ which takes minutes.
 - `ray_intersection_benchmark.dart`: `rayIntersection` on polygon hitboxes
   that are sampled from a concave and from a convex `Path` contour, with one
   precomputed ray for each hitbox in every tick.
-- `raycast_benchmark.dart`: `raycast` in a static scene of simple, polygon,
-  path and mixed hitboxes, comparing the old code path with
-  `StandardCollisionDetection.nearestFirstRaycast`, and printing the time per
-  ray, the speedup and whether both find the same hits.
+- `raycast_benchmark.dart`: `raycast` in a static and in a rotating scene of
+  simple, polygon, path and mixed hitboxes, printing the time per ray.
   `raycast_benchmark_app.dart` runs it in a profile or release build.
 - `raycast_allocation_app.dart`: not a suite, but the app that
   `tool/measure_raycast_allocations.dart` runs in a profile build to count
-  the allocations of `raycast` with both code paths, see "Measuring
-  allocations" above. It only registers a service extension that casts rays
-  against a scene from `raycast_scene.dart`.
+  the allocations of `raycast`, see "Measuring allocations" above. It only
+  registers a service extension that casts rays against a scene from
+  `raycast_scene.dart`.
 - `tool/measure_raycast_allocations.dart`: the tool that drives that app and
-  prints the objects and the time per ray of each code path for each case,
-  and can also show which stacks allocate the objects of a class.
+  prints the objects and the time per ray for each case, and can also show
+  which stacks allocate the objects of a class.
 - `transform2d_benchmark.dart`: the `Transform2D` hot paths: matrix
   recalculation after position and angle changes, point conversion, matrix
   assignment, and copying transforms.

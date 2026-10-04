@@ -1,7 +1,5 @@
 // ignore_for_file: use_primary_constructors
 
-import 'dart:typed_data';
-
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:flame/collisions.dart';
 
@@ -16,42 +14,35 @@ const _phases = 8;
 const _phaseAngle = 0.05;
 
 /// Benchmarks [CollisionDetection.raycast] in a scene of [count] hitboxes of
-/// the given [kind], with the old code path or the one that visits the
-/// hitboxes from the nearest to the farthest, depending on [nearestFirst].
-/// Each run casts the same [_raysPerRun] rays.
+/// the given [kind]. Each run casts the same [_raysPerRun] rays.
 ///
 /// If [rotate] is true, every run starts by turning all of the components to
 /// the next of [_phases] rotations, so the bounding boxes and vertices of the
 /// hitboxes are computed again, like in a game where things rotate. The cost
-/// of that is in the time of both code paths. The rotations repeat, so that
-/// both code paths find the same hits in the same phase of the scene.
+/// of that is in the time.
 class RaycastBenchmark extends AsyncBenchmarkBase {
   RaycastBenchmark({
     required this.kind,
     required this.count,
-    required this.nearestFirst,
     this.rotate = false,
   }) : super('Raycast ${kind.name} x$count');
 
   final HitboxKind kind;
   final int count;
-  final bool nearestFirst;
   final bool rotate;
 
   late final RaycastScenery _scenery;
   late final List<double> _baseAngles;
   final _result = RaycastResult<ShapeHitbox>();
   var _phase = 0;
-  final _distancesByPhase = List<Float64List?>.filled(_phases, null);
+  var _hits = 0;
 
   @override
   Future<void> setup() async {
-    // The same scene and rays for both code paths.
     _scenery = await RaycastScenery.create(kind: kind, count: count);
     _baseAngles = [
       for (final component in _scenery.components) component.angle,
     ];
-    _scenery.detection.nearestFirstRaycast = nearestFirst;
   }
 
   @override
@@ -63,73 +54,44 @@ class RaycastBenchmark extends AsyncBenchmarkBase {
         _scenery.components[i].angle = _baseAngles[i] + _phase * _phaseAngle;
       }
     }
-    final distances = _distancesByPhase[_phase] ??= Float64List(_raysPerRun);
-    final rays = _scenery.rays;
-    for (var i = 0; i < _raysPerRun; i++) {
-      final hit = detection.raycast(rays[i], out: _result);
-      distances[i] = hit == null ? -1 : hit.distance!;
+    var hits = 0;
+    for (final ray in _scenery.rays) {
+      if (detection.raycast(ray, out: _result) != null) {
+        hits++;
+      }
     }
+    _hits = hits;
   }
 
-  /// The distance at which each ray hit something in each phase of the scene,
-  /// or -1 where it hit nothing, to keep the work from being optimized away
-  /// and to check that both code paths find the same hits. It is null for the
-  /// phases that did not run.
-  List<Float64List?> get distancesByPhase => _distancesByPhase;
+  /// The number of rays that hit something in the last run, to keep the work
+  /// from being optimized away.
+  int get hits => _hits;
 }
 
-/// Runs the benchmark for the old and the new code path in all the cases, and
-/// prints a table with the time per ray and the speedup.
+/// Runs the benchmark in all the cases, and prints a table with the time per
+/// ray.
 Future<void> main() async {
   const counts = [100, 200, 500];
   // ignore: avoid_print
-  print('Raycast: old code path vs nearest first ($_raysPerRun rays per run)');
+  print('Raycast ($_raysPerRun rays per run)');
   // ignore: avoid_print
-  print(
-    'kind      hitboxes  rotate  old [microseconds/ray]  new [microseconds/ray]'
-    '  speedup  hits',
-  );
+  print('kind      hitboxes  rotate  microseconds/ray  hits');
   for (final kind in HitboxKind.shapes) {
     for (final count in counts) {
       for (final rotate in [false, true]) {
-        final old = RaycastBenchmark(
+        final benchmark = RaycastBenchmark(
           kind: kind,
           count: count,
-          nearestFirst: false,
           rotate: rotate,
         );
-        final oldMicros = await old.measure();
-        final nearest = RaycastBenchmark(
-          kind: kind,
-          count: count,
-          nearestFirst: true,
-          rotate: rotate,
-        );
-        final newMicros = await nearest.measure();
-        final oldPerRay = oldMicros / _raysPerRun;
-        final newPerRay = newMicros / _raysPerRun;
-        // Compare the hit of every ray in the phases that both code paths ran.
-        var phasesCompared = 0;
-        var same = true;
-        for (var phase = 0; phase < _phases; phase++) {
-          final a = old.distancesByPhase[phase];
-          final b = nearest.distancesByPhase[phase];
-          if (a != null && b != null) {
-            phasesCompared++;
-            for (var i = 0; i < _raysPerRun; i++) {
-              same &= (a[i] - b[i]).abs() <= 1e-9;
-            }
-          }
-        }
+        final micros = await benchmark.measure();
+        final perRay = micros / _raysPerRun;
         // ignore: avoid_print
         print(
           '${kind.name.padRight(10)}${'$count'.padRight(10)}'
           '${(rotate ? 'yes' : 'no').padRight(8)}'
-          '${oldPerRay.toStringAsFixed(2).padRight(24)}'
-          '${newPerRay.toStringAsFixed(2).padRight(24)}'
-          '${'${(oldPerRay / newPerRay).toStringAsFixed(2)}x'.padRight(9)}'
-          '${same && phasesCompared > 0 ? 'same' : 'DIFFERENT'} '
-          '($phasesCompared phases)',
+          '${perRay.toStringAsFixed(2).padRight(18)}'
+          '${benchmark.hits}',
         );
       }
     }

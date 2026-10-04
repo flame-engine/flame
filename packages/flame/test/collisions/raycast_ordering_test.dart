@@ -91,24 +91,55 @@ StandardCollisionDetection<Broadphase<ShapeHitbox>> _detection(
       as StandardCollisionDetection<Broadphase<ShapeHitbox>>;
 }
 
-/// The result of casting the [ray] with the old and the new code path.
-(RaycastResult<ShapeHitbox>?, RaycastResult<ShapeHitbox>?) _both(
-  StandardCollisionDetection<Broadphase<ShapeHitbox>> detection,
+/// The nearest hit of the [ray], found by asking every hitbox, as the
+/// reference for what [StandardCollisionDetection.raycast] should find.
+RaycastResult<ShapeHitbox>? _reference(
+  CollisionDetection<ShapeHitbox, Broadphase<ShapeHitbox>> detection,
   Ray2 ray, {
   double? maxDistance,
   bool Function(ShapeHitbox candidate)? hitboxFilter,
   List<ShapeHitbox>? ignoreHitboxes,
 }) {
-  RaycastResult<ShapeHitbox>? cast() => detection.raycast(
+  RaycastResult<ShapeHitbox>? nearest;
+  for (final hitbox in detection.items) {
+    if (ignoreHitboxes?.contains(hitbox) ?? false) {
+      continue;
+    }
+    if (hitboxFilter != null && !hitboxFilter(hitbox)) {
+      continue;
+    }
+    final result = hitbox.rayIntersection(ray);
+    if (result == null || result.distance! > (maxDistance ?? double.infinity)) {
+      continue;
+    }
+    if (nearest == null || result.distance! < nearest.distance!) {
+      nearest = result;
+    }
+  }
+  return nearest;
+}
+
+/// The result of casting the [ray] by the reference and by [detection].
+(RaycastResult<ShapeHitbox>?, RaycastResult<ShapeHitbox>?) _both(
+  CollisionDetection<ShapeHitbox, Broadphase<ShapeHitbox>> detection,
+  Ray2 ray, {
+  double? maxDistance,
+  bool Function(ShapeHitbox candidate)? hitboxFilter,
+  List<ShapeHitbox>? ignoreHitboxes,
+}) {
+  final expected = _reference(
+    detection,
     ray,
     maxDistance: maxDistance,
     hitboxFilter: hitboxFilter,
     ignoreHitboxes: ignoreHitboxes,
   );
-  detection.nearestFirstRaycast = false;
-  final expected = cast();
-  detection.nearestFirstRaycast = true;
-  final actual = cast();
+  final actual = detection.raycast(
+    ray,
+    maxDistance: maxDistance,
+    hitboxFilter: hitboxFilter,
+    ignoreHitboxes: ignoreHitboxes,
+  );
   return (expected, actual);
 }
 
@@ -137,24 +168,14 @@ void _expectSame(
 }
 
 void main() {
-  group('StandardCollisionDetection.nearestFirstRaycast', () {
-    test('is off by default', () {
-      expect(StandardCollisionDetection().nearestFirstRaycast, isFalse);
-    });
-
-    test('is set by the constructor', () {
-      final detection = StandardCollisionDetection(nearestFirstRaycast: true);
-      expect(detection.nearestFirstRaycast, isTrue);
-    });
-
+  group('StandardCollisionDetection.raycast', () {
     testCollisionDetectionGame('finds nothing in an empty world', (game) async {
       await game.ready();
-      _detection(game).nearestFirstRaycast = true;
       final ray = Ray2(origin: Vector2.zero(), direction: Vector2(1, 0));
       expect(game.collisionDetection.raycast(ray), isNull);
     });
 
-    testCollisionDetectionGame('finds the same hits as the old code', (
+    testCollisionDetectionGame('finds the same hits as asking every hitbox', (
       game,
     ) async {
       final random = Random(1);
@@ -162,7 +183,7 @@ void main() {
       await game.ready();
       var hits = 0;
       for (final ray in _rays(random, 400)) {
-        final (expected, actual) = _both(_detection(game), ray);
+        final (expected, actual) = _both(game.collisionDetection, ray);
         _expectSame(actual, expected);
         hits += expected == null ? 0 : 1;
       }
@@ -181,7 +202,7 @@ void main() {
       for (final ray in _rays(random, 400)) {
         final maxDistance = 20 + random.nextDouble() * 200;
         final (expected, actual) = _both(
-          _detection(game),
+          game.collisionDetection,
           ray,
           maxDistance: maxDistance,
         );
@@ -235,7 +256,7 @@ void main() {
             ? null
             : 50 + random.nextDouble() * 400;
         final (expected, actual) = _both(
-          _detection(game),
+          game.collisionDetection,
           ray,
           maxDistance: maxDistance,
         );
@@ -258,7 +279,7 @@ void main() {
       );
       _addAll(game, [near, far]);
       await game.ready();
-      final detection = _detection(game)..nearestFirstRaycast = true;
+      final detection = _detection(game);
       final ray = Ray2(origin: Vector2(0, 50), direction: Vector2(1, 0));
       // The far hitbox is never tested, as the near hit is nearer than its
       // box, so it has to be dropped without being taken out.
@@ -299,7 +320,6 @@ void main() {
       );
       _addAll(game, [near, far]);
       await game.ready();
-      _detection(game).nearestFirstRaycast = true;
       final ray = Ray2(origin: Vector2(0, 50), direction: Vector2(1, 0));
       final nested = <ShapeHitbox?>[];
       final result = game.collisionDetection.raycast(
@@ -337,7 +357,7 @@ void main() {
             ),
             direction: direction,
           );
-          final (expected, actual) = _both(_detection(game), ray);
+          final (expected, actual) = _both(game.collisionDetection, ray);
           _expectSame(actual, expected);
         }
       }
@@ -353,14 +373,14 @@ void main() {
       final ignored = hitboxes.take(20).toList();
       for (final ray in _rays(random, 200)) {
         final (expectedFiltered, actualFiltered) = _both(
-          _detection(game),
+          game.collisionDetection,
           ray,
           hitboxFilter: (hitbox) => hitbox is! CircleHitbox,
         );
         _expectSame(actualFiltered, expectedFiltered);
         expect(actualFiltered?.hitbox, isNot(isA<CircleHitbox>()));
         final (expectedIgnoring, actualIgnoring) = _both(
-          _detection(game),
+          game.collisionDetection,
           ray,
           ignoreHitboxes: ignored,
         );
@@ -385,7 +405,6 @@ void main() {
       );
       _addAll(game, [triangle, square]);
       await game.ready();
-      _detection(game).nearestFirstRaycast = true;
       // Starts inside of the box, outside of the triangle, going away from it.
       final empty = Ray2(origin: Vector2(190, 90), direction: Vector2(1, 0));
       final emptyResult = game.collisionDetection.raycast(empty);
@@ -405,7 +424,6 @@ void main() {
       );
       _addAll(game, [square]);
       await game.ready();
-      _detection(game).nearestFirstRaycast = true;
       final ray = Ray2(origin: Vector2.all(50), direction: Vector2(1, 0));
       final result = game.collisionDetection.raycast(ray);
       expect(result!.isInsideHitbox, isTrue);
@@ -421,7 +439,6 @@ void main() {
       );
       _addAll(game, [square]);
       await game.ready();
-      _detection(game).nearestFirstRaycast = true;
       final out = RaycastResult<ShapeHitbox>();
       final hit = Ray2(origin: Vector2(0, 50), direction: Vector2(1, 0));
       final result = game.collisionDetection.raycast(hit, out: out);
@@ -440,25 +457,32 @@ void main() {
       _addAll(game, _scene(random, 40));
       await game.ready();
       final origin = Vector2(400, 300);
-      List<double?> distances({required bool nearestFirst}) {
-        _detection(game).nearestFirstRaycast = nearestFirst;
-        return [
-          ...game.collisionDetection
-              .raycastAll(origin, numberOfRays: 90)
-              .map((r) => r.distance),
-          ...game.collisionDetection
-              .raytrace(
-                Ray2(origin: origin, direction: Vector2(1, 0.3)..normalize()),
-              )
-              .map((r) => r.distance),
-        ];
+      final rays = <Ray2>[];
+      final out = <RaycastResult<ShapeHitbox>>[];
+      final results = game.collisionDetection.raycastAll(
+        origin,
+        numberOfRays: 90,
+        rays: rays,
+        out: out,
+      );
+      expect(results, isNotEmpty);
+      expect(rays, hasLength(90));
+      for (var i = 0; i < rays.length; i++) {
+        _expectSame(
+          out[i].isActive ? out[i] : null,
+          _reference(game.collisionDetection, rays[i]),
+        );
       }
-
-      final expected = distances(nearestFirst: false);
-      final actual = distances(nearestFirst: true);
-      expect(actual.length, expected.length);
-      for (var i = 0; i < actual.length; i++) {
-        expect(actual[i], closeTo(expected[i]!, 1e-9));
+      final start = Ray2(
+        origin: origin,
+        direction: Vector2(1, 0.3)..normalize(),
+      );
+      final traced = game.collisionDetection.raytrace(start).toList();
+      expect(traced, isNotEmpty);
+      var current = start;
+      for (final result in traced) {
+        _expectSame(result, _reference(game.collisionDetection, current));
+        current = result.reflectionRay!;
       }
     });
   });

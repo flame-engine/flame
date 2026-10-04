@@ -8,8 +8,8 @@ import 'package:flutter/widgets.dart';
 import 'raycast_scene.dart';
 
 /// The app that `tool/measure_raycast_allocations.dart` runs in a profile
-/// build, so that it can measure the allocations of casting rays with the
-/// old code path and with the nearest first one, in AOT code like a game has.
+/// build, so that it can measure the allocations of casting rays in AOT code
+/// like a game has.
 ///
 /// It does nothing by itself: it registers the service extension
 /// `ext.flame.raycast`, which casts rays against a scene.
@@ -52,7 +52,6 @@ Future<RaycastScenery> _sceneFor(
 /// - `scene`: a name of [RaycastScene].
 /// - `count`: the number of hitboxes.
 /// - `rays`: the number of rays to cast, from the rays of the scene in turn.
-/// - `nearestFirst`: `true` for the nearest first code path.
 ///
 /// It returns the number of rays that hit something and the microseconds that
 /// casting took.
@@ -64,12 +63,10 @@ Future<developer.ServiceExtensionResponse> _handle(
   final scene = RaycastScene.values.byName(parameters['scene']!);
   final count = int.parse(parameters['count']!);
   final rays = int.parse(parameters['rays']!);
-  final nearestFirst = parameters['nearestFirst'] == 'true';
   final scenery = await _sceneFor(kind, scene, count);
   final detection = scenery.detection;
   final result = RaycastResult<ShapeHitbox>();
   final sceneRays = scenery.rays;
-  detection.nearestFirstRaycast = nearestFirst;
   var hits = 0;
   final watch = Stopwatch()..start();
   for (var i = 0; i < rays; i++) {
@@ -79,7 +76,6 @@ Future<developer.ServiceExtensionResponse> _handle(
     }
   }
   final micros = watch.elapsedMicroseconds;
-  detection.nearestFirstRaycast = false;
   return developer.ServiceExtensionResponse.result(
     jsonEncode({
       'hits': hits,
