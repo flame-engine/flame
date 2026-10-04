@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:flame/src/devtools/dev_tools_connector.dart';
 
 /// The [ImageCacheConnector] reports the contents of the game's image cache to
-/// the devtools extension, and lets it trigger a collection.
+/// the devtools extension, and lets it trigger an eviction.
 class ImageCacheConnector() extends DevToolsConnector {
   @override
   void init() {
@@ -29,9 +29,9 @@ class ImageCacheConnector() extends DevToolsConnector {
     );
 
     registerExtension(
-      'ext.flame_devtools.collectImages',
+      'ext.flame_devtools.evictUnusedImages',
       (method, parameters) async {
-        final freedBytes = game.images.collect();
+        final freedBytes = game.images.evictUnused();
         return ServiceExtensionResponse.result(
           json.encode({'freed_bytes': freedBytes}),
         );

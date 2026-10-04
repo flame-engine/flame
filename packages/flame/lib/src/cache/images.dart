@@ -11,28 +11,29 @@ import 'package:flutter/services.dart';
 ///
 /// The cache owns every image in it and disposes of an image when it is
 /// removed, either explicitly through [clear] and [clearCache] or through
-/// collection.
+/// eviction.
 ///
-/// ## Collection
+/// ## Eviction
 ///
-/// Images can be collected automatically once they are no longer used, so that
+/// Images can be evicted automatically once they are no longer used, so that
 /// a game that loads images as it goes does not grow its memory usage without
-/// bound. Collection is opt-in: with no [maxSizeBytes] set and no calls to
-/// [collect], the cache keeps every image until it is cleared.
+/// bound. Eviction is opt-in: with no [maxSizeBytes] set and no calls to
+/// [evictUnused], the cache keeps every image until it is cleared.
 ///
 /// The cache knows which images are in use through reference counting. Every
 /// component that renders an image retains it with [retain] while it is
 /// mounted and releases it with [release] when it is removed, which the Flame
 /// components do through the `ImageRetainer` mixin. An image with no retainers
-/// is collectable once [gracePeriod] has passed since it was last loaded,
-/// fetched or released. The grace period covers the gap between loading an
-/// image, typically in `onLoad`, and the component that uses it being mounted.
+/// is eligible for eviction once [gracePeriod] has passed since it was last
+/// loaded, fetched or released. The grace period covers the gap between
+/// loading an image, typically in `onLoad`, and the component that uses it
+/// being mounted.
 ///
-/// Collection runs when [collect] is called, and automatically when a load
+/// Eviction runs when [evictUnused] is called, and automatically when a load
 /// pushes the cache over [maxSizeBytes], in which case the least recently used
-/// collectable images are disposed until the cache fits in its budget again.
+/// eligible images are disposed until the cache fits in its budget again.
 ///
-/// A collected image is gone from the cache, so with collection enabled obtain
+/// An evicted image is gone from the cache, so with eviction enabled obtain
 /// images with [load] rather than [fromCache], since [load] decodes the image
 /// again when it is missing and [fromCache] fails. Images that your own code
 /// keeps outside of a retaining component must be retained manually.
@@ -43,7 +44,7 @@ class Images({AssetBundle? bundle, int? maxSizeBytes}) {
 
   final Map<String, _ImageAsset> _assets = {};
 
-  final Set<String> _collectedKeys = {};
+  final Set<String> _evictedKeys = {};
 
   /// The [AssetBundle] from which images are loaded.
   /// defaults to [Flame.bundle].
@@ -53,12 +54,12 @@ class Images({AssetBundle? bundle, int? maxSizeBytes}) {
 
   /// The soft upper bound, in bytes, for the images held by this cache.
   ///
-  /// When a load pushes the cache over this budget, collectable images are
+  /// When a load pushes the cache over this budget, eligible images are
   /// disposed in least recently used order until the cache fits again. Images
   /// that are retained, or that were used within [gracePeriod], are never
-  /// collected, so the cache can exceed the budget while they are needed.
+  /// evicted, so the cache can exceed the budget while they are needed.
   ///
-  /// When `null`, which is the default, no automatic collection happens.
+  /// When `null`, which is the default, no automatic eviction happens.
   int? get maxSizeBytes => _maxSizeBytes;
 
   set maxSizeBytes(int? value) {
@@ -67,7 +68,7 @@ class Images({AssetBundle? bundle, int? maxSizeBytes}) {
   }
 
   /// How long an image stays in the cache after it was last loaded, fetched,
-  /// retained or released before it becomes collectable.
+  /// retained or released before it becomes eligible for eviction.
   ///
   /// This covers the gap between loading an image and mounting the component
   /// that retains it. Raise it if a component loads many images one after the
@@ -100,7 +101,7 @@ class Images({AssetBundle? bundle, int? maxSizeBytes}) {
     return asset.owner;
   }
 
-  /// Marks [image] as in use, which protects it from collection until it is
+  /// Marks [image] as in use, which protects it from eviction until it is
   /// released with [release] as many times as it was retained.
   ///
   /// This is a no-op when [image] does not belong to this cache. A clone of a
@@ -149,11 +150,11 @@ class Images({AssetBundle? bundle, int? maxSizeBytes}) {
   /// loaded, fetched, retained or released within [gracePeriod].
   ///
   /// Returns the estimated number of bytes that were freed.
-  int collect() {
+  int evictUnused() {
     var freed = 0;
-    for (final asset in _collectableAssets()) {
+    for (final asset in _evictionCandidates()) {
       freed += asset.sizeBytes;
-      _collect(asset);
+      _evict(asset);
     }
     return freed;
   }
@@ -209,7 +210,7 @@ class Images({AssetBundle? bundle, int? maxSizeBytes}) {
   void clearCache() {
     _assets.forEach((_, asset) => asset.dispose());
     _assets.clear();
-    _collectedKeys.clear();
+    _evictedKeys.clear();
   }
 
   /// Returns the image [name] from the cache.
@@ -223,9 +224,9 @@ class Images({AssetBundle? bundle, int? maxSizeBytes}) {
     final asset = _assets[name];
     assert(
       asset != null,
-      _collectedKeys.contains(name)
-          ? 'Tried to access an image "$name" that has been collected from the '
-                'cache. Use load() to get images when collection is enabled, '
+      _evictedKeys.contains(name)
+          ? 'Tried to access an image "$name" that has been evicted from the '
+                'cache. Use load() to get images when eviction is enabled, '
                 'or retain() the image while you keep a reference to it'
           : 'Tried to access an image "$name" that does not exist in the '
                 'cache. Make sure to load() an image before accessing it',
@@ -326,7 +327,7 @@ class Images({AssetBundle? bundle, int? maxSizeBytes}) {
       existing.lastUsed = clock.now();
       return existing.retrieveAsync();
     }
-    _collectedKeys.remove(key);
+    _evictedKeys.remove(key);
     final asset = _assets[key] = _ImageAsset.future(this, key, generator());
     return asset.retrieveAsync();
   }
@@ -370,7 +371,7 @@ class Images({AssetBundle? bundle, int? maxSizeBytes}) {
     _enforceBudget();
   }
 
-  List<_ImageAsset> _collectableAssets() {
+  List<_ImageAsset> _evictionCandidates() {
     final now = clock.now();
     return _assets.values.where((asset) {
       return asset.refCount == 0 &&
@@ -388,20 +389,20 @@ class Images({AssetBundle? bundle, int? maxSizeBytes}) {
     if (size <= budget) {
       return;
     }
-    final candidates = _collectableAssets()
+    final candidates = _evictionCandidates()
       ..sort((a, b) => a.lastUsed.compareTo(b.lastUsed));
     for (final asset in candidates) {
       if (size <= budget) {
         break;
       }
       size -= asset.sizeBytes;
-      _collect(asset);
+      _evict(asset);
     }
   }
 
-  void _collect(_ImageAsset asset) {
+  void _evict(_ImageAsset asset) {
     _assets.remove(asset.key);
-    _collectedKeys.add(asset.key);
+    _evictedKeys.add(asset.key);
     asset.dispose();
   }
 }

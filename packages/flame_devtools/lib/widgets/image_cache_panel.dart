@@ -3,7 +3,7 @@ import 'package:flame_devtools/repository.dart';
 import 'package:flutter/material.dart';
 
 /// Shows the images held by the game's image cache, how much memory they take
-/// and how many times each one is retained, with a button to collect the
+/// and how many times each one is retained, with a button to evict the
 /// unused ones.
 class const ImageCachePanel({super.key}) extends StatefulWidget {
   @override
@@ -25,8 +25,8 @@ class _ImageCachePanelState() extends State<ImageCachePanel> {
     });
   }
 
-  Future<void> _collect() async {
-    await Repository.collectImages();
+  Future<void> _evictUnused() async {
+    await Repository.evictUnusedImages();
     _refresh();
   }
 
@@ -58,9 +58,9 @@ class _ImageCachePanelState() extends State<ImageCachePanel> {
                   label: const Text('Refresh'),
                 ),
                 TextButton.icon(
-                  onPressed: _collect,
+                  onPressed: _evictUnused,
                   icon: const Icon(Icons.cleaning_services),
-                  label: const Text('Collect unused'),
+                  label: const Text('Evict unused'),
                 ),
               ],
             ),

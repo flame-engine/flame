@@ -123,14 +123,14 @@ abstract final class Repository() {
     return ImageCacheInfo.fromJson(imageCacheResponse.json!);
   }
 
-  /// Collects the unused images in the game's image cache and returns the
+  /// Evicts the unused images in the game's image cache and returns the
   /// estimated number of bytes that were freed.
-  static Future<int> collectImages() async {
-    final collectResponse = await serviceManager
+  static Future<int> evictUnusedImages() async {
+    final evictResponse = await serviceManager
         .callServiceExtensionOnMainIsolate(
-          'ext.flame_devtools.collectImages',
+          'ext.flame_devtools.evictUnusedImages',
         );
-    return collectResponse.json!['freed_bytes'] as int;
+    return evictResponse.json!['freed_bytes'] as int;
   }
 
   /// Sets the [attribute] of the component with the given [id], where

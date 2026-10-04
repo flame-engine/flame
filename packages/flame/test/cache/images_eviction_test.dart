@@ -11,7 +11,7 @@ void main() {
     return withClock(Clock.fixed(DateTime.now().add(duration)), body);
   }
 
-  group('Images collection', () {
+  group('Images eviction', () {
     group('retain and release', () {
       test('count the references of an image', () async {
         final cache = Images();
@@ -131,7 +131,7 @@ void main() {
       });
     });
 
-    group('collect', () {
+    group('evictUnused', () {
       test(
         'disposes images that are not retained once the grace period passed',
         () async {
@@ -139,7 +139,7 @@ void main() {
           cache.add('a', await generateImage(2, 2));
           cache.add('b', await generateImage(3, 3));
 
-          final freed = later(const Duration(seconds: 10), cache.collect);
+          final freed = later(const Duration(seconds: 10), cache.evictUnused);
 
           expect(freed, 16 + 36);
           expect(cache.containsKey('a'), isFalse);
@@ -152,14 +152,14 @@ void main() {
         final cache = Images();
         cache.add('a', await generateImage());
 
-        expect(cache.collect(), 0);
+        expect(cache.evictUnused(), 0);
         expect(cache.containsKey('a'), isTrue);
 
         later(const Duration(seconds: 4), () => cache.fromCache('a'));
-        expect(later(const Duration(seconds: 8), cache.collect), 0);
+        expect(later(const Duration(seconds: 8), cache.evictUnused), 0);
         expect(cache.containsKey('a'), isTrue);
 
-        expect(later(const Duration(seconds: 10), cache.collect), 4);
+        expect(later(const Duration(seconds: 10), cache.evictUnused), 4);
         expect(cache.containsKey('a'), isFalse);
       });
 
@@ -167,7 +167,7 @@ void main() {
         final cache = Images()..gracePeriod = Duration.zero;
         cache.add('a', await generateImage());
 
-        expect(cache.collect(), 4);
+        expect(cache.evictUnused(), 4);
         expect(cache.containsKey('a'), isFalse);
       });
 
@@ -178,12 +178,12 @@ void main() {
         cache.add('loose', await generateImage());
         cache.retain(retained);
 
-        expect(cache.collect(), 4);
+        expect(cache.evictUnused(), 4);
         expect(cache.containsKey('retained'), isTrue);
         expect(cache.containsKey('loose'), isFalse);
 
         cache.release(retained);
-        expect(cache.collect(), 4);
+        expect(cache.evictUnused(), 4);
         expect(cache.containsKey('retained'), isFalse);
       });
 
@@ -191,18 +191,18 @@ void main() {
         final cache = Images()..gracePeriod = Duration.zero;
         final pending = cache.fetchOrGenerate('a', generateImage);
 
-        expect(cache.collect(), 0);
+        expect(cache.evictUnused(), 0);
         expect(cache.containsKey('a'), isTrue);
         await pending;
-        expect(cache.collect(), 4);
+        expect(cache.evictUnused(), 4);
       });
 
-      test('disposes the collected image', () async {
+      test('disposes the evicted image', () async {
         final cache = Images()..gracePeriod = Duration.zero;
         final image = await generateImage();
         cache.add('a', image);
 
-        cache.collect();
+        cache.evictUnused();
 
         expect(image.debugDisposed, isTrue);
       });
@@ -210,13 +210,13 @@ void main() {
       test('fromCache fails with a helpful message afterwards', () async {
         final cache = Images()..gracePeriod = Duration.zero;
         cache.add('a', await generateImage());
-        cache.collect();
+        cache.evictUnused();
 
         expect(
           () => cache.fromCache('a'),
           failsAssert(
-            'Tried to access an image "a" that has been collected from the '
-            'cache. Use load() to get images when collection is enabled, or '
+            'Tried to access an image "a" that has been evicted from the '
+            'cache. Use load() to get images when eviction is enabled, or '
             'retain() the image while you keep a reference to it',
           ),
         );
@@ -225,7 +225,7 @@ void main() {
       test('the image can be loaded again afterwards', () async {
         final cache = Images()..gracePeriod = Duration.zero;
         final first = await cache.fetchOrGenerate('a', generateImage);
-        cache.collect();
+        cache.evictUnused();
 
         final second = await cache.fetchOrGenerate('a', generateImage);
 
@@ -236,7 +236,7 @@ void main() {
     });
 
     group('maxSizeBytes', () {
-      test('collects the least recently used images over budget', () async {
+      test('evicts the least recently used images over budget', () async {
         final cache = Images(maxSizeBytes: 32)..gracePeriod = Duration.zero;
         cache.add('a', await generateImage(2, 2));
         cache.add('b', await generateImage(2, 2));
@@ -253,7 +253,7 @@ void main() {
         expect(cache.sizeBytes, 32);
       });
 
-      test('collects when a load completes', () async {
+      test('evicts when a load completes', () async {
         final cache = Images(maxSizeBytes: 16)..gracePeriod = Duration.zero;
         cache.add('a', await generateImage(2, 2));
 
@@ -265,7 +265,7 @@ void main() {
         expect(cache.keys, ['b']);
       });
 
-      test('never collects retained images', () async {
+      test('never evicts retained images', () async {
         final cache = Images(maxSizeBytes: 16)..gracePeriod = Duration.zero;
         final retained = await generateImage(2, 2);
         cache.add('a', retained);

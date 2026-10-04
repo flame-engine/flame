@@ -9,7 +9,7 @@ import 'package:meta/meta.dart';
 ///
 /// While the component is mounted, the images returned by [retainedImages]
 /// are retained in the cache that they were loaded into, which protects them
-/// from being collected. They are released again when the component is
+/// from being evicted. They are released again when the component is
 /// removed.
 ///
 /// Whenever the images that the component renders change after it was
