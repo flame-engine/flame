@@ -22,14 +22,44 @@ flutter test benchmark/priority_change_benchmark.dart
 
 The `flutter test` runner executes in JIT mode with asserts enabled, which is
 fine for comparing before/after numbers on the same machine. For
-release-representative numbers, run on a device instead:
+release-representative numbers, a suite needs to run as an app in a profile or
+release build. This package has no platform runner, so the app runs from the
+`examples` directory, which has a macOS one. `raycast_benchmark_app.dart` does
+this for `raycast_benchmark.dart`, printing the same table and exiting:
 
 ```console
-flutter run --release -t benchmark/main.dart -d <device>
+cd examples
+flutter build macos --release -t ../packages/flame/benchmark/raycast_benchmark_app.dart
+build/macos/Build/Products/Release/examples.app/Contents/MacOS/examples
 ```
+
+Running the binary prints the table straight to the terminal, and the app exits
+when it is done. Use `--profile` instead of `--release` for a profile build.
 
 Note that `flutter test` prints `No tests ran` at the end; that is expected,
 the benchmark results are printed above it.
+
+
+## Measuring allocations
+
+The time per ray does not tell how much is allocated, and the allocations of
+AOT code differ from the ones of `flutter test`. The tool
+`tool/measure_raycast_allocations.dart` measures what `raycast` allocates, in a
+profile build, with no manual steps:
+
+```console
+dart run benchmark/tool/measure_raycast_allocations.dart
+```
+
+It runs `raycast_allocation_app.dart` from the `examples` directory with
+`flutter run --machine`, connects to the VM service of the app, and for each
+case asks the app, through the service extension `ext.flame.raycast` that it
+registers, to build a scene and cast rays against it. The objects per ray are
+counted by tracing the allocations of the classes that a raycast allocates,
+and the time per ray is measured by the app without tracing. The options of
+the tool, like the device, the number of timings and a filter on the cases,
+are documented at the top of the file. The first run makes a profile build,
+which takes minutes. To compare a change, run it on both branches.
 
 
 ## Suites
@@ -73,6 +103,17 @@ the benchmark results are printed above it.
 - `ray_intersection_benchmark.dart`: `rayIntersection` on polygon hitboxes
   that are sampled from a concave and from a convex `Path` contour, with one
   precomputed ray for each hitbox in every tick.
+- `raycast_benchmark.dart`: `raycast` in a static and in a rotating scene of
+  simple, polygon, path and mixed hitboxes, printing the time per ray.
+  `raycast_benchmark_app.dart` runs it in a profile or release build.
+- `raycast_allocation_app.dart`: not a suite, but the app that
+  `tool/measure_raycast_allocations.dart` runs in a profile build to count
+  the allocations of `raycast`, see "Measuring allocations" above. It only
+  registers a service extension that casts rays against a scene from
+  `raycast_scene.dart`.
+- `tool/measure_raycast_allocations.dart`: the tool that drives that app and
+  prints the objects and the time per ray for each case, and can also show
+  which stacks allocate the objects of a class.
 - `transform2d_benchmark.dart`: the `Transform2D` hot paths: matrix
   recalculation after position and angle changes, point conversion, matrix
   assignment, and copying transforms.

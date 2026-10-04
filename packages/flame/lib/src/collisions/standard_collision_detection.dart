@@ -1,8 +1,10 @@
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
+import 'package:meta/meta.dart';
 
 /// The default implementation of [CollisionDetection].
 /// Checks whether any [ShapeHitbox]s in [items] collide with each other and
@@ -66,8 +68,34 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
 
   static final _temporaryRaycastResult = RaycastResult<ShapeHitbox>();
 
-  static final _temporaryRayAabb = Aabb2();
+  /// The hitboxes that a ray may reach, ordered by the distance at which the
+  /// ray enters their boxes. They are kept between the rays of this instance,
+  /// to not allocate for each ray.
+  final _candidates = _RaycastCandidates();
 
+  /// Whether a [raycast] of this instance is running, so that one started
+  /// from inside of it, by a hitbox filter or by a
+  /// [ShapeHitbox.rayIntersection], does not take over its [_candidates].
+  bool _isCasting = false;
+
+  /// The number of hitboxes that are still referenced by the candidates of
+  /// the last [raycast], which is 0 once it has returned.
+  @visibleForTesting
+  int get retainedRaycastCandidates => _candidates.retained;
+
+  /// Casts the [ray] and returns the nearest hit, if any.
+  ///
+  /// The hitboxes are visited from the nearest to the farthest, by the point
+  /// where the ray enters their bounding boxes, and the search stops as soon
+  /// as the best hit so far is nearer than the next hitbox, so that most
+  /// hitboxes never have their [ShapeHitbox.rayIntersection] called. Between
+  /// hitboxes hit at exactly the same distance, the one whose box is entered
+  /// first wins.
+  ///
+  /// Hitboxes that rays should go through, like trigger zones, are best left
+  /// out with [hitboxFilter], which skips them before any work, rather than
+  /// with a [ShapeHitbox.rayIntersection] that always returns `null`, as such
+  /// hitboxes still have to be ordered.
   @override
   RaycastResult<ShapeHitbox>? raycast(
     Ray2 ray, {
@@ -77,36 +105,82 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
     RaycastResult<ShapeHitbox>? out,
   }) {
     var finalResult = out?..reset();
-    _updateRayAabb(ray, maxDistance);
-    for (final item in items) {
-      if (ignoreHitboxes?.contains(item) ?? false) {
-        continue;
-      }
-      if (hitboxFilter != null) {
-        if (!hitboxFilter(item)) {
+    final limit = maxDistance ?? double.infinity;
+    final isNested = _isCasting;
+    final candidates = isNested ? _RaycastCandidates() : _candidates;
+    _isCasting = true;
+    try {
+      for (final item in items) {
+        if (!_isCandidate(item, hitboxFilter, ignoreHitboxes)) {
           continue;
         }
-      }
-      if (!item.aabb.intersectsWithAabb2(_temporaryRayAabb)) {
-        continue;
-      }
-      final currentResult = item.rayIntersection(
-        ray,
-        out: _temporaryRaycastResult,
-      );
-      final possiblyFirstResult = !(finalResult?.isActive ?? false);
-      if (currentResult != null &&
-          (possiblyFirstResult ||
-              currentResult.distance! < finalResult!.distance!) &&
-          currentResult.distance! <= (maxDistance ?? double.infinity)) {
-        if (finalResult == null) {
-          finalResult = currentResult.clone();
-        } else {
-          finalResult.setFrom(currentResult);
+        final entry = ray.entryDistanceToAabb2(item.aabb);
+        if (entry < 0 || entry > limit) {
+          continue;
         }
+        candidates.add(entry, item);
+      }
+      candidates.order();
+      // Takes the hitboxes out from the nearest to the farthest. Most of the
+      // time the loop ends after a few, so the rest are never ordered.
+      while (candidates.isNotEmpty) {
+        // A hit can not be nearer than the entry point to its box.
+        if ((finalResult?.isActive ?? false) &&
+            finalResult!.distance! <= candidates.nearestDistance) {
+          break;
+        }
+        final hitbox = candidates.removeNearest();
+        final currentResult = hitbox.rayIntersection(
+          ray,
+          out: _temporaryRaycastResult,
+        );
+        finalResult = _nearer(finalResult, currentResult, limit);
+      }
+    } finally {
+      // Do not keep the hitboxes alive through the candidates, also if one of
+      // the callbacks throws.
+      candidates.clear();
+      if (!isNested) {
+        _isCasting = false;
       }
     }
     return (finalResult?.isActive ?? false) ? finalResult : null;
+  }
+
+  /// Whether a ray may hit [hitbox], by the `hitboxFilter` and the
+  /// `ignoreHitboxes` arguments of [raycast].
+  @pragma('vm:prefer-inline')
+  static bool _isCandidate(
+    ShapeHitbox hitbox,
+    bool Function(ShapeHitbox candidate)? hitboxFilter,
+    List<ShapeHitbox>? ignoreHitboxes,
+  ) {
+    if (ignoreHitboxes?.contains(hitbox) ?? false) {
+      return false;
+    }
+    return hitboxFilter == null || hitboxFilter(hitbox);
+  }
+
+  /// The nearer of [best], the best hit so far, and [current], a hit that is
+  /// only taken when it is not farther than [maxDistance]. It is written into
+  /// [best] when there is one, and otherwise cloned, as [current] is reused.
+  @pragma('vm:prefer-inline')
+  static RaycastResult<ShapeHitbox>? _nearer(
+    RaycastResult<ShapeHitbox>? best,
+    RaycastResult<ShapeHitbox>? current,
+    double maxDistance,
+  ) {
+    // A positive comparison, so that a NaN distance or limit is rejected.
+    if (current == null || !(current.distance! <= maxDistance)) {
+      return best;
+    }
+    if (best == null) {
+      return current.clone();
+    }
+    if (!best.isActive || current.distance! < best.distance!) {
+      best.setFrom(current);
+    }
+    return best;
   }
 
   @override
@@ -197,29 +271,91 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
       }
     }
   }
+}
 
-  /// Computes an axis-aligned bounding box for a [ray].
-  ///
-  /// When [maxDistance] is provided, this will be the bounding box around
-  /// the origin of the ray and its ending point. When [maxDistance]
-  /// is `null`, the bounding box will encompass the whole quadrant
-  /// of space, from the ray's origin to infinity.
-  void _updateRayAabb(Ray2 ray, double? maxDistance) {
-    final x1 = ray.origin.x;
-    final y1 = ray.origin.y;
-    double x2;
-    double y2;
+/// The hitboxes that a ray may reach, and the distances at which the ray
+/// enters their boxes, as a binary min-heap by distance, so that the nearest
+/// can be taken out first without ordering them all. It only grows, so that
+/// it does not allocate for each ray when it is kept between them.
+class _RaycastCandidates() {
+  var _distances = Float64List(32);
+  var _hitboxes = List<ShapeHitbox?>.filled(32, null);
 
-    if (maxDistance != null) {
-      x2 = ray.origin.x + ray.direction.x * maxDistance;
-      y2 = ray.origin.y + ray.direction.y * maxDistance;
-    } else {
-      x2 = ray.direction.x > 0 ? double.infinity : double.negativeInfinity;
-      y2 = ray.direction.y > 0 ? double.infinity : double.negativeInfinity;
+  /// The number of candidates that have not been taken out.
+  var _length = 0;
+
+  /// The most candidates there have been since the last [clear], which is
+  /// how many entries of [_hitboxes] may be set.
+  var _added = 0;
+
+  bool get isNotEmpty => _length > 0;
+
+  /// The number of hitboxes that are still referenced.
+  int get retained => _hitboxes.where((hitbox) => hitbox != null).length;
+
+  /// Adds a candidate at the end, without keeping the order, which [order]
+  /// restores for all of them at once.
+  void add(double distance, ShapeHitbox hitbox) {
+    if (_length == _distances.length) {
+      final capacity = _length * 2;
+      _distances = Float64List(capacity)..setRange(0, _length, _distances);
+      _hitboxes = List<ShapeHitbox?>.filled(capacity, null)
+        ..setRange(0, _length, _hitboxes);
     }
+    _distances[_length] = distance;
+    _hitboxes[_length] = hitbox;
+    _length++;
+    _added = math.max(_added, _length);
+  }
 
-    _temporaryRayAabb
-      ..min.setValues(math.min(x1, x2), math.min(y1, y2))
-      ..max.setValues(math.max(x1, x2), math.max(y1, y2));
+  /// Orders the candidates so that the nearest is first.
+  void order() {
+    for (var index = (_length >> 1) - 1; index >= 0; index--) {
+      _siftDown(index);
+    }
+  }
+
+  /// The distance of the nearest candidate, which must exist.
+  double get nearestDistance => _distances[0];
+
+  /// Takes the nearest candidate out, which must exist.
+  ShapeHitbox removeNearest() {
+    final hitbox = _hitboxes[0]!;
+    _length--;
+    if (_length > 0) {
+      _distances[0] = _distances[_length];
+      _hitboxes[0] = _hitboxes[_length];
+      _siftDown(0);
+    }
+    return hitbox;
+  }
+
+  /// Takes all of the candidates out and drops the references to them.
+  void clear() {
+    _hitboxes.fillRange(0, _added, null);
+    _length = 0;
+    _added = 0;
+  }
+
+  /// Moves the entry at [index] down until its children are not nearer.
+  void _siftDown(int index) {
+    final distance = _distances[index];
+    final hitbox = _hitboxes[index];
+    final half = _length >> 1;
+    var hole = index;
+    while (hole < half) {
+      var child = 2 * hole + 1;
+      if (child + 1 < _length && _distances[child + 1] < _distances[child]) {
+        child++;
+      }
+      if (_distances[child] >= distance) {
+        break;
+      }
+      _distances[hole] = _distances[child];
+      _hitboxes[hole] = _hitboxes[child];
+      hole = child;
+    }
+    _distances[hole] = distance;
+    _hitboxes[hole] = hitbox;
   }
 }
