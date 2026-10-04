@@ -111,11 +111,15 @@ class TreeView(this.owner, {required Vector2 position})
         node.isRunning ? Status.running : node.lastStatus,
       );
       final label = _labels[node];
-      final text = '${node.runtimeType}${label == null ? '' : '  $label'}';
+      final text = _typeName(node) + (label == null ? '' : '  $label');
+      final x = depth * _indent;
+      final y = line * _lineHeight + 4;
+      // The bullet is drawn, because glyphs are not available in all fonts.
+      canvas.drawCircle(Offset(x + 3, y + 5), 2.5, Paint()..color = color);
       _paint(color, bold: node.isRunning).render(
         canvas,
-        '● $text',
-        Vector2(depth * _indent, line * _lineHeight + 4),
+        text,
+        Vector2(x + 10, y),
       );
       line++;
       final children = switch (node) {
@@ -128,6 +132,32 @@ class TreeView(this.owner, {required Vector2 position})
 
     draw(owner.behaviorTree.root, 0);
   }
+}
+
+/// The name of the type of [node].
+///
+/// `runtimeType` can not be used for this, because it is minified in release
+/// builds, which is what the examples on the website are.
+String _typeName(Node node) {
+  return switch (node) {
+    MoveTo() => 'MoveTo',
+    PlayEffect() => 'PlayEffect',
+    Task() => 'Task',
+    Condition() => 'Condition',
+    AsyncTask() => 'AsyncTask',
+    Wait() => 'Wait',
+    Sequence() => 'Sequence',
+    Selector() => 'Selector',
+    Parallel() => 'Parallel',
+    Inverter() => 'Inverter',
+    AlwaysSucceed() => 'AlwaysSucceed',
+    AlwaysFail() => 'AlwaysFail',
+    Repeat() => 'Repeat',
+    RetryOnFailure() => 'RetryOnFailure',
+    TimeLimit() => 'TimeLimit',
+    Cooldown() => 'Cooldown',
+    _ => 'Node',
+  };
 }
 
 /// The color that is used to show a [Status] in the examples.
