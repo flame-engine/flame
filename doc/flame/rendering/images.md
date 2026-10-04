@@ -127,6 +127,65 @@ class MyGame extends Game {
 ```
 
 
+## Evicting unused images
+
+Every image in the `Images` cache stays in memory until it is removed, so a game that loads images
+as it goes, for example one image set per level, grows its memory usage with every level unless it
+removes what it no longer needs. The cache can do this for you by evicting the images that are no
+longer used. Eviction is opt-in, with nothing configured the cache behaves as described above.
+
+The cache knows which images are in use through reference counting. The components that render
+images (`SpriteComponent`, `SpriteAnimationComponent`, `SpriteGroupComponent`,
+`SpriteAnimationGroupComponent`, `SpriteBatchComponent`, `ParallaxComponent`,
+`NineTileBoxComponent`, `IsometricTileMapComponent` and the `flame_tiled` layers) retain their
+images while they are mounted and release them when they are removed. An image that nobody retains
+becomes eligible for eviction once the `gracePeriod` (five seconds by default) has passed since it
+was last loaded, fetched or released. The grace period covers the gap between loading an image in
+`onLoad` and the component that uses it being mounted.
+
+There are two ways to evict:
+
+- Call `images.evictUnused()` yourself, for example when switching levels. It disposes every
+  eligible image and returns the estimated number of bytes that it freed.
+- Set a budget with `images.maxSizeBytes`. Whenever a load pushes the cache over the budget, the
+  least recently used eligible images are disposed until the cache fits again. Retained images
+  and images within their grace period are never evicted, so the cache can exceed the budget
+  while they are needed. The budget is a soft limit.
+
+```dart
+class MyGame extends FlameGame {
+  @override
+  Future<void> onLoad() async {
+    images.maxSizeBytes = 256 * 1024 * 1024;
+  }
+
+  Future<void> loadLevel(int level) async {
+    world.removeAll(world.children);
+    await world.add(Level(level));
+    // The images of the previous level are released by now and get evicted
+    // the next time the cache goes over its budget, or right away with:
+    images.evictUnused();
+  }
+}
+```
+
+You can inspect the cache with `images.sizeBytes`, `images.sizeBytesOf(key)` and
+`images.retainCount(key)`, and the Flame DevTools extension shows the same numbers.
+
+A few things to keep in mind when eviction is enabled:
+
+- Get images with `images.load()` instead of `images.fromCache()`. An evicted image is gone from
+  the cache, `load` decodes it again when needed, while `fromCache` fails.
+- Images that you render yourself, outside of one of the components listed above, must be retained
+  with `images.retain(image)` while you use them and released with `images.release(image)`
+  afterwards. Components can do this by mixing in `ImageRetainer` and returning the images they
+  render from `retainedImages`, and calling `updateRetainedImages()` whenever those change.
+- Load images per level or scene rather than all of them up front. Eviction can only free
+  images that nothing uses, so loading everything at start and then keeping it in use leaves nothing
+  to evict.
+- `clear` and `clearCache` still remove images whether they are retained or not.
+
+
 ## Loading images over the network
 
 The Flame core package doesn't offer a built in method to loading images from the network.

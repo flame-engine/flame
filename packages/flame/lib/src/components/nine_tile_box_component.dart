@@ -13,7 +13,7 @@ export '../nine_tile_box.dart';
 /// It uses the x, y, width and height coordinates from the
 /// [PositionComponent] to render.
 class NineTileBoxComponent({
-  var NineTileBox? nineTileBox,
+  var NineTileBox? _nineTileBox,
   super.position,
   super.size,
   super.scale,
@@ -22,7 +22,21 @@ class NineTileBoxComponent({
   super.children,
   super.priority,
   super.key,
-}) extends PositionComponent with HasPaint {
+}) extends PositionComponent with HasPaint, ImageRetainer {
+  /// The [NineTileBox] that this component renders.
+  NineTileBox? get nineTileBox => _nineTileBox;
+
+  set nineTileBox(NineTileBox? value) {
+    _nineTileBox = value;
+    updateRetainedImages();
+  }
+
+  @override
+  Iterable<Image> get retainedImages {
+    final nineTileBox = _nineTileBox;
+    return nineTileBox == null ? const [] : [nineTileBox.sprite.image];
+  }
+
   @override
   @mustCallSuper
   void onMount() {
@@ -30,6 +44,7 @@ class NineTileBoxComponent({
       nineTileBox != null,
       'The nineTileBox should be set either in the constructor or in onLoad',
     );
+    super.onMount();
   }
 
   @mustCallSuper

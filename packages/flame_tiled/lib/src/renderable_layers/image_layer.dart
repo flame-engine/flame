@@ -1,4 +1,5 @@
 import 'package:flame/cache.dart';
+import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_tiled/src/mutable_rect.dart';
@@ -14,13 +15,16 @@ class FlameImageLayer({
   required super.destTileSize,
   required final Image _image,
   super.filterQuality,
-}) extends RenderableLayer<ImageLayer> {
+}) extends RenderableLayer<ImageLayer> with ImageRetainer {
   late final ImageRepeat _repeat;
   final MutableRect _paintArea = MutableRect.fromLTRB(0, 0, 0, 0);
 
   this {
     _initImageRepeat();
   }
+
+  @override
+  Iterable<Image> get retainedImages => [_image];
 
   @override
   void render(Canvas canvas) {
