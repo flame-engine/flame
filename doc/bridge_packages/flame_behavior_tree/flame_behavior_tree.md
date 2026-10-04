@@ -90,8 +90,9 @@ Reading a key that has no value and no `initial` value throws an error that tell
 was. Use `getOrNull` or `blackboard.has` when a value is allowed to be missing. Keys are compared
 by identity, so declare each of them once, for example as a top level constant.
 
-In this example, the game puts the destination on the blackboard when the screen is tapped, and
-the tree takes care of the rest.
+In this example, the game puts the position of a bone on the blackboard when the screen is tapped,
+and the tree takes care of the rest. The tree is shown below the dog, and the node that is running
+is highlighted.
 
 ```{flutter-app}
 :sources: ../../examples
@@ -99,7 +100,7 @@ the tree takes care of the rest.
 :subfolder: stories/bridge_libraries/flame_behavior_tree
 :show: widget code
 :width: 400
-:height: 300
+:height: 340
 ```
 
 
@@ -123,16 +124,16 @@ Sequence(
 )
 ```
 
-In the example below, both agents walk as long as it is safe. Only the agent with the reactive
-sequence notices the danger, and stops.
+In the example below, both cars drive as long as the traffic light is green. Tap to turn it red,
+and only the car with the reactive sequence notices, and stops.
 
 ```{flutter-app}
 :sources: ../../examples
-:page: memory_example
+:page: traffic_example
 :subfolder: stories/bridge_libraries/flame_behavior_tree
 :show: widget code
 :width: 400
-:height: 250
+:height: 320
 ```
 
 
@@ -190,13 +191,16 @@ Sequence([
 ])
 ```
 
+The robot below uses all of them. It walks to work spots and scans them, and goes to charge when
+its battery is low.
+
 ```{flutter-app}
 :sources: ../../examples
-:page: leaf_nodes_example
+:page: robot_example
 :subfolder: stories/bridge_libraries/flame_behavior_tree
 :show: widget code
 :width: 400
-:height: 450
+:height: 390
 ```
 
 
@@ -211,13 +215,29 @@ Decorators have a single child, and change how it behaves.
 - `TimeLimit(child, seconds)` aborts the child and fails if it keeps running for too long.
 - `Cooldown(child, seconds)` fails without running the child for some time after it finished.
 
+The turret below uses `Cooldown`, `Repeat` and `Inverter` to fire bursts of three shots at a target
+in range, and rest in between:
+
 ```{flutter-app}
 :sources: ../../examples
-:page: decorators_example
+:page: turret_example
 :subfolder: stories/bridge_libraries/flame_behavior_tree
 :show: widget code
 :width: 400
 :height: 380
+```
+
+The thief below uses `RetryOnFailure`, `TimeLimit` and `AlwaysSucceed` while trying to pick a lock.
+Tap to call a guard: the thief only breaks in when none is nearby, and a reactive sequence aborts
+the break-in as soon as one shows up.
+
+```{flutter-app}
+:sources: ../../examples
+:page: thief_example
+:subfolder: stories/bridge_libraries/flame_behavior_tree
+:show: widget code
+:width: 400
+:height: 480
 ```
 
 
@@ -227,15 +247,16 @@ A `Parallel` node ticks all of its children on every tick, so that they run at t
 `ParallelPolicy` decides when it is done. With `requireAll`, which is the default, it succeeds
 when all the children have succeeded, and fails as soon as one of them fails. With `requireOne`
 it succeeds as soon as one child succeeds, and fails when all of them have failed. When the result
-is known, the children that are still running are aborted.
+is known, the children that are still running are aborted. In the example below, the runners are
+the children of a `Parallel` node, and the orange one is stopped by `requireOne`.
 
 ```{flutter-app}
 :sources: ../../examples
-:page: parallel_example
+:page: race_example
 :subfolder: stories/bridge_libraries/flame_behavior_tree
 :show: widget code
 :width: 400
-:height: 300
+:height: 440
 ```
 
 
