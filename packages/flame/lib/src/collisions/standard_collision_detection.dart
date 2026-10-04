@@ -170,7 +170,8 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>({
     RaycastResult<ShapeHitbox>? current,
     double maxDistance,
   ) {
-    if (current == null || current.distance! > maxDistance) {
+    // A positive comparison, so that a NaN distance or limit is rejected.
+    if (current == null || !(current.distance! <= maxDistance)) {
       return best;
     }
     if (best == null) {

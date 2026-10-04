@@ -218,6 +218,23 @@ void main() {
       expect(misses, greaterThan(20));
     });
 
+    testCollisionDetectionGame('finds nothing with a NaN maxDistance', (
+      game,
+    ) async {
+      final square = RectangleHitbox(
+        position: Vector2(100, 0),
+        size: Vector2.all(100),
+      );
+      _addAll(game, [square]);
+      await game.ready();
+      final ray = Ray2(origin: Vector2(0, 50), direction: Vector2(1, 0));
+      expect(game.collisionDetection.raycast(ray), isNotNull);
+      expect(
+        game.collisionDetection.raycast(ray, maxDistance: double.nan),
+        isNull,
+      );
+    });
+
     testCollisionDetectionGame('finds the same hits with many candidates', (
       game,
     ) async {
