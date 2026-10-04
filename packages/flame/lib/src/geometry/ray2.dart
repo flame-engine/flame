@@ -60,7 +60,19 @@ class Ray2({
   // intersect with the aabb, no matter what direction they have.
   // https://tavianator.com/2011/ray_box.html
   // https://tavianator.com/2015/ray_box_nan.html
-  bool intersectsWithAabb2(Aabb2 box) {
+  bool intersectsWithAabb2(Aabb2 box) => entryDistanceToAabb2(box) >= 0;
+
+  /// The distance along the ray at which it enters the [box], which is 0 when
+  /// it originates inside of or on the edge of the box, or -1 when it does not
+  /// intersect the box.
+  ///
+  /// It returns a negative number instead of `null` for a miss so that it can
+  /// be called for many boxes without allocating a boxed double each time.
+  ///
+  /// Rays that originate on the edge of the [box] are considered to be
+  /// intersecting with the box no matter what direction they have, like for
+  /// [intersectsWithAabb2].
+  double entryDistanceToAabb2(Aabb2 box) {
     final tx1 = (box.min.x - origin.x) * directionInvX;
     final tx2 = (box.max.x - origin.x) * directionInvX;
 
@@ -70,7 +82,8 @@ class Ray2({
     final tMin = max(min(tx1, tx2), min(ty1, ty2));
     final tMax = min(max(tx1, tx2), max(ty1, ty2));
 
-    return tMax >= max(tMin, 0);
+    final entry = max(tMin, 0.0);
+    return tMax >= entry ? entry : -1;
   }
 
   /// Gives the point at a certain length along the ray.

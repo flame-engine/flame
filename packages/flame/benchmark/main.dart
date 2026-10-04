@@ -5,6 +5,7 @@ import 'components_at_point_benchmark.dart' as components_at_point;
 import 'path_collision_benchmark.dart' as path_collision;
 import 'priority_change_benchmark.dart' as priority_change;
 import 'ray_intersection_benchmark.dart' as ray_intersection;
+import 'raycast_benchmark.dart' as raycast;
 import 'render_components_benchmark.dart' as render_components;
 import 'transform2d_benchmark.dart' as transform2d;
 import 'type_query_benchmark.dart' as type_query;
@@ -23,5 +24,6 @@ Future<void> main() async {
   await collision_detection.main();
   await path_collision.main();
   await ray_intersection.main();
+  await raycast.main();
   await transform2d.main();
 }

@@ -288,6 +288,64 @@ void main() {
       );
     });
 
+    group('entryDistanceToAabb2', () {
+      final aabb2 = Aabb2.minMax(Vector2.all(10), Vector2.all(20));
+
+      test('is the distance to the nearest edge', () {
+        final ray = Ray2(origin: Vector2(0, 15), direction: Vector2(1, 0));
+        expect(ray.entryDistanceToAabb2(aabb2), closeTo(10, 1e-9));
+        final diagonal = Ray2(
+          origin: Vector2(5, 5),
+          direction: Vector2(1, 1)..normalize(),
+        );
+        // The direction is stored as 32 bit floats, so it is not exact.
+        expect(
+          diagonal.entryDistanceToAabb2(aabb2),
+          closeTo(Vector2.all(5).length, 1e-6),
+        );
+      });
+
+      test('is 0 when the ray originates inside of the box', () {
+        final ray = Ray2(origin: Vector2(15, 12), direction: Vector2(0, 1));
+        expect(ray.entryDistanceToAabb2(aabb2), 0);
+      });
+
+      test('is 0 when the ray originates on an edge', () {
+        final away = Ray2(origin: Vector2(10, 15), direction: Vector2(-1, 0));
+        expect(away.entryDistanceToAabb2(aabb2), 0);
+        final along = Ray2(origin: Vector2(10, 15), direction: Vector2(0, 1));
+        expect(along.entryDistanceToAabb2(aabb2), 0);
+      });
+
+      test('is negative when the ray misses the box', () {
+        final beside = Ray2(origin: Vector2(0, 25), direction: Vector2(1, 0));
+        expect(beside.entryDistanceToAabb2(aabb2), lessThan(0));
+        final away = Ray2(origin: Vector2(0, 15), direction: Vector2(-1, 0));
+        expect(away.entryDistanceToAabb2(aabb2), lessThan(0));
+        final parallel = Ray2(origin: Vector2(5, 0), direction: Vector2(0, 1));
+        expect(parallel.entryDistanceToAabb2(aabb2), lessThan(0));
+      });
+
+      test('agrees with intersectsWithAabb2', () {
+        final rays = [
+          for (var angle = 0.0; angle < 6.3; angle += 0.1)
+            for (final origin in [
+              Vector2(0, 15),
+              Vector2(15, 15),
+              Vector2(30, 0),
+            ])
+              Ray2(origin: origin, direction: Vector2(1, 0)..rotate(angle)),
+        ];
+        for (final ray in rays) {
+          expect(
+            ray.entryDistanceToAabb2(aabb2) >= 0,
+            ray.intersectsWithAabb2(aabb2),
+            reason: '$ray',
+          );
+        }
+      });
+    });
+
     group('lineSegmentIntersection', () {
       test(
         'Correct intersection point length on ray going east',
