@@ -82,6 +82,37 @@ class Enemy extends PositionComponent with HasBehaviorTree {
 }
 ```
 
+
+## Flame nodes
+
+Besides the nodes of `behavior_tree`, this package has two nodes that work with the effects of
+Flame:
+
+- `PlayEffect(builder)` adds an effect to the owner of the tree (or to a `target`), is running while
+  it plays and succeeds when it completes. The effect is removed if the node is aborted.
+- `MoveTo(destination, ...)` moves the owner (or a `target`) to a position, either in a given
+  `duration` or at a given `speed`.
+
+```dart
+Sequence([
+  MoveTo((context) => context.get(destination), speed: 100),
+  PlayEffect(
+    (context) => ColorEffect(
+      Colors.red,
+      EffectController(duration: 0.3, alternate: true),
+    ),
+  ),
+])
+```
+
+
+## Documentation and examples
+
+The [documentation](https://docs.flame-engine.org/latest/bridge_packages/flame_behavior_tree/flame_behavior_tree.html)
+explains how behavior trees work, with small interactive examples for the nodes and for
+`HasBehaviorTree`. They can also be found in the
+[examples app](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/bridge_libraries/flame_behavior_tree).
+
 See the [example](example/lib/main.dart) for an agent that walks in and out of a house.
 
 
