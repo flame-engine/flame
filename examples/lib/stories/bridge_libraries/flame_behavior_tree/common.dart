@@ -60,13 +60,13 @@ CircleComponent dot(Color color, {required Vector2 position, double r = 10}) {
   );
 }
 
-final _labels = Expando<String>();
-
-/// Gives [node] a [label], which is shown next to it in a [TreeView].
+/// Gives [node] a [label], which is shown next to it in a [TreeView] and in
+/// the Flame DevTools.
 ///
-/// Returns [node], so that it can be used right where the node is created.
+/// This sets the `name` of the node, and returns the node, so that it can be
+/// used right where the node is created.
 T named<T extends Node>(String label, T node) {
-  _labels[node] = label;
+  node.name = label;
   return node;
 }
 
@@ -110,7 +110,7 @@ class TreeView(this.owner, {required Vector2 position})
       final color = statusColor(
         node.isRunning ? Status.running : node.lastStatus,
       );
-      final label = _labels[node];
+      final label = node.name;
       final text = _typeName(node) + (label == null ? '' : '  $label');
       final x = depth * _indent;
       final y = line * _lineHeight + 4;
