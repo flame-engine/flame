@@ -212,6 +212,7 @@ class Polygon(final List<Vector2> _vertices, {bool? convex}) extends Shape {
       }
       target._aabb = null;
       target._center = null;
+      target._perimeter = null;
       return target;
     }
     final newVertices = _vertices

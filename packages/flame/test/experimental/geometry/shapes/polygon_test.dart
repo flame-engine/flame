@@ -319,6 +319,22 @@ void main() {
       },
     );
 
+    test('project with target updates cached perimeter', () {
+      final polygon = Polygon([
+        Vector2(0, 0),
+        Vector2(0, 10),
+        Vector2(10, 10),
+        Vector2(10, 0),
+      ]);
+      final target = Polygon(List.generate(4, (_) => Vector2.zero()));
+      expect(target.perimeter, 0);
+
+      final transform = Transform2D()..scale = Vector2.all(2);
+      polygon.project(transform, target);
+      expect(target.perimeter, 80);
+      expect(polygon.perimeter, 40);
+    });
+
     test('project with wrong-shape target', () {
       final z = Vector2.zero();
       final polygon = Polygon([z, z, z, z, z]);
