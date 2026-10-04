@@ -99,6 +99,24 @@ class Sprite(
     );
   }
 
+  /// Returns the outlines of the parts of this sprite that are not
+  /// transparent, as the closed contours of a [Path].
+  ///
+  /// The contours are relative to the top left corner of the sprite, and they
+  /// are scaled from the [srcSize] to the given [size], when there is one, so
+  /// that they line up with the sprite when it is rendered with that size.
+  ///
+  /// See [ImageExtension.contour] for the [alphaThreshold] and for the
+  /// details of the contours. Keep in mind that this reads back the pixels of
+  /// the [image], so it should be done when loading, not in the game loop.
+  Future<Path> contour({Vector2? size, double alphaThreshold = 0.5}) {
+    return image.contour(
+      region: src,
+      size: size,
+      alphaThreshold: alphaThreshold,
+    );
+  }
+
   /// Same as [render], but takes both the position and the size as a single
   /// [Rect].
   ///

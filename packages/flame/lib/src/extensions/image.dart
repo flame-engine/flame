@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:flame/collisions.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
+import 'package:flame/src/geometry/alpha_contours.dart';
 
 export 'dart:ui' show Image;
 
@@ -74,6 +76,81 @@ extension ImageExtension on Image {
     }
 
     return await fromPixels(newPixelData, width, height);
+  }
+
+  /// Returns the outlines of the parts of this image that are not transparent,
+  /// as the closed contours of a [Path].
+  ///
+  /// Only the pixels in the [region] are considered, the whole image by
+  /// default, and the contours are relative to its top left corner. They are
+  /// scaled from the size of the [region] to the given [size], when there is
+  /// one.
+  ///
+  /// A pixel is part of the outlined area when its alpha is at least the
+  /// [alphaThreshold], which is between zero, excluded, and one. The outlines
+  /// pass between the pixels, at the point where the alpha would reach the
+  /// [alphaThreshold] if it changed linearly between their centers, so that the
+  /// anti-aliased edges of the image are followed more closely than a pixel.
+  /// Only the outer outlines are kept, not the ones of the holes in the
+  /// areas, and the separate areas give separate contours.
+  ///
+  /// The contours are meant to make hitboxes that follow the outline of the
+  /// image, like a [PathHitbox], or a [PolygonHitbox] from one of them, which
+  /// simplify them according to their sampling.
+  ///
+  /// Keep in mind that this reads back the pixels of the image, so it is an
+  /// expensive operation that should be done when loading, not in the game
+  /// loop.
+  Future<Path> contour({
+    Rect? region,
+    Vector2? size,
+    double alphaThreshold = 0.5,
+  }) async {
+    return contourFromPixels(
+      await pixelsInUint8(),
+      width,
+      height,
+      region: region,
+      size: size,
+      alphaThreshold: alphaThreshold,
+    );
+  }
+
+  /// Returns the outlines of the parts of a raw list of [pixels] that are not
+  /// transparent, as the closed contours of a [Path].
+  ///
+  /// The [pixels] are in the RGBA format, as in [fromPixels]. See [contour]
+  /// for the [region], [size] and [alphaThreshold] parameters.
+  static Path contourFromPixels(
+    Uint8List pixels,
+    int width,
+    int height, {
+    Rect? region,
+    Vector2? size,
+    double alphaThreshold = 0.5,
+  }) {
+    assert(pixels.length == width * height * 4);
+    assert(
+      alphaThreshold > 0 && alphaThreshold <= 1,
+      'The alpha threshold has to be in (0, 1]: $alphaThreshold',
+    );
+    final left = (region?.left.round() ?? 0).clamp(0, width);
+    final top = (region?.top.round() ?? 0).clamp(0, height);
+    final right = (region?.right.round() ?? width).clamp(left, width);
+    final bottom = (region?.bottom.round() ?? height).clamp(top, height);
+    final columns = right - left;
+    final rows = bottom - top;
+    return traceAlphaContours(
+      pixels,
+      width: width,
+      left: left,
+      top: top,
+      columns: columns,
+      rows: rows,
+      threshold: alphaThreshold,
+      scaleX: size == null || columns == 0 ? 1 : size.x / columns,
+      scaleY: size == null || rows == 0 ? 1 : size.y / rows,
+    );
   }
 
   /// Returns the bounding [Rect] of the image.
