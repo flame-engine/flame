@@ -1,5 +1,3 @@
-// ignore_for_file: use_primary_constructors
-
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:flame/collisions.dart';
 
@@ -20,16 +18,12 @@ const _phaseAngle = 0.05;
 /// the next of [_phases] rotations, so the bounding boxes and vertices of the
 /// hitboxes are computed again, like in a game where things rotate. The cost
 /// of that is in the time.
-class RaycastBenchmark extends AsyncBenchmarkBase {
-  RaycastBenchmark({
-    required this.kind,
-    required this.count,
-    this.rotate = false,
-  }) : super('Raycast ${kind.name} x$count');
-
-  final HitboxKind kind;
-  final int count;
-  final bool rotate;
+class RaycastBenchmark({
+  required final HitboxKind kind,
+  required final int count,
+  final bool rotate = false,
+}) extends AsyncBenchmarkBase {
+  this : super('Raycast ${kind.name} x$count');
 
   late final RaycastScenery _scenery;
   late final List<double> _baseAngles;

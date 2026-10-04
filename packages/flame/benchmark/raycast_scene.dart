@@ -1,6 +1,3 @@
-// ignore_for_file: use_primary_constructors, empty_container_bodies
-// ignore_for_file: unnecessary_const_in_enum_constructor
-
 import 'dart:math';
 import 'dart:ui';
 
@@ -18,7 +15,7 @@ const _worldWidth = 800.0;
 const _worldHeight = 600.0;
 
 /// The kinds of hitboxes of a scene.
-enum HitboxKind {
+enum HitboxKind() {
   /// The cheapest to intersect with a ray: rectangles and circles.
   simple,
 
@@ -50,36 +47,29 @@ enum HitboxKind {
 }
 
 /// The sizes of the hitboxes of a scene.
-enum RaycastScene {
+enum RaycastScene(final double minSize, final double maxSize) {
   /// Small hitboxes, so that a ray crosses the boxes of a few of them.
   spread(30, 80),
 
   /// Hitboxes as big as most of the world, so that a ray crosses the boxes of
   /// many of them, and, with the concave ones, hits few of them.
-  dense(300, 500);
-
-  const RaycastScene(this.minSize, this.maxSize);
-
-  final double minSize;
-  final double maxSize;
+  dense(300, 500),
 }
 
-class RaycastGame extends FlameGame<RaycastWorld> {
-  RaycastGame() : super(world: RaycastWorld());
+class RaycastGame() extends FlameGame<RaycastWorld> {
+  this : super(world: RaycastWorld());
 }
 
-class RaycastWorld extends World with HasCollisionDetection {}
+class RaycastWorld() extends World with HasCollisionDetection;
 
 /// A scene of hitboxes in a [RaycastGame], and rays to cast against it. The
 /// scene and the rays only depend on the arguments, so the same scene can be
 /// built again to compare runs.
-class RaycastScenery {
-  RaycastScenery._(this.game, this.components, this.rays);
-
-  final RaycastGame game;
-  final List<PositionComponent> components;
-  final List<Ray2> rays;
-
+class RaycastScenery._(
+  final RaycastGame game,
+  final List<PositionComponent> components,
+  final List<Ray2> rays,
+) {
   StandardCollisionDetection<Broadphase<ShapeHitbox>> get detection =>
       game.world.collisionDetection
           as StandardCollisionDetection<Broadphase<ShapeHitbox>>;
@@ -247,11 +237,10 @@ class RaycastScenery {
 
 /// A rectangle whose ray intersection does not allocate: it is never hit, or
 /// it is hit where the ray enters its box.
-class _StubHitbox extends RectangleHitbox {
-  _StubHitbox(double size, {required this.hits})
-    : super(size: Vector2.all(size), collisionType: CollisionType.inactive);
+class _StubHitbox(double size, {required final bool hits})
+    extends RectangleHitbox {
+  this : super(size: Vector2.all(size), collisionType: CollisionType.inactive);
 
-  final bool hits;
   final _normal = Vector2(0, -1);
   final _reflection = Ray2.zero();
 

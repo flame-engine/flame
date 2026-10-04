@@ -1,5 +1,3 @@
-// ignore_for_file: use_primary_constructors
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -173,8 +171,8 @@ String _row(List<String> columns) {
   ].join();
 }
 
-class _Options {
-  _Options(List<String> arguments) {
+class _Options(List<String> arguments) {
+  this {
     for (final argument in arguments) {
       final match = RegExp(r'^--([\w-]+)=(.*)$').firstMatch(argument);
       if (match == null) {
@@ -214,13 +212,7 @@ class _Options {
   String trace = '';
 }
 
-class _Case {
-  _Case(this.kind, this.scene, this.count);
-
-  final String kind;
-  final String scene;
-  final int count;
-
+class _Case(final String kind, final String scene, final int count) {
   String get id => '$scene/$kind/$count';
 }
 
@@ -252,31 +244,21 @@ String _top(Map<String, int> counts, int rays, {int count = 4}) {
       .join(', ');
 }
 
-class _CaseResult {
-  _CaseResult({
-    required this.testCase,
-    required this.traceRays,
-    required this.timingRays,
-    required this.counts,
-    required this.micros,
-    required this.range,
-    required this.truncated,
-  });
-
-  final _Case testCase;
-  final int traceRays;
-  final int timingRays;
-  final Map<String, int> counts;
+class _CaseResult({
+  required final _Case testCase,
+  required final int traceRays,
+  required final int timingRays,
+  required final Map<String, int> counts,
 
   /// The microseconds per ray.
-  final double micros;
+  required final double micros,
 
   /// The fastest and the slowest of the timings, in microseconds per ray.
-  final (double, double) range;
+  required final (double, double) range,
 
   /// Whether the VM may have dropped allocation samples.
-  final bool truncated;
-
+  required final bool truncated,
+}) {
   double get _objects =>
       counts.values.fold(0, (sum, count) => sum + count) / traceRays;
 
@@ -404,9 +386,7 @@ Future<void> _traceCases(
 typedef _Counted = ({Map<String, int> counts, bool truncated});
 
 /// The app run by `flutter run --machine`, and its VM service.
-class _App {
-  _App._(this._process);
-
+class _App._(final Process _process) {
   /// The samples that one chunk of rays may have without the VM dropping some,
   /// which it does when its buffer of samples is full.
   static const _sampleBufferLimit = 40000;
@@ -414,7 +394,6 @@ class _App {
   /// The fewest rays in a chunk.
   static const _minChunk = 10;
 
-  final Process _process;
   final log = <String>[];
   final _wsUri = Completer<String>();
   final _started = Completer<void>();
