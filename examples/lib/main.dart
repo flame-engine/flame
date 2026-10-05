@@ -3,6 +3,15 @@ import 'package:examples/platform/stub_provider.dart'
     if (dart.library.html) 'platform/web_provider.dart';
 import 'package:examples/stories/animations/animations.dart';
 import 'package:examples/stories/bridge_libraries/audio/audio.dart';
+import 'package:examples/stories/bridge_libraries/flame_behavior_tree/basic_example.dart';
+import 'package:examples/stories/bridge_libraries/flame_behavior_tree/flame_behavior_tree.dart';
+import 'package:examples/stories/bridge_libraries/flame_behavior_tree/race_example.dart';
+import 'package:examples/stories/bridge_libraries/flame_behavior_tree/robot_example.dart';
+import 'package:examples/stories/bridge_libraries/flame_behavior_tree/switch_tree_example.dart';
+import 'package:examples/stories/bridge_libraries/flame_behavior_tree/thief_example.dart';
+import 'package:examples/stories/bridge_libraries/flame_behavior_tree/tick_interval_example.dart';
+import 'package:examples/stories/bridge_libraries/flame_behavior_tree/traffic_example.dart';
+import 'package:examples/stories/bridge_libraries/flame_behavior_tree/turret_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/flame_forge2d.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/distance_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/filter_joint.dart';
@@ -44,6 +53,14 @@ void main() {
   final page = PageProviderImpl().getPage();
 
   final routes = <String, FlameGame Function()>{
+    'basic_example': BasicExample.new,
+    'robot_example': RobotExample.new,
+    'traffic_example': TrafficExample.new,
+    'turret_example': TurretExample.new,
+    'thief_example': ThiefExample.new,
+    'race_example': RaceExample.new,
+    'tick_interval_example': TickIntervalExample.new,
+    'switch_tree_example': SwitchTreeExample.new,
     'distance_joint': DistanceJointExample.new,
     'motor_joint': MotorJointExample.new,
     'mouse_joint': MouseJointExample.new,
@@ -116,6 +133,7 @@ void runAsWidgetbook() {
         imageStories(),
 
         // Bridge package examples
+        flameBehaviorTreeStories(),
         forge2DStories(),
         jointsStories(),
         flameIsolateStories(),

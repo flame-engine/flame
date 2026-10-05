@@ -15,6 +15,7 @@ dependencies:
   crystal_ball: ^0.1.0
   flame: ^2.0.0-dev.0
   flame_audio: ^2.13.0-dev.0
+  flame_behavior_tree: ^0.2.0-dev.0+6
   flame_forge2d: ^0.21.0-dev.0
   flame_isolate: ^0.7.0-dev.0+24
   flame_lottie: ^0.5.0-dev.0+24

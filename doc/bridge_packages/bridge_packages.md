@@ -10,6 +10,11 @@ Uses Flutter GPU / Impeller low-level level access to provide an ergonomic and *
 Play multiple audio files simultaneously (bridge package for [AudioPlayers]).
 :::
 
+:::{package} flame_behavior_tree
+
+Make the components of your game follow a behavior tree.
+:::
+
 :::{package} flame_behaviors
 
 Apply separation of concerns to game logic in the form of Entities and Behaviors.
@@ -116,6 +121,7 @@ Load Typled sprite atlases with edge-repeated padding (bridge package for [Typle
 :hidden:
 
 flame_audio                 <flame_audio/flame_audio.md>
+flame_behavior_tree         <flame_behavior_tree/flame_behavior_tree.md>
 flame_behaviors             <flame_behaviors/flame_behaviors.md>
 flame_bloc                  <flame_bloc/flame_bloc.md>
 flame_fire_atlas            <flame_fire_atlas/flame_fire_atlas.md>
