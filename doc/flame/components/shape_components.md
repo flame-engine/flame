@@ -187,7 +187,7 @@ clean up the result:
 Both default to `0`, which keeps every vertex and every piece. For Box2D, `minDistance` is 4 times
 its linear slop and `minWidth` twice it.
 
-The cost grows about with the cube of the number of vertices, so split the polygons when loading
+The cost grows about with the square of the number of vertices, so split the polygons when loading
 and not in every tick. The polygons of a `PathComponent` are a convenient input, since they follow
 each contour of a path with straight edges and are already simplified according to their
 `sampling`:

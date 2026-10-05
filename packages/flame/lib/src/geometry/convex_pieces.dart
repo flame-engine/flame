@@ -25,7 +25,7 @@ import 'package:flame/extensions.dart';
 /// a hole that touches the outline at a vertex is filled, though. The parts
 /// of a [polygon] that crosses itself may be left out.
 ///
-/// The cost grows about with the cube of the number of vertices, so it is
+/// The cost grows about with the square of the number of vertices, so it is
 /// meant to be done when loading, not in the game loop. The polygons of a
 /// `PathComponent` are already simplified according to their sampling, while
 /// a [polygon] made by hand should not have a vertex for each pixel or each

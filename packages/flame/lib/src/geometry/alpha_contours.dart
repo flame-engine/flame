@@ -33,58 +33,78 @@ Path traceAlphaContours(
   if (columns <= 0 || rows <= 0) {
     return path;
   }
-  // The alpha of the region with a transparent border around it, so that
-  // every outline is closed.
+  // The samples are the pixels of the region with a transparent border around
+  // them, so that every outline is closed.
   final gridWidth = columns + 2;
   final gridHeight = rows + 2;
-  final alpha = Float64List(gridWidth * gridHeight);
+
+  /// The alpha of the pixel at the [sample], which is zero on the border.
+  double alphaAt(int sample) {
+    final x = sample % gridWidth - 1;
+    final y = sample ~/ gridWidth - 1;
+    if (x < 0 || y < 0 || x >= columns || y >= rows) {
+      return 0;
+    }
+    return pixels[((top + y) * width + left + x) * 4 + 3] / 255;
+  }
+
+  // Whether each sample is inside, which is all that the scan of the cells
+  // needs, while the alpha itself is only read along the outlines. The
+  // smallest alpha that is inside is found with the same comparison that the
+  // alpha of a sample would go through.
+  var minAlpha = 0;
+  while (minAlpha < 256 && minAlpha / 255 < threshold) {
+    minAlpha++;
+  }
+  final inside = Uint8List(gridWidth * gridHeight);
   for (var y = 0; y < rows; y++) {
-    final pixel = (top + y) * width + left;
+    final pixel = ((top + y) * width + left) * 4 + 3;
     final sample = (y + 1) * gridWidth + 1;
     for (var x = 0; x < columns; x++) {
-      alpha[sample + x] = pixels[(pixel + x) * 4 + 3] / 255;
+      if (pixels[pixel + x * 4] >= minAlpha) {
+        inside[sample + x] = 1;
+      }
     }
   }
 
   // An edge joins a sample with the one at its right (2 * sample) or with the
   // one below it (2 * sample + 1). Each crossed edge starts one segment of an
-  // outline, which ends at the edge stored here, and it ends another one.
-  final next = Int32List(gridWidth * gridHeight * 2)
-    ..fillRange(
-      0,
-      gridWidth * gridHeight * 2,
-      -1,
-    );
-  // The corners and the edges of a cell in clockwise order, where the edge at
-  // an index goes from the corner at that index to the following one.
-  final corners = Int32List(4);
+  // outline, which ends at the edge stored here, and it ends another one. Only
+  // the edges along the outlines are stored, in the order they are found in,
+  // which is also the order of the [starts].
+  final next = <int, int>{};
+  final starts = <int>[];
+  // The edges of a cell in clockwise order, where the edge at an index goes
+  // from the corner at that index to the following one, and the corners are
+  // the bits of the cell in the same order.
   final edges = Int32List(4);
-  final inside = List.filled(4, false);
   final crossed = Int32List(4);
   for (var y = 0; y < gridHeight - 1; y++) {
+    final row = y * gridWidth;
+    // The left corners of a cell are the right corners of the previous one.
+    var topLeftBit = inside[row];
+    var bottomLeftBit = inside[row + gridWidth];
     for (var x = 0; x < gridWidth - 1; x++) {
-      final topLeft = y * gridWidth + x;
-      corners[0] = topLeft;
-      corners[1] = topLeft + 1;
-      corners[2] = topLeft + gridWidth + 1;
-      corners[3] = topLeft + gridWidth;
-      var insideCount = 0;
-      for (var i = 0; i < 4; i++) {
-        inside[i] = alpha[corners[i]] >= threshold;
-        if (inside[i]) {
-          insideCount++;
-        }
-      }
-      if (insideCount == 0 || insideCount == 4) {
+      final topLeft = row + x;
+      final topRightBit = inside[topLeft + 1];
+      final bottomRightBit = inside[topLeft + gridWidth + 1];
+      final cell =
+          topLeftBit |
+          topRightBit << 1 |
+          bottomRightBit << 2 |
+          bottomLeftBit << 3;
+      topLeftBit = topRightBit;
+      bottomLeftBit = bottomRightBit;
+      if (cell == 0 || cell == 15) {
         continue;
       }
-      edges[0] = 2 * corners[0];
-      edges[1] = 2 * corners[1] + 1;
-      edges[2] = 2 * corners[3];
-      edges[3] = 2 * corners[0] + 1;
+      edges[0] = 2 * topLeft;
+      edges[1] = 2 * (topLeft + 1) + 1;
+      edges[2] = 2 * (topLeft + gridWidth);
+      edges[3] = 2 * topLeft + 1;
       var count = 0;
       for (var i = 0; i < 4; i++) {
-        if (inside[i] != inside[(i + 1) % 4]) {
+        if ((cell >> i & 1) != (cell >> (i + 1) % 4 & 1)) {
           crossed[count++] = i;
         }
       }
@@ -95,19 +115,21 @@ Path traceAlphaContours(
       // or apart: the segments then end at the next or at the previous
       // crossing, which are the same one in the other cases.
       final joined =
-          (alpha[corners[0]] +
-                  alpha[corners[1]] +
-                  alpha[corners[2]] +
-                  alpha[corners[3]]) /
-              4 >=
-          threshold;
+          count == 4 &&
+          (alphaAt(topLeft) +
+                      alphaAt(topLeft + 1) +
+                      alphaAt(topLeft + gridWidth + 1) +
+                      alphaAt(topLeft + gridWidth)) /
+                  4 >=
+              threshold;
       for (var i = 0; i < count; i++) {
         final edge = crossed[i];
-        if (inside[edge]) {
+        if (cell >> edge & 1 == 1) {
           final end = joined
               ? crossed[(i + 1) % count]
               : crossed[(i + count - 1) % count];
           next[edges[edge]] = edges[end];
+          starts.add(edges[edge]);
         }
       }
     }
@@ -116,25 +138,24 @@ Path traceAlphaContours(
   Offset crossing(int edge) {
     final sample = edge >> 1;
     final other = edge.isEven ? sample + 1 : sample + gridWidth;
-    final t = (threshold - alpha[sample]) / (alpha[other] - alpha[sample]);
+    final alpha = alphaAt(sample);
+    final t = (threshold - alpha) / (alphaAt(other) - alpha);
     // The sample at (1, 1) is the center of the first pixel of the region.
     final x = sample % gridWidth - 0.5 + (edge.isEven ? t : 0);
     final y = sample ~/ gridWidth - 0.5 + (edge.isEven ? 0 : t);
     return Offset(x * scaleX, y * scaleY);
   }
 
-  for (var start = 0; start < next.length; start++) {
-    if (next[start] < 0) {
+  for (final start in starts) {
+    if (!next.containsKey(start)) {
       continue;
     }
     final points = <Offset>[];
-    var edge = start;
+    int? edge = start;
     do {
-      points.add(crossing(edge));
-      final following = next[edge];
-      next[edge] = -1;
-      edge = following;
-    } while (edge != start && edge >= 0);
+      points.add(crossing(edge!));
+      edge = next.remove(edge);
+    } while (edge != start && edge != null);
     final outline = _withoutCollinear(_withoutDuplicates(points));
     // The outer outlines have the inside on their right, so they go clockwise
     // on the screen, while the outlines of the holes go counterclockwise.
