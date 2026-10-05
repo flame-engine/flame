@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'dart:math';
 
 import 'package:flame/components.dart';
@@ -136,13 +134,17 @@ class Agent({
         door.absolutePosition + Vector2(door.size.x * 0.8, -15);
 
     // Keeps knocking until the door gets opened (tap the door to open it).
-    final waitForDoor = Task((context) {
-      if (door.isOpen) {
-        return Status.success;
-      }
-      door.knock();
-      return Status.running;
-    });
+    // Nodes keep track of whether they are running, so every place in the tree
+    // gets a node of its own.
+    Node waitForDoor() {
+      return Task((context) {
+        if (door.isOpen) {
+          return Status.success;
+        }
+        door.knock();
+        return Status.running;
+      });
+    }
 
     // The tree is a loop: go inside, hang around, go outside, and again.
     // Each child of a sequence is resumed where it was left, so the agent
@@ -151,32 +153,17 @@ class Agent({
       Repeat(
         Sequence([
           Wait(1),
-          _walkTo(outsideTheDoor, duration: 3),
-          waitForDoor,
-          _walkTo(() => house.absoluteCenter, duration: 3),
+          MoveTo((_) => outsideTheDoor(), duration: 3),
+          waitForDoor(),
+          MoveTo((_) => house.absoluteCenter, duration: 3),
           Wait(2),
-          _walkTo(insideTheDoor, duration: 3),
-          waitForDoor,
-          _walkTo(outsideTheDoor, duration: 2),
-          _walkTo(() => _startPosition, duration: 3),
+          MoveTo((_) => insideTheDoor(), duration: 3),
+          waitForDoor(),
+          MoveTo((_) => outsideTheDoor(), duration: 2),
+          MoveTo((_) => _startPosition, duration: 3),
         ]),
       ),
       owner: this,
     );
-  }
-
-  /// A node that moves the agent to [target] and succeeds once it arrives.
-  Node _walkTo(Vector2 Function() target, {required double duration}) {
-    return AsyncTask((context) {
-      final arrived = Completer<Status>();
-      add(
-        MoveEffect.to(
-          target(),
-          EffectController(duration: duration, curve: Curves.easeInOut),
-          onComplete: () => arrived.complete(Status.success),
-        ),
-      );
-      return arrived.future;
-    });
   }
 }
