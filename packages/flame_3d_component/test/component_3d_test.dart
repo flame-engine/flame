@@ -22,9 +22,6 @@ class _RecordingComponent3D({
   bool get isReadyToRender => ready;
 
   @override
-  Future<void> onLoad() async {}
-
-  @override
   void updateScene(double dt) {
     updates.add(dt);
   }
