@@ -170,8 +170,8 @@ Some consumers of polygons only accept convex ones with a limited number of vert
 shapes of physics engines such as Box2D, which take at most 8 vertices. The `convexPieces` function
 splits a simple polygon, convex or concave, into such pieces: it first splits the polygon into
 triangles by ear clipping, and then merges neighboring triangles as long as they stay convex and
-within `maxVertices`, which defaults to `8` (the Hertel-Mehlhorn algorithm). The pieces reuse the
-vertices of the polygon and go in the same direction.
+within `maxVertices`, which defaults to `8` (the Hertel-Mehlhorn algorithm). The pieces are made of
+copies of the vertices of the polygon and go in the same direction.
 
 A polygon that touches itself at a vertex, like the outline of two shapes that meet at a corner, is
 split there first, and a hole that touches the outline at a vertex is filled. The parts of a
@@ -190,7 +190,7 @@ its linear slop and `minWidth` twice it.
 The cost grows about with the square of the number of vertices, so split the polygons when loading
 and not in every tick. The polygons of a `PathComponent` are a convenient input, since they follow
 each contour of a path with straight edges and are already simplified according to their
-`sampling`:
+`sampling`, and `PathComponent.polygonsOf` gives them without making a component:
 
 ```dart
 void main() {
@@ -207,9 +207,9 @@ void main() {
       Offset(0, 40),
     ], true);
 
-  final component = PathComponent(path: path);
   final pieces = [
-    for (final polygon in component.polygons) ...convexPieces(polygon),
+    for (final polygon in PathComponent.polygonsOf(path))
+      ...convexPieces(polygon),
   ];
 }
 ```

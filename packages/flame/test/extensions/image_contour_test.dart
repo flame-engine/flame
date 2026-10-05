@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/src/geometry/signed_area.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// The pixels of the [rows], where each character is a pixel: '#' is opaque,
@@ -93,13 +94,10 @@ void main() {
 
     test('goes clockwise on the screen', () {
       final vertices = _vertices(_contour(['##', '##'])).single;
-      var area = 0.0;
-      for (var i = 0; i < vertices.length; i++) {
-        final a = vertices[i];
-        final b = vertices[(i + 1) % vertices.length];
-        area += a.dx * b.dy - b.dx * a.dy;
-      }
-      expect(area, greaterThan(0));
+      expect(
+        signedArea([for (final vertex in vertices) vertex.toVector2()]),
+        greaterThan(0),
+      );
     });
 
     test('follows concave outlines', () {
@@ -145,10 +143,21 @@ void main() {
     test('places the edges where the alpha reaches the threshold', () {
       final half = _contour(['#+']).getBounds();
       expect(half.right, closeTo(1.5 + 0.004, 0.001));
-      final low = _contour(['#+'], alphaThreshold: 0.25).getBounds();
+      final low = _contour(['#+.'], alphaThreshold: 0.25).getBounds();
       expect(low.right, closeTo(1.5 + 1 - 0.25 / (128 / 255), 0.001));
       final high = _contour(['#+'], alphaThreshold: 0.75).getBounds();
       expect(high.right, closeTo(0.5 + 0.25 / (127 / 255), 0.001));
+    });
+
+    test('stays within the region at a low threshold', () {
+      final low = _contour(['##', '##'], alphaThreshold: 1 / 255);
+      expect(low.getBounds(), const Rect.fromLTRB(0, 0, 2, 2));
+      final region = _contour(
+        ['....', '.##.', '....'],
+        region: const Rect.fromLTWH(1, 1, 2, 1),
+        alphaThreshold: 0.25,
+      );
+      expect(region.getBounds(), const Rect.fromLTRB(0, 0, 2, 1));
     });
 
     test('keeps the corners where the alpha is exactly the threshold', () {

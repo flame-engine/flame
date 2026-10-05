@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flame/extensions.dart';
+import 'package:flame/src/geometry/signed_area.dart';
 
 /// Splits a simple [polygon] into convex polygons of at most [maxVertices]
 /// vertices each, like the ones that physics engines such as Box2D need.
@@ -18,7 +19,9 @@ import 'package:flame/extensions.dart';
 /// For Box2D, [minDistance] is 4 times its linear slop and [minWidth] twice
 /// it, see `b2ComputeHull`.
 ///
-/// The pieces reuse the vertices of the [polygon], in the same direction.
+/// The pieces are made of copies of the vertices of the [polygon], going in
+/// the same direction, so they can be handed to the consumers that change
+/// their vertices in place, like a `PolygonHitbox`.
 ///
 /// The [polygon] may touch itself at its vertices, like the outline of two
 /// shapes that meet at a corner, which is split there into simple polygons:
@@ -42,15 +45,16 @@ List<List<Vector2>> convexPieces(
   if (n < 3) {
     return const [];
   }
-  // The pieces are worked out on indices of vertices going counterclockwise,
-  // that is with a positive area, and turned back into vertices at the end.
-  final isClockwise = _doubleArea(vertices) < 0;
-  final indices = List.generate(n, (i) => isClockwise ? n - 1 - i : i);
+  // The pieces are worked out on indices of vertices going clockwise on the
+  // screen, that is with a positive signed area, and turned back into
+  // vertices at the end.
+  final isReversed = signedArea(vertices) < 0;
+  final indices = List.generate(n, (i) => isReversed ? n - 1 - i : i);
   final pieces = [
     for (final loop in _splitAtTouches(vertices, indices, minDistance))
       // The loops that go the other way are holes that touch the outline,
       // which the other loops already cover.
-      if (_doubleArea([for (final i in loop) vertices[i]]) > 0)
+      if (signedArea([for (final i in loop) vertices[i]]) > 0)
         ..._triangulate(vertices, loop),
   ];
   // Corners that are reflex by less than half of the minimum width are
@@ -59,21 +63,33 @@ List<List<Vector2>> convexPieces(
   return [
     for (final piece in pieces)
       if (_isWideEnough(vertices, piece, minDistance, minWidth))
-        [for (final i in isClockwise ? piece.reversed : piece) vertices[i]],
+        [
+          for (final i in isReversed ? piece.reversed : piece)
+            vertices[i].clone(),
+        ],
   ];
 }
 
-/// Splits the polygon given by the [loop] of indices of [vertices] where it
+/// Splits the polygon given by the [indices] of [vertices] where it
 /// touches itself, that is where two of its vertices that are not
 /// consecutive are welded, into loops that do not touch themselves.
 ///
 /// Ear clipping can get stuck on a polygon that touches itself, which would
 /// leave the rest of it out.
+///
+/// The last vertices of a loop that are welded to its first one are left out,
+/// like consecutive vertices are, since a loop that was split off ends next to
+/// the vertex where the polygon touches itself.
 List<List<int>> _splitAtTouches(
   List<Vector2> vertices,
-  List<int> loop,
+  List<int> indices,
   double minDistance,
 ) {
+  var loop = indices;
+  while (loop.length > 1 &&
+      _isWelded(vertices[loop.last], vertices[loop.first], minDistance)) {
+    loop = loop.sublist(0, loop.length - 1);
+  }
   for (var a = 0; a < loop.length; a++) {
     for (var b = a + 2; b < loop.length; b++) {
       if (_isWelded(vertices[loop[a]], vertices[loop[b]], minDistance)) {
@@ -135,25 +151,15 @@ bool _isWelded(Vector2 a, Vector2 b, double minDistance) {
   return distance == 0 || distance < minDistance;
 }
 
-/// Twice the signed area of the [polygon], positive if it is counterclockwise.
-double _doubleArea(List<Vector2> polygon) {
-  var area = 0.0;
-  for (var i = 0; i < polygon.length; i++) {
-    final a = polygon[i];
-    final b = polygon[(i + 1) % polygon.length];
-    area += a.x * b.y - b.x * a.y;
-  }
-  return area;
-}
-
-/// Twice the signed area of the triangle [a], [b], [c], positive if it is
-/// counterclockwise, that is if [b] is a convex corner.
+/// Twice the signed area of the triangle [a], [b], [c], positive if it goes
+/// clockwise on the screen, that is if [b] is a convex corner of a polygon
+/// that goes clockwise on the screen.
 double _cross(Vector2 a, Vector2 b, Vector2 c) {
   return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
 }
 
-/// Splits the counterclockwise polygon given by the [indices] of [vertices]
-/// into triangles, by clipping its ears.
+/// Splits the polygon given by the [indices] of [vertices], which goes
+/// clockwise on the screen, into triangles, by clipping its ears.
 List<List<int>> _triangulate(List<Vector2> vertices, List<int> indices) {
   final remaining = List.of(indices);
   final triangles = <List<int>>[];
@@ -243,8 +249,8 @@ void _merge(
   }
 }
 
-/// The union of the counterclockwise pieces [a] and [b] if they share an
-/// edge, or null otherwise.
+/// The union of the pieces [a] and [b], which go clockwise on the screen, if
+/// they share an edge, or null otherwise.
 List<int>? _union(List<int> a, List<int> b) {
   for (var k = 0; k < a.length; k++) {
     final from = a[k];
@@ -264,8 +270,9 @@ List<int>? _union(List<int> a, List<int> b) {
   return null;
 }
 
-/// Whether the counterclockwise [piece] has no reflex corners, except for the
-/// ones closer than the [tolerance] to the line through their neighbors.
+/// Whether the [piece], which goes clockwise on the screen, has no reflex
+/// corners, except for the ones closer than the [tolerance] to the line
+/// through their neighbors.
 bool _isConvex(List<Vector2> vertices, List<int> piece, double tolerance) {
   final m = piece.length;
   for (var i = 0; i < m; i++) {

@@ -102,6 +102,21 @@ void main() {
       );
     });
 
+    test('polygonsOf gives the polygons in the coordinates of the path', () {
+      final path = Path()
+        ..addRect(const Rect.fromLTWH(5, 5, 10, 10))
+        ..addRect(const Rect.fromLTWH(7, 7, 2, 2));
+      final polygons = PathComponent.polygonsOf(path);
+      final component = PathComponent(path: path);
+
+      expect(polygons, hasLength(1));
+      expect(
+        polygons.single.map((vertex) => vertex - Vector2.all(5)),
+        component.polygons.single,
+      );
+      expect(PathComponent.polygonsOf(path, filter: false), hasLength(2));
+    });
+
     test('contains the points inside of any polygon', () {
       final path = Path()
         ..addRect(const Rect.fromLTWH(0, 0, 10, 10))

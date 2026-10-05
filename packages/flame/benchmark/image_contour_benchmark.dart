@@ -80,8 +80,8 @@ class ConvexPiecesBenchmark(final int vertices) extends _SingleRunBenchmark {
 }
 
 /// The whole way from the pixels of a [size] by [size] blob to the convex
-/// pieces of its outline, through the polygons of a [PathComponent] with the
-/// default sampling.
+/// pieces of its outline, through the polygons that a [PathComponent] makes
+/// of it with the default sampling.
 class PipelineBenchmark(final int size) extends _SingleRunBenchmark {
   this : super('Pixels to convex pieces of blob ${size}x$size');
 
@@ -95,8 +95,7 @@ class PipelineBenchmark(final int size) extends _SingleRunBenchmark {
   @override
   void run() {
     final outline = ImageExtension.contourFromPixels(_pixels, size, size);
-    final component = PathComponent(path: outline);
-    for (final polygon in component.polygons) {
+    for (final polygon in PathComponent.polygonsOf(outline)) {
       convexPieces(polygon);
     }
   }

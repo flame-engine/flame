@@ -51,7 +51,7 @@ class PathComponent({
   /// all lie inside of the largest polygon are left out too, since they are
   /// details of the shape that it already covers, like the eyes of a face.
   this : super(size: path.getBounds().size.toVector2()) {
-    _polygons = _polygonsOf(
+    _polygons = polygonsOf(
       this.path,
       sampling: sampling,
       tolerance: tolerance,
@@ -213,13 +213,18 @@ class PathComponent({
     return rectIntersections;
   }
 
-  /// Returns the polygon of each closed contour of the [path] with at least
-  /// three vertices, with the vertices going counterclockwise.
-  static List<List<Vector2>> _polygonsOf(
+  /// Returns the polygons that a [PathComponent] of the [path] would have, in
+  /// the coordinates of the [path], without making the component.
+  ///
+  /// There is one polygon for each closed contour of the [path] with at least
+  /// three vertices, which go counterclockwise in the screen coordinate
+  /// system. See the constructor for the [sampling], the [tolerance] and the
+  /// [filter].
+  static List<List<Vector2>> polygonsOf(
     Path path, {
-    required double sampling,
-    required double? tolerance,
-    required bool filter,
+    double sampling = 1.0,
+    double? tolerance,
+    bool filter = true,
   }) {
     final polygons = <List<Vector2>>[];
     for (final metric in path.computeMetrics()) {

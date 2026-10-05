@@ -90,9 +90,10 @@ extension ImageExtension on Image {
   /// [alphaThreshold], which is between zero, excluded, and one. The outlines
   /// pass between the pixels, at the point where the alpha would reach the
   /// [alphaThreshold] if it changed linearly between their centers, so that the
-  /// anti-aliased edges of the image are followed more closely than a pixel.
-  /// Only the outer outlines are kept, not the ones of the holes in the
-  /// areas, and the separate areas give separate contours.
+  /// anti-aliased edges of the image are followed more closely than a pixel,
+  /// and they stay within the [region]. Only the outer outlines are kept, not
+  /// the ones of the holes in the areas, and the separate areas give separate
+  /// contours.
   ///
   /// The contours are meant to make hitboxes that follow the outline of the
   /// image, like a `PathHitbox`, or a `PolygonHitbox` from one of them, which

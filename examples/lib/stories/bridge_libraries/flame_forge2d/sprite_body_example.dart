@@ -4,7 +4,6 @@ import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
@@ -30,10 +29,6 @@ class SpriteBodyExample({bool showPieces = false}) extends Forge2DExampleGame {
 class SpriteBodyWorld({bool showPieces = false})
     extends Forge2DWorld
     with TapCallbacks, HasGameRef<Forge2DGame> {
-  this {
-    _showPieces = showPieces;
-  }
-
   /// The width of the flames, in meters.
   static const flameWidth = 8.0;
 
@@ -47,7 +42,7 @@ class SpriteBodyWorld({bool showPieces = false})
   /// flames share, since tracing it reads back the pixels of the image.
   late final List<List<Vector2>> _pieces;
 
-  bool _showPieces = false;
+  bool _showPieces = showPieces;
 
   /// Whether the convex pieces of the flames are drawn, which applies to the
   /// flames already added too.
@@ -107,9 +102,9 @@ class FlameBody(
   /// [size] in meters, relative to its center.
   ///
   /// The outline is traced in pixels rather than in meters, with [pixels] per
-  /// meter, so that the default sampling of the [PathComponent] that makes
-  /// its polygons follows it closely. The parts of the sprite that are apart
-  /// give separate polygons, and so separate pieces.
+  /// meter, so that the default sampling of the polygons of a
+  /// [PathComponent] follows it closely. The parts of the sprite that are
+  /// apart give separate polygons, and so separate pieces.
   static Future<List<List<Vector2>>> piecesOf(
     Sprite sprite,
     Vector2 size,
@@ -117,19 +112,13 @@ class FlameBody(
   ) async {
     final pixelSize = size * pixels;
     final outline = await sprite.contour(size: pixelSize);
-    // The component moves the outline to its origin, so it is placed where
-    // the center of the outline is, relative to the center of the sprite.
-    final center = outline.getBounds().center.toVector2();
-    final component = PathComponent(
-      path: outline,
-      position: (center - pixelSize / 2) / pixels,
-      anchor: Anchor.center,
-      scale: Vector2.all(1 / pixels),
-    );
+    // The outline is relative to the top left corner of the sprite, while the
+    // pieces are relative to its center.
+    final center = pixelSize / 2;
     return [
-      for (final polygon in component.polygons)
+      for (final polygon in PathComponent.polygonsOf(outline))
         ...convexPieces(
-          [for (final vertex in polygon) component.positionOf(vertex)],
+          [for (final vertex in polygon) (vertex - center) / pixels],
           minDistance: 4 * linearSlop,
           minWidth: 2 * linearSlop,
         ),

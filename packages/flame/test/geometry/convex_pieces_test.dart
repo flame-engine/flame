@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
+import 'package:flame/src/geometry/signed_area.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -45,7 +46,27 @@ void main() {
         Vector2(2, 0),
       ];
       final pieces = convexPieces(clockwise);
-      expect(pieces.every((piece) => _signedArea(piece) < 0), isTrue);
+      expect(pieces.every((piece) => signedArea(piece) < 0), isTrue);
+    });
+
+    test('copies the vertices of the polygon', () {
+      final square = [
+        Vector2(0, 0),
+        Vector2(1, 0),
+        Vector2(1, 1),
+        Vector2(0, 1),
+      ];
+      final pieces = convexPieces(square);
+      expect(pieces.single, unorderedEquals(square));
+      for (final vertex in pieces.single) {
+        vertex.setZero();
+      }
+      expect(square, [
+        Vector2(0, 0),
+        Vector2(1, 0),
+        Vector2(1, 1),
+        Vector2(0, 1),
+      ]);
     });
 
     test('limits the number of vertices of the pieces', () {
@@ -55,7 +76,7 @@ void main() {
       ];
       final pieces = convexPieces(circle, maxVertices: 5);
       expect(pieces.every((piece) => piece.length <= 5), isTrue);
-      expect(_totalArea(pieces), closeTo(_signedArea(circle), 1e-9));
+      expect(_totalArea(pieces), closeTo(signedArea(circle), 1e-9));
     });
 
     test('welds the vertices closer than minDistance', () {
@@ -94,6 +115,27 @@ void main() {
       expect(pieces, hasLength(2));
       expect(pieces.every(_isConvex), isTrue);
       expect(_totalArea(pieces), closeTo(2, 1e-9));
+    });
+
+    test('welds the vertices next to where the polygon touches itself', () {
+      // Two squares that meet near the corner (1, 1), where the second visit
+      // is within minDistance of the first one, and the last vertex is within
+      // minDistance of the second visit but not of the first one.
+      final touching = [
+        Vector2(1, 1),
+        Vector2(2, 1),
+        Vector2(2, 2),
+        Vector2(1, 2),
+        Vector2(1.05, 1),
+        Vector2(0, 1),
+        Vector2(0, 0),
+        Vector2(1, 0),
+        Vector2(1.1, 0.95),
+      ];
+      final pieces = convexPieces(touching, minDistance: 0.1);
+      expect(pieces, hasLength(2));
+      expect(pieces.every(_isConvex), isTrue);
+      expect(_totalArea(pieces), closeTo(2.025, 1e-6));
     });
 
     test('fills a hole that touches the outline at a vertex', () {
@@ -136,8 +178,8 @@ void main() {
         ),
         isTrue,
       );
-      expect(pieces.every((piece) => _signedArea(piece) > 0), isTrue);
-      expect(_totalArea(pieces), closeTo(_signedArea(star), 1e-6));
+      expect(pieces.every((piece) => signedArea(piece) > 0), isTrue);
+      expect(_totalArea(pieces), closeTo(signedArea(star), 1e-6));
     }, repeatCount: 100);
 
     test('covers the polygons of a PathComponent', () {
@@ -151,8 +193,7 @@ void main() {
         ..lineTo(10, 40)
         ..lineTo(0, 40)
         ..close();
-      final component = PathComponent(path: path);
-      final polygon = component.polygons.single.toList();
+      final polygon = PathComponent.polygonsOf(path).single;
       final pieces = convexPieces(polygon);
       expect(pieces.length, greaterThan(1));
       expect(pieces.every(_isConvex), isTrue);
@@ -161,22 +202,12 @@ void main() {
   });
 }
 
-double _signedArea(List<Vector2> polygon) {
-  var area = 0.0;
-  for (var i = 0; i < polygon.length; i++) {
-    final a = polygon[i];
-    final b = polygon[(i + 1) % polygon.length];
-    area += a.x * b.y - b.x * a.y;
-  }
-  return area / 2;
-}
-
 double _totalArea(List<List<Vector2>> pieces) {
-  return pieces.fold(0, (sum, piece) => sum + _signedArea(piece).abs());
+  return pieces.fold(0, (sum, piece) => sum + signedArea(piece).abs());
 }
 
 bool _isConvex(List<Vector2> piece) {
-  final sign = _signedArea(piece).sign;
+  final sign = signedArea(piece).sign;
   for (var i = 0; i < piece.length; i++) {
     final a = piece[i];
     final b = piece[(i + 1) % piece.length];

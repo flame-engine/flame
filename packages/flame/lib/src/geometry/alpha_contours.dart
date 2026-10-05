@@ -1,6 +1,7 @@
 import 'dart:typed_data';
-import 'dart:ui';
 
+import 'package:flame/extensions.dart';
+import 'package:flame/src/geometry/signed_area.dart';
 import 'package:meta/meta.dart';
 
 /// Traces the outlines of the areas of a region of [pixels] whose alpha is at
@@ -14,9 +15,9 @@ import 'package:meta/meta.dart';
 ///
 /// The outlines are found with marching squares on the alpha of the pixel
 /// centers, so they cross between two pixels where the alpha would reach the
-/// [threshold] if it changed linearly between them. Only the outer outlines
-/// are kept, not the ones of the holes, and each of them goes clockwise in
-/// the screen coordinate system.
+/// [threshold] if it changed linearly between them, and they stay within the
+/// region. Only the outer outlines are kept, not the ones of the holes, and
+/// each of them goes clockwise in the screen coordinate system.
 @internal
 Path traceAlphaContours(
   Uint8List pixels, {
@@ -140,10 +141,15 @@ Path traceAlphaContours(
     final other = edge.isEven ? sample + 1 : sample + gridWidth;
     final alpha = alphaAt(sample);
     final t = (threshold - alpha) / (alphaAt(other) - alpha);
-    // The sample at (1, 1) is the center of the first pixel of the region.
+    // The sample at (1, 1) is the center of the first pixel of the region,
+    // while the samples of the border are half a pixel outside of it, so the
+    // crossings on their edges are kept within the region.
     final x = sample % gridWidth - 0.5 + (edge.isEven ? t : 0);
     final y = sample ~/ gridWidth - 0.5 + (edge.isEven ? 0 : t);
-    return Offset(x * scaleX, y * scaleY);
+    return Offset(
+      x.clamp(0, columns).toDouble() * scaleX,
+      y.clamp(0, rows).toDouble() * scaleY,
+    );
   }
 
   for (final start in starts) {
@@ -159,7 +165,8 @@ Path traceAlphaContours(
     final outline = _withoutCollinear(_withoutDuplicates(points));
     // The outer outlines have the inside on their right, so they go clockwise
     // on the screen, while the outlines of the holes go counterclockwise.
-    if (outline.length >= 3 && _signedArea(outline) > 0) {
+    if (outline.length >= 3 &&
+        signedArea([for (final point in outline) point.toVector2()]) > 0) {
       path.addPolygon(outline, true);
     }
   }
@@ -205,16 +212,4 @@ bool _isCollinear(Offset previous, Offset point, Offset next) {
       (point.dx - previous.dx) * (next.dy - point.dy) -
       (point.dy - previous.dy) * (next.dx - point.dx);
   return cross.abs() <= 1e-9;
-}
-
-/// Twice the area of the polygon, positive when it goes clockwise on the
-/// screen.
-double _signedArea(List<Offset> points) {
-  var area = 0.0;
-  for (var i = 0; i < points.length; i++) {
-    final a = points[i];
-    final b = points[(i + 1) % points.length];
-    area += a.dx * b.dy - b.dx * a.dy;
-  }
-  return area;
 }
