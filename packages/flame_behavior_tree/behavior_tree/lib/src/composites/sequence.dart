@@ -1,34 +1,26 @@
 import 'package:behavior_tree/behavior_tree.dart';
 
-/// A composite node that stops at its first successful child node.
-class Sequence({List<NodeInterface>? children})
-    extends BaseNode
-    implements NodeInterface {
-  /// Creates a sequence node for given [children] nodes.
-  this {
-    _children.forEach(setParent);
-  }
-
-  final List<NodeInterface> _children = children ?? <NodeInterface>[];
-
-  @override
-  void tick() {
-    for (final node in _children) {
-      node.tick();
-
-      if (node.status != NodeStatus.success) {
-        status = node.status;
-        return;
-      }
-    }
-    status = NodeStatus.success;
-  }
+/// A composite node that ticks its children in order, for as long as they
+/// succeed.
+///
+/// - It fails as soon as a child fails.
+/// - It is running while a child is running.
+/// - It succeeds when all the children have succeeded.
+///
+/// By default the sequence remembers which child was running and resumes from
+/// there on the next tick. Set [reactive] to true to re-check the earlier
+/// children on every tick instead; if one of them stops succeeding, the
+/// running child is aborted.
+class Sequence(super.children, {this.reactive = false}) extends Composite {
+  /// Whether to re-evaluate from the first child on every tick.
+  final bool reactive;
 
   @override
-  void reset() {
-    for (final node in _children) {
-      node.reset();
-    }
-    super.reset();
+  Status onTick(TickContext context) {
+    return tickChildren(
+      context,
+      continueOn: Status.success,
+      reactive: reactive,
+    );
   }
 }

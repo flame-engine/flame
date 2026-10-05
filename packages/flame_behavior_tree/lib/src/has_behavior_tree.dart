@@ -1,84 +1,99 @@
-import 'dart:async';
+import 'dart:math';
 
 import 'package:behavior_tree/behavior_tree.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/foundation.dart';
 
-/// A mixin on [Component] to indicate that the component has a behavior tree.
+/// A mixin on [Component] that gives it a behavior tree.
 ///
-/// Reference to the behavior tree for this component can be set or accessed
-/// via [treeRoot]. The update frequency of the tree can be reduced by
-/// increasing [tickInterval]. By default, the tree will be updated on every
-/// update of the component.
+/// Set [behaviorTree] to give the component its AI. The tree is ticked on every
+/// update of the component, with the delta time of that update. Increase
+/// [tickInterval] to tick it less often; the tree then receives the time that
+/// has accumulated since its last tick.
 ///
-/// An optional [blackboard] can be provided to share data between nodes in
-/// the behavior tree. The blackboard is stored in this component and accessed
-/// by nodes through their parent chain, so it doesn't need to be stored in
-/// each node.
-mixin HasBehaviorTree<T extends NodeInterface> on Component
-    implements BlackboardProvider {
-  T? _treeRoot;
-  Timer? _timer;
+/// ```dart
+/// class Enemy extends PositionComponent with HasBehaviorTree {
+///   @override
+///   Future<void> onLoad() async {
+///     behaviorTree = BehaviorTree(
+///       Selector([attack, chase, patrol]),
+///       owner: this,
+///     );
+///   }
+/// }
+/// ```
+///
+/// The running nodes of the tree are aborted when the component is removed.
+mixin HasBehaviorTree on Component {
+  BehaviorTree? _behaviorTree;
   double _tickInterval = 0;
-  Blackboard? _blackboard;
+  double _accumulated = 0;
+  bool _hasTicked = false;
 
-  /// The delay between any two ticks of the behavior tree.
+  /// The behavior tree of this component.
+  ///
+  /// Throws a [StateError] if no tree has been set yet. Setting a new tree
+  /// aborts the running nodes of the previous one.
+  BehaviorTree get behaviorTree {
+    final tree = _behaviorTree;
+    if (tree == null) {
+      throw StateError(
+        'No behavior tree has been set on $this. Assign `behaviorTree` first.',
+      );
+    }
+    return tree;
+  }
+
+  set behaviorTree(BehaviorTree tree) {
+    _behaviorTree?.abort();
+    _behaviorTree = tree;
+    _accumulated = 0;
+    _hasTicked = false;
+  }
+
+  /// The blackboard of the [behaviorTree], as a shortcut.
+  Blackboard get blackboard => behaviorTree.blackboard;
+
+  /// The minimum time, in seconds, between two ticks of the behavior tree.
+  ///
+  /// The default of 0 ticks the tree on every update. Negative values are
+  /// treated as 0. This can be changed at any time.
   double get tickInterval => _tickInterval;
   set tickInterval(double interval) {
-    _tickInterval = interval;
-
-    if (_tickInterval > 0) {
-      _timer ??= Timer(period: interval, repeat: true);
-      _timer?.period = interval;
-    } else {
-      _timer?.onTick = null;
-      _timer = null;
-      _tickInterval = 0;
-    }
-  }
-
-  /// The blackboard for sharing data between nodes.
-  ///
-  /// If not set, nodes will receive null when they access the blackboard.
-  /// Create a blackboard and assign it to enable data sharing:
-  ///
-  /// ```dart
-  /// blackboard = Blackboard();
-  /// blackboard.set('health', 100);
-  /// ```
-  ///
-  /// The blackboard is stored in this component and accessed by nodes
-  /// through their parent chain, eliminating the need to store it in each node.
-  @override
-  Blackboard? get blackboard => _blackboard;
-  set blackboard(Blackboard? value) => _blackboard = value;
-
-  /// The root node of the behavior tree.
-  T get treeRoot => _treeRoot!;
-  set treeRoot(T value) {
-    _treeRoot = value;
-    // Set this component as the blackboard provider for the root node
-    if (value is BaseNode) {
-      value.blackboardProvider = this;
-    }
-    _timer?.onTick = _treeRoot!.tick;
-  }
-
-  @override
-  @mustCallSuper
-  Future<void> onLoad() async {
-    super.onLoad();
-    _timer?.onTick = _treeRoot?.tick;
+    _tickInterval = max(0, interval);
   }
 
   @override
   @mustCallSuper
   void update(double dt) {
     super.update(dt);
-    if (_tickInterval > 0) {
-      _timer?.update(dt);
-    } else {
-      _treeRoot?.tick();
+
+    final tree = _behaviorTree;
+    if (tree == null) {
+      return;
     }
+    if (_tickInterval <= 0 || !_hasTicked) {
+      _hasTicked = true;
+      _accumulated = 0;
+      tree.tick(dt);
+      return;
+    }
+
+    _accumulated += dt;
+    if (_accumulated >= _tickInterval) {
+      final elapsed = _accumulated;
+      _accumulated = 0;
+      tree.tick(elapsed);
+    }
+  }
+
+  @override
+  @mustCallSuper
+  void onRemove() {
+    _behaviorTree?.abort();
+    // A component that is mounted again starts with a tick, like a new one.
+    _accumulated = 0;
+    _hasTicked = false;
+    super.onRemove();
   }
 }
