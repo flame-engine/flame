@@ -1,11 +1,11 @@
 import 'dart:math';
 
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
-import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/convex_pieces.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
 class SpriteBodyExample({bool showPieces = false}) extends Forge2DExampleGame {

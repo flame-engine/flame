@@ -164,6 +164,38 @@ The `PathHitbox` is the hitbox counterpart of the `PathComponent`, see
 [](../collision_detection.md#pathhitbox).
 
 
+### Convex pieces
+
+Some consumers of polygons only accept convex ones with a limited number of vertices, like the
+shapes of physics engines such as Box2D, which take at most 8 vertices. The `convexPieces` function
+splits a simple polygon, convex or concave, into such pieces: it first splits the polygon into
+triangles by ear clipping, and then merges neighboring triangles as long as they stay convex and
+within `maxVertices`, which defaults to `8` (the Hertel-Mehlhorn algorithm). The pieces reuse the
+vertices of the polygon and go in the same direction.
+
+Engines also reject the polygons that are too small for their tolerances, so two more arguments
+clean up the result:
+
+- `minDistance`: Of the consecutive vertices closer than this, only the first one is kept, and the
+  vertices closer than half of it to the line through their neighbors are left out.
+- `minWidth`: The pieces narrower than this are left out.
+
+Both default to `0`, which keeps every vertex and every piece. For Box2D, `minDistance` is 4 times
+its linear slop and `minWidth` twice it.
+
+The polygons of a `PathComponent` are a convenient input, since they follow each contour of a path
+with straight edges:
+
+```dart
+void main() {
+  final component = PathComponent(path: path);
+  final pieces = [
+    for (final polygon in component.polygons) ...convexPieces(polygon),
+  ];
+}
+```
+
+
 ## RectangleComponent
 
 A `RectangleComponent` is created very similarly to how a `PositionComponent` is created, since it
