@@ -173,6 +173,10 @@ triangles by ear clipping, and then merges neighboring triangles as long as they
 within `maxVertices`, which defaults to `8` (the Hertel-Mehlhorn algorithm). The pieces reuse the
 vertices of the polygon and go in the same direction.
 
+A polygon that touches itself at a vertex, like the outline of two shapes that meet at a corner, is
+split there first, and a hole that touches the outline at a vertex is filled. The parts of a
+polygon that crosses itself may be left out.
+
 Engines also reject the polygons that are too small for their tolerances, so two more arguments
 clean up the result:
 

@@ -78,6 +78,41 @@ void main() {
       expect(convexPieces(sliver), hasLength(1));
     });
 
+    test('splits a polygon where it touches itself', () {
+      // Two squares that meet at the corner (1, 1), which is visited twice.
+      final touching = [
+        Vector2(0, 0),
+        Vector2(1, 0),
+        Vector2(1, 1),
+        Vector2(2, 1),
+        Vector2(2, 2),
+        Vector2(1, 2),
+        Vector2(1, 1),
+        Vector2(0, 1),
+      ];
+      final pieces = convexPieces(touching);
+      expect(pieces, hasLength(2));
+      expect(pieces.every(_isConvex), isTrue);
+      expect(_totalArea(pieces), closeTo(2, 1e-9));
+    });
+
+    test('fills a hole that touches the outline at a vertex', () {
+      // A square, and a triangular hole that goes the other way, which both
+      // start at (0, 0).
+      final withHole = [
+        Vector2(0, 0),
+        Vector2(4, 0),
+        Vector2(4, 4),
+        Vector2(0, 4),
+        Vector2(0, 0),
+        Vector2(1, 2),
+        Vector2(2, 1),
+      ];
+      final pieces = convexPieces(withHole);
+      expect(pieces.every(_isConvex), isTrue);
+      expect(_totalArea(pieces), closeTo(16, 1e-9));
+    });
+
     test('gives no pieces for fewer than three vertices', () {
       expect(convexPieces([]), isEmpty);
       expect(convexPieces([Vector2(0, 0), Vector2(1, 0)]), isEmpty);

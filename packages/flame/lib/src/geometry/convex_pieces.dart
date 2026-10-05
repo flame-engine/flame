@@ -20,6 +20,11 @@ import 'package:flame/extensions.dart';
 ///
 /// The pieces reuse the vertices of the [polygon], in the same direction.
 ///
+/// The [polygon] may touch itself at its vertices, like the outline of two
+/// shapes that meet at a corner, which is split there into simple polygons:
+/// a hole that touches the outline at a vertex is filled, though. The parts
+/// of a [polygon] that crosses itself may be left out.
+///
 /// The cost grows about with the cube of the number of vertices, so it is
 /// meant to be done when loading, not in the game loop. The polygons of a
 /// `PathComponent` are already simplified according to their sampling, while
@@ -41,7 +46,13 @@ List<List<Vector2>> convexPieces(
   // that is with a positive area, and turned back into vertices at the end.
   final isClockwise = _doubleArea(vertices) < 0;
   final indices = List.generate(n, (i) => isClockwise ? n - 1 - i : i);
-  final pieces = _triangulate(vertices, indices);
+  final pieces = [
+    for (final loop in _splitAtTouches(vertices, indices, minDistance))
+      // The loops that go the other way are holes that touch the outline,
+      // which the other loops already cover.
+      if (_doubleArea([for (final i in loop) vertices[i]]) > 0)
+        ..._triangulate(vertices, loop),
+  ];
   // Corners that are reflex by less than half of the minimum width are
   // accepted as convex, since the engine straightens them anyway.
   _merge(vertices, pieces, maxVertices, minWidth / 2);
@@ -50,6 +61,34 @@ List<List<Vector2>> convexPieces(
       if (_isWideEnough(vertices, piece, minDistance, minWidth))
         [for (final i in isClockwise ? piece.reversed : piece) vertices[i]],
   ];
+}
+
+/// Splits the polygon given by the [loop] of indices of [vertices] where it
+/// touches itself, that is where two of its vertices that are not
+/// consecutive are welded, into loops that do not touch themselves.
+///
+/// Ear clipping can get stuck on a polygon that touches itself, which would
+/// leave the rest of it out.
+List<List<int>> _splitAtTouches(
+  List<Vector2> vertices,
+  List<int> loop,
+  double minDistance,
+) {
+  for (var a = 0; a < loop.length; a++) {
+    for (var b = a + 2; b < loop.length; b++) {
+      if (_isWelded(vertices[loop[a]], vertices[loop[b]], minDistance)) {
+        return [
+          ..._splitAtTouches(vertices, loop.sublist(a, b), minDistance),
+          ..._splitAtTouches(
+            vertices,
+            [...loop.sublist(b), ...loop.sublist(0, a)],
+            minDistance,
+          ),
+        ];
+      }
+    }
+  }
+  return [loop];
 }
 
 /// The vertices of the [polygon] without the ones closer than [minDistance]
@@ -121,8 +160,8 @@ List<List<int>> _triangulate(List<Vector2> vertices, List<int> indices) {
   while (remaining.length >= 3) {
     final ear = _findEar(vertices, remaining);
     if (ear == -1) {
-      // Only a polygon that crosses itself has no ears; what is left of it is
-      // left out.
+      // A polygon that crosses itself may have no ears left, while a simple
+      // one always has; what is left of it is left out.
       break;
     }
     final m = remaining.length;
