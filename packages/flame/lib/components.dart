@@ -63,5 +63,6 @@ export 'src/geometry/polygon_component.dart';
 export 'src/geometry/rectangle_component.dart';
 export 'src/geometry/shape_component.dart';
 export 'src/math/block.dart';
+export 'src/sprite_warp/warp_grid.dart' show WarpGrid, WarpInterpolation;
 export 'src/text/renderers/text_paint.dart';
 export 'src/timer.dart';
