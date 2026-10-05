@@ -183,11 +183,26 @@ clean up the result:
 Both default to `0`, which keeps every vertex and every piece. For Box2D, `minDistance` is 4 times
 its linear slop and `minWidth` twice it.
 
-The polygons of a `PathComponent` are a convenient input, since they follow each contour of a path
-with straight edges:
+The cost grows about with the cube of the number of vertices, so split the polygons when loading
+and not in every tick. The polygons of a `PathComponent` are a convenient input, since they follow
+each contour of a path with straight edges and are already simplified according to their
+`sampling`:
 
 ```dart
 void main() {
+  // A U shape, which is concave.
+  final path = Path()
+    ..addPolygon(const [
+      Offset(0, 0),
+      Offset(40, 0),
+      Offset(40, 40),
+      Offset(30, 40),
+      Offset(30, 10),
+      Offset(10, 10),
+      Offset(10, 40),
+      Offset(0, 40),
+    ], true);
+
   final component = PathComponent(path: path);
   final pieces = [
     for (final polygon in component.polygons) ...convexPieces(polygon),

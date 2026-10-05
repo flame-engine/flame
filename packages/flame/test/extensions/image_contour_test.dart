@@ -151,6 +151,31 @@ void main() {
       expect(high.right, closeTo(0.5 + 0.25 / (127 / 255), 0.001));
     });
 
+    test('keeps the corners where the alpha is exactly the threshold', () {
+      // The outline passes through the centers of the opaque pixels, where
+      // all the edges of the pixels are crossed at the same point.
+      final path = _contour([
+        '.....',
+        '.###.',
+        '.###.',
+        '.###.',
+        '.....',
+      ], alphaThreshold: 1);
+      expect(_vertices(path).single, hasLength(4));
+      expect(path.getBounds(), const Rect.fromLTRB(1.5, 1.5, 3.5, 3.5));
+    });
+
+    test('asserts that the region is within the image', () {
+      expect(
+        () => _contour(['##', '##'], region: const Rect.fromLTWH(-1, 0, 2, 2)),
+        throwsAssertionError,
+      );
+      expect(
+        () => _contour(['##', '##'], region: const Rect.fromLTWH(1, 1, 2, 1)),
+        throwsAssertionError,
+      );
+    });
+
     test('counts only the pixels in the region, relative to it', () {
       final path = _contour([
         '#....',

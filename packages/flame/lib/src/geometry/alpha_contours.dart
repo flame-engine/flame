@@ -135,7 +135,7 @@ Path traceAlphaContours(
       next[edge] = -1;
       edge = following;
     } while (edge != start && edge >= 0);
-    final outline = _withoutCollinear(points);
+    final outline = _withoutCollinear(_withoutDuplicates(points));
     // The outer outlines have the inside on their right, so they go clockwise
     // on the screen, while the outlines of the holes go counterclockwise.
     if (outline.length >= 3 && _signedArea(outline) > 0) {
@@ -145,8 +145,27 @@ Path traceAlphaContours(
   return path;
 }
 
+/// Removes the points of the closed outline that are the same as the previous
+/// one, which happens where the alpha of a pixel is exactly the threshold:
+/// the outline then passes through the center of the pixel, where all the
+/// edges of the pixel are crossed.
+List<Offset> _withoutDuplicates(List<Offset> points) {
+  final result = <Offset>[];
+  for (final point in points) {
+    if (result.isEmpty || result.last != point) {
+      result.add(point);
+    }
+  }
+  while (result.length > 1 && result.last == result.first) {
+    result.removeLast();
+  }
+  return result;
+}
+
 /// Removes the points of the closed outline that are in the middle of a
-/// straight stretch, like the ones along the sides of the pixels.
+/// straight stretch, like the ones along the sides of the pixels. The outline
+/// must not have consecutive duplicate points, since both of them would be
+/// removed.
 List<Offset> _withoutCollinear(List<Offset> points) {
   final count = points.length;
   return [

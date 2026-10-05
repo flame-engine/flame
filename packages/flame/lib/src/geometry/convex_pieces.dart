@@ -19,6 +19,12 @@ import 'package:flame/extensions.dart';
 /// it, see `b2ComputeHull`.
 ///
 /// The pieces reuse the vertices of the [polygon], in the same direction.
+///
+/// The cost grows about with the cube of the number of vertices, so it is
+/// meant to be done when loading, not in the game loop. The polygons of a
+/// `PathComponent` are already simplified according to their sampling, while
+/// a [polygon] made by hand should not have a vertex for each pixel or each
+/// tiny step along a curve.
 List<List<Vector2>> convexPieces(
   List<Vector2> polygon, {
   int maxVertices = 8,

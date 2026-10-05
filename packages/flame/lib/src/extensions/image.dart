@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:flame/collisions.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/src/geometry/alpha_contours.dart';
@@ -84,7 +83,8 @@ extension ImageExtension on Image {
   /// Only the pixels in the [region] are considered, the whole image by
   /// default, and the contours are relative to its top left corner. They are
   /// scaled from the size of the [region] to the given [size], when there is
-  /// one.
+  /// one. The [region] has to be within the image, and its sides are rounded
+  /// to whole pixels.
   ///
   /// A pixel is part of the outlined area when its alpha is at least the
   /// [alphaThreshold], which is between zero, excluded, and one. The outlines
@@ -95,12 +95,15 @@ extension ImageExtension on Image {
   /// areas, and the separate areas give separate contours.
   ///
   /// The contours are meant to make hitboxes that follow the outline of the
-  /// image, like a [PathHitbox], or a [PolygonHitbox] from one of them, which
+  /// image, like a `PathHitbox`, or a `PolygonHitbox` from one of them, which
   /// simplify them according to their sampling.
   ///
-  /// Keep in mind that this reads back the pixels of the image, so it is an
-  /// expensive operation that should be done when loading, not in the game
-  /// loop.
+  /// Keep in mind that this reads back the pixels of the whole image, even
+  /// when the [region] is only a part of it, so it is an expensive operation
+  /// that should be done when loading, not in the game loop. To trace several
+  /// regions of the same image, like the sprites of a sprite sheet, read the
+  /// pixels once with [pixelsInUint8] and pass them to [contourFromPixels] for
+  /// each region.
   Future<Path> contour({
     Rect? region,
     Vector2? size,
@@ -134,10 +137,17 @@ extension ImageExtension on Image {
       alphaThreshold > 0 && alphaThreshold <= 1,
       'The alpha threshold has to be in (0, 1]: $alphaThreshold',
     );
-    final left = (region?.left.round() ?? 0).clamp(0, width);
-    final top = (region?.top.round() ?? 0).clamp(0, height);
-    final right = (region?.right.round() ?? width).clamp(left, width);
-    final bottom = (region?.bottom.round() ?? height).clamp(top, height);
+    final left = region?.left.round() ?? 0;
+    final top = region?.top.round() ?? 0;
+    final right = region?.right.round() ?? width;
+    final bottom = region?.bottom.round() ?? height;
+    // A region that is clamped to the image would move and stretch the
+    // contours, relative to the region that was asked for.
+    assert(
+      left >= 0 && top >= 0 && right <= width && bottom <= height,
+      'The region $region is not within the image of $width x $height',
+    );
+    assert(right >= left && bottom >= top, 'The region $region is inverted');
     final columns = right - left;
     final rows = bottom - top;
     return traceAlphaContours(
