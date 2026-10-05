@@ -31,7 +31,7 @@ class SpriteAnimationComponent({
   super.children,
   super.priority,
   super.key,
-}) extends PositionComponent with HasPaint {
+}) extends PositionComponent with HasPaint, ImageRetainer {
   /// The animation ticker used for updating [animation].
   SpriteAnimationTicker? _animationTicker = animation?.createTicker();
 
@@ -124,8 +124,13 @@ class SpriteAnimationComponent({
         _animationTicker = null;
       }
       _resizeToSprite();
+      updateRetainedImages();
     }
   }
+
+  @override
+  Iterable<Image> get retainedImages =>
+      animation?.frames.map((frame) => frame.sprite.image) ?? const [];
 
   @mustCallSuper
   @override

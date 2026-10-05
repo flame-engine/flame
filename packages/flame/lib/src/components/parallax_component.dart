@@ -66,13 +66,19 @@ class ParallaxComponent<T extends FlameGame>({
   super.children,
   super.priority,
   super.key,
-}) extends PositionComponent with HasGameRef<T> {
+}) extends PositionComponent with HasGameRef<T>, ImageRetainer {
   bool isFullscreen = size == null && !(_parallax?.isSized ?? false);
   Parallax? get parallax => _parallax;
   set parallax(Parallax? p) {
     _parallax = p;
     _parallax?.resize(size);
+    updateRetainedImages();
   }
+
+  @override
+  Iterable<Image> get retainedImages =>
+      _parallax?.layers.map((layer) => layer.parallaxRenderer.image) ??
+      const [];
 
   /// Creates a component with an empty parallax which can be set later.
   this
@@ -106,6 +112,7 @@ class ParallaxComponent<T extends FlameGame>({
       parallax != null,
       'The parallax needs to be set in either the constructor or in onLoad',
     );
+    super.onMount();
   }
 
   @mustCallSuper

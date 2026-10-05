@@ -24,6 +24,11 @@
 This package provides a `HasBehaviorTree` mixin for Flame `Components`. It can be added to any
 `Component` and it takes care of ticking the behavior tree along with the component's update.
 
+The behavior tree itself comes from the
+[behavior_tree](https://github.com/flame-engine/flame/tree/main/packages/flame_behavior_tree/behavior_tree)
+package, which is re-exported from here. Read its README to learn about the available nodes, how
+running nodes work and how to share data using the blackboard.
+
 
 ## Getting started
 
@@ -36,47 +41,90 @@ flutter pub add flame_behavior_tree
 
 ## Usage
 
-- Add the `HasBehaviorTree` mixin to the component that wants to follow a certain AI behavior.
-
-  ```dart
-  class MyComponent extends Position with HasBehaviorTree {
-  
-  }
-  ```
-
-- Set-up a behavior tree and set its root as the `treeRoot` of the `HasBehaviorTree`.
+Add the `HasBehaviorTree` mixin to the component that wants to follow a certain AI behavior, and
+assign a `BehaviorTree` to `behaviorTree`:
 
 ```dart
-class MyComponent extends PositionComponent with HasBehaviorTree {
+class Enemy extends PositionComponent with HasBehaviorTree {
+  @override
   Future<void> onLoad() async {
-    treeRoot = Selector(
-      children: [
-        Sequence(children: [task1, condition, task2]),
-        Sequence(...),
-      ]
+    behaviorTree = BehaviorTree(
+      Selector([
+        Sequence([
+          Condition((context) => canSeePlayer()),
+          Task((context) => chasePlayer(context.dt)),
+        ]),
+        Task((context) => patrol(context.dt)),
+      ]),
+      owner: this,
     );
-    super.onLoad();
   }
 }
 ```
 
-- Increase the `tickInterval` to make the tree tick less frequently.
+- The tree is ticked on every update of the component. `context.dt` in the nodes is the time since
+  the previous tick.
+- Passing `owner: this` lets nodes get the component with `context.owner<Enemy>()`.
+- The blackboard of the tree is available as `blackboard` on the component, so the rest of your
+  game can read and write the values that the AI works with.
+- The running nodes of the tree are aborted when the component is removed, or when you assign a new
+  tree.
+
+To tick the tree less often, increase `tickInterval`. This can be done at any time. The tree is
+ticked on the first update, and then whenever `tickInterval` seconds have passed. The `dt` that
+the nodes see is the time since the previous tick of the tree.
 
 ```dart
-class MyComponent extends PositionComponent with HasBehaviorTree {
-  Future<void> onLoad() async {
-    treeRoot = Selector(...);
-    tickInterval = 4;
-    super.onLoad();
+class Enemy extends PositionComponent with HasBehaviorTree {
+  Enemy() {
+    tickInterval = 0.5; // Think twice per second.
   }
 }
 ```
 
 
-## Additional information
+## Flame nodes
 
-When working with behavior trees, keep in mind that
+Besides the nodes of `behavior_tree`, this package has two nodes that work with the effects of
+Flame:
 
-- nodes of a behavior tree do not necessarily update on every frame.
-- avoid storing data in nodes as much as possible because it can go out of sync with rest of the
-game as nodes are not ticked on every frame.
+- `PlayEffect(builder)` adds an effect to the owner of the tree (or to a `target`), is running while
+  it plays and succeeds when it completes. The effect is removed if the node is aborted.
+- `MoveTo(destination, ...)` moves the owner (or a `target`) to a position, either in a given
+  `duration` or at a given `speed`.
+
+```dart
+Sequence([
+  MoveTo((context) => context.get(destination), speed: 100),
+  PlayEffect(
+    (context) => ColorEffect(
+      Colors.red,
+      EffectController(duration: 0.3, alternate: true),
+    ),
+  ),
+])
+```
+
+
+## Documentation and examples
+
+The [documentation](https://docs.flame-engine.org/latest/bridge_packages/flame_behavior_tree/flame_behavior_tree.html)
+explains how behavior trees work, with small interactive examples for the nodes and for
+`HasBehaviorTree`. They can also be found in the
+[examples app](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/bridge_libraries/flame_behavior_tree).
+
+See the [example](example/lib/main.dart) for an agent that walks in and out of a house.
+
+
+## Migrating from 0.1.x / 0.2.0-dev
+
+- Instead of `treeRoot = root`, assign `behaviorTree = BehaviorTree(root, owner: this)`.
+- `HasBehaviorTree` is not generic anymore.
+- The blackboard now belongs to the `BehaviorTree`. It is always available, uses typed keys and is
+  not assigned on the component. Pass an existing one to `BehaviorTree(blackboard: ...)` if you need
+  to.
+- Setting `tickInterval` after the component was loaded now works, and the first tick happens
+  immediately instead of after the first interval.
+
+The nodes themselves changed too, see the migration guide in the
+[behavior_tree README](https://github.com/flame-engine/flame/tree/main/packages/flame_behavior_tree/behavior_tree#migrating-from-01x).

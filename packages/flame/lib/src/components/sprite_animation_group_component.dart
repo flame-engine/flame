@@ -33,7 +33,7 @@ class SpriteAnimationGroupComponent<T>({
   super.children,
   super.priority,
   super.key,
-}) extends PositionComponent with HasPaint {
+}) extends PositionComponent with HasPaint, ImageRetainer {
   ValueNotifier<T?>? _currentAnimationNotifier;
 
   /// A [ValueNotifier] that notifies when the current animation changes.
@@ -166,8 +166,16 @@ class SpriteAnimationGroupComponent<T>({
             )
           : null;
       _resizeToSprite();
+      updateRetainedImages();
     }
   }
+
+  @override
+  Iterable<Image> get retainedImages =>
+      _animations?.values.expand(
+        (animation) => animation.frames.map((frame) => frame.sprite.image),
+      ) ??
+      const [];
 
   /// Returns a map containing [SpriteAnimationTicker] for each state.
   Map<T, SpriteAnimationTicker>? get animationTickers => _animationTickers;

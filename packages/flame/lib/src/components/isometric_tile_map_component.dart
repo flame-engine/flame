@@ -11,7 +11,7 @@ import 'package:flame/src/sprite_sheet.dart';
 /// property.
 class IsometricTileMapComponent(
   /// This is the tileset that will be used to render this map.
-  var SpriteSheet tileset,
+  var SpriteSheet _tileset,
 
   /// The positions of each block will be placed respecting this matrix.
   var List<List<int>> matrix, {
@@ -31,9 +31,9 @@ class IsometricTileMapComponent(
   super.children,
   super.priority,
   super.key,
-}) extends PositionComponent {
+}) extends PositionComponent with ImageRetainer {
   /// Where the tileset's image is stored.
-  Sprite _renderSprite = Sprite(tileset.image);
+  Sprite _renderSprite = Sprite(_tileset.image);
 
   /// Displacement applied so that the origin of the component
   /// matches the origin of the AABB.
@@ -42,6 +42,17 @@ class IsometricTileMapComponent(
   this {
     _recomputeSizeAndOffset();
   }
+
+  /// The tileset that is used to render this map.
+  SpriteSheet get tileset => _tileset;
+
+  set tileset(SpriteSheet value) {
+    _tileset = value;
+    updateRetainedImages();
+  }
+
+  @override
+  Iterable<Image> get retainedImages => [_tileset.image];
 
   /// This is the size the tiles will be drawn (either original or overwritten).
   Vector2 get effectiveTileSize => destTileSize ?? tileset.srcSize;

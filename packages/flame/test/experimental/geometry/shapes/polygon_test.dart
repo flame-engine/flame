@@ -273,6 +273,68 @@ void main() {
       expect(result.vertices[3], Vector2(10, 30));
     });
 
+    test('project with target updates cached aabb and center', () {
+      final polygon = Polygon([
+        Vector2(0, 0),
+        Vector2(0, 10),
+        Vector2(10, 10),
+        Vector2(10, 0),
+      ]);
+      final target = Polygon(List.generate(4, (_) => Vector2.zero()));
+      // Cache the aabb and the center of the target before projecting.
+      expect(target.aabb.min, Vector2.zero());
+      expect(target.center, Vector2.zero());
+
+      final transform = Transform2D()..position = Vector2(100, 100);
+      polygon.project(transform, target);
+      expect(target.aabb.min, Vector2(100, 100));
+      expect(target.aabb.max, Vector2(110, 110));
+      expect(target.center, Vector2(105, 105));
+      expect(target.containsPoint(Vector2(105, 105)), true);
+      expect(target.containsPoint(Vector2(5, 5)), false);
+    });
+
+    test(
+      'project with target and reflection transform updates cached aabb '
+      'and center',
+      () {
+        final polygon = Polygon([
+          Vector2(0, 0),
+          Vector2(0, 10),
+          Vector2(10, 10),
+          Vector2(10, 0),
+        ]);
+        final target = Polygon(List.generate(4, (_) => Vector2.zero()));
+        expect(target.aabb.min, Vector2.zero());
+        expect(target.center, Vector2.zero());
+
+        final transform = Transform2D()
+          ..position = Vector2(100, 100)
+          ..scale = Vector2(-1, 1);
+        polygon.project(transform, target);
+        expect(target.aabb.min, Vector2(90, 100));
+        expect(target.aabb.max, Vector2(100, 110));
+        expect(target.center, Vector2(95, 105));
+        expect(target.containsPoint(Vector2(95, 105)), true);
+      },
+    );
+
+    test('project with target updates cached perimeter', () {
+      final polygon = Polygon([
+        Vector2(0, 0),
+        Vector2(0, 10),
+        Vector2(10, 10),
+        Vector2(10, 0),
+      ]);
+      final target = Polygon(List.generate(4, (_) => Vector2.zero()));
+      expect(target.perimeter, 0);
+
+      final transform = Transform2D()..scale = Vector2.all(2);
+      polygon.project(transform, target);
+      expect(target.perimeter, 80);
+      expect(polygon.perimeter, 40);
+    });
+
     test('project with wrong-shape target', () {
       final z = Vector2.zero();
       final polygon = Polygon([z, z, z, z, z]);

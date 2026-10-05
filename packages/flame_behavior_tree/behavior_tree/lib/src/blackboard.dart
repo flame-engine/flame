@@ -1,66 +1,102 @@
-/// Shared memory for behavior tree nodes to read and write data.
+/// A typed key used to store and retrieve values from a [Blackboard].
 ///
-/// The Blackboard provides a centralized location for storing and retrieving
-/// data that needs to be shared between nodes in a behavior tree.
-class Blackboard() {
-  final Map<String, dynamic> _data = {};
+/// Keys are compared by identity, not by [name], so declare each key once and
+/// share it. Declaring it `const` is the easiest way to do that:
+///
+/// ```dart
+/// const health = BlackboardKey<int>('health', initial: 100);
+/// ```
+///
+/// The [name] is only used in error messages. If a key has an [initial] value,
+/// reading it from a [Blackboard] that has no value for it returns that value.
+class const BlackboardKey<T>(this.name, {this.initial}) {
+  /// A human readable name of this key, used in error messages.
+  final String name;
 
-  /// Gets a value from the blackboard.
+  /// The value returned by [Blackboard.get] if nothing was set for this key.
+  final T? initial;
+
+  /// Whether this key has an [initial] value.
+  bool get hasInitial => initial != null;
+
+  /// Whether [value] is of the type of this key.
   ///
-  /// Returns the value associated with [key], or [defaultValue] if the key
-  /// doesn't exist. If no default is provided and the key doesn't exist,
-  /// throws a [StateError].
-  T get<T>(String key, {T? defaultValue}) {
-    if (!_data.containsKey(key)) {
-      if (defaultValue != null) {
-        return defaultValue;
-      }
-      throw StateError('Key "$key" not found in blackboard');
+  /// This is a runtime check that also catches what the compiler does not,
+  /// because the type parameter of a key can be widened when it is passed
+  /// around. For example `set(doubleKey, 0)` compiles, but stores an int.
+  bool accepts(Object? value) => value is T;
+
+  @override
+  String toString() => 'BlackboardKey<$T>($name)';
+}
+
+/// Shared memory for the nodes of a behavior tree.
+///
+/// The blackboard is how nodes communicate with each other and with the
+/// outside world. Values are accessed using a [BlackboardKey], which makes
+/// every read and write type-safe.
+class Blackboard() {
+  final Map<BlackboardKey<Object?>, Object?> _data = {};
+
+  /// Returns the value stored for [key].
+  ///
+  /// If nothing has been set, [BlackboardKey.initial] is returned. If the key
+  /// has no initial value either, a [StateError] naming the key is thrown. Use
+  /// [getOrNull] when the value is allowed to be missing.
+  T get<T>(BlackboardKey<T> key) {
+    if (_data.containsKey(key)) {
+      return _data[key] as T;
     }
-    return _data[key] as T;
+    if (key.hasInitial) {
+      return key.initial as T;
+    }
+    throw StateError(
+      '$key was read before being set and it has no initial value.',
+    );
   }
 
-  /// Sets a value in the blackboard.
+  /// Returns the value stored for [key], or null if there is none.
   ///
-  /// Associates [value] with [key]. If [key] already exists, its value is
-  /// replaced.
-  void set<T>(String key, T value) {
+  /// [BlackboardKey.initial] is used if nothing has been set.
+  T? getOrNull<T>(BlackboardKey<T> key) {
+    if (_data.containsKey(key)) {
+      return _data[key] as T?;
+    }
+    return key.initial;
+  }
+
+  /// Stores [value] for [key], replacing any previous value.
+  ///
+  /// Throws an [ArgumentError] if [value] is not of the type of [key]. Watch
+  /// out for number literals, a `BlackboardKey<double>` needs `0.0` and not
+  /// `0`.
+  void set<T>(BlackboardKey<T> key, T value) {
+    if (!key.accepts(value)) {
+      throw ArgumentError.value(
+        value,
+        'value',
+        'Cannot be stored for $key because it is a ${value.runtimeType}.',
+      );
+    }
     _data[key] = value;
   }
 
-  /// Checks if a key exists in the blackboard.
-  bool has(String key) => _data.containsKey(key);
+  /// Whether a value has been explicitly set for [key].
+  bool has(BlackboardKey<Object?> key) => _data.containsKey(key);
 
-  /// Removes a key and its value from the blackboard.
-  ///
-  /// Returns the value that was associated with [key], or null if [key]
-  /// was not in the blackboard.
-  dynamic remove(String key) => _data.remove(key);
+  /// Removes the value stored for [key], so that reading it falls back to
+  /// [BlackboardKey.initial].
+  void remove(BlackboardKey<Object?> key) => _data.remove(key);
 
-  /// Removes all entries from the blackboard.
+  /// Removes all the values.
   void clear() => _data.clear();
 
-  /// Returns all keys in the blackboard.
-  Iterable<String> get keys => _data.keys;
+  /// The keys that have a value set.
+  Iterable<BlackboardKey<Object?>> get keys => _data.keys;
 
-  /// Returns the number of key-value pairs in the blackboard.
-  int get length => _data.length;
-
-  /// Returns true if the blackboard is empty.
-  bool get isEmpty => _data.isEmpty;
-
-  /// Returns true if the blackboard is not empty.
-  bool get isNotEmpty => _data.isNotEmpty;
-
-  /// Creates a copy of this blackboard.
-  Blackboard copy() {
-    final copy = Blackboard();
-    copy._data.addAll(_data);
-    return copy;
-  }
+  /// Creates a shallow copy of this blackboard.
+  Blackboard copy() => Blackboard().._data.addAll(_data);
 
   @override
-  String toString() {
-    return 'Blackboard($_data)';
-  }
+  String toString() => 'Blackboard($_data)';
 }

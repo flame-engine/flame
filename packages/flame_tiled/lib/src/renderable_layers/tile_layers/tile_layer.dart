@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/rendering.dart';
 import 'package:flame_tiled/flame_tiled.dart';
@@ -40,8 +41,14 @@ abstract class FlameTileLayer({
   required final bool ignoreFlip,
   required var Paint Function(double opacity) layerPaintFactory,
   super.filterQuality,
-}) extends RenderableLayer<TileLayer> {
+}) extends RenderableLayer<TileLayer> with ImageRetainer {
   late Paint _layerPaint = layerPaintFactory(opacity);
+
+  @override
+  Iterable<Image> get retainedImages {
+    final atlas = tiledAtlas.atlas;
+    return atlas == null ? const [] : [atlas];
+  }
 
   /// Cached transform of every tile, indexed as
   /// `transforms[x - originX][y - originY]` for the Tiled tile `(x, y)`.

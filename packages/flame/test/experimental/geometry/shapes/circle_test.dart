@@ -129,6 +129,22 @@ void main() {
       expect(target.center, closeToVector(Vector2(10, 20)));
     });
 
+    test('project with target updates cached aabb', () {
+      final circle = Circle(Vector2.zero(), 10);
+      final target = Circle(Vector2.zero(), 1);
+      // Cache the aabb of both circles before projecting.
+      expect(circle.aabb.max, Vector2(10, 10));
+      expect(target.aabb.max, Vector2(1, 1));
+
+      final transform = Transform2D()..position = Vector2(100, 0);
+      circle.project(transform, target);
+      expect(target.aabb.min, closeToVector(Vector2(90, -10)));
+      expect(target.aabb.max, closeToVector(Vector2(110, 10)));
+      // The circle that was projected did not change.
+      expect(circle.aabb.min, Vector2(-10, -10));
+      expect(circle.aabb.max, Vector2(10, 10));
+    });
+
     test('support', () {
       final circle = Circle(Vector2(2, 1), 10);
       expect(circle.support(Vector2(1, 0)), closeToVector(Vector2(12, 1)));
