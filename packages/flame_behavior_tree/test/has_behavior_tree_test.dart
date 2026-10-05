@@ -2,31 +2,14 @@ import 'package:flame/components.dart';
 import 'package:flame_behavior_tree/flame_behavior_tree.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 
 void main() {
   group('HasBehaviorTree', () {
-    final alwaysFailure = _MockNode();
-    final alwaysSuccess = _MockNode();
-    final alwaysRunning = _MockNode();
-
-    setUp(() {
-      reset(alwaysFailure);
-      reset(alwaysSuccess);
-      reset(alwaysRunning);
-
-      when(() => alwaysFailure.status).thenReturn(NodeStatus.failure);
-      when(() => alwaysSuccess.status).thenReturn(NodeStatus.success);
-      when(() => alwaysRunning.status).thenReturn(NodeStatus.running);
+    test('throws a descriptive error if the tree is accessed before set', () {
+      final component = _BehaviorTreeComponent();
+      expect(() => component.behaviorTree, throwsStateError);
+      expect(() => component.blackboard, throwsStateError);
     });
-
-    testWithFlameGame(
-      'updates with null tree.',
-      (game) async {
-        final component = _BehaviorTreeComponent();
-        expect(() => game.add(component), returnsNormally);
-      },
-    );
 
     test('tick interval can be changed', () {
       final component = _BehaviorTreeComponent();
@@ -39,280 +22,189 @@ void main() {
       expect(component.tickInterval, 0);
     });
 
-    test('throws if treeNode is accessed before setting.', () {
-      final component = _BehaviorTreeComponent();
-      expect(() => component.treeRoot, throwsA(isA<TypeError>()));
-
-      component.treeRoot = _MockNode();
-      expect(() => component.treeRoot, returnsNormally);
+    test('exposes the blackboard of the tree', () {
+      final blackboard = Blackboard();
+      final component = _BehaviorTreeComponent()
+        ..behaviorTree = BehaviorTree(
+          Task((_) => Status.success),
+          blackboard: blackboard,
+        );
+      expect(component.blackboard, same(blackboard));
     });
 
-    testWithFlameGame(
-      'updates without errors with a valid tree.',
-      (game) async {
+    testWithFlameGame('updates with no tree', (game) async {
+      await game.ensureAdd(_BehaviorTreeComponent());
+      expect(() => game.update(1), returnsNormally);
+    });
+
+    testWithFlameGame('ticks the tree on every update', (game) async {
+      final ticks = <double>[];
+      final component = _BehaviorTreeComponent()
+        ..behaviorTree = BehaviorTree(
+          Task((context) {
+            ticks.add(context.dt);
+            return Status.success;
+          }),
+        );
+      await game.ensureAdd(component);
+
+      game.update(0.1);
+      game.update(0.2);
+      expect(ticks, [0.1, 0.2]);
+    });
+
+    testWithFlameGame('the tree can access the component as owner', (
+      game,
+    ) async {
+      _BehaviorTreeComponent? owner;
+      final component = _BehaviorTreeComponent();
+      component.behaviorTree = BehaviorTree(
+        Task((context) {
+          owner = context.owner<_BehaviorTreeComponent>();
+          return Status.success;
+        }),
+        owner: component,
+      );
+      await game.ensureAdd(component);
+
+      game.update(0.1);
+      expect(owner, same(component));
+    });
+
+    testWithFlameGame('nodes can share data through the blackboard', (
+      game,
+    ) async {
+      const counter = BlackboardKey<int>('counter', initial: 0);
+      final component = _BehaviorTreeComponent()
+        ..behaviorTree = BehaviorTree(
+          Sequence([
+            Task((context) {
+              context.set(counter, context.get(counter) + 1);
+              return Status.success;
+            }),
+            Task((context) {
+              context.set(counter, context.get(counter) + 10);
+              return Status.success;
+            }),
+          ]),
+        );
+      await game.ensureAdd(component);
+
+      game.update(0.1);
+      game.update(0.1);
+      expect(component.blackboard.get(counter), 22);
+    });
+
+    group('tick interval', () {
+      testWithFlameGame('ticks the tree at a slower rate', (game) async {
+        final ticks = <double>[];
         final component = _BehaviorTreeComponent()
-          ..treeRoot = Sequence(
-            children: [alwaysSuccess, alwaysFailure, alwaysRunning],
+          ..tickInterval = 1
+          ..behaviorTree = BehaviorTree(
+            Task((context) {
+              ticks.add(context.dt);
+              return Status.success;
+            }),
           );
+        await game.ensureAdd(component);
 
-        expect(() async => game.add(component), returnsNormally);
-
-        await game.ready();
-        expect(() => game.update(10), returnsNormally);
-
-        verify(alwaysSuccess.tick).called(1);
-        verify(alwaysFailure.tick).called(1);
-        verifyNever(alwaysRunning.tick);
-      },
-    );
-
-    testWithFlameGame(
-      'tree updates at a slower rate.',
-      (game) async {
-        final component = _BehaviorTreeComponent()
-          ..treeRoot = Sequence(
-            children: [alwaysSuccess, alwaysFailure, alwaysRunning],
-          )
-          ..tickInterval = 1;
-
-        game.add(component);
-        await game.ready();
-
-        const dt = 1 / 60;
-        const gameTime = 3.0;
-        var elapsedTime = 0.0;
-
-        while (elapsedTime < gameTime) {
+        const dt = 0.25;
+        for (var i = 0; i < 12; i++) {
           game.update(dt);
-          elapsedTime += dt;
         }
 
-        verify(alwaysSuccess.tick).called(gameTime.toInt());
-        verify(alwaysFailure.tick).called(gameTime.toInt());
-        verifyNever(alwaysRunning.tick);
-      },
-    );
-
-    group('Blackboard support', () {
-      test('blackboard can be set and retrieved', () {
-        final component = _BehaviorTreeComponent();
-        expect(component.blackboard, isNull);
-
-        final blackboard = Blackboard();
-        component.blackboard = blackboard;
-
-        expect(component.blackboard, same(blackboard));
+        // Immediately on the first update, then once the interval has passed.
+        expect(ticks, [dt, 1, 1]);
       });
 
-      test('blackboard can be set to null', () {
-        final component = _BehaviorTreeComponent();
-        final blackboard = Blackboard();
-        component.blackboard = blackboard;
+      testWithFlameGame('can be changed after the component loaded', (
+        game,
+      ) async {
+        var ticks = 0;
+        final component = _BehaviorTreeComponent()
+          ..behaviorTree = BehaviorTree(
+            Task((_) {
+              ticks++;
+              return Status.success;
+            }),
+          );
+        await game.ensureAdd(component);
 
-        component.blackboard = null;
-        expect(component.blackboard, isNull);
+        game.update(0.5);
+        expect(ticks, 1);
+
+        component.tickInterval = 1;
+        for (var i = 0; i < 4; i++) {
+          game.update(0.5);
+        }
+        expect(ticks, 3);
+      });
+    });
+
+    testWithFlameGame('ticks right away when it is mounted again', (
+      game,
+    ) async {
+      var ticks = 0;
+      final component = _BehaviorTreeComponent()
+        ..tickInterval = 1
+        ..behaviorTree = BehaviorTree(
+          Task((_) {
+            ticks++;
+            return Status.success;
+          }),
+        );
+      await game.ensureAdd(component);
+
+      game.update(0.25);
+      expect(ticks, 1);
+      // Not yet ticked again, but time has been collected.
+      game.update(0.25);
+      expect(ticks, 1);
+
+      component.removeFromParent();
+      await game.ready();
+      await game.ensureAdd(component);
+
+      // The first tick is not delayed, and does not use the time of before.
+      game.update(0.25);
+      expect(ticks, 2);
+      game.update(0.25);
+      expect(ticks, 2);
+    });
+
+    group('lifecycle', () {
+      testWithFlameGame('aborts the tree when the component is removed', (
+        game,
+      ) async {
+        var aborted = 0;
+        final component = _BehaviorTreeComponent()
+          ..behaviorTree = BehaviorTree(
+            Task((_) => Status.running, onAbortCallback: (_) => aborted++),
+          );
+        await game.ensureAdd(component);
+        game.update(0.1);
+
+        component.removeFromParent();
+        await game.ready();
+        expect(aborted, 1);
       });
 
-      test('implements BlackboardProvider', () {
-        final component = _BehaviorTreeComponent();
-        expect(component, isA<BlackboardProvider>());
+      testWithFlameGame('aborts the previous tree when replaced', (
+        game,
+      ) async {
+        var aborted = 0;
+        final component = _BehaviorTreeComponent()
+          ..behaviorTree = BehaviorTree(
+            Task((_) => Status.running, onAbortCallback: (_) => aborted++),
+          );
+        await game.ensureAdd(component);
+        game.update(0.1);
+
+        component.behaviorTree = BehaviorTree(Task((_) => Status.success));
+        expect(aborted, 1);
       });
-
-      testWithFlameGame(
-        'nodes can access blackboard through component',
-        (game) async {
-          final component = _BehaviorTreeComponent();
-          final blackboard = Blackboard();
-          blackboard.set('testValue', 42);
-
-          component.blackboard = blackboard;
-
-          final task = _TestTask();
-          component.treeRoot = Sequence(children: [task]);
-
-          game.add(component);
-          await game.ready();
-
-          game.update(0.1);
-
-          expect(task.retrievedValue, 42);
-        },
-      );
-
-      testWithFlameGame(
-        'nested nodes can access blackboard',
-        (game) async {
-          final component = _BehaviorTreeComponent();
-          final blackboard = Blackboard();
-          blackboard.set('nestedValue', 'hello');
-
-          component.blackboard = blackboard;
-
-          final deepTask = _TestTask();
-          final innerSequence = Sequence(children: [deepTask]);
-          final outerSequence = Sequence(children: [innerSequence]);
-          component.treeRoot = outerSequence;
-
-          game.add(component);
-          await game.ready();
-
-          game.update(0.1);
-
-          expect(deepTask.retrievedValue, 'hello');
-        },
-      );
-
-      testWithFlameGame(
-        'nodes can modify blackboard',
-        (game) async {
-          final component = _BehaviorTreeComponent();
-          final blackboard = Blackboard();
-          blackboard.set('counter', 0);
-
-          component.blackboard = blackboard;
-
-          final incrementTask = _IncrementTask();
-          component.treeRoot = Sequence(children: [incrementTask]);
-
-          game.add(component);
-          await game.ready();
-
-          game.update(0.1);
-          expect(blackboard.get<int>('counter'), 1);
-
-          component.treeRoot.reset();
-          game.update(0.1);
-          expect(blackboard.get<int>('counter'), 2);
-        },
-      );
-
-      testWithFlameGame(
-        'multiple nodes share same blackboard',
-        (game) async {
-          final component = _BehaviorTreeComponent();
-          final blackboard = Blackboard();
-          blackboard.set('shared', 0);
-
-          component.blackboard = blackboard;
-
-          final task1 = _IncrementSharedTask();
-          final task2 = _IncrementSharedTask();
-          final task3 = _IncrementSharedTask();
-
-          component.treeRoot = Sequence(children: [task1, task2, task3]);
-
-          game.add(component);
-          await game.ready();
-
-          game.update(0.1);
-
-          expect(blackboard.get<int>('shared'), 3);
-        },
-      );
-
-      testWithFlameGame(
-        'nodes work without blackboard set',
-        (game) async {
-          final component = _BehaviorTreeComponent();
-          // No blackboard set
-
-          final task = _TestTask();
-          component.treeRoot = Sequence(children: [task]);
-
-          game.add(component);
-          await game.ready();
-
-          expect(() => game.update(0.1), returnsNormally);
-          expect(task.retrievedValue, isNull);
-        },
-      );
-
-      testWithFlameGame(
-        'blackboard provider is set on root node',
-        (game) async {
-          final component = _BehaviorTreeComponent();
-          final blackboard = Blackboard();
-          component.blackboard = blackboard;
-
-          final rootNode = Sequence(children: []);
-          component.treeRoot = rootNode;
-
-          game.add(component);
-          await game.ready();
-
-          // Root node should have access to blackboard
-          expect(rootNode.blackboard, same(blackboard));
-        },
-      );
-
-      testWithFlameGame(
-        'changing blackboard updates accessible data',
-        (game) async {
-          final component = _BehaviorTreeComponent();
-          final blackboard1 = Blackboard();
-          blackboard1.set('value', 'first');
-
-          component.blackboard = blackboard1;
-
-          final task = _TestTask();
-          component.treeRoot = Sequence(children: [task]);
-
-          game.add(component);
-          await game.ready();
-
-          game.update(0.1);
-          expect(task.retrievedValue, 'first');
-
-          // Change to a different blackboard
-          final blackboard2 = Blackboard();
-          blackboard2.set('value', 'second');
-          component.blackboard = blackboard2;
-
-          component.treeRoot.reset();
-          game.update(0.1);
-          expect(task.retrievedValue, 'second');
-        },
-      );
     });
   });
 }
 
 class _BehaviorTreeComponent() extends Component with HasBehaviorTree;
-
-class _MockNode() extends Mock implements NodeInterface;
-
-// Test helper nodes for blackboard testing
-
-class _TestTask() extends BaseNode {
-  Object? retrievedValue;
-
-  @override
-  void tick() {
-    if (blackboard?.has('testValue') ?? false) {
-      retrievedValue = blackboard?.get('testValue');
-    } else if (blackboard?.has('nestedValue') ?? false) {
-      retrievedValue = blackboard?.get('nestedValue');
-    } else if (blackboard?.has('value') ?? false) {
-      retrievedValue = blackboard?.get('value');
-    }
-    status = NodeStatus.success;
-  }
-}
-
-class _IncrementTask() extends BaseNode {
-  @override
-  void tick() {
-    final current = blackboard?.get<int>('counter') ?? 0;
-    blackboard?.set('counter', current + 1);
-    status = NodeStatus.success;
-  }
-}
-
-class _IncrementSharedTask() extends BaseNode {
-  @override
-  void tick() {
-    final current = blackboard?.get<int>('shared') ?? 0;
-    blackboard?.set('shared', current + 1);
-    status = NodeStatus.success;
-  }
-}
