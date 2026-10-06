@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flame_devtools/behavior_tree_snapshot.dart';
-import 'package:flame_devtools/repository.dart';
 import 'package:flame_devtools/widgets/behavior_tree_view.dart';
 import 'package:flutter/material.dart';
 
@@ -12,10 +11,17 @@ const _refreshInterval = Duration(milliseconds: 500);
 ///
 /// It shows nothing if the component does not have a behavior tree, so it can
 /// be added for any selected component.
-class const BehaviorTreeSection({required this.id, super.key})
-    extends StatefulWidget {
+class const BehaviorTreeSection({
+  required this.id,
+  required this.fetch,
+  super.key,
+}) extends StatefulWidget {
   /// The id of the component.
   final int id;
+
+  /// Gets the behavior tree of the component with the given id, or null if it
+  /// does not have one.
+  final Future<BehaviorTreeSnapshot?> Function(int id) fetch;
 
   @override
   State<BehaviorTreeSection> createState() => _BehaviorTreeSectionState();
@@ -59,12 +65,20 @@ class _BehaviorTreeSectionState() extends State<BehaviorTreeSection> {
     }
     _isLoading = true;
     final id = widget.id;
-    final snapshot = await Repository.getBehaviorTree(id: id);
+    final snapshot = await widget.fetch(id);
     _isLoading = false;
-    // The selection might have changed while the tree was loading.
-    if (mounted && id == widget.id) {
-      setState(() => _snapshot = snapshot);
+    if (!mounted) {
+      return;
     }
+    if (id != widget.id) {
+      // The selection changed while the tree was loading, so what was fetched
+      // belongs to another component. The refresh that the change asked for
+      // was dropped because this one was still running, and nothing else would
+      // ask for it when the view is not live, so it is done here.
+      await _refresh();
+      return;
+    }
+    setState(() => _snapshot = snapshot);
   }
 
   @override
