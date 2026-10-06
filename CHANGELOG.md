@@ -3,6 +3,230 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-10-06
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`behavior_tree` - `v0.1.6-dev.1`](#behavior_tree---v016-dev1)
+ - [`flame` - `v2.0.0-dev.1`](#flame---v200-dev1)
+ - [`flame_behavior_tree` - `v0.2.0-dev.1`](#flame_behavior_tree---v020-dev1)
+ - [`flame_markdown` - `v0.3.0-dev.1`](#flame_markdown---v030-dev1)
+ - [`flame_tiled` - `v4.0.0-dev.1`](#flame_tiled---v400-dev1)
+
+Packages with other changes:
+
+ - [`flame_3d` - `v0.4.0-dev.1`](#flame_3d---v040-dev1)
+ - [`flame_3d_component` - `v0.1.0-dev.1`](#flame_3d_component---v010-dev1)
+ - [`flame_audio` - `v2.13.0-dev.1`](#flame_audio---v2130-dev1)
+ - [`flame_behaviors` - `v2.0.0-dev.1`](#flame_behaviors---v200-dev1)
+ - [`flame_bloc` - `v2.0.0-dev.1`](#flame_bloc---v200-dev1)
+ - [`flame_cli` - `v0.1.1-dev.1`](#flame_cli---v011-dev1)
+ - [`flame_console` - `v0.2.0-dev.1`](#flame_console---v020-dev1)
+ - [`flame_fire_atlas` - `v1.9.0-dev.1`](#flame_fire_atlas---v190-dev1)
+ - [`flame_forge2d` - `v0.21.0-dev.1`](#flame_forge2d---v0210-dev1)
+ - [`flame_gamepads` - `v0.1.3-dev.1`](#flame_gamepads---v013-dev1)
+ - [`flame_isolate` - `v0.7.0-dev.1`](#flame_isolate---v070-dev1)
+ - [`flame_kenney_xml` - `v0.2.0-dev.1`](#flame_kenney_xml---v020-dev1)
+ - [`flame_lint` - `v1.5.0-dev.1`](#flame_lint---v150-dev1)
+ - [`flame_lottie` - `v0.5.0-dev.1`](#flame_lottie---v050-dev1)
+ - [`flame_network_assets` - `v0.4.0-dev.1`](#flame_network_assets---v040-dev1)
+ - [`flame_noise` - `v0.3.4-dev.1`](#flame_noise---v034-dev1)
+ - [`flame_rive` - `v2.0.0-dev.1`](#flame_rive---v200-dev1)
+ - [`flame_riverpod` - `v5.5.6-dev.1`](#flame_riverpod---v556-dev1)
+ - [`flame_spine` - `v0.4.0-dev.1`](#flame_spine---v040-dev1)
+ - [`flame_splash_screen` - `v0.3.2-dev.1`](#flame_splash_screen---v032-dev1)
+ - [`flame_sprite_fusion` - `v0.3.0-dev.1`](#flame_sprite_fusion---v030-dev1)
+ - [`flame_steering_behaviors` - `v0.3.0-dev.1`](#flame_steering_behaviors---v030-dev1)
+ - [`flame_svg` - `v3.0.0-dev.1`](#flame_svg---v300-dev1)
+ - [`flame_test` - `v3.0.0-dev.1`](#flame_test---v300-dev1)
+ - [`flame_texturepacker` - `v5.2.0-dev.1`](#flame_texturepacker---v520-dev1)
+ - [`flame_typled` - `v0.2.0-dev.1`](#flame_typled---v020-dev1)
+ - [`jenny` - `v1.5.2-dev.1`](#jenny---v152-dev1)
+
+---
+
+#### `behavior_tree` - `v0.1.6-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+ - **FEAT**: Add Flame nodes, examples and docs for flame_behavior_tree ([#4095](https://github.com/flame-engine/flame/issues/4095)). ([4cb46020](https://github.com/flame-engine/flame/commit/4cb46020c604740316675135755d017804606430))
+ - **BREAKING** **FEAT**: Redesign the behavior_tree API to make it simpler to use ([#4094](https://github.com/flame-engine/flame/issues/4094)). ([760fce2d](https://github.com/flame-engine/flame/commit/760fce2d4d2992c2b161be302f5234bcd2b3286f))
+
+#### `flame` - `v2.0.0-dev.1`
+
+ - **PERF**: Visit the hitboxes from the nearest to the farthest in raycast ([#4088](https://github.com/flame-engine/flame/issues/4088)). ([27311915](https://github.com/flame-engine/flame/commit/2731191544c5c5322a12728e8cc2f64ab59dd17f))
+ - **PERF**: Drive descendants() with an explicit stack instead of a sync* generator ([#4009](https://github.com/flame-engine/flame/issues/4009)). ([dadabf1f](https://github.com/flame-engine/flame/commit/dadabf1f9d72709e2901b4c2b74c346a02958ceb))
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Allow moving the camera via viewfinder.position x and y ([#4099](https://github.com/flame-engine/flame/issues/4099)). ([93e486d2](https://github.com/flame-engine/flame/commit/93e486d2015e0cbf396d58759b3084fcd161da87))
+ - **FIX**: Reset target AABB when projecting circles and polygons. ([#4092](https://github.com/flame-engine/flame/issues/4092)). ([21c6ceb3](https://github.com/flame-engine/flame/commit/21c6ceb3c3dcc019262173c14dc8f902114c6be9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+ - **FIX**: Forward pressedInsets to InternalSpriteButton ([#4081](https://github.com/flame-engine/flame/issues/4081)). ([78b7c2db](https://github.com/flame-engine/flame/commit/78b7c2db49e78b8ee6b0e5309911c58a851f9022))
+ - **FEAT**: Add reference counted eviction of unused images to the Images cache ([#4093](https://github.com/flame-engine/flame/issues/4093)). ([b237740d](https://github.com/flame-engine/flame/commit/b237740da43377a8eac2ebb6806adceffaca180d))
+ - **FEAT**: Fix stale state in the devtools extension and add overlay toggles and priority editing ([#4079](https://github.com/flame-engine/flame/issues/4079)). ([71098fb0](https://github.com/flame-engine/flame/commit/71098fb04662a4ae0d99665073943c4713fbf5ff))
+ - **BREAKING** **FEAT**: Use Flutter's paragraph layout for rich text documents ([#4064](https://github.com/flame-engine/flame/issues/4064)). ([4566d89f](https://github.com/flame-engine/flame/commit/4566d89ff05c1050a054a473b6f1367d9652f799))
+
+#### `flame_behavior_tree` - `v0.2.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+ - **FEAT**: Add Flame nodes, examples and docs for flame_behavior_tree ([#4095](https://github.com/flame-engine/flame/issues/4095)). ([4cb46020](https://github.com/flame-engine/flame/commit/4cb46020c604740316675135755d017804606430))
+ - **BREAKING** **FEAT**: Redesign the behavior_tree API to make it simpler to use ([#4094](https://github.com/flame-engine/flame/issues/4094)). ([760fce2d](https://github.com/flame-engine/flame/commit/760fce2d4d2992c2b161be302f5234bcd2b3286f))
+
+#### `flame_markdown` - `v0.3.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+ - **BREAKING** **FEAT**: Use Flutter's paragraph layout for rich text documents ([#4064](https://github.com/flame-engine/flame/issues/4064)). ([4566d89f](https://github.com/flame-engine/flame/commit/4566d89ff05c1050a054a473b6f1367d9652f799))
+
+#### `flame_tiled` - `v4.0.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+ - **FEAT**: Add reference counted eviction of unused images to the Images cache ([#4093](https://github.com/flame-engine/flame/issues/4093)). ([b237740d](https://github.com/flame-engine/flame/commit/b237740da43377a8eac2ebb6806adceffaca180d))
+ - **BREAKING** **FIX**: Render oversized and flipped tiles like Tiled ([#4082](https://github.com/flame-engine/flame/issues/4082)). ([b9ef18ea](https://github.com/flame-engine/flame/commit/b9ef18eaf66b516ac65d2d4de690a2b73dc96c7a))
+
+#### `flame_3d` - `v0.4.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_3d_component` - `v0.1.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FEAT**: Add flame_3d_component, a Component3D backed by flutter_scene ([#4086](https://github.com/flame-engine/flame/issues/4086)). ([5fc3e1c2](https://github.com/flame-engine/flame/commit/5fc3e1c22cee8bbf643d785e1aa52c95dbdcbc4d))
+
+#### `flame_audio` - `v2.13.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_behaviors` - `v2.0.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_bloc` - `v2.0.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_cli` - `v0.1.1-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+ - **FEAT**: Prepare the templates in the cli for v2 ([#4090](https://github.com/flame-engine/flame/issues/4090)). ([15e8cf3f](https://github.com/flame-engine/flame/commit/15e8cf3f86f83cb714f6ded8b4dcec21d1e90059))
+ - **FEAT**: Add a devtools command to flame_cli that opens the DevTools for the running game ([#4080](https://github.com/flame-engine/flame/issues/4080)). ([13c34f30](https://github.com/flame-engine/flame/commit/13c34f301b370d90ac8dcb2abb5ff04ce093681e))
+
+#### `flame_console` - `v0.2.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_fire_atlas` - `v1.9.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_forge2d` - `v0.21.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_gamepads` - `v0.1.3-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_isolate` - `v0.7.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_kenney_xml` - `v0.2.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_lint` - `v1.5.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_lottie` - `v0.5.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_network_assets` - `v0.4.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_noise` - `v0.3.4-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_rive` - `v2.0.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_riverpod` - `v5.5.6-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_spine` - `v0.4.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_splash_screen` - `v0.3.2-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_sprite_fusion` - `v0.3.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_steering_behaviors` - `v0.3.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_svg` - `v3.0.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_test` - `v3.0.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_texturepacker` - `v5.2.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `flame_typled` - `v0.2.0-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+#### `jenny` - `v1.5.2-dev.1`
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+
+
 ## 2026-09-30
 
 ### Changes

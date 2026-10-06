@@ -1,3 +1,12 @@
+## 4.0.0-dev.1
+
+> Note: This release has breaking changes.
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+ - **FEAT**: Add reference counted eviction of unused images to the Images cache ([#4093](https://github.com/flame-engine/flame/issues/4093)). ([b237740d](https://github.com/flame-engine/flame/commit/b237740da43377a8eac2ebb6806adceffaca180d))
+ - **BREAKING** **FIX**: Render oversized and flipped tiles like Tiled ([#4082](https://github.com/flame-engine/flame/issues/4082)). ([b9ef18ea](https://github.com/flame-engine/flame/commit/b9ef18eaf66b516ac65d2d4de690a2b73dc96c7a))
+
 ## 4.0.0-dev.0
 
 > Note: This release has breaking changes.
