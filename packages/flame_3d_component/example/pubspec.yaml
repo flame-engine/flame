@@ -1,0 +1,29 @@
+name: flame_3d_component_example
+resolution: workspace
+description: Example app of how to use the flame_3d_component package
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.13.0 <4.0.0"
+  flutter: ">=3.47.0"
+
+dependencies:
+  flame: ^2.0.0-dev.0
+  flame_3d_component: ^0.1.0
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flame_lint: ^1.4.4-dev.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/images/parallax/
+    - assets/models/
