@@ -59,7 +59,17 @@ WidgetbookComponent spritesStories() {
       ),
       ExampleUseCase(
         name: 'Sprite Warp',
-        builder: (_) => GameWidget(game: SpriteWarpExample()),
+        builder: (context) => GameWidget(
+          game: SpriteWarpExample(
+            gridSize: context.knobs.int.slider(
+              label: 'Grid Size',
+              initialValue: 4,
+              min: 3,
+              max: 8,
+              divisions: 5,
+            ),
+          ),
+        ),
         codeLink: baseLink('sprites/sprite_warp_example.dart'),
         info: SpriteWarpExample.description,
       ),
