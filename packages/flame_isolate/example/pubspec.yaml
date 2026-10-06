@@ -21,7 +21,7 @@ dependencies:
   quiver: ^3.2.1
 
 dev_dependencies:
-  flame_lint: ^1.4.4-dev.0
+  flame_lint: ^1.5.0-dev.0
 flutter:
   assets:
     - assets/images/
