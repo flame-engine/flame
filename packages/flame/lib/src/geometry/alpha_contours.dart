@@ -207,9 +207,17 @@ List<Offset> _withoutCollinear(List<Offset> points) {
   ];
 }
 
+/// Whether the [point] is on the line through the [previous] and the [next]
+/// ones, within an angle of about 1e-9 radians, which doesn't depend on the
+/// scale of the outline, unlike its area.
 bool _isCollinear(Offset previous, Offset point, Offset next) {
-  final cross =
-      (point.dx - previous.dx) * (next.dy - point.dy) -
-      (point.dy - previous.dy) * (next.dx - point.dx);
-  return cross.abs() <= 1e-9;
+  final firstDx = point.dx - previous.dx;
+  final firstDy = point.dy - previous.dy;
+  final secondDx = next.dx - point.dx;
+  final secondDy = next.dy - point.dy;
+  final cross = firstDx * secondDy - firstDy * secondDx;
+  final squaredLengths =
+      (firstDx * firstDx + firstDy * firstDy) *
+      (secondDx * secondDx + secondDy * secondDy);
+  return cross * cross <= 1e-18 * squaredLengths;
 }

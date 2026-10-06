@@ -203,6 +203,39 @@ void main() {
       );
       expect(path.getBounds(), const Rect.fromLTRB(0, 5, 10, 10));
     });
+
+    test('keeps the same outline at any size', () {
+      final rows = [
+        '......',
+        '.##+..',
+        '.####.',
+        '.+##..',
+        '......',
+      ];
+      final expected = _contour(rows);
+      for (final size in [
+        Vector2(6e-6, 5e-6),
+        Vector2(6e-2, 5e-2),
+        Vector2(6e3, 5e3),
+        Vector2(6e-6, 5),
+        Vector2(6e3, 5e-2),
+      ]) {
+        final actual = _contour(rows, size: size);
+        expect(actual.contours, hasLength(1), reason: 'size $size');
+        // Points every quarter of a pixel, which tell apart the outlines
+        // that miss a corner, since the corners cut off half a pixel. They
+        // are shifted so that none of them is on an edge.
+        for (var y = 0.2; y < 5; y += 0.25) {
+          for (var x = 0.1; x < 6; x += 0.25) {
+            expect(
+              actual.contains(Offset(x * size.x / 6, y * size.y / 5)),
+              expected.contains(Offset(x, y)),
+              reason: '($x, $y) at size $size',
+            );
+          }
+        }
+      }
+    });
   });
 
   group('ImageExtension.contour', () {
