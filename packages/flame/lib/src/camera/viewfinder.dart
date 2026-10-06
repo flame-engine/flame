@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/src/camera/behaviors/viewport_aware_bounds_behavior.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flame/src/game/notifying_vector2.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:meta/meta.dart';
 
@@ -28,13 +29,21 @@ class Viewfinder({
   /// Transform matrix used by the viewfinder.
   final Transform2D transform = Transform2D();
 
+  final NotifyingVector2 _position = NotifyingVector2.zero();
+
+  this {
+    _position.addListener(_onPositionChanged);
+  }
+
   /// The game coordinates of a point that is to be positioned at the center
   /// of the viewport.
   @override
-  Vector2 get position => -transform.offset;
+  NotifyingVector2 get position => _position;
   @override
-  set position(Vector2 value) {
-    transform.offset = -value;
+  set position(Vector2 value) => _position.setFrom(value);
+
+  void _onPositionChanged() {
+    transform.offset.setValues(-_position.x, -_position.y);
     visibleRect = null;
   }
 
