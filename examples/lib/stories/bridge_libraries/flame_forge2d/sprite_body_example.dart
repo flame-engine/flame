@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
@@ -85,14 +86,19 @@ class SpriteBodyWorld({bool showPieces = false})
 }
 
 /// A body that is drawn by a [sprite] of the given [size], in meters, and
-/// collides as the convex [pieces] of its outline.
+/// collides as the convex [pieces] of its outline, which are drawn on top of
+/// the [sprite] when [renderBody] is true.
 class FlameBody(
   final Vector2 initialPosition, {
   required final Sprite sprite,
   required final List<List<Vector2>> pieces,
   required final Vector2 size,
-}) extends BodyComponent {
-  this : super(renderBody: false);
+}) extends BodyComponent with GlowingBody {
+  this
+    : super(
+        paint: Paint()..color = ExampleColors.sky,
+        renderBody: false,
+      );
 
   /// The linear slop of Box2D in meters, as `Tolerances.linearSlop` with the
   /// default length units, which is not used here as it needs the native
@@ -129,9 +135,14 @@ class FlameBody(
   }
 
   @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-    add(SpriteComponent(sprite: sprite, size: size, anchor: Anchor.center));
+  double get outlineWidth => 0.05;
+
+  // The sprite is drawn here rather than by a child, since the children are
+  // drawn after the body, and the sprite would hide the pieces.
+  @override
+  void render(Canvas canvas) {
+    sprite.render(canvas, size: size, anchor: Anchor.center);
+    super.render(canvas);
   }
 
   @override
