@@ -15,7 +15,7 @@ dependencies:
   web: ^1.1.0
 
 dev_dependencies:
-  flame_lint: ^1.4.4-dev.0
+  flame_lint: ^1.5.0-dev.0
 
 flutter:
   assets:
