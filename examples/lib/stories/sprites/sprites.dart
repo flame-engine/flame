@@ -7,6 +7,7 @@ import 'package:examples/stories/sprites/sprite_batch_example.dart';
 import 'package:examples/stories/sprites/sprite_batch_load_example.dart';
 import 'package:examples/stories/sprites/sprite_group_example.dart';
 import 'package:examples/stories/sprites/sprite_sheet_example.dart';
+import 'package:examples/stories/sprites/sprite_warp_example.dart';
 import 'package:flame/game.dart';
 import 'package:widgetbook/widgetbook.dart';
 
@@ -55,6 +56,12 @@ WidgetbookComponent spritesStories() {
         builder: (_) => GameWidget(game: SpriteGroupExample()),
         codeLink: baseLink('sprites/sprite_group_example.dart'),
         info: SpriteGroupExample.description,
+      ),
+      ExampleUseCase(
+        name: 'Sprite Warp',
+        builder: (_) => GameWidget(game: SpriteWarpExample()),
+        codeLink: baseLink('sprites/sprite_warp_example.dart'),
+        info: SpriteWarpExample.description,
       ),
     ],
   );

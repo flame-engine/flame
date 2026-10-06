@@ -1,6 +1,8 @@
 # specific people's names and/or usernames
 akida # github.com/akida 
 bdero # github.com/bdero
+catmull # Catmull/Rom
+Catmull # Catmull/Rom
 bluefireteam # github.com/bluefireteam
 erayzesen # erayzesen.itch.io
 erickzanardo # github.com/erickzanardo 
