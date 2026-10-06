@@ -5,6 +5,11 @@
 Uses Flutter GPU / Impeller low-level level access to provide an ergonomic and **very experimental**
 3D rendering engine on top of Flame.
 
+:::{package} flame_3d_component
+
+Add 3D components to the Flame component tree (bridge package for [flutter_scene]).
+:::
+
 :::{package} flame_audio
 
 Play multiple audio files simultaneously (bridge package for [AudioPlayers]).
@@ -115,11 +120,13 @@ Load Typled sprite atlases with edge-repeated padding (bridge package for [Typle
 [Tiled]: https://www.mapeditor.org/
 [Typled]: https://pub.dev/packages/typled
 [flutter_svg]: https://github.com/dnfield/flutter_svg
+[flutter_scene]: https://github.com/bdero/flutter_scene
 
 
 ```{toctree}
 :hidden:
 
+flame_3d_component          <flame_3d_component/flame_3d_component.md>
 flame_audio                 <flame_audio/flame_audio.md>
 flame_behavior_tree         <flame_behavior_tree/flame_behavior_tree.md>
 flame_behaviors             <flame_behaviors/flame_behaviors.md>
