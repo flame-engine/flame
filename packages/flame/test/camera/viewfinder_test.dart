@@ -36,6 +36,60 @@ void main() {
     );
 
     testWithFlameGame(
+      'camera can be moved by setting position x and y directly',
+      (game) async {
+        final world = World()..addToParent(game);
+        final camera = CameraComponent(world: world)..addToParent(game);
+        world.add(_Rect());
+        await game.ready();
+
+        camera.viewfinder.position.x = 100;
+        camera.viewfinder.position.y = -50;
+        expect(camera.viewfinder.position, closeToVector(Vector2(100, -50)));
+        expect(
+          camera.viewfinder.transform.offset,
+          closeToVector(Vector2(-100, 50)),
+        );
+
+        final canvas = MockCanvas();
+        game.render(canvas);
+        expect(
+          canvas,
+          MockCanvas()
+            ..translate(300, 350) // (800,600)/2 - (100,-50)
+            ..drawRect(const Rect.fromLTWH(0, 0, 80, 60))
+            ..translate(0, 0),
+        );
+      },
+    );
+
+    testWithFlameGame(
+      'modifying position in place updates visibleWorldRect',
+      (game) async {
+        final world = World()..addToParent(game);
+        final camera = CameraComponent(world: world)..addToParent(game);
+        await game.ready();
+
+        expect(
+          camera.visibleWorldRect,
+          const Rect.fromLTRB(-400, -300, 400, 300),
+        );
+
+        camera.viewfinder.position.add(Vector2(100, 50));
+        expect(
+          camera.visibleWorldRect,
+          const Rect.fromLTRB(-300, -250, 500, 350),
+        );
+
+        camera.viewfinder.position.setValues(-10, 20);
+        expect(
+          camera.visibleWorldRect,
+          const Rect.fromLTRB(-410, -280, 390, 320),
+        );
+      },
+    );
+
+    testWithFlameGame(
       'default camera centers on a given world point',
       (game) async {
         final world = World()..addToParent(game);

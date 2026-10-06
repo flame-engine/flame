@@ -10,13 +10,13 @@ environment:
   flutter: ">=3.47.0"
 
 dependencies:
-  flame_splash_screen: ^0.3.2-dev.0+4
+  flame_splash_screen: ^0.3.2-dev.1
   flutter:
     sdk: flutter
 
   material_ui: ^1.0.0
 dev_dependencies:
-  flame_lint: ^1.4.4-dev.0
+  flame_lint: ^1.5.0-dev.1
   flutter_test:
     sdk: flutter
 

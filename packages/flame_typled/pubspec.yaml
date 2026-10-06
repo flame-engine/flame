@@ -1,7 +1,7 @@
 name: flame_typled
 resolution: workspace
 description: Typled sprite atlas support for the Flame Engine
-version: 0.2.0-dev.0
+version: 0.2.0-dev.1
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_typled
 funding:
   - https://opencollective.com/blue-fire
@@ -17,14 +17,14 @@ environment:
   flutter: ">=3.47.0"
 
 dependencies:
-  flame: ^2.0.0-dev.0
+  flame: ^2.0.0-dev.1
   flutter:
     sdk: flutter
   typled: ^0.0.5
 
 dev_dependencies:
   dartdoc: ^9.0.0
-  flame_lint: ^1.4.4-dev.0
+  flame_lint: ^1.5.0-dev.1
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.4

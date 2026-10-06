@@ -12,15 +12,15 @@ environment:
 
 dependencies:
   equatable: ^2.0.5
-  flame: ^2.0.0-dev.0
-  flame_bloc: ^2.0.0-dev.0
+  flame: ^2.0.0-dev.1
+  flame_bloc: ^2.0.0-dev.1
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.2
   material_ui: ^1.0.0
 
 dev_dependencies:
-  flame_lint: ^1.4.4-dev.0
+  flame_lint: ^1.5.0-dev.1
   flutter_test:
     sdk: flutter
 

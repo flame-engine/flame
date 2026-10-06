@@ -1,7 +1,7 @@
 name: flame_behaviors
 resolution: workspace
 description: Flame Behaviors applies separation of concerns to game logic in the form of Entities and Behaviors, originally built by Very Good Ventures.
-version: 2.0.0-dev.0
+version: 2.0.0-dev.1
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_behaviors
 
 environment:
@@ -9,13 +9,13 @@ environment:
   flutter: ">=3.47.0"
 
 dependencies:
-  flame: ^2.0.0-dev.0
+  flame: ^2.0.0-dev.1
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.4.4-dev.0
-  flame_test: ^3.0.0-dev.0
+  flame_lint: ^1.5.0-dev.1
+  flame_test: ^3.0.0-dev.1
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.4

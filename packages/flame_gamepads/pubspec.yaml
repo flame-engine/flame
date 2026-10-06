@@ -1,7 +1,7 @@
 name: flame_gamepads
 resolution: workspace
 description: Flame bindings to work with gamepads package
-version: 0.1.3-dev.0
+version: 0.1.3-dev.1
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_gamepads
 funding:
   - https://opencollective.com/blue-fire
@@ -16,14 +16,14 @@ environment:
   flutter: ">=3.47.0"
 
 dependencies:
-  flame: ^2.0.0-dev.0
+  flame: ^2.0.0-dev.1
   flutter:
     sdk: flutter
   gamepads: ^0.1.10
 
 dev_dependencies:
   dartdoc: ^9.0.0
-  flame_lint: ^1.4.4-dev.0
+  flame_lint: ^1.5.0-dev.1
   flutter_test:
     sdk: flutter
   gamepads_platform_interface: any

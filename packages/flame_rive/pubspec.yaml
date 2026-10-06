@@ -2,7 +2,7 @@ name: flame_rive
 resolution: workspace
 description: Rive support for the Flame game engine. This uses the rive package and provides wrappers and components to be used inside Flame.
 homepage: https://github.com/flame-engine/flame
-version: 2.0.0-dev.0
+version: 2.0.0-dev.1
 funding:
   - https://opencollective.com/blue-fire
   - https://github.com/sponsors/bluefireteam
@@ -17,14 +17,14 @@ environment:
   flutter: ">=3.47.0"
 
 dependencies:
-  flame: ^2.0.0-dev.0
+  flame: ^2.0.0-dev.1
   flutter:
     sdk: flutter
   rive: ^0.14.6
 
 dev_dependencies:
   dartdoc: ^9.0.0
-  flame_lint: ^1.4.4-dev.0
-  flame_test: ^3.0.0-dev.0
+  flame_lint: ^1.5.0-dev.1
+  flame_test: ^3.0.0-dev.1
   flutter_test:
     sdk: flutter

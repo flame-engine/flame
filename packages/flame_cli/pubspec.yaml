@@ -1,7 +1,7 @@
 name: flame_cli
 resolution: workspace
 description: A command line tool for creating Flame games, and for inspecting, controlling and playing running ones, for example to take snapshots of them.
-version: 0.1.1-dev.0
+version: 0.1.1-dev.1
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_cli
 funding:
   - https://opencollective.com/blue-fire
@@ -25,7 +25,7 @@ dependencies:
   yaml_edit: ^2.2.4
 
 dev_dependencies:
-  flame_lint: ^1.4.4-dev.0
+  flame_lint: ^1.5.0-dev.1
   test: any
 
 executables:

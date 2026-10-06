@@ -8,13 +8,13 @@ environment:
   sdk: ">=3.13.0 <4.0.0"
 
 dependencies:
-  flame: ^2.0.0-dev.0
-  flame_tiled: ^4.0.0-dev.0
+  flame: ^2.0.0-dev.1
+  flame_tiled: ^4.0.0-dev.1
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.4.4-dev.0
+  flame_lint: ^1.5.0-dev.1
 flutter:
   uses-material-design: true
   assets:

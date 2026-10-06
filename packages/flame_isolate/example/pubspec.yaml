@@ -13,15 +13,15 @@ environment:
 dependencies:
   collection: ^1.18.0
   cupertino_ui: any
-  flame: ^2.0.0-dev.0
-  flame_isolate: ^0.7.0-dev.0+24
+  flame: ^2.0.0-dev.1
+  flame_isolate: ^0.7.0-dev.1
   flutter:
     sdk: flutter
   material_ui: ^1.0.0
   quiver: ^3.2.1
 
 dev_dependencies:
-  flame_lint: ^1.4.4-dev.0
+  flame_lint: ^1.5.0-dev.1
 flutter:
   assets:
     - assets/images/
