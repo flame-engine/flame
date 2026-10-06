@@ -126,6 +126,9 @@ class SpriteComponent({
   set sprite(Sprite? value) {
     _sprite = value;
     _resizeToSprite();
+    // The warp renderer holds an image shader, which would keep the previous
+    // image alive after it is released (and possibly evicted) below.
+    _disposeWarpRenderer();
     updateRetainedImages();
   }
 

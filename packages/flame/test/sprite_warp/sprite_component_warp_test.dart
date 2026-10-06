@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame_test/flame_test.dart';
@@ -260,6 +261,61 @@ Future<void> main() async {
       await game.ready();
       expect(component.warpRenderer, isNull);
       expect(sprite.image.debugDisposed, isFalse);
+    });
+
+    group('with image eviction', () {
+      Future<Images> evictingCache() async {
+        return Images()
+          ..gracePeriod = Duration.zero
+          ..add('a', await _gradientImage())
+          ..add('b', await _gradientImage());
+      }
+
+      testWithFlameGame('mounted images are not evicted', (game) async {
+        final images = await evictingCache();
+        final component = _component(
+          Sprite(images.fromCache('a')),
+          warpGrid: _centerPull(),
+        );
+        game.world.add(component);
+        await game.ready();
+        await _render([component]);
+
+        images.evictUnused();
+        expect(images.containsKey('a'), isTrue);
+        expect(images.containsKey('b'), isFalse);
+        await _render([component]);
+
+        component.removeFromParent();
+        await game.ready();
+        expect(component.warpRenderer, isNull);
+        images.evictUnused();
+        expect(images.containsKey('a'), isFalse);
+      });
+
+      testWithFlameGame(
+        'changing the sprite drops the renderer of the old image',
+        (game) async {
+          final images = await evictingCache();
+          final a = images.fromCache('a');
+          final component = _component(Sprite(a), warpGrid: _centerPull());
+          game.world.add(component);
+          await game.ready();
+          await _render([component]);
+          expect(component.warpRenderer, isNotNull);
+
+          component.sprite = Sprite(images.fromCache('b'));
+          expect(component.warpRenderer, isNull);
+          images.evictUnused();
+          expect(a.debugDisposed, isTrue);
+          expect(images.containsKey('b'), isTrue);
+
+          await _expectSameRendering(
+            component,
+            _component(component.sprite!, warpGrid: _centerPull()),
+          );
+        },
+      );
     });
   });
 }
