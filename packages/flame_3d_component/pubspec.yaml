@@ -9,7 +9,6 @@ funding:
   - https://patreon.com/bluefireoss
 topics:
   - flame
-  - 3d
   - flutter-scene
   - gltf
 
@@ -26,7 +25,7 @@ dependencies:
 
 dev_dependencies:
   dartdoc: ^9.0.0
-  flame_lint: ^1.4.4-dev.0
+  flame_lint: ^1.5.0-dev.0
   flame_test: ^3.0.0-dev.0
   flutter_test:
     sdk: flutter
