@@ -5,6 +5,7 @@ Audioplayers # A Flutter plugin to play multiple simultaneously audio files http
 BGUG # Break Guns Using Gems, a game by BlueFire https://github.com/bluefireteam/bgug
 Bodymovin # An After Effects extension to export Lottie animations https://aescripts.com/bodymovin/
 emberquest # Ember Quest, our platformer tutorial game
+fscene # The website of Flutter Scene https://fscene.dev
 Hermione # A character from the book Harry Potter
 Kenobi # Eminent Jedi Master, General of the Republic Army, Obi-Wan Kenobi
 Nakama # An open-source server designed to power modern games and apps https://github.com/Allan-Nava/nakama-flutter

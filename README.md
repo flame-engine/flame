@@ -83,6 +83,8 @@ helpers, in order to make integrations seamless.
 
 Flame officially provides bridge libraries to the following packages:
 
+- [flame_3d_component][flame_3d_component] for [flutter_scene][flutter_scene]: Add 3D
+  components to the component tree.
 - [flame_audio][flame_audio] for [AudioPlayers][audioplayers]: Play multiple audio files
   simultaneously.
 - [flame_behavior_tree][flame_behavior_tree] for [behavior_tree][behavior_tree]: Drive game logic
@@ -220,6 +222,8 @@ via an issue, GitHub discussion, or reach out to the team either using the
 [flame_network_assets]: https://github.com/flame-engine/flame/tree/main/packages/flame_network_assets
 [flame_rive]: https://github.com/flame-engine/flame/tree/main/packages/flame_rive
 [rive]: https://rive.app/
+[flame_3d_component]: https://github.com/flame-engine/flame/tree/main/packages/flame_3d_component
+[flutter_scene]: https://github.com/bdero/flutter_scene
 [flame_svg]: https://github.com/flame-engine/flame/tree/main/packages/flame_svg
 [flutter_svg]: https://github.com/dnfield/flutter_svg
 [flame_texturepacker]: https://github.com/flame-engine/flame/tree/main/packages/flame_texturepacker
