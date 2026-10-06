@@ -68,10 +68,16 @@ void main() {
   });
 
   group('BehaviorTreeView', () {
-    Future<void> pumpView(WidgetTester tester, BehaviorTreeSnapshot snapshot) {
+    Future<void> pumpView(
+      WidgetTester tester,
+      BehaviorTreeSnapshot snapshot, {
+      Widget? controls,
+    }) {
       return tester.pumpWidget(
         MaterialApp(
-          home: Scaffold(body: BehaviorTreeView(snapshot: snapshot)),
+          home: Scaffold(
+            body: BehaviorTreeView(snapshot: snapshot, controls: controls),
+          ),
         ),
       );
     }
@@ -108,9 +114,12 @@ void main() {
       expect(weightOf('Task'), FontWeight.normal);
     });
 
-    testWidgets('says how often the tree is ticked', (tester) async {
+    testWidgets('only says how often the tree is ticked if it is slower', (
+      tester,
+    ) async {
+      // Ticking on every update is what is expected, so it is not mentioned.
       await pumpView(tester, BehaviorTreeSnapshot.fromJson(_json()));
-      expect(find.text('Ticked on every update'), findsOne);
+      expect(find.textContaining('Ticked'), findsNothing);
 
       await pumpView(
         tester,
@@ -119,22 +128,88 @@ void main() {
       expect(find.text('Ticked every 0.5s'), findsOne);
     });
 
-    testWidgets('shows the blackboard if it has values', (tester) async {
-      await pumpView(tester, BehaviorTreeSnapshot.fromJson(_json()));
-      expect(find.text('Blackboard'), findsNothing);
-
+    testWidgets('shows the values on the blackboard', (tester) async {
       await pumpView(
         tester,
         BehaviorTreeSnapshot.fromJson(
           _json(
             blackboard: [
               {'key': 'health', 'value': '3'},
+              {'key': 'name', 'value': 'Dash'},
             ],
           ),
         ),
       );
+
       expect(find.text('Blackboard'), findsOne);
-      expect(find.text('health: 3'), findsOne);
+      expect(find.text('No values are set'), findsNothing);
+      expect(find.textContaining('health: 3', findRichText: true), findsOne);
+      expect(find.textContaining('name: Dash', findRichText: true), findsOne);
+    });
+
+    testWidgets('says that the blackboard is empty', (tester) async {
+      await pumpView(tester, BehaviorTreeSnapshot.fromJson(_json()));
+
+      expect(find.text('Blackboard'), findsOne);
+      expect(find.text('No values are set'), findsOne);
+    });
+
+    group('layout', () {
+      Future<void> pumpWithWidth(WidgetTester tester, double width) async {
+        tester.view.physicalSize = Size(width, 1000);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.reset);
+        await pumpView(
+          tester,
+          BehaviorTreeSnapshot.fromJson(_json()),
+          controls: const Text('the controls'),
+        );
+      }
+
+      testWidgets('aligns the blackboard with the tree when wide', (
+        tester,
+      ) async {
+        await pumpWithWidth(tester, 900);
+
+        final tree = tester.getTopLeft(find.text('Behavior tree'));
+        final blackboard = tester.getTopLeft(find.text('Blackboard'));
+        expect(blackboard.dx, greaterThan(tree.dx + 200));
+        // The headings are on the same line, although only the blackboard
+        // has the controls next to it.
+        expect(blackboard.dy, tree.dy);
+      });
+
+      testWidgets('puts the controls at the end of the blackboard heading', (
+        tester,
+      ) async {
+        await pumpWithWidth(tester, 900);
+
+        final blackboard = tester.getTopLeft(find.text('Blackboard'));
+        final controls = tester.getTopLeft(find.text('the controls'));
+        expect(controls.dx, greaterThan(blackboard.dx + 100));
+        expect(controls.dy, closeTo(blackboard.dy, 10));
+      });
+
+      testWidgets('puts the blackboard below the tree when narrow', (
+        tester,
+      ) async {
+        await pumpWithWidth(tester, 400);
+
+        final tree = tester.getTopLeft(find.text('Behavior tree'));
+        final blackboard = tester.getTopLeft(find.text('Blackboard'));
+        expect(blackboard.dx, tree.dx);
+        expect(blackboard.dy, greaterThan(tree.dy + 100));
+      });
+
+      testWidgets('puts the controls at the end of the tree heading when '
+          'narrow', (tester) async {
+        await pumpWithWidth(tester, 400);
+
+        final tree = tester.getTopLeft(find.text('Behavior tree'));
+        final controls = tester.getTopLeft(find.text('the controls'));
+        expect(controls.dx, greaterThan(tree.dx + 100));
+        expect(controls.dy, closeTo(tree.dy, 10));
+      });
     });
   });
 }

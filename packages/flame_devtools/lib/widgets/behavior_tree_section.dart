@@ -75,33 +75,29 @@ class _BehaviorTreeSectionState() extends State<BehaviorTreeSection> {
     }
 
     final theme = Theme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text('Behavior tree', style: theme.textTheme.titleSmall),
-            const Spacer(),
-            Text('Live', style: theme.textTheme.bodySmall),
-            Switch(
-              value: _isLive,
-              onChanged: (value) {
-                setState(() => _isLive = value);
-                if (value) {
-                  _refresh();
-                }
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.refresh),
-              iconSize: 18,
-              tooltip: 'Refresh',
-              onPressed: _refresh,
-            ),
-          ],
-        ),
-        BehaviorTreeView(snapshot: snapshot),
-      ],
+    return BehaviorTreeView(
+      snapshot: snapshot,
+      controls: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('Live', style: theme.textTheme.bodyMedium),
+          Switch(
+            value: _isLive,
+            onChanged: (value) {
+              setState(() => _isLive = value);
+              if (value) {
+                _refresh();
+              }
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            iconSize: 18,
+            tooltip: 'Refresh',
+            onPressed: _refresh,
+          ),
+        ],
+      ),
     );
   }
 }
