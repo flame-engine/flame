@@ -12,12 +12,12 @@ environment:
 
 dependencies:
   flame: ^2.0.0-dev.0
-  flame_3d_component: ^0.1.0
+  flame_3d_component: ^0.1.0-dev.0
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.4.4-dev.0
+  flame_lint: ^1.5.0-dev.0
   flutter_test:
     sdk: flutter
 

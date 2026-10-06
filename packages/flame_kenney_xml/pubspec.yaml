@@ -25,7 +25,7 @@ dependencies:
 
 dev_dependencies:
   build_runner: ^2.4.11
-  flame_lint: ^1.4.4-dev.0
+  flame_lint: ^1.5.0-dev.0
   flutter_test:
     sdk: flutter
   mockito: ^5.4.4
