@@ -40,7 +40,7 @@ class SpriteBodyWorld({bool showPieces = false})
     with TapCallbacks, HasGameRef<Forge2DGame> {
   /// The images of the bodies, which the taps go through in turn, with their
   /// widths in meters.
-  static const images = {'flame.png': 8.0, 'pizza.png': 6.0};
+  static const images = {'flame.png': 8.0, 'pizza.png': 6.0, 'zap.png': 9.0};
 
   /// The shape of each of the [images].
   late final List<_Shape> _shapes;
@@ -165,9 +165,11 @@ class ContourBody(
       material: SurfaceMaterial(restitution: 0.4, friction: 0.5),
     );
 
+    final angle = (initialPosition.x + initialPosition.y) / 2 * pi;
     final bodyDef = BodyDef(
       position: initialPosition,
-      rotation: Rot.fromAngle((initialPosition.x + initialPosition.y) / 2 * pi),
+      rotation: Rot.fromAngle(angle),
+      angularVelocity: angle / 8,
       type: BodyType.dynamic,
     );
     final body = world.createBody(bodyDef);
