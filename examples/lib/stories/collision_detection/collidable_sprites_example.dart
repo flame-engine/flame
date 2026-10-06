@@ -21,6 +21,8 @@ class CollidableSpritesExample() extends FlameGame with HasCollisionDetection {
 
   @override
   Future<void> onLoad() async {
+    camera.viewport.add(FpsTextComponent(position: Vector2(8, 4)));
+
     add(ScreenHitbox());
     const componentWidth = 150.0;
     // Top left component

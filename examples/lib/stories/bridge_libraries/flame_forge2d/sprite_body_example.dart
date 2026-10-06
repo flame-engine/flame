@@ -7,7 +7,9 @@ import 'package:flame/events.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class SpriteBodyExample({bool showPieces = false}) extends Forge2DExampleGame {
+class SpriteBodyExample({bool showPieces = false})
+    extends Forge2DExampleGame
+    with HasGameRef<Forge2DExampleGame> {
   static const String description = '''
     In this example we show how to add a sprite on top of a `BodyComponent`
     whose shape follows the outline of the sprite.
@@ -57,6 +59,7 @@ class SpriteBodyWorld({bool showPieces = false})
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+    gameRef.camera.viewport.add(FpsTextComponent(position: Vector2(8, 4)));
     addAll(createBoundaries(gameRef));
     _sprite = await gameRef.loadSprite('assets/images/flame.png');
     _size = _sprite.srcSize..scale(flameWidth / _sprite.srcSize.x);
