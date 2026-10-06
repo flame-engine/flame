@@ -59,15 +59,19 @@ WidgetbookComponent spritesStories() {
       ),
       ExampleUseCase(
         name: 'Sprite Warp',
-        builder: (context) => GameWidget(
-          game: SpriteWarpExample(
-            gridSize: context.knobs.int.slider(
-              label: 'Grid Size',
-              initialValue: 4,
-              min: 3,
-              max: 8,
-              divisions: 5,
-            ),
+        builder: (context) => SpriteWarpStory(
+          gridSize: context.knobs.int.slider(
+            label: 'Grid Size',
+            initialValue: 4,
+            min: 3,
+            max: 8,
+            divisions: 5,
+          ),
+          image: context.knobs.object.dropdown(
+            label: 'Image',
+            initialOption: SpriteWarpImage.flame,
+            options: SpriteWarpImage.values,
+            labelBuilder: (image) => image.name,
           ),
         ),
         codeLink: baseLink('sprites/sprite_warp_example.dart'),
