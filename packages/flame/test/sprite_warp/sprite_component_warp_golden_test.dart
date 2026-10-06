@@ -55,19 +55,25 @@ WarpGrid _inflate() {
   return grid.replacingDestinationPositions(positions);
 }
 
-SpriteComponent _panel(
+class _WarpedSprite({
+  super.sprite,
+  super.position,
+  super.size,
+}) extends SpriteComponent with HasWarpGrid;
+
+_WarpedSprite _panel(
   Image image,
   int index,
   WarpGrid grid, {
   WarpInterpolation interpolation = WarpInterpolation.bilinear,
 }) {
-  return SpriteComponent(
-    sprite: Sprite(image),
-    position: Vector2(30 + index * 160.0, 30),
-    size: Vector2.all(120),
-    warpGrid: grid,
-    warpInterpolation: interpolation,
-  );
+  return _WarpedSprite(
+      sprite: Sprite(image),
+      position: Vector2(30 + index * 160.0, 30),
+      size: Vector2.all(120),
+    )
+    ..warpGrid = grid
+    ..warpInterpolation = interpolation;
 }
 
 void main() {

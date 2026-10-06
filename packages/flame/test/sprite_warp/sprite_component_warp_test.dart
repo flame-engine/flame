@@ -62,7 +62,22 @@ Future<void> _expectSameRendering(
   expect(difference, lessThanOrEqualTo(1));
 }
 
-SpriteComponent _component(
+class _WarpedSprite({
+  super.sprite,
+  super.position,
+  super.size,
+  super.bleed,
+  super.paint,
+}) extends SpriteComponent with HasWarpGrid;
+
+class _WarpedRasterSprite({
+  required super.baseSprite,
+  super.images,
+  super.position,
+  super.size,
+}) extends RasterSpriteComponent with HasWarpGrid;
+
+_WarpedSprite _component(
   Sprite sprite, {
   WarpGrid? warpGrid,
   WarpInterpolation warpInterpolation = WarpInterpolation.bilinear,
@@ -70,15 +85,15 @@ SpriteComponent _component(
   double? bleed,
   Paint? paint,
 }) {
-  return SpriteComponent(
-    sprite: sprite,
-    position: position ?? Vector2(4, 8),
-    size: Vector2(64, 32),
-    warpGrid: warpGrid,
-    warpInterpolation: warpInterpolation,
-    bleed: bleed,
-    paint: paint,
-  );
+  return _WarpedSprite(
+      sprite: sprite,
+      position: position ?? Vector2(4, 8),
+      size: Vector2(64, 32),
+      bleed: bleed,
+      paint: paint,
+    )
+    ..warpGrid = warpGrid
+    ..warpInterpolation = warpInterpolation;
 }
 
 /// A 2x2 grid with the center vertex moved towards the top-right.
@@ -248,6 +263,50 @@ Future<void> main() async {
       await _render([component]);
       expect(renderer.meshBuilds, 3);
       expect(renderer.verticesBuilds, 5);
+    });
+
+    test('renders like a plain SpriteComponent without a grid', () async {
+      final sprite = Sprite(image);
+      await _expectSameRendering(
+        _component(sprite, bleed: 3),
+        SpriteComponent(
+          sprite: sprite,
+          position: Vector2(4, 8),
+          size: Vector2(64, 32),
+          bleed: 3,
+        ),
+      );
+    });
+
+    testWithFlameGame('works on SpriteComponent subclasses', (game) async {
+      // Separate caches, since rasterizing the same sprite concurrently into
+      // the same cache would dispose one of the two rasterized images.
+      final baseSprite = Sprite(image);
+      final warped = _WarpedRasterSprite(
+        baseSprite: baseSprite,
+        images: Images(),
+        position: Vector2(4, 8),
+        size: Vector2(64, 32),
+      )..warpGrid = WarpGrid.identity(columns: 3, rows: 2);
+      final plain = RasterSpriteComponent(
+        baseSprite: baseSprite,
+        images: Images(),
+        position: Vector2(4, 8),
+        size: Vector2(64, 32),
+      );
+      game.world.addAll([warped, plain]);
+      await game.ready();
+
+      expect(warped.sprite!.image, isNot(baseSprite.image));
+      await _expectSameRendering(warped, plain);
+      expect(warped.warpRenderer, isNotNull);
+
+      warped.warpGrid = _centerPull();
+      final difference = _maxDifference(
+        await _render([warped]),
+        await _render([plain]),
+      );
+      expect(difference, greaterThan(16));
     });
 
     test('drops the renderer when the grid is removed', () async {

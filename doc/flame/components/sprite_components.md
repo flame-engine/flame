@@ -39,24 +39,28 @@ class MyGame extends FlameGame {
 
 ### Warping
 
-A `SpriteComponent` can distort (warp) its sprite with a `WarpGrid`, similarly to SpriteKit's
-`SKWarpGeometryGrid`. A grid of `columns` x `rows` cells has `(columns + 1) * (rows + 1)` vertices,
-and each vertex has a source position and a destination position: the part of the sprite found at
-the source position is drawn at the destination position, and everything in between is
-interpolated.
+A `SpriteComponent` with the `HasWarpGrid` mixin can distort (warp) its sprite with a `WarpGrid`,
+similarly to SpriteKit's `SKWarpGeometryGrid`. A grid of `columns` x `rows` cells has
+`(columns + 1) * (rows + 1)` vertices, and each vertex has a source position and a destination
+position: the part of the sprite found at the source position is drawn at the destination
+position, and everything in between is interpolated.
 
 ```dart
+class WarpedSprite extends SpriteComponent with HasWarpGrid {
+  WarpedSprite({super.sprite, super.size});
+}
+
 final grid = WarpGrid.identity(columns: 2, rows: 2);
 final positions = grid.destinationPositions;
 // Pull the center vertex towards the top-right corner.
 positions[grid.vertexIndex(1, 1)] = Vector2(0.7, 0.3);
 
-final component = SpriteComponent(
-  sprite: sprite,
-  size: Vector2.all(128),
-  warpGrid: grid.replacingDestinationPositions(positions),
-);
+final component = WarpedSprite(sprite: sprite, size: Vector2.all(128))
+  ..warpGrid = grid.replacingDestinationPositions(positions);
 ```
+
+The mixin works with any subclass of `SpriteComponent`. Subclasses that change how the sprite is
+drawn, like `HasWarpGrid` does, can override `renderSprite`.
 
 Positions are normalized, with the y axis pointing down: source positions are relative to the
 sprite's source rectangle, and destination positions are relative to the component's `size`.

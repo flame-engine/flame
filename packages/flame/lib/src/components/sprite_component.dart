@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/src/sprite_warp/sprite_warp_renderer.dart';
 import 'package:meta/meta.dart';
 
 export '../sprite.dart';
@@ -25,17 +24,6 @@ class SpriteComponent({
   super.children,
   super.priority,
   var double? bleed,
-
-  /// The grid used to warp (distort) the [sprite], or `null` to render it
-  /// undistorted.
-  ///
-  /// The grid's destination positions are relative to the component's [size].
-  /// Only the visual rendering is affected: [size], hit testing and
-  /// collisions are not.
-  var WarpGrid? warpGrid,
-
-  /// How [warpGrid] is interpolated between its vertices.
-  var WarpInterpolation warpInterpolation = WarpInterpolation.bilinear,
   super.key,
 }) extends PositionComponent with HasPaint, ImageRetainer {
   /// When set to true, the component is auto-resized to match the
@@ -74,8 +62,6 @@ class SpriteComponent({
     int? priority,
     ComponentKey? key,
     double? bleed,
-    WarpGrid? warpGrid,
-    WarpInterpolation warpInterpolation = WarpInterpolation.bilinear,
   }) : this(
          sprite: Sprite(
            image,
@@ -93,16 +79,8 @@ class SpriteComponent({
          children: children,
          priority: priority,
          bleed: bleed,
-         warpGrid: warpGrid,
-         warpInterpolation: warpInterpolation,
          key: key,
        );
-
-  SpriteWarpRenderer? _warpRenderer;
-
-  /// The renderer used while [warpGrid] is set.
-  @visibleForTesting
-  SpriteWarpRenderer? get warpRenderer => _warpRenderer;
 
   /// Returns current value of auto resize flag.
   bool get autoResize => _autoResize;
@@ -126,9 +104,6 @@ class SpriteComponent({
   set sprite(Sprite? value) {
     _sprite = value;
     _resizeToSprite();
-    // The warp renderer holds an image shader, which would keep the previous
-    // image alive after it is released (and possibly evicted) below.
-    _disposeWarpRenderer();
     updateRetainedImages();
   }
 
@@ -148,46 +123,28 @@ class SpriteComponent({
     super.onMount();
   }
 
-  @override
-  @mustCallSuper
-  void onRemove() {
-    _disposeWarpRenderer();
-    super.onRemove();
-  }
-
   @mustCallSuper
   @override
   void render(Canvas canvas) {
     final sprite = _sprite;
-    if (sprite == null) {
-      return;
-    }
-    final warpGrid = this.warpGrid;
-    if (warpGrid == null) {
-      _disposeWarpRenderer();
-      sprite.render(
-        canvas,
-        size: size,
-        overridePaint: paint,
-        bleed: bleed,
-      );
-    } else {
-      (_warpRenderer ??= SpriteWarpRenderer()).render(
-        canvas,
-        sprite: sprite,
-        grid: warpGrid,
-        interpolation: warpInterpolation,
-        width: size.x,
-        height: size.y,
-        paint: paint,
-        bleed: bleed ?? 0,
-      );
+    if (sprite != null) {
+      renderSprite(canvas, sprite);
     }
   }
 
-  void _disposeWarpRenderer() {
-    _warpRenderer?.dispose();
-    _warpRenderer = null;
+  /// Renders the [sprite] of this component onto the [canvas], in the local
+  /// coordinates of the component.
+  ///
+  /// This is called by [render] when the component has a sprite, and can be
+  /// overridden to change how the sprite is drawn, as [HasWarpGrid] does.
+  @protected
+  void renderSprite(Canvas canvas, Sprite sprite) {
+    sprite.render(
+      canvas,
+      size: size,
+      overridePaint: paint,
+      bleed: bleed,
+    );
   }
 
   /// Updates the size [sprite]'s srcSize if [autoResize] is true.

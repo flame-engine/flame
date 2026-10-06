@@ -9,9 +9,10 @@ class SpriteWarpExample({final int gridSize = 4})
     extends FlameGame
     with DoubleTapCallbacks {
   static const String description = '''
-    In this example two `SpriteComponent`s share the same sprite and are
-    warped by the same `WarpGrid`: the left one interpolates the grid
-    bilinearly (like SpriteKit does), the right one with Catmull-Rom splines.
+    In this example two `SpriteComponent`s with the `HasWarpGrid` mixin share
+    the same sprite and are warped by the same `WarpGrid`: the left one
+    interpolates the grid bilinearly (like SpriteKit does), the right one
+    with Catmull-Rom splines.
 
     The grid has NxN cells, and therefore (N+1)x(N+1) vertices: use the
     `Grid Size` knob to choose N between 3 and 8 (4 by default, i.e. 25
@@ -21,8 +22,8 @@ class SpriteWarpExample({final int gridSize = 4})
     double tap to reset it.
   ''';
 
-  late final SpriteComponent _bilinear;
-  late final SpriteComponent _catmullRom;
+  late final _WarpedSprite _bilinear;
+  late final _WarpedSprite _catmullRom;
   final List<_Handle> _handles = [];
 
   @override
@@ -35,21 +36,19 @@ class SpriteWarpExample({final int gridSize = 4})
     final spriteSize = sprite.srcSize * scale;
     final grid = WarpGrid.identity(columns: gridSize, rows: gridSize);
 
-    _bilinear = SpriteComponent(
+    _bilinear = _WarpedSprite(
       sprite: sprite,
       size: spriteSize,
       position: Vector2(-spriteSize.x * 0.75, 0),
-      anchor: Anchor.center,
-      warpGrid: grid,
-    );
-    _catmullRom = SpriteComponent(
-      sprite: sprite,
-      size: spriteSize,
-      position: Vector2(spriteSize.x * 0.75, 0),
-      anchor: Anchor.center,
-      warpGrid: grid,
-      warpInterpolation: WarpInterpolation.catmullRom,
-    );
+    )..warpGrid = grid;
+    _catmullRom =
+        _WarpedSprite(
+            sprite: sprite,
+            size: spriteSize,
+            position: Vector2(spriteSize.x * 0.75, 0),
+          )
+          ..warpGrid = grid
+          ..warpInterpolation = WarpInterpolation.catmullRom;
 
     for (final position in grid.destinationPositions) {
       _handles.add(
@@ -98,6 +97,12 @@ class SpriteWarpExample({final int gridSize = 4})
     _bilinear.warpGrid = identity;
     _catmullRom.warpGrid = identity;
   }
+}
+
+class _WarpedSprite({super.sprite, super.size, super.position})
+    extends SpriteComponent
+    with HasWarpGrid {
+  this : super(anchor: Anchor.center);
 }
 
 final Paint _overlayPaint = Paint()
