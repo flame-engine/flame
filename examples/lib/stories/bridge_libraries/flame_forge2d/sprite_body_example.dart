@@ -19,7 +19,8 @@ class SpriteBodyExample({bool showPieces = false})
     transparent, with `Sprite.contour`, and the body collides as its convex
     pieces, which the Show pieces knob draws.
 
-    Tap the screen to add more flames.
+    Tap the screen to add more bodies, which alternate between flames and
+    pizzas.
   ''';
 
   this
@@ -29,31 +30,33 @@ class SpriteBodyExample({bool showPieces = false})
       );
 }
 
+/// A sprite, with its size in meters, with the aspect ratio of the sprite,
+/// and the convex pieces of its outline, which all the bodies of that sprite
+/// share, since tracing it reads back the pixels of the image.
+typedef _Shape = ({Sprite sprite, Vector2 size, List<List<Vector2>> pieces});
+
 class SpriteBodyWorld({bool showPieces = false})
     extends Forge2DWorld
     with TapCallbacks, HasGameRef<Forge2DGame> {
-  /// The width of the flames, in meters.
-  static const flameWidth = 8.0;
+  /// The images of the bodies, which the taps go through in turn, with their
+  /// widths in meters.
+  static const images = {'flame.png': 8.0, 'pizza.png': 6.0};
 
-  late final Sprite _sprite;
+  /// The shape of each of the [images].
+  late final List<_Shape> _shapes;
 
-  /// The size of the flames, in meters, with the aspect ratio of the
-  /// [_sprite].
-  late final Vector2 _size;
-
-  /// The convex pieces of the outline of the [_sprite], which all the
-  /// flames share, since tracing it reads back the pixels of the image.
-  late final List<List<Vector2>> _pieces;
+  /// The number of bodies added by tapping, which picks the next shape.
+  int _taps = 0;
 
   bool _showPieces = showPieces;
 
-  /// Whether the convex pieces of the flames are drawn, which applies to the
-  /// flames already added too.
+  /// Whether the convex pieces of the bodies are drawn, which applies to the
+  /// bodies already added too.
   bool get showPieces => _showPieces;
   set showPieces(bool value) {
     _showPieces = value;
-    for (final flame in children.whereType<FlameBody>()) {
-      flame.renderBody = value;
+    for (final body in children.whereType<ContourBody>()) {
+      body.renderBody = value;
     }
   }
 
@@ -62,24 +65,34 @@ class SpriteBodyWorld({bool showPieces = false})
     await super.onLoad();
     gameRef.camera.viewport.add(FpsTextComponent(position: Vector2(8, 4)));
     addAll(createBoundaries(gameRef));
-    _sprite = await gameRef.loadSprite('assets/images/flame.png');
-    _size = _sprite.srcSize..scale(flameWidth / _sprite.srcSize.x);
-    _pieces = await FlameBody.piecesOf(
-      _sprite,
-      _size,
+    _shapes = [
+      for (final MapEntry(key: image, value: width) in images.entries)
+        await _loadShape(image, width),
+    ];
+  }
+
+  /// The shape of the [image], scaled to the [width] in meters.
+  Future<_Shape> _loadShape(String image, double width) async {
+    final sprite = await gameRef.loadSprite('assets/images/$image');
+    final size = sprite.srcSize..scale(width / sprite.srcSize.x);
+    final pieces = await ContourBody.piecesOf(
+      sprite,
+      size,
       gameRef.metersToPixels,
     );
+    return (sprite: sprite, size: size, pieces: pieces);
   }
 
   @override
   void onTapDown(TapDownEvent info) {
     super.onTapDown(info);
+    final shape = _shapes[_taps++ % _shapes.length];
     add(
-      FlameBody(
+      ContourBody(
         info.localPosition,
-        sprite: _sprite,
-        pieces: _pieces,
-        size: _size,
+        sprite: shape.sprite,
+        pieces: shape.pieces,
+        size: shape.size,
       )..renderBody = showPieces,
     );
   }
@@ -88,7 +101,7 @@ class SpriteBodyWorld({bool showPieces = false})
 /// A body that is drawn by a [sprite] of the given [size], in meters, and
 /// collides as the convex [pieces] of its outline, which are drawn on top of
 /// the [sprite] when [renderBody] is true.
-class FlameBody(
+class ContourBody(
   final Vector2 initialPosition, {
   required final Sprite sprite,
   required final List<List<Vector2>> pieces,
