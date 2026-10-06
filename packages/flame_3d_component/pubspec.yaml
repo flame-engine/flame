@@ -1,7 +1,7 @@
 name: flame_3d_component
 resolution: workspace
 description: Add 3D components backed by flutter_scene to the Flame component tree
-version: 0.1.0
+version: 0.1.0-dev.0
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_3d_component
 funding:
   - https://opencollective.com/blue-fire
