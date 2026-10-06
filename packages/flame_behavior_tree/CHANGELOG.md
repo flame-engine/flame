@@ -1,3 +1,12 @@
+## 0.2.0-dev.1
+
+> Note: This release has breaking changes.
+
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+ - **FEAT**: Add Flame nodes, examples and docs for flame_behavior_tree ([#4095](https://github.com/flame-engine/flame/issues/4095)). ([4cb46020](https://github.com/flame-engine/flame/commit/4cb46020c604740316675135755d017804606430))
+ - **BREAKING** **FEAT**: Redesign the behavior_tree API to make it simpler to use ([#4094](https://github.com/flame-engine/flame/issues/4094)). ([760fce2d](https://github.com/flame-engine/flame/commit/760fce2d4d2992c2b161be302f5234bcd2b3286f))
+
 ## 0.2.0-dev.0+6
 
 > Note: This release has breaking changes.

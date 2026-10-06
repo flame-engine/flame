@@ -1,3 +1,18 @@
+## 2.0.0-dev.1
+
+> Note: This release has breaking changes.
+
+ - **PERF**: Visit the hitboxes from the nearest to the farthest in raycast ([#4088](https://github.com/flame-engine/flame/issues/4088)). ([27311915](https://github.com/flame-engine/flame/commit/2731191544c5c5322a12728e8cc2f64ab59dd17f))
+ - **PERF**: Drive descendants() with an explicit stack instead of a sync* generator ([#4009](https://github.com/flame-engine/flame/issues/4009)). ([dadabf1f](https://github.com/flame-engine/flame/commit/dadabf1f9d72709e2901b4c2b74c346a02958ceb))
+ - **FIX**: Version flame_3d_component as a prerelease and move flame_lint to 1.5.0-dev.0 ([#4100](https://github.com/flame-engine/flame/issues/4100)). ([f3961dbe](https://github.com/flame-engine/flame/commit/f3961dbea689ca3b4ad89edee1fc3688286409f9))
+ - **FIX**: Allow moving the camera via viewfinder.position x and y ([#4099](https://github.com/flame-engine/flame/issues/4099)). ([93e486d2](https://github.com/flame-engine/flame/commit/93e486d2015e0cbf396d58759b3084fcd161da87))
+ - **FIX**: Reset target AABB when projecting circles and polygons. ([#4092](https://github.com/flame-engine/flame/issues/4092)). ([21c6ceb3](https://github.com/flame-engine/flame/commit/21c6ceb3c3dcc019262173c14dc8f902114c6be9))
+ - **FIX**: Bump the minimum Flutter version to 3.47.0 and Dart to 3.13.0 ([#4087](https://github.com/flame-engine/flame/issues/4087)). ([53cea039](https://github.com/flame-engine/flame/commit/53cea039746da34187e3d0991e355647aa4ffdcc))
+ - **FIX**: Forward pressedInsets to InternalSpriteButton ([#4081](https://github.com/flame-engine/flame/issues/4081)). ([78b7c2db](https://github.com/flame-engine/flame/commit/78b7c2db49e78b8ee6b0e5309911c58a851f9022))
+ - **FEAT**: Add reference counted eviction of unused images to the Images cache ([#4093](https://github.com/flame-engine/flame/issues/4093)). ([b237740d](https://github.com/flame-engine/flame/commit/b237740da43377a8eac2ebb6806adceffaca180d))
+ - **FEAT**: Fix stale state in the devtools extension and add overlay toggles and priority editing ([#4079](https://github.com/flame-engine/flame/issues/4079)). ([71098fb0](https://github.com/flame-engine/flame/commit/71098fb04662a4ae0d99665073943c4713fbf5ff))
+ - **BREAKING** **FEAT**: Use Flutter's paragraph layout for rich text documents ([#4064](https://github.com/flame-engine/flame/issues/4064)). ([4566d89f](https://github.com/flame-engine/flame/commit/4566d89ff05c1050a054a473b6f1367d9652f799))
+
 ## 2.0.0-dev.0
 
 > Note: This release has breaking changes.
