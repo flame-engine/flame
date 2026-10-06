@@ -57,9 +57,7 @@ List<List<Vector2>> convexPieces(
       if (signedArea([for (final i in loop) vertices[i]]) > 0)
         ..._triangulate(vertices, loop),
   ];
-  // Corners that are reflex by less than half of the minimum width are
-  // accepted as convex, since the engine straightens them anyway.
-  _merge(vertices, pieces, maxVertices, minWidth / 2);
+  _merge(vertices, pieces, maxVertices);
   return [
     for (final piece in pieces)
       if (_isWideEnough(vertices, piece, minDistance, minWidth))
@@ -222,13 +220,8 @@ int _findEar(List<Vector2> vertices, List<int> remaining) {
 }
 
 /// Merges the [pieces] that share an edge, as long as the result is convex
-/// within the [tolerance] and has at most [maxVertices] vertices.
-void _merge(
-  List<Vector2> vertices,
-  List<List<int>> pieces,
-  int maxVertices,
-  double tolerance,
-) {
+/// and has at most [maxVertices] vertices.
+void _merge(List<Vector2> vertices, List<List<int>> pieces, int maxVertices) {
   var hasMerged = true;
   while (hasMerged) {
     hasMerged = false;
@@ -237,7 +230,7 @@ void _merge(
         final merged = _union(pieces[i], pieces[j]);
         if (merged != null &&
             merged.length <= maxVertices &&
-            _isConvex(vertices, merged, tolerance)) {
+            _isConvex(vertices, merged)) {
           pieces[i] = merged;
           pieces.removeAt(j);
           hasMerged = true;
@@ -271,15 +264,14 @@ List<int>? _union(List<int> a, List<int> b) {
 }
 
 /// Whether the [piece], which goes clockwise on the screen, has no reflex
-/// corners, except for the ones closer than the [tolerance] to the line
-/// through their neighbors.
-bool _isConvex(List<Vector2> vertices, List<int> piece, double tolerance) {
+/// corners.
+bool _isConvex(List<Vector2> vertices, List<int> piece) {
   final m = piece.length;
   for (var i = 0; i < m; i++) {
     final a = vertices[piece[(i - 1 + m) % m]];
     final b = vertices[piece[i]];
     final c = vertices[piece[(i + 1) % m]];
-    if (_cross(a, b, c) < -tolerance * a.distanceTo(c)) {
+    if (_cross(a, b, c) < 0) {
       return false;
     }
   }

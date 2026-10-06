@@ -99,6 +99,21 @@ void main() {
       expect(convexPieces(sliver), hasLength(1));
     });
 
+    test('keeps the pieces convex with a minWidth', () {
+      // A square with a shallow dent in its top edge, shallower than minWidth.
+      final dented = [
+        Vector2(0, 0),
+        Vector2(5, 0.3),
+        Vector2(10, 0),
+        Vector2(10, 10),
+        Vector2(0, 10),
+      ];
+      final pieces = convexPieces(dented, minWidth: 1);
+      expect(pieces, hasLength(2));
+      expect(pieces.every(_isConvex), isTrue);
+      expect(_totalArea(pieces), closeTo(signedArea(dented).abs(), 1e-9));
+    });
+
     test('splits a polygon where it touches itself', () {
       // Two squares that meet at the corner (1, 1), which is visited twice.
       final touching = [
