@@ -131,14 +131,28 @@ Future<void> main() async {
     }
 
     test('identity grid with bleed', () async {
-      // The bleed keeps integer scales (96 / 32 and 64 / 16), so that no
-      // pixel samples the image exactly between two texels, where
-      // drawImageRect and drawVertices may round differently.
       final sprite = Sprite(image);
       await _expectSameRendering(
         _component(sprite, warpGrid: WarpGrid.identity(), bleed: 16),
         _component(sprite, bleed: 16),
       );
+    });
+
+    test('identity grid at non-integer scales', () async {
+      // With these scales some pixels sample the image exactly between two
+      // texels, which every triangle of the mesh must round like
+      // drawImageRect does.
+      final sprite = Sprite(image);
+      for (final bleed in [2.0, 6.0]) {
+        await _expectSameRendering(
+          _component(
+            sprite,
+            warpGrid: WarpGrid.identity(columns: 3, rows: 2),
+            bleed: bleed,
+          ),
+          _component(sprite, bleed: bleed),
+        );
+      }
     });
 
     test('identity grid with opacity', () async {

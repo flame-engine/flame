@@ -13,6 +13,19 @@ final Float64List _identityMatrix = Float64List.fromList([
   0, 0, 0, 1, //
 ]);
 
+/// Offset, in texels, added to all the texture coordinates.
+///
+/// When a pixel samples the image exactly on the boundary between two texels
+/// (e.g. every third pixel when a sprite is scaled by 1.5 with nearest
+/// filtering), each triangle of the mesh would round the tie in its own way,
+/// because of tiny floating point differences, and lines of the image would
+/// show 1-texel steps along the triangles' edges. Nudging the coordinates
+/// towards the lower texel makes every triangle round ties the same way as
+/// drawImageRect does, while staying well above the float32 precision of the
+/// coordinates of large textures and well below any visible effect with
+/// linear filtering.
+const double _texelOffset = -1 / 1024;
+
 /// Renders a [Sprite] warped by a [WarpGrid], caching everything that does
 /// not change between frames.
 ///
@@ -155,9 +168,10 @@ class SpriteWarpRenderer() {
     for (var k = 0; k < positions.length; k += 2) {
       positions[k] = mesh.positions[k] * scaleX - bleed;
       positions[k + 1] = mesh.positions[k + 1] * scaleY - bleed;
-      textureCoordinates[k] = src.left + mesh.textureCoordinates[k] * src.width;
+      textureCoordinates[k] =
+          src.left + mesh.textureCoordinates[k] * src.width + _texelOffset;
       textureCoordinates[k + 1] =
-          src.top + mesh.textureCoordinates[k + 1] * src.height;
+          src.top + mesh.textureCoordinates[k + 1] * src.height + _texelOffset;
     }
     _vertices?.dispose();
     _vertices = Vertices.raw(
