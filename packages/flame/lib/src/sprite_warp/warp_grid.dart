@@ -54,7 +54,8 @@ class const WarpGrid.raw(
   /// undistorted grid.
   ///
   /// Throws an [ArgumentError] when the rendered mesh of the grid would have
-  /// more than 65536 vertices, e.g. with more than 63 x 63 cells.
+  /// more than 65536 vertices, e.g. with more than 63 x 63 cells, or when
+  /// there isn't one position per vertex.
   factory WarpGrid({
     required int columns,
     required int rows,
@@ -122,6 +123,8 @@ class const WarpGrid.raw(
   Float32List get rawDestinationPositions => _destination;
 
   /// Returns a copy of this grid with the given source [positions].
+  ///
+  /// Throws an [ArgumentError] when there isn't one position per vertex.
   WarpGrid replacingSourcePositions(List<Vector2> positions) {
     return WarpGrid.raw(
       columns,
@@ -132,6 +135,8 @@ class const WarpGrid.raw(
   }
 
   /// Returns a copy of this grid with the given destination [positions].
+  ///
+  /// Throws an [ArgumentError] when there isn't one position per vertex.
   WarpGrid replacingDestinationPositions(List<Vector2> positions) {
     return WarpGrid.raw(
       columns,
@@ -182,10 +187,11 @@ class const WarpGrid.raw(
   }
 
   static Float32List _fromVectors(List<Vector2> positions, int vertexCount) {
-    assert(
-      positions.length == vertexCount,
-      'Expected $vertexCount positions, got ${positions.length}',
-    );
+    if (positions.length != vertexCount) {
+      throw ArgumentError(
+        'Expected $vertexCount positions, got ${positions.length}',
+      );
+    }
     final result = Float32List(2 * vertexCount);
     for (var i = 0; i < vertexCount; i++) {
       result[2 * i] = positions[i].x;

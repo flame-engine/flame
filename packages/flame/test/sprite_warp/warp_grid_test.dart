@@ -159,11 +159,25 @@ void main() {
           rows: 1,
           sourcePositions: grid.sourcePositions,
         ),
-        failsAssert(),
+        throwsArgumentError,
+      );
+      expect(
+        () => WarpGrid(
+          columns: 2,
+          rows: 2,
+          destinationPositions: [Vector2.zero()],
+        ),
+        throwsArgumentError,
+      );
+      expect(
+        () => grid.replacingSourcePositions(
+          [...grid.sourcePositions, Vector2.zero()],
+        ),
+        throwsArgumentError,
       );
       expect(
         () => grid.replacingDestinationPositions([Vector2.zero()]),
-        failsAssert(),
+        throwsArgumentError,
       );
     });
 
