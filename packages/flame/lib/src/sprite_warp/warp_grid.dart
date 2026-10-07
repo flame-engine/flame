@@ -53,16 +53,21 @@ class const WarpGrid.raw(
   /// Creates a grid with the given positions, which default to those of an
   /// undistorted grid.
   ///
-  /// Throws an [ArgumentError] when the rendered mesh of the grid would have
-  /// more than 65536 vertices, e.g. with more than 63 x 63 cells, or when
-  /// there isn't one position per vertex.
+  /// Throws an [ArgumentError] when [columns] or [rows] are not positive, when
+  /// the rendered mesh of the grid would have more than 65536 vertices, e.g.
+  /// with more than 63 x 63 cells, or when there isn't one position per
+  /// vertex.
   factory WarpGrid({
     required int columns,
     required int rows,
     List<Vector2>? sourcePositions,
     List<Vector2>? destinationPositions,
   }) {
-    assert(columns > 0 && rows > 0, 'Columns and rows must be positive');
+    if (columns <= 0 || rows <= 0) {
+      throw ArgumentError(
+        'Columns and rows must be positive, got $columns x $rows',
+      );
+    }
     final meshVertices =
         (columns * (1 << warpSubdivisionLevels) + 1) *
         (rows * (1 << warpSubdivisionLevels) + 1);

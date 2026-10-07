@@ -139,8 +139,12 @@ void main() {
     });
 
     test('fails on invalid dimensions', () {
-      expect(() => WarpGrid(columns: 0, rows: 1), failsAssert());
-      expect(() => WarpGrid(columns: 1, rows: -1), failsAssert());
+      expect(() => WarpGrid(columns: 0, rows: 1), throwsArgumentError);
+      expect(() => WarpGrid(columns: 1, rows: -1), throwsArgumentError);
+      expect(
+        () => WarpGrid.identity(columns: -1, rows: -1),
+        throwsArgumentError,
+      );
       // The rendered mesh must fit 16-bit indices.
       expect(WarpGrid.identity(columns: 63, rows: 63).vertexCount, 4096);
       expect(() => WarpGrid(columns: 64, rows: 64), throwsArgumentError);
