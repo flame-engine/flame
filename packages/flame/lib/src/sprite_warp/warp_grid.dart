@@ -34,46 +34,57 @@ const int _maxMeshVertices = 1 << 16;
 /// Note that SpriteKit's `SKWarpGeometryGrid` uses a bottom-left origin with
 /// the y axis pointing up, so its positions must be converted accordingly.
 @immutable
-class WarpGrid {
-  WarpGrid({
-    required this.columns,
-    required this.rows,
-    List<Vector2>? sourcePositions,
-    List<Vector2>? destinationPositions,
-  }) : assert(columns > 0 && rows > 0, 'Columns and rows must be positive'),
-       assert(
-         (columns * (1 << warpSubdivisionLevels) + 1) *
-                 (rows * (1 << warpSubdivisionLevels) + 1) <=
-             _maxMeshVertices,
-         'Too many columns and rows: $columns x $rows',
-       ),
-       _source = _positionsOrIdentity(sourcePositions, columns, rows),
-       _destination = _positionsOrIdentity(destinationPositions, columns, rows);
+class const WarpGrid.raw(
+  /// The number of cells in the horizontal direction.
+  final int columns,
 
-  /// Creates a grid that renders the sprite without distortion.
-  WarpGrid.identity({int columns = 1, int rows = 1})
-    : this(columns: columns, rows: rows);
-
+  /// The number of cells in the vertical direction.
+  final int rows,
+  final Float32List _source,
+  final Float32List _destination,
+) {
   /// Creates a grid from interleaved x, y source and destination positions,
   /// which are used as is and must not be modified afterwards.
   ///
   /// Both lists must hold `2 * (columns + 1) * (rows + 1)` values.
   @internal
-  const WarpGrid.raw(
-    this.columns,
-    this.rows,
-    this._source,
-    this._destination,
-  );
+  this;
 
-  /// The number of cells in the horizontal direction.
-  final int columns;
+  /// Creates a grid with the given positions, which default to those of an
+  /// undistorted grid.
+  ///
+  /// Throws an [ArgumentError] when the rendered mesh of the grid would have
+  /// more than 65536 vertices, e.g. with more than 63 x 63 cells.
+  factory WarpGrid({
+    required int columns,
+    required int rows,
+    List<Vector2>? sourcePositions,
+    List<Vector2>? destinationPositions,
+  }) {
+    assert(columns > 0 && rows > 0, 'Columns and rows must be positive');
+    final meshVertices =
+        (columns * (1 << warpSubdivisionLevels) + 1) *
+        (rows * (1 << warpSubdivisionLevels) + 1);
+    if (meshVertices > _maxMeshVertices) {
+      throw ArgumentError(
+        'Too many columns and rows: $columns x $rows (at most '
+        '$_maxMeshVertices mesh vertices, got $meshVertices)',
+      );
+    }
+    return WarpGrid.raw(
+      columns,
+      rows,
+      _positionsOrIdentity(sourcePositions, columns, rows),
+      _positionsOrIdentity(destinationPositions, columns, rows),
+    );
+  }
 
-  /// The number of cells in the vertical direction.
-  final int rows;
-
-  final Float32List _source;
-  final Float32List _destination;
+  /// Creates a grid that renders the sprite without distortion.
+  ///
+  /// Throws an [ArgumentError] in the same cases as the default constructor.
+  factory WarpGrid.identity({int columns = 1, int rows = 1}) {
+    return WarpGrid(columns: columns, rows: rows);
+  }
 
   /// The number of vertices, equal to `(columns + 1) * (rows + 1)`.
   int get vertexCount => (columns + 1) * (rows + 1);

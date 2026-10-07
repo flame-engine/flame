@@ -143,7 +143,11 @@ void main() {
       expect(() => WarpGrid(columns: 1, rows: -1), failsAssert());
       // The rendered mesh must fit 16-bit indices.
       expect(WarpGrid.identity(columns: 63, rows: 63).vertexCount, 4096);
-      expect(() => WarpGrid(columns: 64, rows: 64), failsAssert());
+      expect(() => WarpGrid(columns: 64, rows: 64), throwsArgumentError);
+      expect(
+        () => WarpGrid.identity(columns: 4000),
+        throwsArgumentError,
+      );
     });
 
     test('fails on wrong number of positions', () {
