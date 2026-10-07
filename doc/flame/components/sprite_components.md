@@ -104,6 +104,11 @@ A few more things to keep in mind:
 - An image filter in the paint, like a blur, makes the edges of a warped sprite fade out, while
   an undistorted sprite repeats its border pixels instead.
 
+The [Sprite Warp example](https://examples.flame-engine.org/#/?path=sprites/sprite-warp) shows
+both interpolations side by side. Drag the handles to move the grid's vertices, and use the
+`Animate` knob to wave the grid with a `WarpEffect`. The `Reset` knob button, or a double tap,
+resets the grid to the identity; both are disabled while the animation runs.
+
 
 ## SpriteAnimationComponent
 

@@ -50,3 +50,8 @@ To animate through several grids, like SpriteKit's `SKAction.animate(withWarps:t
 
 Note that a new grid is assigned at every tick while the effect runs, so the sprite's mesh is
 rebuilt every frame.
+
+The `Animate` knob of the
+[Sprite Warp example](https://examples.flame-engine.org/#/?path=sprites/sprite-warp) runs an
+infinite `WarpEffect.by` while still allowing the grid to be dragged. Its `Reset` knob button,
+which resets the grid to the identity, is disabled while the animation runs.
