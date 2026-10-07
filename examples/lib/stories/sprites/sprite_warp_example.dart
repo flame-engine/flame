@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:material_ui/material_ui.dart';
@@ -15,11 +16,13 @@ enum SpriteWarpImage(final String path) {
 }
 
 /// Hosts a [SpriteWarpExample] and shows the given [image] on it, so that
-/// changing the image keeps the current warp, while changing the [gridSize]
-/// creates a new game.
+/// changing the image or [animate] keeps the current warp, while changing the
+/// [gridSize] creates a new game. Every change of [resets] resets the grid.
 class const SpriteWarpStory({
   required final int gridSize,
   required final SpriteWarpImage image,
+  final bool animate = false,
+  final int resets = 0,
   super.key,
 }) extends StatelessWidget {
   @override
@@ -27,6 +30,8 @@ class const SpriteWarpStory({
     return _SpriteWarpGame(
       gridSize: gridSize,
       image: image,
+      animate: animate,
+      resets: resets,
       key: ValueKey(gridSize),
     );
   }
@@ -35,6 +40,8 @@ class const SpriteWarpStory({
 class const _SpriteWarpGame({
   required final int gridSize,
   required final SpriteWarpImage image,
+  required final bool animate,
+  required final int resets,
   super.key,
 }) extends StatefulWidget {
   @override
@@ -45,12 +52,18 @@ class _SpriteWarpGameState() extends State<_SpriteWarpGame> {
   late final SpriteWarpExample _game = SpriteWarpExample(
     gridSize: widget.gridSize,
     image: widget.image,
+    animate: widget.animate,
   );
 
   @override
   void didUpdateWidget(_SpriteWarpGame oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _game.setImage(widget.image);
+    _game
+      ..setImage(widget.image)
+      ..animate = widget.animate;
+    if (widget.resets != oldWidget.resets) {
+      _game.resetGrid();
+    }
   }
 
   @override
@@ -60,6 +73,7 @@ class _SpriteWarpGameState() extends State<_SpriteWarpGame> {
 class SpriteWarpExample({
   final int gridSize = 4,
   SpriteWarpImage image = SpriteWarpImage.flame,
+  bool animate = false,
 }) extends FlameGame with DoubleTapCallbacks {
   static const String description = '''
     In this example two `SpriteComponent`s with the `HasWarpGrid` mixin share
@@ -73,11 +87,19 @@ class SpriteWarpExample({
 
     Use the `Image` knob to choose the sprite: the current warp is kept.
 
+    Turn on the `Animate` knob to make the grid wave back and forth with a
+    `WarpEffect`. The effect changes the grid incrementally, so dragging the
+    handles keeps working while it runs.
+
     Drag the handles on the left sprite to move the vertices of the grid, and
-    double tap to reset it.
+    double tap or press the `Reset` knob button to reset it (both are
+    disabled while the animation runs).
   ''';
 
   SpriteWarpImage _image = image;
+  bool _animate = animate;
+  Effect? _animation;
+  WarpGrid? _shownGrid;
   late final _WarpedSprite _bilinear;
   late final _WarpedSprite _catmullRom;
   late final TextComponent _bilinearLabel;
@@ -102,6 +124,64 @@ class SpriteWarpExample({
 
     world.addAll([_bilinear, _catmullRom, _bilinearLabel, _catmullRomLabel]);
     await _showImage(_image);
+    _updateAnimation();
+  }
+
+  /// Starts or stops waving the grid.
+  set animate(bool value) {
+    if (value == _animate) {
+      return;
+    }
+    _animate = value;
+    loaded.then((_) => _updateAnimation());
+  }
+
+  void _updateAnimation() {
+    if (!_animate) {
+      // The grid stays as it is when the animation stops.
+      _animation?.removeFromParent();
+      _animation = null;
+      return;
+    }
+    if (_animation != null) {
+      return;
+    }
+    // Rows sway horizontally and columns vertically, the outer edges stay.
+    final offsets = [
+      for (var row = 0; row <= gridSize; row++)
+        for (var column = 0; column <= gridSize; column++)
+          Vector2(
+            0.1 * sin(2 * pi * row / gridSize),
+            0.1 * sin(2 * pi * column / gridSize),
+          ),
+    ];
+    _bilinear.add(
+      _animation = WarpEffect.by(
+        offsets,
+        EffectController(
+          duration: 1,
+          reverseDuration: 1,
+          infinite: true,
+          curve: Curves.easeInOut,
+        ),
+      ),
+    );
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (!isLoaded) {
+      return;
+    }
+    // Drags and the animation change the grid of the left sprite: mirror it
+    // on the right sprite and on the handles.
+    final grid = _bilinear.warpGrid!;
+    if (!identical(grid, _shownGrid)) {
+      _shownGrid = grid;
+      _catmullRom.warpGrid = grid;
+      _placeHandles(grid);
+    }
   }
 
   /// Shows [image] on both sprites, keeping the current warp.
@@ -152,19 +232,24 @@ class SpriteWarpExample({
 
   void _updateGrid() {
     final size = _bilinear.size;
-    final grid = _bilinear.warpGrid!.replacingDestinationPositions([
+    _bilinear.warpGrid = _bilinear.warpGrid!.replacingDestinationPositions([
       for (final handle in _handles) handle.position.clone()..divide(size),
     ]);
-    _bilinear.warpGrid = grid;
-    _catmullRom.warpGrid = grid;
+  }
+
+  /// Removes any distortion from the grid.
+  void resetGrid() {
+    loaded.then((_) {
+      _bilinear.warpGrid = WarpGrid.identity(columns: gridSize, rows: gridSize);
+    });
   }
 
   @override
   void onDoubleTapDown(DoubleTapDownEvent event) {
-    final identity = WarpGrid.identity(columns: gridSize, rows: gridSize);
-    _placeHandles(identity);
-    _bilinear.warpGrid = identity;
-    _catmullRom.warpGrid = identity;
+    // Like the `Reset` knob button, resetting is disabled while animating.
+    if (!_animate) {
+      resetGrid();
+    }
   }
 }
 

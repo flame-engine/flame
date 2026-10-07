@@ -54,7 +54,17 @@ class WarpGrid {
   WarpGrid.identity({int columns = 1, int rows = 1})
     : this(columns: columns, rows: rows);
 
-  const WarpGrid._(this.columns, this.rows, this._source, this._destination);
+  /// Creates a grid from interleaved x, y source and destination positions,
+  /// which are used as is and must not be modified afterwards.
+  ///
+  /// Both lists must hold `2 * (columns + 1) * (rows + 1)` values.
+  @internal
+  const WarpGrid.raw(
+    this.columns,
+    this.rows,
+    this._source,
+    this._destination,
+  );
 
   /// The number of cells in the horizontal direction.
   final int columns;
@@ -102,7 +112,7 @@ class WarpGrid {
 
   /// Returns a copy of this grid with the given source [positions].
   WarpGrid replacingSourcePositions(List<Vector2> positions) {
-    return WarpGrid._(
+    return WarpGrid.raw(
       columns,
       rows,
       _fromVectors(positions, vertexCount),
@@ -112,7 +122,7 @@ class WarpGrid {
 
   /// Returns a copy of this grid with the given destination [positions].
   WarpGrid replacingDestinationPositions(List<Vector2> positions) {
-    return WarpGrid._(
+    return WarpGrid.raw(
       columns,
       rows,
       _source,

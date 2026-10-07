@@ -1,3 +1,4 @@
+import 'package:examples/commons/button_knob.dart';
 import 'package:examples/commons/commons.dart';
 import 'package:examples/commons/example_use_case.dart';
 import 'package:examples/stories/sprites/base64_sprite_example.dart';
@@ -59,21 +60,26 @@ WidgetbookComponent spritesStories() {
       ),
       ExampleUseCase(
         name: 'Sprite Warp',
-        builder: (context) => SpriteWarpStory(
-          gridSize: context.knobs.int.slider(
-            label: 'Grid Size',
-            initialValue: 4,
-            min: 3,
-            max: 8,
-            divisions: 5,
-          ),
-          image: context.knobs.object.dropdown(
-            label: 'Image',
-            initialOption: SpriteWarpImage.flame,
-            options: SpriteWarpImage.values,
-            labelBuilder: (image) => image.name,
-          ),
-        ),
+        builder: (context) {
+          final animate = context.knobs.boolean(label: 'Animate');
+          return SpriteWarpStory(
+            gridSize: context.knobs.int.slider(
+              label: 'Grid Size',
+              initialValue: 4,
+              min: 3,
+              max: 8,
+              divisions: 5,
+            ),
+            image: context.knobs.object.dropdown(
+              label: 'Image',
+              initialOption: SpriteWarpImage.flame,
+              options: SpriteWarpImage.values,
+              labelBuilder: (image) => image.name,
+            ),
+            animate: animate,
+            resets: context.knobs.button(label: 'Reset', enabled: !animate),
+          );
+        },
         codeLink: baseLink('sprites/sprite_warp_example.dart'),
         info: SpriteWarpExample.description,
       ),

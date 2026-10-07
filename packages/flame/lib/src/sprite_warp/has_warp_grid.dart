@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/src/components/sprite_component.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/sprite_warp/sprite_warp_renderer.dart';
 import 'package:flame/src/sprite_warp/warp_grid.dart';
 import 'package:meta/meta.dart';
@@ -19,12 +20,13 @@ import 'package:meta/meta.dart';
 /// While [warpGrid] is `null` the sprite is rendered as usual. Warping only
 /// changes how the sprite is drawn: the component's size, hit testing and
 /// collisions are not affected.
-mixin HasWarpGrid on SpriteComponent {
+mixin HasWarpGrid on SpriteComponent implements WarpGridProvider {
   /// The grid used to warp the [sprite], or `null` to render it undistorted.
   ///
   /// The grid's destination positions are relative to the component's
   /// [size]. Since [WarpGrid] is immutable, assign a new grid to change the
-  /// warp.
+  /// warp, or animate it with a `WarpEffect`.
+  @override
   WarpGrid? warpGrid;
 
   /// How [warpGrid] is interpolated between its vertices.
