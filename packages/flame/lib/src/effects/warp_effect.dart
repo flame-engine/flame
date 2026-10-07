@@ -74,7 +74,10 @@ class WarpEffect.by(
   @override
   void apply(double progress) {
     final dProgress = progress - previousProgress;
-    if (dProgress == 0) {
+    // Without offsets the grid is left as it is, so that its mesh is not
+    // rebuilt every frame.
+    if (dProgress == 0 ||
+        (_sourceOffsets == null && _destinationOffsets == null)) {
       return;
     }
     final grid = target.warpGrid!;

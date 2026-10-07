@@ -134,6 +134,22 @@ void main() {
       );
     });
 
+    testWithFlameGame('unchanged grid is kept', (game) async {
+      final component = _WarpedComponent()..warpGrid = identity;
+      await game.ensureAdd(component);
+
+      component.add(
+        WarpEffect.to(WarpGrid.identity(), EffectController(duration: 1)),
+      );
+      game.update(0);
+      game.update(0.5);
+      expect(identical(component.warpGrid, identity), isTrue);
+      game.update(0.5);
+      game.update(0);
+      expect(component.children.length, 0);
+      expect(identical(component.warpGrid, identity), isTrue);
+    });
+
     testWithFlameGame('reversed', (game) async {
       final component = _WarpedComponent()..warpGrid = identity;
       await game.ensureAdd(component);
