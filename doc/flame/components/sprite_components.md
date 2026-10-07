@@ -105,9 +105,19 @@ A few more things to keep in mind:
   an undistorted sprite repeats its border pixels instead.
 
 The [Sprite Warp example](https://examples.flame-engine.org/#/?path=sprites/sprite-warp) shows
-both interpolations side by side. Drag the handles to move the grid's vertices, and use the
-`Animate` knob to wave the grid with a `WarpEffect`. The `Reset` knob button, or a double tap,
-resets the grid to the identity; both are disabled while the animation runs.
+two components with the `HasWarpGrid` mixin that share the same sprite and the same `WarpGrid`:
+the left one uses `WarpInterpolation.bilinear`, the right one `WarpInterpolation.catmullRom`.
+The left sprite has a draggable handle on each vertex, connected by grid lines: dragging a handle
+moves the vertex's destination position, and the right sprite mirrors the change. The example
+has the following knobs:
+
+- `Grid Size`: the number of cells per side (3 to 8, 4 by default). Changing it starts over with
+  an undistorted grid.
+- `Image`: switches between a few sprites, keeping the current warp.
+- `Animate`: waves the grid back and forth with an infinite `WarpEffect.by`. Since the effect
+  changes the grid incrementally, the handles can still be dragged while it runs.
+- `Reset`: a button that resets the grid to the identity, like a double tap on the game. Both
+  are disabled while the animation runs.
 
 
 ## SpriteAnimationComponent
