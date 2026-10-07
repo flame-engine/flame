@@ -81,7 +81,7 @@ and its y axis points up.
 
 `WarpGrid` is immutable: to change the warp, assign a new grid to `warpGrid`, for example one
 created with `replacingDestinationPositions`. Setting `warpGrid` to `null` renders the sprite
-undistorted again.
+undistorted again. To animate the warp, use a [`WarpEffect`](../effects/warp_effects.md).
 
 The grid is interpolated according to `warpInterpolation`:
 
