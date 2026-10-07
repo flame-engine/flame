@@ -231,6 +231,16 @@ void main() {
       expect(() => game.update(0), throwsStateError);
     });
 
+    testWithFlameGame('grid removed while running', (game) async {
+      final component = _WarpedComponent()..warpGrid = identity;
+      await game.ensureAdd(component);
+
+      component.add(WarpEffect.by(offsets, EffectController(duration: 1)));
+      game.update(0);
+      component.warpGrid = null;
+      expect(() => game.update(0.5), throwsStateError);
+    });
+
     testWithFlameGame('relative with wrong number of offsets', (game) async {
       final component = _WarpedComponent()
         ..warpGrid = WarpGrid.identity(columns: 2);

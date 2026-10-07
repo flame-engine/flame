@@ -80,7 +80,10 @@ class WarpEffect.by(
         (_sourceOffsets == null && _destinationOffsets == null)) {
       return;
     }
-    final grid = target.warpGrid!;
+    final grid = target.warpGrid;
+    if (grid == null) {
+      throw StateError('The grid was removed while being warped');
+    }
     target.warpGrid = WarpGrid.raw(
       grid.columns,
       grid.rows,
