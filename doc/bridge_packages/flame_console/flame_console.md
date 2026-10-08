@@ -57,7 +57,7 @@ Widget build(BuildContext context) {
 ## Custom commands
 
  Custom commands can be created by extending the `FlameConsoleCommand` class and adding them to the
- the `customCommands` list in the `ConsoleView` widget.
+ `customCommands` list in the `ConsoleView` widget.
 
  ```dart
 class MyCustomCommand extends FlameConsoleCommand<MyGame> {

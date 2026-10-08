@@ -97,7 +97,7 @@ Setting up an automated deployment on it is super simple and can be achieved in 
 First, create your account on Cloudflare, and once you are logged in, use the `+ Add` button on
 the top right corner to create your page project.
 
-![Cloudflare add menu screenshot](../images/add_button.png)
+![Cloudflare add menu screenshot](../images/cloudflare/add_button.png)
 
 Next follow the steps to connect your repository, you can choose between GitHub and GitLab.
 
@@ -107,7 +107,7 @@ be pre-filled with `main`.
 
 Scrolling down you will see the build settings panel, which should look like this:
 
-![Cloudflare build settings screenshot](../images/build_form.png)
+![Cloudflare build settings screenshot](../images/cloudflare/build_form.png)
 
 Leave the `Framework preset` as `None` since Flutter is not supported out of the box.
 
