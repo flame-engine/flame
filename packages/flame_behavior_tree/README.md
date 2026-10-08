@@ -106,6 +106,17 @@ Sequence([
 ```
 
 
+## Debugging
+
+In debug mode, the behavior tree of a component is shown in the Flame DevTools when you select the
+component. It shows what every node is doing, and the blackboard. Give nodes a `name` to make the
+tree easier to read:
+
+```dart
+Condition((context) => context.get(isHungry))..name = 'is hungry?'
+```
+
+
 ## Documentation and examples
 
 The [documentation](https://docs.flame-engine.org/latest/bridge_packages/flame_behavior_tree/flame_behavior_tree.html)

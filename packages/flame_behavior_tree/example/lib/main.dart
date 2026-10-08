@@ -146,21 +146,27 @@ class Agent({
       });
     }
 
-    // The tree is a loop: go inside, hang around, go outside, and again.
+    // The tree is a loop: go inside, hang around, go outside, and again. The
+    // names of the nodes are what the Flame DevTools show for this tree.
     // Each child of a sequence is resumed where it was left, so the agent
     // keeps walking even though the tree is ticked on every frame.
     behaviorTree = BehaviorTree(
       Repeat(
         Sequence([
-          Wait(1),
-          MoveTo((_) => outsideTheDoor(), duration: 3),
-          waitForDoor(),
-          MoveTo((_) => house.absoluteCenter, duration: 3),
-          Wait(2),
-          MoveTo((_) => insideTheDoor(), duration: 3),
-          waitForDoor(),
-          MoveTo((_) => outsideTheDoor(), duration: 2),
-          MoveTo((_) => _startPosition, duration: 3),
+          Wait(1)..name = 'wait outside',
+          MoveTo((_) => outsideTheDoor(), duration: 3)
+            ..name = 'walk to the door',
+          waitForDoor()..name = 'wait for the door to open',
+          MoveTo((_) => house.absoluteCenter, duration: 3)
+            ..name = 'walk into the house',
+          Wait(2)..name = 'stay inside',
+          MoveTo((_) => insideTheDoor(), duration: 3)
+            ..name = 'walk to the door from inside',
+          waitForDoor()..name = 'wait for the door to open',
+          MoveTo((_) => outsideTheDoor(), duration: 2)
+            ..name = 'step out of the door',
+          MoveTo((_) => _startPosition, duration: 3)
+            ..name = 'walk back to the start',
         ]),
       ),
       owner: this,
