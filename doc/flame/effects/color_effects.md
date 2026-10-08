@@ -56,7 +56,7 @@ final effect = OpacityEffect.to(
 );
 ```
 
-If the component uses multiple paints, the effect can target one more more of those paints
+If the component uses multiple paints, the effect can target one or more of those paints
 using the `target` parameter. The `HasPaint` mixin implements `OpacityProvider` and exposes APIs
 to easily create providers for desired paintIds. For single paintId `opacityProviderOf` can be used
 and for multiple paintIds and `opacityProviderOfList` can be used.

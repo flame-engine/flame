@@ -16,6 +16,17 @@ import 'package:meta/meta.dart';
 /// 3. [onExit] is called after [onTick] returned success or failure, or
 ///    [onAbort] is called if the parent interrupted the node while running.
 abstract class Node() {
+  /// An optional name for this node, which tools use to tell nodes apart.
+  ///
+  /// It does not have any effect on how the node behaves, but it makes a tree
+  /// a lot easier to read in the Flame DevTools. A cascade is a good way to
+  /// set it where the node is created:
+  ///
+  /// ```dart
+  /// Condition((context) => context.get(isHungry))..name = 'is hungry?'
+  /// ```
+  String? name;
+
   bool _isRunning = false;
   Status? _lastStatus;
 

@@ -60,7 +60,7 @@ for more details on our plans and what is currently supported.
 
 This package does not guarantee that it will follow correct
 [semver](https://semver.org/) versioning rules, nor does it assure that its APIs
-wont break. Be ready to constantly have to refactor your code if you are
+won't break. Be ready to constantly have to refactor your code if you are
 planning on using this package, and potentially to have to contribute with
 improvements and fixes. Please do not use this for production environments.
 
