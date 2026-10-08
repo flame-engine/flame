@@ -65,7 +65,7 @@ Box2d world is mapped to `world` in the `Forge2DGame` component and every `Body`
 use as a component should be wrapped in a `BodyComponent`, and added to the `world` in your
 `Forge2DGame`.
 
-You can have have non-physics-related components in your `Forge2DGame` world's component list along
+You can have non-physics-related components in your `Forge2DGame` world's component list along
 with your physical entities. When the update is called, it will use the Forge2D physics engine to
 properly update every `BodyComponent` and other components in the game will be updated according to
 the normal `FlameGame` way.

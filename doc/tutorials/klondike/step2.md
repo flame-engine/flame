@@ -193,7 +193,7 @@ not planning to change these values during the game:
 
 Next, we will create a `Stock` component, the `Waste`, four `Foundation`s and
 seven `Pile`s, setting their sizes and positions in the world. The positions
-are calculated using simple arithmetics. This should all happen inside the
+are calculated using simple arithmetic. This should all happen inside the
 `onLoad` method, after loading the sprite sheet:
 
 ```dart
