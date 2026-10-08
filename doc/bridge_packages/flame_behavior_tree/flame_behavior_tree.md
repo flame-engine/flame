@@ -262,6 +262,20 @@ the children of a `Parallel` node, and the orange one is stopped by `requireOne`
 ```
 
 
+### Naming nodes
+
+Every node has an optional `name`. It does not change how the node behaves, but it makes a tree a
+lot easier to read in the [Flame DevTools](#debugging), where a tree of `Task`s and `Condition`s
+would otherwise be a list of identical rows. The easiest way to set it is with a cascade:
+
+```dart
+Sequence([
+  Condition((context) => context.get(isHungry))..name = 'is hungry?',
+  MoveTo((context) => context.get(foodPosition), speed: 80)..name = 'go to the food',
+])
+```
+
+
 ### Your own nodes
 
 A `Task` or a `Condition` is enough for most things. When a node needs some state or has to clean
@@ -339,6 +353,28 @@ nodes that are running in the old tree are aborted.
 :width: 400
 :height: 300
 ```
+
+
+## Debugging
+
+When a tree does not do what you expect, the Flame DevTools show what it is doing. Run your game in
+debug mode and open the [Flutter DevTools](https://docs.flutter.dev/tools/devtools/overview). In the
+"Flame" tab, click a component in the component tree, and if it has a behavior tree, the tree is
+shown in the details of the component.
+
+Every node shows its type and its [name](#naming-nodes), and what it is doing:
+
+- A node that is running is bold and yellow.
+- Other nodes have the color of the status that they returned last: green for success and red for
+  failure.
+- Grey nodes have not been ticked yet, or were aborted.
+
+Below the tree, the blackboard shows the values that the nodes have set. The view is live, it
+refreshes twice a second, and the switch next to it freezes it so that you can look at a moment
+more closely. The tick interval of the tree is shown too, which is useful when the tree seems to
+react slowly.
+
+Nothing is registered in release mode, so there is no cost in your published game.
 
 
 ## Migrating from 0.2.0-dev

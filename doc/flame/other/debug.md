@@ -25,6 +25,11 @@ Flame registers when a `FlameGame` is created in debug mode. Other tools can cal
 extensions through the Dart VM Service. The [Flame CLI](cli.md) uses them to take snapshots of a
 running game from the terminal, which is also useful for scripts and AI coding agents.
 
+If a selected component has a behavior tree, because it uses the `HasBehaviorTree` mixin of
+[flame_behavior_tree](../../bridge_packages/flame_behavior_tree/flame_behavior_tree.md#debugging),
+the extension also shows the tree, with what each of its nodes is doing, and the contents of its
+blackboard.
+
 
 ### Service extensions
 
@@ -46,6 +51,12 @@ isolate that runs the game. Every `id` parameter is the `hashCode` of a componen
 - `ext.flame_devtools.getComponentInfo`: Returns the same fields as a tree node for the component
   with the given `id`, without the children, and additionally the id of its `parent`, its
   `childCount` and its `debugMode`.
+- `ext.flame_devtools.getBehaviorTree`: Describes the behavior tree of the component with the given
+  `id`. It is registered by `flame_behavior_tree`, so it only exists in games that have a component
+  with `HasBehaviorTree`. It returns `hasBehaviorTree`, which is false for a component without a
+  tree. Otherwise it also returns the `tickInterval`, the `status` that the tree returned last, the
+  `tree` with for every node its `type`, optional `name`, `status`, `isRunning` and `children`, and
+  the `blackboard` as a list of `key` and `value` strings.
 - `ext.flame_devtools.getPositionComponentAttributes` and
   `ext.flame_devtools.setPositionComponentAttributes`: Read and change the attributes of a
   `PositionComponent`. Setting takes the `id`, an `attribute` (`x`, `y`, `width`, `height`,
@@ -69,6 +80,10 @@ isolate that runs the game. Every `id` parameter is the `hashCode` of a componen
 
 If you have multiple games in your app, only the last one created is connected, see
 `DevToolsService.initWithGame` to change it.
+
+Your own packages can add service extensions in the same way, by extending `DevToolsConnector`
+and registering it with `DevToolsService.instance.registerConnector`. The service extensions of a
+connector are registered when it is created, so make sure that you create it only once.
 
 
 ## FPS

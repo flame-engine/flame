@@ -32,9 +32,12 @@ class DevToolsService._() {
   FlameGame? _game;
   FlameGame get game => _game!;
 
-  /// The list of available connectors, remember to add your connector here if
-  /// you create a new one.
-  final connectors = [
+  /// The list of available connectors.
+  ///
+  /// The connectors of Flame are in this list from the start. A connector from
+  /// another package, which should be available after the game was created,
+  /// is added with [registerConnector].
+  final connectors = <DevToolsConnector>[
     DebugModeConnector(),
     ComponentCountConnector(),
     ComponentTreeConnector(),
@@ -46,6 +49,21 @@ class DevToolsService._() {
     InputConnector(),
     ImageCacheConnector(),
   ];
+
+  /// Adds [connector] to the [connectors], so that it is told about the game
+  /// that is observed now and about the games that are set later.
+  ///
+  /// This is how a package that is built on top of Flame can expose its own
+  /// information to the devtools extension. The service extensions of the
+  /// connector are registered when it is created, which has to happen only
+  /// once, so create it inside a guard.
+  void registerConnector(DevToolsConnector connector) {
+    connectors.add(connector);
+    final game = _game;
+    if (game != null) {
+      connector.initGame(game);
+    }
+  }
 
   /// This method is called every time a new game is set in the service and it
   /// is responsible for calling the [DevToolsConnector.initGame] method in all
