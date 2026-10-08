@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="120" height="68" tilewidth="16" tileheight="16" infinite="1" nextlayerid="2" nextobjectid="1">
- <layer id="1" name="Tile Layer 1" width="120" height="68">
-  <data encoding="csv"/>
- </layer>
-</map>
