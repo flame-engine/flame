@@ -126,7 +126,20 @@ class SpriteComponent({
   @mustCallSuper
   @override
   void render(Canvas canvas) {
-    sprite?.render(
+    final sprite = _sprite;
+    if (sprite != null) {
+      renderSprite(canvas, sprite);
+    }
+  }
+
+  /// Renders the [sprite] of this component onto the [canvas], in the local
+  /// coordinates of the component.
+  ///
+  /// This is called by [render] when the component has a sprite, and can be
+  /// overridden to change how the sprite is drawn, as [HasWarpGrid] does.
+  @protected
+  void renderSprite(Canvas canvas, Sprite sprite) {
+    sprite.render(
       canvas,
       size: size,
       overridePaint: paint,

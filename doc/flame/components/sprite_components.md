@@ -37,6 +37,89 @@ class MyGame extends FlameGame {
 ```
 
 
+### Warping
+
+A `SpriteComponent` with the `HasWarpGrid` mixin can distort (warp) its sprite with a `WarpGrid`,
+similarly to SpriteKit's `SKWarpGeometryGrid`. A grid of `columns` x `rows` cells has
+`(columns + 1) * (rows + 1)` vertices, and each vertex has a source position and a destination
+position: the part of the sprite found at the source position is drawn at the destination
+position, and everything in between is interpolated.
+
+```dart
+class WarpedSprite extends SpriteComponent with HasWarpGrid {
+  WarpedSprite({super.sprite, super.size});
+}
+
+final grid = WarpGrid.identity(columns: 2, rows: 2);
+final positions = grid.destinationPositions;
+// Pull the center vertex towards the top-right corner.
+positions[grid.vertexIndex(1, 1)] = Vector2(0.7, 0.3);
+
+final component = WarpedSprite(sprite: sprite, size: Vector2.all(128))
+  ..warpGrid = grid.replacingDestinationPositions(positions);
+```
+
+The mixin works with any subclass of `SpriteComponent`. Subclasses that change how the sprite is
+drawn, like `HasWarpGrid` does, can override `renderSprite`.
+
+Positions are normalized, with the y axis pointing down: source positions are relative to the
+sprite's source rectangle, and destination positions are relative to the component's `size`.
+Destination positions outside of the `0..1` range are valid, and are drawn outside of the
+component's bounds. Vertices are stored in row-major order starting from the top-left corner,
+so for a 2x2 grid the indices are:
+
+```text
+[0]---[1]---[2]
+ |     |     |
+[3]---[4]---[5]
+ |     |     |
+[6]---[7]---[8]
+```
+
+Note that SpriteKit uses the opposite conventions: its vertices start from the bottom-left corner
+and its y axis points up.
+
+`WarpGrid` is immutable: to change the warp, assign a new grid to `warpGrid`, for example one
+created with `replacingDestinationPositions`. Setting `warpGrid` to `null` renders the sprite
+undistorted again. To animate the warp, use a [`WarpEffect`](../effects/warp_effects.md).
+
+The grid is interpolated according to `warpInterpolation`:
+
+- `WarpInterpolation.bilinear` (the default) interpolates each cell independently, like SpriteKit
+  does. Moving a vertex only affects the cells around it, and the edges between cells stay
+  straight.
+- `WarpInterpolation.catmullRom` interpolates the grid with Catmull-Rom splines, so that the
+  sprite bends smoothly across cells while still passing through every vertex. Moving a vertex
+  also affects the cells up to two cells away, and strong distortions can slightly overshoot.
+
+A few more things to keep in mind:
+
+- Warping only changes how the sprite is drawn: the component's `size`, hit testing and
+  collisions are not affected.
+- The component's paint keeps working, so effects like `OpacityEffect` and `ColorEffect`, as well
+  as `tint` and `hue`, apply to warped sprites too. The paint's `shader` is ignored.
+- Each cell is drawn as 4x4 sub-cells of two triangles each. The resulting mesh is rebuilt only
+  when a new grid is assigned or `warpInterpolation` changes, so creating a new grid every frame,
+  for example to animate the warp, has a cost.
+- An image filter in the paint, like a blur, makes the edges of a warped sprite fade out, while
+  an undistorted sprite repeats its border pixels instead.
+
+The [Sprite Warp example](https://examples.flame-engine.org/#/?path=sprites/sprite-warp) shows
+two components with the `HasWarpGrid` mixin that share the same sprite and the same `WarpGrid`:
+the left one uses `WarpInterpolation.bilinear`, the right one `WarpInterpolation.catmullRom`.
+The left sprite has a draggable handle on each vertex, connected by grid lines: dragging a handle
+moves the vertex's destination position, and the right sprite mirrors the change. The example
+has the following knobs:
+
+- `Grid Size`: the number of cells per side (3 to 8, 4 by default). Changing it starts over with
+  an undistorted grid.
+- `Image`: switches between a few sprites, keeping the current warp.
+- `Animate`: waves the grid back and forth with an infinite `WarpEffect.by`. Since the effect
+  changes the grid incrementally, the handles can still be dragged while it runs.
+- `Reset`: a button that resets the grid to the identity, like a double tap on the game. Both
+  are disabled while the animation runs.
+
+
 ## SpriteAnimationComponent
 
 This class is used to represent a Component that has sprites that run in a single cyclic animation.
