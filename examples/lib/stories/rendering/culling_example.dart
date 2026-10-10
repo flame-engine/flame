@@ -14,10 +14,10 @@ class CullingExample({
   final int amount = 10000,
 }) extends FlameGame with KeyboardEvents {
   static const description = '''
-The camera slowly pans over a large field of components, of which only a small
-part is visible at any time. Toggle the "Culled" knob, or press C, to compare
-the frame rate (and the number of components rendered each frame) with and
-without culling through the `CullWhenOffscreen` mixin.
+The camera slowly moves over a big field of animated sprites. Only a few of
+them are on-screen at any time. Press C, or use the "Culled" knob, to turn
+`CullWhenOffscreen` on and off. Compare the frame rate and the number of
+sprites that are drawn on each frame.
   ''';
 
   static const _fieldSize = 4000.0;

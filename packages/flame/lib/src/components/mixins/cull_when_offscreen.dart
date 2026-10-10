@@ -3,45 +3,89 @@ import 'dart:ui';
 
 import 'package:flame/src/camera/camera_component.dart';
 import 'package:flame/src/camera/world.dart';
+import 'package:flame/src/components/mixins/has_visibility.dart';
 import 'package:flame/src/components/position_component.dart';
 import 'package:meta/meta.dart';
 
-/// Skips rendering a [PositionComponent], and all of its children, while it is
-/// outside of the area visible through the camera that is currently rendering
-/// it.
+/// Skips drawing a [PositionComponent] while it is off-screen.
 ///
-/// Only rendering is skipped, the component is still updated as usual. Culling
-/// is conservative: a component is only skipped when its [cullBounds] (grown by
-/// [cullPadding]) do not overlap the camera's `visibleWorldRect`.
+/// When the component is outside of what the camera shows, its `render` is not
+/// called, and neither is the `render` of its children. This saves time in
+/// games with many components. Only drawing is skipped: `update`, collisions
+/// and effects keep working.
 ///
-/// Components that are not part of a [World] (for example children of the
-/// viewport, like a HUD) are never culled.
+/// ## The main rule
 ///
-/// Since the whole subtree is skipped, children that are drawn outside of the
-/// bounds of this component will disappear together with it. Increase
-/// [cullPadding] or override [cullBounds] in that case.
+/// **Everything the component draws, including its children, must fit inside
+/// its [cullBounds] plus [cullPadding].**
 ///
-/// Prefer applying this to many small components (sprites, tiles, enemies)
-/// rather than to a single large parent. For scenery that never changes,
-/// consider a `SpriteBatchComponent` instead.
+/// The decision only looks at the component itself. If a child sticks out of
+/// the parent's box, it disappears as soon as the parent's box leaves the
+/// screen, even if the child is still visible. Nothing warns you about this,
+/// unless you turn on [debugVerifyCulledSubtrees].
+///
+/// ## Good to know
+///
+/// - Only components inside a [World] are culled. Components in the viewport
+///   (like a HUD) are never culled.
+/// - Each camera decides for itself. A minimap and the main camera can see
+///   different things.
+/// - Using the mixin on both a parent and its children is fine. A culled
+///   parent skips its children, and a visible parent lets each child decide.
+/// - A custom `Decorator` that moves the drawing is not taken into account.
+///   Override [cullBounds] in that case.
+/// - A culled component does not call `render`, so do not keep per-frame work
+///   in `render`. Use `update` instead.
+///
+/// ## Choosing [cullPadding]
+///
+/// Use the farthest distance, in world units, that anything reaches outside of
+/// the box. For example: a shadow's offset plus its blur, half of an outline's
+/// width, or how far a child sticks out. When unsure, use a bigger number. It
+/// only costs a few extra components drawn near the edge of the screen.
+///
+/// Prefer using this mixin on many small components, like sprites and tiles.
+/// For scenery that never changes, use a `SpriteBatchComponent` instead.
 mixin CullWhenOffscreen on PositionComponent {
-  /// Whether this component is currently culled when it is off-screen.
+  /// Turns culling on or off for this component only.
   ///
-  /// Set to false to always render the component, for example to compare
-  /// the cost of culling, or while a component is temporarily drawn outside of
-  /// its bounds.
+  /// When false, this component is always drawn, as long as its parent is
+  /// drawn. If the parent is culled, the parent skips its children, so this
+  /// component is skipped too.
   bool cullingEnabled = true;
 
-  /// Extra margin, in world units, added around [cullBounds] before checking
-  /// for visibility. Useful when the component draws outside of its [size], for
-  /// example shadows, outlines or effects.
+  /// Turns on an extra check that helps to find culling mistakes. Use it only
+  /// while developing, because it is slow.
+  ///
+  /// When a component is about to be culled, this looks at all of its children.
+  /// If one of them is on-screen, an [AssertionError] is thrown. The message
+  /// tells you which [cullPadding] fixes the problem.
+  ///
+  /// This is off by default, and it does nothing in release builds.
+  ///
+  /// ```dart
+  /// void main() {
+  ///   CullWhenOffscreen.debugVerifyCulledSubtrees = true;
+  ///   runApp(GameWidget(game: MyGame()));
+  /// }
+  /// ```
+  ///
+  /// It only checks children that are [PositionComponent]s. It cannot see what
+  /// a component draws by itself in `render` outside of its [size], like a
+  /// shadow. Use [cullPadding] for that.
+  static bool debugVerifyCulledSubtrees = false;
+
+  /// Extra space, in world units, added around [cullBounds] before checking if
+  /// the component is on-screen.
+  ///
+  /// Use it when the component or its children draw outside of the [size] box.
   double cullPadding = 0;
 
-  /// The area in the world coordinate space that this component occupies.
+  /// The area of the world that this component takes up.
   ///
-  /// Defaults to the absolute bounding rectangle of the component. Override
-  /// this when [size] is not representative of what is drawn, for example for
-  /// components with a zero size.
+  /// By default this is the box made by the position, size, anchor, scale and
+  /// angle of the component and its parents. Override it when the [size] is not
+  /// what the component really draws, for example when the size is zero.
   Rect get cullBounds {
     // Fast path for the common case of a direct, unrotated child of the world,
     // which avoids the vector allocations of `toAbsoluteRect`.
@@ -97,8 +141,54 @@ mixin CullWhenOffscreen on PositionComponent {
       return false;
     }
     final bounds = cullBounds;
-    return !camera.visibleWorldRect.overlaps(
+    final visibleRect = camera.visibleWorldRect;
+    final offscreen = !visibleRect.overlaps(
       cullPadding == 0 ? bounds : bounds.inflate(cullPadding),
     );
+    assert(() {
+      if (offscreen && debugVerifyCulledSubtrees && hasChildren) {
+        final problem = _debugCulledSubtreeProblem(visibleRect, bounds);
+        if (problem != null) {
+          throw AssertionError(problem);
+        }
+      }
+      return true;
+    }());
+    return offscreen;
+  }
+
+  /// Returns a description of the problem when this component is culled while
+  /// one of its descendants is visible, and null when culling is correct.
+  String? _debugCulledSubtreeProblem(Rect visibleRect, Rect bounds) {
+    PositionComponent? visibleDescendant;
+    var requiredPadding = 0.0;
+    for (final descendant in descendants()) {
+      if (descendant is! PositionComponent) {
+        continue;
+      }
+      if (descendant is HasVisibility &&
+          !(descendant as HasVisibility).isVisible) {
+        continue;
+      }
+      final rect = descendant.toAbsoluteRect();
+      requiredPadding = max(
+        requiredPadding,
+        max(
+          max(bounds.left - rect.left, rect.right - bounds.right),
+          max(bounds.top - rect.top, rect.bottom - bounds.bottom),
+        ),
+      );
+      if (visibleDescendant == null && visibleRect.overlaps(rect)) {
+        visibleDescendant = descendant;
+      }
+    }
+    if (visibleDescendant == null) {
+      return null;
+    }
+    return '$runtimeType is off-screen and was skipped, but its child '
+        '${visibleDescendant.runtimeType} is on-screen. A skipped component '
+        'also skips its children. Set cullPadding to at least '
+        '${requiredPadding.ceil()} (it is now $cullPadding), or override '
+        'cullBounds.';
   }
 }
