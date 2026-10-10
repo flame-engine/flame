@@ -46,13 +46,13 @@ class PathComponent({
   /// are left out; by default, the tolerance is half the [sampling]. See
   /// [PathMetricExtension.walkContour] for the details of both parameters.
   ///
-  /// Contours that end up with fewer than three vertices, like open lines, do
-  /// not become polygons. When [filter] is true, the polygons whose vertices
-  /// all lie inside of the largest polygon are left out too, since they are
-  /// details of the shape that it already covers, like the eyes of a face.
+  /// Open and degenerate contours do not become polygons, see
+  /// [PathExtension.toPolygons]. When [filter] is true, the polygons whose
+  /// vertices all lie inside of the largest polygon are left out too, since
+  /// they are details of the shape that it already covers, like the eyes of a
+  /// face.
   this : super(size: path.getBounds().size.toVector2()) {
-    _polygons = polygonsOf(
-      this.path,
+    _polygons = this.path.toPolygons(
       sampling: sampling,
       tolerance: tolerance,
       filter: filter,
@@ -211,54 +211,5 @@ class PathComponent({
       }
     }
     return rectIntersections;
-  }
-
-  /// Returns the polygons that a [PathComponent] of the [path] would have, in
-  /// the coordinates of the [path], without making the component.
-  ///
-  /// There is one polygon for each closed contour of the [path] with at least
-  /// three vertices, which go counterclockwise in the screen coordinate
-  /// system. See the constructor for the [sampling], the [tolerance] and the
-  /// [filter].
-  static List<List<Vector2>> polygonsOf(
-    Path path, {
-    double sampling = 1.0,
-    double? tolerance,
-    bool filter = true,
-  }) {
-    final polygons = <List<Vector2>>[];
-    for (final metric in path.computeMetrics()) {
-      if (!metric.isClosed) {
-        continue;
-      }
-      final contour = metric.walkContour(sampling, tolerance);
-      if (contour.length > 2) {
-        final vertices = contour.vertices;
-        if (PolygonComponent.isClockwise(vertices)) {
-          vertices.reverse();
-        }
-        polygons.add(vertices);
-      }
-    }
-    if (filter && polygons.length > 1) {
-      final largest = polygons.reduce((a, b) => _area(a) >= _area(b) ? a : b);
-      final largestPath = Path()
-        ..addPolygon(
-          largest.map((vertex) => vertex.toOffset()).toList(growable: false),
-          true,
-        );
-      polygons.removeWhere(
-        (polygon) =>
-            polygon != largest &&
-            polygon.every((vertex) => largestPath.contains(vertex.toOffset())),
-      );
-    }
-    return polygons;
-  }
-
-  /// The area of the bounds of the polygon with the given [vertices].
-  static double _area(List<Vector2> vertices) {
-    final bounds = RectExtension.getBounds(vertices);
-    return bounds.width * bounds.height;
   }
 }

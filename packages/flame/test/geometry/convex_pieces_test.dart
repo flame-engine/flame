@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/geometry/signed_area.dart';
@@ -197,7 +196,7 @@ void main() {
       expect(_totalArea(pieces), closeTo(signedArea(star), 1e-6));
     }, repeatCount: 100);
 
-    test('covers the polygons of a PathComponent', () {
+    test('covers the polygons of a path', () {
       final path = Path()
         ..moveTo(0, 0)
         ..lineTo(40, 0)
@@ -208,7 +207,7 @@ void main() {
         ..lineTo(10, 40)
         ..lineTo(0, 40)
         ..close();
-      final polygon = PathComponent.polygonsOf(path).single;
+      final polygon = path.toPolygons().single;
       final pieces = convexPieces(polygon);
       expect(pieces.length, greaterThan(1));
       expect(pieces.every(_isConvex), isTrue);

@@ -5,6 +5,7 @@ import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
@@ -138,7 +139,7 @@ class ContourBody(
     // pieces are relative to its center.
     final center = pixelSize / 2;
     return [
-      for (final polygon in PathComponent.polygonsOf(outline))
+      for (final polygon in outline.toPolygons())
         ...convexPieces(
           [for (final vertex in polygon) (vertex - center) / pixels],
           minDistance: 4 * linearSlop,

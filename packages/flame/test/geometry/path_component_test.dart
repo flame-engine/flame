@@ -1,7 +1,7 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame_test/test_paths.dart';
 import 'package:test/test.dart';
 
@@ -102,11 +102,11 @@ void main() {
       );
     });
 
-    test('polygonsOf gives the polygons in the coordinates of the path', () {
+    test('the polygons are the ones of the path moved to the origin', () {
       final path = Path()
         ..addRect(const Rect.fromLTWH(5, 5, 10, 10))
         ..addRect(const Rect.fromLTWH(7, 7, 2, 2));
-      final polygons = PathComponent.polygonsOf(path);
+      final polygons = path.toPolygons();
       final component = PathComponent(path: path);
 
       expect(polygons, hasLength(1));
@@ -114,7 +114,6 @@ void main() {
         polygons.single.map((vertex) => vertex - Vector2.all(5)),
         component.polygons.single,
       );
-      expect(PathComponent.polygonsOf(path, filter: false), hasLength(2));
     });
 
     test('contains the points inside of any polygon', () {

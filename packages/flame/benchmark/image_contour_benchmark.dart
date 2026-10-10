@@ -95,7 +95,7 @@ class PipelineBenchmark(final int size) extends _SingleRunBenchmark {
   @override
   void run() {
     final outline = ImageExtension.contourFromPixels(_pixels, size, size);
-    for (final polygon in PathComponent.polygonsOf(outline)) {
+    for (final polygon in outline.toPolygons()) {
       convexPieces(polygon);
     }
   }

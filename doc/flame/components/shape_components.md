@@ -153,9 +153,11 @@ void main() {
 ```
 
 The `sampling` and `tolerance` arguments control how the contours are followed, see
-[](#from-a-path). The vertices of each polygon are available in `polygons`.
+[](#from-a-path). The vertices of each polygon are available in `polygons`, and `path.toPolygons()`
+gives the same polygons, in the coordinates of the path, without making a component.
 
-Contours with fewer than three vertices, like open lines, are rendered but do not become polygons.
+Open contours and degenerate ones, with fewer than three vertices or no area, are rendered but do
+not become polygons.
 By default, the polygons whose vertices all lie inside of the largest polygon are left out as well,
 since the largest one already covers them; the eyes of a face are an example of this. Pass
 `filter: false` to keep every polygon, for example when the inner contours should be hit by rays.
@@ -188,9 +190,9 @@ Both default to `0`, which keeps every vertex and every piece. For Box2D, `minDi
 its linear slop and `minWidth` twice it.
 
 The cost grows about with the square of the number of vertices, so split the polygons when loading
-and not in every tick. The polygons of a `PathComponent` are a convenient input, since they follow
+and not in every tick. The polygons from `Path.toPolygons` are a convenient input, since they follow
 each contour of a path with straight edges and are already simplified according to their
-`sampling`, and `PathComponent.polygonsOf` gives them without making a component:
+`sampling`:
 
 ```dart
 void main() {
@@ -208,7 +210,7 @@ void main() {
     ], true);
 
   final pieces = [
-    for (final polygon in PathComponent.polygonsOf(path))
+    for (final polygon in path.toPolygons())
       ...convexPieces(polygon),
   ];
 }

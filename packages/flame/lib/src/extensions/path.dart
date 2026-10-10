@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:flame/extensions.dart';
 import 'package:flame/src/cache/matrix_pool.dart' show pathTransform;
+import 'package:flame/src/geometry/signed_area.dart';
 
 export 'dart:ui' show Path;
 
@@ -86,6 +87,58 @@ extension PathExtension on Path {
       for (final metric in computeMetrics())
         metric.walkContour(sampling, tolerance),
     ];
+  }
+
+  /// Returns a polygon for each closed contour of the path, with vertices that
+  /// go counterclockwise in the screen coordinate system.
+  ///
+  /// Unlike [walkContours], open contours and degenerate ones, with fewer than
+  /// three vertices or no area, are dropped. When [filter] is true, so are the
+  /// polygons that lie inside of the largest one.
+  ///
+  /// See [PathMetricExtension.walkContour] for the [sampling] and the
+  /// [tolerance] parameters.
+  List<List<Vector2>> toPolygons({
+    double sampling = 1.0,
+    double? tolerance,
+    bool filter = true,
+  }) {
+    final polygons = <List<Vector2>>[];
+    for (final metric in computeMetrics()) {
+      if (!metric.isClosed) {
+        continue;
+      }
+      final vertices = metric.walkContour(sampling, tolerance).vertices;
+      final area = vertices.length > 2 ? signedArea(vertices) : 0.0;
+      if (area == 0) {
+        continue;
+      }
+      if (area > 0) {
+        vertices.reverse();
+      }
+      polygons.add(vertices);
+    }
+    if (filter && polygons.length > 1) {
+      final largest = polygons.reduce(
+        (a, b) => _boundsArea(a) >= _boundsArea(b) ? a : b,
+      );
+      final largestPath = Path()
+        ..addPolygon(
+          largest.map((vertex) => vertex.toOffset()).toList(growable: false),
+          true,
+        );
+      polygons.removeWhere(
+        (polygon) =>
+            polygon != largest &&
+            polygon.every((vertex) => largestPath.contains(vertex.toOffset())),
+      );
+    }
+    return polygons;
+  }
+
+  static double _boundsArea(List<Vector2> vertices) {
+    final bounds = RectExtension.getBounds(vertices);
+    return bounds.width * bounds.height;
   }
 
   /// Walk only the contour at [index], without sampling the other contours of
