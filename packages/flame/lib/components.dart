@@ -24,6 +24,7 @@ export 'src/components/input/toggle_button_component.dart';
 export 'src/components/isometric_tile_map_component.dart';
 export 'src/components/mixins/component_viewport_margin.dart';
 export 'src/components/mixins/coordinate_transform.dart';
+export 'src/components/mixins/cull_when_offscreen.dart';
 export 'src/components/mixins/gesture_hitboxes.dart';
 export 'src/components/mixins/has_ancestor.dart';
 export 'src/components/mixins/has_auto_batched_children.dart'

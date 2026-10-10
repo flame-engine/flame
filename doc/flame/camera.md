@@ -263,13 +263,38 @@ moves or the viewport changes its size.
 
 The `CameraComponent` has a method called `canSee` which can be used to check
 if a component is visible from the camera point of view.
-This is useful for example to cull components that are not in view.
+This is useful for example to remove components that are not in view.
 
 ```dart
 if (!camera.canSee(component)) {
-   component.removeFromParent(); // Cull the component
+   component.removeFromParent(); // Remove the component
 }
 ```
+
+### CullWhenOffscreen
+
+To only skip the _rendering_ of components that are outside of the camera's view, add the
+`CullWhenOffscreen` mixin to a `PositionComponent`. The component is still updated as usual, but
+its `render` (and the rendering of all its children) is skipped while it is outside of the
+`visibleWorldRect` of the camera that is rendering it.
+
+```dart
+class Tree extends SpriteComponent with CullWhenOffscreen {
+  Tree() {
+    cullPadding = 20; // Optional margin for shadows, outlines, etc.
+  }
+}
+```
+
+Things to keep in mind:
+
+- Culling is opt-in, components without the mixin are always rendered.
+- Only components inside the `World` are culled, components in the viewport (like a HUD) are never
+  affected.
+- Children that are drawn outside of the bounds of a culled parent disappear together with it. Use
+  `cullPadding`, or override `cullBounds`, if the component draws outside of its `size`.
+- Prefer many small components over a single big parent. For scenery that never changes, a
+  `SpriteBatchComponent` might be a better fit.
 
 
 ### Post processing
