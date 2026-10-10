@@ -34,40 +34,7 @@ sprites that are drawn on each frame.
 
   @override
   Future<void> onLoad() async {
-    final animations = [
-      await loadSpriteAnimation(
-        'assets/images/animations/ember.png',
-        SpriteAnimationData.sequenced(
-          amount: 3,
-          textureSize: Vector2.all(16),
-          stepTime: 0.15,
-        ),
-      ),
-      await loadSpriteAnimation(
-        'assets/images/animations/chopper.png',
-        SpriteAnimationData.sequenced(
-          amount: 4,
-          textureSize: Vector2.all(48),
-          stepTime: 0.15,
-        ),
-      ),
-      await loadSpriteAnimation(
-        'assets/images/animations/robot.png',
-        SpriteAnimationData.sequenced(
-          amount: 8,
-          textureSize: Vector2(16, 18),
-          stepTime: 0.2,
-        ),
-      ),
-      await loadSpriteAnimation(
-        'assets/images/bomb_ptero.png',
-        SpriteAnimationData.sequenced(
-          amount: 4,
-          textureSize: Vector2.all(48),
-          stepTime: 0.2,
-        ),
-      ),
-    ];
+    final animations = await loadCullingAnimations(this);
     final random = Random(1);
     world.addAll([
       for (var i = 0; i < amount; i++)
@@ -139,6 +106,44 @@ sprites that are drawn on each frame.
     renderedThisFrame = 0;
     super.render(canvas);
   }
+}
+
+/// Loads the animations that the culling examples draw.
+Future<List<SpriteAnimation>> loadCullingAnimations(FlameGame game) async {
+  return [
+    await game.loadSpriteAnimation(
+      'assets/images/animations/ember.png',
+      SpriteAnimationData.sequenced(
+        amount: 3,
+        textureSize: Vector2.all(16),
+        stepTime: 0.15,
+      ),
+    ),
+    await game.loadSpriteAnimation(
+      'assets/images/animations/chopper.png',
+      SpriteAnimationData.sequenced(
+        amount: 4,
+        textureSize: Vector2.all(48),
+        stepTime: 0.15,
+      ),
+    ),
+    await game.loadSpriteAnimation(
+      'assets/images/animations/robot.png',
+      SpriteAnimationData.sequenced(
+        amount: 8,
+        textureSize: Vector2(16, 18),
+        stepTime: 0.2,
+      ),
+    ),
+    await game.loadSpriteAnimation(
+      'assets/images/bomb_ptero.png',
+      SpriteAnimationData.sequenced(
+        amount: 4,
+        textureSize: Vector2.all(48),
+        stepTime: 0.2,
+      ),
+    ),
+  ];
 }
 
 class _AnimatedSprite({
