@@ -7,7 +7,6 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
-import 'package:flame/text.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart' show KeyEventResult;
 
@@ -26,17 +25,23 @@ small camera skipped it.
 Press C, or use the "Culled" knob, to turn culling on and off. With culling on,
 only the sprites near the white box are bright. With culling off, the small
 camera draws every sprite, so all of them are bright.
+
+The FPS at the top is for the whole game. While the big view is on, it sets the
+FPS, because it always draws every sprite. Press V to hide the big view. Then
+the FPS is the FPS of the small camera alone.
+
+The "draw time" line is how long the small camera needs to draw its sprites in
+Dart. It does not include the work of the GPU.
   ''';
 
   static const _fieldSize = 4000.0;
   static final Vector2 _innerViewSize = Vector2(320, 240);
   static const _margin = 20.0;
-  static final _hudText = TextPaint(
-    style: const TextStyle(color: Color(0xFFFFFFFF), fontSize: 16),
-  );
+
+  late final _TimedCamera _innerCamera;
 
   /// The small camera that moves around and that does the culling.
-  late final CameraComponent innerCamera;
+  CameraComponent get innerCamera => _innerCamera;
 
   /// Counts the frames, so that sprites know when they were last drawn by the
   /// inner camera.
@@ -47,7 +52,11 @@ camera draws every sprite, so all of them are bright.
   int _lastInnerRenderCount = 0;
 
   late bool _culled = culled;
+  late final CullingStatusText _statusText;
+  late final World _emptyWorld;
+  bool _bigViewVisible = true;
   late final TextComponent _countText;
+  late final TextComponent _timeText;
   double _time = 0;
 
   @override
@@ -66,17 +75,21 @@ camera draws every sprite, so all of them are bright.
       _InnerViewOutline(),
     ]);
 
+    // The big camera looks at this empty world when the big view is hidden.
+    _emptyWorld = World();
+    add(_emptyWorld);
+
     // The default camera is the big one, and it shows the whole field.
     camera.viewfinder.visibleGameSize = Vector2.all(_fieldSize * 1.05);
 
     // The inner camera is added after the default camera, so it is drawn on
     // top of it.
-    innerCamera = CameraComponent(
+    _innerCamera = _TimedCamera(
       world: world,
       viewport: FixedSizeViewport(_innerViewSize.x, _innerViewSize.y)
         ..anchor = Anchor.bottomRight,
     );
-    innerCamera.viewport.add(
+    _innerCamera.viewport.add(
       RectangleComponent(
         size: _innerViewSize,
         paint: BasicPalette.white.paint()
@@ -84,34 +97,42 @@ camera draws every sprite, so all of them are bright.
           ..strokeWidth = 4,
       ),
     );
-    add(innerCamera);
+    add(_innerCamera);
 
     camera.viewport.add(
       PositionComponent(
         position: Vector2.all(10),
-        size: Vector2(330, 90),
+        size: Vector2(480, 196),
         children: [
           RectangleComponent(
-            size: Vector2(330, 90),
+            size: Vector2(480, 196),
             paint: BasicPalette.black.withAlpha(140).paint(),
           ),
           FpsTextComponent(
             position: Vector2(10, 8),
-            textRenderer: _hudText,
+            textRenderer: cullingHudText,
+          ),
+          _statusText = CullingStatusText(
+            culled: _culled,
+            position: Vector2(10, 36),
           ),
           _countText = TextComponent(
-            position: Vector2(10, 28),
-            textRenderer: _hudText,
+            position: Vector2(10, 70),
+            textRenderer: cullingHudText,
+          ),
+          _timeText = TextComponent(
+            position: Vector2(10, 98),
+            textRenderer: cullingHudText,
           ),
           TextComponent(
             text: 'Bright: drawn by the small camera',
-            position: Vector2(10, 48),
-            textRenderer: _hudText,
+            position: Vector2(10, 134),
+            textRenderer: cullingHudText,
           ),
           TextComponent(
-            text: 'Press C to turn culling on or off',
-            position: Vector2(10, 66),
-            textRenderer: _hudText,
+            text: 'C: culling on/off     V: big view on/off',
+            position: Vector2(10, 162),
+            textRenderer: cullingHudText,
           ),
         ],
       ),
@@ -138,9 +159,15 @@ camera draws every sprite, so all of them are bright.
   ) {
     if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.keyC) {
       _culled = !_culled;
+      _statusText.culled = _culled;
       for (final sprite in world.children.query<_Sprite>()) {
         sprite.cullingEnabled = _culled;
       }
+      return KeyEventResult.handled;
+    }
+    if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.keyV) {
+      _bigViewVisible = !_bigViewVisible;
+      camera.world = _bigViewVisible ? world : _emptyWorld;
       return KeyEventResult.handled;
     }
     return super.onKeyEvent(event, keysPressed);
@@ -155,8 +182,12 @@ camera draws every sprite, so all of them are bright.
       sin(_time * 0.2) * _fieldSize * 0.35,
     );
     _countText.text =
-        '${_culled ? 'Culled' : 'Not culled'}: small camera drew '
-        '$_lastInnerRenderCount/$amount';
+        'Small camera drew: $_lastInnerRenderCount/$amount sprites';
+    final milliseconds = _innerCamera.drawMilliseconds;
+    if (milliseconds > 0) {
+      _timeText.text =
+          'Small camera draw time: ${milliseconds.toStringAsFixed(1)} ms';
+    }
   }
 
   @override
@@ -218,5 +249,29 @@ class _InnerViewOutline()
       return;
     }
     canvas.drawRect(game.innerCamera.visibleWorldRect, _paint);
+  }
+}
+
+/// A camera that measures how long it takes to draw its world.
+class _TimedCamera({
+  super.world,
+  super.viewport,
+}) extends CameraComponent {
+  final Stopwatch _stopwatch = Stopwatch();
+
+  /// The average time the camera takes to draw, in milliseconds.
+  double drawMilliseconds = 0;
+
+  @override
+  void renderTree(Canvas canvas) {
+    _stopwatch
+      ..reset()
+      ..start();
+    super.renderTree(canvas);
+    _stopwatch.stop();
+    final milliseconds = _stopwatch.elapsedMicroseconds / 1000;
+    drawMilliseconds = drawMilliseconds == 0
+        ? milliseconds
+        : drawMilliseconds * 0.95 + milliseconds * 0.05;
   }
 }

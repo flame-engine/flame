@@ -21,14 +21,12 @@ sprites that are drawn on each frame.
   ''';
 
   static const _fieldSize = 4000.0;
-  static final _hudText = TextPaint(
-    style: const TextStyle(color: Color(0xFFFFFFFF), fontSize: 16),
-  );
 
   /// How many components were rendered in the previous frame.
   static int renderedThisFrame = 0;
 
   late bool _culled = culled;
+  late final CullingStatusText _statusText;
   late final TextComponent _renderedText;
   double _time = 0;
 
@@ -49,24 +47,28 @@ sprites that are drawn on each frame.
     camera.viewport.add(
       PositionComponent(
         position: Vector2.all(10),
-        size: Vector2(300, 70),
+        size: Vector2(400, 130),
         children: [
           RectangleComponent(
-            size: Vector2(300, 70),
+            size: Vector2(400, 130),
             paint: BasicPalette.black.withAlpha(140).paint(),
           ),
           FpsTextComponent(
             position: Vector2(10, 8),
-            textRenderer: _hudText,
+            textRenderer: cullingHudText,
+          ),
+          _statusText = CullingStatusText(
+            culled: _culled,
+            position: Vector2(10, 36),
           ),
           _renderedText = TextComponent(
-            position: Vector2(10, 28),
-            textRenderer: _hudText,
+            position: Vector2(10, 70),
+            textRenderer: cullingHudText,
           ),
           TextComponent(
-            text: 'Press C to toggle culling',
-            position: Vector2(10, 48),
-            textRenderer: _hudText,
+            text: 'Press C to turn culling on or off',
+            position: Vector2(10, 98),
+            textRenderer: cullingHudText,
           ),
         ],
       ),
@@ -80,6 +82,7 @@ sprites that are drawn on each frame.
   ) {
     if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.keyC) {
       _culled = !_culled;
+      _statusText.culled = _culled;
       for (final box in world.children.query<_AnimatedSprite>()) {
         box.cullingEnabled = _culled;
       }
@@ -93,18 +96,53 @@ sprites that are drawn on each frame.
     super.update(dt);
     _time += dt;
     camera.viewfinder.position = Vector2(
-      cos(_time * 0.3) * _fieldSize * 0.4,
-      sin(_time * 0.2) * _fieldSize * 0.4,
+      cos(_time * 0.3) * _fieldSize * 0.2,
+      sin(_time * 0.2) * _fieldSize * 0.2,
     );
-    _renderedText.text =
-        '${_culled ? 'Culled' : 'Not culled'}: $renderedThisFrame/$amount '
-        'rendered';
+    _renderedText.text = 'Drawn: $renderedThisFrame/$amount sprites';
   }
 
   @override
   void render(Canvas canvas) {
     renderedThisFrame = 0;
     super.render(canvas);
+  }
+}
+
+/// The text style of the HUD of the culling examples.
+final TextPaint cullingHudText = TextPaint(
+  style: const TextStyle(color: Color(0xFFFFFFFF), fontSize: 20),
+);
+
+/// Shows if culling is on (green) or off (red).
+class CullingStatusText({
+  bool culled = true,
+  super.position,
+}) extends TextComponent {
+  static final _onText = TextPaint(
+    style: const TextStyle(
+      color: Color(0xFF4DFF6A),
+      fontSize: 26,
+      fontWeight: FontWeight.bold,
+    ),
+  );
+  static final _offText = TextPaint(
+    style: const TextStyle(
+      color: Color(0xFFFF5252),
+      fontSize: 26,
+      fontWeight: FontWeight.bold,
+    ),
+  );
+
+  this : super(text: _label(culled), textRenderer: _style(culled));
+
+  static String _label(bool culled) => culled ? 'Culling: ON' : 'Culling: OFF';
+
+  static TextPaint _style(bool culled) => culled ? _onText : _offText;
+
+  set culled(bool value) {
+    text = _label(value);
+    textRenderer = _style(value);
   }
 }
 
