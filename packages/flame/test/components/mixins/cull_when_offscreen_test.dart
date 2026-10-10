@@ -462,6 +462,25 @@ void main() {
       );
 
       testWithFlameGame(
+        'the debug check ignores everything below a hidden component',
+        (game) async {
+          CullWhenOffscreen.debugVerifyCulledSubtrees = true;
+          final (_, world, _) = await setUp(game);
+          // The grandchild is on-screen, but its parent is hidden, so it is
+          // never drawn.
+          final hidden = _HiddenComponent(
+            position: Vector2(-100, 0),
+            children: [_CountingComponent(position: Vector2.zero())],
+          );
+          await world.ensureAdd(
+            _CountingComponent(position: Vector2(100, 0), children: [hidden]),
+          );
+
+          expect(() => renderGame(game), returnsNormally);
+        },
+      );
+
+      testWithFlameGame(
         'the debug check looks through components without a position',
         (game) async {
           CullWhenOffscreen.debugVerifyCulledSubtrees = true;
@@ -692,7 +711,7 @@ class _CountingComponent({
   }
 }
 
-class _HiddenComponent({super.position})
+class _HiddenComponent({super.position, super.children})
     extends PositionComponent
     with HasVisibility {
   this {

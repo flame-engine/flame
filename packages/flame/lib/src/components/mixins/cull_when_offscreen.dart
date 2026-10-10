@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flame/src/camera/camera_component.dart';
 import 'package:flame/src/camera/world.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/mixins/has_visibility.dart';
 import 'package:flame/src/components/position_component.dart';
 import 'package:meta/meta.dart';
@@ -170,24 +171,33 @@ mixin CullWhenOffscreen on PositionComponent {
   String? _debugCulledSubtreeProblem(Rect visibleRect, Rect bounds) {
     PositionComponent? visibleDescendant;
     var requiredPadding = 0.0;
-    for (final descendant in descendants()) {
-      if (descendant is! PositionComponent) {
+    // A hidden `HasVisibility` component hides all of its descendants too, so
+    // its whole subtree is skipped.
+    final pending = <Component>[this];
+    while (pending.isNotEmpty) {
+      final current = pending.removeLast();
+      if (!current.hasChildren) {
         continue;
       }
-      if (descendant is HasVisibility &&
-          !(descendant as HasVisibility).isVisible) {
-        continue;
-      }
-      final rect = descendant.toAbsoluteRect();
-      requiredPadding = max(
-        requiredPadding,
-        max(
-          max(bounds.left - rect.left, rect.right - bounds.right),
-          max(bounds.top - rect.top, rect.bottom - bounds.bottom),
-        ),
-      );
-      if (visibleDescendant == null && visibleRect.overlaps(rect)) {
-        visibleDescendant = descendant;
+      for (final child in current.children) {
+        if (child is HasVisibility && !child.isVisible) {
+          continue;
+        }
+        pending.add(child);
+        if (child is! PositionComponent) {
+          continue;
+        }
+        final rect = child.toAbsoluteRect();
+        requiredPadding = max(
+          requiredPadding,
+          max(
+            max(bounds.left - rect.left, rect.right - bounds.right),
+            max(bounds.top - rect.top, rect.bottom - bounds.bottom),
+          ),
+        );
+        if (visibleDescendant == null && visibleRect.overlaps(rect)) {
+          visibleDescendant = child;
+        }
       }
     }
     if (visibleDescendant == null) {
