@@ -211,6 +211,13 @@ class MoveTo extends Node {
 Extend `Decorator` for a node with a single `child`, or `Composite` for one with multiple
 `children`; both take care of aborting their children.
 
+Every node has an optional `name`, which tools like the Flame DevTools show to tell nodes apart.
+It does not change how a node behaves. Set it with a cascade:
+
+```dart
+Condition((context) => context.get(isHungry))..name = 'is hungry?'
+```
+
 Nodes keep track of whether they are running, so every place in a tree needs a node instance of its
 own. When you need the same node in multiple places, write a function that creates it.
 

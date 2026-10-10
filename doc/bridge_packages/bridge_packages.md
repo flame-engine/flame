@@ -2,7 +2,7 @@
 
 :::{package} flame_3d [WIP]
 
-Uses Flutter GPU / Impeller low-level level access to provide an ergonomic and **very experimental**
+Uses Flutter GPU / Impeller low-level access to provide an ergonomic and **very experimental**
 3D rendering engine on top of Flame.
 
 :::{package} flame_3d_component

@@ -1,5 +1,6 @@
 import 'package:devtools_extensions/devtools_extensions.dart';
 import 'package:flame/devtools.dart';
+import 'package:flame_devtools/behavior_tree_snapshot.dart';
 
 abstract final class Repository() {
   static Future<ComponentTreeNode> getComponentTree() async {
@@ -90,6 +91,30 @@ abstract final class Repository() {
       args: {'step_time': stepTime.toString()},
     );
     return (stepResponse.json!['step_time'] as num).toDouble();
+  }
+
+  /// Gets the behavior tree of the component with the given [id], or null if
+  /// the component does not have one.
+  ///
+  /// The service extension for this is registered by `flame_behavior_tree`, so
+  /// it does not exist at all in games that do not use that package. That is
+  /// not an error, those games simply have no behavior trees.
+  static Future<BehaviorTreeSnapshot?> getBehaviorTree({
+    required int id,
+  }) async {
+    try {
+      final response = await serviceManager.callServiceExtensionOnMainIsolate(
+        'ext.flame_devtools.getBehaviorTree',
+        args: {'id': id.toString()},
+      );
+      final json = response.json!;
+      if (json['hasBehaviorTree'] != true) {
+        return null;
+      }
+      return BehaviorTreeSnapshot.fromJson(json);
+    } on Exception {
+      return null;
+    }
   }
 
   static Future<String?> snapshot({required int id}) async {

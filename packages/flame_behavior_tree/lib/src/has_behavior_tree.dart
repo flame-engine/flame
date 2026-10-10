@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:behavior_tree/behavior_tree.dart';
 import 'package:flame/components.dart';
+import 'package:flame_behavior_tree/src/devtools/behavior_tree_connector.dart';
 import 'package:flutter/foundation.dart';
 
 /// A mixin on [Component] that gives it a behavior tree.
@@ -24,6 +25,9 @@ import 'package:flutter/foundation.dart';
 /// ```
 ///
 /// The running nodes of the tree are aborted when the component is removed.
+///
+/// In debug mode the tree can be inspected in the Flame devtools, by selecting
+/// the component in the component tree.
 mixin HasBehaviorTree on Component {
   BehaviorTree? _behaviorTree;
   double _tickInterval = 0;
@@ -44,6 +48,9 @@ mixin HasBehaviorTree on Component {
     return tree;
   }
 
+  /// Whether a [behaviorTree] has been set.
+  bool get hasBehaviorTree => _behaviorTree != null;
+
   set behaviorTree(BehaviorTree tree) {
     _behaviorTree?.abort();
     _behaviorTree = tree;
@@ -61,6 +68,14 @@ mixin HasBehaviorTree on Component {
   double get tickInterval => _tickInterval;
   set tickInterval(double interval) {
     _tickInterval = max(0, interval);
+  }
+
+  @override
+  @mustCallSuper
+  void onMount() {
+    super.onMount();
+    // Makes the tree show up in the Flame devtools, in debug mode.
+    BehaviorTreeConnector.ensureRegistered();
   }
 
   @override
