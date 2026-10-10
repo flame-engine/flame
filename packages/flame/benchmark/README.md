@@ -84,6 +84,9 @@ which takes minutes. To compare a change, run it on both branches.
   logic and inputs on a two-level tree.
 - `render_components_benchmark.dart`: render pass over a randomized tree onto
   a mock canvas.
+- `culling_benchmark.dart`: draws 10k components through a camera, with and
+  without `CullWhenOffscreen`. It runs once with most components off-screen,
+  and once with all of them on-screen, to show what the check costs.
 - `components_at_point_benchmark.dart`: pointer hit testing
   (`componentsAtPoint`) with and without the hit-test cache.
 - `collision_detection_benchmark.dart`: the collision detection system with

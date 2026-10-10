@@ -1,5 +1,7 @@
 import 'package:examples/commons/commons.dart';
 import 'package:examples/commons/example_use_case.dart';
+import 'package:examples/stories/rendering/culling_example.dart';
+import 'package:examples/stories/rendering/culling_visualized_example.dart';
 import 'package:examples/stories/rendering/flip_sprite_example.dart';
 import 'package:examples/stories/rendering/isometric_tile_map_example.dart';
 import 'package:examples/stories/rendering/layers_example.dart';
@@ -35,6 +37,32 @@ WidgetbookComponent renderingStories() {
         ),
         codeLink: baseLink('rendering/isometric_tile_map_example.dart'),
         info: IsometricTileMapExample.description,
+      ),
+      ExampleUseCase(
+        name: 'Culling',
+        builder: (context) => GameWidget(
+          game: CullingExample(
+            culled: context.knobs.boolean(
+              label: 'Culled',
+              initialValue: true,
+            ),
+          ),
+        ),
+        codeLink: baseLink('rendering/culling_example.dart'),
+        info: CullingExample.description,
+      ),
+      ExampleUseCase(
+        name: 'Culling (visualized)',
+        builder: (context) => GameWidget(
+          game: CullingVisualizedExample(
+            culled: context.knobs.boolean(
+              label: 'Culled',
+              initialValue: true,
+            ),
+          ),
+        ),
+        codeLink: baseLink('rendering/culling_visualized_example.dart'),
+        info: CullingVisualizedExample.description,
       ),
       ExampleUseCase(
         name: 'Nine Tile Box',
