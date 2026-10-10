@@ -337,19 +337,17 @@ class Tank extends PositionComponent with CullWhenOffscreen {
 #### How much cullPadding?
 
 `cullPadding` is the farthest distance, in world units, that anything reaches outside of the box.
-Use the biggest value that applies:
+If nothing sticks out, you do not need it. The default is `0`. Otherwise, use the biggest value that
+applies:
 
-| What sticks out                   | Padding                                           |
-| --------------------------------- | ------------------------------------------------- |
-| Nothing                           | `0` (the default)                                 |
-| An outline                        | Half of the outline width                         |
-| A drop shadow                     | The shadow offset plus the blur                   |
-| A child outside of the parent     | How far the child sticks out                      |
-| An effect that scales it up       | `size * (maxScale - 1) / 2`, for a centered anchor |
-| You are not sure                  | A bit more than you think you need                |
+- **An outline:** half of the outline width.
+- **A drop shadow:** the shadow offset plus the blur.
+- **A child outside of the parent:** how far the child sticks out.
+- **An effect that scales the component up:** `size * (maxScale - 1) / 2`, for a centered anchor.
 
-A padding that is too big is cheap. A few extra components are drawn near the edge of the screen. A
-padding that is too small makes things appear too late. When in doubt, use a bigger number.
+When in doubt, use a bit more than you think you need. A padding that is too big is cheap, because a
+few extra components are drawn near the edge of the screen. A padding that is too small makes things
+appear too late.
 
 #### Finding mistakes
 
