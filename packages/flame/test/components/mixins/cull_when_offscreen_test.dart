@@ -159,7 +159,7 @@ void main() {
     testWithFlameGame('is conservative for a rotated camera', (game) async {
       final (_, world, camera) = await setUp(game);
       camera.viewfinder.angle = 0.7;
-      // Inside the rotated view, but outside the unrotated 60x40 rect.
+      // Inside the rotated view, but outside the 60x40 view without rotation.
       final component = _CountingComponent(position: Vector2(-10, 25));
       await world.ensureAdd(component);
 

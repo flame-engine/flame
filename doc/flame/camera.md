@@ -271,6 +271,7 @@ if (!camera.canSee(component)) {
 }
 ```
 
+
 ### CullWhenOffscreen
 
 Normally, every component in the `World` is drawn on every frame, even when it is far outside of
@@ -287,6 +288,7 @@ class Tree extends SpriteComponent with CullWhenOffscreen {
 
 It is opt-in. Components without the mixin are always drawn, so nothing changes in existing games.
 
+
 #### How it works
 
 - Only drawing is skipped. `update`, collisions and effects keep running.
@@ -298,6 +300,7 @@ It is opt-in. Components without the mixin are always drawn, so nothing changes 
 - Only components inside a `World` are skipped. Components in the viewport, like a HUD, never are.
 - The box comes from the `position`, `size`, `anchor`, `scale` and `angle` of the component and its
   parents.
+
 
 #### The main rule
 
@@ -317,8 +320,9 @@ This usually happens with:
 - **Effects that make the component bigger.** For example, a scale pulse.
 
 ```dart
-// Wrong: the health bar is 30 units above the tank. When the tank is just below the screen,
-// the health bar should still be visible, but it is skipped together with the tank.
+// Wrong: the health bar is 30 units above the tank. When the tank is just
+// below the screen, the health bar should still be visible, but it is skipped
+// together with the tank.
 class Tank extends PositionComponent with CullWhenOffscreen {
   Tank() : super(size: Vector2.all(40)) {
     add(HealthBar(position: Vector2(0, -30)));
@@ -334,6 +338,7 @@ class Tank extends PositionComponent with CullWhenOffscreen {
 }
 ```
 
+
 #### How much cullPadding?
 
 `cullPadding` is the farthest distance, in world units, that anything reaches outside of the box.
@@ -348,6 +353,7 @@ applies:
 When in doubt, use a bit more than you think you need. A padding that is too big is cheap, because a
 few extra components are drawn near the edge of the screen. A padding that is too small makes things
 appear too late.
+
 
 #### Finding mistakes
 
@@ -370,12 +376,14 @@ something looks wrong, or after you change how a component draws its children.
 It only checks children that are `PositionComponent`s. It cannot see what a component draws
 by itself in `render` outside of its `size`, like a shadow. Use the table above for those.
 
+
 #### Turning culling off for one component
 
 Set `cullingEnabled = false` to always draw a component.
 
 This only works while its parent is drawn. If the parent is skipped, its children are skipped
 too, so a child with `cullingEnabled = false` is not drawn either.
+
 
 #### Parents and children
 
@@ -392,6 +400,7 @@ class Chunk extends PositionComponent with CullWhenOffscreen {
 
 The main rule applies to the chunk. Its box must cover all of its children. If a child is outside of
 the chunk's `size`, use `cullPadding` on the chunk.
+
 
 #### Other things to know
 

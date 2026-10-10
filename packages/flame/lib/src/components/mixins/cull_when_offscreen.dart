@@ -87,8 +87,8 @@ mixin CullWhenOffscreen on PositionComponent {
   /// angle of the component and its parents. Override it when the [size] is not
   /// what the component really draws, for example when the size is zero.
   Rect get cullBounds {
-    // Fast path for the common case of a direct, unrotated child of the world,
-    // which avoids the vector allocations of `toAbsoluteRect`.
+    // Fast path for the common case of a direct child of the world that is not
+    // rotated, which avoids the vector allocations of `toAbsoluteRect`.
     if (angle == 0 && parent is World) {
       final width = size.x * scale.x;
       final height = size.y * scale.y;
@@ -145,16 +145,24 @@ mixin CullWhenOffscreen on PositionComponent {
     final offscreen = !visibleRect.overlaps(
       cullPadding == 0 ? bounds : bounds.inflate(cullPadding),
     );
-    assert(() {
-      if (offscreen && debugVerifyCulledSubtrees && hasChildren) {
-        final problem = _debugCulledSubtreeProblem(visibleRect, bounds);
-        if (problem != null) {
-          throw AssertionError(problem);
-        }
-      }
-      return true;
-    }());
+    assert(_debugVerifyCulledSubtree(offscreen, visibleRect, bounds));
     return offscreen;
+  }
+
+  /// Only used in an assert, see [debugVerifyCulledSubtrees]. Always returns
+  /// true, or throws when a culled component has a visible descendant.
+  bool _debugVerifyCulledSubtree(
+    bool offscreen,
+    Rect visibleRect,
+    Rect bounds,
+  ) {
+    if (offscreen && debugVerifyCulledSubtrees && hasChildren) {
+      final problem = _debugCulledSubtreeProblem(visibleRect, bounds);
+      if (problem != null) {
+        throw AssertionError(problem);
+      }
+    }
+    return true;
   }
 
   /// Returns a description of the problem when this component is culled while
