@@ -1,7 +1,7 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame_test/test_paths.dart';
 import 'package:test/test.dart';
 
@@ -99,6 +99,20 @@ void main() {
       expect(
         PolygonComponent.isClockwise(pathComponent.polygons.first),
         isFalse,
+      );
+    });
+
+    test('the polygons are the ones of the path moved to the origin', () {
+      final path = Path()
+        ..addRect(const Rect.fromLTWH(5, 5, 10, 10))
+        ..addRect(const Rect.fromLTWH(7, 7, 2, 2));
+      final polygons = path.toPolygons();
+      final component = PathComponent(path: path);
+
+      expect(polygons, hasLength(1));
+      expect(
+        polygons.single.map((vertex) => vertex - Vector2.all(5)),
+        component.polygons.single,
       );
     });
 

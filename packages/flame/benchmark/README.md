@@ -100,6 +100,11 @@ which takes minutes. To compare a change, run it on both branches.
   shapes, the effect of the simplification tolerance of `walkContours` next to
   the samples before they are simplified, and polygon-polygon intersection
   cost.
+- `image_contour_benchmark.dart`: a standalone suite, not part of
+  `main.dart`, that measures tracing the outlines of images with
+  `ImageExtension.contourFromPixels`, including a transparent image for the
+  scan of the pixels alone, splitting stars of growing size with
+  `convexPieces`, and the whole way from the pixels to the convex pieces.
 - `ray_intersection_benchmark.dart`: `rayIntersection` on polygon hitboxes
   that are sampled from a concave and from a convex `Path` contour, with one
   precomputed ray for each hitbox in every tick.

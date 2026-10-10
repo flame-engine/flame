@@ -330,6 +330,46 @@ costs accordingly. Keep the `filter` on unless the inner contours matter, and us
 `sampling` that still follows the outline closely enough.
 
 
+### Hitboxes from the outline of a sprite
+
+When the outline of a sprite is not available as a `Path`, it can be traced from the sprite itself
+with `Sprite.contour`, which gives a closed contour for each of the separate parts of the sprite
+that are not transparent, leaving out the holes in them. The same is available for a region of an
+`Image` with `ImageExtension.contour`, and for raw pixels with `ImageExtension.contourFromPixels`.
+
+A pixel belongs to the outlined parts when its alpha is at least the `alphaThreshold`, which is
+`0.5` by default, and the contours pass between the pixels where the alpha reaches the threshold,
+so that they follow the anti-aliased edges of the sprite more closely than a pixel. Use a low
+threshold, like `1 / 255`, to include every visible pixel.
+
+The contours are relative to the top left corner of the sprite, and they are scaled to the given
+`size`, so that they line up with the sprite rendered by a `SpriteComponent` of that size. Since a
+`PathHitbox` moves its path to its own origin, place it at the top left corner of the contours:
+
+```dart
+class Spaceship extends SpriteComponent with CollisionCallbacks {
+  Spaceship(Sprite sprite) : super(sprite: sprite, size: Vector2(64, 48));
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    final outline = await sprite!.contour(size: size);
+    add(
+      PathHitbox(
+        path: outline,
+        position: outline.getBounds().topLeft.toVector2(),
+        sampling: 2,
+      ),
+    );
+  }
+}
+```
+
+A `PolygonHitbox.fromPath(outline, sampling: 2)` places itself and is enough when the sprite has a
+single part. Tracing the outline reads back the pixels of the image, so do it while loading, and
+only once for all the components that share the same sprite.
+
+
 ### RectangleHitbox
 
 The `RectangleHitbox` has the same constructors as the [](components/shape_components.md#rectanglecomponent),

@@ -20,6 +20,7 @@ import 'package:examples/stories/bridge_libraries/flame_forge2d/sprite_body_exam
 import 'package:examples/stories/bridge_libraries/flame_forge2d/tap_callbacks_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/widget_example.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/widgets.dart';
 import 'package:widgetbook/widgetbook.dart';
 
 String link(String example) =>
@@ -55,7 +56,9 @@ WidgetbookComponent forge2DStories() {
       ),
       ExampleUseCase(
         name: 'Sprite Bodies',
-        builder: (_) => GameWidget(game: SpriteBodyExample()),
+        builder: (context) => _SpriteBodyStory(
+          showPieces: context.knobs.boolean(label: 'Show pieces'),
+        ),
         codeLink: link('sprite_body_example.dart'),
         info: SpriteBodyExample.description,
       ),
@@ -153,4 +156,27 @@ WidgetbookComponent jointsStories() {
       ),
     ],
   );
+}
+
+/// Hosts a single [SpriteBodyExample] and applies the [showPieces] knob to it,
+/// so that changing the knob doesn't restart the game.
+class const _SpriteBodyStory({required final bool showPieces})
+    extends StatefulWidget {
+  @override
+  State<_SpriteBodyStory> createState() => _SpriteBodyStoryState();
+}
+
+class _SpriteBodyStoryState() extends State<_SpriteBodyStory> {
+  late final _game = SpriteBodyExample(showPieces: widget.showPieces);
+
+  @override
+  void didUpdateWidget(_SpriteBodyStory oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.showPieces != oldWidget.showPieces) {
+      (_game.world as SpriteBodyWorld).showPieces = widget.showPieces;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => GameWidget(game: _game);
 }
