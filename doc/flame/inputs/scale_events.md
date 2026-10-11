@@ -138,6 +138,27 @@ A lower value makes the recognizer more sensitive (reacts to smaller pinch movem
 higher value requires a more deliberate gesture before scale events fire.
 
 
+## Trackpad gestures
+
+A trackpad pinch on desktop or the web reaches Flame as a scale gesture too, so `ScaleCallbacks`
+works there without any extra code. Two-finger panning arrives the same way, with `scale` staying at
+1 while the focal point travels, which you can read from `focalPointDelta`.
+
+A trackpad reports a gesture rather than individual fingers, which leads to two differences:
+
+- `pointerCount` is always 2 during a trackpad gesture. The platform does not say how many fingers
+  are actually down, so Flame reports the minimum it can be, as Flutter's own
+  `ScaleGestureRecognizer` does.
+- No drag events are produced. `DragCallbacks` is keyed by pointer, and a trackpad gesture has no
+  per-finger pointers to key off, so a component that only uses `DragCallbacks` does not react to
+  the trackpad at all. If you pan a camera from drag events, handle `focalPointDelta` in
+  `onScaleUpdate` as well so that the trackpad works too.
+
+The `scaleThreshold` above applies here too: the platform reports the scale factor directly, so a
+pinch crosses the threshold on its own, and a pure pan crosses it once the focal point has moved
+past the platform's pan slop.
+
+
 ## Combining with DragCallbacks
 
 `ScaleCallbacks` and `DragCallbacks` can be used at the same time. Both are driven by the same
