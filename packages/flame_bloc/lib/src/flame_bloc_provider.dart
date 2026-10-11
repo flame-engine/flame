@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flame/components.dart';
-import 'package:material_ui/material_ui.dart';
+import 'package:meta/meta.dart';
 
 /// {@template flame_bloc_provider}
 /// A [Component] that provides a [Bloc] to its children
