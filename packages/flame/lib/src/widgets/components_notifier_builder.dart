@@ -1,5 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/widgets.dart';
 
 /// A widget that rebuilds every time the given [notifier] changes.
 class const ComponentsNotifierBuilder<T extends Component>({
