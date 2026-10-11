@@ -1,7 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/foundation.dart';
 
 /// [CollisionDetection] is the foundation of the collision detection system in
 /// Flame.

@@ -1,5 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:material_ui/material_ui.dart';
+import 'package:meta/meta.dart';
 
 /// A mixin that ensures an ancestor is of the given type [T].
 ///

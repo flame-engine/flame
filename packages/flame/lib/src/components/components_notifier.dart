@@ -1,8 +1,7 @@
 import 'dart:collection';
 
 import 'package:flame/components.dart';
-import 'package:material_ui/material_ui.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 
 /// A [ChangeNotifier] that notifies its listeners when a [Component] is
 /// added or removed, or updated. The meaning of an updated component

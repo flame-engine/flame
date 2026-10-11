@@ -4,8 +4,7 @@ import 'dart:ui' hide Image;
 
 import 'package:flame/components.dart';
 import 'package:flame/post_process.dart';
-import 'package:material_ui/material_ui.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 
 /// A way to apply effects to a whole component tree.
 ///

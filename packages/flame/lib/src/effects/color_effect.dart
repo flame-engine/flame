@@ -1,8 +1,9 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/src/effects/component_effect.dart';
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/animation.dart';
 
 /// Change the color of a component over time.
 ///
