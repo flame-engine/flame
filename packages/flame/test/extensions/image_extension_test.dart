@@ -3,9 +3,9 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/extensions.dart';
+import 'package:flame/palette.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:material_ui/material_ui.dart';
 
 final _output = List.filled(8 * 8 * 4, 255);
 
@@ -120,7 +120,7 @@ void main() {
       final recorder = PictureRecorder();
       Canvas(recorder).drawRect(
         const Rect.fromLTWH(0, 0, 100, 100),
-        Paint()..color = Colors.white,
+        BasicPalette.white.paint(),
       );
       final pic = recorder.endRecording();
       final image = await pic.toImage(100, 100);
