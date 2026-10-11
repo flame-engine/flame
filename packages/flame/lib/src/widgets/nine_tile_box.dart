@@ -6,7 +6,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/src/nine_tile_box.dart' as non_widget;
 import 'package:flame/src/sprite.dart';
 import 'package:flame/src/widgets/base_future_builder.dart';
-import 'package:material_ui/material_ui.dart' hide Image;
+import 'package:flutter/widgets.dart' hide Image;
 
 export '../nine_tile_box.dart';
 export '../sprite.dart';

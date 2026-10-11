@@ -6,7 +6,7 @@ import 'package:flame/src/sprite_animation.dart';
 import 'package:flame/src/sprite_animation_ticker.dart';
 import 'package:flame/src/widgets/base_future_builder.dart';
 import 'package:flame/src/widgets/sprite_painter.dart';
-import 'package:material_ui/material_ui.dart' hide Animation;
+import 'package:flutter/widgets.dart' hide Animation;
 
 export '../sprite_animation.dart';
 
