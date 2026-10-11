@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flame/components.dart';
 import 'package:flame_bloc/flame_bloc.dart';
-import 'package:material_ui/material_ui.dart';
+import 'package:meta/meta.dart';
 
 /// Adds [Bloc] access to a [Component].
 ///

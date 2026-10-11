@@ -1,5 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:material_ui/material_ui.dart';
+import 'package:meta/meta.dart';
 
 /// A mixin that ensures a parent is of the given type [T].
 mixin ParentIsA<T extends Component> on Component {
