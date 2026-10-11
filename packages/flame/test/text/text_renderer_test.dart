@@ -1,6 +1,7 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:flame/text.dart';
-import 'package:material_ui/material_ui.dart';
 import 'package:test/test.dart';
 
 void main() {
