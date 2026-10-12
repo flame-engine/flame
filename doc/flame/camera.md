@@ -286,7 +286,7 @@ class Tree extends SpriteComponent with CullWhenOffscreen {
 }
 ```
 
-It is opt-in. Components without the mixin are always drawn, so nothing changes in existing games.
+It is opt-in - components without the mixin are always drawn.
 
 
 #### How it works
