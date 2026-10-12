@@ -104,8 +104,8 @@ enum DefaultWarpTarget(final String label) {
   /// Moves the vertices towards the center (away if [amount] is negative),
   /// the corners the most.
   static Vector2 _towardsCenter(double u, double v, double amount) {
-    final cornerness = sqrt(4 * (u - 0.5).abs() * (v - 0.5).abs());
-    return Vector2(0.5 - u, 0.5 - v) * amount * (0.4 + 0.6 * cornerness);
+    final cornerOrientation = sqrt(4 * (u - 0.5).abs() * (v - 0.5).abs());
+    return Vector2(0.5 - u, 0.5 - v) * amount * (0.4 + 0.6 * cornerOrientation);
   }
 
   /// Moves the vertices radially, turning the grid's concentric squares into
