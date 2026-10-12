@@ -1,8 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/palette.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:material_ui/material_ui.dart';
 
 class _PaintComponent() extends Component with HasPaint;
 
@@ -11,7 +11,8 @@ void main() {
     testWithFlameGame('applies the correct color filter', (game) async {
       final component = _PaintComponent();
       await game.ensureAdd(component);
-      const color = Colors.red;
+      // has distinct components, so a swap fails
+      final color = BasicPalette.pink.color;
       component.add(
         ColorEffect(color, EffectController(duration: 1)),
       );
@@ -19,8 +20,8 @@ void main() {
       expect(
         component.paint.colorFilter.toString(),
         equals(
-          'ColorFilter.mode(Color(alpha: 0.0000, red: 0.9569, green: '
-          '0.2627, blue: 0.2118, colorSpace: ColorSpace.sRGB),'
+          'ColorFilter.mode(Color(alpha: 0.0000, red: 1.0000, green: '
+          '0.4118, blue: 0.7059, colorSpace: ColorSpace.sRGB),'
           ' BlendMode.srcATop)',
         ),
       );
@@ -29,8 +30,8 @@ void main() {
       expect(
         component.paint.colorFilter.toString(),
         equals(
-          'ColorFilter.mode(Color(alpha: 0.5000, red: 0.9569, green: '
-          '0.2627, blue: 0.2118, colorSpace: ColorSpace.sRGB), '
+          'ColorFilter.mode(Color(alpha: 0.5000, red: 1.0000, green: '
+          '0.4118, blue: 0.7059, colorSpace: ColorSpace.sRGB), '
           'BlendMode.srcATop)',
         ),
       );
@@ -43,7 +44,7 @@ void main() {
         await game.ensureAdd(component);
 
         final originalColorFilter = component.paint.colorFilter;
-        const color = Colors.red;
+        final color = BasicPalette.red.color;
 
         final effect = ColorEffect(
           color,
@@ -73,7 +74,7 @@ void main() {
         await game.ensureAdd(component);
 
         final originalColorFilter = component.paint.colorFilter;
-        const color = Colors.red;
+        final color = BasicPalette.red.color;
 
         final effect = ColorEffect(
           color,
@@ -103,7 +104,7 @@ void main() {
         await game.ensureAdd(component);
 
         final effect = ColorEffect(
-          Colors.red,
+          BasicPalette.red.color,
           EffectController(duration: 1),
         );
         await component.ensureAdd(effect);
@@ -127,7 +128,7 @@ void main() {
         final effect = ColorEffect(
           opacityFrom: 1,
           opacityTo: 0,
-          Colors.black,
+          BasicPalette.black.color,
           ZigzagEffectController(
             period: 1,
           ),
@@ -143,7 +144,7 @@ void main() {
     test('Validates opacity values', () {
       expect(
         () => ColorEffect(
-          Colors.blue,
+          BasicPalette.blue.color,
           EffectController(duration: 1),
           opacityTo: 1.1,
         ),
@@ -152,7 +153,7 @@ void main() {
 
       expect(
         () => ColorEffect(
-          Colors.blue,
+          BasicPalette.blue.color,
           EffectController(duration: 1),
           opacityFrom: 255,
         ),
@@ -161,7 +162,7 @@ void main() {
 
       expect(
         () => ColorEffect(
-          Colors.blue,
+          BasicPalette.blue.color,
           EffectController(duration: 1),
           opacityTo: -254,
         ),
@@ -170,7 +171,7 @@ void main() {
 
       expect(
         () => ColorEffect(
-          Colors.blue,
+          BasicPalette.blue.color,
           EffectController(duration: 1),
           opacityFrom: -0.5,
         ),
@@ -179,7 +180,7 @@ void main() {
 
       expect(
         () => ColorEffect(
-          Colors.blue,
+          BasicPalette.blue.color,
           EffectController(duration: 1),
           opacityFrom: 0.1,
           opacityTo: 0.9,

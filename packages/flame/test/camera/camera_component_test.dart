@@ -1,14 +1,14 @@
 import 'dart:math';
-import 'dart:ui' show PictureRecorder;
+import 'dart:ui';
 
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/palette.dart';
 import 'package:flame/post_process.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:material_ui/material_ui.dart';
 
 import 'camera_test_helpers.dart';
 
@@ -401,24 +401,24 @@ void main() {
           CrossHair(
             size: Vector2.all(28),
             position: camera.viewport.size / 2 + Vector2.all(4),
-            color: Colors.teal,
+            color: BasicPalette.teal.color,
           ),
         );
         camera.viewfinder.add(
           CrossHair(
             size: Vector2.all(20),
             position: Vector2(-2, 4),
-            color: Colors.white,
+            color: BasicPalette.white.color,
           ),
         );
         world.add(
-          CrossHair(size: Vector2.all(14), color: Colors.green),
+          CrossHair(size: Vector2.all(14), color: BasicPalette.green.color),
         );
         camera.viewport.add(
           CrossHair(
             size: Vector2.all(8),
             position: camera.viewport.size / 2 + Vector2(4, -4),
-            color: Colors.red,
+            color: BasicPalette.red.color,
           ),
         );
       },
@@ -443,24 +443,24 @@ void main() {
         CrossHair(
           size: Vector2.all(28),
           position: resolution / 2 + Vector2.all(4),
-          color: Colors.teal,
+          color: BasicPalette.teal.color,
         ),
       );
       camera.viewfinder.add(
         CrossHair(
           size: Vector2.all(20),
           position: Vector2(0, 2),
-          color: Colors.white,
+          color: BasicPalette.white.color,
         ),
       );
       world.add(
-        CrossHair(size: Vector2.all(14), color: Colors.green),
+        CrossHair(size: Vector2.all(14), color: BasicPalette.green.color),
       );
       camera.viewport.add(
         CrossHair(
           size: Vector2.all(8),
           position: resolution / 2 + Vector2(2, -2),
-          color: Colors.red,
+          color: BasicPalette.red.color,
         ),
       );
     },
@@ -485,24 +485,24 @@ void main() {
         CrossHair(
           size: Vector2.all(28),
           position: resolution / 2 + Vector2.all(4),
-          color: Colors.teal,
+          color: BasicPalette.teal.color,
         ),
       );
       camera.viewfinder.add(
         CrossHair(
           size: Vector2.all(20),
           position: Vector2(-2, 4),
-          color: Colors.white,
+          color: BasicPalette.white.color,
         ),
       );
       world.add(
-        CrossHair(size: Vector2.all(14), color: Colors.green),
+        CrossHair(size: Vector2.all(14), color: BasicPalette.green.color),
       );
       camera.viewport.add(
         CrossHair(
           size: Vector2.all(8),
           position: resolution / 2 + Vector2(4, -4),
-          color: Colors.red,
+          color: BasicPalette.red.color,
         ),
       );
     },
