@@ -30,4 +30,3 @@ dependencies:
 dev_dependencies:
   dartdoc: ^9.0.0
   flame_lint: ^1.5.0-dev.1
-  material_ui: ^1.0.0
