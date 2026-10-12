@@ -1,5 +1,6 @@
 import 'package:examples/commons/button_knob.dart';
 import 'package:examples/commons/commons.dart';
+import 'package:examples/commons/dropdown_knob.dart';
 import 'package:examples/commons/example_use_case.dart';
 import 'package:examples/stories/sprites/base64_sprite_example.dart';
 import 'package:examples/stories/sprites/basic_sprite_example.dart';
@@ -9,6 +10,7 @@ import 'package:examples/stories/sprites/sprite_batch_load_example.dart';
 import 'package:examples/stories/sprites/sprite_group_example.dart';
 import 'package:examples/stories/sprites/sprite_sheet_example.dart';
 import 'package:examples/stories/sprites/sprite_warp_example.dart';
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:widgetbook/widgetbook.dart';
 
@@ -76,8 +78,27 @@ WidgetbookComponent spritesStories() {
               options: SpriteWarpImage.values,
               labelBuilder: (image) => image.name,
             ),
+            interpolation: context.knobs.object.dropdown(
+              label: 'Interpolation',
+              initialOption: WarpInterpolation.bilinear,
+              options: WarpInterpolation.values,
+              labelBuilder: (interpolation) => interpolation.name,
+            ),
+            defaultTarget: context.knobs.dropdown(
+              label: 'Default Target',
+              options: DefaultWarpTarget.values,
+              labelBuilder: (target) => target.label,
+              enabled: !animate,
+            ),
             animate: animate,
-            resets: context.knobs.button(label: 'Reset', enabled: !animate),
+            startResets: context.knobs.button(
+              label: 'Reset Start',
+              enabled: !animate,
+            ),
+            targetResets: context.knobs.button(
+              label: 'Reset Target',
+              enabled: !animate,
+            ),
           );
         },
         codeLink: baseLink('sprites/sprite_warp_example.dart'),
