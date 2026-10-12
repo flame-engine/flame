@@ -147,13 +147,15 @@ class SvgPathsComponent(
     ..strokeCap = .round
     ..strokeJoin = .bevel;
 
-  /// The scale that fits the [svg] within the [size] while keeping the aspect
-  /// ratio, and the offset that centers it within the [size].
+  /// The scale that fits the [area] of the [svg], by default its bounds,
+  /// within the [size] while keeping the aspect ratio, and the offset that
+  /// centers it within the [size].
   static ({Rect full, double fit, Vector2 offset}) _layout(
     SvgPaths svg,
-    Vector2? size,
-  ) {
-    final full = svg.bounds;
+    Vector2? size, [
+    Rect? area,
+  ]) {
+    final full = area ?? svg.bounds;
     final fullSize = full.size.toVector2();
     final target = size ?? fullSize;
     var fit = min(target.x / fullSize.x, target.y / fullSize.y);
@@ -243,6 +245,9 @@ class SvgPathsComponent(
   /// Creates a single [SvgPathsHitbox] for all the paths in the [svg], placed
   /// like the components from [createPathComponents], which also describes
   /// the [sampling] and [tolerance].
+  ///
+  /// The [area] of the [svg] fitted within the [size] is its bounds by
+  /// default, see [SvgPaths.render].
   static SvgPathsHitbox createSvgPathsHitbox(
     SvgPaths svg,
     Vector2? size, {
@@ -250,8 +255,9 @@ class SvgPathsComponent(
     bool? filter,
     double sampling = 1.0,
     double? tolerance,
+    Rect? area,
   }) {
-    final (:full, :fit, :offset) = _layout(svg, size);
+    final (:full, :fit, :offset) = _layout(svg, size, area);
     final (:pathSampling, :pathTolerance) = _toPathUnits(
       sampling,
       tolerance,
