@@ -1,7 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:flame/widgets.dart';
+import 'package:flame_test/flame_test.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:material_ui/material_ui.dart';
 
 class _Enemy() extends PositionComponent with Notifier;
 
@@ -10,16 +11,14 @@ void main() {
     testWidgets('renders the initial value', (tester) async {
       final notifier = ComponentsNotifier<_Enemy>([_Enemy()]);
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: ComponentsNotifierBuilder(
-              notifier: notifier,
-              builder: (context, notifier) {
-                return Text(
-                  'Enemies: ${notifier.components.length}',
-                );
-              },
-            ),
+        FlameTestApp(
+          child: ComponentsNotifierBuilder(
+            notifier: notifier,
+            builder: (context, notifier) {
+              return Text(
+                'Enemies: ${notifier.components.length}',
+              );
+            },
           ),
         ),
       );
@@ -30,16 +29,14 @@ void main() {
     testWidgets('rebuilds when an enemy is added', (tester) async {
       final notifier = ComponentsNotifier<_Enemy>([_Enemy()]);
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: ComponentsNotifierBuilder(
-              notifier: notifier,
-              builder: (context, notifier) {
-                return Text(
-                  'Enemies: ${notifier.components.length}',
-                );
-              },
-            ),
+        FlameTestApp(
+          child: ComponentsNotifierBuilder(
+            notifier: notifier,
+            builder: (context, notifier) {
+              return Text(
+                'Enemies: ${notifier.components.length}',
+              );
+            },
           ),
         ),
       );
@@ -54,16 +51,14 @@ void main() {
       final enemy = _Enemy();
       final notifier = ComponentsNotifier<_Enemy>([enemy]);
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: ComponentsNotifierBuilder(
-              notifier: notifier,
-              builder: (context, notifier) {
-                return Text(
-                  'Enemies: ${notifier.components.length}',
-                );
-              },
-            ),
+        FlameTestApp(
+          child: ComponentsNotifierBuilder(
+            notifier: notifier,
+            builder: (context, notifier) {
+              return Text(
+                'Enemies: ${notifier.components.length}',
+              );
+            },
           ),
         ),
       );
