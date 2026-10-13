@@ -7,7 +7,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 
 /// Measures tracing the outlines of images with
-/// [ImageExtension.contourFromPixels] and splitting polygons into
+/// [Uint8ListExtension.contour] and splitting polygons into
 /// [convexPieces], from the pixels to the convex pieces of a body.
 ///
 /// This is a standalone suite, not part of `main.dart`. Run it with
@@ -53,7 +53,7 @@ class TraceBenchmark(final int size, {final bool transparent = false})
 
   @override
   void run() {
-    ImageExtension.contourFromPixels(_pixels, size, size);
+    _pixels.contour(size, size);
   }
 }
 
@@ -94,7 +94,7 @@ class PipelineBenchmark(final int size) extends _SingleRunBenchmark {
 
   @override
   void run() {
-    final outline = ImageExtension.contourFromPixels(_pixels, size, size);
+    final outline = _pixels.contour(size, size);
     for (final polygon in outline.toPolygons()) {
       convexPieces(polygon);
     }

@@ -113,8 +113,8 @@ class Sprite(
   /// the whole [image], not only the ones of the sprite, so it should be done
   /// when loading, not in the game loop. To trace several sprites of the same
   /// sprite sheet, read its pixels once with [ImageExtension.pixelsInUint8]
-  /// and pass them to [ImageExtension.contourFromPixels] with the [src] of
-  /// each sprite.
+  /// and pass them to [Uint8ListExtension.contour] with the [src] of each
+  /// sprite.
   Future<Path> contour({Vector2? size, double alphaThreshold = 0.5}) {
     return image.contour(
       region: src,

@@ -30,8 +30,7 @@ Path _contour(
   Vector2? size,
   double alphaThreshold = 0.5,
 }) {
-  return ImageExtension.contourFromPixels(
-    _pixels(rows),
+  return _pixels(rows).contour(
     rows.first.length,
     rows.length,
     region: region,
@@ -53,7 +52,7 @@ Future<Image> _image(List<String> rows) {
 List<List<Offset>> _vertices(Path path) => path.walkContours(1, 0.001);
 
 void main() {
-  group('ImageExtension.contourFromPixels', () {
+  group('Uint8ListExtension.contour', () {
     test('is empty for a transparent image', () {
       final path = _contour(['...', '...']);
       expect(path.contours, isEmpty);

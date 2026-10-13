@@ -102,7 +102,7 @@ which takes minutes. To compare a change, run it on both branches.
   cost.
 - `image_contour_benchmark.dart`: a standalone suite, not part of
   `main.dart`, that measures tracing the outlines of images with
-  `ImageExtension.contourFromPixels`, including a transparent image for the
+  `Uint8ListExtension.contour`, including a transparent image for the
   scan of the pixels alone, splitting stars of growing size with
   `convexPieces`, and the whole way from the pixels to the convex pieces.
 - `ray_intersection_benchmark.dart`: `rayIntersection` on polygon hitboxes

@@ -335,7 +335,7 @@ costs accordingly. Keep the `filter` on unless the inner contours matter, and us
 When the outline of a sprite is not available as a `Path`, it can be traced from the sprite itself
 with `Sprite.contour`, which gives a closed contour for each of the separate parts of the sprite
 that are not transparent, leaving out the holes in them. The same is available for a region of an
-`Image` with `ImageExtension.contour`, and for raw pixels with `ImageExtension.contourFromPixels`.
+`Image` with `ImageExtension.contour`, and for raw pixels with `Uint8ListExtension.contour`.
 
 A pixel belongs to the outlined parts when its alpha is at least the `alphaThreshold`, which is
 `0.5` by default, and the contours pass between the pixels where the alpha reaches the threshold,
