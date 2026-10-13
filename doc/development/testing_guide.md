@@ -110,6 +110,20 @@ testWidgets('test name', (tester) async {
 There are some additional methods available on the `tester` controller, for example in order to
 simulate taps, or drags, or key presses.
 
+If the widget under test needs an app around it (for example `MediaQuery`, `Directionality` or a
+default text style), wrap it in `FlameTestApp` from `flame_test` instead of `MaterialApp`:
+
+```dart
+await tester.pumpWidget(
+  FlameTestApp(
+    child: GameWidget(game: game),
+  ),
+);
+```
+
+`FlameTestApp` is a minimal `WidgetsApp`, so tests don't depend on Material. Only wrap the widget
+in a bare `Directionality` when the test is specifically about text direction.
+
 
 ### Golden tests
 

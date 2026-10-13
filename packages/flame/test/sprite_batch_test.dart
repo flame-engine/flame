@@ -1,10 +1,10 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:material_ui/material_ui.dart' hide Image;
 import 'package:mocktail/mocktail.dart';
 
 import '_resources/load_image.dart';
@@ -24,17 +24,18 @@ void main() {
     test('can replace the color of a batch', () {
       final image = _MockImage();
       final spriteBatch = SpriteBatch(image);
-      spriteBatch.add(source: Rect.zero, color: Colors.blue);
+      spriteBatch.add(source: Rect.zero, color: BasicPalette.blue.color);
 
-      spriteBatch.replace(0, color: Colors.red);
+      final red = BasicPalette.red.color;
+      spriteBatch.replace(0, color: red);
 
       final batchItem = spriteBatch.getBatchItem(0);
 
       /// Use .closeTo() to avoid floating point rounding errors.
-      expect(batchItem.paint.color.a, closeTo(Colors.red.a, 0.001));
-      expect(batchItem.paint.color.r, closeTo(Colors.red.r, 0.001));
-      expect(batchItem.paint.color.g, closeTo(Colors.red.g, 0.001));
-      expect(batchItem.paint.color.b, closeTo(Colors.red.b, 0.001));
+      expect(batchItem.paint.color.a, closeTo(red.a, 0.001));
+      expect(batchItem.paint.color.r, closeTo(red.r, 0.001));
+      expect(batchItem.paint.color.g, closeTo(red.g, 0.001));
+      expect(batchItem.paint.color.b, closeTo(red.b, 0.001));
     });
 
     test('can replace the source of a batch', () {
@@ -312,7 +313,7 @@ void main() {
 
         spriteBatch.add(
           source: source,
-          color: Colors.redAccent,
+          color: BasicPalette.red.color,
           offset: Vector2.all(margin),
         );
 

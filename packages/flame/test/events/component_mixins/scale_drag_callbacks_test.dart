@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:material_ui/material_ui.dart';
 
 import 'input_test_helper.dart';
 
@@ -602,8 +602,8 @@ void main() {
           ),
         );
         await tester.pumpWidget(
-          MaterialApp(
-            home: Stack(
+          FlameTestApp(
+            child: Stack(
               children: [
                 Positioned(
                   left: 100.0,
@@ -688,7 +688,7 @@ void main() {
         final scaleComponent = ScaleWithCallbacksComponent();
         game.world.add(scaleComponent);
         await tester.pumpWidget(GameWidget(game: game));
-        await tester.pump(Durations.short1);
+        await tester.pump(const Duration(milliseconds: 50));
 
         final dragComponent = DragWithCallbacksComponent();
         game.world.add(dragComponent);

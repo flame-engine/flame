@@ -1,9 +1,10 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_riverpod/flame_riverpod.dart';
+import 'package:flame_test/flame_test.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:material_ui/material_ui.dart';
 
 final numberProvider = Provider.autoDispose((ref) {
   return 1;
@@ -51,8 +52,8 @@ void main() {
 
       await widgetTester.pumpWidget(
         ProviderScope(
-          child: MaterialApp(
-            home: RiverpodAwareGameWidget(
+          child: FlameTestApp(
+            child: RiverpodAwareGameWidget(
               game: game,
               key: key,
             ),
@@ -103,8 +104,8 @@ void main() {
 
     await widgetTester.pumpWidget(
       ProviderScope(
-        child: MaterialApp(
-          home: RiverpodAwareGameWidget(
+        child: FlameTestApp(
+          child: RiverpodAwareGameWidget(
             game: game,
             key: key,
           ),
@@ -157,8 +158,8 @@ void main() {
 
       await widgetTester.pumpWidget(
         ProviderScope(
-          child: MaterialApp(
-            home: RiverpodAwareGameWidget(
+          child: FlameTestApp(
+            child: RiverpodAwareGameWidget(
               game: game,
               key: key,
             ),
