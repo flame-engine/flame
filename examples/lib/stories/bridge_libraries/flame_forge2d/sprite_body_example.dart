@@ -38,6 +38,9 @@ class SpriteBodyWorld({bool showPieces = false})
 
   int _taps = 0;
 
+  /// The pieces traced by the bodies, shared by those of the same image.
+  final _pieces = <Image, Future<List<List<Vector2>>>>{};
+
   bool _showPieces = showPieces;
 
   /// Whether the convex pieces of all the bodies are drawn.
@@ -71,17 +74,22 @@ class SpriteBodyWorld({bool showPieces = false})
         info.localPosition,
         sprite: sprite,
         size: sprite.srcSize..scale(width / sprite.srcSize.x),
+        cache: _pieces,
       )..renderBody = showPieces,
     );
   }
 }
 
-/// A body drawn by a [sprite] of the given [size] in meters, colliding as the
-/// convex [pieces] of its outline, drawn when [renderBody] is true.
+/// A body drawn by a [sprite] (when [renderBody] is `true`) of the given [size]
+/// in meters, colliding as the convex [pieces] of its outline.
+///
+/// The pieces are traced only once for each image by the bodies sharing the
+/// same [cache], which must all draw the full image whole at the same size.
 class ContourBody(
   final Vector2 initialPosition, {
   required final Sprite sprite,
   required final Vector2 size,
+  final Map<Image, Future<List<List<Vector2>>>>? cache,
 }) extends BodyComponent with GlowingBody {
   this
     : super(
@@ -99,7 +107,8 @@ class ContourBody(
 
   @override
   Future<void> onLoad() async {
-    pieces = await tracePieces();
+    pieces =
+        await (cache?.putIfAbsent(sprite.image, tracePieces) ?? tracePieces());
     // Creates the body from the pieces.
     await super.onLoad();
   }
