@@ -2,6 +2,7 @@
 akida # github.com/akida 
 bdero # github.com/bdero
 bluefireteam # github.com/bluefireteam
+Catmull # Catmull/Rom
 erayzesen # erayzesen.itch.io
 erickzanardo # github.com/erickzanardo 
 feroult # github.com/feroult 
