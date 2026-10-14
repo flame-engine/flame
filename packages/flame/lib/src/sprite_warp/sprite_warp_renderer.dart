@@ -134,7 +134,10 @@ class SpriteWarpRenderer() {
   ///
   /// The image shader is not disposed but only dereferenced, since on the
   /// CanvasKit web renderer disposing an image shader also disposes its image,
-  /// which belongs to the sprite and may be shared.
+  /// which belongs to the sprite and may be shared. This is fixed by
+  /// https://github.com/flutter/flutter/pull/191232, which makes the shader
+  /// hold a clone of the image, so the shader can be disposed once Flame
+  /// requires a Flutter version that includes it.
   void dispose() {
     _vertices?.dispose();
     _vertices = null;
