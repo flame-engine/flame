@@ -6,7 +6,7 @@ import 'package:flame/src/sprite_warp/sprite_warp_renderer.dart';
 import 'package:meta/meta.dart';
 
 /// A mixin for components that can warp (distort) their sprite with a
-/// [WarpGrid], similarly to SpriteKit's `SKWarpGeometryGrid`.
+/// [WarpGrid].
 ///
 /// It works with any component that renders its sprite through
 /// [RendersSprite], like [SpriteComponent], [SpriteGroupComponent],

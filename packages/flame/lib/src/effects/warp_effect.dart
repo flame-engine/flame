@@ -6,8 +6,7 @@ import 'package:flame/src/effects/effect.dart';
 import 'package:flame/src/effects/effect_target.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 
-/// Change the [WarpGrid] of a component over time, similarly to SpriteKit's
-/// `SKAction.warp(to:duration:)`.
+/// Change the [WarpGrid] of a component over time.
 ///
 /// This effect applies incremental changes to the positions of the target's
 /// warp grid, and requires that any other effect or update logic applied to

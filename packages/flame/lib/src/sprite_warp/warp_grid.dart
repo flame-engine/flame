@@ -30,9 +30,6 @@ const int _maxMeshVertices = 1 << 16;
 ///
 /// When omitted, both source and destination positions describe a regular
 /// grid, so that the sprite is rendered without distortion.
-///
-/// Note that SpriteKit's `SKWarpGeometryGrid` uses a bottom-left origin with
-/// the y axis pointing up, so its positions must be converted accordingly.
 @immutable
 class const WarpGrid.raw(
   /// The number of cells in the horizontal direction.
@@ -236,8 +233,7 @@ class const WarpGrid.raw(
 
 /// How a [WarpGrid] is interpolated between its vertices.
 enum WarpInterpolation() {
-  /// Bilinear interpolation within each cell, matching SpriteKit's
-  /// `SKWarpGeometryGrid` rendering.
+  /// Bilinear interpolation within each cell.
   ///
   /// Moving a vertex only affects the cells that share it, and the edges
   /// between cells stay straight.
