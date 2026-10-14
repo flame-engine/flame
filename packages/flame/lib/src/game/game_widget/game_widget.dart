@@ -369,6 +369,7 @@ class GameWidgetState<T extends Game>() extends State<GameWidget<T>> {
       return KeyEventResult.ignored;
     }
 
+    game.keyDetector?.call(event);
     if (game is KeyboardEvents) {
       return game.onKeyEvent(
         event,

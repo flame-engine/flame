@@ -2,6 +2,7 @@ export 'src/events/callbacks/double_tap_callbacks.dart' show DoubleTapCallbacks;
 export 'src/events/callbacks/drag_callbacks.dart' show DragCallbacks;
 export 'src/events/callbacks/hover_callbacks.dart' show HoverCallbacks;
 export 'src/events/callbacks/input_callbacks.dart' show InputCallbacks;
+export 'src/events/callbacks/keyboard_callbacks.dart' show KeyboardCallbacks;
 export 'src/events/callbacks/long_press_callbacks.dart' show LongPressCallbacks;
 export 'src/events/callbacks/mouse_move_callbacks.dart' show MouseMoveCallbacks;
 export 'src/events/callbacks/pointer_input_callbacks.dart'
@@ -16,6 +17,8 @@ export 'src/events/callbacks/tertiary_tap_callbacks.dart'
 export 'src/events/dispatchers/dispatcher.dart' show Dispatcher;
 export 'src/events/dispatchers/double_tap_dispatcher.dart'
     show DoubleTapDispatcher, DoubleTapDispatcherKey;
+export 'src/events/dispatchers/keyboard_dispatcher.dart'
+    show KeyboardDispatcher, KeyboardDispatcherKey;
 export 'src/events/dispatchers/long_press_dispatcher.dart'
     show LongPressDispatcher, LongPressDispatcherKey;
 export 'src/events/dispatchers/mouse_move_dispatcher.dart'
@@ -40,6 +43,8 @@ export 'src/events/messages/drag_end_event.dart' show DragEndEvent;
 export 'src/events/messages/drag_start_event.dart' show DragStartEvent;
 export 'src/events/messages/drag_update_event.dart' show DragUpdateEvent;
 export 'src/events/messages/event.dart' show Event;
+export 'src/events/messages/keyboard_event.dart'
+    show KeyHoldEvent, KeyPressEvent, KeyReleaseEvent, KeyboardEvent;
 export 'src/events/messages/location_context_event.dart'
     show LocationContextEvent;
 export 'src/events/messages/long_press_cancel_event.dart'
