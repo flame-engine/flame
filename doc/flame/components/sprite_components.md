@@ -59,8 +59,10 @@ final component = WarpedSprite(sprite: sprite, size: Vector2.all(128))
   ..warpGrid = grid.replacingDestinationPositions(positions);
 ```
 
-The mixin works with any subclass of `SpriteComponent`. Subclasses that change how the sprite is
-drawn, like `HasWarpGrid` does, can override `renderSprite`.
+The mixin works with `SpriteComponent`, `SpriteGroupComponent`, `SpriteAnimationComponent`,
+`SpriteAnimationGroupComponent` and their subclasses, since they all draw their sprite through the
+`renderSprite` method of the `RendersSprite` mixin. Other mixins can override `renderSprite` to
+change how the sprite is drawn, like `HasWarpGrid` does.
 
 Positions are normalized, with the y axis pointing down: source positions are relative to the
 sprite's source rectangle, and destination positions are relative to the component's `size`.

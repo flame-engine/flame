@@ -77,6 +77,26 @@ class _WarpedRasterSprite({
   super.size,
 }) extends RasterSpriteComponent with HasWarpGrid;
 
+class _WarpedSpriteGroup({
+  super.sprites,
+  super.current,
+  super.position,
+  super.size,
+}) extends SpriteGroupComponent<int> with HasWarpGrid;
+
+class _WarpedSpriteAnimation({
+  super.animation,
+  super.position,
+  super.size,
+}) extends SpriteAnimationComponent with HasWarpGrid;
+
+class _WarpedSpriteAnimationGroup({
+  super.animations,
+  super.current,
+  super.position,
+  super.size,
+}) extends SpriteAnimationGroupComponent<int> with HasWarpGrid;
+
 _WarpedSprite _component(
   Sprite sprite, {
   WarpGrid? warpGrid,
@@ -307,6 +327,51 @@ Future<void> main() async {
         await _render([plain]),
       );
       expect(difference, greaterThan(16));
+    });
+
+    test('works on SpriteGroupComponent', () async {
+      final sprite = Sprite(image, srcSize: Vector2(16, 16));
+      final warped = _WarpedSpriteGroup(
+        sprites: {0: sprite},
+        current: 0,
+        position: Vector2(4, 8),
+        size: Vector2(64, 32),
+      )..warpGrid = WarpGrid.identity(columns: 3, rows: 2);
+
+      await _expectSameRendering(warped, _component(sprite));
+      expect(warped.warpRenderer, isNotNull);
+    });
+
+    test('works on SpriteAnimationComponent', () async {
+      final frames = [
+        Sprite(image, srcSize: Vector2(16, 16)),
+        Sprite(image, srcPosition: Vector2(16, 0), srcSize: Vector2(16, 16)),
+      ];
+      final warped = _WarpedSpriteAnimation(
+        animation: SpriteAnimation.spriteList(frames, stepTime: 1),
+        position: Vector2(4, 8),
+        size: Vector2(64, 32),
+      )..warpGrid = WarpGrid.identity(columns: 3, rows: 2);
+
+      await _expectSameRendering(warped, _component(frames[0]));
+      warped.update(1);
+      await _expectSameRendering(warped, _component(frames[1]));
+      expect(warped.warpRenderer!.meshBuilds, 1);
+    });
+
+    test('works on SpriteAnimationGroupComponent', () async {
+      final sprite = Sprite(image, srcSize: Vector2(16, 16));
+      final warped = _WarpedSpriteAnimationGroup(
+        animations: {
+          0: SpriteAnimation.spriteList([sprite], stepTime: 1),
+        },
+        current: 0,
+        position: Vector2(4, 8),
+        size: Vector2(64, 32),
+      )..warpGrid = WarpGrid.identity(columns: 3, rows: 2);
+
+      await _expectSameRendering(warped, _component(sprite));
+      expect(warped.warpRenderer, isNotNull);
     });
 
     test('drops the renderer when the grid is removed', () async {

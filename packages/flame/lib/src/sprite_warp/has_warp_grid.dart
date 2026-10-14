@@ -1,13 +1,16 @@
 import 'dart:ui';
 
-import 'package:flame/src/components/sprite_component.dart';
+import 'package:flame/components.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/sprite_warp/sprite_warp_renderer.dart';
-import 'package:flame/src/sprite_warp/warp_grid.dart';
 import 'package:meta/meta.dart';
 
-/// A mixin for [SpriteComponent]s that can warp (distort) their sprite with a
+/// A mixin for components that can warp (distort) their sprite with a
 /// [WarpGrid], similarly to SpriteKit's `SKWarpGeometryGrid`.
+///
+/// It works with any component that renders its sprite through
+/// [RendersSprite], like [SpriteComponent], [SpriteGroupComponent],
+/// [SpriteAnimationComponent] and [SpriteAnimationGroupComponent].
 ///
 /// ```dart
 /// class WarpedSprite extends SpriteComponent with HasWarpGrid {
@@ -20,8 +23,8 @@ import 'package:meta/meta.dart';
 /// While [warpGrid] is `null` the sprite is rendered as usual. Warping only
 /// changes how the sprite is drawn: the component's size, hit testing and
 /// collisions are not affected.
-mixin HasWarpGrid on SpriteComponent implements WarpGridProvider {
-  /// The grid used to warp the [sprite], or `null` to render it undistorted.
+mixin HasWarpGrid on RendersSprite, ImageRetainer implements WarpGridProvider {
+  /// The grid used to warp the sprite, or `null` to render it undistorted.
   ///
   /// The grid's destination positions are relative to the component's
   /// [size]. Since [WarpGrid] is immutable, assign a new grid to change the
@@ -39,11 +42,11 @@ mixin HasWarpGrid on SpriteComponent implements WarpGridProvider {
   SpriteWarpRenderer? get warpRenderer => _warpRenderer;
 
   @override
-  set sprite(Sprite? value) {
+  void updateRetainedImages() {
     // The warp renderer holds an image shader, which would keep the previous
     // image alive after it is released (and possibly evicted).
     _disposeWarpRenderer();
-    super.sprite = value;
+    super.updateRetainedImages();
   }
 
   @override

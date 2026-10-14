@@ -23,9 +23,9 @@ class SpriteComponent({
   super.anchor,
   super.children,
   super.priority,
-  var double? bleed,
+  @override var double? bleed,
   super.key,
-}) extends PositionComponent with HasPaint, ImageRetainer {
+}) extends PositionComponent with HasPaint, ImageRetainer, RendersSprite {
   /// When set to true, the component is auto-resized to match the
   /// size of underlying sprite.
   bool _autoResize = autoResize ?? size == null;
@@ -130,21 +130,6 @@ class SpriteComponent({
     if (sprite != null) {
       renderSprite(canvas, sprite);
     }
-  }
-
-  /// Renders the [sprite] of this component onto the [canvas], in the local
-  /// coordinates of the component.
-  ///
-  /// This is called by [render] when the component has a sprite, and can be
-  /// overridden to change how the sprite is drawn, as [HasWarpGrid] does.
-  @protected
-  void renderSprite(Canvas canvas, Sprite sprite) {
-    sprite.render(
-      canvas,
-      size: size,
-      overridePaint: paint,
-      bleed: bleed,
-    );
   }
 
   /// Updates the size [sprite]'s srcSize if [autoResize] is true.
