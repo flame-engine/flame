@@ -9,9 +9,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class SpriteBodyExample({bool showPieces = false})
-    extends Forge2DExampleGame
-    with HasGameRef<Forge2DExampleGame> {
+class SpriteBodyExample({SpriteBodyWorld? world}) extends Forge2DExampleGame {
   static const String description = '''
     In this example we show how to add a sprite on top of a BodyComponent
     whose shape follows the outline of the sprite.
@@ -26,9 +24,14 @@ class SpriteBodyExample({bool showPieces = false})
   this
     : super(
         gravity: Vector2(0, 10.0),
-        world: SpriteBodyWorld(showPieces: showPieces),
+        world: world ?? SpriteBodyWorld(),
       );
 }
+
+/// The convex pieces traced for a region of an image at a size, which the
+/// bodies drawing that region at that size share.
+typedef ContourPiecesCache =
+    Map<(Image, Rect, Vector2), Future<List<List<Vector2>>>>;
 
 class SpriteBodyWorld({bool showPieces = false})
     extends Forge2DWorld
@@ -38,8 +41,9 @@ class SpriteBodyWorld({bool showPieces = false})
 
   int _taps = 0;
 
-  /// The pieces traced by the bodies, shared by those of the same image.
-  final _pieces = <Image, Future<List<List<Vector2>>>>{};
+  /// The pieces traced by the bodies, shared by those of the same sprite and
+  /// size.
+  final ContourPiecesCache _pieces = {};
 
   bool _showPieces = showPieces;
 
@@ -83,13 +87,13 @@ class SpriteBodyWorld({bool showPieces = false})
 /// A body drawn by a [sprite] (when [renderBody] is `true`) of the given [size]
 /// in meters, colliding as the convex [pieces] of its outline.
 ///
-/// The pieces are traced only once for each image by the bodies sharing the
-/// same [cache], which must all draw the full image whole at the same size.
+/// The pieces are traced only once for each region of an image and size by
+/// the bodies sharing the same [cache].
 class ContourBody(
   final Vector2 initialPosition, {
   required final Sprite sprite,
   required final Vector2 size,
-  final Map<Image, Future<List<List<Vector2>>>>? cache,
+  final ContourPiecesCache? cache,
 }) extends BodyComponent with GlowingBody {
   this
     : super(
@@ -107,8 +111,8 @@ class ContourBody(
 
   @override
   Future<void> onLoad() async {
-    pieces =
-        await (cache?.putIfAbsent(sprite.image, tracePieces) ?? tracePieces());
+    final key = (sprite.image, sprite.src, size.clone());
+    pieces = await (cache?.putIfAbsent(key, tracePieces) ?? tracePieces());
     // Creates the body from the pieces.
     await super.onLoad();
   }

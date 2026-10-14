@@ -167,13 +167,14 @@ class const _SpriteBodyStory({required final bool showPieces})
 }
 
 class _SpriteBodyStoryState() extends State<_SpriteBodyStory> {
-  late final _game = SpriteBodyExample(showPieces: widget.showPieces);
+  late final _world = SpriteBodyWorld(showPieces: widget.showPieces);
+  late final _game = SpriteBodyExample(world: _world);
 
   @override
   void didUpdateWidget(_SpriteBodyStory oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.showPieces != oldWidget.showPieces) {
-      (_game.world as SpriteBodyWorld).showPieces = widget.showPieces;
+      _world.showPieces = widget.showPieces;
     }
   }
 
