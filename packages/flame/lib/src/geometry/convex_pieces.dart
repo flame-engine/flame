@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:flame/extensions.dart';
 import 'package:flame/src/geometry/signed_area.dart';
@@ -158,88 +159,170 @@ double _cross(Vector2 a, Vector2 b, Vector2 c) {
 
 /// Splits the polygon given by the [indices] of [vertices], which goes
 /// clockwise on the screen, into triangles, by clipping its ears.
+///
+/// A vertex is an ear if its corner is not reflex and no other vertex lies
+/// within the triangle that it makes with its neighbors. Collinear vertices
+/// are ears too, as they only make a degenerate triangle. Only the reflex
+/// and collinear vertices can be within an ear of a simple polygon, so only
+/// those are checked, and clipping an ear only changes whether its two
+/// neighbors are ears.
 List<List<int>> _triangulate(List<Vector2> vertices, List<int> indices) {
-  final remaining = List.of(indices);
-  final triangles = <List<int>>[];
-  while (remaining.length >= 3) {
-    final ear = _findEar(vertices, remaining);
-    if (ear == -1) {
-      // A polygon that crosses itself may have no ears left, while a simple
-      // one always has; what is left of it is left out.
-      break;
-    }
-    final m = remaining.length;
-    final triangle = [
-      remaining[(ear - 1 + m) % m],
-      remaining[ear],
-      remaining[(ear + 1) % m],
-    ];
-    remaining.removeAt(ear);
-    final [a, b, c] = [for (final i in triangle) vertices[i]];
-    // Clipping a collinear vertex leaves no triangle.
-    if (_cross(a, b, c) > 0) {
-      triangles.add(triangle);
+  final m = indices.length;
+  final previous = Int32List.fromList([for (var k = 0; k < m; k++) k - 1])
+    ..[0] = m - 1;
+  final next = Int32List.fromList([for (var k = 0; k < m; k++) k + 1])
+    ..[m - 1] = 0;
+  Vector2 at(int k) => vertices[indices[k]];
+  double turn(int k) => _cross(at(previous[k]), at(k), at(next[k]));
+
+  final isReflex = List.filled(m, false);
+  final reflex = <int>[];
+  for (var k = 0; k < m; k++) {
+    if (turn(k) <= 0) {
+      isReflex[k] = true;
+      reflex.add(k);
     }
   }
-  return triangles;
-}
-
-/// The position in [remaining] of a vertex that can be clipped, or -1 if
-/// there is none.
-///
-/// A vertex can be clipped if its corner is not reflex and no other vertex
-/// lies within the triangle that it makes with its neighbors. Collinear
-/// vertices can be clipped too, as they only make a degenerate triangle.
-int _findEar(List<Vector2> vertices, List<int> remaining) {
-  final m = remaining.length;
-  for (var i = 0; i < m; i++) {
-    final a = vertices[remaining[(i - 1 + m) % m]];
-    final b = vertices[remaining[i]];
-    final c = vertices[remaining[(i + 1) % m]];
-    if (_cross(a, b, c) < 0) {
-      continue;
+  var reflexCount = reflex.length;
+  void setConvex(int k) {
+    if (isReflex[k]) {
+      isReflex[k] = false;
+      reflexCount--;
     }
-    var isEar = true;
-    for (final j in remaining) {
-      final p = vertices[j];
+  }
+
+  bool isEar(int k) {
+    if (turn(k) < 0) {
+      return false;
+    }
+    final a = at(previous[k]);
+    final b = at(k);
+    final c = at(next[k]);
+    for (final r in reflex) {
+      if (!isReflex[r]) {
+        continue;
+      }
+      final p = at(r);
       if (p == a || p == b || p == c) {
         continue;
       }
       if (_cross(a, b, p) >= 0 &&
           _cross(b, c, p) >= 0 &&
           _cross(c, a, p) >= 0) {
-        isEar = false;
-        break;
+        return false;
       }
     }
-    if (isEar) {
-      return i;
-    }
+    return true;
   }
-  return -1;
+
+  final ears = List.generate(m, isEar);
+  final triangles = <List<int>>[];
+  var remaining = m;
+  var k = 0;
+  var stepsWithoutEar = 0;
+  var isRechecked = false;
+  while (remaining >= 3) {
+    if (!ears[k]) {
+      if (++stepsWithoutEar > remaining) {
+        // The vertices on the edges of an ear can keep it from being one
+        // until they are clipped, which only its neighbors are checked for.
+        // A polygon that crosses itself may have no ears left, while a
+        // simple one always has; what is left of it is left out.
+        if (isRechecked) {
+          break;
+        }
+        for (var i = 0, j = k; i < remaining; i++, j = next[j]) {
+          ears[j] = isEar(j);
+        }
+        isRechecked = true;
+        stepsWithoutEar = 0;
+      }
+      k = next[k];
+      continue;
+    }
+    final before = previous[k];
+    final after = next[k];
+    // Clipping a collinear vertex leaves no triangle.
+    if (turn(k) > 0) {
+      triangles.add([indices[before], indices[k], indices[after]]);
+    }
+    next[before] = after;
+    previous[after] = before;
+    setConvex(k);
+    remaining--;
+    // A neighbor can only turn from reflex to convex, never the other way.
+    if (turn(before) > 0) {
+      setConvex(before);
+    }
+    if (turn(after) > 0) {
+      setConvex(after);
+    }
+    // The vertices that are no longer reflex are dropped from the list once
+    // they make up most of it.
+    if (reflex.length > 2 * reflexCount + 32) {
+      reflex.removeWhere((r) => !isReflex[r]);
+    }
+    ears[before] = isEar(before);
+    ears[after] = isEar(after);
+    stepsWithoutEar = 0;
+    isRechecked = false;
+    k = after;
+  }
+  return triangles;
 }
 
 /// Merges the [pieces] that share an edge, as long as the result is convex
 /// and has at most [maxVertices] vertices.
+///
+/// The neighbors of a piece are found through the edges that it shares with
+/// them, which go the other way around in the neighbor.
 void _merge(List<Vector2> vertices, List<List<int>> pieces, int maxVertices) {
-  var hasMerged = true;
-  while (hasMerged) {
-    hasMerged = false;
-    for (var i = 0; i < pieces.length; i++) {
-      for (var j = i + 1; j < pieces.length; j++) {
-        final merged = _union(pieces[i], pieces[j]);
+  final n = vertices.length;
+  final owners = <int, int>{};
+  void own(int piece) {
+    final indices = pieces[piece];
+    for (var k = 0; k < indices.length; k++) {
+      owners[indices[k] * n + indices[(k + 1) % indices.length]] = piece;
+    }
+  }
+
+  for (var i = 0; i < pieces.length; i++) {
+    own(i);
+  }
+  final isMerged = List.filled(pieces.length, false);
+  for (var i = 0; i < pieces.length; i++) {
+    if (isMerged[i]) {
+      continue;
+    }
+    var hasMerged = true;
+    while (hasMerged) {
+      hasMerged = false;
+      final piece = pieces[i];
+      for (var k = 0; k < piece.length; k++) {
+        final j = owners[piece[(k + 1) % piece.length] * n + piece[k]];
+        if (j == null || j == i || isMerged[j]) {
+          continue;
+        }
+        final merged = _union(piece, pieces[j]);
         if (merged != null &&
             merged.length <= maxVertices &&
             _isConvex(vertices, merged)) {
           pieces[i] = merged;
-          pieces.removeAt(j);
+          isMerged[j] = true;
+          own(i);
           hasMerged = true;
-          // The grown piece may now be merged with the ones already checked.
-          j = i;
+          break;
         }
       }
     }
   }
+  var kept = 0;
+  for (var i = 0; i < pieces.length; i++) {
+    if (!isMerged[i]) {
+      pieces[kept++] = pieces[i];
+    }
+  }
+  pieces.length = kept;
 }
 
 /// The union of the pieces [a] and [b], which go clockwise on the screen, if
