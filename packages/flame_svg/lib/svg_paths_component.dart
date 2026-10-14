@@ -5,7 +5,6 @@ import 'package:flame/cache.dart' show AssetsCache;
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/palette.dart' show BasicPalette;
 import 'package:flame_svg/flame_svg.dart';
 import 'package:flutter/foundation.dart' show visibleForTesting;
 
@@ -133,19 +132,11 @@ class SvgPathsComponent(
     }
   }
 
-  // Temporary: each hitbox and component gets its own paint, so that changing
-  // the paint of one does not change the others.
+  // Each hitbox gets its own paint, so that changing the paint of one does not
+  // change the others.
   static Paint _whiteStroke() => Paint()
     ..color = const Color(0xffffffff)
     ..style = PaintingStyle.stroke;
-
-  // Temporary.
-  static Paint _pathStroke() => Paint()
-    ..color = BasicPalette.blue.color
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = 3
-    ..strokeCap = .round
-    ..strokeJoin = .bevel;
 
   /// The scale that fits the [area] of the [svg], by default its bounds,
   /// within the [size] while keeping the aspect ratio, and the offset that
@@ -230,7 +221,7 @@ class SvgPathsComponent(
           path: (vectorPaint?.isStroked ?? false) ? path : closedPath,
           position: position,
           scale: Vector2.all(fit),
-          paint: paint ?? _pathStroke(),
+          paint: paint,
           paintLayers: vectorPaint?.paintLayers,
           sampling: pathSampling,
           tolerance: pathTolerance,
