@@ -7,6 +7,7 @@ erickzanardo # github.com/erickzanardo
 feroult # github.com/feroult 
 fröber # github.com/Brixto
 gnarhard # github.com/gnarhard
+Hertel # Co-author of triangulation algorithm
 Hoodead # github.com/kornellapu
 kenney # kenney.nl
 Klingsbo # github.com/spydon
@@ -17,6 +18,7 @@ Lousberg # kaylousberg.itch.io
 luan # github.com/luanpotter
 luanpotter # github.com/luanpotter
 Lukas # github.com/spydon
+Mehlhorn # Co-author of triangulation algorithm
 pgainullin # github.com/pgainullin 
 Schnurber # github.com/schnurber 
 spydon # github.com/spydon
