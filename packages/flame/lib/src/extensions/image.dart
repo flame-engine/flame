@@ -76,6 +76,48 @@ extension ImageExtension on Image {
     return await fromPixels(newPixelData, width, height);
   }
 
+  /// Returns the outlines of the parts of this image that are not transparent,
+  /// as the closed contours of a [Path].
+  ///
+  /// Only the pixels in the [region] are considered, the whole image by
+  /// default, and the contours are relative to its top left corner. They are
+  /// scaled from the size of the [region] to the given [size], when there is
+  /// one. The [region] has to be within the image, and its sides are rounded
+  /// to whole pixels.
+  ///
+  /// A pixel is part of the outlined area when its alpha is at least the
+  /// [alphaThreshold], which is between zero, excluded, and one. The outlines
+  /// pass between the pixels, at the point where the alpha would reach the
+  /// [alphaThreshold] if it changed linearly between their centers, so that the
+  /// anti-aliased edges of the image are followed more closely than a pixel,
+  /// and they stay within the [region]. Only the outer outlines are kept, not
+  /// the ones of the holes in the areas, and the separate areas give separate
+  /// contours.
+  ///
+  /// The contours are meant to make hitboxes that follow the outline of the
+  /// image, like a `PathHitbox`, or a `PolygonHitbox` from one of them, which
+  /// simplify them according to their sampling.
+  ///
+  /// Keep in mind that this reads back the pixels of the whole image, even
+  /// when the [region] is only a part of it, so it is an expensive operation
+  /// that should be done when loading, not in the game loop. To trace several
+  /// regions of the same image, like the sprites of a sprite sheet, read the
+  /// pixels once with [pixelsInUint8] and pass them to
+  /// [Uint8ListExtension.contour] for each region.
+  Future<Path> contour({
+    Rect? region,
+    Vector2? size,
+    double alphaThreshold = 0.5,
+  }) async {
+    return (await pixelsInUint8()).contour(
+      width,
+      height,
+      region: region,
+      size: size,
+      alphaThreshold: alphaThreshold,
+    );
+  }
+
   /// Returns the bounding [Rect] of the image.
   Rect getBoundingRect() => Vector2.zero() & size;
 
