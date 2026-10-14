@@ -130,12 +130,13 @@ extension PaintConverter on Paint {
 
   /// Possibly converts a stroked [Paint] to a [ui.Paint].
   ///
-  /// A stroke without a width has the SVG default width of 1, and a stroke
-  /// with a width of zero or less is not painted.
+  /// A stroke without a width, or with an invalid negative one, has the SVG
+  /// default width of 1, and a stroke with a width of zero is not painted.
   ui.Paint? toStrokedUiPaint() {
     final s = stroke;
-    final width = s?.width ?? 1;
-    if (s == null || width <= 0) {
+    final w = s?.width;
+    final width = w == null || w < 0 ? 1.0 : w;
+    if (s == null || width == 0) {
       return null;
     }
     final p = ui.Paint();

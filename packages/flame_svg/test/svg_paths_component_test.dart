@@ -4,12 +4,16 @@ import 'dart:ui' as ui;
 import 'package:flame/cache.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flame_svg/flame_svg.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter/services.dart' show AssetBundle;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _MockAssetBundle() extends Mock implements AssetBundle;
+
+class _CollisionGame() extends FlameGame with HasCollisionDetection;
 
 SvgPathsComponent _componentOf(
   List<(String, String)> paths, {
@@ -136,6 +140,29 @@ void main() {
         expect(component.children, isEmpty, reason: hitboxes.name);
       }
     });
+
+    testWithGame<_CollisionGame>(
+      'has hitboxes without an area',
+      _CollisionGame.new,
+      (game) async {
+        for (final hitboxes in SvgHitboxes.values) {
+          for (final size in [Vector2.zero(), Vector2(10, 0)]) {
+            final component = _componentOf(
+              [('M0 0L50 0L50 50Z', 'fill="#ff0000"')],
+              hitboxes: hitboxes,
+              size: size,
+            );
+            await game.ensureAdd(component);
+            game.update(0);
+            expect(
+              component.descendants().whereType<PathHitbox>(),
+              hasLength(1),
+              reason: '${hitboxes.name} $size',
+            );
+          }
+        }
+      },
+    );
 
     group('hitbox paints', () {
       const paths = [

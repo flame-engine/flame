@@ -107,7 +107,8 @@ Each frame is described by the time it appears, its `start`, and the time it las
 
 - Overlapping frames are all rendered, in the order of the frames.
 - During a gap between frames, the frames shown last remain on screen.
-- Before the earliest frame appears, that frame is already shown.
+- Before the earliest frame appears, that frame is already shown in the first loop, while in the
+  next loops the frames shown last remain.
 
 By default, each loop of the animation lasts until the latest end of its frames. A longer
 `duration` adds a pause at the end of each loop.
@@ -119,12 +120,12 @@ class MyGame extends FlameGame {
     final animation = await SvgPathsAnimation.load(
       [
         SvgPathsAnimationFrameData(
-          fileName: 'assets/svgs/invader.svg',
+          fileName: 'assets/svgs/invader1.svg',
           start: 0,
           duration: 0.3,
         ),
         SvgPathsAnimationFrameData(
-          fileName: 'assets/svgs/invader_feet_in.svg',
+          fileName: 'assets/svgs/invader1_feet_in.svg',
           start: 0.4,
           duration: 0.3,
         ),

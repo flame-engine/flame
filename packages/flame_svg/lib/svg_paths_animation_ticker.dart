@@ -74,7 +74,8 @@ class SvgPathsAnimationTicker(final SvgPathsAnimation animation) {
     }
   }
 
-  /// Sets this animation to the end of its loop, even if paused.
+  /// Sets this animation to the end of its loop, even if paused. An animation
+  /// that loops then starts its next loop, like a `SpriteAnimationTicker`.
   void setToLast() {
     clock = animation.duration;
     elapsed = animation.duration;

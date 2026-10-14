@@ -260,7 +260,15 @@ void main() {
       expect(paint!.strokeWidth, 1);
     });
 
-    test('has no stroked paint without a stroke with a positive width', () {
+    test('has the SVG default width for a stroke with a negative width', () {
+      final paint = const vgc.Paint(
+        stroke: vgc.Stroke(color: color, width: -1),
+      ).toStrokedUiPaint();
+      expect(paint, isNotNull);
+      expect(paint!.strokeWidth, 1);
+    });
+
+    test('has no stroked paint without a stroke or with a zero width', () {
       expect(const vgc.Paint().toStrokedUiPaint(), isNull);
       expect(
         const vgc.Paint(

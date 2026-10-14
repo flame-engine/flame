@@ -87,8 +87,9 @@ class SvgPathsAnimationComponent(
   void update(double dt) {
     if (playing) {
       animationTicker.update(dt);
-      _updateHitboxes();
     }
+    // Also while not playing, since the ticker can be changed directly.
+    _updateHitboxes();
     if (removeOnFinish && animationTicker.done()) {
       removeFromParent();
     }

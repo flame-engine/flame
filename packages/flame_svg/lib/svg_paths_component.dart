@@ -279,9 +279,12 @@ class SvgPathsComponent(
     double? tolerance,
     double fit,
   ) {
+    // A component without an area shrinks the paths to nothing, so their
+    // polygons are only sampled in the units of the SVG file.
+    final scale = fit > 0 ? fit : 1;
     return (
-      pathSampling: sampling / fit,
-      pathTolerance: tolerance == null ? null : tolerance / fit,
+      pathSampling: sampling / scale,
+      pathTolerance: tolerance == null ? null : tolerance / scale,
     );
   }
 

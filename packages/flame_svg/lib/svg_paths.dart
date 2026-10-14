@@ -59,10 +59,10 @@ class SvgPaths(String svg, {this.merge = true}) {
   VectorPaint paintAt(int index) => _paths[index].paint;
 
   /// The original width reported by the [VectorInstructions].
-  double get width => _instructions.width;
+  late final double width;
 
   /// The original height reported by the [VectorInstructions].
-  double get height => _instructions.height;
+  late final double height;
 
   /// The original size reported by the [VectorInstructions].
   Size get size => Size(width, height);
@@ -111,15 +111,22 @@ class SvgPaths(String svg, {this.merge = true}) {
     ui.Canvas canvas,
     Vector2 position,
     Vector2 size, {
+    ui.Paint? overridePaint,
     ui.Rect? area,
   }) {
-    canvas.renderAt(position, (c) => render(c, size, area: area));
+    canvas.renderAt(
+      position,
+      (c) => render(c, size, overridePaint: overridePaint, area: area),
+    );
   }
 
   // MARK: - Private methods
 
   void _importSvg(String svg) {
-    _instructions = parseWithoutOptimizers(svg);
+    // Only the size is kept from the instructions, which can be large.
+    final instructions = parseWithoutOptimizers(svg);
+    width = instructions.width;
+    height = instructions.height;
 
     final paints = <int, VectorPaint>{};
     // The same path can be drawn with different paints, since the vector
@@ -158,7 +165,7 @@ class SvgPaths(String svg, {this.merge = true}) {
     }
 
     // Walk all vector instructions, considering only path commands.
-    for (final c in _instructions.commands) {
+    for (final c in instructions.commands) {
       if (c.type != .path) {
         // Other commands, like clipping, are not supported, but they still
         // separate the paths around them.
@@ -175,9 +182,9 @@ class SvgPaths(String svg, {this.merge = true}) {
       }
 
       // Convert the paint and the path.
-      final paint = paints[paintId] ??= _instructions.paints[paintId]
+      final paint = paints[paintId] ??= instructions.paints[paintId]
           .toVectorPaint();
-      final path = paths[(pathId, paintId)] ??= _instructions.paths[pathId]
+      final path = paths[(pathId, paintId)] ??= instructions.paths[pathId]
           .toVectorPath(paint);
 
       // Paths with both a fill and a stroke are never merged, since the fill
@@ -220,6 +227,5 @@ class SvgPaths(String svg, {this.merge = true}) {
     return bounds ?? .zero;
   }
 
-  late final VectorInstructions _instructions;
   final List<VectorPath> _paths = [];
 }

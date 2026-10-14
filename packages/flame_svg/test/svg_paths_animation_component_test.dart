@@ -94,6 +94,19 @@ void main() {
       expect(_positionsOf(component), [_aPosition]);
     });
 
+    test('changes the hitboxes with the ticker while not playing', () {
+      final component = SvgPathsAnimationComponent(
+        _animationOf(),
+        playing: false,
+      );
+      component.animationTicker.update(1.5);
+      component.update(0);
+      expect(_positionsOf(component), [_bPosition]);
+      component.animationTicker.reset();
+      component.update(0);
+      expect(_positionsOf(component), [_aPosition]);
+    });
+
     test('renders the frames shown', () async {
       final component = SvgPathsAnimationComponent(
         _animationOf(),

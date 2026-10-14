@@ -2,8 +2,8 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 
-/// A paint object imported from a path in a SVG file. When present, the `fill`
-/// component of the SVG style takes precedence over the `stroke` component.
+/// The paints of a path imported from an SVG file: its [fill] and its
+/// [stroke], each of which may be missing.
 @immutable
 class VectorPaint {
   /// The fill component of the SVG style.

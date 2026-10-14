@@ -39,8 +39,8 @@ class SvgPathsAnimationFrame(
 /// duration.
 ///
 /// Overlapping frames are all shown, in the order of [frames]. During a gap
-/// the frames shown last remain, and before the earliest start the earliest
-/// frames are shown.
+/// the frames shown last remain. Before the earliest start, the earliest
+/// frames are shown in the first loop, and the latest ones in the next loops.
 class SvgPathsAnimation(
   List<SvgPathsAnimationFrame> frames, {
 

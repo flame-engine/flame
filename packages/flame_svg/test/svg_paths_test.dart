@@ -99,6 +99,16 @@ void main() {
       expect(svg.paintAt(1).stroke!.strokeWidth, 1);
     });
 
+    test('keeps the strokes with a negative width', () {
+      final svg = SvgPaths(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"> '
+        '<path d="M10 10L90 90" fill="none" stroke="#000000" '
+        'stroke-width="-1"/> </svg>',
+      );
+      expect(svg.length, 1);
+      expect(svg.paintAt(0).stroke!.strokeWidth, 1);
+    });
+
     test('gives each path its own paint when they share the same data', () {
       // The vector graphics compiler shares the paths with the same data.
       const d = 'M0 0L50 0L50 50Z';
@@ -304,6 +314,24 @@ void main() {
         );
         expect(alphaAt(data, 15, 15), 255);
         expect(alphaAt(data, 5, 5), 0);
+      });
+
+      testWidgets('renders at the given position with the override paint', (
+        tester,
+      ) async {
+        final data = await render(
+          tester,
+          draw: (canvas) => svg.renderPosition(
+            canvas,
+            Vector2.all(10),
+            Vector2.all(10),
+            area: const Rect.fromLTWH(50, 50, 5, 5),
+            overridePaint: Paint()..color = const Color(0xff0000ff),
+          ),
+        );
+        // The pixel at (15, 15) is blue instead of red, in RGBA order.
+        expect(data.getUint8((15 * 20 + 15) * 4), 0);
+        expect(data.getUint8((15 * 20 + 15) * 4 + 2), 255);
       });
 
       testWidgets('fits the whole SVG by default', (tester) async {
