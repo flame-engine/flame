@@ -238,7 +238,14 @@ void main() {
       component.add(WarpEffect.by(offsets, EffectController(duration: 1)));
       game.update(0);
       component.warpGrid = null;
-      expect(() => game.update(0.5), throwsStateError);
+      game.update(0.5);
+      expect(component.warpGrid, isNull);
+
+      component.warpGrid = identity;
+      game.update(0.5);
+      expect(_destination(component, 3), closeToVector(Vector2(1.25, 1.125)));
+      game.update(0);
+      expect(component.children.length, 0);
     });
 
     testWithFlameGame('relative with wrong number of offsets', (game) async {

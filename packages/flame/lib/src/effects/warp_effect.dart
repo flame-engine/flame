@@ -29,7 +29,8 @@ class WarpEffect.by(
   /// if given.
   ///
   /// The offsets are normalized like the grid positions, and there must be
-  /// one per vertex. The target must have a grid when the effect starts.
+  /// one per vertex. The target must have a grid when the effect starts, and
+  /// the effect has no effect while the target's grid is `null`.
   this {
     this.target = target;
   }
@@ -82,7 +83,8 @@ class WarpEffect.by(
     }
     final grid = target.warpGrid;
     if (grid == null) {
-      throw StateError('The grid was removed while being warped');
+      // The grid was removed while running, so there is nothing to warp.
+      return;
     }
     target.warpGrid = WarpGrid.raw(
       grid.columns,
