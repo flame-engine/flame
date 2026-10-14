@@ -47,6 +47,55 @@ class MyGame extends FlameGame {
 ```
 
 
+## SvgPaths and SvgPathsComponent
+
+`SvgPaths` imports the paths of an SVG file as Flutter `Path` objects with their paints, so that
+they can be both rendered and used for collisions. Only the paths are imported: clipping, masks,
+group opacity, text, images and patterns are ignored, so use `Svg` for files that rely on them.
+
+By default, consecutive paths with the same paint are merged, as long as their bounds do not
+overlap, which keeps the painting order of the file; pass `merge: false` to keep every path.
+
+```dart
+final svg = await SvgPaths.fromFile('assets/svgs/spaceship.svg');
+svg.render(canvas, Vector2.all(100));
+```
+
+The `SvgPathsComponent` renders an `SvgPaths` object fitted within its size, keeping its aspect
+ratio, and gives it hitboxes. Its size is by default the size of the bounds of the paths.
+`SvgPathsComponent.load` reads the file from `assets/svgs/` by default:
+
+```dart
+class MyGame extends FlameGame with HasCollisionDetection {
+  @override
+  Future<void> onLoad() async {
+    final spaceship = await SvgPathsComponent.load(
+      'spaceship',
+      position: Vector2.all(100),
+      size: Vector2.all(60),
+    );
+    add(spaceship);
+  }
+}
+```
+
+The `hitboxes` parameter, an `SvgHitboxes` value, chooses how the hitboxes are created:
+
+- `SvgHitboxes.single` (the default): one `SvgPathsHitbox` for the whole file. Its paths count as a
+  single solid, so a ray hits the outline of their union, and not the edges of paths that are
+  inside of others.
+- `SvgHitboxes.perPath`: a `PathComponent` for each path, each with its own `PathHitbox`, which
+  render the paths themselves.
+
+The polygons of the hitboxes are sampled from the paths every `sampling` units, and simplified
+within a `tolerance`, both in the units of the component and not of the SVG file. With `filter`,
+the default, the polygons inside of the largest one are left out. Pass `renderHitboxes: true` to
+see the hitboxes.
+
+To add a hitbox to a component of your own, `SvgPathsComponent.createSvgPathsHitbox` and
+`SvgPathsComponent.createPathComponents` create the same hitboxes for a given size.
+
+
 ## SvgPathsAnimationComponent
 
 The `SvgPathsAnimationComponent` plays an `SvgPathsAnimation`, much like the
