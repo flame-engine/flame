@@ -201,7 +201,7 @@ class SvgPaths(String svg, {this.merge = true}) {
       // would change the painting order. The same goes for paths with a
       // different fill type, which a merged path can only have one of.
       final canMerge = merge && !(paint.isFilled && paint.isStroked);
-      final bounds = _paintedBounds(path.path.getBounds(), paint);
+      final bounds = _paintedBounds(path);
       if (!canMerge ||
           paintId != runPaintId ||
           path.path.fillType != run.first.path.fillType ||
@@ -220,11 +220,12 @@ class SvgPaths(String svg, {this.merge = true}) {
     assert(_paints.length == length, 'Paints/Paths length mismatch');
   }
 
-  /// The [bounds] of a path, grown to include its stroke, if any. The stroke
+  /// The bounds of the [path], grown to include its stroke, if any. The stroke
   /// can reach up to the miter limit, which is 4 by default, times half of its
   /// width, so we use twice its width to be on the safe side.
-  static ui.Rect _paintedBounds(ui.Rect bounds, VectorPaint paint) {
-    final stroke = paint.stroke;
+  ui.Rect _paintedBounds(VectorPath path) {
+    final bounds = path.path.getBounds();
+    final stroke = path.paint.stroke;
     return stroke == null ? bounds : bounds.inflate(stroke.strokeWidth * 2);
   }
 
@@ -242,6 +243,6 @@ class SvgPaths(String svg, {this.merge = true}) {
   }
 
   late final VectorInstructions _instructions;
-  late final List<VectorPath> _paths = [];
-  late final List<VectorPaint> _paints = [];
+  final List<VectorPath> _paths = [];
+  final List<VectorPaint> _paints = [];
 }
