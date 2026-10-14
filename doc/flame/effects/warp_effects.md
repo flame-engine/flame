@@ -1,9 +1,8 @@
 # Warp Effects
 
 Warp effects animate the [`WarpGrid`](../components/sprite_components.md#warping) of a component
-over time, similarly to SpriteKit's `SKAction.warp(to:duration:)`. They can be applied to any
-component that implements the `WarpGridProvider` interface, such as a `SpriteComponent` with the
-`HasWarpGrid` mixin.
+over time. They can be applied to any component that implements the `WarpGridProvider` interface,
+such as a component with the `HasWarpGrid` mixin.
 
 Like the other built-in effects, warp effects change the grid incrementally, so several of them
 can run on the same component at the same time, and they can be combined with any other code that
@@ -45,11 +44,10 @@ final effect = WarpEffect.to(
 );
 ```
 
-To animate through several grids, like SpriteKit's `SKAction.animate(withWarps:times:)`, use a
-`SequenceEffect` of `WarpEffect.to` effects.
+To animate through several grids, use a `SequenceEffect` of `WarpEffect.to` effects.
 
-Note that a new grid is assigned at every tick while the effect runs, so the sprite's mesh is
-rebuilt every frame.
+Since the warp changes at every tick while the effect runs, keep the grid as small as the warp
+allows, especially when many sprites are warped at the same time.
 
 The `Animate` knob of the
 [Sprite Warp example](https://examples.flame-engine.org/#/?path=sprites/sprite-warp) warps two
