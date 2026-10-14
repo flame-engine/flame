@@ -79,20 +79,10 @@ class Sprite(
   /// otherwise the hash code of the rasterized image will be used as the key.
   Future<Sprite> rasterize({String? cacheKey, Images? images}) async {
     final key = cacheKey ?? _createRasterizeCacheKey();
-
-    final imagesCache = images ?? Flame.images;
-
-    if (imagesCache.containsKey(key)) {
-      final cachedImage = imagesCache.fromCache(key);
-      return Sprite(
-        cachedImage,
-        srcSize: srcSize,
-      );
-    }
-
-    final rasterizedImage = await toImage();
-    imagesCache.add(key, rasterizedImage);
-
+    final rasterizedImage = await (images ?? Flame.images).fetchOrGenerate(
+      key,
+      toImage,
+    );
     return Sprite(
       rasterizedImage,
       srcSize: srcSize,

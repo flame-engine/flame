@@ -345,18 +345,17 @@ Future<void> main() async {
     });
 
     testWithFlameGame('works on SpriteComponent subclasses', (game) async {
-      // Separate caches, since rasterizing the same sprite concurrently into
-      // the same cache would dispose one of the two rasterized images.
       final baseSprite = Sprite(image);
+      final images = Images();
       final warped = _WarpedRasterSprite(
         baseSprite: baseSprite,
-        images: Images(),
+        images: images,
         position: Vector2(4, 8),
         size: Vector2(64, 32),
       )..warpGrid = WarpGrid.identity(columns: 3, rows: 2);
       final plain = RasterSpriteComponent(
         baseSprite: baseSprite,
-        images: Images(),
+        images: images,
         position: Vector2(4, 8),
         size: Vector2(64, 32),
       );
