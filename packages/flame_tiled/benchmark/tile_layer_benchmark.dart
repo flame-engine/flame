@@ -14,7 +14,8 @@ import 'package:flutter_test/flutter_test.dart';
 const _tileSize = 16.0;
 const _viewport = (width: 800.0, height: 600.0);
 
-/// Renders an orthogonal map of [mapTiles] x [mapTiles] tiles through a
+/// Renders a map of [mapTiles] x [mapTiles] tiles, which is orthogonal unless
+/// [orientation] says otherwise, through a
 /// camera that shows [_viewport] worth of it, in the middle of the map.
 ///
 /// With a map much bigger than the view, almost all of the tiles are
@@ -25,6 +26,8 @@ class TileLayerBenchmark({
   required final bool useAtlas,
   final bool infinite = false,
   final int? chunkSize,
+  final String orientation = 'orthogonal',
+  final String attributes = '',
   final bool rasterize = false,
 }) extends AsyncBenchmarkBase {
   late final FlameGame _game;
@@ -37,7 +40,14 @@ class TileLayerBenchmark({
     // `useAtlas` setting by the next benchmark.
     // ignore: invalid_use_of_visible_for_testing_member
     TiledAtlas.atlasMap.clear();
-    Flame.bundle = _BenchmarkBundle(_mapXml(mapTiles, infinite: infinite));
+    Flame.bundle = _BenchmarkBundle(
+      _mapXml(
+        mapTiles,
+        infinite: infinite,
+        orientation: orientation,
+        attributes: attributes,
+      ),
+    );
     final map = await TiledComponent.load(
       'assets/tiles/map.tmx',
       Vector2.all(_tileSize),
@@ -77,7 +87,12 @@ class TileLayerBenchmark({
   }
 }
 
-String _mapXml(int tiles, {required bool infinite}) {
+String _mapXml(
+  int tiles, {
+  required bool infinite,
+  String orientation = 'orthogonal',
+  String attributes = '',
+}) {
   final String data;
   if (infinite) {
     // Chunks of 16x16 tiles, like Tiled writes them. [tiles] is rounded up
@@ -99,7 +114,7 @@ String _mapXml(int tiles, {required bool infinite}) {
   }
   return '''
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" orientation="orthogonal" renderorder="right-down" width="$tiles" height="$tiles" tilewidth="16" tileheight="16" infinite="${infinite ? 1 : 0}" nextlayerid="2" nextobjectid="1">
+<map version="1.8" orientation="$orientation" renderorder="right-down" width="$tiles" height="$tiles" tilewidth="16" tileheight="16" infinite="${infinite ? 1 : 0}" $attributes nextlayerid="2" nextobjectid="1">
  <tileset firstgid="1" name="4_color_sprite" tilewidth="16" tileheight="16" tilecount="1" columns="1">
   <image source="4_color_sprite.png" width="16" height="16"/>
  </tileset>
@@ -155,5 +170,31 @@ Future<void> main() async {
       useAtlas: true,
       rasterize: true,
     ).report();
+  }
+  // The other orientations, with the tiles that are as big as the cells.
+  for (final (name, orientation, attributes) in [
+    ('isometric', 'isometric', ''),
+    ('staggered', 'staggered', 'staggeraxis="y" staggerindex="odd"'),
+    (
+      'hexagonal',
+      'hexagonal',
+      'hexsidelength="8" staggeraxis="y" staggerindex="odd"',
+    ),
+  ]) {
+    for (final useAtlas in [true, false]) {
+      final path = useAtlas ? 'atlas' : 'no atlas';
+      for (final (kind, chunkSize) in [('', null), (', culled', 16)]) {
+        for (final tiles in [208, 496]) {
+          await TileLayerBenchmark(
+            label: '$tiles x $tiles tiles, $name$kind, $path',
+            mapTiles: tiles,
+            useAtlas: useAtlas,
+            chunkSize: chunkSize,
+            orientation: orientation,
+            attributes: attributes,
+          ).report();
+        }
+      }
+    }
   }
 }
