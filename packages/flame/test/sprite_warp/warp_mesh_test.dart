@@ -124,6 +124,51 @@ void main() {
       });
     }
 
+    test('reuses the buffers of a previous mesh of the same size', () {
+      final grid = _warpedGrid();
+      final previous = WarpMesh.fromGrid(
+        WarpGrid.identity(columns: 3, rows: 2),
+        WarpInterpolation.bilinear,
+      );
+      final positions = previous.positions;
+      final textureCoordinates = previous.textureCoordinates;
+      final indices = previous.indices;
+
+      final mesh = WarpMesh.fromGrid(
+        grid,
+        WarpInterpolation.catmullRom,
+        previous: previous,
+      );
+      final expected = WarpMesh.fromGrid(grid, WarpInterpolation.catmullRom);
+
+      expect(identical(mesh.positions, positions), isTrue);
+      expect(identical(mesh.textureCoordinates, textureCoordinates), isTrue);
+      expect(identical(mesh.indices, indices), isTrue);
+      expect(mesh.positions, expected.positions);
+      expect(mesh.textureCoordinates, expected.textureCoordinates);
+      expect(mesh.indices, expected.indices);
+    });
+
+    test('rebuilds the indices when the dimensions change', () {
+      final previous = WarpMesh.fromGrid(
+        WarpGrid.identity(columns: 3, rows: 2),
+        WarpInterpolation.bilinear,
+      );
+      final indices = previous.indices;
+      final grid = WarpGrid.identity(columns: 2, rows: 3);
+
+      final mesh = WarpMesh.fromGrid(
+        grid,
+        WarpInterpolation.bilinear,
+        previous: previous,
+      );
+      final expected = WarpMesh.fromGrid(grid, WarpInterpolation.bilinear);
+
+      expect(identical(mesh.indices, indices), isFalse);
+      expect(mesh.positions, expected.positions);
+      expect(mesh.indices, expected.indices);
+    });
+
     test('bilinear interpolation within a cell', () {
       final grid = WarpGrid.identity().replacingDestinationPositions([
         Vector2(0, 0),

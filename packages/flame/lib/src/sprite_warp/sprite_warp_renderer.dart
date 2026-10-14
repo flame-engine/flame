@@ -43,6 +43,8 @@ class SpriteWarpRenderer() {
   double _width = 0;
   double _height = 0;
   double _bleed = 0;
+  Float32List _positions = Float32List(0);
+  Float32List _textureCoordinates = Float32List(0);
   Vertices? _vertices;
   Rect _bounds = Rect.zero;
 
@@ -115,6 +117,8 @@ class SpriteWarpRenderer() {
   void dispose() {
     _vertices?.dispose();
     _vertices = null;
+    _positions = Float32List(0);
+    _textureCoordinates = Float32List(0);
     _shader = null;
     _image = null;
     _paint.shader = null;
@@ -130,7 +134,7 @@ class SpriteWarpRenderer() {
     }
     _grid = grid;
     _interpolation = interpolation;
-    _mesh = WarpMesh.fromGrid(grid, interpolation);
+    _mesh = WarpMesh.fromGrid(grid, interpolation, previous: _mesh);
     meshBuilds++;
     _src = null;
   }
@@ -163,8 +167,14 @@ class SpriteWarpRenderer() {
     final mesh = _mesh!;
     final scaleX = width + 2 * bleed;
     final scaleY = height + 2 * bleed;
-    final positions = Float32List(mesh.positions.length);
-    final textureCoordinates = Float32List(mesh.textureCoordinates.length);
+    // Vertices copy their data, so the buffers can be reused for the next
+    // vertices.
+    if (_positions.length != mesh.positions.length) {
+      _positions = Float32List(mesh.positions.length);
+      _textureCoordinates = Float32List(mesh.textureCoordinates.length);
+    }
+    final positions = _positions;
+    final textureCoordinates = _textureCoordinates;
     for (var k = 0; k < positions.length; k += 2) {
       positions[k] = mesh.positions[k] * scaleX - bleed;
       positions[k + 1] = mesh.positions[k + 1] * scaleY - bleed;

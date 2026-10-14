@@ -23,11 +23,19 @@ class WarpMesh._(
 
   /// Indices of the triangles' vertices.
   final Uint16List indices,
+  final int _columns,
+  final _PaddedGrid _source,
+  final _PaddedGrid _destination,
 ) {
   /// Builds the mesh of [grid] using the given [interpolation].
+  ///
+  /// The buffers of [previous] are reused when they have the right size, so
+  /// that a grid that changes every frame, like during a `WarpEffect`, doesn't
+  /// allocate a new mesh every frame. [previous] must not be used afterwards.
   factory WarpMesh.fromGrid(
     WarpGrid grid,
     WarpInterpolation interpolation, {
+    WarpMesh? previous,
     @visibleForTesting int subdivisionLevels = warpSubdivisionLevels,
   }) {
     final subdivisions = 1 << subdivisionLevels;
@@ -39,15 +47,18 @@ class WarpMesh._(
       grid.rawSourcePositions,
       grid.columns,
       grid.rows,
+      previous?._source,
     );
     final destination = _PaddedGrid(
       grid.rawDestinationPositions,
       grid.columns,
       grid.rows,
+      previous?._destination,
     );
 
-    final positions = Float32List(2 * columns * rows);
-    final textureCoordinates = Float32List(2 * columns * rows);
+    final length = 2 * columns * rows;
+    final positions = _reuse(previous?.positions, length);
+    final textureCoordinates = _reuse(previous?.textureCoordinates, length);
     var k = 0;
     for (var row = 0; row < rows; row++) {
       for (var column = 0; column < columns; column++) {
@@ -64,6 +75,34 @@ class WarpMesh._(
       }
     }
 
+    final indices =
+        previous != null &&
+            previous._columns == columns &&
+            previous.positions.length == length
+        ? previous.indices
+        : _buildIndices(columns, rows);
+    return WarpMesh._(
+      positions,
+      textureCoordinates,
+      indices,
+      columns,
+      source,
+      destination,
+    );
+  }
+
+  /// The bounding box of [positions].
+  late final Rect bounds = _boundsOf(positions);
+
+  int get vertexCount => positions.length ~/ 2;
+
+  static Float32List _reuse(Float32List? buffer, int length) {
+    return buffer != null && buffer.length == length
+        ? buffer
+        : Float32List(length);
+  }
+
+  static Uint16List _buildIndices(int columns, int rows) {
     final indices = Uint16List(6 * (columns - 1) * (rows - 1));
     var i = 0;
     for (var row = 0; row < rows - 1; row++) {
@@ -80,13 +119,8 @@ class WarpMesh._(
         indices[i++] = bottomLeft;
       }
     }
-    return WarpMesh._(positions, textureCoordinates, indices);
+    return indices;
   }
-
-  /// The bounding box of [positions].
-  late final Rect bounds = _boundsOf(positions);
-
-  int get vertexCount => positions.length ~/ 2;
 
   static Rect _boundsOf(Float32List positions) {
     var left = double.infinity;
@@ -108,31 +142,40 @@ class WarpMesh._(
 /// Every mesh vertex along the axis is interpolated from the 4 nearest grid
 /// vertices (in padded coordinates, see [_PaddedGrid]), with weights that
 /// only depend on the vertex's position within its cell: they are computed
-/// once for each of the `subdivisions + 1` possible positions.
+/// once for each of the `subdivisions + 1` possible positions, and shared by
+/// all the meshes with the same subdivisions and interpolation.
 class _AxisWeights(
   final int cells,
   final int subdivisions,
   WarpInterpolation interpolation,
 ) {
-  final Float64List _weights = Float64List(4 * (subdivisions + 1));
+  final Float64List _weights = _cache[(subdivisions, interpolation)] ??=
+      _computeWeights(subdivisions, interpolation);
 
-  this {
+  static final Map<(int, WarpInterpolation), Float64List> _cache = {};
+
+  static Float64List _computeWeights(
+    int subdivisions,
+    WarpInterpolation interpolation,
+  ) {
+    final weights = Float64List(4 * (subdivisions + 1));
     for (var k = 0; k <= subdivisions; k++) {
       final t = k / subdivisions;
       final w = 4 * k;
       switch (interpolation) {
         case WarpInterpolation.bilinear:
-          _weights[w + 1] = 1 - t;
-          _weights[w + 2] = t;
+          weights[w + 1] = 1 - t;
+          weights[w + 2] = t;
         case WarpInterpolation.catmullRom:
           final t2 = t * t;
           final t3 = t2 * t;
-          _weights[w] = 0.5 * (-t + 2 * t2 - t3);
-          _weights[w + 1] = 0.5 * (2 - 5 * t2 + 3 * t3);
-          _weights[w + 2] = 0.5 * (t + 4 * t2 - 3 * t3);
-          _weights[w + 3] = 0.5 * (-t2 + t3);
+          weights[w] = 0.5 * (-t + 2 * t2 - t3);
+          weights[w + 1] = 0.5 * (2 - 5 * t2 + 3 * t3);
+          weights[w + 2] = 0.5 * (t + 4 * t2 - 3 * t3);
+          weights[w + 3] = 0.5 * (-t2 + t3);
       }
     }
+    return weights;
   }
 
   /// The cell containing the mesh vertex at [index]; the last vertex belongs
@@ -152,9 +195,19 @@ class _AxisWeights(
 /// Linear extrapolation makes Catmull-Rom splines reproduce linear functions,
 /// so that an undistorted grid stays undistorted, and makes a single cell
 /// interpolate bilinearly.
-class _PaddedGrid(Float32List values, int columns, int rows) {
+///
+/// The data of the `previous` grid is reused when it has the right size.
+class _PaddedGrid(
+  Float32List values,
+  int columns,
+  int rows,
+  _PaddedGrid? previous,
+) {
   final int _width = columns + 3;
-  final Float32List _data = Float32List(2 * (columns + 3) * (rows + 3));
+  final Float32List _data = WarpMesh._reuse(
+    previous?._data,
+    2 * (columns + 3) * (rows + 3),
+  );
 
   this {
     for (var row = 0; row <= rows; row++) {
