@@ -69,6 +69,7 @@ abstract class RenderableLayer<T extends Layer>({
     required Map<Tile, TileFrames> animationFrames,
     required TiledAtlas atlas,
     required Paint Function(double opacity) layerPaintFactory,
+    int? chunkSize,
     FilterQuality? filterQuality,
     bool? ignoreFlip,
     Images? images,
@@ -85,6 +86,7 @@ abstract class RenderableLayer<T extends Layer>({
         ignoreFlip: ignoreFlip,
         filterQuality: filterQuality,
         layerPaintFactory: layerPaintFactory,
+        chunkSize: chunkSize,
       );
     } else if (layer is ImageLayer) {
       return await FlameImageLayer.load(
@@ -168,6 +170,14 @@ abstract class RenderableLayer<T extends Layer>({
   Rect get visibleRect => _visibleRect ??= _mapRect;
   Rect? _visibleRect;
 
+  /// Whether [visibleRect] is the view of a camera, see [updateView].
+  bool _hasCamera = false;
+
+  /// The area that this layer can limit its rendering to, or null if it has to
+  /// render everything.
+  @protected
+  Rect? get cullRect => _hasCamera ? visibleRect : null;
+
   Rect get _mapRect {
     final size = TiledComponent.computeSize(
       map.orientation,
@@ -195,9 +205,18 @@ abstract class RenderableLayer<T extends Layer>({
   /// the parent of this layer.
   ///
   /// See https://doc.mapeditor.org/en/latest/manual/layers/#parallax-scrolling-factor
+  ///
+  /// [hasCamera] is false when the map is rendered without a camera. In that
+  /// case [visibleRect] is the area of the map and not a view, so the layer
+  /// must not skip anything because it is outside of it.
   @internal
   @mustCallSuper
-  void updateView(Vector2 viewCenter, Rect visibleRect) {
+  void updateView(
+    Vector2 viewCenter,
+    Rect visibleRect, {
+    bool hasCamera = true,
+  }) {
+    _hasCamera = hasCamera;
     final parentParallaxX = parentLayer?.parallaxX ?? 1;
     final parentParallaxY = parentLayer?.parallaxY ?? 1;
     final x = offsetX + viewCenter.x * parentParallaxX * (1 - layer.parallaxX);

@@ -16,7 +16,23 @@ class OrthogonalTileLayer({
   required super.ignoreFlip,
   required super.layerPaintFactory,
   super.filterQuality,
+  super.chunkSize,
 }) extends FlameTileLayer {
+  /// Chunks are only used when every tile fits in its cell, since tiles that
+  /// stick out of their cell are drawn over the tiles of the next rows, in an
+  /// order that chunks would change.
+  @override
+  late final bool usesChunks =
+      (map.infinite || chunkSize != null) &&
+      map.tileWidth == map.tileHeight &&
+      map.tilesets.every(
+        (tileset) =>
+            tileset.image != null &&
+            tileset.tileWidth == map.tileWidth &&
+            tileset.tileHeight == map.tileHeight &&
+            tileset.tileOffset == null,
+      );
+
   @override
   void cacheTiles() {
     final size = destTileSize;
@@ -64,7 +80,9 @@ class OrthogonalTileLayer({
         );
         storeTransform(tx, ty, transform);
 
-        batch.addTransform(
+        addTile(
+          tx,
+          ty,
           source: src,
           transform: transform,
           flip: shouldFlip(flips),

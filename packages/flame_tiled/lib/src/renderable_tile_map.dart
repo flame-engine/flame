@@ -301,6 +301,16 @@ class RenderableTiledMap(
   /// {@template renderable_tile_map_factory}
   /// By default, [FlameTileLayer] renders flipped tiles if they exist.
   /// You can disable this by setting [ignoreFlip] to `true`.
+  ///
+  /// The tiles of infinite orthogonal maps are only rendered while they are in
+  /// view, in chunks of the size that the map has in Tiled, as long as the
+  /// tiles fit in their cells. Set [chunkSize] to a number of tiles to do the
+  /// same for finite maps, which is worth it for big maps, or to use another
+  /// chunk size for an infinite map. A good size is 16: smaller chunks skip
+  /// more tiles but need more draw calls, and a chunk that is partly in view
+  /// is rendered in full. The tiles of a chunk are rendered together, so a
+  /// layer is no longer a single draw call, and a tile that was changed with
+  /// [setTileData] makes the whole layer rebuild its chunks.
   /// {@endtemplate}
   static Future<RenderableTiledMap> fromFile(
     String fileName,
@@ -314,6 +324,7 @@ class RenderableTiledMap(
     bool Function(Tileset)? tsxPackingFilter,
     bool useAtlas = true,
     Paint Function(double opacity)? layerPaintFactory,
+    int? chunkSize,
     double atlasPackingSpacingX = 0,
     double atlasPackingSpacingY = 0,
     String? package,
@@ -335,6 +346,7 @@ class RenderableTiledMap(
       tsxPackingFilter: tsxPackingFilter,
       useAtlas: useAtlas,
       layerPaintFactory: layerPaintFactory ?? _defaultLayerPaintFactory,
+      chunkSize: chunkSize,
       atlasPackingSpacingX: atlasPackingSpacingX,
       atlasPackingSpacingY: atlasPackingSpacingY,
       package: package,
@@ -363,6 +375,7 @@ class RenderableTiledMap(
     bool Function(Tileset)? tsxPackingFilter,
     bool useAtlas = true,
     Paint Function(double opacity)? layerPaintFactory,
+    int? chunkSize,
     double atlasPackingSpacingX = 0,
     double atlasPackingSpacingY = 0,
     String? package,
@@ -387,6 +400,7 @@ class RenderableTiledMap(
       tsxPackingFilter: tsxPackingFilter,
       useAtlas: useAtlas,
       layerPaintFactory: layerPaintFactory ?? _defaultLayerPaintFactory,
+      chunkSize: chunkSize,
       atlasPackingSpacingX: atlasPackingSpacingX,
       atlasPackingSpacingY: atlasPackingSpacingY,
       package: package,
@@ -411,6 +425,7 @@ class RenderableTiledMap(
     bool Function(Tileset)? tsxPackingFilter,
     bool useAtlas = true,
     Paint Function(double opacity)? layerPaintFactory,
+    int? chunkSize,
     double atlasPackingSpacingX = 0,
     double atlasPackingSpacingY = 0,
     String? package,
@@ -444,6 +459,7 @@ class RenderableTiledMap(
       ignoreFlip: ignoreFlip,
       images: images,
       layerPaintFactory: layerPaintFactory ?? _defaultLayerPaintFactory,
+      chunkSize: chunkSize,
       package: package,
       imagesDirectory: imagesDirectory,
     );
@@ -464,6 +480,7 @@ class RenderableTiledMap(
     Map<Tile, TileFrames> animationFrames, {
     required TiledAtlas atlas,
     required Paint Function(double opacity) layerPaintFactory,
+    int? chunkSize,
     bool? ignoreFlip,
     Images? images,
     String? package,
@@ -479,6 +496,7 @@ class RenderableTiledMap(
         ignoreFlip: ignoreFlip,
         images: images,
         layerPaintFactory: layerPaintFactory,
+        chunkSize: chunkSize,
         package: package,
         imagesDirectory: imagesDirectory,
       );
@@ -493,6 +511,7 @@ class RenderableTiledMap(
           ignoreFlip: ignoreFlip,
           images: images,
           layerPaintFactory: layerPaintFactory,
+          chunkSize: chunkSize,
           package: package,
           imagesDirectory: imagesDirectory,
         );
@@ -533,7 +552,11 @@ class RenderableTiledMap(
       _viewCenter.setValues(visibleRect.center.dx, visibleRect.center.dy);
     }
     for (final layer in renderableLayers) {
-      layer.updateView(_viewCenter, visibleRect);
+      layer.updateView(
+        _viewCenter,
+        visibleRect,
+        hasCamera: camera != null,
+      );
     }
     super.renderTree(canvas);
   }

@@ -25,6 +25,7 @@ dependencies:
   tiled: ^0.12.0
 
 dev_dependencies:
+  benchmark_harness: ^2.3.1
   dartdoc: ^9.0.0
   flame_lint: ^1.5.0-dev.1
   flame_test: ^3.0.0-dev.1
