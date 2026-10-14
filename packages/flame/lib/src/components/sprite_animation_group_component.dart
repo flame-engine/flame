@@ -33,7 +33,7 @@ class SpriteAnimationGroupComponent<T>({
   super.children,
   super.priority,
   super.key,
-}) extends PositionComponent with HasPaint, ImageRetainer {
+}) extends PositionComponent with HasPaint, ImageRetainer, RendersSprite {
   ValueNotifier<T?>? _currentAnimationNotifier;
 
   /// A [ValueNotifier] that notifies when the current animation changes.
@@ -199,11 +199,10 @@ class SpriteAnimationGroupComponent<T>({
   @mustCallSuper
   @override
   void render(Canvas canvas) {
-    animationTicker?.getSprite().render(
-      canvas,
-      size: size,
-      overridePaint: paint,
-    );
+    final ticker = animationTicker;
+    if (ticker != null) {
+      renderSprite(canvas, ticker.getSprite());
+    }
   }
 
   @mustCallSuper
