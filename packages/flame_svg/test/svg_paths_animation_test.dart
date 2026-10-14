@@ -93,6 +93,17 @@ void main() {
         expect(animation.indicesAt(0.5, firstLoop: false), [2, 3]);
       });
 
+      test('does not overlap frames that follow each other', () {
+        // 0.1 + 0.2 is a little more than 0.3.
+        final following = SvgPathsAnimation([
+          _frame(0, 0.1),
+          _frame(0.1, 0.2),
+          _frame(0.3, 0.1),
+        ]);
+        expect(following.indicesAt(0.3), [2]);
+        expect(following.indicesAt(0.1), [1]);
+      });
+
       test('returns lists that can not be modified', () {
         for (final time in [0.0, 1.2, 3.0]) {
           expect(

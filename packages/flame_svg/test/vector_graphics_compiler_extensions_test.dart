@@ -120,6 +120,16 @@ void main() {
         ).toUiGradient(),
         isNull,
       );
+      expect(
+        const vgc.LinearGradient(
+          id: 'linear',
+          from: vgc.Point.zero,
+          to: vgc.Point(10, 10),
+          colors: [],
+          offsets: [],
+        ).toUiGradient(),
+        isNull,
+      );
     });
 
     test('asserts that the bounds have been applied', () {
@@ -178,6 +188,27 @@ void main() {
         const vgc.Paint(
           stroke: vgc.Stroke(color: color, width: 1),
         ).toStrokedUiPaint()!.shader,
+        isNull,
+      );
+    });
+
+    test('paints nothing with a gradient without colors', () {
+      const empty = vgc.LinearGradient(
+        id: 'empty',
+        from: vgc.Point.zero,
+        to: vgc.Point(10, 10),
+        unitMode: vgc.GradientUnitMode.transformed,
+      );
+      expect(
+        const vgc.Paint(
+          fill: vgc.Fill(color: color, shader: empty),
+        ).toFilledUiPaint(),
+        isNull,
+      );
+      expect(
+        const vgc.Paint(
+          stroke: vgc.Stroke(color: color, width: 1, shader: empty),
+        ).toStrokedUiPaint(),
         isNull,
       );
     });

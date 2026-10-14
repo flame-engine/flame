@@ -1,4 +1,4 @@
-import 'dart:math' show min;
+import 'dart:math' show max, min;
 import 'dart:ui' as ui;
 
 import 'package:flame/cache.dart';
@@ -184,6 +184,10 @@ class SvgPaths(String svg, {this.merge = true}) {
       // Convert the paint and the path.
       final paint = paints[paintId] ??= instructions.paints[paintId]
           .toVectorPaint();
+      if (!paint.isFilled && !paint.isStroked) {
+        // Nothing is painted, like with a gradient without colors.
+        continue;
+      }
       final path = paths[(pathId, paintId)] ??= instructions.paths[pathId]
           .toVectorPath(paint);
 
@@ -209,13 +213,19 @@ class SvgPaths(String svg, {this.merge = true}) {
     endRun();
   }
 
-  /// The bounds of the [path], grown to include its stroke, if any. The stroke
-  /// can reach up to the miter limit, which is 4 by default, times half of its
-  /// width, so we use twice its width to be on the safe side.
+  /// The bounds of the [path], grown to include its stroke, if any. A miter
+  /// join can reach up to the miter limit times half of the width of the
+  /// stroke, and the other joins and caps less than twice that width.
   ui.Rect _paintedBounds(VectorPath path) {
     final bounds = path.path.getBounds();
     final stroke = path.paint.stroke;
-    return stroke == null ? bounds : bounds.inflate(stroke.strokeWidth * 2);
+    if (stroke == null) {
+      return bounds;
+    }
+    final reach = stroke.strokeJoin == .miter
+        ? max(2.0, stroke.strokeMiterLimit / 2)
+        : 2.0;
+    return bounds.inflate(stroke.strokeWidth * reach);
   }
 
   ui.Rect _computeBounds() {

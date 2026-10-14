@@ -161,6 +161,29 @@ void main() {
         expect(SvgPaths(svgOf(lines, style), merge: false).length, 2);
       });
 
+      test('does not merge strokes whose miter joins reach each other', () {
+        // The sharp join at (40, 50) reaches up to 25 times the half width
+        // of the stroke with this miter limit, past the vertical line.
+        const lines = ['M0 48L40 50L0 52', 'M85 20L85 80'];
+        const style = 'fill="none" stroke="#000000" stroke-width="10"';
+        expect(SvgPaths(svgOf(lines, style)).length, 1);
+        expect(
+          SvgPaths(svgOf(lines, '$style stroke-miterlimit="50"')).length,
+          2,
+        );
+      });
+
+      test('skips the paths that paint nothing', () {
+        const svg =
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"> '
+            '<linearGradient id="g"></linearGradient> '
+            '<rect width="10" height="10" fill="url(#g)"/> '
+            '<rect x="20" width="10" height="10" fill="#ff0000"/> </svg>';
+        final paths = SvgPaths(svg, merge: false);
+        expect(paths.length, 1);
+        expect(paths.bounds, const Rect.fromLTRB(20, 0, 30, 10));
+      });
+
       test('does not merge paths across an unsupported command', () {
         // The clipped path in the middle is separated from the others by the
         // clip command and the restore command.

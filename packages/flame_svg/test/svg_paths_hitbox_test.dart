@@ -105,6 +105,15 @@ void main() {
       expect(hitbox.rayIntersection(_ray(-5, 10, 1, 0)), isNotNull);
     });
 
+    test('a ray hits a thin polygon far from the origin', () {
+      // The polygon is thinner than the tolerance of the crossings there.
+      final thin = Path()..addRect(const Rect.fromLTWH(10000, 0, 0.5, 100));
+      final result = _hitbox([thin]).rayIntersection(_ray(9000, 50, 1, 0));
+      expect(result, isNotNull);
+      expect(result!.isInsideHitbox, isFalse);
+      expect(result.intersectionPoint!.x, closeTo(10000, 1e-3));
+    });
+
     test('a ray that misses the bounding box has no result', () {
       final hitbox = _hitbox(overlapping);
       final out = RaycastResult<ShapeHitbox>();

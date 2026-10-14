@@ -38,6 +38,11 @@ class SvgPathsHitbox({
   /// Whether the origin of the ray is inside of each of the polygons.
   late final _inside = List<bool>.filled(globalPolygons().length, false);
 
+  /// The last group of crossings that each of the polygons is part of, see
+  /// [rayIntersection], and the number of groups so far.
+  late final _groups = List<int>.filled(globalPolygons().length, 0);
+  var _groupCount = 0;
+
   /// Returns information about where the ray enters the union of the polygons
   /// of the hitbox, or leaves it if the origin of the ray is inside of it.
   ///
@@ -101,20 +106,29 @@ class SvgPathsHitbox({
 
     // Walk along the ray, keeping track of how many polygons the ray is
     // inside of. Crossings at the same distance, like the shared edges of
-    // adjacent polygons, are taken together. The ray hits the union where
-    // that count changes between zero and more than zero.
+    // adjacent polygons, are taken together. Those of the same polygon are
+    // only taken together at the very same distance, like when the ray
+    // touches a vertex, so that its thin parts are not skipped. The ray hits
+    // the union where that count changes between zero and more than zero.
     _crossings.sort((a, b) => a.distance.compareTo(b.distance));
+    final samePolygonEpsilon = epsilon * 1e-6;
     final startsInside = insideCount > 0;
     var count = insideCount;
     var i = 0;
     while (i < _crossings.length) {
       final distance = _crossings[i].distance;
       final wasInside = count > 0;
+      final group = ++_groupCount;
       _Crossing? leaving;
       _Crossing? entering;
-      while (i < _crossings.length &&
-          _crossings[i].distance - distance <= epsilon) {
+      while (i < _crossings.length) {
         final crossing = _crossings[i];
+        final gap = crossing.distance - distance;
+        if (gap > epsilon ||
+            (_groups[crossing.polygon] == group && gap > samePolygonEpsilon)) {
+          break;
+        }
+        _groups[crossing.polygon] = group;
         if (_inside[crossing.polygon]) {
           leaving ??= crossing;
           count--;

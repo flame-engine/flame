@@ -118,8 +118,12 @@ class SvgPathsAnimation(
   /// The indices of the frames shown at the given [time] within a loop, see
   /// [SvgPathsAnimation], in a list that can not be modified.
   List<int> indicesAt(double time, {bool firstLoop = true}) {
+    // The ends of the frames are sums, which can be a little off: a frame
+    // from 0.1 lasting 0.2 ends after a frame starting at 0.3. Moving the time
+    // forward a little makes such frames follow each other.
+    final t = time + _epsilon;
     final active = _indicesWhere(
-      (frame) => frame.start <= time && time < frame.end,
+      (frame) => frame.start <= t && t < frame.end,
     );
     if (active.isNotEmpty) {
       return active;
@@ -127,7 +131,7 @@ class SvgPathsAnimation(
     // In a gap, the frames shown last are those ending last before it.
     double? lastEnd;
     for (final frame in frames) {
-      if (frame.end <= time) {
+      if (frame.end <= t) {
         lastEnd = max(lastEnd ?? frame.end, frame.end);
       }
     }
@@ -139,6 +143,8 @@ class SvgPathsAnimation(
 
   /// Creates and returns a new [SvgPathsAnimationTicker].
   SvgPathsAnimationTicker createTicker() => SvgPathsAnimationTicker(this);
+
+  static const _epsilon = 1e-9;
 
   late final double _earliestStart = frames
       .map((frame) => frame.start)

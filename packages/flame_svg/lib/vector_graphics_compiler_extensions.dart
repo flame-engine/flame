@@ -80,14 +80,15 @@ extension GradientConverter on Gradient {
   /// [GradientUnitMode.transformed]: this is always the case for gradients
   /// coming from parsed [VectorInstructions].
   ///
-  /// Returns `null` if the gradient has no [Gradient.colors].
+  /// Returns `null` if the gradient has no [Gradient.colors], in which case
+  /// SVG paints nothing with it.
   ui.Gradient? toUiGradient() {
     assert(
       unitMode == null || unitMode == GradientUnitMode.transformed,
       'Gradient bounds must be applied before conversion',
     );
     final c = colors;
-    if (c == null) {
+    if (c == null || c.isEmpty) {
       return null;
     }
     final uiColors = [for (final color in c) ui.Color(color.value)];
@@ -131,7 +132,9 @@ extension PaintConverter on Paint {
   /// Possibly converts a stroked [Paint] to a [ui.Paint].
   ///
   /// A stroke without a width, or with an invalid negative one, has the SVG
-  /// default width of 1, and a stroke with a width of zero is not painted.
+  /// default width of 1, and a stroke with a width of zero, or with a gradient
+  /// that can not be converted (see [GradientConverter.toUiGradient]), is not
+  /// painted.
   ui.Paint? toStrokedUiPaint() {
     final s = stroke;
     final w = s?.width;
@@ -139,12 +142,16 @@ extension PaintConverter on Paint {
     if (s == null || width == 0) {
       return null;
     }
+    final shader = s.shader?.toUiGradient();
+    if (s.shader != null && shader == null) {
+      return null;
+    }
     final p = ui.Paint();
     p.style = .stroke;
     p.blendMode = blendMode.toUiBlendMode();
     p.strokeWidth = width;
     p.color = ui.Color(s.color.value);
-    p.shader = s.shader?.toUiGradient();
+    p.shader = shader;
     // Without a miter limit we keep the default of the engine: reading it
     // back from the paint and assigning it gives a different value.
     final m = s.miterLimit;
@@ -163,16 +170,23 @@ extension PaintConverter on Paint {
   }
 
   /// Possibly converts a filled [Paint] to a [ui.Paint].
+  ///
+  /// A fill with a gradient that can not be converted (see
+  /// [GradientConverter.toUiGradient]) is not painted.
   ui.Paint? toFilledUiPaint() {
     final f = fill;
     if (f == null) {
+      return null;
+    }
+    final shader = f.shader?.toUiGradient();
+    if (f.shader != null && shader == null) {
       return null;
     }
     final p = ui.Paint();
     p.style = .fill;
     p.blendMode = blendMode.toUiBlendMode();
     p.color = ui.Color(f.color.value);
-    p.shader = f.shader?.toUiGradient();
+    p.shader = shader;
     return p;
   }
 }
