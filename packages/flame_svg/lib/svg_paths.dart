@@ -150,13 +150,7 @@ class SvgPaths(String svg, {this.merge = true}) {
           merged.addPath(path.path, .zero);
         }
         // The paths of a run all share the same paint.
-        _paths.add(
-          VectorPath(
-            merged,
-            run.first.paint,
-            pathId: _paths.length,
-          ),
-        );
+        _paths.add(VectorPath(merged, run.first.paint));
       }
       run.clear();
       runBounds.clear();
@@ -184,7 +178,7 @@ class SvgPaths(String svg, {this.merge = true}) {
       final paint = paints[paintId] ??= _instructions.paints[paintId]
           .toVectorPaint();
       final path = paths[(pathId, paintId)] ??= _instructions.paths[pathId]
-          .toVectorPath(paint, pathId: pathId);
+          .toVectorPath(paint);
 
       // Paths with both a fill and a stroke are never merged, since the fill
       // and stroke of a merged path are painted after all of its paths, which

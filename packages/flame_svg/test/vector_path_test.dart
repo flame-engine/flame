@@ -46,21 +46,12 @@ int _alphaAt(ByteData data, int x, int y) {
 
 void main() {
   group('VectorPath', () {
-    test('keeps its path, paint, ID and description', () {
+    test('keeps its path and paint', () {
       final path = _square(0, 0, 10);
       final paint = _filled;
-      final description = StringBuffer();
-      final vectorPath = VectorPath(
-        path,
-        paint,
-        pathId: 7,
-        description: description,
-      );
+      final vectorPath = VectorPath(path, paint);
       expect(vectorPath.path, path);
       expect(vectorPath.paint, paint);
-      expect(vectorPath.pathId, 7);
-      expect(vectorPath.description, description);
-      expect(description.toString(), contains('VectorPath 7'));
     });
 
     test('needs a fill or a stroke', () {
@@ -76,7 +67,7 @@ void main() {
         final paint = _filled;
         final path = _square(0, 0, 10);
         final a = VectorPath(path, paint);
-        final b = VectorPath(path, paint, pathId: 3);
+        final b = VectorPath(path, paint);
         expect(a, b);
         expect(a.hashCode, b.hashCode);
       });
@@ -106,21 +97,11 @@ void main() {
       });
     });
 
-    test('toString has the paint and the description', () {
+    test('toString has the paint', () {
       final paint = _filled;
       expect(
         VectorPath(_square(0, 0, 10), paint).toString(),
         'VectorPath(paint: $paint)',
-      );
-      final described = VectorPath(
-        _square(0, 0, 10),
-        _stroked,
-        pathId: 2,
-        description: StringBuffer(),
-      );
-      expect(
-        described.toString(),
-        allOf(contains('stroke:'), contains('VectorPath 2: stroked path')),
       );
     });
 

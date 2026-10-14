@@ -309,30 +309,13 @@ void main() {
       );
     });
 
-    test('describes the commands', () {
-      final description = StringBuffer();
-      vgcPath().toUiPath(description);
-      final text = description.toString();
-      expect(text, contains('moveTo(0.0, 0.0)'));
-      expect(text, contains('lineTo(10.0, 0.0)'));
-      expect(text, contains('cubicTo('));
-      expect(text, contains('close()'));
-    });
-
     test('converts to a VectorPath', () {
       final paint = const vgc.Paint(
         fill: vgc.Fill(color: vgc.Color.fromARGB(255, 1, 2, 3)),
       ).toVectorPaint();
-      final description = StringBuffer();
-      final vectorPath = vgcPath().toVectorPath(
-        paint,
-        pathId: 3,
-        description: description,
-      );
+      final vectorPath = vgcPath().toVectorPath(paint);
       expect(vectorPath.paint, paint);
-      expect(vectorPath.pathId, 3);
       expect(vectorPath.path.getBounds(), const ui.Rect.fromLTRB(0, 0, 10, 10));
-      expect(description.toString(), isNotEmpty);
     });
   });
 }

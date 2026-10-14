@@ -21,12 +21,6 @@ class VectorPaint {
     : fill = paint.style == .fill ? paint : null,
       stroke = paint.style == .stroke ? paint : null;
 
-  /// Create from the given list of [paints]; if present, the first entry
-  /// is assigned to the [fill], and the second (if present) to [stroke].
-  VectorPaint.layers(List<ui.Paint> paints)
-    : fill = paints.isNotEmpty ? paints.first : null,
-      stroke = paints.length > 1 ? paints[1] : null;
-
   /// Return either the [fill] or [stroke] paint object.
   ui.Paint? get paint => fill ?? stroke;
 

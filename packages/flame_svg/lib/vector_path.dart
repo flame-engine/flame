@@ -6,12 +6,7 @@ import 'package:flutter/foundation.dart';
 /// A path originating from the vector graphics compiler, and represented by
 /// a standard [ui.Path] and a [VectorPaint] object.
 @immutable
-class VectorPath(
-  this.path,
-  this.paint, {
-  this.pathId,
-  this.description,
-}) {
+class VectorPath(this.path, this.paint) {
   /// Create from the given [path] and [paint].
   ///
   /// Throws if the [paint] has neither a fill nor a stroke.
@@ -21,9 +16,6 @@ class VectorPath(
         'VectorPath must have at least a stroke or a fill.',
       );
     }
-    description?.writeln(
-      'VectorPath $pathId: ${paint.isFilled ? 'filled' : 'stroked'} path',
-    );
   }
 
   /// Renders the path on the [canvas] with an optional [overridePaint], used
@@ -48,20 +40,8 @@ class VectorPath(
   /// The original path.
   final ui.Path path;
 
-  /// The original path ID.
-  final int? pathId;
-
-  /// Optional description for debugging purposes.
-  final StringBuffer? description;
-
   @override
-  String toString() {
-    var desc = 'VectorPath(paint: $paint)';
-    if (description != null) {
-      desc += '\n${description!}';
-    }
-    return desc;
-  }
+  String toString() => 'VectorPath(paint: $paint)';
 
   /// Two vector paths are equal when they have the same [path] object and the
   /// same [paint], since a [ui.Path] has no value equality.

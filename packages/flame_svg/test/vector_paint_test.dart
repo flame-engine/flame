@@ -47,32 +47,6 @@ void main() {
       });
     });
 
-    group('VectorPaint.layers', () {
-      test(
-        'assigns the first paint to the fill and the second to the stroke',
-        () {
-          final fill = _fill(0xffff0000);
-          final stroke = _stroke(0xff00ff00);
-          final paint = VectorPaint.layers([fill, stroke]);
-          expect(paint.fill, fill);
-          expect(paint.stroke, stroke);
-        },
-      );
-
-      test('can have a fill only', () {
-        final fill = _fill(0xffff0000);
-        final paint = VectorPaint.layers([fill]);
-        expect(paint.fill, fill);
-        expect(paint.isStroked, isFalse);
-      });
-
-      test('can be empty', () {
-        final paint = VectorPaint.layers(const []);
-        expect(paint.isFilled, isFalse);
-        expect(paint.isStroked, isFalse);
-      });
-    });
-
     group('paint', () {
       test('is the fill if there is one', () {
         final fill = _fill(0xffff0000);

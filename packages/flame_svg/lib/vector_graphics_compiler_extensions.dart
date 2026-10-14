@@ -225,25 +225,11 @@ extension PaintConverter on Paint {
 
 /// Path conversion from the vector graphics compiler.
 extension PathConverter on Path {
-  /// Converts a [Path] to a [VectorPath], using the provided [paint] and
-  /// optionally specifying a [pathId] and [description] for debugging purposes.
-  VectorPath toVectorPath(
-    VectorPaint paint, {
-    int? pathId,
-    StringBuffer? description,
-  }) {
-    return VectorPath(
-      toUiPath(description),
-      paint,
-      pathId: pathId,
-      description: description,
-    );
-  }
+  /// Converts a [Path] to a [VectorPath], using the provided [paint].
+  VectorPath toVectorPath(VectorPaint paint) => VectorPath(toUiPath(), paint);
 
-  /// Converts a [Path] to a [ui.Path], with the optional [description]
-  /// for debugging purposes.
-  ui.Path toUiPath([StringBuffer? description]) {
-    description?.writeln('  path');
+  /// Converts a [Path] to a [ui.Path].
+  ui.Path toUiPath() {
     final p = ui.Path();
     switch (fillType) {
       case .nonZero:
@@ -254,18 +240,12 @@ extension PathConverter on Path {
     for (final c in commands) {
       if (c is MoveToCommand) {
         p.moveTo(c.x, c.y);
-        description?.writeln('    ..moveTo(${c.x}, ${c.y})');
       } else if (c is LineToCommand) {
         p.lineTo(c.x, c.y);
-        description?.writeln('    ..lineTo(${c.x}, ${c.y})');
       } else if (c is CubicToCommand) {
         p.cubicTo(c.x1, c.y1, c.x2, c.y2, c.x3, c.y3);
-        description?.writeln(
-          '    ..cubicTo(${c.x1}, ${c.y1}, ${c.x2}, ${c.y2}, ${c.x3}, ${c.y3})',
-        );
       } else if (c is CloseCommand) {
         p.close();
-        description?.writeln('    ..close()');
       }
     }
     return p;

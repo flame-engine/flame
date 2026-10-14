@@ -35,15 +35,6 @@ void main() {
       expect(svg.length, 3);
     });
 
-    test('does not describe its paths', () {
-      // Describing every command of every path is expensive, both in time and
-      // in memory, so it is only done on request.
-      final svg = SvgPaths(_svg([('#ff0000', ''), ('#00ff00', '')]));
-      for (var i = 0; i < svg.length; i++) {
-        expect(svg.pathAt(i).description, isNull);
-      }
-    });
-
     test('computes its bounds once', () {
       final svg = SvgPaths(_svg([('#ff0000', ''), ('#00ff00', '')]));
       expect(svg.bounds, const Rect.fromLTRB(0, 0, 15, 5));
