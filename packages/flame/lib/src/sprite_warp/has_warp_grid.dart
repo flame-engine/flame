@@ -30,7 +30,16 @@ mixin HasWarpGrid on RendersSprite, ImageRetainer implements WarpGridProvider {
   /// [size]. Since [WarpGrid] is immutable, assign a new grid to change the
   /// warp, or animate it with a `WarpEffect`.
   @override
-  WarpGrid? warpGrid;
+  WarpGrid? get warpGrid => _warpGrid;
+  WarpGrid? _warpGrid;
+
+  @override
+  set warpGrid(WarpGrid? value) {
+    _warpGrid = value;
+    if (value == null) {
+      _disposeWarpRenderer();
+    }
+  }
 
   /// How [warpGrid] is interpolated between its vertices.
   WarpInterpolation warpInterpolation = WarpInterpolation.bilinear;
@@ -58,9 +67,8 @@ mixin HasWarpGrid on RendersSprite, ImageRetainer implements WarpGridProvider {
 
   @override
   void renderSprite(Canvas canvas, Sprite sprite) {
-    final warpGrid = this.warpGrid;
+    final warpGrid = _warpGrid;
     if (warpGrid == null) {
-      _disposeWarpRenderer();
       super.renderSprite(canvas, sprite);
       return;
     }

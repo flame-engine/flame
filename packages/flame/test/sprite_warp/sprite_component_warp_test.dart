@@ -382,8 +382,8 @@ Future<void> main() async {
       expect(component.warpRenderer, isNotNull);
 
       component.warpGrid = null;
-      await _expectSameRendering(component, _component(sprite));
       expect(component.warpRenderer, isNull);
+      await _expectSameRendering(component, _component(sprite));
     });
 
     testWithFlameGame('drops the renderer on removal', (game) async {
