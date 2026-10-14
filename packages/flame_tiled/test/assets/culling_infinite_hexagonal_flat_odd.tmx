@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.12.2" orientation="hexagonal" renderorder="right-down" width="10" height="10" tilewidth="16" tileheight="16" infinite="1" hexsidelength="8" staggeraxis="x" staggerindex="odd" nextlayerid="2" nextobjectid="1">
+ <tileset firstgid="1" name="shapes" tilewidth="16" tileheight="16" tilecount="8" columns="8">
+  <image source="culling_hexagons_flat.png" width="128" height="16"/>
+ </tileset>
+ <layer id="1" name="Tiles" width="10" height="10">
+  <data encoding="csv">
+   <chunk x="0" y="0" width="5" height="5">
+0,4,7,2,5,
+6,2147483649,1073741828,7,2,
+3,1073741830,1,2147483652,7,
+8,3,2147483654,1,0,
+5,8,3,0,2147483649
+   </chunk>
+   <chunk x="5" y="0" width="5" height="5">
+8,3,0,1,4,
+5,0,1073741827,6,1,
+0,1073741829,8,2147483651,6,
+7,2,2147483653,8,1073741827,
+4,7,2,1073741829,2147483656
+   </chunk>
+   <chunk x="0" y="5" width="5" height="5">
+2,5,0,3,6,
+7,0,1073741829,8,3,
+0,1073741831,2,2147483653,8,
+1,4,2147483655,2,1073741829,
+6,1,4,1073741831,2147483650
+   </chunk>
+   <chunk x="5" y="5" width="5" height="5">
+1,4,7,2,0,
+6,2147483649,1073741828,0,2,
+3,1073741830,0,2147483652,7,
+8,0,2147483654,1,1073741828,
+0,8,3,1073741830,2147483649
+   </chunk>
+  </data>
+ </layer>
+</map>
