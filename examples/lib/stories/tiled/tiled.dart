@@ -24,6 +24,12 @@ WidgetbookComponent tiledStories() {
               label: 'Culled',
               initialValue: true,
             ),
+            orientation: context.knobs.object.dropdown(
+              label: 'Orientation',
+              initialOption: TiledCullingOrientation.orthogonal,
+              options: TiledCullingOrientation.values,
+              labelBuilder: (value) => value.label,
+            ),
           ),
         ),
         codeLink: baseLink('tiled/tiled_culling_example.dart'),
@@ -36,6 +42,12 @@ WidgetbookComponent tiledStories() {
             culled: context.knobs.boolean(
               label: 'Culled',
               initialValue: true,
+            ),
+            orientation: context.knobs.object.dropdown(
+              label: 'Orientation',
+              initialOption: TiledCullingOrientation.orthogonal,
+              options: TiledCullingOrientation.values,
+              labelBuilder: (value) => value.label,
             ),
           ),
         ),

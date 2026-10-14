@@ -12,10 +12,13 @@ import 'package:flutter/widgets.dart' show KeyEventResult;
 
 class TiledCullingExample({
   final bool culled = true,
+  final TiledCullingOrientation orientation =
+      TiledCullingOrientation.orthogonal,
 }) extends FlameGame with KeyboardEvents {
   static const description = '''
-The camera slowly moves over a big Tiled map, with 160,000 tiles in each of its
-two layers. Press C, or use the "Culled" knob, to turn culling on and off.
+The camera slowly moves over a big Tiled map of 400 x 400 tiles. Press C, or use
+the "Culled" knob, to turn culling on and off. Use the "Orientation" knob to
+change the kind of map: orthogonal, isometric, staggered or hexagonal.
 
 With culling on, the map is split into chunks of 16 x 16 tiles (the `chunkSize`
 of the map), and only the chunks that are in view are drawn. With culling off,
@@ -39,8 +42,8 @@ off.
   @override
   Future<void> onLoad() async {
     // The same map twice, so that the key can switch between them instantly.
-    _culledMap = await loadTiledCullingMap(culled: true);
-    _plainMap = await loadTiledCullingMap(culled: false);
+    _culledMap = await loadTiledCullingMap(orientation, culled: true);
+    _plainMap = await loadTiledCullingMap(orientation, culled: false);
     world.add(_currentMap);
 
     camera.viewport.add(
@@ -93,10 +96,10 @@ off.
   void update(double dt) {
     super.update(dt);
     _time += dt;
-    const center = tiledCullingMapSize / 2;
+    final mapSize = _currentMap.size;
     camera.viewfinder.position = Vector2(
-      center + cos(_time * 0.3) * tiledCullingMapSize * 0.3,
-      center + sin(_time * 0.2) * tiledCullingMapSize * 0.3,
+      mapSize.x * (0.5 + cos(_time * 0.3) * orientation.path),
+      mapSize.y * (0.5 + sin(_time * 0.2) * orientation.path),
     );
     final milliseconds = _currentMap.drawMilliseconds;
     if (milliseconds > 0) {
@@ -108,25 +111,51 @@ off.
 /// The number of tiles on each side of the map of the culling examples.
 const tiledCullingTiles = 400;
 
-/// The size that a tile is drawn with in the culling examples.
-const tiledCullingTileSize = 32.0;
-
 /// The size of the chunks, in tiles, that the culled map is split in.
 const tiledCullingChunkSize = 16;
 
-/// The size of the map of the culling examples, in pixels.
-const tiledCullingMapSize = tiledCullingTiles * tiledCullingTileSize;
+/// The kinds of map that the culling examples show.
+///
+/// The tiles of the maps are as big as the cells of the map, and shaped like
+/// them (a diamond or a hexagon), which is what lets Flame split a map in
+/// chunks. They are drawn twice as big as the images.
+enum TiledCullingOrientation(
+  /// The name that is shown in the knob.
+  final String label,
 
-/// Loads the map of the culling examples (`culling_map.tmx`), which is
-/// [tiledCullingTiles] tiles wide and high. It has a floor, with some details
-/// on it, and the details are in a second layer.
+  /// The Tiled file of the map.
+  final String file,
+
+  /// The size that a tile is drawn with, which is also the size of a cell.
+  final double tileWidth,
+  final double tileHeight,
+
+  /// How far the camera moves from the center of the map, as a part of the
+  /// size of the map. The tiles of an isometric map are in a diamond, so it has
+  /// to stay closer to the center.
+  final double path,
+) {
+  orthogonal('Orthogonal', 'assets/tiles/culling_map.tmx', 32, 32, 0.3),
+  isometric('Isometric', 'assets/tiles/culling_map_isometric.tmx', 64, 32, 0.2),
+  staggered('Staggered', 'assets/tiles/culling_map_staggered.tmx', 64, 32, 0.3),
+  hexagonal('Hexagonal', 'assets/tiles/culling_map_hexagonal.tmx', 64, 64, 0.3);
+
+  /// The size that a tile is drawn with.
+  Vector2 get tileSize => Vector2(tileWidth, tileHeight);
+}
+
+/// Loads the map of the culling examples, which is [tiledCullingTiles] tiles
+/// wide and high.
 ///
 /// The map is split in chunks, which are skipped while they are out of view,
 /// when [culled] is true.
-Future<TimedTiledComponent> loadTiledCullingMap({required bool culled}) async {
+Future<TimedTiledComponent> loadTiledCullingMap(
+  TiledCullingOrientation orientation, {
+  required bool culled,
+}) async {
   final map = await RenderableTiledMap.fromFile(
-    'assets/tiles/culling_map.tmx',
-    Vector2.all(tiledCullingTileSize),
+    orientation.file,
+    orientation.tileSize,
     chunkSize: culled ? tiledCullingChunkSize : null,
   );
   return TimedTiledComponent(map);
