@@ -302,15 +302,25 @@ class RenderableTiledMap(
   /// By default, [FlameTileLayer] renders flipped tiles if they exist.
   /// You can disable this by setting [ignoreFlip] to `true`.
   ///
-  /// The tiles of infinite orthogonal maps are only rendered while they are in
-  /// view, in chunks of the size that the map has in Tiled, as long as the
-  /// tiles fit in their cells. Set [chunkSize] to a number of tiles to do the
-  /// same for finite maps, which is worth it for big maps, or to use another
-  /// chunk size for an infinite map. A good size is 16: smaller chunks skip
-  /// more tiles but need more draw calls, and a chunk that is partly in view
-  /// is rendered in full. The tiles of a chunk are rendered together, so a
-  /// layer is no longer a single draw call, and a tile that was changed with
-  /// [setTileData] makes the whole layer rebuild its chunks.
+  /// The tiles of infinite maps are only rendered while they are in view, in
+  /// chunks of the size that the map has in Tiled, as long as the tiles fit in
+  /// their cells. Set [chunkSize] to a number of tiles to do the same for
+  /// finite maps, which is worth it for big maps, or to use another chunk size
+  /// for an infinite map. A good size is 16: smaller chunks skip more tiles but
+  /// need more draw calls, and a chunk that is partly in view is rendered in
+  /// full. The tiles of a chunk are rendered together, so a layer is no longer
+  /// a single draw call, and a tile that was changed with [setTileData] makes
+  /// the whole layer rebuild its chunks.
+  ///
+  /// This works for every orientation of map. A layer is only split when its
+  /// tiles are as big as the cells of the map and have no offset. Tiles that
+  /// are taller than the cell, like the cubes of many isometric tilesets and
+  /// the tiles of many hexagonal tilesets, are painted over the tiles around
+  /// them, in an order that chunks would change, so those layers are not split.
+  /// The tiles must also stay inside of their own cell, which is the case for
+  /// art that is shaped like the cell, like a diamond or a hexagon. If a tile
+  /// as big as the cell is painted over its neighbors, they can be painted in
+  /// another order when the map is split.
   /// {@endtemplate}
   static Future<RenderableTiledMap> fromFile(
     String fileName,

@@ -105,6 +105,7 @@ abstract class FlameTileLayer({
         ignoreFlip: ignoreFlip,
         filterQuality: filterQuality,
         layerPaintFactory: layerPaintFactory,
+        chunkSize: chunkSize,
       ),
       MapOrientation.staggered => StaggeredTileLayer(
         layer: layer,
@@ -115,6 +116,7 @@ abstract class FlameTileLayer({
         ignoreFlip: ignoreFlip,
         filterQuality: filterQuality,
         layerPaintFactory: layerPaintFactory,
+        chunkSize: chunkSize,
       ),
       MapOrientation.hexagonal => HexagonalTileLayer(
         layer: layer,
@@ -125,6 +127,7 @@ abstract class FlameTileLayer({
         ignoreFlip: ignoreFlip,
         filterQuality: filterQuality,
         layerPaintFactory: layerPaintFactory,
+        chunkSize: chunkSize,
       ),
       MapOrientation.orthogonal => OrthogonalTileLayer(
         layer: layer,
@@ -174,10 +177,41 @@ abstract class FlameTileLayer({
   /// Whether the tiles of this layer are split into chunks, which are only
   /// rendered while they are in view.
   ///
-  /// Layers that cannot do this keep all of their tiles in [TiledAtlas.batch].
-  /// This has to give the same result every time [cacheTiles] runs.
-  @protected
-  bool get usesChunks => false;
+  /// This is the case for the layers of infinite maps, and for the layers of
+  /// finite maps when [chunkSize] is set, as long as every tile stays inside of
+  /// its own cell. Tiles that stick out of their cell (oversized tiles and
+  /// tiles with an offset) are painted over the tiles of other cells, in an
+  /// order that chunks would change. Then all of the tiles are kept in
+  /// [TiledAtlas.batch].
+  late final bool usesChunks = _canUseChunks();
+
+  bool _canUseChunks() {
+    if (!map.infinite && chunkSize == null) {
+      return false;
+    }
+    final fitsCells = map.tilesets.every(
+      (tileset) =>
+          tileset.image != null &&
+          tileset.tileWidth == map.tileWidth &&
+          tileset.tileHeight == map.tileHeight &&
+          tileset.tileOffset == null,
+    );
+    if (!fitsCells) {
+      return false;
+    }
+    // A quarter turn swaps the width and the height of a tile, so in a cell
+    // that is not square the tile sticks out of it. The tiles of hexagonal maps
+    // are rotated in steps of 60º and keep their size.
+    if (map.tileWidth != map.tileHeight &&
+        map.orientation != MapOrientation.hexagonal) {
+      var hasQuarterTurn = false;
+      layer.forEachTile((_, _, gid) {
+        hasQuarterTurn = hasQuarterTurn || gid.flips.diagonally;
+      });
+      return !hasQuarterTurn;
+    }
+    return true;
+  }
 
   /// The size of a chunk, in tiles. Infinite layers use the chunk size of the
   /// map, so that a chunk of the layer is a chunk of Tiled.
