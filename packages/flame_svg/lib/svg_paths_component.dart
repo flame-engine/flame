@@ -184,27 +184,21 @@ class SvgPathsComponent(
       fit,
     );
     final paths = <PathComponent>[];
-    final length = svg.length;
-    for (var svgIndex = 0; svgIndex < length; ++svgIndex) {
+    for (var svgIndex = 0; svgIndex < svg.length; ++svgIndex) {
       final vectorPath = svg.pathAt(svgIndex);
-      final vectorPaint = svg.paintAt(svgIndex);
-      assert(
-        vectorPath != null && vectorPaint != null,
-        'Invalid path or paints',
-      );
-      final path = vectorPath!.path;
+      final vectorPaint = vectorPath.paint;
+      final path = vectorPath.path;
       // A PathComponent moves its path to the origin, so we restore its
       // position within the SVG.
       final position =
           (path.getBounds().topLeft - full.topLeft).toVector2() * fit + offset;
-      final paint = vectorPaint?.paint;
 
       // Filling a path closes its open contours implicitly, but the polygons
       // of a PathComponent only come from closed contours: without closing
       // them, the filled areas of open contours would be missing from the
       // hitbox. The rendering of the component only changes for a path that
       // is both filled and stroked, so that one keeps its original path.
-      final closedPath = _hitboxPath(path, vectorPaint);
+      final closedPath = _hitboxPath(vectorPath);
       final hitbox = PathHitbox(
         path: closedPath,
         sampling: pathSampling,
@@ -218,11 +212,11 @@ class SvgPathsComponent(
       }
       paths.add(
         PathComponent(
-          path: (vectorPaint?.isStroked ?? false) ? path : closedPath,
+          path: vectorPaint.isStroked ? path : closedPath,
           position: position,
           scale: Vector2.all(fit),
-          paint: paint,
-          paintLayers: vectorPaint?.paintLayers,
+          paint: vectorPaint.paint,
+          paintLayers: vectorPaint.paintLayers,
           sampling: pathSampling,
           tolerance: pathTolerance,
           filter: filter ?? true,
@@ -257,7 +251,7 @@ class SvgPathsComponent(
     final combined = Path();
     for (var svgIndex = 0; svgIndex < svg.length; ++svgIndex) {
       combined.addPath(
-        _hitboxPath(svg.pathAt(svgIndex)!.path, svg.paintAt(svgIndex)),
+        _hitboxPath(svg.pathAt(svgIndex)),
         Offset.zero,
       );
     }
@@ -291,10 +285,10 @@ class SvgPathsComponent(
     );
   }
 
-  /// The [path] to make hitboxes from, which has its open contours closed if
+  /// The path to make hitboxes from, which has its open contours closed if
   /// it is filled, like filling does implicitly.
-  static Path _hitboxPath(Path path, VectorPaint? paint) {
-    return (paint?.isFilled ?? false) ? _closeContours(path) : path;
+  static Path _hitboxPath(VectorPath path) {
+    return path.paint.isFilled ? _closeContours(path.path) : path.path;
   }
 
   /// Returns the [path] with all of its contours closed, or the [path] itself

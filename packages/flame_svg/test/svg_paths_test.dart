@@ -40,7 +40,7 @@ void main() {
       // in memory, so it is only done on request.
       final svg = SvgPaths(_svg([('#ff0000', ''), ('#00ff00', '')]));
       for (var i = 0; i < svg.length; i++) {
-        expect(svg.pathAt(i)!.description, isNull);
+        expect(svg.pathAt(i).description, isNull);
       }
     });
 
@@ -71,8 +71,8 @@ void main() {
         _svg([('#ff0000', ''), ('#ff0000', ''), ('#00ff00', '')]),
       );
       expect(svg.length, 2);
-      expect(svg.paintAt(0)!.fill!.color.toARGB32(), 0xffff0000);
-      expect(svg.paintAt(1)!.fill!.color.toARGB32(), 0xff00ff00);
+      expect(svg.paintAt(0).fill!.color.toARGB32(), 0xffff0000);
+      expect(svg.paintAt(1).fill!.color.toARGB32(), 0xff00ff00);
     });
 
     test('does not merge paths separated by another paint', () {
@@ -80,9 +80,9 @@ void main() {
         _svg([('#ff0000', ''), ('#00ff00', ''), ('#ff0000', '')]),
       );
       expect(svg.length, 3);
-      expect(svg.paintAt(0)!.fill!.color.toARGB32(), 0xffff0000);
-      expect(svg.paintAt(1)!.fill!.color.toARGB32(), 0xff00ff00);
-      expect(svg.paintAt(2)!.fill!.color.toARGB32(), 0xffff0000);
+      expect(svg.paintAt(0).fill!.color.toARGB32(), 0xffff0000);
+      expect(svg.paintAt(1).fill!.color.toARGB32(), 0xff00ff00);
+      expect(svg.paintAt(2).fill!.color.toARGB32(), 0xffff0000);
     });
 
     test('does not merge paths with both a fill and a stroke', () {
@@ -102,10 +102,10 @@ void main() {
         '<path d="M10 90L90 10Z" fill="#ff0000" stroke="#000000"/> </svg>',
       );
       expect(svg.length, 2);
-      expect(svg.paintAt(0)!.isFilled, isFalse);
-      expect(svg.paintAt(0)!.stroke!.strokeWidth, 1);
-      expect(svg.paintAt(1)!.isFilled, isTrue);
-      expect(svg.paintAt(1)!.stroke!.strokeWidth, 1);
+      expect(svg.paintAt(0).isFilled, isFalse);
+      expect(svg.paintAt(0).stroke!.strokeWidth, 1);
+      expect(svg.paintAt(1).isFilled, isTrue);
+      expect(svg.paintAt(1).stroke!.strokeWidth, 1);
     });
 
     test('gives each path its own paint when they share the same data', () {
@@ -116,11 +116,8 @@ void main() {
         '<path d="$d" fill="#ff0000"/> <path d="$d" fill="#0000ff"/> </svg>',
       );
       expect(svg.length, 2);
-      for (var i = 0; i < svg.length; i++) {
-        expect(svg.pathAt(i)!.paint, svg.paintAt(i), reason: '$i');
-      }
-      expect(svg.pathAt(0)!.paint.fill!.color.toARGB32(), 0xffff0000);
-      expect(svg.pathAt(1)!.paint.fill!.color.toARGB32(), 0xff0000ff);
+      expect(svg.pathAt(0).paint.fill!.color.toARGB32(), 0xffff0000);
+      expect(svg.pathAt(1).paint.fill!.color.toARGB32(), 0xff0000ff);
     });
 
     group('merge with overlapping paths', () {

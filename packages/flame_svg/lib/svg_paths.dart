@@ -52,19 +52,11 @@ class SvgPaths(String svg, {this.merge = true}) {
   /// The number of [VectorPath] objects in this container.
   int get length => _paths.length;
 
-  /// The [VectorPath] at the given index, if any.
-  VectorPath? pathAt(int index) {
-    final validIndex = index >= 0 && index < length;
-    assert(validIndex, 'Invalid vector path index $index');
-    return validIndex ? _paths[index] : null;
-  }
+  /// The [VectorPath] at the given index, which must be less than [length].
+  VectorPath pathAt(int index) => _paths[index];
 
-  /// The [VectorPaint] at the given index, if any.
-  VectorPaint? paintAt(int index) {
-    final validIndex = index >= 0 && index < _paints.length;
-    assert(validIndex, 'Invalid paints index $index');
-    return validIndex ? _paints[index] : null;
-  }
+  /// The [VectorPaint] of the [VectorPath] at the given index, see [pathAt].
+  VectorPaint paintAt(int index) => _paths[index].paint;
 
   /// The original width reported by the [VectorInstructions].
   double get width => _instructions.width;
@@ -106,8 +98,8 @@ class SvgPaths(String svg, {this.merge = true}) {
     final overrideVP = overridePaint != null
         ? VectorPaint.paint(overridePaint)
         : null;
-    for (var i = 0; i < length; i++) {
-      pathAt(i)?.render(canvas, overrideVP ?? paintAt(i));
+    for (final path in _paths) {
+      path.render(canvas, overrideVP);
     }
 
     canvas.restore();
@@ -144,7 +136,6 @@ class SvgPaths(String svg, {this.merge = true}) {
     // would not add up.
     final run = <VectorPath>[];
     final runBounds = <ui.Rect>[];
-    VectorPaint? runPaint;
     int? runPaintId;
 
     void endRun() {
@@ -158,18 +149,17 @@ class SvgPaths(String svg, {this.merge = true}) {
         for (final path in run) {
           merged.addPath(path.path, .zero);
         }
+        // The paths of a run all share the same paint.
         _paths.add(
           VectorPath(
             merged,
-            runPaint!,
+            run.first.paint,
             pathId: _paths.length,
           ),
         );
       }
-      _paints.add(runPaint!);
       run.clear();
       runBounds.clear();
-      runPaint = null;
       runPaintId = null;
     }
 
@@ -210,14 +200,12 @@ class SvgPaths(String svg, {this.merge = true}) {
       }
       run.add(path);
       runBounds.add(bounds);
-      runPaint = paint;
       runPaintId = paintId;
       if (!canMerge) {
         endRun();
       }
     }
     endRun();
-    assert(_paints.length == length, 'Paints/Paths length mismatch');
   }
 
   /// The bounds of the [path], grown to include its stroke, if any. The stroke
@@ -240,5 +228,4 @@ class SvgPaths(String svg, {this.merge = true}) {
 
   late final VectorInstructions _instructions;
   final List<VectorPath> _paths = [];
-  final List<VectorPaint> _paints = [];
 }
