@@ -16,6 +16,7 @@ SvgPathsComponent _componentOf(
   SvgHitboxes hitboxes = SvgHitboxes.single,
   Vector2? size,
   double sampling = 1.0,
+  double? tolerance,
   bool renderHitboxes = false,
 }) {
   final buffer = StringBuffer(
@@ -30,6 +31,7 @@ SvgPathsComponent _componentOf(
     hitboxes: hitboxes,
     size: size,
     sampling: sampling,
+    tolerance: tolerance,
     renderHitboxes: renderHitboxes,
   );
 }
@@ -231,6 +233,16 @@ void main() {
           sampling: 40,
         );
         expect(_vertices(coarse), lessThan(_vertices(fine)));
+      });
+
+      test('can have a looser tolerance', () {
+        final fine = _componentOf(circle, size: Vector2.all(320));
+        final loose = _componentOf(
+          circle,
+          size: Vector2.all(320),
+          tolerance: 20,
+        );
+        expect(_vertices(loose), lessThan(_vertices(fine)));
       });
     });
 

@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flame_svg/flame_svg.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -130,5 +131,47 @@ void main() {
       expect(component.animationTicker.clock, 0);
       expect(_activeOf(component), [true, false]);
     });
+
+    testWithGame<_CollisionGame>(
+      'ends the collisions of the frames no longer shown',
+      _CollisionGame.new,
+      (game) async {
+        // Crosses the right edge of _a, which is only shown by frames 0 and 2.
+        final collider = _Collider(position: Vector2(8, 2));
+        await game.ensureAddAll([
+          SvgPathsAnimationComponent(_animationOf()),
+          collider,
+        ]);
+        game.update(0);
+        expect(collider.starts, 1);
+        game.update(1.5);
+        expect(collider.ends, 1);
+        game.update(1);
+        expect(collider.starts, 2);
+      },
+    );
   });
+}
+
+class _CollisionGame() extends FlameGame with HasCollisionDetection;
+
+class _Collider({super.position})
+    extends PositionComponent
+    with CollisionCallbacks {
+  this : super(size: Vector2.all(4), children: [RectangleHitbox()]);
+
+  int starts = 0;
+  int ends = 0;
+
+  @override
+  void onCollisionStart(List<Vector2> points, PositionComponent other) {
+    super.onCollisionStart(points, other);
+    starts++;
+  }
+
+  @override
+  void onCollisionEnd(PositionComponent other) {
+    super.onCollisionEnd(other);
+    ends++;
+  }
 }

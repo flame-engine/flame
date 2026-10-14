@@ -90,6 +90,21 @@ void main() {
       expect(hitbox.rayIntersection(_ray(-20, 200, 1, 0)), isNull);
     });
 
+    test('a ray that only touches a vertex has no result', () {
+      final diamond = Path()
+        ..moveTo(10, 0)
+        ..lineTo(20, 10)
+        ..lineTo(10, 20)
+        ..lineTo(0, 10)
+        ..close();
+      // The square above makes the ray pass within the bounding box.
+      final hitbox = _hitbox([diamond, _square(100, -30, 10)]);
+      final out = RaycastResult<ShapeHitbox>();
+      expect(hitbox.rayIntersection(_ray(-5, 0, 1, 0), out: out), isNull);
+      expect(out.isActive, isFalse);
+      expect(hitbox.rayIntersection(_ray(-5, 10, 1, 0)), isNotNull);
+    });
+
     test('a ray that misses the bounding box has no result', () {
       final hitbox = _hitbox(overlapping);
       final out = RaycastResult<ShapeHitbox>();

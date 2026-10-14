@@ -138,6 +138,7 @@ void main() {
       final ticker = animationOf().createTicker();
       expect(ticker.currentIndices, [0]);
       expect(ticker.currentFrames.single.start, 0.5);
+      expect(ticker.totalDuration(), 3);
     });
 
     test('calls onFrame only when the frames shown change', () {
@@ -204,6 +205,18 @@ void main() {
       expect(ticker.done(), isTrue);
       expect(ticker.clock, 3);
       expect(ticker.currentIndices, [1]);
+    });
+
+    test('completes again after a reset', () async {
+      final ticker = animationOf(loop: false).createTicker();
+      final first = ticker.completed;
+      ticker
+        ..update(4)
+        ..reset();
+      final second = ticker.completed;
+      expect(second, isNot(same(first)));
+      ticker.update(4);
+      await expectLater(second, completes);
     });
 
     test('resets', () {

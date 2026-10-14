@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flame/cache.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/flame.dart';
 import 'package:flame_svg/svg_paths.dart';
 import 'package:flutter/services.dart' show AssetBundle;
 import 'package:flutter_test/flutter_test.dart';
@@ -47,6 +48,11 @@ void main() {
       final svg = SvgPaths(_svg([('#ff0000', ''), ('#00ff00', '')]));
       expect(svg.bounds, const Rect.fromLTRB(0, 0, 15, 5));
       expect(identical(svg.bounds, svg.bounds), isTrue);
+    });
+
+    test('has the size of the SVG file', () {
+      final svg = SvgPaths(_svg([('#ff0000', '')]));
+      expect(svg.size, const Size(100, 100));
     });
 
     test('merges consecutive paths with the same paint', () {
@@ -205,6 +211,15 @@ void main() {
         ).called(1);
       });
 
+      test('reads the file via Flame.assets by default', () async {
+        final previous = Flame.assets;
+        addTearDown(() => Flame.assets = previous);
+        final bundle = _MockAssetBundle();
+        Flame.assets = cacheOf(bundle);
+        await SvgPaths.fromFile('assets/svgs/a.svg');
+        verify(() => bundle.loadString('assets/svgs/a.svg')).called(1);
+      });
+
       test('passes on the merge', () async {
         final paths = await SvgPaths.fromFile(
           'assets/svgs/a.svg',
@@ -242,10 +257,19 @@ void main() {
         '<path d="M50 50L55 50L55 55L50 55Z" fill="#ff0000"/> </svg>',
       );
 
-      Future<ByteData> render(WidgetTester tester, {Rect? area}) async {
+      Future<ByteData> render(
+        WidgetTester tester, {
+        Rect? area,
+        void Function(Canvas)? draw,
+      }) async {
         return (await tester.runAsync(() async {
           final recorder = PictureRecorder();
-          svg.render(Canvas(recorder), Vector2.all(20), area: area);
+          final canvas = Canvas(recorder);
+          if (draw != null) {
+            draw(canvas);
+          } else {
+            svg.render(canvas, Vector2.all(20), area: area);
+          }
           final image = await recorder.endRecording().toImage(20, 20);
           return await image.toByteData();
         }))!;
@@ -254,6 +278,34 @@ void main() {
       int alphaAt(ByteData data, int x, int y) {
         return data.getUint8((y * 20 + x) * 4 + 3);
       }
+
+      testWidgets('uses the override paint', (tester) async {
+        final data = await render(
+          tester,
+          draw: (canvas) => svg.render(
+            canvas,
+            Vector2.all(20),
+            overridePaint: Paint()..color = const Color(0xff0000ff),
+          ),
+        );
+        // The pixel at (10, 10) is blue instead of red, in RGBA order.
+        expect(data.getUint8((10 * 20 + 10) * 4), 0);
+        expect(data.getUint8((10 * 20 + 10) * 4 + 2), 255);
+      });
+
+      testWidgets('renders at the given position', (tester) async {
+        final data = await render(
+          tester,
+          draw: (canvas) => svg.renderPosition(
+            canvas,
+            Vector2.all(10),
+            Vector2.all(10),
+            area: const Rect.fromLTWH(50, 50, 5, 5),
+          ),
+        );
+        expect(alphaAt(data, 15, 15), 255);
+        expect(alphaAt(data, 5, 5), 0);
+      });
 
       testWidgets('fits the whole SVG by default', (tester) async {
         final data = await render(tester);
