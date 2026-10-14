@@ -13,6 +13,14 @@ final Float64List _identityMatrix = Float64List.fromList([
   0, 0, 0, 1, //
 ]);
 
+/// The color filter that [Paint.invertColors] applies.
+const ColorFilter _invertColors = ColorFilter.matrix([
+  -1, 0, 0, 0, 255, //
+  0, -1, 0, 0, 255, //
+  0, 0, -1, 0, 255, //
+  0, 0, 0, 1, 0, //
+]);
+
 /// Offset, in texels, added to all the texture coordinates.
 ///
 /// When a pixel samples the image exactly on the boundary between two texels
@@ -98,9 +106,22 @@ class SpriteWarpRenderer() {
     } else {
       // Impeller ignores the paint's color filter in drawVertices, so it is
       // applied through a layer instead, on every backend for consistency.
-      _paint.blendMode = BlendMode.srcOver;
+      // The image filter and the color inversion are applied by the layer as
+      // well, so that they come after the color filter like in drawImageRect.
+      _paint
+        ..blendMode = BlendMode.srcOver
+        ..imageFilter = null
+        ..invertColors = false;
+      ImageFilter filter = colorFilter;
+      if (paint.invertColors) {
+        filter = ImageFilter.compose(outer: _invertColors, inner: filter);
+      }
+      final imageFilter = paint.imageFilter;
+      if (imageFilter != null) {
+        filter = ImageFilter.compose(outer: imageFilter, inner: filter);
+      }
       _layerPaint
-        ..colorFilter = colorFilter
+        ..imageFilter = filter
         ..blendMode = paint.blendMode;
       final hasFilters = paint.imageFilter != null || paint.maskFilter != null;
       canvas.saveLayer(hasFilters ? null : _bounds, _layerPaint);

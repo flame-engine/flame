@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -21,6 +22,24 @@ Future<Image> _gradientImage() {
       pixels[i] = x * 8;
       pixels[i + 1] = y * 16;
       pixels[i + 2] = 255 - x * 4;
+      pixels[i + 3] = 255;
+    }
+  }
+  return ImageExtension.fromPixels(pixels, width, height);
+}
+
+/// A 32x16 black and white checkerboard of 2x2 squares.
+Future<Image> _checkerboardImage() {
+  const width = 32;
+  const height = 16;
+  final pixels = Uint8List(width * height * 4);
+  for (var y = 0; y < height; y++) {
+    for (var x = 0; x < width; x++) {
+      final i = 4 * (y * width + x);
+      final value = (x ~/ 2 + y ~/ 2).isEven ? 255 : 0;
+      pixels[i] = value;
+      pixels[i + 1] = value;
+      pixels[i + 2] = value;
       pixels[i + 3] = 255;
     }
   }
@@ -204,6 +223,33 @@ Future<void> main() async {
         ..tint(const Color(0x8000FF00));
       final unwarped = _component(sprite)..tint(const Color(0x8000FF00));
       await _expectSameRendering(warped, unwarped);
+    });
+
+    test('applies the filters in the same order as drawImageRect', () async {
+      final sprite = Sprite(await _checkerboardImage());
+      for (final invertColors in [false, true]) {
+        Paint filters() => Paint()
+          ..colorFilter = const ColorFilter.linearToSrgbGamma()
+          ..imageFilter = ImageFilter.blur(sigmaX: 1, sigmaY: 1)
+          ..invertColors = invertColors;
+        final warped = await _render([
+          _component(sprite, warpGrid: WarpGrid.identity(), paint: filters()),
+        ]);
+        final unwarped = await _render([_component(sprite, paint: filters())]);
+
+        // The edges differ, since an undistorted sprite repeats its border
+        // pixels, so only the inside of the sprite is compared.
+        var difference = 0;
+        for (var y = 16; y < 32; y++) {
+          for (var x = 12; x < 60; x++) {
+            for (var c = 0; c < 4; c++) {
+              final i = 4 * (y * _canvasWidth + x) + c;
+              difference = max(difference, (warped[i] - unwarped[i]).abs());
+            }
+          }
+        }
+        expect(difference, lessThanOrEqualTo(1));
+      }
     });
 
     test('destination positions are relative to the size', () async {
