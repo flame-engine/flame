@@ -1,6 +1,6 @@
 import 'dart:ui' as ui;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 /// A paint object imported from a path in a SVG file. When present, the `fill`
 /// component of the SVG style takes precedence over the `stroke` component.

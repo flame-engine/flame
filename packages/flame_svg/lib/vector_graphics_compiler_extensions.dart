@@ -7,115 +7,68 @@ import 'package:vector_graphics_compiler/vector_graphics_compiler.dart';
 /// [BlendMode] mapping from the vector graphics compiler.
 extension BlendModeConverter on BlendMode {
   /// Converts a [BlendMode] to a [ui.BlendMode].
-  ui.BlendMode toUiBlendMode() {
-    switch (this) {
-      case .clear:
-        return .clear;
-      case .color:
-        return .color;
-      case .colorBurn:
-        return .colorBurn;
-      case .colorDodge:
-        return .colorDodge;
-      case .darken:
-        return .darken;
-      case .difference:
-        return .difference;
-      case .dst:
-        return .dst;
-      case .dstATop:
-        return .dstATop;
-      case .dstIn:
-        return .dstIn;
-      case .dstOut:
-        return .dstOut;
-      case .dstOver:
-        return .dstOver;
-      case .exclusion:
-        return .exclusion;
-      case .hardLight:
-        return .hardLight;
-      case .hue:
-        return .hue;
-      case .lighten:
-        return .lighten;
-      case .luminosity:
-        return .luminosity;
-      case .modulate:
-        return .modulate;
-      case .multiply:
-        return .multiply;
-      case .overlay:
-        return .overlay;
-      case .plus:
-        return .plus;
-      case .saturation:
-        return .saturation;
-      case .screen:
-        return .screen;
-      case .softLight:
-        return .softLight;
-      case .src:
-        return .src;
-      case .srcATop:
-        return .srcATop;
-      case .srcIn:
-        return .srcIn;
-      case .srcOut:
-        return .srcOut;
-      case .srcOver:
-        return .srcOver;
-      case .xor:
-        return .xor;
-    }
-  }
+  ui.BlendMode toUiBlendMode() => switch (this) {
+    .clear => .clear,
+    .color => .color,
+    .colorBurn => .colorBurn,
+    .colorDodge => .colorDodge,
+    .darken => .darken,
+    .difference => .difference,
+    .dst => .dst,
+    .dstATop => .dstATop,
+    .dstIn => .dstIn,
+    .dstOut => .dstOut,
+    .dstOver => .dstOver,
+    .exclusion => .exclusion,
+    .hardLight => .hardLight,
+    .hue => .hue,
+    .lighten => .lighten,
+    .luminosity => .luminosity,
+    .modulate => .modulate,
+    .multiply => .multiply,
+    .overlay => .overlay,
+    .plus => .plus,
+    .saturation => .saturation,
+    .screen => .screen,
+    .softLight => .softLight,
+    .src => .src,
+    .srcATop => .srcATop,
+    .srcIn => .srcIn,
+    .srcOut => .srcOut,
+    .srcOver => .srcOver,
+    .xor => .xor,
+  };
 }
 
 /// [StrokeCap] mapping from the vector graphics compiler.
 extension StrokeCapConverter on StrokeCap {
   /// Converts a [StrokeCap] to a [ui.StrokeCap].
-  ui.StrokeCap toUiStrokeCap() {
-    switch (this) {
-      case .butt:
-        return .butt;
-      case .round:
-        return .round;
-      case .square:
-        return .square;
-    }
-  }
+  ui.StrokeCap toUiStrokeCap() => switch (this) {
+    .butt => .butt,
+    .round => .round,
+    .square => .square,
+  };
 }
 
 /// [StrokeJoin] mapping from the vector graphics compiler.
 extension StrokeJoinConverter on StrokeJoin {
   /// Converts a [StrokeJoin] to a [ui.StrokeJoin].
-  ui.StrokeJoin toUiStrokeJoin() {
-    switch (this) {
-      case .miter:
-        return .miter;
-      case .round:
-        return .round;
-      case .bevel:
-        return .bevel;
-    }
-  }
+  ui.StrokeJoin toUiStrokeJoin() => switch (this) {
+    .miter => .miter,
+    .round => .round,
+    .bevel => .bevel,
+  };
 }
 
 /// [TileMode] mapping from the vector graphics compiler.
 extension TileModeConverter on TileMode {
   /// Converts a [TileMode] to a [ui.TileMode].
-  ui.TileMode toUiTileMode() {
-    switch (this) {
-      case .clamp:
-        return .clamp;
-      case .repeated:
-        return .repeated;
-      case .mirror:
-        return .mirror;
-      case .decal:
-        return .decal;
-    }
-  }
+  ui.TileMode toUiTileMode() => switch (this) {
+    .clamp => .clamp,
+    .repeated => .repeated,
+    .mirror => .mirror,
+    .decal => .decal,
+  };
 }
 
 /// [Gradient] conversion from the vector graphics compiler.
@@ -230,13 +183,11 @@ extension PathConverter on Path {
 
   /// Converts a [Path] to a [ui.Path].
   ui.Path toUiPath() {
-    final p = ui.Path();
-    switch (fillType) {
-      case .nonZero:
-        p.fillType = .nonZero;
-      case .evenOdd:
-        p.fillType = .evenOdd;
-    }
+    final p = ui.Path()
+      ..fillType = switch (fillType) {
+        .nonZero => .nonZero,
+        .evenOdd => .evenOdd,
+      };
     for (final c in commands) {
       if (c is MoveToCommand) {
         p.moveTo(c.x, c.y);
