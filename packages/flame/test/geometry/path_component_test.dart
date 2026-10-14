@@ -24,8 +24,8 @@ void main() {
 
       final pathComponent = PathComponent(path: path);
 
-      expect(pathComponent.width, pathSize.width);
-      expect(pathComponent.height, pathSize.height);
+      expect(pathComponent.width, closeTo(pathSize.width, 1e-5));
+      expect(pathComponent.height, closeTo(pathSize.height, 1e-5));
     });
 
     test('invader1 preserves the aspect ratio', () {

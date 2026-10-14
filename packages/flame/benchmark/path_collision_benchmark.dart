@@ -7,7 +7,6 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame_test/test_paths.dart';
 
 import 'common.dart';
 
@@ -31,7 +30,25 @@ enum ShapeKind() {
   path,
 }
 
-/// The anchor points of [TestPaths.flame], which is
+/// A flame shape, kept here rather than taken from the test paths so that the
+/// results stay comparable across branches.
+Path _flamePath() {
+  return Path()
+    ..moveTo(62.0, 42.8)
+    ..cubicTo(62.0, 58.9, 49.0, 65.0, 33.0, 65.0)
+    ..cubicTo(17.0, 65.0, 4.0, 58.9, 4.0, 42.8)
+    ..cubicTo(4.0, 38.6, 4.9, 35.9, 6.5, 32.2)
+    ..cubicTo(7.6, 29.8, 10.1, 40.7, 11.9, 38.8)
+    ..cubicTo(16.2, 34.1, 7.2, 23.3, 23.8, 15.2)
+    ..cubicTo(20.8, 23.5, 23.2, 26.8, 26.4, 26.8)
+    ..cubicTo(33.4, 26.8, 33.5, 16.3, 32.7, 3.0)
+    ..cubicTo(54.1, 19.6, 42.3, 26.0, 44.7, 28.1)
+    ..cubicTo(56.6, 29.4, 48.7, 3.1, 59.3, 28.3)
+    ..cubicTo(61.3, 32.8, 62.0, 37.5, 62.0, 42.8)
+    ..close();
+}
+
+/// The anchor points of [_flamePath], which is
 /// what a hand-written polygon of that shape would look like.
 final _flameVertices = [
   Vector2(62.0, 42.8),
@@ -161,7 +178,7 @@ _Polygon _flamePolygonHitbox(Vector2 size) {
 }
 
 _Polygon _flamePathHitbox(Vector2 size) {
-  final path = TestPaths.byName('flame', size.toSize());
+  final path = _flamePath().centered.resizeTo(size.toSize(), keepRatio: true);
   return _Polygon.fromPath(path, anchor: Anchor.center, position: size / 2);
 }
 
