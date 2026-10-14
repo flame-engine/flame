@@ -28,7 +28,8 @@ class SvgPathsAnimationTicker(final SvgPathsAnimation animation) {
   @visibleForTesting
   Completer<void>? completeCompleter;
 
-  /// The indices of the frames currently shown, in the order of the frames.
+  /// The indices of the frames currently shown, in the order of the frames,
+  /// in a list that can not be modified.
   List<int> get currentIndices => _currentIndices;
   late List<int> _currentIndices = animation.indicesAt(0);
 
@@ -73,11 +74,11 @@ class SvgPathsAnimationTicker(final SvgPathsAnimation animation) {
     }
   }
 
-  /// Sets this animation to the end of its loop.
+  /// Sets this animation to the end of its loop, even if paused.
   void setToLast() {
     clock = animation.duration;
     elapsed = animation.duration;
-    update(0);
+    _advance();
   }
 
   /// Updates this animation, if not paused, ticking it by [dt] seconds.
@@ -87,6 +88,11 @@ class SvgPathsAnimationTicker(final SvgPathsAnimation animation) {
     }
     clock += dt;
     elapsed += dt;
+    _advance();
+  }
+
+  /// Shows the frames at the [clock], handling the start, loop and end.
+  void _advance() {
     if (_done) {
       return;
     }

@@ -92,6 +92,15 @@ void main() {
       test('shows the latest frames before the earliest in later loops', () {
         expect(animation.indicesAt(0.5, firstLoop: false), [2, 3]);
       });
+
+      test('returns lists that can not be modified', () {
+        for (final time in [0.0, 1.2, 3.0]) {
+          expect(
+            () => animation.indicesAt(time).add(0),
+            throwsUnsupportedError,
+          );
+        }
+      });
     });
 
     test('loads each file once', () async {
@@ -185,6 +194,15 @@ void main() {
     test('sets to last', () {
       final ticker = animationOf(loop: false).createTicker()..setToLast();
       expect(ticker.done(), isTrue);
+      expect(ticker.currentIndices, [1]);
+    });
+
+    test('sets to last while paused', () {
+      final ticker = animationOf(loop: false).createTicker()
+        ..paused = true
+        ..setToLast();
+      expect(ticker.done(), isTrue);
+      expect(ticker.clock, 3);
       expect(ticker.currentIndices, [1]);
     });
 

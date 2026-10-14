@@ -106,17 +106,17 @@ class SvgPathsAnimation(
   late final Rect area = _computeArea();
 
   /// The indices of the frames that start first.
-  late final List<int> earliestIndices = List.unmodifiable(
-    _indicesWhere((frame) => frame.start == _earliestStart),
+  late final List<int> earliestIndices = _indicesWhere(
+    (frame) => frame.start == _earliestStart,
   );
 
   /// The indices of the frames that end last.
-  late final List<int> latestIndices = List.unmodifiable(
-    _indicesWhere((frame) => frame.end == _latestEnd(frames)),
+  late final List<int> latestIndices = _indicesWhere(
+    (frame) => frame.end == _latestEnd(frames),
   );
 
   /// The indices of the frames shown at the given [time] within a loop, see
-  /// [SvgPathsAnimation].
+  /// [SvgPathsAnimation], in a list that can not be modified.
   List<int> indicesAt(double time, {bool firstLoop = true}) {
     final active = _indicesWhere(
       (frame) => frame.start <= time && time < frame.end,
@@ -145,10 +145,10 @@ class SvgPathsAnimation(
       .reduce(min);
 
   List<int> _indicesWhere(bool Function(SvgPathsAnimationFrame) test) {
-    return [
+    return List.unmodifiable([
       for (var i = 0; i < frames.length; i++)
         if (test(frames[i])) i,
-    ];
+    ]);
   }
 
   Rect _computeArea() {
