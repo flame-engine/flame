@@ -27,13 +27,7 @@ class VectorPaint {
   /// Return a list of [ui.Paint], with at most two elements, [fill] and
   /// [stroke].
   List<ui.Paint>? get paintLayers {
-    final paints = <ui.Paint>[];
-    if (fill != null) {
-      paints.add(fill!);
-    }
-    if (stroke != null) {
-      paints.add(stroke!);
-    }
+    final paints = [?fill, ?stroke];
     return paints.isNotEmpty ? paints : null;
   }
 
