@@ -50,6 +50,17 @@ void main() {
       expect(identical(svg.bounds, svg.bounds), isTrue);
     });
 
+    test('has the bounds of the imported paths only', () {
+      // The clip is not imported, so it is not part of the bounds.
+      final svg = SvgPaths(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"> '
+        '<clipPath id="c"><rect width="100" height="100"/></clipPath> '
+        '<g clip-path="url(#c)"> '
+        '<path d="M10 10L20 10L20 20Z" fill="#ff0000"/> </g> </svg>',
+      );
+      expect(svg.bounds, const Rect.fromLTRB(10, 10, 20, 20));
+    });
+
     test('has the size of the SVG file', () {
       final svg = SvgPaths(_svg([('#ff0000', '')]));
       expect(svg.size, const Size(100, 100));

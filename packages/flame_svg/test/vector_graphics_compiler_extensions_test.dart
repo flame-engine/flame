@@ -335,13 +335,4 @@ void main() {
       expect(description.toString(), isNotEmpty);
     });
   });
-
-  group('RectConverter', () {
-    test('converts to a ui.Rect', () {
-      expect(
-        const vgc.Rect.fromLTRB(1, 2, 3, 4).toUiRect(),
-        const ui.Rect.fromLTRB(1, 2, 3, 4),
-      );
-    });
-  });
 }

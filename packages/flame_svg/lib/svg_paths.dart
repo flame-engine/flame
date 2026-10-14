@@ -75,8 +75,8 @@ class SvgPaths(String svg, {this.merge = true}) {
   /// The original size reported by the [VectorInstructions].
   Size get size => Size(width, height);
 
-  /// The original bounds for the whole SVG file, computed as the union
-  /// of all the vector graphics compiler paths.
+  /// The bounds of the paths, without their strokes, or [ui.Rect.zero] if
+  /// there are none.
   late final ui.Rect bounds = _computeBounds();
 
   /// Renders all paths on the [canvas], fitting the [area] of the SVG file
@@ -230,16 +230,12 @@ class SvgPaths(String svg, {this.merge = true}) {
   }
 
   ui.Rect _computeBounds() {
-    var bounds = ui.Rect.zero;
-    for (final path in _instructions.paths) {
-      final b = path.bounds().toUiRect();
-      if (bounds == .zero) {
-        bounds = b;
-      } else {
-        bounds = bounds.expandToInclude(b);
-      }
+    ui.Rect? bounds;
+    for (final path in _paths) {
+      final b = path.path.getBounds();
+      bounds = bounds?.expandToInclude(b) ?? b;
     }
-    return bounds;
+    return bounds ?? .zero;
   }
 
   late final VectorInstructions _instructions;

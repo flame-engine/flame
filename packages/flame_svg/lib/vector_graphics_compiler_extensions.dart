@@ -271,11 +271,3 @@ extension PathConverter on Path {
     return p;
   }
 }
-
-/// [Rect] conversion for the vector graphics compiler.
-extension RectConverter on Rect {
-  /// Convert a [Rect] to a [ui.Rect].
-  ui.Rect toUiRect() {
-    return ui.Rect.fromLTRB(left, top, right, bottom);
-  }
-}
