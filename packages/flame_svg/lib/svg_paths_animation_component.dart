@@ -1,4 +1,3 @@
-import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame_svg/flame_svg.dart';
@@ -11,7 +10,9 @@ import 'package:flame_svg/flame_svg.dart';
 /// area.
 ///
 /// With [hitboxes], each [SvgPaths] of the frames gets an [SvgPathsHitbox],
-/// which is only active while one of its frames is shown.
+/// which is only a child of the component while one of its frames is shown,
+/// so that the hidden frames neither collide nor get hit by rays. While the
+/// component is mounted, the hitboxes change at the next tick, like any child.
 class SvgPathsAnimationComponent(
   /// The animation of the component.
   final SvgPathsAnimation animation, {
@@ -62,7 +63,6 @@ class SvgPathsAnimationComponent(
           );
         }
       }
-      addAll(_hitboxes.values);
       _updateHitboxes();
     }
   }
@@ -95,15 +95,23 @@ class SvgPathsAnimationComponent(
   }
 
   @override
+  void onMount() {
+    super.onMount();
+    // The children are not mounted yet, so they change right away.
+    _updateHitboxes();
+  }
+
+  @override
   void onRemove() {
     super.onRemove();
+    // The hitboxes are updated when the component is mounted again, since
+    // they are being removed together with it.
     if (resetOnRemove) {
       animationTicker.reset();
-      _updateHitboxes();
     }
   }
 
-  /// Activates the hitboxes of the frames shown, and deactivates the others.
+  /// Adds the hitboxes of the frames shown, and removes the others.
   void _updateHitboxes() {
     final indices = animationTicker.currentIndices;
     if (_hitboxes.isEmpty || identical(indices, _hitboxIndices)) {
@@ -112,12 +120,14 @@ class SvgPathsAnimationComponent(
     _hitboxIndices = indices;
     final shown = {for (final i in indices) animation.frames[i].svg};
     _hitboxes.forEach((svg, hitbox) {
-      final isShown = shown.contains(svg);
-      hitbox
-        ..collisionType = isShown
-            ? CollisionType.active
-            : CollisionType.inactive
-        ..renderShape = renderHitboxes && isShown;
+      final isChild = hitbox.parent == this && !hitbox.isRemoving;
+      if (shown.contains(svg)) {
+        if (!isChild) {
+          add(hitbox);
+        }
+      } else if (isChild) {
+        remove(hitbox);
+      }
     });
   }
 }

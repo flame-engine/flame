@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame_svg/flame_svg.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -27,10 +28,14 @@ SvgPathsAnimation _animationOf({bool loop = true}) => SvgPathsAnimation([
 List<SvgPathsHitbox> _hitboxesOf(SvgPathsAnimationComponent component) =>
     component.children.whereType<SvgPathsHitbox>().toList();
 
-List<bool> _activeOf(SvgPathsAnimationComponent component) => [
-  for (final hitbox in _hitboxesOf(component))
-    hitbox.collisionType == CollisionType.active,
+/// The positions of the hitboxes, which tell them apart: the one of [_a] is
+/// at the origin, and the one of [_b] is not.
+List<Vector2> _positionsOf(SvgPathsAnimationComponent component) => [
+  for (final hitbox in _hitboxesOf(component)) hitbox.position,
 ];
+
+final _aPosition = Vector2.zero();
+final _bPosition = Vector2(30, 10);
 
 void main() {
   group('SvgPathsAnimationComponent', () {
@@ -45,10 +50,9 @@ void main() {
       );
     });
 
-    test('has a hitbox for each SVG of the frames', () {
+    test('has the hitboxes of the frames shown', () {
       final component = SvgPathsAnimationComponent(_animationOf());
-      expect(_hitboxesOf(component).length, 2);
-      expect(_activeOf(component), [true, false]);
+      expect(_positionsOf(component), [_aPosition]);
       expect(
         SvgPathsAnimationComponent(_animationOf(), hitboxes: false).children,
         isEmpty,
@@ -60,23 +64,25 @@ void main() {
         _animationOf(),
         size: Vector2(80, 40),
       );
-      final [a, b] = _hitboxesOf(component);
-      expect(a.position, Vector2.zero());
+      expect(_positionsOf(component), [Vector2.zero()]);
+      component.update(1.5);
+      final [b] = _hitboxesOf(component);
       expect(b.position, Vector2(60, 20));
       expect(b.scale, Vector2.all(2));
     });
 
-    test('activates the hitboxes of the frames shown', () {
+    test('changes the hitboxes with the frames shown', () {
       final component = SvgPathsAnimationComponent(
         _animationOf(),
         renderHitboxes: true,
       );
-      expect(_hitboxesOf(component).map((h) => h.renderShape), [true, false]);
+      final [a] = _hitboxesOf(component);
+      expect(a.renderShape, isTrue);
       component.update(1.5);
-      expect(_activeOf(component), [false, true]);
-      expect(_hitboxesOf(component).map((h) => h.renderShape), [false, true]);
+      expect(_positionsOf(component), [_bPosition]);
+      expect(_hitboxesOf(component).single.renderShape, isTrue);
       component.update(1);
-      expect(_activeOf(component), [true, false]);
+      expect(_hitboxesOf(component), [same(a)]);
     });
 
     test('does not tick while not playing', () {
@@ -85,7 +91,7 @@ void main() {
         playing: false,
       )..update(1.5);
       expect(component.animationTicker.currentIndices, [0]);
-      expect(_activeOf(component), [true, false]);
+      expect(_positionsOf(component), [_aPosition]);
     });
 
     test('renders the frames shown', () async {
@@ -125,12 +131,32 @@ void main() {
       );
       await game.ensureAdd(component);
       game.update(1.5);
-      expect(_activeOf(component), [false, true]);
+      await game.ready();
+      expect(_positionsOf(component), [_bPosition]);
       game.remove(component);
       await game.ready();
       expect(component.animationTicker.clock, 0);
-      expect(_activeOf(component), [true, false]);
+      await game.ensureAdd(component);
+      expect(_positionsOf(component), [_aPosition]);
     });
+
+    testWithGame<_CollisionGame>(
+      'is not hit by rays at the frames not shown',
+      _CollisionGame.new,
+      (game) async {
+        final component = SvgPathsAnimationComponent(_animationOf());
+        await game.ensureAdd(component);
+        // Aims at _b, which is only shown by frame 1.
+        final ray = Ray2(origin: Vector2(35, -10), direction: Vector2(0, 1));
+        expect(game.collisionDetection.raycast(ray), isNull);
+        game.update(1.5);
+        await game.ready();
+        expect(
+          game.collisionDetection.raycast(ray)?.intersectionPoint,
+          Vector2(35, 10),
+        );
+      },
+    );
 
     testWithGame<_CollisionGame>(
       'ends the collisions of the frames no longer shown',
@@ -144,9 +170,12 @@ void main() {
         ]);
         game.update(0);
         expect(collider.starts, 1);
+        // The hitboxes change at the next tick after the frames.
         game.update(1.5);
+        game.update(0);
         expect(collider.ends, 1);
         game.update(1);
+        game.update(0);
         expect(collider.starts, 2);
       },
     );

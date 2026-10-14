@@ -148,8 +148,10 @@ union of their bounds, the `area` of the animation, which is fitted within the s
 component while keeping its aspect ratio. The size of the component is by default the size of
 that area.
 
-Each SVG file used by the frames gets an `SvgPathsHitbox`, which is only active while one of its
-frames is shown. Pass `hitboxes: false` to skip them, or `renderHitboxes: true` to see them.
+Each SVG file used by the frames gets an `SvgPathsHitbox`, which is only a child of the component
+while one of its frames is shown, so that hidden frames neither collide nor get hit by rays. Like
+any child, a hitbox is added or removed at the next tick after its frames change. Pass
+`hitboxes: false` to skip them, or `renderHitboxes: true` to see them.
 
 Like the `SpriteAnimationComponent`, the component can be paused with `playing`, removed when a
 non-looping animation finishes with `removeOnFinish`, and reset when removed with
