@@ -12,8 +12,6 @@ enum SpriteWarpImage(final String path) {
   zap('zap.png'),
   pizza('pizza.png'),
   player('layers/player.png'),
-  enemy('layers/enemy.png'),
-  background('layers/background.png'),
   mountain('parallax/mountain-far.png'),
 }
 
@@ -21,16 +19,7 @@ enum SpriteWarpImage(final String path) {
 enum DefaultWarpTarget(final String label) {
   none('None'),
   wave('Wave'),
-  waveHorizontal('Wave Horizontal'),
-  waveVertical('Wave Vertical'),
-  crushNorth('Crush N'),
-  crushNorthEast('Crush NE'),
-  crushEast('Crush E'),
-  crushSouthEast('Crush SE'),
-  crushSouth('Crush S'),
-  crushSouthWest('Crush SW'),
-  crushWest('Crush W'),
-  crushNorthWest('Crush NW'),
+  crush('Crush'),
   deflate('Deflate'),
   inflate('Inflate'),
   implode('Implode'),
@@ -39,10 +28,7 @@ enum DefaultWarpTarget(final String label) {
   /// Returns this target for a grid of [gridSize] x [gridSize] cells.
   WarpGrid grid(int gridSize) {
     final identity = WarpGrid.identity(columns: gridSize, rows: gridSize);
-    if (this == none) {
-      return identity;
-    }
-    // Seeded, so that crushes always look the same.
+    // Seeded, so that the crush always looks the same.
     final random = Random(index);
     return identity.replacingDestinationPositions([
       for (final position in identity.destinationPositions)
@@ -55,16 +41,7 @@ enum DefaultWarpTarget(final String label) {
     return switch (this) {
       none => Vector2.zero(),
       wave => Vector2(0.1 * sin(2 * pi * v), 0.1 * sin(2 * pi * u)),
-      waveHorizontal => Vector2(0.1 * sin(2 * pi * v), 0),
-      waveVertical => Vector2(0, 0.1 * sin(2 * pi * u)),
-      crushNorth => _crushSide(u, v, Vector2(0.5, 0), random),
-      crushNorthEast => _crush(u, v, Vector2(1, 0), random),
-      crushEast => _crushSide(u, v, Vector2(1, 0.5), random),
-      crushSouthEast => _crush(u, v, Vector2(1, 1), random),
-      crushSouth => _crushSide(u, v, Vector2(0.5, 1), random),
-      crushSouthWest => _crush(u, v, Vector2(0, 1), random),
-      crushWest => _crushSide(u, v, Vector2(0, 0.5), random),
-      crushNorthWest => _crush(u, v, Vector2(0, 0), random),
+      crush => _crush(u, v, random),
       deflate => _towardsCenter(u, v, 0.35),
       inflate => _towardsCenter(u, v, -0.25),
       implode => _toCircle(u, v, 0.3),
@@ -72,33 +49,15 @@ enum DefaultWarpTarget(final String label) {
     };
   }
 
-  /// Dents [corner] inwards, crumpled by some jitter.
-  static Vector2 _crush(double u, double v, Vector2 corner, Random random) {
+  /// Dents the top-right corner inwards, crumpled by some jitter.
+  static Vector2 _crush(double u, double v, Random random) {
+    final corner = Vector2(1, 0);
     final distance = Vector2(u, v).distanceTo(corner) / sqrt2;
     final falloff = pow(max(0, 1 - distance / 0.55), 2).toDouble();
-    return _dent(corner, 0.45, 0.15, falloff, random);
-  }
-
-  /// Dents the [middle] of a side inwards, rounder than [_crush].
-  static Vector2 _crushSide(double u, double v, Vector2 middle, Random random) {
-    final distance = Vector2(u, v).distanceTo(middle) / sqrt2;
-    final falloff = pow(max(0, 1 - pow(distance / 0.55, 2)), 2).toDouble();
-    return _dent(middle, 0.3, 0.06, falloff, random);
-  }
-
-  /// Moves a vertex inwards from [origin] by [depth] plus random [jitter],
-  /// scaled by [falloff].
-  static Vector2 _dent(
-    Vector2 origin,
-    double depth,
-    double jitter,
-    double falloff,
-    Random random,
-  ) {
     final noise = Vector2(random.nextDouble(), random.nextDouble())
       ..sub(Vector2.all(0.5));
-    final inwards = (Vector2.all(0.5) - origin)..normalize();
-    return (inwards * depth + noise * jitter) * falloff;
+    final inwards = (Vector2.all(0.5) - corner)..normalize();
+    return (inwards * 0.45 + noise * 0.15) * falloff;
   }
 
   /// Moves the vertices towards the center (away if [amount] is negative),
@@ -120,16 +79,13 @@ enum DefaultWarpTarget(final String label) {
   }
 }
 
-/// Hosts a [SpriteWarpExample], recreated only when [gridSize] changes. A
-/// change of [startResets] or [targetResets] resets the matching grid.
+/// Hosts a [SpriteWarpExample], recreated only when [gridSize] changes.
 class const SpriteWarpStory({
   required final int gridSize,
   required final SpriteWarpImage image,
   required final WarpInterpolation interpolation,
   required final DefaultWarpTarget defaultTarget,
   final bool animate = false,
-  final int startResets = 0,
-  final int targetResets = 0,
   super.key,
 }) extends StatelessWidget {
   @override
@@ -140,8 +96,6 @@ class const SpriteWarpStory({
       interpolation: interpolation,
       defaultTarget: defaultTarget,
       animate: animate,
-      startResets: startResets,
-      targetResets: targetResets,
       key: ValueKey(gridSize),
     );
   }
@@ -153,8 +107,6 @@ class const _SpriteWarpGame({
   required final WarpInterpolation interpolation,
   required final DefaultWarpTarget defaultTarget,
   required final bool animate,
-  required final int startResets,
-  required final int targetResets,
   super.key,
 }) extends StatefulWidget {
   @override
@@ -178,12 +130,6 @@ class _SpriteWarpGameState() extends State<_SpriteWarpGame> {
       ..interpolation = widget.interpolation
       ..defaultTarget = widget.defaultTarget
       ..animate = widget.animate;
-    if (widget.startResets != oldWidget.startResets) {
-      _game.resetStart();
-    }
-    if (widget.targetResets != oldWidget.targetResets) {
-      _game.resetTarget();
-    }
   }
 
   @override
@@ -202,8 +148,8 @@ class SpriteWarpExample({
     the target grid (right) of a `WarpEffect.to`.
 
     Drag a handle to move its vertex, or double tap it to reset the vertex.
-    Use `Default Target` to pick a predefined target grid, and the reset
-    buttons to reset a grid.
+    Double tap a sprite away from the handles to reset its whole grid, and
+    use `Default Target` to pick a predefined target grid.
 
     Turn on `Animate` to warp each sprite to the other's grid and back.
   ''';
@@ -219,19 +165,18 @@ class SpriteWarpExample({
   WarpGrid? _targetGrid;
 
   late final _EditableWarpSprite _startSprite = _EditableWarpSprite(
-    gridSize: gridSize,
     label: 'Start',
+    initialGrid: () => WarpGrid.identity(columns: gridSize, rows: gridSize),
   );
 
   late final _EditableWarpSprite _targetSprite = _EditableWarpSprite(
-    gridSize: gridSize,
     label: 'Target',
+    initialGrid: () => _defaultTarget.grid(gridSize),
   );
 
   @override
   Future<void> onLoad() async {
     _applyInterpolation();
-    _targetSprite.warpGrid = _defaultTarget.grid(gridSize);
     world.addAll([_startSprite, _targetSprite]);
     await _showImage();
     _updateAnimation();
@@ -285,7 +230,7 @@ class SpriteWarpExample({
       return;
     }
     _defaultTarget = value;
-    resetTarget();
+    _targetSprite.resetGrid();
   }
 
   /// Starts or stops warping both sprites between the two grids.
@@ -298,11 +243,8 @@ class SpriteWarpExample({
   }
 
   void _updateAnimation() {
-    for (final sprite in [_startSprite, _targetSprite]) {
-      sprite
-        ..editable = !_animate
-        ..gridBehind = _animate;
-    }
+    _startSprite.editable = !_animate;
+    _targetSprite.editable = !_animate;
     if (!_animate) {
       if (_animations.isNotEmpty) {
         for (final animation in _animations) {
@@ -337,80 +279,26 @@ class SpriteWarpExample({
       curve: Curves.easeInOut,
     );
   }
-
-  /// Removes any distortion from the start grid, unless animating.
-  void resetStart() {
-    loaded.then((_) {
-      if (!_animate) {
-        _startSprite.warpGrid = WarpGrid.identity(
-          columns: gridSize,
-          rows: gridSize,
-        );
-      }
-    });
-  }
-
-  /// Resets the target grid to the default target, unless animating.
-  void resetTarget() {
-    loaded.then((_) {
-      if (!_animate) {
-        _targetSprite.warpGrid = _defaultTarget.grid(gridSize);
-      }
-    });
-  }
 }
 
 /// A labeled [SpriteComponent] whose grid has handles on its vertices, which
-/// can be dragged or double tapped while [editable].
+/// can be dragged or double tapped while [editable]. Double tapping the
+/// sprite itself resets its grid to the one returned by [initialGrid].
 class _EditableWarpSprite({
-  required int gridSize,
   required String label,
-}) extends SpriteComponent with HasWarpGrid {
+  required final WarpGrid Function() initialGrid,
+}) extends SpriteComponent with HasWarpGrid, DoubleTapCallbacks {
   this : super(anchor: Anchor.center) {
-    warpGrid = WarpGrid.identity(columns: gridSize, rows: gridSize);
+    warpGrid = initialGrid();
     final text = TextComponent(text: label, anchor: Anchor.center);
-    addAll([text, _overlay]);
+    add(text);
     size.addListener(
       () => text.position = Vector2(size.x / 2, size.y * 1.2),
     );
   }
 
-  final _WarpGridOverlay _overlay = _WarpGridOverlay();
-
-  bool editable = true;
-
-  /// Whether the grid is drawn behind the sprite, more transparent.
-  bool get gridBehind => _gridBehind;
-  bool _gridBehind = false;
-  set gridBehind(bool value) {
-    _gridBehind = value;
-    _overlay._paint.color = Color(value ? 0x40FFFFFF : 0x80FFFFFF);
-  }
-
-  @override
-  void render(Canvas canvas) {
-    if (gridBehind) {
-      super.renderChild(canvas, _overlay);
-    }
-    super.render(canvas);
-  }
-
-  @override
-  void renderChild(Canvas canvas, Component child) {
-    // When behind, [render] already rendered the overlay.
-    if (!gridBehind || child != _overlay) {
-      super.renderChild(canvas, child);
-    }
-  }
-}
-
-/// Draws the grid of its parent, and places the handles on its vertices.
-class _WarpGridOverlay() extends Component with ParentIsA<_EditableWarpSprite> {
-  // Updates after the effects on the parent, so that the handles follow them.
-  this : super(priority: 1);
-
   /// Shared by the grid lines and the handles.
-  final Paint _paint = Paint()
+  final Paint _gridPaint = Paint()
     ..color = const Color(0x80FFFFFF)
     ..style = PaintingStyle.stroke
     ..strokeWidth = 2;
@@ -419,18 +307,36 @@ class _WarpGridOverlay() extends Component with ParentIsA<_EditableWarpSprite> {
   WarpGrid? _shownGrid;
   final Vector2 _shownSize = Vector2.zero();
 
+  /// Whether the grid can be edited. While not editable, the handles are
+  /// hidden and the grid is drawn faintly behind the sprite.
+  bool get editable => _editable;
+  bool _editable = true;
+  set editable(bool value) {
+    _editable = value;
+    _gridPaint.color = Color(value ? 0x80FFFFFF : 0x40FFFFFF);
+  }
+
   @override
   void onLoad() {
-    for (var i = 0; i < parent.warpGrid!.vertexCount; i++) {
+    for (var i = 0; i < warpGrid!.vertexCount; i++) {
       _handles.add(_Handle(this, i));
     }
     addAll(_handles);
   }
 
+  /// Resets the whole grid.
+  void resetGrid() {
+    if (editable) {
+      warpGrid = initialGrid();
+    }
+  }
+
+  @override
+  void onDoubleTapDown(DoubleTapDownEvent event) => resetGrid();
+
   @override
   void update(double dt) {
-    final grid = parent.warpGrid!;
-    final size = parent.size;
+    final grid = warpGrid!;
     if (identical(grid, _shownGrid) && size == _shownSize) {
       return;
     }
@@ -442,63 +348,84 @@ class _WarpGridOverlay() extends Component with ParentIsA<_EditableWarpSprite> {
     }
   }
 
-  /// Resets the vertex of [handle].
-  void _reset(_Handle handle) {
-    final grid = parent.warpGrid!;
-    final stride = grid.columns + 1;
-    _move(
-      handle,
-      Vector2(
-        (handle._index % stride) / grid.columns,
-        (handle._index ~/ stride) / grid.rows,
-      )..multiply(parent.size),
-    );
-  }
-
-  void _move(_Handle handle, Vector2 position) {
-    if (!parent.editable) {
-      return;
-    }
-    handle.position = position;
-    final size = parent.size;
-    parent.warpGrid = _shownGrid = parent.warpGrid!
-        .replacingDestinationPositions([
-          for (final handle in _handles) handle.position.clone()..divide(size),
-        ]);
-  }
-
-  /// Connects each handle to its right and bottom neighbors.
   @override
   void render(Canvas canvas) {
-    final grid = parent.warpGrid!;
+    if (!editable) {
+      _renderGrid(canvas);
+    }
+    super.render(canvas);
+    if (editable) {
+      _renderGrid(canvas);
+    }
+  }
+
+  /// Connects each vertex to its right and bottom neighbors.
+  void _renderGrid(Canvas canvas) {
+    final grid = warpGrid!;
+    final points = [
+      for (final position in grid.destinationPositions)
+        (position..multiply(size)).toOffset(),
+    ];
     final stride = grid.columns + 1;
     for (var row = 0; row <= grid.rows; row++) {
       for (var column = 0; column <= grid.columns; column++) {
-        final from = _handles[row * stride + column].position.toOffset();
+        final from = points[row * stride + column];
         if (column < grid.columns) {
-          final to = _handles[row * stride + column + 1].position;
-          canvas.drawLine(from, to.toOffset(), _paint);
+          canvas.drawLine(from, points[row * stride + column + 1], _gridPaint);
         }
         if (row < grid.rows) {
-          final to = _handles[(row + 1) * stride + column].position;
-          canvas.drawLine(from, to.toOffset(), _paint);
+          canvas.drawLine(
+            from,
+            points[(row + 1) * stride + column],
+            _gridPaint,
+          );
         }
       }
     }
   }
+
+  /// Resets the vertex of [handle].
+  void _resetVertex(_Handle handle) {
+    final grid = warpGrid!;
+    final stride = grid.columns + 1;
+    _moveVertex(
+      handle,
+      Vector2(
+        (handle._index % stride) / grid.columns,
+        (handle._index ~/ stride) / grid.rows,
+      )..multiply(size),
+    );
+  }
+
+  void _moveVertex(_Handle handle, Vector2 position) {
+    if (!editable) {
+      return;
+    }
+    handle.position = position;
+    warpGrid = _shownGrid = warpGrid!.replacingDestinationPositions([
+      for (final handle in _handles) handle.position.clone()..divide(size),
+    ]);
+  }
 }
 
 /// Moves the vertex at [_index] when dragged, and resets it when double
-/// tapped.
-class _Handle(final _WarpGridOverlay _overlay, final int _index)
+/// tapped. Hidden while the grid is not editable.
+class _Handle(final _EditableWarpSprite _sprite, final int _index)
     extends CircleComponent
     with DragCallbacks, DoubleTapCallbacks {
-  this : super(radius: 8, anchor: Anchor.center, paint: _overlay._paint);
+  this : super(radius: 8, anchor: Anchor.center, paint: _sprite._gridPaint);
+
+  @override
+  void render(Canvas canvas) {
+    if (_sprite.editable) {
+      super.render(canvas);
+    }
+  }
 
   @override
   void onDragUpdate(DragUpdateEvent event) =>
-      _overlay._move(this, position + event.localDelta);
+      _sprite._moveVertex(this, position + event.localDelta);
 
   @override
-  void onDoubleTapDown(DoubleTapDownEvent event) => _overlay._reset(this);
+  void onDoubleTapDown(DoubleTapDownEvent event) => _sprite._resetVertex(this);
 }

@@ -1,6 +1,4 @@
-import 'package:examples/commons/button_knob.dart';
 import 'package:examples/commons/commons.dart';
-import 'package:examples/commons/dropdown_knob.dart';
 import 'package:examples/commons/example_use_case.dart';
 import 'package:examples/stories/sprites/base64_sprite_example.dart';
 import 'package:examples/stories/sprites/basic_sprite_example.dart';
@@ -62,45 +60,31 @@ WidgetbookComponent spritesStories() {
       ),
       ExampleUseCase(
         name: 'Sprite Warp',
-        builder: (context) {
-          final animate = context.knobs.boolean(label: 'Animate');
-          return SpriteWarpStory(
-            gridSize: context.knobs.int.slider(
-              label: 'Grid Size',
-              initialValue: 4,
-              min: 3,
-              max: 8,
-              divisions: 5,
-            ),
-            image: context.knobs.object.dropdown(
-              label: 'Image',
-              initialOption: SpriteWarpImage.flame,
-              options: SpriteWarpImage.values,
-              labelBuilder: (image) => image.name,
-            ),
-            interpolation: context.knobs.object.dropdown(
-              label: 'Interpolation',
-              initialOption: WarpInterpolation.bilinear,
-              options: WarpInterpolation.values,
-              labelBuilder: (interpolation) => interpolation.name,
-            ),
-            defaultTarget: context.knobs.dropdown(
-              label: 'Default Target',
-              options: DefaultWarpTarget.values,
-              labelBuilder: (target) => target.label,
-              enabled: !animate,
-            ),
-            animate: animate,
-            startResets: context.knobs.button(
-              label: 'Reset Start',
-              enabled: !animate,
-            ),
-            targetResets: context.knobs.button(
-              label: 'Reset Target',
-              enabled: !animate,
-            ),
-          );
-        },
+        builder: (context) => SpriteWarpStory(
+          gridSize: context.knobs.int.slider(
+            label: 'Grid Size',
+            initialValue: 4,
+            min: 3,
+            max: 8,
+            divisions: 5,
+          ),
+          image: context.knobs.object.dropdown(
+            label: 'Image',
+            options: SpriteWarpImage.values,
+            labelBuilder: (image) => image.name,
+          ),
+          interpolation: context.knobs.object.dropdown(
+            label: 'Interpolation',
+            options: WarpInterpolation.values,
+            labelBuilder: (interpolation) => interpolation.name,
+          ),
+          defaultTarget: context.knobs.object.dropdown(
+            label: 'Default Target',
+            options: DefaultWarpTarget.values,
+            labelBuilder: (target) => target.label,
+          ),
+          animate: context.knobs.boolean(label: 'Animate'),
+        ),
         codeLink: baseLink('sprites/sprite_warp_example.dart'),
         info: SpriteWarpExample.description,
       ),

@@ -109,14 +109,13 @@ A few more things to keep in mind:
 The [Sprite Warp example](https://examples.flame-engine.org/#/?path=sprites/sprite-warp) shows
 two sprites with editable grids: the start grid on the left and the target grid of a
 [`WarpEffect.to`](../effects/warp_effects.md#warpeffectto) on the right. Drag a handle to move
-its vertex, or double tap it to reset the vertex. Knobs:
+its vertex, double tap it to reset the vertex, or double tap the sprite to reset its whole grid.
+Knobs:
 
 - `Grid Size`: the number of cells per side (3 to 8); changing it resets both grids.
 - `Image`, `Interpolation`: the sprite and the `WarpInterpolation` of both sprites.
-- `Default Target`: a predefined target grid, such as waves, crushes, or an implosion.
+- `Default Target`: a predefined target grid, such as a wave, a crush, or an implosion.
 - `Animate`: warps each sprite to the other's grid and back, with two infinite `WarpEffect.to`.
-- `Reset Start`, `Reset Target`: reset the start grid to the identity, and the target grid to the
-  `Default Target`.
 
 
 ## SpriteAnimationComponent
