@@ -71,6 +71,7 @@ abstract base class GpuBackend() {
     required int width,
     required int height,
     required Color clearValue,
+    int msaaSampleCount = 1,
   });
 
   /// Begins a new frame.

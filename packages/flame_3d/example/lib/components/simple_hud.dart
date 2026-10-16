@@ -43,7 +43,8 @@ class SimpleHud() extends Component with HasGameRef<ExampleGame3D> {
 Camera controls:
 - Move using W, A, S, D, Space, Left-Ctrl
 - Look around with arrow keys or mouse
-- Change camera mode with 1, 2, 3 or 4
+- Change camera mode with M
+- Toggle MSAA with O
 - Change camera projection with P
 - Zoom in and out with scroll
 ''',

@@ -32,10 +32,11 @@ class GraphicsDevice({
   late GpuRenderPass _renderPass;
   late GpuRenderTarget _renderTarget;
 
-  // Render target pool: keyed by (width, height), each entry is a list of
-  // targets. _poolIndex tracks how many have been handed out this frame.
-  final _pool = <(int, int), List<GpuRenderTarget>>{};
-  final _poolIndex = <(int, int), int>{};
+  // Render target pool: keyed by (width, height, MSAA sample count), each
+  // entry is a list of targets. _poolIndex tracks how many have been handed
+  // out this frame.
+  final _pool = <(int, int, int), List<GpuRenderTarget>>{};
+  final _poolIndex = <(int, int, int), int>{};
 
   /// Begin a new frame.
   ///
@@ -75,8 +76,10 @@ class GraphicsDevice({
   /// The graphics device can be used to bind resources like [Mesh]s,
   /// [Material]s and [Texture]s. Once you have executed all your bindings you
   /// can submit the batch to the GPU with [endPass].
-  void beginPass(Size size) {
-    _renderTarget = _acquireRenderTarget(size);
+  ///
+  /// Supported values for [msaaSampleCount] are `1` or `4`.
+  void beginPass(Size size, {int msaaSampleCount = 1}) {
+    _renderTarget = _acquireRenderTarget(size, msaaSampleCount);
     _renderPass = _frame.beginRenderPass(
       _renderTarget,
       blend: blendState,
@@ -137,8 +140,12 @@ class GraphicsDevice({
   ///
   /// Multiple passes at the same size within a frame get distinct targets.
   /// Targets are reused across frames.
-  GpuRenderTarget _acquireRenderTarget(Size size) {
-    final key = (size.width.toInt(), size.height.toInt());
+  GpuRenderTarget _acquireRenderTarget(Size size, int msaaSampleCount) {
+    final key = (
+      size.width.toInt(),
+      size.height.toInt(),
+      msaaSampleCount,
+    );
     final targets = _pool.putIfAbsent(key, () => []);
     final index = _poolIndex.putIfAbsent(key, () => 0);
 
@@ -152,6 +159,7 @@ class GraphicsDevice({
       width: key.$1,
       height: key.$2,
       clearValue: clearValue,
+      msaaSampleCount: key.$3,
     );
 
     targets.add(target);
