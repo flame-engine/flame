@@ -44,7 +44,10 @@ class World3D({
       ..lights = _lights
       ..setCamera(camera.viewMatrix, camera.projectionMatrix);
 
-    gameRef.device.beginPass(renderSize);
+    gameRef.device.beginPass(
+      renderSize,
+      msaaSampleCount: gameRef.msaa().sampleCount,
+    );
     super.renderFromCamera(canvas);
     context.flush();
 
