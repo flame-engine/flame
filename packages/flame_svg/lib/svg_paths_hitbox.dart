@@ -1,8 +1,11 @@
 import 'dart:math' show max;
+import 'dart:ui' show Paint, PaintingStyle;
 
 import 'package:flame/collisions.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
+import 'package:flame_svg/svg_paths.dart';
+import 'package:flame_svg/vector_path.dart';
 
 /// A [PathHitbox] that treats its polygons as a union of solid shapes.
 ///
@@ -31,6 +34,79 @@ class SvgPathsHitbox({
   /// With this constructor you create a [SvgPathsHitbox] from all the closed
   /// contours of the [path]. See [PathHitbox.new] for the parameters.
   this;
+
+  /// Creates a hitbox for all the paths of the [svg], see
+  /// [VectorPath.hitboxPath], which fits the [area] of the [svg], by default
+  /// its bounds, within the [size] of its parent, by default the size of that
+  /// area, see [SvgPaths.fit]. When the size of the parent changes, [place]
+  /// fits the hitbox within the new size.
+  ///
+  /// The [sampling] and [tolerance] of the polygons, see [PathComponent.new],
+  /// are in the units of the [size], and not in those of the SVG file. With
+  /// [renderHitboxes], the polygons are outlined in white.
+  factory SvgPathsHitbox.fromSvg(
+    SvgPaths svg,
+    Vector2? size, {
+    Rect? area,
+    bool? renderHitboxes,
+    bool? filter,
+    double sampling = 1.0,
+    double? tolerance,
+  }) {
+    final full = area ?? svg.bounds;
+    final fit = svg.fit(size ?? full.size.toVector2(), area: full).scale;
+    // A parent without an area shrinks the paths to nothing, so their
+    // polygons are only sampled in the units of the SVG file.
+    final units = fit > 0 ? fit : 1;
+    final combined = Path();
+    for (var svgIndex = 0; svgIndex < svg.length; ++svgIndex) {
+      combined.addPath(svg.pathAt(svgIndex).hitboxPath, Offset.zero);
+    }
+    final hitbox = SvgPathsHitbox(
+      path: combined,
+      sampling: sampling / units,
+      tolerance: tolerance == null ? null : tolerance / units,
+      filter: filter ?? true,
+    );
+    hitbox
+      .._svg = svg
+      .._area = full
+      ..place(size ?? full.size.toVector2());
+    if (renderHitboxes ?? false) {
+      hitbox
+        ..renderShape = true
+        ..paint = (Paint()
+          ..color = const Color(0xffffffff)
+          ..style = PaintingStyle.stroke);
+    }
+    return hitbox;
+  }
+
+  /// The SVG file and its area that the hitbox was created for, see
+  /// [SvgPathsHitbox.fromSvg].
+  SvgPaths? _svg;
+  Rect? _area;
+
+  /// Fits the hitbox within the given [size] of its parent, like
+  /// [SvgPathsHitbox.fromSvg] does, which it must have been created with.
+  ///
+  /// The polygons are not made again, so they keep the sampling and the
+  /// tolerance of the size that they were made for.
+  void place(Vector2 size) {
+    final svg = _svg;
+    final area = _area;
+    assert(
+      svg != null && area != null,
+      'Only a hitbox from SvgPathsHitbox.fromSvg can be placed',
+    );
+    if (svg == null || area == null) {
+      return;
+    }
+    final (area: _, scale: fit, :offset) = svg.fit(size, area: area);
+    // Closing the contours of the paths for the hitbox keeps their bounds.
+    position = (svg.bounds.topLeft - area.topLeft).toVector2() * fit + offset;
+    scale.setValues(fit, fit);
+  }
 
   final _normal = Vector2.zero();
   final _crossings = <_Crossing>[];

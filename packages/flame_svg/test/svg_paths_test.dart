@@ -338,6 +338,34 @@ void main() {
       });
     });
 
+    group('fit', () {
+      final svg = SvgPaths(_svg([('#ff0000', '')]));
+
+      test('fits the whole SVG by default, centered', () {
+        final (:area, :scale, :offset) = svg.fit(Vector2(50, 100));
+        expect(area, const Rect.fromLTWH(0, 0, 100, 100));
+        expect(scale, 0.5);
+        expect(offset, Vector2(0, 25));
+      });
+
+      test('fits the given area', () {
+        const given = Rect.fromLTWH(50, 50, 10, 20);
+        final (:area, :scale, :offset) = svg.fit(Vector2(40, 40), area: given);
+        expect(area, given);
+        expect(scale, 2);
+        expect(offset, Vector2(10, 0));
+      });
+
+      test('does not scale an empty area', () {
+        final (:area, :scale, :offset) = svg.fit(
+          Vector2(40, 40),
+          area: Rect.zero,
+        );
+        expect(scale, 1);
+        expect(offset, Vector2(20, 20));
+      });
+    });
+
     group('render', () {
       // A red square from (50, 50) to (55, 55), in a 100x100 SVG.
       final svg = SvgPaths(

@@ -337,6 +337,24 @@ void main() {
         );
         expect(_vertices(loose), lessThan(_vertices(fine)));
       });
+
+      test('can have a looser tolerance per path', () {
+        int perPathVertices(double? tolerance) {
+          final component = _componentOf(
+            circle,
+            hitboxes: SvgHitboxes.perPath,
+            size: Vector2.all(320),
+            tolerance: tolerance,
+          );
+          final hitbox = component.descendants().whereType<PathHitbox>().single;
+          return hitbox.polygons.fold(
+            0,
+            (sum, polygon) => sum + polygon.length,
+          );
+        }
+
+        expect(perPathVertices(20), lessThan(perPathVertices(null)));
+      });
     });
 
     test('with a single hitbox, has one hitbox for all the paths', () {

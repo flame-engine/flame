@@ -61,6 +61,23 @@ void main() {
       );
     });
 
+    group('hitboxPath', () {
+      test('closes the open contours of a filled path', () {
+        final path = VectorPath(_openTriangle(10, 10, 20), _filled);
+        final hitboxPath = path.hitboxPath;
+        expect(hitboxPath.computeMetrics().single.isClosed, isTrue);
+        expect(hitboxPath.getBounds(), path.path.getBounds());
+        expect(identical(path.hitboxPath, hitboxPath), isTrue);
+      });
+
+      test('is the path itself when it is closed or not filled', () {
+        final closed = VectorPath(_square(0, 0, 10), _filled);
+        expect(identical(closed.hitboxPath, closed.path), isTrue);
+        final stroked = VectorPath(_openTriangle(10, 10, 20), _stroked);
+        expect(identical(stroked.hitboxPath, stroked.path), isTrue);
+      });
+    });
+
     group('equality', () {
       test('is by paint and path', () {
         // Both are compared by identity.

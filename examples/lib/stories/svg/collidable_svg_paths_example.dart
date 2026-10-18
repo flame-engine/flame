@@ -113,7 +113,7 @@ class CollidableSvgPathsComponent(
     _svg = await SvgPaths.fromFile('assets/svgs/$name.svg');
     _area = _svg.bounds;
     size = _area.size.toVector2()..scale(svgWidth / _area.width);
-    add(SvgPathsComponent.createSvgPathsHitbox(_svg, size));
+    add(SvgPathsHitbox.fromSvg(_svg, size));
     add(RotateEffect.by(tau, EffectController(duration: 3, infinite: true)));
   }
 

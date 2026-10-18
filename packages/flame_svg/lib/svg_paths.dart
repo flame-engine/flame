@@ -71,9 +71,32 @@ class SvgPaths(String svg, {this.merge = true}) {
   /// there are none.
   late final ui.Rect bounds = _computeBounds();
 
+  /// How the [area] of the SVG file, by default the whole file, fits within
+  /// the [size] while keeping its aspect ratio, and centered within it: each
+  /// point of the [area] goes to `(point - area.topLeft) * scale + offset`.
+  ///
+  /// The scale is 1 when there is nothing to fit, like with an empty [area].
+  ({ui.Rect area, double scale, Vector2 offset}) fit(
+    Vector2 size, {
+    ui.Rect? area,
+  }) {
+    final source = area ?? ui.Rect.fromLTWH(0, 0, width, height);
+    var scale = min(size.x / source.width, size.y / source.height);
+    if (!scale.isFinite) {
+      scale = 1;
+    }
+    return (
+      area: source,
+      scale: scale,
+      offset: Vector2(
+        (size.x - source.width * scale) / 2,
+        (size.y - source.height * scale) / 2,
+      ),
+    );
+  }
+
   /// Renders all paths on the [canvas], fitting the [area] of the SVG file
-  /// into the dimensions in [size] while keeping the aspect ratio, and
-  /// centering it. The [area] is the whole SVG file by default.
+  /// into the dimensions in [size], see [fit].
   ///
   /// An optional [overridePaint] is used instead of the [VectorPaint]s.
   void render(
@@ -82,16 +105,11 @@ class SvgPaths(String svg, {this.merge = true}) {
     ui.Paint? overridePaint,
     ui.Rect? area,
   }) {
-    final source = area ?? ui.Rect.fromLTWH(0, 0, width, height);
-    final scale = min(size.x / source.width, size.y / source.height);
-    if (!scale.isFinite) {
-      // There is nothing to fit, like in an empty SVG file.
-      return;
-    }
+    final (area: source, :scale, :offset) = fit(size, area: area);
     canvas.save();
     canvas.translate(
-      (size.x - source.width * scale) * 0.5 - source.left * scale,
-      (size.y - source.height * scale) * 0.5 - source.top * scale,
+      offset.x - source.left * scale,
+      offset.y - source.top * scale,
     );
     canvas.scale(scale);
 

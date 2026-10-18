@@ -40,6 +40,27 @@ class VectorPath(this.path, this.paint) {
   /// The original path.
   final ui.Path path;
 
+  /// The area that hitboxes cover: the [path], with its open contours closed
+  /// if it is filled, like filling does implicitly.
+  late final ui.Path hitboxPath = paint.isFilled ? _closeContours(path) : path;
+
+  /// Returns the [path] with all of its contours closed, or the [path] itself
+  /// if they already are.
+  static ui.Path _closeContours(ui.Path path) {
+    final metrics = path.computeMetrics().toList();
+    if (metrics.every((metric) => metric.isClosed)) {
+      return path;
+    }
+    final closed = ui.Path()..fillType = path.fillType;
+    for (final metric in metrics) {
+      closed.addPath(
+        metric.extractPath(0, metric.length)..close(),
+        ui.Offset.zero,
+      );
+    }
+    return closed;
+  }
+
   @override
   String toString() => 'VectorPath(paint: $paint)';
 

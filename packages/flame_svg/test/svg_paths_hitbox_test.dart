@@ -1,3 +1,5 @@
+import 'dart:ui' show PaintingStyle;
+
 import 'package:flame/collisions.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
@@ -130,6 +132,54 @@ void main() {
       final hitbox = _hitbox(overlapping);
       expect(hitbox.rayIntersection(_ray(10, 140, 1, 0)), isNotNull);
       expect(hitbox.rayIntersection(_ray(10, 140, -1, 0)), isNull);
+    });
+
+    group('fromSvg', () {
+      // The paths do not start at the origin, and their bounds are 70x40.
+      final svg = SvgPaths(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"> '
+        '<path d="M20 10L60 10L60 30Z" fill="#ff0000"/> '
+        '<path d="M70 40L90 40L90 50Z" fill="#00ff00"/> </svg>',
+      );
+
+      test('fits the bounds of the SVG within the size', () {
+        final hitbox = SvgPathsHitbox.fromSvg(svg, Vector2(140, 200));
+        // Scaled by 2, and centered vertically.
+        expect(hitbox.scale, Vector2.all(2));
+        expect(hitbox.position, Vector2(0, 60));
+        expect(SvgPathsHitbox.fromSvg(svg, null).scale, Vector2.all(1));
+      });
+
+      test('fits the given area within the size', () {
+        final hitbox = SvgPathsHitbox.fromSvg(
+          svg,
+          Vector2.all(50),
+          area: const Rect.fromLTWH(0, 0, 100, 100),
+        );
+        expect(hitbox.scale, Vector2.all(0.5));
+        expect(hitbox.position, Vector2(10, 5));
+      });
+
+      test('is placed again for another size', () {
+        final hitbox = SvgPathsHitbox.fromSvg(svg, null)
+          ..place(Vector2(140, 200));
+        final expected = SvgPathsHitbox.fromSvg(svg, Vector2(140, 200));
+        expect(hitbox.position, expected.position);
+        expect(hitbox.scale, expected.scale);
+      });
+
+      test('can be rendered', () {
+        final hitbox = SvgPathsHitbox.fromSvg(svg, null, renderHitboxes: true);
+        expect(hitbox.renderShape, isTrue);
+        expect(hitbox.paint.style, PaintingStyle.stroke);
+      });
+
+      test('asserts when placing a hitbox that is not from an SVG', () {
+        expect(
+          () => _hitbox(overlapping).place(Vector2.all(10)),
+          throwsAssertionError,
+        );
+      });
     });
 
     test('populates and returns the given result', () {

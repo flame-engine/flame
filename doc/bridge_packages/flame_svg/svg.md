@@ -92,7 +92,7 @@ within a `tolerance`, both in the units of the component and not of the SVG file
 the default, the polygons inside of the largest one are left out. Pass `renderHitboxes: true` to
 see the hitboxes.
 
-To add a hitbox to a component of your own, `SvgPathsComponent.createSvgPathsHitbox` and
+To add a hitbox to a component of your own, `SvgPathsHitbox.fromSvg` and
 `SvgPathsComponent.createPathComponents` create the same hitboxes for a given size.
 
 
