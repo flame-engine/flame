@@ -10,6 +10,7 @@ hoverable
 Hoverables
 inactives
 layouting
+miterlimit
 NTSC
 orientable
 platformer
