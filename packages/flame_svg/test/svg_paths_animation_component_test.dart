@@ -71,6 +71,18 @@ void main() {
       expect(b.scale, Vector2.all(2));
     });
 
+    test('places the hitboxes of all frames when resized', () {
+      final component = SvgPathsAnimationComponent(_animationOf())
+        ..size = Vector2(80, 40);
+      expect(_positionsOf(component), [Vector2.zero()]);
+      expect(_hitboxesOf(component).single.scale, Vector2.all(2));
+      // The hitbox of the frame that was not shown is placed too.
+      component.update(1.5);
+      final [b] = _hitboxesOf(component);
+      expect(b.position, Vector2(60, 20));
+      expect(b.scale, Vector2.all(2));
+    });
+
     test('changes the hitboxes with the frames shown', () {
       final component = SvgPathsAnimationComponent(
         _animationOf(),

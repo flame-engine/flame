@@ -164,6 +164,72 @@ void main() {
       },
     );
 
+    group('when resized', () {
+      // The paths do not start at the origin, and their bounds are 70x40.
+      final svg = SvgPaths(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"> '
+        '<path d="M20 10L60 10L60 30Z" fill="#ff0000"/> '
+        '<path d="M70 40L90 40L90 50Z" fill="#00ff00"/> </svg>',
+        merge: false,
+      );
+
+      /// The children placed by the component, which are path components
+      /// with [SvgHitboxes.perPath], and a single hitbox otherwise.
+      List<PositionComponent> placedOf(SvgPathsComponent component) => [
+        ...component.children.whereType<PathComponent>(),
+      ];
+
+      void expectPlacedLike(
+        SvgPathsComponent actual,
+        SvgPathsComponent expected,
+      ) {
+        final actualPlaced = placedOf(actual);
+        final expectedPlaced = placedOf(expected);
+        expect(actualPlaced, hasLength(expectedPlaced.length));
+        expect(actualPlaced, isNotEmpty);
+        for (var i = 0; i < actualPlaced.length; i++) {
+          expect(actualPlaced[i].position, expectedPlaced[i].position);
+          expect(actualPlaced[i].scale, expectedPlaced[i].scale);
+        }
+      }
+
+      for (final hitboxes in SvgHitboxes.values) {
+        test('places the ${hitboxes.name} hitboxes like at that size', () {
+          final component = SvgPathsComponent(svg, hitboxes: hitboxes);
+          // Another aspect ratio, so that the paths are centered.
+          component.size = Vector2(140, 200);
+          expectPlacedLike(
+            component,
+            SvgPathsComponent(svg, hitboxes: hitboxes, size: Vector2(140, 200)),
+          );
+          component.width = 210;
+          expectPlacedLike(
+            component,
+            SvgPathsComponent(svg, hitboxes: hitboxes, size: Vector2(210, 200)),
+          );
+        });
+      }
+
+      test('keeps the polygons of the hitboxes', () {
+        final component = SvgPathsComponent(svg);
+        final hitbox = component.children.whereType<SvgPathsHitbox>().single;
+        final polygons = hitbox.polygons;
+        component.size = Vector2.all(500);
+        expect(hitbox.polygons, polygons);
+        expect(hitbox.scale, Vector2.all(500 / 70));
+      });
+
+      test('shrinks the hitboxes to nothing without an area', () {
+        for (final hitboxes in SvgHitboxes.values) {
+          final component = SvgPathsComponent(svg, hitboxes: hitboxes);
+          component.size = Vector2(10, 0);
+          for (final placed in placedOf(component)) {
+            expect(placed.scale, Vector2.zero(), reason: hitboxes.name);
+          }
+        }
+      });
+    });
+
     group('hitbox paints', () {
       const paths = [
         ('M0 0L50 0L50 50Z', 'fill="#ff0000"'),

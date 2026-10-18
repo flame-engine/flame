@@ -48,6 +48,9 @@ class SvgPathsAnimationComponent(
   /// Create from the given [animation]. The [filter], [sampling] and
   /// [tolerance] of the hitboxes are those of
   /// [SvgPathsComponent.createSvgPathsHitbox].
+  ///
+  /// The hitboxes follow the [size] of the component when it changes, but
+  /// their polygons keep the [sampling] and [tolerance] of the initial size.
   this : super(size: size ?? animation.area.size.toVector2()) {
     if (hitboxes) {
       for (final frame in animation.frames) {
@@ -64,6 +67,7 @@ class SvgPathsAnimationComponent(
         }
       }
       _updateHitboxes();
+      this.size.addListener(_placeHitboxes);
     }
   }
 
@@ -110,6 +114,19 @@ class SvgPathsAnimationComponent(
     if (resetOnRemove) {
       animationTicker.reset();
     }
+  }
+
+  /// Places all the hitboxes, also those of the frames not shown, within the
+  /// [size] of the component.
+  void _placeHitboxes() {
+    _hitboxes.forEach(
+      (svg, hitbox) => SvgPathsComponent.placeSvgPathsHitbox(
+        hitbox,
+        svg,
+        size,
+        area: animation.area,
+      ),
+    );
   }
 
   /// Adds the hitboxes of the frames shown, and removes the others.
