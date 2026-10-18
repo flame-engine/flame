@@ -164,12 +164,40 @@ class SvgPaths(String svg, {this.merge = true}) {
       runPaintId = null;
     }
 
+    // How deep the commands are within a mask or a pattern, whose own shapes
+    // are skipped: those of a mask only tell which parts of its content are
+    // visible, and those of a pattern are only its tile.
+    var skipDepth = 0;
+
+    bool isAlphaMask(DrawCommand c) {
+      // Only alpha masks use this blend mode, which SVG groups can not have.
+      final paintId = c.paintId;
+      return paintId != null &&
+          instructions.paints[paintId].blendMode == BlendMode.dstIn;
+    }
+
     // Walk all vector instructions, considering only path commands.
     for (final c in instructions.commands) {
       if (c.type != .path) {
         // Other commands, like clipping, are not supported, but they still
         // separate the paths around them.
         endRun();
+        switch (c.type) {
+          case .saveLayer || .clip || .mask || .pattern when skipDepth > 0:
+            skipDepth++;
+          case .mask || .pattern:
+            skipDepth = 1;
+          case .saveLayer when isAlphaMask(c):
+            skipDepth = 1;
+          case .restore when skipDepth > 0:
+            skipDepth--;
+          default:
+        }
+        continue;
+      }
+      if (skipDepth > 0 || c.patternId != null) {
+        // The paths painted with a pattern are skipped too, since they would
+        // be painted white.
         continue;
       }
 

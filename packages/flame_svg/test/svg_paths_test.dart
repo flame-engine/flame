@@ -8,6 +8,7 @@ import 'package:flame_svg/svg_paths.dart';
 import 'package:flutter/services.dart' show AssetBundle;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:vector_graphics_compiler/vector_graphics_compiler.dart' as vgc;
 
 class _MockAssetBundle() extends Mock implements AssetBundle;
 
@@ -210,6 +211,61 @@ void main() {
           return data.getUint8((35 * 100 + 35) * 4 + 3);
         }))!;
         expect(alpha, 255);
+      });
+    });
+
+    group('masks and patterns', () {
+      // A red square after the shapes, which is always imported.
+      const red = '<rect x="70" y="70" width="10" height="10" fill="#ff0000"/>';
+
+      // The group in the mask is a layer of its own, after which the rest of
+      // the mask is still skipped.
+      String maskedSvg({String maskType = ''}) =>
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"> '
+          '<mask id="m" $maskType> '
+          '<g opacity="0.5"><circle cx="35" cy="35" r="10" fill="#000000"/></g> '
+          '<rect width="100" height="100" fill="#ffffff"/> </mask> '
+          '<rect x="10" y="10" width="50" height="50" fill="#0000ff" '
+          'mask="url(#m)"/> $red </svg>';
+
+      void expectOnlyContent(SvgPaths svg) {
+        expect(svg.length, 2);
+        expect(svg.paintAt(0).fill!.color.toARGB32(), 0xff0000ff);
+        expect(svg.paintAt(1).fill!.color.toARGB32(), 0xffff0000);
+        expect(svg.bounds, const Rect.fromLTRB(10, 10, 80, 80));
+      }
+
+      test('skips the shapes of a mask, but not its content', () {
+        final svg = maskedSvg();
+        expect(
+          vgc.parseWithoutOptimizers(svg).commands.map((c) => c.type),
+          contains(vgc.DrawCommandType.mask),
+        );
+        expectOnlyContent(SvgPaths(svg, merge: false));
+      });
+
+      test('skips the shapes of an alpha mask, but not its content', () {
+        // An alpha mask is a layer with the dstIn blend mode, not a mask.
+        final svg = maskedSvg(maskType: 'mask-type="alpha"');
+        expect(
+          vgc.parseWithoutOptimizers(svg).commands.map((c) => c.type),
+          isNot(contains(vgc.DrawCommandType.mask)),
+        );
+        expectOnlyContent(SvgPaths(svg, merge: false));
+      });
+
+      test('skips the shapes of a pattern, and the shapes painted with it', () {
+        final svg = SvgPaths(
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"> '
+          '<pattern id="p" width="10" height="10" '
+          'patternUnits="userSpaceOnUse"> '
+          '<rect x="2" y="2" width="6" height="6" fill="#00ff00"/> '
+          '</pattern> '
+          '<rect width="50" height="50" fill="url(#p)"/> $red </svg>',
+          merge: false,
+        );
+        expect(svg.length, 1);
+        expect(svg.paintAt(0).fill!.color.toARGB32(), 0xffff0000);
       });
     });
 
