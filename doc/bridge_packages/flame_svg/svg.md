@@ -50,8 +50,14 @@ class MyGame extends FlameGame {
 ## SvgPaths and SvgPathsComponent
 
 `SvgPaths` imports the paths of an SVG file as Flutter `Path` objects with their paints, so that
-they can be both rendered and used for collisions. Only the paths are imported: clipping, masks,
-group opacity, text, images and patterns are ignored, so use `Svg` for files that rely on them.
+they can be both rendered and used for collisions. Only the paths are imported, so use `Svg` for
+files that rely on anything else:
+
+- Clips, and the opacity (including `fill-opacity`) and blend modes of groups, are ignored, so the
+  paths that they apply to are drawn as they are.
+- The content of a mask is drawn without the mask, whose own shapes are skipped.
+- The tiles of patterns are skipped, and so are the shapes painted with a pattern.
+- Text and images are not imported.
 
 By default, consecutive paths with the same paint are merged, as long as their bounds do not
 overlap, which keeps the painting order of the file; pass `merge: false` to keep every path.
@@ -82,18 +88,26 @@ class MyGame extends FlameGame with HasCollisionDetection {
 The `hitboxes` parameter, an `SvgHitboxes` value, chooses how the hitboxes are created:
 
 - `SvgHitboxes.single` (the default): one `SvgPathsHitbox` for the whole file. Its paths count as a
-  single solid, so a ray hits the outline of their union, and not the edges of paths that are
-  inside of others.
+  single solid for rays, which hit the outline of their union, and not the edges of paths that are
+  inside of others. Collisions still come from the edges of all the paths.
 - `SvgHitboxes.perPath`: a `PathComponent` for each path, each with its own `PathHitbox`, which
-  render the paths themselves.
+  render the paths themselves. Since each of them moves its path, but not its gradient, the
+  gradients of the paths are only placed correctly with `SvgHitboxes.single`.
+
+The hitboxes cover the filled areas of the paths, with their open contours closed like filling
+does, but not their strokes: a closed outline drawn only by its stroke counts as solid, an open one
+has no hitbox, and strokes can reach beyond the hitboxes.
 
 The polygons of the hitboxes are sampled from the paths every `sampling` units, and simplified
 within a `tolerance`, both in the units of the component and not of the SVG file. With `filter`,
 the default, the polygons inside of the largest one are left out. Pass `renderHitboxes: true` to
-see the hitboxes.
+see the hitboxes. When the size of the component changes, the hitboxes follow it, but their
+polygons keep the sampling of the initial size.
 
 To add a hitbox to a component of your own, `SvgPathsHitbox.fromSvg` and
-`SvgPathsComponent.createPathComponents` create the same hitboxes for a given size.
+`SvgPathsComponent.createPathComponents` create the same hitboxes for a given size, and
+`SvgPathsHitbox.place` and `SvgPathsComponent.placePathComponents` place them again for another
+size.
 
 
 ## SvgPathsAnimationComponent
@@ -151,8 +165,9 @@ that area.
 
 Each SVG file used by the frames gets an `SvgPathsHitbox`, which is only a child of the component
 while one of its frames is shown, so that hidden frames neither collide nor get hit by rays. Like
-any child, a hitbox is added or removed at the next tick after its frames change. Pass
-`hitboxes: false` to skip them, or `renderHitboxes: true` to see them.
+any child, a hitbox is added or removed at the next tick after its frames change. The hitboxes
+follow the size of the component, like those of the `SvgPathsComponent`. Pass `hitboxes: false` to
+skip them, or `renderHitboxes: true` to see them.
 
 Like the `SpriteAnimationComponent`, the component can be paused with `playing`, removed when a
 non-looping animation finishes with `removeOnFinish`, and reset when removed with

@@ -7,7 +7,8 @@ import 'package:flame/geometry.dart';
 import 'package:flame_svg/svg_paths.dart';
 import 'package:flame_svg/vector_path.dart';
 
-/// A [PathHitbox] that treats its polygons as a union of solid shapes.
+/// A [PathHitbox] that treats its polygons as a union of solid shapes for
+/// rays.
 ///
 /// [PathHitbox] decides what a ray hits from the polygon with the closest
 /// edge, which is right for the polygons of a single shape, but not for
@@ -20,6 +21,9 @@ import 'package:flame_svg/vector_path.dart';
 /// enters the union of the polygons, or leaves it when it starts inside. The
 /// edges between polygons that are inside of the union are ignored. Like in
 /// [PathHitbox], polygons are solid, so the holes in them count as inside.
+///
+/// Collisions still come from the edges of all the polygons, like with
+/// [PathHitbox], also those inside of the union.
 class SvgPathsHitbox({
   required super.path,
   super.sampling,

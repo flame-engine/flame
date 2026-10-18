@@ -13,9 +13,13 @@ import 'package:vector_graphics_compiler/vector_graphics_compiler.dart';
 /// A container for SVG files, represented as a collection of [VectorPath]
 /// and associated [VectorPaint] objects.
 ///
-/// Only the paths of the SVG file are imported: clipping, masks, group
-/// opacity, text, images and patterns are ignored, so an SVG file using them
-/// may look different than in other renderers.
+/// Only the paths of the SVG file are imported, so an SVG file using anything
+/// else may look different than in other renderers:
+/// - clips, and the opacity and blend modes of groups, are ignored;
+/// - the content of a mask is imported without the mask, whose own shapes
+///   are skipped;
+/// - the tiles of patterns, and the shapes painted with them, are skipped;
+/// - text and images are not imported.
 @immutable
 class SvgPaths(String svg, {this.merge = true}) {
   /// Create from an [svg] string, and perform an optional [merge]

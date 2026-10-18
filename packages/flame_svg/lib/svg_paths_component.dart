@@ -15,6 +15,8 @@ enum SvgHitboxes() {
   single,
 
   /// A [PathHitbox] for each path, which is a child of its [PathComponent].
+  /// Each component moves its path, but not its gradient, so gradients are
+  /// only placed correctly with [single].
   perPath,
 }
 

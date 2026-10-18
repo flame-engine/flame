@@ -41,7 +41,7 @@ class VectorPath(this.path, this.paint) {
   final ui.Path path;
 
   /// The area that hitboxes cover: the [path], with its open contours closed
-  /// if it is filled, like filling does implicitly.
+  /// if it is filled, like filling does implicitly, and without its stroke.
   late final ui.Path hitboxPath = paint.isFilled ? _closeContours(path) : path;
 
   /// Returns the [path] with all of its contours closed, or the [path] itself
