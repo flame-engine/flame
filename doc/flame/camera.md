@@ -263,13 +263,196 @@ moves or the viewport changes its size.
 
 The `CameraComponent` has a method called `canSee` which can be used to check
 if a component is visible from the camera point of view.
-This is useful for example to cull components that are not in view.
+This is useful for example to remove components that are not in view.
 
 ```dart
 if (!camera.canSee(component)) {
-   component.removeFromParent(); // Cull the component
+   component.removeFromParent(); // Remove the component
 }
 ```
+
+
+### CullWhenOffscreen
+
+Normally, every component in the `World` is drawn on every frame, even when it is far outside of
+the screen. In a game with many components, like tiles, trees or enemies, this wastes time.
+
+The `CullWhenOffscreen` mixin fixes this. Add it to a `PositionComponent`, and the component is not
+drawn while it is outside of what the camera shows.
+
+```dart
+class Tree extends SpriteComponent with CullWhenOffscreen {
+  Tree({super.position}) : super(size: Vector2.all(32));
+}
+```
+
+It is opt-in - components without the mixin are always drawn.
+
+
+#### How it works
+
+- Only drawing is skipped. `update`, collisions and effects keep running.
+- When a component is skipped, its children are skipped too.
+- A component is skipped when its box (`cullBounds`, plus `cullPadding`) does not touch the area
+  that the camera shows (`visibleWorldRect`).
+- It never skips something that is on-screen, as long as you follow the main rule below.
+- Each camera decides on its own. The main camera and a minimap can see different things.
+- Only components inside a `World` are skipped. Components in the viewport, like a HUD, never are.
+- The box comes from the `position`, `size`, `anchor`, `scale` and `angle` of the component and its
+  parents.
+
+
+#### The main rule
+
+> Everything the component draws, including its children, must fit inside its box plus
+> `cullPadding`, or be listed with `CullBoundsChildren`.
+
+Flame only looks at the box of the component itself. It does not look at the children, unless you
+list them. If a child sticks out of the parent's box, it disappears when the parent's box leaves the
+screen, even if the child is still visible. You get no error. Things just appear too late at the
+edge of the screen.
+
+This usually happens with:
+
+- **A component with a size of zero.** This is common for a `PositionComponent` that only groups
+  children. Its box is a single point.
+- **A child that is away from the parent's box.** For example, the health bar above a tank.
+- **Things drawn in `render` outside of the `size`.** For example, shadows, outlines and glows.
+- **Effects that make the component bigger.** For example, a scale pulse.
+
+```dart
+// Wrong: the health bar is 30 units above the tank. When the tank is just
+// below the screen, the health bar should still be visible, but it is skipped
+// together with the tank.
+class Tank extends PositionComponent with CullWhenOffscreen {
+  Tank() : super(size: Vector2.all(40)) {
+    add(HealthBar(position: Vector2(0, -30)));
+  }
+}
+
+// Right: CullBoundsChildren tells Flame which child sticks out of the box.
+class Tank extends PositionComponent
+    with CullWhenOffscreen, CullBoundsChildren {
+  late final HealthBar healthBar;
+
+  Tank() : super(size: Vector2.all(40)) {
+    healthBar = HealthBar(position: Vector2(0, -30));
+    add(healthBar);
+  }
+
+  @override
+  Iterable<PositionComponent> get cullBoundsChildren => [healthBar];
+}
+```
+
+
+#### Children that stick out
+
+Add the `CullBoundsChildren` mixin after `CullWhenOffscreen`, and list the children that stick out
+of the box in `cullBoundsChildren`. Flame adds the box of each listed child to the box of the
+component, and then adds `cullPadding`.
+
+- The box of a listed child is measured on every frame, so it follows the child when it moves.
+- List only the children that stick out. Each listed child costs a little on every frame. Listing
+  all of the children of a component with many children can cost nearly as much as drawing them.
+- A listed component can also be a grandchild, or deeper.
+- A listed component that is not mounted is ignored.
+- The list is read on every frame, so you can change it at any time, for example in `update`. A
+  change is used by the next render.
+- To use all of the children, return the cached list of the children:
+
+  ```dart
+  @override
+  Iterable<PositionComponent> get cullBoundsChildren =>
+      hasChildren ? children.query<PositionComponent>() : const [];
+  ```
+
+  This follows children that are added or removed. It only includes direct children, and it costs
+  as much as the number of children, so use it for components with only a few.
+- Return components that you keep in fields. Do not create new components in the getter.
+- If you override `cullBounds` yourself, call `super.cullBounds`. Otherwise the listed children are
+  left out.
+- The mixin must come after `CullWhenOffscreen`, and you must implement the getter. Dart reports an
+  error if you do not.
+
+If something is drawn outside of the box, but it is not a component, use `cullPadding` instead.
+
+
+#### How much cullPadding?
+
+`cullPadding` is the farthest distance, in world units, that anything reaches outside of the box.
+If nothing sticks out, you do not need it. The default is `0`. Otherwise, use the biggest value that
+applies:
+
+- **An outline:** half of the outline width.
+- **A drop shadow:** the shadow offset plus the blur.
+- **An effect that scales the component up:** `size * (maxScale - 1) / 2`, for a centered anchor.
+
+For a child that sticks out, use `CullBoundsChildren` instead of guessing a number.
+
+When in doubt, use a bit more than you think you need. A padding that is too big is cheap, because a
+few extra components are drawn near the edge of the screen. A padding that is too small makes things
+appear too late.
+
+
+#### Finding mistakes
+
+You can ask Flame to check for mistakes while you develop:
+
+```dart
+void main() {
+  CullWhenOffscreen.debugVerifyCulledSubtrees = true;
+  runApp(GameWidget(game: MyGame()));
+}
+```
+
+Now, when a component is about to be skipped, Flame looks at its children. If one of them is
+on-screen, an `AssertionError` is thrown. It tells you which component is wrong and which
+`cullPadding` to use. Children with `isVisible` set to `false` are ignored.
+
+This check is slow, so it is off by default. It does nothing in release builds. Turn it on when
+something looks wrong, or after you change how a component draws its children.
+
+It only checks children that are `PositionComponent`s. It cannot see what a component draws
+by itself in `render` outside of its `size`, like a shadow. Use `cullPadding` for those.
+
+
+#### Turning culling off for one component
+
+Set `cullingEnabled = false` to always draw a component.
+
+This only works while its parent is drawn. If the parent is skipped, its children are skipped
+too, so a child with `cullingEnabled = false` is not drawn either.
+
+
+#### Parents and children
+
+You can use the mixin on both a parent and its children. If the parent is skipped, its children are
+skipped. If the parent is drawn, each child decides for itself.
+
+This is useful for big maps. A "chunk" parent can skip a whole area with one check:
+
+```dart
+class Chunk extends PositionComponent with CullWhenOffscreen {
+  Chunk({required super.position}) : super(size: Vector2.all(1024));
+}
+```
+
+The main rule applies to the chunk. Its box must cover all of its children. If a child is outside of
+the chunk's `size`, list it with `CullBoundsChildren` on the chunk, or use `cullPadding`.
+
+
+#### Other things to know
+
+- If the `size` is not what the component draws, override `cullBounds`. For example, a
+  `ParticleEmitterComponent` can have a size of zero.
+- A custom `Decorator` that moves the drawing is not taken into account. Override `cullBounds`, or
+  set `cullingEnabled = false`.
+- A skipped component does not call `render`. Do work that must happen on every frame in `update`.
+- Culling only helps when many components are off-screen. If almost everything is on-screen, the
+  check costs a little more than it saves. Try the culling example and the culling benchmark
+  before you use it everywhere.
+- For scenery that never changes, use a `SpriteBatchComponent` instead.
 
 
 ### Post processing
