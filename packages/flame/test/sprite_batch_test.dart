@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -398,5 +399,159 @@ void main() {
       backgroundColor: const Color(0xFFFFFFFF),
       goldenFile: '_goldens/sprite_batch_test_3.png',
     );
+
+    group('without the atlas', () {
+      const cellSize = 20;
+      const background = Color(0xFF9AD0A0);
+      const itemColor = Color(0x800000FF);
+
+      Future<Image> createSprite() {
+        final recorder = PictureRecorder();
+        Canvas(recorder).drawCircle(
+          const Offset(cellSize / 2, cellSize / 2),
+          cellSize / 3,
+          Paint()..color = const Color(0xFFE53935),
+        );
+        return recorder.endRecording().toImage(cellSize, cellSize);
+      }
+
+      Future<Uint8List> renderBatch(
+        Image sprite, {
+        required bool useAtlas,
+        BlendMode? defaultBlendMode,
+        BlendMode? blendMode,
+        Paint? paint,
+      }) async {
+        final spriteBatch = SpriteBatch(
+          sprite,
+          useAtlas: useAtlas,
+          defaultBlendMode: defaultBlendMode,
+        );
+        spriteBatch.add(
+          source: Rect.fromLTWH(0, 0, cellSize / 2, cellSize.toDouble()),
+          color: itemColor,
+        );
+        spriteBatch.add(
+          source: Rect.fromLTWH(
+            cellSize / 2,
+            0,
+            cellSize / 2,
+            cellSize.toDouble(),
+          ),
+          offset: Vector2(cellSize / 2, 0),
+        );
+
+        final recorder = PictureRecorder();
+        final canvas = Canvas(recorder)..drawPaint(Paint()..color = background);
+        spriteBatch.render(canvas, blendMode: blendMode, paint: paint);
+        final image = await recorder.endRecording().toImage(
+          cellSize,
+          cellSize,
+        );
+        return (await image.toByteData())!.buffer.asUint8List();
+      }
+
+      int countDifferentPixels(Uint8List a, Uint8List b) {
+        var differentPixels = 0;
+        for (var i = 0; i < a.length; i += 4) {
+          for (var c = 0; c < 4; c++) {
+            // Allow small rounding differences.
+            if ((a[i + c] - b[i + c]).abs() > 2) {
+              differentPixels++;
+              break;
+            }
+          }
+        }
+        return differentPixels;
+      }
+
+      const modes = [
+        BlendMode.srcOver,
+        BlendMode.srcOut,
+        BlendMode.srcIn,
+        BlendMode.srcATop,
+        BlendMode.modulate,
+        BlendMode.multiply,
+      ];
+
+      for (final mode in modes) {
+        test('renders colors like drawAtlas with ${mode.name}', () async {
+          final sprite = await createSprite();
+          final expected = await renderBatch(
+            sprite,
+            useAtlas: true,
+            blendMode: mode,
+          );
+          final fromRender = await renderBatch(
+            sprite,
+            useAtlas: false,
+            blendMode: mode,
+          );
+          final fromDefault = await renderBatch(
+            sprite,
+            useAtlas: false,
+            defaultBlendMode: mode,
+          );
+
+          expect(countDifferentPixels(expected, fromRender), 0);
+          expect(countDifferentPixels(expected, fromDefault), 0);
+        });
+      }
+
+      test('does not modify the paint passed to render', () async {
+        final sprite = await createSprite();
+        final paint = Paint();
+        await renderBatch(
+          sprite,
+          useAtlas: false,
+          blendMode: BlendMode.srcOut,
+          paint: paint,
+        );
+
+        expect(paint.blendMode, BlendMode.srcOver);
+      });
+
+      testGolden(
+        'renders colors like drawAtlas for different blend modes',
+        (game, tester) async {
+          final spriteSheet = await loadImage('alphabet.png');
+          const source = Rect.fromLTWH(3 * tileSize, 0, tileSize, tileSize);
+          const scale = 2.0;
+          const cell = tileSize * scale + margin;
+
+          // Each row uses a blend mode, the left column uses drawAtlas and the
+          // right column uses the fallback, so both columns should match.
+          for (final (row, mode) in modes.indexed) {
+            for (final (column, useAtlas) in [true, false].indexed) {
+              final spriteBatch = SpriteBatch(
+                spriteSheet,
+                useAtlas: useAtlas,
+              );
+              spriteBatch.add(
+                source: source,
+                color: itemColor,
+                scale: scale,
+                offset: Vector2(
+                  margin + column * cell,
+                  margin + row * cell,
+                ),
+              );
+              game.add(
+                SpriteBatchComponent(
+                  spriteBatch: spriteBatch,
+                  blendMode: mode,
+                ),
+              );
+            }
+          }
+        },
+        size: Vector2(
+          margin + 2 * (tileSize * 2 + margin),
+          margin + modes.length * (tileSize * 2 + margin),
+        ),
+        backgroundColor: background,
+        goldenFile: '_goldens/sprite_batch_test_4.png',
+      );
+    });
   });
 }

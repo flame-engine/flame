@@ -96,7 +96,7 @@ class BatchItem({
     final result = Matrix4(
       transform.scos,  transform.ssin,  0, 0,
       -transform.ssin, transform.scos,  0, 0,
-      0,               0,               0, 0,
+      0,               0,               1, 0,
       transform.tx,    transform.ty,    0, 1,
     );
     // dart format on
@@ -277,6 +277,10 @@ class SpriteBatch(
   // Used to not create new Paint objects in [render] and
   // [generateFlippedAtlas].
   final _emptyPaint = Paint();
+
+  // Used to blend the item colors with their sprites in the non-atlas path.
+  final _colorPaint = Paint();
+  final _spritePaint = Paint();
 
   Future<void> _makeFlippedAtlas() async {
     _flippedAtlasStatus = FlippedAtlasStatus.generating;
@@ -638,23 +642,39 @@ class SpriteBatch(
       );
     } else {
       for (final batchItem in _batchItems) {
-        renderPaint.blendMode = blendMode ?? renderPaint.blendMode;
-
-        // Use the original (non-expanded) rect for the background color so
-        // that per-item colors match the atlas path behavior.
-        final colorRect = Offset.zero & batchItem.source.size;
-
         canvas
           ..save()
-          ..transform32(batchItem.matrix.storage)
-          ..drawRect(colorRect, batchItem.paint)
-          ..drawImageRect(
+          ..transform32(batchItem.matrix.storage);
+
+        if (hasNoColors) {
+          canvas.drawImageRect(
             atlas,
             batchItem.source,
             batchItem.destination,
             renderPaint,
-          )
-          ..restore();
+          );
+        } else {
+          // Like drawAtlas, the sprite (source) is blended with its color
+          // (destination) only, and the result is then drawn onto the canvas
+          // with the render paint.
+          _colorPaint.color = batchItem.color;
+          _spritePaint
+            ..blendMode = actualBlendMode!
+            ..filterQuality = renderPaint.filterQuality
+            ..isAntiAlias = renderPaint.isAntiAlias;
+          canvas
+            ..saveLayer(batchItem.destination, renderPaint)
+            ..drawRect(batchItem.destination, _colorPaint)
+            ..drawImageRect(
+              atlas,
+              batchItem.source,
+              batchItem.destination,
+              _spritePaint,
+            )
+            ..restore();
+        }
+
+        canvas.restore();
       }
     }
   }
