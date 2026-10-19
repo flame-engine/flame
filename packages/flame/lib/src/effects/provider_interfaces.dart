@@ -97,3 +97,11 @@ abstract class HueProvider() {
   double get hue;
   set hue(double value);
 }
+
+/// Interface for a component that can be affected by warp effects.
+///
+/// See [HasWarpGrid] for an example implementation.
+abstract class WarpGridProvider() {
+  WarpGrid? get warpGrid;
+  set warpGrid(WarpGrid? value);
+}

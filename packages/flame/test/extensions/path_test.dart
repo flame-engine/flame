@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/extensions.dart';
+import 'package:flame/src/geometry/signed_area.dart';
 import 'package:test/test.dart';
 
 double _area(List<Offset> polygon) {
@@ -224,6 +225,56 @@ void main() {
       final path = Path()..addRect(const Rect.fromLTWH(0, 0, 10, 10));
       expect(() => path.walkContourAt(1), throwsRangeError);
       expect(() => path.walkContourAt(-1), throwsRangeError);
+    });
+  });
+
+  group('toPolygons', () {
+    test('gives a counterclockwise polygon for each closed contour', () {
+      final path = Path()
+        ..addRect(const Rect.fromLTWH(0, 0, 10, 10))
+        ..addPolygon(const [
+          Offset(20, 0),
+          Offset(20, 10),
+          Offset(30, 10),
+        ], true);
+      final polygons = path.toPolygons();
+      expect(polygons, hasLength(2));
+      expect(polygons.every((polygon) => signedArea(polygon) < 0), isTrue);
+      expect(
+        RectExtension.getBounds(polygons.first),
+        const Rect.fromLTWH(0, 0, 10, 10),
+      );
+    });
+
+    test('drops the open and the degenerate contours', () {
+      final path = Path()
+        ..moveTo(0, 0)
+        ..lineTo(10, 0)
+        ..lineTo(10, 10)
+        ..moveTo(0, 20)
+        ..lineTo(10, 20)
+        ..close()
+        ..moveTo(0, 30)
+        ..close()
+        ..addRect(const Rect.fromLTWH(20, 20, 10, 10));
+      expect(path.toPolygons(), hasLength(1));
+      expect(Path().toPolygons(), isEmpty);
+    });
+
+    test('drops the polygons inside of the largest one unless asked', () {
+      final path = Path()
+        ..addRect(const Rect.fromLTWH(5, 5, 10, 10))
+        ..addRect(const Rect.fromLTWH(7, 7, 2, 2));
+      expect(path.toPolygons(), hasLength(1));
+      expect(path.toPolygons(filter: false), hasLength(2));
+    });
+
+    test('follows the contours like walkContours', () {
+      final path = Path()..addOval(const Rect.fromLTWH(0, 0, 100, 60));
+      expect(
+        path.toPolygons(sampling: 2, tolerance: 0.3).single,
+        hasLength(path.walkContours(2, 0.3).single.length),
+      );
     });
   });
 

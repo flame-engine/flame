@@ -43,6 +43,20 @@ void main() {
       expect(images.keys, hasLength(2));
     });
 
+    test('concurrent rasterizations share the same image', () async {
+      final images = Images();
+      final baseSprite = Sprite(await loadImage('flame.png'));
+
+      final sprites = await Future.wait([
+        baseSprite.rasterize(images: images),
+        baseSprite.rasterize(images: images),
+      ]);
+
+      expect(identical(sprites[0].image, sprites[1].image), isTrue);
+      expect(sprites[0].image.debugDisposed, isFalse);
+      expect(images.keys, hasLength(1));
+    });
+
     group('when using a custom cache key', () {
       test('adds the image to the cache with the custom key', () async {
         final images = Images();

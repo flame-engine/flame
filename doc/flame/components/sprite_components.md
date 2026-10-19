@@ -37,6 +37,84 @@ class MyGame extends FlameGame {
 ```
 
 
+### Warping
+
+A `SpriteComponent` with the `HasWarpGrid` mixin can distort (warp) its sprite with a `WarpGrid`,
+similarly to SpriteKit's `SKWarpGeometryGrid`, but following Flame's conventions: vertices start
+from the top-left corner and the y axis points down. A grid of `columns` x `rows` cells has
+`(columns + 1) * (rows + 1)` vertices, and each vertex has a source position and a destination
+position: the part of the sprite found at the source position is drawn at the destination
+position, and everything in between is interpolated.
+
+```dart
+class WarpedSprite extends SpriteComponent with HasWarpGrid {
+  WarpedSprite({super.sprite, super.size});
+}
+
+final grid = WarpGrid.identity(columns: 2, rows: 2);
+final positions = grid.destinationPositions;
+// Pull the center vertex towards the top-right corner.
+positions[grid.vertexIndex(1, 1)] = Vector2(0.7, 0.3);
+
+final component = WarpedSprite(sprite: sprite, size: Vector2.all(128))
+  ..warpGrid = grid.replacingDestinationPositions(positions);
+```
+
+The mixin works with `SpriteComponent`, `SpriteGroupComponent`, `SpriteAnimationComponent`,
+`SpriteAnimationGroupComponent` and their subclasses, since they all draw their sprite through the
+`renderSprite` method of the `RendersSprite` mixin. Other mixins can override `renderSprite` to
+change how the sprite is drawn, like `HasWarpGrid` does.
+
+Positions are normalized, with the y axis pointing down: source positions are relative to the
+sprite's source rectangle, and destination positions are relative to the component's `size`.
+Destination positions outside of the `0..1` range are valid, and are drawn outside of the
+component's bounds. Vertices are stored in row-major order starting from the top-left corner,
+so for a 2x2 grid the indices are:
+
+```text
+[0]---[1]---[2]
+ |     |     |
+[3]---[4]---[5]
+ |     |     |
+[6]---[7]---[8]
+```
+
+`WarpGrid` is immutable: to change the warp, assign a new grid to `warpGrid`, for example one
+created with `replacingDestinationPositions`. Setting `warpGrid` to `null` renders the sprite
+undistorted again. To animate the warp, use a [`WarpEffect`](../effects/warp_effects.md).
+
+The grid is interpolated according to `warpInterpolation`:
+
+- `WarpInterpolation.bilinear` (the default) interpolates each cell independently. Moving a
+  vertex only affects the cells around it, and the edges between cells stay straight.
+- `WarpInterpolation.catmullRom` interpolates the grid with Catmull-Rom splines, so that the
+  sprite bends smoothly across cells while still passing through every vertex. Moving a vertex
+  also affects the cells up to two cells away, and strong distortions can slightly overshoot.
+
+A few more things to keep in mind:
+
+- Warping only changes how the sprite is drawn: the component's `size`, hit testing and
+  collisions are not affected.
+- The component's paint keeps working, so effects like `OpacityEffect` and `ColorEffect`, as well
+  as `tint` and `hue`, apply to warped sprites too. The paint's `shader` is ignored.
+- Keep assigning the same `WarpGrid` instance while the warp doesn't change, since assigning a
+  new grid, even an equal one, rebuilds the warped sprite. Use only as many cells as the warp
+  needs, since every cell adds to the cost of rebuilding and drawing the sprite.
+- An image filter in the paint, like a blur, makes the edges of a warped sprite fade out, while
+  an undistorted sprite repeats its border pixels instead.
+
+The [Sprite Warp example](https://examples.flame-engine.org/#/?path=sprites/sprite-warp) shows
+two sprites with editable grids: the start grid on the left and the target grid of a
+[`WarpEffect.to`](../effects/warp_effects.md#warpeffectto) on the right. Drag a handle to move
+its vertex, double tap it to reset the vertex, or double tap the sprite to reset its whole grid.
+Knobs:
+
+- `Grid Size`: the number of cells per side (3 to 8); changing it resets both grids.
+- `Image`, `Interpolation`: the sprite and the `WarpInterpolation` of both sprites.
+- `Default Target`: a predefined target grid, such as a wave, a crush, or an implosion.
+- `Animate`: warps each sprite to the other's grid and back, with two infinite `WarpEffect.to`.
+
+
 ## SpriteAnimationComponent
 
 This class is used to represent a Component that has sprites that run in a single cyclic animation.
