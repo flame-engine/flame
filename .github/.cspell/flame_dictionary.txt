@@ -7,7 +7,6 @@ Bodymovin # An After Effects extension to export Lottie animations https://aescr
 emberquest # Ember Quest, our platformer tutorial game
 firstgid # The first global tile id of a tileset in a Tiled map
 fscene # The website of Flutter Scene https://fscene.dev
-Gids # Plural of gid, the global id of a tile in Tiled
 Hermione # A character from the book Harry Potter
 hexsidelength # The length of the side of the hexagons of a Tiled map
 Kenobi # Eminent Jedi Master, General of the Republic Army, Obi-Wan Kenobi
@@ -30,7 +29,6 @@ texturepacker # a packed spritesheet format
 tilecount # The number of tiles of a tileset in a Tiled map file
 tileheight # The height of a tile in a Tiled map file
 Tilemap # What tile maps are called within Tiled
-tileoffset # The offset that the tiles of a tileset are drawn at in a Tiled map file
 tilewidth # The width of a tile in a Tiled map file
 typled # A grid map and sprite sheet tool https://github.com/erickzanardo/typled
 vantablack # brand name for a famous super-black ink known as the darkest ever made
