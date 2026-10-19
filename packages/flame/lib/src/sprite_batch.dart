@@ -676,10 +676,10 @@ class SpriteBatch(
           // with the render paint.
           //
           // The color and the sprite are drawn without antialiasing so that
-          // their edges blend exactly, and the clip antialiases the edges of
-          // the result instead. The clip also keeps the render paint from
-          // affecting the canvas outside of the item, unless the paint has an
-          // image filter that has to draw outside of it.
+          // their edges blend exactly, and the clip applies antialiasing to
+          // the edges of the result instead. The clip also keeps the render
+          // paint from affecting the canvas outside of the item, unless the
+          // paint has an image filter that has to draw outside of it.
           if (renderPaint.imageFilter == null) {
             canvas.clipRect(
               batchItem.destination,
