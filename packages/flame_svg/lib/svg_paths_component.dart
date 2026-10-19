@@ -14,9 +14,9 @@ enum SvgHitboxes() {
   /// other count as a single solid, including for rays.
   single,
 
-  /// A [PathHitbox] for each path, which is a child of its [PathComponent].
-  /// Each component moves its path, but not its gradient, so gradients are
-  /// only placed correctly with [single].
+  /// A [PathHitbox] for each path, which are all children of the
+  /// [SvgPathsComponent]. The paths of the same file do not collide with each
+  /// other.
   perPath,
 }
 
@@ -41,7 +41,7 @@ class SvgPathsComponent(
   /// The hitboxes follow the [size] of the component when it changes, but
   /// their polygons keep the [sampling] and [tolerance] of the initial size.
   this : super(size: size ?? svg.bounds.size.toVector2()) {
-    addAll(_pathComponents);
+    addAll(_pathHitboxes);
     final hitbox = _hitbox;
     if (hitbox != null) {
       add(hitbox);
@@ -50,8 +50,8 @@ class SvgPathsComponent(
   }
 
   /// The children with [SvgHitboxes.perPath].
-  final List<PathComponent> _pathComponents = hitboxes == SvgHitboxes.perPath
-      ? createPathComponents(
+  final List<PathHitbox> _pathHitboxes = hitboxes == SvgHitboxes.perPath
+      ? createPathHitboxes(
           svg,
           size,
           renderHitboxes: renderHitboxes,
@@ -136,18 +136,14 @@ class SvgPathsComponent(
   /// How the hitboxes of the component are created.
   final SvgHitboxes hitboxes;
 
-  /// With [SvgHitboxes.single] the paths are rendered by the component
-  /// itself, since it has no [PathComponent]s.
   @override
   void render(Canvas canvas) {
-    if (hitboxes == SvgHitboxes.single) {
-      svg.render(canvas, size, area: svg.bounds);
-    }
+    svg.render(canvas, size, area: svg.bounds);
   }
 
   void _placeHitboxes() {
-    if (_pathComponents.isNotEmpty) {
-      placePathComponents(_pathComponents, svg, size);
+    if (_pathHitboxes.isNotEmpty) {
+      placePathHitboxes(_pathHitboxes, svg, size);
     }
     _hitbox?.place(size);
   }
@@ -167,19 +163,17 @@ class SvgPathsComponent(
     return svg.fit(size ?? svg.bounds.size.toVector2(), area: svg.bounds);
   }
 
-  /// Creates a [PathComponent] for each path in the [svg].
+  /// Creates a [PathHitbox] for each path in the [svg], as with
+  /// [SvgHitboxes.perPath].
   ///
   /// The paths are scaled to fit within the [size] of the component while
   /// keeping the aspect ratio, and are centered within it. This way the
   /// center of the component is the center of the SVG contents, which is what
   /// the component rotates and scales around.
   ///
-  /// Each of the components gets a [PathHitbox], as with
-  /// [SvgHitboxes.perPath].
-  ///
   /// The [sampling] and [tolerance] of the polygons, see [PathComponent.new],
   /// are in the units of the [size], and not in those of the SVG file.
-  static List<PathComponent> createPathComponents(
+  static List<PathHitbox> createPathHitboxes(
     SvgPaths svg,
     Vector2? size, {
     bool? renderHitboxes,
@@ -193,20 +187,13 @@ class SvgPathsComponent(
     final units = fit > 0 ? fit : 1;
     final pathSampling = sampling / units;
     final pathTolerance = tolerance == null ? null : tolerance / units;
-    final paths = <PathComponent>[];
+    final hitboxes = <PathHitbox>[];
     for (var svgIndex = 0; svgIndex < svg.length; ++svgIndex) {
-      final vectorPath = svg.pathAt(svgIndex);
-      final vectorPaint = vectorPath.paint;
-      final path = vectorPath.path;
-
       // Filling a path closes its open contours implicitly, but the polygons
-      // of a PathComponent only come from closed contours: without closing
-      // them, the filled areas of open contours would be missing from the
-      // hitbox. The rendering of the component only changes for a path that
-      // is both filled and stroked, so that one keeps its original path.
-      final closedPath = vectorPath.hitboxPath;
+      // of a PathHitbox only come from closed contours: without closing them,
+      // the filled areas of open contours would be missing from the hitbox.
       final hitbox = PathHitbox(
-        path: closedPath,
+        path: svg.pathAt(svgIndex).hitboxPath,
         sampling: pathSampling,
         tolerance: pathTolerance,
         filter: filter ?? true,
@@ -216,42 +203,32 @@ class SvgPathsComponent(
           ..renderShape = true
           ..paint = _whiteStroke();
       }
-      paths.add(
-        PathComponent(
-          path: vectorPaint.isStroked ? path : closedPath,
-          paint: vectorPaint.paint,
-          paintLayers: vectorPaint.paintLayers,
-          sampling: pathSampling,
-          tolerance: pathTolerance,
-          filter: filter ?? true,
-          children: [hitbox],
-        ),
-      );
+      hitboxes.add(hitbox);
     }
-    placePathComponents(paths, svg, size);
-    return paths;
+    placePathHitboxes(hitboxes, svg, size);
+    return hitboxes;
   }
 
-  /// Places the [components] made by [createPathComponents] for the [svg]
-  /// within the given [size], like after their parent is resized.
+  /// Places the [hitboxes] made by [createPathHitboxes] for the [svg] within
+  /// the given [size], like after their parent is resized.
   ///
   /// Their polygons are not made again, so they keep the sampling and the
   /// tolerance of the size that they were made for.
-  static void placePathComponents(
-    List<PathComponent> components,
+  static void placePathHitboxes(
+    List<PathHitbox> hitboxes,
     SvgPaths svg,
     Vector2? size,
   ) {
     assert(
-      components.length == svg.length,
-      'There must be a component for each path',
+      hitboxes.length == svg.length,
+      'There must be a hitbox for each path',
     );
     final (:area, scale: fit, :offset) = _fit(svg, size);
     for (var svgIndex = 0; svgIndex < svg.length; ++svgIndex) {
-      // A PathComponent moves its path to the origin, so we restore its
-      // position within the SVG.
-      final topLeft = svg.pathAt(svgIndex).path.getBounds().topLeft;
-      components[svgIndex]
+      // A PathHitbox moves its path to the origin, so we restore its position
+      // within the SVG.
+      final topLeft = svg.pathAt(svgIndex).hitboxPath.getBounds().topLeft;
+      hitboxes[svgIndex]
         ..position = (topLeft - area.topLeft).toVector2() * fit + offset
         ..scale.setValues(fit, fit);
     }

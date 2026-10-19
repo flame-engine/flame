@@ -90,9 +90,13 @@ The `hitboxes` parameter, an `SvgHitboxes` value, chooses how the hitboxes are c
 - `SvgHitboxes.single` (the default): one `SvgPathsHitbox` for the whole file. Its paths count as a
   single solid for rays, which hit the outline of their union, and not the edges of paths that are
   inside of others. Collisions still come from the edges of all the paths.
-- `SvgHitboxes.perPath`: a `PathComponent` for each path, each with its own `PathHitbox`, which
-  render the paths themselves. Since each of them moves its path, but not its gradient, the
-  gradients of the paths are only placed correctly with `SvgHitboxes.single`.
+- `SvgHitboxes.perPath`: a `PathHitbox` for each path, so that rays hit the closest edge of any of
+  the paths, as for separate shapes.
+
+Either way, the component renders the paths itself and owns its hitboxes: collisions and rays
+report the `SvgPathsComponent`, and the paths of the same file do not collide with each other. With
+several hitboxes touching another component, `onCollisionStart` is called once for each of them,
+like for any component with several hitboxes.
 
 The hitboxes cover the filled areas of the paths, with their open contours closed like filling
 does, but not their strokes: a closed outline drawn only by its stroke counts as solid, an open one
@@ -105,9 +109,8 @@ see the hitboxes. When the size of the component changes, the hitboxes follow it
 polygons keep the sampling of the initial size.
 
 To add a hitbox to a component of your own, `SvgPathsHitbox.fromSvg` and
-`SvgPathsComponent.createPathComponents` create the same hitboxes for a given size, and
-`SvgPathsHitbox.place` and `SvgPathsComponent.placePathComponents` place them again for another
-size.
+`SvgPathsComponent.createPathHitboxes` create the same hitboxes for a given size, and
+`SvgPathsHitbox.place` and `SvgPathsComponent.placePathHitboxes` place them again for another size.
 
 
 ## SvgPathsAnimationComponent

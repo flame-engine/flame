@@ -5,6 +5,7 @@ import 'package:flame/cache.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame_svg/flame_svg.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/services.dart' show AssetBundle;
@@ -14,6 +15,20 @@ import 'package:mocktail/mocktail.dart';
 class _MockAssetBundle() extends Mock implements AssetBundle;
 
 class _CollisionGame() extends FlameGame with HasCollisionDetection;
+
+class _CollidingSvgPaths(
+  super.svg, {
+  super.hitboxes = SvgHitboxes.perPath,
+  super.position,
+}) extends SvgPathsComponent with CollisionCallbacks {
+  final List<PositionComponent> others = [];
+
+  @override
+  void onCollisionStart(List<Vector2> points, PositionComponent other) {
+    super.onCollisionStart(points, other);
+    others.add(other);
+  }
+}
 
 SvgPathsComponent _componentOf(
   List<(String, String)> paths, {
@@ -46,12 +61,10 @@ int _vertices(SvgPathsComponent component) {
 }
 
 PathHitbox _perPathHitboxOf(String path, String style) {
-  return _componentOf([(path, style)], hitboxes: SvgHitboxes.perPath).children
-      .whereType<PathComponent>()
-      .single
-      .children
-      .whereType<PathHitbox>()
-      .single;
+  return _componentOf(
+    [(path, style)],
+    hitboxes: SvgHitboxes.perPath,
+  ).children.whereType<PathHitbox>().single;
 }
 
 void main() {
@@ -122,7 +135,7 @@ void main() {
         );
         expect(component.svg.length, 2);
         expect(component.hitboxes, SvgHitboxes.perPath);
-        expect(component.children.whereType<PathComponent>().length, 2);
+        expect(component.children.whereType<PathHitbox>().length, 2);
         expect(component.size, Vector2.all(50));
       });
     });
@@ -173,11 +186,10 @@ void main() {
         merge: false,
       );
 
-      /// The children placed by the component, which are path components
-      /// with [SvgHitboxes.perPath], and a single hitbox otherwise.
-      List<PositionComponent> placedOf(SvgPathsComponent component) => [
-        ...component.children.whereType<PathComponent>(),
-      ];
+      /// The hitboxes placed by the component, one for each path with
+      /// [SvgHitboxes.perPath], and a single one otherwise.
+      List<PathHitbox> placedOf(SvgPathsComponent component) =>
+          component.children.whereType<PathHitbox>().toList();
 
       void expectPlacedLike(
         SvgPathsComponent actual,
@@ -242,10 +254,7 @@ void main() {
           hitboxes: SvgHitboxes.perPath,
           renderHitboxes: true,
         );
-        final hitboxes = component.children
-            .whereType<PathComponent>()
-            .map((path) => path.children.whereType<PathHitbox>().single)
-            .toList();
+        final hitboxes = component.children.whereType<PathHitbox>().toList();
         expect(hitboxes.length, 2);
         expect(identical(hitboxes[0].paint, hitboxes[1].paint), isFalse);
       });
@@ -285,7 +294,7 @@ void main() {
       expect(hitbox.polygons, isEmpty);
     });
 
-    test('with perPath hitboxes, has a hitbox in each path component', () {
+    test('with perPath hitboxes, has a hitbox for each path', () {
       final component = _componentOf(
         [
           ('M0 0L50 0L50 50Z', 'fill="#ff0000"'),
@@ -293,12 +302,69 @@ void main() {
         ],
         hitboxes: SvgHitboxes.perPath,
       );
-      final paths = component.children.whereType<PathComponent>().toList();
-      expect(paths.length, 2);
-      for (final path in paths) {
-        expect(path.children.whereType<PathHitbox>().length, 1);
-      }
+      // The paths are rendered by the component, so the hitboxes are its only
+      // children.
+      expect(component.children.length, 2);
+      expect(component.children.whereType<PathHitbox>().length, 2);
       expect(component.children.whereType<SvgPathsHitbox>(), isEmpty);
+    });
+
+    group('collisions', () {
+      // Two overlapping squares.
+      final svg = SvgPaths(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"> '
+        '<path d="M0 0L60 0L60 60L0 60Z" fill="#ff0000"/> '
+        '<path d="M40 40L100 40L100 100L40 100Z" fill="#00ff00"/> </svg>',
+      );
+
+      for (final hitboxes in SvgHitboxes.values) {
+        testWithGame<_CollisionGame>(
+          'with ${hitboxes.name} hitboxes, are with the SVG component',
+          _CollisionGame.new,
+          (game) async {
+            final first = _CollidingSvgPaths(svg, hitboxes: hitboxes);
+            final second = _CollidingSvgPaths(
+              svg,
+              hitboxes: hitboxes,
+              position: Vector2.all(50),
+            );
+            await game.ensureAddAll([first, second]);
+            game.update(0);
+            expect(first.others, isNotEmpty);
+            expect(first.others, everyElement(second));
+            expect(second.others, isNotEmpty);
+            expect(second.others, everyElement(first));
+          },
+        );
+
+        testWithGame<_CollisionGame>(
+          'with ${hitboxes.name} hitboxes, are not between the paths',
+          _CollisionGame.new,
+          (game) async {
+            final component = _CollidingSvgPaths(svg, hitboxes: hitboxes);
+            await game.ensureAdd(component);
+            game.update(0);
+            expect(component.others, isEmpty);
+            for (final hitbox in component.children.whereType<PathHitbox>()) {
+              expect(hitbox.activeCollisions, isEmpty);
+            }
+          },
+        );
+
+        testWithGame<_CollisionGame>(
+          'with ${hitboxes.name} hitboxes, rays hit the SVG component',
+          _CollisionGame.new,
+          (game) async {
+            final component = _CollidingSvgPaths(svg, hitboxes: hitboxes);
+            await game.ensureAdd(component);
+            game.update(0);
+            final result = game.collisionDetection.raycast(
+              Ray2(origin: Vector2(-10, 30), direction: Vector2(1, 0)),
+            );
+            expect(result?.hitbox?.hitboxParent, component);
+          },
+        );
+      }
     });
 
     group('polygon sampling', () {
