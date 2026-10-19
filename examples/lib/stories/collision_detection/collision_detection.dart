@@ -3,6 +3,7 @@ import 'package:examples/commons/example_use_case.dart';
 import 'package:examples/stories/collision_detection/bouncing_ball_example.dart';
 import 'package:examples/stories/collision_detection/circles_example.dart';
 import 'package:examples/stories/collision_detection/collidable_animation_example.dart';
+import 'package:examples/stories/collision_detection/collidable_sprites_example.dart';
 import 'package:examples/stories/collision_detection/multiple_shapes_example.dart';
 import 'package:examples/stories/collision_detection/multiple_worlds_example.dart';
 import 'package:examples/stories/collision_detection/quadtree_example.dart';
@@ -26,6 +27,14 @@ WidgetbookComponent collisionDetectionStories() {
           'collision_detection/collidable_animation_example.dart',
         ),
         info: CollidableAnimationExample.description,
+      ),
+      ExampleUseCase(
+        name: 'Collidable SpriteComponent',
+        builder: (_) => GameWidget(game: CollidableSpritesExample()),
+        codeLink: baseLink(
+          'collision_detection/collidable_sprites_example.dart',
+        ),
+        info: CollidableSpritesExample.description,
       ),
       ExampleUseCase(
         name: 'Circles',

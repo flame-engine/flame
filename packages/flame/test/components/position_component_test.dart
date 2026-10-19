@@ -1255,6 +1255,35 @@ void main() {
         expect(child.toRect(), const Rect.fromLTWH(-3, 3, 1, 1));
         expect(child.toAbsoluteRect(), const Rect.fromLTWH(7, 13, 1, 1));
       });
+
+      testWithFlameGame('absolute toRect with a rotated ancestor', (
+        game,
+      ) async {
+        // The child has no rotation of its own, but its parent is rotated by
+        // 45 degrees. The corners of the child in world coordinates are
+        // (0, 0), (70.71, 70.71), (-7.07, 7.07) and (63.64, 77.78).
+        final child = PositionComponent(size: Vector2(100, 10));
+        game.add(PositionComponent(angle: pi / 4, children: [child]));
+        await game.ready();
+
+        final rect = child.toAbsoluteRect();
+        expect(rect.left, closeTo(-7.0711, 1e-3));
+        expect(rect.top, closeTo(0, 1e-3));
+        expect(rect.right, closeTo(70.7107, 1e-3));
+        expect(rect.bottom, closeTo(77.7817, 1e-3));
+      });
+
+      testWithFlameGame('toRect only uses the rotation of the component', (
+        game,
+      ) async {
+        // `toRect` is in the coordinate space of the parent, so the rotation of
+        // the parent does not matter.
+        final child = PositionComponent(size: Vector2(100, 10));
+        game.add(PositionComponent(angle: pi / 4, children: [child]));
+        await game.ready();
+
+        expect(child.toRect(), const Rect.fromLTWH(0, 0, 100, 10));
+      });
     });
 
     group('absoluteAngle', () {

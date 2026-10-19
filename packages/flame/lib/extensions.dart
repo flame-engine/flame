@@ -14,4 +14,5 @@ export 'src/extensions/random.dart';
 export 'src/extensions/rect.dart';
 export 'src/extensions/rectangle.dart';
 export 'src/extensions/size.dart';
+export 'src/extensions/uint8_list.dart';
 export 'src/extensions/vector2.dart';

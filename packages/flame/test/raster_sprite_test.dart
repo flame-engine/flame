@@ -4,7 +4,6 @@ import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:material_ui/material_ui.dart';
 
 import '_resources/load_image.dart';
 
@@ -42,6 +41,20 @@ void main() {
       );
       await secondBaseSprite.rasterize(images: images);
       expect(images.keys, hasLength(2));
+    });
+
+    test('concurrent rasterizations share the same image', () async {
+      final images = Images();
+      final baseSprite = Sprite(await loadImage('flame.png'));
+
+      final sprites = await Future.wait([
+        baseSprite.rasterize(images: images),
+        baseSprite.rasterize(images: images),
+      ]);
+
+      expect(identical(sprites[0].image, sprites[1].image), isTrue);
+      expect(sprites[0].image.debugDisposed, isFalse);
+      expect(images.keys, hasLength(1));
     });
 
     group('when using a custom cache key', () {

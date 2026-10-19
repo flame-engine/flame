@@ -18,7 +18,7 @@ import 'package:meta/meta.dart';
 ///
 /// Example usage:
 /// ```dart
-/// import 'package:flutter/material.dart';
+/// import 'package:material_ui/material_ui.dart';
 ///
 /// final icon = IconComponent(
 ///   icon: Icons.star,

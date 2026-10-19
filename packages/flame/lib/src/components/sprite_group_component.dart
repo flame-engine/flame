@@ -24,7 +24,7 @@ class SpriteGroupComponent<T>({
   super.children,
   super.priority,
   super.key,
-}) extends PositionComponent with HasPaint, ImageRetainer {
+}) extends PositionComponent with HasPaint, ImageRetainer, RendersSprite {
   ValueNotifier<T?>? _currentSpriteNotifier;
 
   /// A [ValueNotifier] that notifies when the current sprite changes.
@@ -137,11 +137,10 @@ class SpriteGroupComponent<T>({
   @mustCallSuper
   @override
   void render(Canvas canvas) {
-    sprite?.render(
-      canvas,
-      size: size,
-      overridePaint: paint,
-    );
+    final sprite = this.sprite;
+    if (sprite != null) {
+      renderSprite(canvas, sprite);
+    }
   }
 
   /// Updates the size to current [sprite]'s srcSize if [autoResize] is true.
