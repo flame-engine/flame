@@ -305,11 +305,12 @@ It is opt-in - components without the mixin are always drawn.
 #### The main rule
 
 > Everything the component draws, including its children, must fit inside its box plus
-> `cullPadding`.
+> `cullPadding`, or be listed with `CullBoundsChildren`.
 
-Flame only looks at the box of the component itself. It does not look at the children. If a child
-sticks out of the parent's box, it disappears when the parent's box leaves the screen, even if the
-child is still visible. You get no error. Things just appear too late at the edge of the screen.
+Flame only looks at the box of the component itself. It does not look at the children, unless you
+list them. If a child sticks out of the parent's box, it disappears when the parent's box leaves the
+screen, even if the child is still visible. You get no error. Things just appear too late at the
+edge of the screen.
 
 This usually happens with:
 
@@ -329,14 +330,52 @@ class Tank extends PositionComponent with CullWhenOffscreen {
   }
 }
 
-// Right: cullPadding tells Flame how far the children reach outside of the box.
-class Tank extends PositionComponent with CullWhenOffscreen {
+// Right: CullBoundsChildren tells Flame which child sticks out of the box.
+class Tank extends PositionComponent
+    with CullWhenOffscreen, CullBoundsChildren {
+  late final HealthBar healthBar;
+
   Tank() : super(size: Vector2.all(40)) {
-    cullPadding = 30;
-    add(HealthBar(position: Vector2(0, -30)));
+    healthBar = HealthBar(position: Vector2(0, -30));
+    add(healthBar);
   }
+
+  @override
+  Iterable<PositionComponent> get cullBoundsChildren => [healthBar];
 }
 ```
+
+
+#### Children that stick out
+
+Add the `CullBoundsChildren` mixin after `CullWhenOffscreen`, and list the children that stick out
+of the box in `cullBoundsChildren`. Flame adds the box of each listed child to the box of the
+component, and then adds `cullPadding`.
+
+- The box of a listed child is measured on every frame, so it follows the child when it moves.
+- List only the children that stick out. Each listed child costs a little on every frame. Listing
+  all of the children of a component with many children can cost nearly as much as drawing them.
+- A listed component can also be a grandchild, or deeper.
+- A listed component that is not mounted is ignored.
+- The list is read on every frame, so you can change it at any time, for example in `update`. A
+  change is used by the next render.
+- To use all of the children, return the cached list of the children:
+
+  ```dart
+  @override
+  Iterable<PositionComponent> get cullBoundsChildren =>
+      hasChildren ? children.query<PositionComponent>() : const [];
+  ```
+
+  This follows children that are added or removed. It only includes direct children, and it costs
+  as much as the number of children, so use it for components with only a few.
+- Return components that you keep in fields. Do not create new components in the getter.
+- If you override `cullBounds` yourself, call `super.cullBounds`. Otherwise the listed children are
+  left out.
+- The mixin must come after `CullWhenOffscreen`, and you must implement the getter. Dart reports an
+  error if you do not.
+
+If something is drawn outside of the box, but it is not a component, use `cullPadding` instead.
 
 
 #### How much cullPadding?
@@ -347,8 +386,9 @@ applies:
 
 - **An outline:** half of the outline width.
 - **A drop shadow:** the shadow offset plus the blur.
-- **A child outside of the parent:** how far the child sticks out.
 - **An effect that scales the component up:** `size * (maxScale - 1) / 2`, for a centered anchor.
+
+For a child that sticks out, use `CullBoundsChildren` instead of guessing a number.
 
 When in doubt, use a bit more than you think you need. A padding that is too big is cheap, because a
 few extra components are drawn near the edge of the screen. A padding that is too small makes things
@@ -374,7 +414,7 @@ This check is slow, so it is off by default. It does nothing in release builds. 
 something looks wrong, or after you change how a component draws its children.
 
 It only checks children that are `PositionComponent`s. It cannot see what a component draws
-by itself in `render` outside of its `size`, like a shadow. Use the table above for those.
+by itself in `render` outside of its `size`, like a shadow. Use `cullPadding` for those.
 
 
 #### Turning culling off for one component
@@ -399,7 +439,7 @@ class Chunk extends PositionComponent with CullWhenOffscreen {
 ```
 
 The main rule applies to the chunk. Its box must cover all of its children. If a child is outside of
-the chunk's `size`, use `cullPadding` on the chunk.
+the chunk's `size`, list it with `CullBoundsChildren` on the chunk, or use `cullPadding`.
 
 
 #### Other things to know
