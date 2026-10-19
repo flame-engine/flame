@@ -184,6 +184,34 @@ void main() {
     );
 
     testWithGame<_CollisionGame>(
+      'follows the moves of the component while a frame is not shown',
+      _CollisionGame.new,
+      (game) async {
+        final component = SvgPathsAnimationComponent(_animationOf());
+        // Crosses the right edge of _a once the component is moved.
+        final collider = _Collider(position: Vector2(1008, 2));
+        await game.ensureAddAll([component, collider]);
+        Ray2 rayAt(double x) =>
+            Ray2(origin: Vector2(x + 5, -10), direction: Vector2(0, 1));
+        // The bounds of the hitbox of _a are computed at the origin.
+        expect(game.collisionDetection.raycast(rayAt(0)), isNotNull);
+        game.update(1.5);
+        await game.ready();
+        // Moved while the hitbox of _a is not a child, until frame 2 shows _a.
+        component.position.setValues(1000, 0);
+        game.update(1);
+        await game.ready();
+        expect(
+          game.collisionDetection.raycast(rayAt(1000))?.intersectionPoint,
+          Vector2(1005, 0),
+        );
+        expect(game.collisionDetection.raycast(rayAt(0)), isNull);
+        game.update(0);
+        expect(collider.starts, 1);
+      },
+    );
+
+    testWithGame<_CollisionGame>(
       'ends the collisions of the frames no longer shown',
       _CollisionGame.new,
       (game) async {

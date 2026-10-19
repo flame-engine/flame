@@ -112,6 +112,16 @@ class SvgPathsHitbox({
     scale.setValues(fit, fit);
   }
 
+  /// [ShapeHitbox] does not follow the transforms of its ancestors while it
+  /// is not mounted, so its cached bounds may be stale when it is added again,
+  /// like the hitboxes of `SvgPathsAnimationComponent`. They are computed
+  /// again before the hitbox is added to the collision detection.
+  @override
+  void onMount() {
+    computeAabb(aabb);
+    super.onMount();
+  }
+
   final _normal = Vector2.zero();
   final _crossings = <_Crossing>[];
 
