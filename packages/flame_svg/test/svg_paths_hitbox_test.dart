@@ -116,6 +116,53 @@ void main() {
       expect(result.intersectionPoint!.x, closeTo(10000, 1e-3));
     });
 
+    test('a ray does not skip a gap between polygons far from the origin', () {
+      for (final x in [0.0, 10000.0]) {
+        final separated = [_square(x, 0, 10), _square(x + 10.5, 0, 10)];
+        final hitbox = _hitbox(separated);
+        // From the middle of each square towards the other one.
+        for (final ray in [_ray(x + 5, 5, 1, 0), _ray(x + 15.5, 5, -1, 0)]) {
+          final result = hitbox.rayIntersection(ray);
+          expect(result!.isInsideHitbox, isTrue, reason: '$x');
+          expect(result.distance, closeTo(5, 1e-3), reason: '$x');
+        }
+      }
+    });
+
+    test('adjacent polygons far from the origin form a continuous solid', () {
+      final adjacent = [_square(10000, 0, 50), _square(10050, 0, 50)];
+      final result = _hitbox(adjacent).rayIntersection(_ray(10010, 25, 1, 0));
+      expect(result!.isInsideHitbox, isTrue);
+      expect(result.intersectionPoint!.x, closeTo(10100, 1e-3));
+    });
+
+    test('a shared edge stays continuous when the hitbox is transformed', () {
+      final hitbox = _hitbox([_square(0, 0, 50), _square(50, 0, 50)])
+        ..position.setValues(12345.678, -9876.5)
+        ..angle = 0.7
+        ..scale.setValues(3.3, 3.3);
+      // Along the x axis of the hitbox, from inside of the first square.
+      final origin = hitbox.absolutePositionOf(Vector2(10, 25));
+      final direction = hitbox.absolutePositionOf(Vector2(11, 25)) - origin;
+      final result = hitbox.rayIntersection(
+        Ray2(origin: origin, direction: direction..normalize()),
+      );
+      expect(result!.isInsideHitbox, isTrue);
+      expect(result.distance, closeTo(90 * 3.3, 1e-3));
+    });
+
+    test('a ray does not skip a small gap far from the origin', () {
+      // The gap and the thin polygon after it are still much larger than the
+      // rounding of the paths there.
+      final paths = [
+        _square(10000, 0, 10),
+        Path()..addRect(const Rect.fromLTWH(10010.1, 0, 0.1, 10)),
+      ];
+      final result = _hitbox(paths).rayIntersection(_ray(10005, 5, 1, 0));
+      expect(result!.isInsideHitbox, isTrue);
+      expect(result.distance, closeTo(5, 1e-3));
+    });
+
     test('a ray that misses the bounding box has no result', () {
       final hitbox = _hitbox(overlapping);
       final out = RaycastResult<ShapeHitbox>();
@@ -172,6 +219,25 @@ void main() {
         final hitbox = SvgPathsHitbox.fromSvg(svg, null, renderHitboxes: true);
         expect(hitbox.renderShape, isTrue);
         expect(hitbox.paint.style, PaintingStyle.stroke);
+      });
+
+      test('keeps shared edges continuous across group transforms', () {
+        // Both paths share the edge at x = 100.3, reached through different
+        // transforms, so their vertices there may differ by rounding.
+        final adjacent = SvgPaths(
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100"> '
+          '<g transform="translate(0.3 0)"> '
+          '<path d="M0 0L100 0L100 50L0 50Z" fill="#ff0000"/></g> '
+          '<g transform="scale(0.1 1)"> '
+          '<path d="M1003 0L2003 0L2003 50L1003 50Z" fill="#00ff00"/></g> '
+          '</svg>',
+        );
+        // Scaled by 100, so that the coordinates are large.
+        final hitbox = SvgPathsHitbox.fromSvg(adjacent, Vector2(20000, 5000));
+        expect(hitbox.scale, Vector2.all(100));
+        final result = hitbox.rayIntersection(_ray(5000, 2500, 1, 0));
+        expect(result!.isInsideHitbox, isTrue);
+        expect(result.intersectionPoint!.x, closeTo(20000, 1e-2));
       });
 
       test('asserts when placing a hitbox that is not from an SVG', () {
