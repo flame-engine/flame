@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_test/flame_test.dart';
@@ -301,6 +302,24 @@ void main() {
       expect(() => batchItem.matrix, returnsNormally);
     });
 
+    test('matrix keeps the item in the plane of the canvas', () {
+      final image = _MockImage();
+      when(() => image.width).thenReturn(100);
+      when(() => image.height).thenReturn(100);
+      final spriteBatch = SpriteBatch(image, useAtlas: false);
+
+      for (final flip in [false, true]) {
+        final index = spriteBatch.add(
+          source: const Rect.fromLTWH(0, 0, 10, 10),
+          flip: flip,
+        );
+        final matrix = spriteBatch.getBatchItem(index).matrix;
+
+        expect(matrix.storage[14], closeTo(0, 1e-9)); // tz
+        expect(matrix.determinant(), isNot(0));
+      }
+    });
+
     const margin = 2.0;
     const tileSize = 6.0;
 
@@ -509,6 +528,105 @@ void main() {
         );
 
         expect(paint.blendMode, BlendMode.srcOver);
+      });
+
+      Future<Uint8List> renderItem(
+        Image sprite, {
+        required bool useAtlas,
+        required Rect source,
+        double rotation = 0,
+        Vector2? offset,
+        Color? color,
+        BlendMode? blendMode,
+        Paint? paint,
+      }) async {
+        final spriteBatch = SpriteBatch(sprite, useAtlas: useAtlas);
+        spriteBatch.add(
+          source: source,
+          rotation: rotation,
+          anchor: source.size.toVector2() / 2,
+          offset: offset,
+          color: color,
+        );
+
+        final recorder = PictureRecorder();
+        final canvas = Canvas(recorder)..drawPaint(Paint()..color = background);
+        spriteBatch.render(canvas, blendMode: blendMode, paint: paint);
+        final image = await recorder.endRecording().toImage(
+          cellSize,
+          cellSize,
+        );
+        return (await image.toByteData())!.buffer.asUint8List();
+      }
+
+      test('draws the default color behind the items', () async {
+        final sprite = await createSprite();
+        final spriteBatch = SpriteBatch(
+          sprite,
+          useAtlas: false,
+          defaultColor: const Color(0xFF0000FF),
+        );
+        spriteBatch.add(
+          source: Rect.fromLTWH(0, 0, cellSize.toDouble(), cellSize.toDouble()),
+        );
+
+        final recorder = PictureRecorder();
+        spriteBatch.render(Canvas(recorder));
+        final image = await recorder.endRecording().toImage(
+          cellSize,
+          cellSize,
+        );
+        final pixels = (await image.toByteData())!;
+
+        // The corner of the sprite is transparent, so the default color shows.
+        expect(pixels.getUint32(0), 0x0000FFFF);
+      });
+
+      test('blends the edges like drawAtlas at fractional offsets', () async {
+        final recorder = PictureRecorder();
+        Canvas(recorder).drawPaint(Paint()..color = const Color(0xFFE53935));
+        final sprite = await recorder.endRecording().toImage(8, 8);
+
+        Future<Uint8List> render({required bool useAtlas}) {
+          return renderItem(
+            sprite,
+            useAtlas: useAtlas,
+            source: const Rect.fromLTWH(0, 0, 8, 8),
+            rotation: 0.3,
+            offset: Vector2(10.3, 10.6),
+            color: const Color(0xFF0000FF),
+            blendMode: BlendMode.srcOut,
+          );
+        }
+
+        final expected = await render(useAtlas: true);
+        final actual = await render(useAtlas: false);
+        // The opaque sprite and color cancel each other out everywhere.
+        expect(actual, expected);
+      });
+
+      test('does not apply the render paint outside of the item', () async {
+        final sprite = await createSprite();
+
+        Future<Uint8List> render({required bool useAtlas}) {
+          return renderItem(
+            sprite,
+            useAtlas: useAtlas,
+            source: const Rect.fromLTWH(5, 5, 10, 10),
+            rotation: 0.5,
+            offset: Vector2.all(cellSize / 2),
+            color: itemColor,
+            blendMode: BlendMode.srcOver,
+            // drawAtlas does not antialias the edges of the items.
+            paint: Paint()
+              ..blendMode = BlendMode.src
+              ..isAntiAlias = false,
+          );
+        }
+
+        final expected = await render(useAtlas: true);
+        final actual = await render(useAtlas: false);
+        expect(countDifferentPixels(expected, actual), 0);
       });
 
       testGolden(
