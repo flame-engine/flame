@@ -112,6 +112,15 @@ class _MyApp(final List<String> events) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: FadeForwardsPageTransitionsBuilder(
+              allowSnapshotting: false,
+            ),
+          },
+        ),
+      ),
       routes: {
         '/': (_) => const _TitlePage(),
         '/game': (_) => _GamePage(game),
@@ -265,6 +274,7 @@ void main() {
           'update',
           'render',
           'update',
+          'render',
           'update',
           'onRemove',
           'onDispose',
@@ -283,6 +293,7 @@ void main() {
         'update',
         'render',
         'update',
+        'render',
         'update',
         'onRemove',
         'onDispose',
