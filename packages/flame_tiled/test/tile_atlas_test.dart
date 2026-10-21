@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
@@ -230,6 +232,72 @@ void main() {
       });
     });
 
+    group('external tileset image paths', () {
+      // Tiled writes a tileset's image source relative to the `.tsx` file,
+      // which is itself relative to the map. So for a map that references
+      // `sets/edge.tsx`, an image source of `img/edge.png` means
+      // `sets/img/edge.png`, and that is then resolved against the images
+      // directory (`assets/images/` by default).
+      //
+      // Both cases below have as many path segments in the image source as in
+      // the tileset source, which used to skip prepending the tileset's
+      // folder, so the image was resolved as if it were relative to the map
+      // instead (#4117).
+
+      // Builds a map with a single external tileset, as if [tilesetSource]
+      // had been read from the map and [imageSource] from the `.tsx`.
+      TiledMap mapWith({
+        required String tilesetSource,
+        required String imageSource,
+      }) {
+        return TiledMap(
+          height: 1,
+          tileHeight: 1,
+          tileWidth: 1,
+          width: 1,
+          tilesets: [
+            Tileset(
+              source: tilesetSource,
+              tileWidth: 16,
+              tileHeight: 16,
+              tileCount: 1,
+              image: TiledImage(source: imageSource, width: 16, height: 16),
+            ),
+          ],
+        );
+      }
+
+      setUp(TiledAtlas.atlasMap.clear);
+
+      test('resolves an image in a subfolder of the tileset', () async {
+        // `sets/` + `img/edge.png`, not `img/edge.png` alone.
+        const path = 'assets/images/sets/img/edge.png';
+        // The bundle only serves this exact path, so loading the image from
+        // anywhere else throws and fails the test.
+        final images = Images(bundle: _ExactAssetBundle({path}));
+        await TiledAtlas.fromTiledMap(
+          mapWith(tilesetSource: 'sets/edge.tsx', imageSource: 'img/edge.png'),
+          images: images,
+        );
+
+        // The image was loaded, and only from the expected path.
+        expect(images.keys, [path]);
+      });
+
+      test('resolves an image in the parent folder of the tileset', () async {
+        // `sets/` + `../edge.png`, with the `..` collapsed so the asset key is
+        // one a real bundle can serve.
+        const path = 'assets/images/edge.png';
+        final images = Images(bundle: _ExactAssetBundle({path}));
+        await TiledAtlas.fromTiledMap(
+          mapWith(tilesetSource: 'sets/edge.tsx', imageSource: '../edge.png'),
+          images: images,
+        );
+
+        expect(images.keys, [path]);
+      });
+    });
+
     group('Single tileset map', () {
       late AssetBundle bundle;
 
@@ -286,4 +354,17 @@ void main() {
       );
     });
   });
+}
+
+/// Serves `green_sprite.png` only under the exact [keys], so a test fails if a
+/// tileset image is loaded from any other path.
+class _ExactAssetBundle(final Set<String> keys) extends CachingAssetBundle {
+  @override
+  Future<ByteData> load(String key) async {
+    if (!keys.contains(key)) {
+      throw StateError('Unable to load asset: $key');
+    }
+    final bytes = await File('test/assets/green_sprite.png').readAsBytes();
+    return ByteData.view(Uint8List.fromList(bytes).buffer);
+  }
 }
