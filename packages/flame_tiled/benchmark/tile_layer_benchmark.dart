@@ -28,6 +28,7 @@ class TileLayerBenchmark({
   final int? chunkSize,
   final String orientation = 'orthogonal',
   final String attributes = '',
+  final bool tileOffset = false,
   final bool rasterize = false,
 }) extends AsyncBenchmarkBase {
   late final FlameGame _game;
@@ -46,6 +47,7 @@ class TileLayerBenchmark({
         infinite: infinite,
         orientation: orientation,
         attributes: attributes,
+        tileOffset: tileOffset,
       ),
     );
     final map = await TiledComponent.load(
@@ -92,6 +94,7 @@ String _mapXml(
   required bool infinite,
   String orientation = 'orthogonal',
   String attributes = '',
+  bool tileOffset = false,
 }) {
   final String data;
   if (infinite) {
@@ -116,6 +119,7 @@ String _mapXml(
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.8" orientation="$orientation" renderorder="right-down" width="$tiles" height="$tiles" tilewidth="16" tileheight="16" infinite="${infinite ? 1 : 0}" $attributes nextlayerid="2" nextobjectid="1">
  <tileset firstgid="1" name="4_color_sprite" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  ${tileOffset ? '<tileoffset x="0" y="-4"/>' : ''}
   <image source="4_color_sprite.png" width="16" height="16"/>
  </tileset>
  <layer id="1" name="Tile Layer 1" width="$tiles" height="$tiles">
@@ -194,6 +198,26 @@ Future<void> main() async {
             attributes: attributes,
           ).report();
         }
+      }
+    }
+  }
+  // Tiles with an offset reach into the cells around them, so their layers are
+  // split in runs instead of chunks.
+  for (final (name, orientation, attributes) in [
+    ('orthogonal', 'orthogonal', ''),
+    ('isometric', 'isometric', ''),
+  ]) {
+    for (final (kind, chunkSize) in [('', null), (', culled', 16)]) {
+      for (final tiles in [208, 496]) {
+        await TileLayerBenchmark(
+          label: '$tiles x $tiles tiles, $name, offset tiles$kind, atlas',
+          mapTiles: tiles,
+          useAtlas: true,
+          chunkSize: chunkSize,
+          orientation: orientation,
+          attributes: attributes,
+          tileOffset: true,
+        ).report();
       }
     }
   }
