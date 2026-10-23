@@ -52,6 +52,7 @@ void main() {
         component,
         geometry,
         geometry.anchor + const Offset(50, 0),
+        snapStep: pi / 12,
       )!;
 
       drag.update(Vector2(-50, 50));
@@ -70,6 +71,7 @@ void main() {
         component,
         geometry,
         geometry.anchor + const Offset(50, 0),
+        snapStep: pi / 12,
       )!;
 
       // Sweeps about 21.8 degrees.
@@ -85,6 +87,7 @@ void main() {
         component,
         geometry,
         geometry.anchor + const Offset(50, 0),
+        snapStep: pi / 12,
       )!.update(Vector2(-50, 50));
       expect(component.angle, closeTo(-pi / 2, 1e-9));
     });
@@ -108,6 +111,7 @@ void main() {
         component,
         GizmoHandle.x,
         geometry,
+        snapStep: 0.1,
       )!.update(Vector2(40, 30));
       expect(component.scale, closeToVector(Vector2(2, 1)));
 
@@ -115,13 +119,19 @@ void main() {
         component,
         GizmoHandle.y,
         geometry,
+        snapStep: 0.1,
       )!.update(Vector2(40, -20));
       expect(component.scale, closeToVector(Vector2(2, 0.5)));
     });
 
     testWithFlameGame('scales uniformly with the square handle', (game) async {
       await setUpComponent(game);
-      final drag = ScaleDrag.start(component, GizmoHandle.free, geometry)!;
+      final drag = ScaleDrag.start(
+        component,
+        GizmoHandle.free,
+        geometry,
+        snapStep: 0.1,
+      )!;
 
       drag.update(Vector2.all(20 * sqrt2));
       expect(component.scale, closeToVector(Vector2.all(2)));
@@ -136,13 +146,34 @@ void main() {
         component,
         GizmoHandle.x,
         geometry,
+        snapStep: 0.1,
       )!.update(Vector2(5, 0), snap: true);
       expect(component.scale, closeToVector(Vector2(1.1, 1)));
     });
 
+    testWithFlameGame('only snaps the dragged axes', (game) async {
+      await setUpComponent(game);
+      component.scale = Vector2(1.23, 1.37);
+      ScaleDrag.start(
+        component,
+        GizmoHandle.x,
+        geometry,
+        snapStep: 0.1,
+      )!.update(Vector2.zero(), snap: true);
+      expect(component.scale, closeToVector(Vector2(1.2, 1.37)));
+    });
+
     testWithFlameGame('does not scale with the ring', (game) async {
       await setUpComponent(game);
-      expect(ScaleDrag.start(component, GizmoHandle.ring, geometry), isNull);
+      expect(
+        ScaleDrag.start(
+          component,
+          GizmoHandle.ring,
+          geometry,
+          snapStep: 0.1,
+        ),
+        isNull,
+      );
     });
   });
 }

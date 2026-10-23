@@ -3,14 +3,21 @@ import 'package:flame/components.dart'
 import 'package:flame_studio/src/core/gizmo/canvas_mapping.dart';
 import 'package:flame_studio/src/core/gizmo/gizmo_drag.dart';
 import 'package:flame_studio/src/core/gizmo/gizmo_geometry.dart';
+import 'package:flame_studio/src/core/snap_settings.dart';
 
 /// Moves a [component] by dragging one of the handles of its gizmo.
 ///
 /// The drag is converted into the space of the component's parent, where its
 /// position lives. Dragging an axis handle only moves the component along that
-/// axis. Snapping rounds the distance moved to whole units.
+/// axis.
+///
+/// Snapping places the component on a grid with cells of [snapStep] units in
+/// the parent space. When dragging along an axis that isn't parallel to the
+/// axes of the parent, the distance moved is snapped instead, so that the
+/// component stays on the axis.
 class MoveDrag._(
   final PositionComponent component,
+  final double snapStep,
   this._startPosition,
   this._parentToCanvas,
   this._axis,
@@ -29,6 +36,7 @@ class MoveDrag._(
   static MoveDrag? start(
     PositionComponent component,
     GizmoHandle handle, {
+    required double snapStep,
     CameraComponent? camera,
   }) {
     final parentToCanvas = ParentToCanvas.of(component, camera: camera);
@@ -48,6 +56,7 @@ class MoveDrag._(
     }
     return MoveDrag._(
       component,
+      snapStep,
       component.position.clone(),
       parentToCanvas,
       axis,
@@ -56,18 +65,40 @@ class MoveDrag._(
 
   @override
   void update(Vector2 canvasDelta, {bool snap = false}) {
-    var delta = _parentToCanvas.canvasToParent(canvasDelta);
+    final delta = _parentToCanvas.canvasToParent(canvasDelta);
     final axis = _axis;
-    if (axis != null) {
-      delta = axis * delta.dot(axis);
+    if (axis == null) {
+      final position = _startPosition + delta;
+      if (snap) {
+        position.setValues(
+          snapTo(position.x, snapStep),
+          snapTo(position.y, snapStep),
+        );
+      }
+      component.position = position;
+      return;
+    }
+    var distance = delta.dot(axis);
+    if (snap && _isParallel(axis.y)) {
+      final x = snapTo(_startPosition.x + distance * axis.x, snapStep);
+      component.position = Vector2(x, _startPosition.y);
+      return;
+    }
+    if (snap && _isParallel(axis.x)) {
+      final y = snapTo(_startPosition.y + distance * axis.y, snapStep);
+      component.position = Vector2(_startPosition.x, y);
+      return;
     }
     if (snap) {
-      delta.setValues(
-        delta.x.roundToDouble(),
-        delta.y.roundToDouble(),
-      );
+      distance = snapTo(distance, snapStep);
     }
-    component.position = _startPosition + delta;
+    component.position = _startPosition + axis * distance;
+  }
+
+  /// Whether an axis whose other coordinate is [otherCoordinate] is parallel
+  /// to one of the axes of the parent.
+  static bool _isParallel(double otherCoordinate) {
+    return otherCoordinate.abs() < 1e-9;
   }
 
   @override

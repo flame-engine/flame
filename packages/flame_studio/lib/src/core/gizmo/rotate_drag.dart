@@ -1,24 +1,24 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart' show PositionComponent, Vector2;
 import 'package:flame_studio/src/core/gizmo/canvas_mapping.dart';
 import 'package:flame_studio/src/core/gizmo/gizmo_drag.dart';
 import 'package:flame_studio/src/core/gizmo/gizmo_geometry.dart';
+import 'package:flame_studio/src/core/snap_settings.dart';
 
 /// Rotates a [component] around its anchor by dragging the ring of its gizmo.
 ///
 /// The component turns by the angle that the pointer sweeps around the anchor.
-/// Snapping rounds the angle of the component to multiples of [snapAngle].
+/// Snapping rounds the angle of the component to multiples of [snapStep],
+/// which is in radians.
 class RotateDrag._(
   final PositionComponent component,
+  final double snapStep,
   this._startAngle,
   this._anchor,
   this._startPoint,
   this._direction,
 ) implements GizmoDrag {
-  static const double snapAngle = pi / 12;
-
   final double _startAngle;
   final Offset _anchor;
   final Offset _startPoint;
@@ -35,8 +35,9 @@ class RotateDrag._(
   static RotateDrag? start(
     PositionComponent component,
     GizmoGeometry geometry,
-    Offset startPoint,
-  ) {
+    Offset startPoint, {
+    required double snapStep,
+  }) {
     final parentToCanvas = ParentToCanvas.of(
       component,
       camera: geometry.camera,
@@ -46,6 +47,7 @@ class RotateDrag._(
     }
     return RotateDrag._(
       component,
+      snapStep,
       component.angle,
       geometry.anchor,
       startPoint,
@@ -63,7 +65,7 @@ class RotateDrag._(
         (point - _anchor).direction - (_startPoint - _anchor).direction;
     var angle = _startAngle + _direction * sweep;
     if (snap) {
-      angle = (angle / snapAngle).roundToDouble() * snapAngle;
+      angle = snapTo(angle, snapStep);
     }
     component.angle = angle;
   }

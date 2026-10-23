@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:flame_studio/src/core/snap_settings.dart';
 import 'package:flame_studio/src/core/viewport_tool.dart';
+import 'package:flame_studio/src/widgets/panels/inspector/property_editors.dart';
 import 'package:flame_studio/src/widgets/toolbar/toolbar_button.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,13 +15,13 @@ class const ViewportToolButton(final ViewportTool tool, {super.key})
     final currentTool = ref.watch(viewportToolProvider);
     return ToolbarButton(
       icon: _icon(tool),
-      tooltip: _tooltip(tool),
+      tooltip: _tooltip(tool, ref.watch(snapSettingsProvider)),
       toggled: currentTool == tool,
       onClick: () => ref.read(viewportToolProvider.notifier).use(tool),
     );
   }
 
-  static String _tooltip(ViewportTool tool) {
+  static String _tooltip(ViewportTool tool, SnapSettings snap) {
     return switch (tool) {
       ViewportTool.interact =>
         'Interact: the game receives the mouse input, as if the studio '
@@ -29,14 +31,15 @@ class const ViewportToolButton(final ViewportTool tool, {super.key})
             'to cycle through overlapping components',
       ViewportTool.move =>
         'Move: drag the arrows to move along an axis, or the square or the '
-            'component itself to move freely. Hold Shift to snap to whole '
-            'units',
+            'component itself to move freely. Hold Shift to snap to a grid '
+            'of ${formatNumber(snap.moveStep)} units',
       ViewportTool.rotate =>
         'Rotate: drag the ring to rotate around the anchor. Hold Shift to snap '
-            'to 15°',
+            'to multiples of ${formatNumber(snap.rotateStepDegrees)}°',
       ViewportTool.scale =>
         'Scale: drag the axis handles to scale along an axis, or the square to '
-            'scale uniformly. Hold Shift to snap to multiples of 0.1',
+            'scale uniformly. Hold Shift to snap to multiples of '
+            '${formatNumber(snap.scaleStep)}',
     };
   }
 

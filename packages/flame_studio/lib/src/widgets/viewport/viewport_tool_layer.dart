@@ -9,6 +9,7 @@ import 'package:flame_studio/src/core/gizmo/move_drag.dart';
 import 'package:flame_studio/src/core/gizmo/rotate_drag.dart';
 import 'package:flame_studio/src/core/gizmo/scale_drag.dart';
 import 'package:flame_studio/src/core/selection.dart';
+import 'package:flame_studio/src/core/snap_settings.dart';
 import 'package:flame_studio/src/core/viewport_tool.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
@@ -31,7 +32,33 @@ class _ViewportToolLayerState() extends ConsumerState<ViewportToolLayer> {
   /// Where the pointer went down, in global coordinates. Drags are measured
   /// from this point, so that the drag slop doesn't offset the component.
   Offset? _downPosition;
+  Offset? _lastPosition;
   GizmoDrag? _drag;
+
+  @override
+  void initState() {
+    super.initState();
+    HardwareKeyboard.instance.addHandler(_handleKeyEvent);
+  }
+
+  @override
+  void dispose() {
+    HardwareKeyboard.instance.removeHandler(_handleKeyEvent);
+    super.dispose();
+  }
+
+  /// Applies the drag again when Shift is pressed or released, so that
+  /// snapping toggles without having to move the pointer.
+  bool _handleKeyEvent(KeyEvent event) {
+    final lastPosition = _lastPosition;
+    final isShift =
+        event.logicalKey == LogicalKeyboardKey.shiftLeft ||
+        event.logicalKey == LogicalKeyboardKey.shiftRight;
+    if (_drag != null && lastPosition != null && isShift) {
+      _updateDrag(lastPosition);
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,15 +166,31 @@ class _ViewportToolLayerState() extends ConsumerState<ViewportToolLayer> {
     }
     final (root, point) = target;
     final tool = ref.read(viewportToolProvider);
+    final snapSettings = ref.read(snapSettingsProvider);
     final hit = _handleAt(point);
     if (hit != null) {
       final component =
           ref.read(selectedComponentProvider)! as PositionComponent;
       final (geometry, handle) = hit;
       _drag = switch (tool) {
-        ViewportTool.rotate => RotateDrag.start(component, geometry, point),
-        ViewportTool.scale => ScaleDrag.start(component, handle, geometry),
-        _ => MoveDrag.start(component, handle, camera: geometry.camera),
+        ViewportTool.rotate => RotateDrag.start(
+          component,
+          geometry,
+          point,
+          snapStep: snapSettings.rotateStep,
+        ),
+        ViewportTool.scale => ScaleDrag.start(
+          component,
+          handle,
+          geometry,
+          snapStep: snapSettings.scaleStep,
+        ),
+        _ => MoveDrag.start(
+          component,
+          handle,
+          camera: geometry.camera,
+          snapStep: snapSettings.moveStep,
+        ),
       };
       _setActiveHandle(handle);
     } else if (tool == ViewportTool.move) {
@@ -169,7 +212,12 @@ class _ViewportToolLayerState() extends ConsumerState<ViewportToolLayer> {
               .firstWhereOrNull((geometry) => geometry.containsPoint(point))
               ?.camera ??
           camerasFor(picked).firstOrNull;
-      _drag = MoveDrag.start(picked, GizmoHandle.free, camera: camera);
+      _drag = MoveDrag.start(
+        picked,
+        GizmoHandle.free,
+        camera: camera,
+        snapStep: snapSettings.moveStep,
+      );
       _setActiveHandle(GizmoHandle.free);
     }
   }
@@ -184,6 +232,7 @@ class _ViewportToolLayerState() extends ConsumerState<ViewportToolLayer> {
         !game.isAttached) {
       return;
     }
+    _lastPosition = globalPosition;
     final gameBox = game.renderBox;
     final delta =
         gameBox.globalToLocal(globalPosition) -
@@ -201,5 +250,6 @@ class _ViewportToolLayerState() extends ConsumerState<ViewportToolLayer> {
     }
     _drag = null;
     _downPosition = null;
+    _lastPosition = null;
   }
 }

@@ -42,6 +42,7 @@ void main() {
         component,
         GizmoHandle.free,
         camera: game.camera,
+        snapStep: 8,
       )!;
       drag.update(Vector2(20, 10));
       expect(component.position, closeToVector(Vector2(20, 25)));
@@ -63,6 +64,7 @@ void main() {
         component,
         GizmoHandle.x,
         camera: game.camera,
+        snapStep: 8,
       )!.update(Vector2(20, 10));
       expect(component.position, closeToVector(Vector2(0, 10)));
 
@@ -70,6 +72,7 @@ void main() {
         component,
         GizmoHandle.y,
         camera: game.camera,
+        snapStep: 8,
       )!.update(Vector2(20, 10));
       expect(component.position, closeToVector(Vector2(20, 10)));
     });
@@ -90,10 +93,66 @@ void main() {
         component,
         GizmoHandle.free,
         camera: game.camera,
+        snapStep: 8,
       )!.update(Vector2(10, 0));
       // Moving right on the canvas is moving up in the rotated parent, and
       // the parent's scale halves the distance.
       expect(component.position, closeToVector(Vector2(0, -5)));
+    });
+
+    testWithFlameGame('snaps the position to a grid', (game) async {
+      final component = PositionComponent(position: Vector2(1.5, 2.5));
+      game.world.add(component);
+      await game.ready();
+      final drag = MoveDrag.start(
+        component,
+        GizmoHandle.free,
+        camera: game.camera,
+        snapStep: 8,
+      )!;
+
+      drag.update(Vector2(10, 3), snap: true);
+      expect(component.position, closeToVector(Vector2(8, 8)));
+
+      drag.update(Vector2(10, 3));
+      expect(component.position, closeToVector(Vector2(11.5, 5.5)));
+    });
+
+    testWithFlameGame('snaps the moved coordinate along a parallel axis', (
+      game,
+    ) async {
+      final component = PositionComponent(position: Vector2(1.5, 2.5));
+      game.world.add(component);
+      await game.ready();
+
+      MoveDrag.start(
+        component,
+        GizmoHandle.x,
+        camera: game.camera,
+        snapStep: 8,
+      )!.update(Vector2(13, 3), snap: true);
+      expect(component.position, closeToVector(Vector2(16, 2.5)));
+    });
+
+    testWithFlameGame('snaps the distance along a rotated axis', (game) async {
+      final component = PositionComponent(
+        position: Vector2(1.5, 2.5),
+        angle: pi / 4,
+      );
+      game.world.add(component);
+      await game.ready();
+
+      MoveDrag.start(
+        component,
+        GizmoHandle.x,
+        camera: game.camera,
+        snapStep: 8,
+      )!.update(Vector2(10, 10), snap: true);
+      // The distance moved along the axis, 14.1, snaps to 16.
+      expect(
+        component.position,
+        closeToVector(Vector2(1.5, 2.5) + Vector2.all(16 / sqrt2)),
+      );
     });
 
     testWithFlameGame('cannot drag components whose parent is degenerate', (
@@ -106,7 +165,12 @@ void main() {
       await game.ready();
 
       expect(
-        MoveDrag.start(component, GizmoHandle.free, camera: game.camera),
+        MoveDrag.start(
+          component,
+          GizmoHandle.free,
+          camera: game.camera,
+          snapStep: 8,
+        ),
         isNull,
       );
     });

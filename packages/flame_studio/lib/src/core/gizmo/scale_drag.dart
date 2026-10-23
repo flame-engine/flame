@@ -3,21 +3,21 @@ import 'dart:ui';
 import 'package:flame/components.dart' show PositionComponent, Vector2;
 import 'package:flame_studio/src/core/gizmo/gizmo_drag.dart';
 import 'package:flame_studio/src/core/gizmo/gizmo_geometry.dart';
+import 'package:flame_studio/src/core/snap_settings.dart';
 
 /// Scales a [component] by dragging the handles of its gizmo.
 ///
 /// The axis handles scale along their axis and the square between them scales
 /// both axes uniformly. Dragging a handle away from the anchor by the length of
-/// an axis handle doubles the scale. Snapping rounds the scale to multiples of
-/// [snapStep].
+/// an axis handle doubles the scale. Snapping rounds the scale along the
+/// dragged axes to multiples of [snapStep].
 class ScaleDrag._(
   final PositionComponent component,
   final GizmoHandle handle,
+  final double snapStep,
   this._startScale,
   this._direction,
 ) implements GizmoDrag {
-  static const double snapStep = 0.1;
-
   final Vector2 _startScale;
 
   /// The direction in canvas space in which dragging grows the component.
@@ -30,8 +30,9 @@ class ScaleDrag._(
   static ScaleDrag? start(
     PositionComponent component,
     GizmoHandle handle,
-    GizmoGeometry geometry,
-  ) {
+    GizmoGeometry geometry, {
+    required double snapStep,
+  }) {
     final direction = switch (handle) {
       GizmoHandle.x => geometry.xAxis,
       GizmoHandle.y => geometry.yAxis,
@@ -44,6 +45,7 @@ class ScaleDrag._(
     return ScaleDrag._(
       component,
       handle,
+      snapStep,
       component.scale.clone(),
       direction / direction.distance,
     );
@@ -54,18 +56,15 @@ class ScaleDrag._(
     final distance =
         canvasDelta.x * _direction.dx + canvasDelta.y * _direction.dy;
     final factor = 1 + distance / GizmoGeometry.axisLength;
-    var scale = Vector2(
-      handle == GizmoHandle.y ? _startScale.x : _startScale.x * factor,
-      handle == GizmoHandle.x ? _startScale.y : _startScale.y * factor,
-    );
-    if (snap) {
-      scale = Vector2(_snap(scale.x), _snap(scale.y));
+    double scaled(double value) {
+      final result = value * factor;
+      return snap ? snapTo(result, snapStep) : result;
     }
-    component.scale = scale;
-  }
 
-  static double _snap(double value) {
-    return (value / snapStep).roundToDouble() * snapStep;
+    component.scale = Vector2(
+      handle == GizmoHandle.y ? _startScale.x : scaled(_startScale.x),
+      handle == GizmoHandle.x ? _startScale.y : scaled(_startScale.y),
+    );
   }
 
   @override

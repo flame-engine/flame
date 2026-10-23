@@ -156,6 +156,36 @@ void main() {
       await disposeStudio(tester);
     });
 
+    testWidgets('pressing Shift while dragging snaps right away', (
+      tester,
+    ) async {
+      await pumpStudio(tester);
+      final playerCenter = game.renderBox.localToGlobal(const Offset(18, 28));
+      await tester.tap(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is ViewportToolButton && widget.tool == ViewportTool.move,
+        ),
+      );
+      await tester.pump();
+
+      final gesture = await tester.startGesture(playerCenter);
+      for (var i = 0; i < 10; i++) {
+        await gesture.moveBy(const Offset(3, 1));
+        await tester.pump();
+      }
+      expect(player.position, closeToVector(Vector2(40, 30)));
+
+      await tester.sendKeyDownEvent(LogicalKeyboardKey.shiftLeft);
+      expect(player.position, closeToVector(Vector2(40, 32)));
+
+      await tester.sendKeyUpEvent(LogicalKeyboardKey.shiftLeft);
+      expect(player.position, closeToVector(Vector2(40, 30)));
+
+      await gesture.up();
+      await disposeStudio(tester);
+    });
+
     testWidgets('the rotate tool rotates components with the ring', (
       tester,
     ) async {
