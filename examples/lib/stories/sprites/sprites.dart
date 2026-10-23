@@ -7,6 +7,8 @@ import 'package:examples/stories/sprites/sprite_batch_example.dart';
 import 'package:examples/stories/sprites/sprite_batch_load_example.dart';
 import 'package:examples/stories/sprites/sprite_group_example.dart';
 import 'package:examples/stories/sprites/sprite_sheet_example.dart';
+import 'package:examples/stories/sprites/sprite_warp_example.dart';
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:widgetbook/widgetbook.dart';
 
@@ -55,6 +57,36 @@ WidgetbookComponent spritesStories() {
         builder: (_) => GameWidget(game: SpriteGroupExample()),
         codeLink: baseLink('sprites/sprite_group_example.dart'),
         info: SpriteGroupExample.description,
+      ),
+      ExampleUseCase(
+        name: 'Sprite Warp',
+        builder: (context) => SpriteWarpStory(
+          gridSize: context.knobs.int.slider(
+            label: 'Grid Size',
+            initialValue: 4,
+            min: 3,
+            max: 8,
+            divisions: 5,
+          ),
+          image: context.knobs.object.dropdown(
+            label: 'Image',
+            options: SpriteWarpImage.values,
+            labelBuilder: (image) => image.name,
+          ),
+          interpolation: context.knobs.object.dropdown(
+            label: 'Interpolation',
+            options: WarpInterpolation.values,
+            labelBuilder: (interpolation) => interpolation.name,
+          ),
+          defaultTarget: context.knobs.object.dropdown(
+            label: 'Default Target',
+            options: DefaultWarpTarget.values,
+            labelBuilder: (target) => target.label,
+          ),
+          animate: context.knobs.boolean(label: 'Animate'),
+        ),
+        codeLink: baseLink('sprites/sprite_warp_example.dart'),
+        info: SpriteWarpExample.description,
       ),
     ],
   );

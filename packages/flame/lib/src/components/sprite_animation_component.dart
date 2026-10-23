@@ -31,7 +31,7 @@ class SpriteAnimationComponent({
   super.children,
   super.priority,
   super.key,
-}) extends PositionComponent with HasPaint, ImageRetainer {
+}) extends PositionComponent with HasPaint, ImageRetainer, RendersSprite {
   /// The animation ticker used for updating [animation].
   SpriteAnimationTicker? _animationTicker = animation?.createTicker();
 
@@ -135,11 +135,10 @@ class SpriteAnimationComponent({
   @mustCallSuper
   @override
   void render(Canvas canvas) {
-    _animationTicker?.getSprite().render(
-      canvas,
-      size: size,
-      overridePaint: paint,
-    );
+    final ticker = _animationTicker;
+    if (ticker != null) {
+      renderSprite(canvas, ticker.getSprite());
+    }
   }
 
   @mustCallSuper

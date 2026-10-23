@@ -6,6 +6,7 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/geometry/absolute_transform.dart';
+import 'package:flame/src/geometry/signed_area.dart';
 import 'package:meta/meta.dart';
 
 class PolygonComponent(
@@ -376,11 +377,6 @@ class PolygonComponent(
   /// system, where the y axis points down.
   @internal
   static bool isClockwise(List<Vector2> vertices) {
-    var area = 0.0;
-    for (var i = 0; i < vertices.length; i++) {
-      final j = (i + 1) % vertices.length;
-      area += vertices[i].x * vertices[j].y - vertices[j].x * vertices[i].y;
-    }
-    return area >= 0;
+    return signedArea(vertices) >= 0;
   }
 }

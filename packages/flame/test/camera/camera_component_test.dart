@@ -525,6 +525,23 @@ void main() {
       expect(camera.canSee(player), true);
     });
 
+    testWithFlameGame('child of a rotated ancestor', (game) async {
+      // The child is a 100x10 bar with no rotation of its own, inside a parent
+      // that is rotated by 45 degrees. Its bottom left corner is at
+      // (-7.07, 7.07), and the 2x2 view only contains that corner.
+      final world = World();
+      final camera = CameraComponent(
+        world: world,
+        viewport: FixedSizeViewport(2, 2),
+      )..viewfinder.position = Vector2(-7, 7);
+      final child = PositionComponent(size: Vector2(100, 10));
+      world.add(PositionComponent(angle: pi / 4, children: [child]));
+
+      game.addAll([world, camera]);
+      await game.ready();
+      expect(camera.canSee(child), true);
+    });
+
     testWithFlameGame('unmounted world', (game) async {
       final player = PositionComponent();
       final world = World(children: [player]);
