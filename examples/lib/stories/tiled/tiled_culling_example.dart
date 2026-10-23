@@ -25,6 +25,11 @@ of the map), and only the chunks that are in view are drawn. With culling off,
 every tile of the map is drawn on every frame, even though only a few of them
 are on-screen.
 
+The "Isometric, tall tiles" map has trees and rocks that are taller than their
+cells, and are painted over the tiles behind them. Chunks would change which
+tile is painted on top, so that map is split into runs instead: pieces of one
+row, of up to 64 tiles, which are drawn in the same order as the tiles.
+
 The "Map draw time" line is how long the map needs to draw in Dart. It does not
 include the work of the GPU. Compare it, and the frame rate, with culling on and
 off.
@@ -116,9 +121,12 @@ const tiledCullingChunkSize = 16;
 
 /// The kinds of map that the culling examples show.
 ///
-/// The tiles of the maps are as big as the cells of the map, and shaped like
-/// them (a diamond or a hexagon), which is what lets Flame split a map in
-/// chunks. They are drawn twice as big as the images.
+/// The tiles of most of the maps are as big as the cells of the map, and shaped
+/// like them (a diamond or a hexagon), which is what lets Flame split a map in
+/// square chunks. The trees and rocks of [isometricTall] are taller than their
+/// cells, and are painted over the tiles behind them, so that map is split in
+/// runs instead: pieces of one row of tiles. The tiles are drawn twice as big
+/// as the images.
 enum TiledCullingOrientation(
   /// The name that is shown in the knob.
   final String label,
@@ -133,15 +141,34 @@ enum TiledCullingOrientation(
   /// How far the camera moves from the center of the map, as a part of the
   /// size of the map. The tiles of an isometric map are in a diamond, so it has
   /// to stay closer to the center.
-  final double path,
-) {
+  final double path, {
+
+  /// The height that the images of the tiles are drawn with, when they are
+  /// taller than the cells.
+  final double? artHeight,
+}) {
   orthogonal('Orthogonal', 'assets/tiles/culling_map.tmx', 32, 32, 0.3),
   isometric('Isometric', 'assets/tiles/culling_map_isometric.tmx', 64, 32, 0.2),
   staggered('Staggered', 'assets/tiles/culling_map_staggered.tmx', 64, 32, 0.3),
-  hexagonal('Hexagonal', 'assets/tiles/culling_map_hexagonal.tmx', 64, 64, 0.3);
+  hexagonal('Hexagonal', 'assets/tiles/culling_map_hexagonal.tmx', 64, 64, 0.3),
+  isometricTall(
+    'Isometric, tall tiles (runs)',
+    'assets/tiles/culling_map_isometric_tall.tmx',
+    64,
+    32,
+    0.2,
+    artHeight: 64,
+  );
 
   /// The size that a tile is drawn with.
   Vector2 get tileSize => Vector2(tileWidth, tileHeight);
+
+  /// Whether the tiles are placed like the ones of an isometric map.
+  bool get isIsometric => this == isometric || this == isometricTall;
+
+  /// Whether the map is split in runs, because its tiles are taller than the
+  /// cells, instead of in square chunks.
+  bool get splitsInRuns => artHeight != null;
 }
 
 /// Loads the map of the culling examples, which is [tiledCullingTiles] tiles

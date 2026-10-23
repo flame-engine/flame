@@ -30,6 +30,13 @@ can be green when the view only touches the corner of its box.
 Use the "Orientation" knob to change the kind of map: orthogonal, isometric,
 staggered or hexagonal.
 
+The "Isometric, tall tiles" map has trees and rocks that are taller than their
+cells, and are painted over the tiles behind them. Chunks would change which
+tile is painted on top, so that map is split into runs instead: pieces of one
+row, of up to 64 tiles, which are drawn in the same order as the tiles. The
+shapes are then the runs, which are long and thin, and they reach up to fit the
+trees and rocks.
+
 Press C, or use the "Culled" knob, to turn culling on and off. With culling off,
 the small camera draws every chunk, so they are all green.
 
@@ -127,7 +134,7 @@ It does not include the work of the GPU.
             textRenderer: cullingHudText,
           ),
           TextComponent(
-            text: 'Green: chunks drawn by the small camera',
+            text: 'Green: ${_grid.unit} drawn by the small camera',
             position: Vector2(10, 134),
             textRenderer: cullingHudText,
           ),
@@ -184,7 +191,8 @@ It does not include the work of the GPU.
       mapSize.y * (0.5 + sin(_time * 0.2) * path),
     );
     _chunksText.text =
-        'Small camera draws: ${_grid.chunksInView}/${_grid.chunkCount} chunks';
+        'Small camera draws: '
+        '${_grid.chunksInView}/${_grid.chunkCount} ${_grid.unit}';
     final milliseconds = _innerCamera.drawMilliseconds;
     if (milliseconds > 0) {
       _timeText.text =
@@ -193,8 +201,8 @@ It does not include the work of the GPU.
   }
 }
 
-/// Draws the chunks of the map, and fills the ones that the small camera
-/// draws. It is only drawn by the big camera.
+/// Draws the chunks (or the runs) of the map, and fills the ones that the
+/// small camera draws. It is only drawn by the big camera.
 class _ChunkGrid(final TiledCullingOrientation orientation)
     extends Component
     with HasGameRef<TiledCullingVisualizedExample> {
@@ -218,6 +226,9 @@ class _ChunkGrid(final TiledCullingOrientation orientation)
 
   int get chunkCount => _bounds.length;
 
+  /// What the parts of the map are called.
+  String get unit => orientation.splitsInRuns ? 'runs' : 'chunks';
+
   /// How many chunks the small camera draws.
   int chunksInView = 0;
 
@@ -229,7 +240,11 @@ class _ChunkGrid(final TiledCullingOrientation orientation)
     _linePaint.strokeWidth = width;
     _viewPaint.strokeWidth = width * 3;
     if (_bounds.isEmpty) {
-      _makeChunks();
+      if (orientation.splitsInRuns) {
+        _makeRuns();
+      } else {
+        _makeChunks();
+      }
     }
   }
 
@@ -243,7 +258,8 @@ class _ChunkGrid(final TiledCullingOrientation orientation)
         (tx + 0.5) * w,
         (ty + 0.5) * h,
       ),
-      TiledCullingOrientation.isometric => Offset(
+      TiledCullingOrientation.isometric ||
+      TiledCullingOrientation.isometricTall => Offset(
         w / 2 * (tx - ty) + tiledCullingTiles * w / 2,
         h / 2 * (tx + ty) + h / 2,
       ),
@@ -285,7 +301,7 @@ class _ChunkGrid(final TiledCullingOrientation orientation)
         }
         _bounds.add(bounds);
 
-        if (orientation == TiledCullingOrientation.isometric) {
+        if (orientation.isIsometric) {
           final top = _tileCenter(first.dx.toInt(), first.dy.toInt());
           final right = _tileCenter(last.dx.toInt(), first.dy.toInt());
           final bottom = _tileCenter(last.dx.toInt(), last.dy.toInt());
@@ -301,6 +317,38 @@ class _ChunkGrid(final TiledCullingOrientation orientation)
         } else {
           _shapes.add(Path()..addRect(bounds));
         }
+      }
+    }
+  }
+
+  /// The runs of an isometric map with tiles that are taller than the cells.
+  ///
+  /// A run is a piece of one row of tiles, which goes down and to the right on
+  /// the screen. Each tile is drawn as a box as wide as the cell, and as high
+  /// as its image, which sits on the bottom of the cell.
+  void _makeRuns() {
+    assert(orientation.isIsometric, 'Only isometric maps have tall tiles here');
+    final w = orientation.tileWidth;
+    final h = orientation.tileHeight;
+    // How far the images reach above the cells.
+    final raise = orientation.artHeight! - h;
+    // The run length of Flame: four times the chunk size.
+    const runLength = 4 * tiledCullingChunkSize;
+    for (var ty = 0; ty < tiledCullingTiles; ty++) {
+      for (var start = 0; start < tiledCullingTiles; start += runLength) {
+        final end = min(start + runLength, tiledCullingTiles) - 1;
+        final first = _tileCenter(start, ty);
+        final last = _tileCenter(end, ty);
+        final shape = Path()
+          ..moveTo(first.dx - w / 2, first.dy - raise)
+          ..lineTo(first.dx, first.dy - h / 2 - raise)
+          ..lineTo(last.dx + w / 2, last.dy - raise)
+          ..lineTo(last.dx + w / 2, last.dy)
+          ..lineTo(last.dx, last.dy + h / 2)
+          ..lineTo(first.dx - w / 2, first.dy)
+          ..close();
+        _shapes.add(shape);
+        _bounds.add(shape.getBounds());
       }
     }
   }
