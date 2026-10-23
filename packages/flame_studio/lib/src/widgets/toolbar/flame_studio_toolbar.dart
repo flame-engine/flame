@@ -41,7 +41,17 @@ class const FlameStudioToolbar({super.key}) extends ConsumerWidget {
         children: [
           Padding(
             padding: EdgeInsets.fromLTRB(gap * 2, gap, gap * 10, gap * 2),
-            child: Image.asset('logo_flame.png', fit: BoxFit.scaleDown),
+            child: Image.asset(
+              'assets/logo_flame.png',
+              package: 'flame_studio',
+              fit: BoxFit.scaleDown,
+              // When flame_studio is itself the app (as in its example), its
+              // assets are not prefixed with the package name.
+              errorBuilder: (_, _, _) => Image.asset(
+                'assets/logo_flame.png',
+                fit: BoxFit.scaleDown,
+              ),
+            ),
           ),
           Expanded(child: Container()),
           for (final button in middleButtons)

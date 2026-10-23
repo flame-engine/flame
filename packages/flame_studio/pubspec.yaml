@@ -27,5 +27,6 @@ dev_dependencies:
     sdk: flutter
   test: any
 
-assets:
-  assets/logo_flame.png
+flutter:
+  assets:
+    - assets/logo_flame.png
