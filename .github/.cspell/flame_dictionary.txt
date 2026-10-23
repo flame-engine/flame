@@ -29,6 +29,7 @@ texturepacker # a packed spritesheet format
 tilecount # The number of tiles of a tileset in a Tiled map file
 tileheight # The height of a tile in a Tiled map file
 Tilemap # What tile maps are called within Tiled
+tileoffset # The offset that the tiles of a tileset are drawn at in a Tiled map file
 tilewidth # The width of a tile in a Tiled map file
 typled # A grid map and sprite sheet tool https://github.com/erickzanardo/typled
 vantablack # brand name for a famous super-black ink known as the darkest ever made
