@@ -6,6 +6,7 @@ class const ToolbarButton({
   required final Path icon,
   final void Function()? onClick,
   final bool disabled = false,
+  final bool toggled = false,
   super.key,
 }) extends ConsumerStatefulWidget {
   @override
@@ -23,6 +24,7 @@ class ToolbarButtonState() extends ConsumerState<ToolbarButton> {
         widget.icon,
         ref.watch(themeProvider),
         isDisabled: widget.disabled,
+        isToggled: widget.toggled,
         isHovered: _isHovered,
         isActive: _isActive,
       ),
@@ -65,6 +67,7 @@ class ToolbarButtonState() extends ConsumerState<ToolbarButton> {
 enum _ToolbarButtonRenderState() {
   disabled,
   active,
+  toggled,
   hovered,
   normal,
 }
@@ -73,6 +76,7 @@ class _ToolbarButtonPainter(
   final Path icon,
   final Theme theme, {
   required final bool isDisabled,
+  required final bool isToggled,
   required final bool isHovered,
   required final bool isActive,
 }) extends CustomPainter {
@@ -88,6 +92,7 @@ class _ToolbarButtonPainter(
     final color = switch (renderState) {
       _ToolbarButtonRenderState.disabled => theme.buttonDisabledColor,
       _ToolbarButtonRenderState.active => theme.buttonActiveColor,
+      _ToolbarButtonRenderState.toggled => theme.buttonToggledColor,
       _ToolbarButtonRenderState.hovered => theme.buttonHoverColor,
       _ToolbarButtonRenderState.normal => theme.buttonColor,
     };
@@ -99,6 +104,7 @@ class _ToolbarButtonPainter(
     final textColor = switch (renderState) {
       _ToolbarButtonRenderState.disabled => theme.buttonDisabledTextColor,
       _ToolbarButtonRenderState.active => theme.buttonActiveTextColor,
+      _ToolbarButtonRenderState.toggled => theme.buttonActiveTextColor,
       _ToolbarButtonRenderState.hovered => theme.buttonHoverTextColor,
       _ToolbarButtonRenderState.normal => theme.buttonTextColor,
     };
@@ -112,6 +118,7 @@ class _ToolbarButtonPainter(
     return isHovered != old.isHovered ||
         isActive != old.isActive ||
         isDisabled != old.isDisabled ||
+        isToggled != old.isToggled ||
         icon != old.icon;
   }
 
@@ -121,6 +128,9 @@ class _ToolbarButtonPainter(
     }
     if (isActive) {
       return _ToolbarButtonRenderState.active;
+    }
+    if (isToggled) {
+      return _ToolbarButtonRenderState.toggled;
     }
     if (isHovered) {
       return _ToolbarButtonRenderState.hovered;

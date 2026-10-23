@@ -1,8 +1,10 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_studio/src/core/inspector/component_inspectors.dart';
+import 'package:flame_studio/src/core/viewport_tool.dart';
 import 'package:flame_studio/src/widgets/flame_studio.dart';
 import 'package:flame_studio/src/widgets/panels/inspector/property_editors.dart';
+import 'package:flame_studio/src/widgets/toolbar/viewport_tool_button.dart';
 import 'package:flame_studio/src/widgets/viewport/gizmo_overlay.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -106,6 +108,34 @@ void main() {
           ..circle()
           ..circle(),
       );
+
+      await disposeStudio(tester);
+    });
+
+    testWidgets('the select tool selects components in the game view', (
+      tester,
+    ) async {
+      await pumpStudio(tester);
+      final playerCenter = game.renderBox.localToGlobal(const Offset(18, 28));
+
+      // With the interact tool, the click goes to the game.
+      await tester.tapAt(playerCenter);
+      await tester.pump();
+      expect(find.text('Transform'), findsNothing);
+
+      await tester.tap(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is ViewportToolButton &&
+              widget.tool == ViewportTool.select,
+        ),
+      );
+      await tester.pump();
+      await tester.tapAt(playerCenter);
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.text('Transform'), findsOneWidget);
+      expect(find.text('10'), findsOneWidget);
 
       await disposeStudio(tester);
     });

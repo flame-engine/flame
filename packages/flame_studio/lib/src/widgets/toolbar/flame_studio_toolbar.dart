@@ -1,7 +1,9 @@
 import 'package:flame_studio/src/core/theme.dart';
+import 'package:flame_studio/src/core/viewport_tool.dart';
 import 'package:flame_studio/src/widgets/toolbar/next_frame_button.dart';
 import 'package:flame_studio/src/widgets/toolbar/pause_button.dart';
 import 'package:flame_studio/src/widgets/toolbar/start_button.dart';
+import 'package:flame_studio/src/widgets/toolbar/viewport_tool_button.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -53,6 +55,11 @@ class const FlameStudioToolbar({super.key}) extends ConsumerWidget {
               ),
             ),
           ),
+          for (final tool in ViewportTool.values)
+            Padding(
+              padding: EdgeInsets.all(gap),
+              child: ViewportToolButton(tool),
+            ),
           Expanded(child: Container()),
           for (final button in middleButtons)
             Padding(padding: EdgeInsets.all(gap), child: button),

@@ -15,6 +15,7 @@ class Theme() {
   final Color buttonColor = const Color(0xFF404040);
   final Color buttonHoverColor = const Color(0xFF606060);
   final Color buttonActiveColor = const Color(0xFFA0A0A0);
+  final Color buttonToggledColor = const Color(0xFF8A5A1E);
   final Color buttonDisabledColor = const Color(0x44404040);
   final Color buttonTextColor = const Color(0xFFffd78d);
   final Color buttonHoverTextColor = const Color(0xffffe95d);
