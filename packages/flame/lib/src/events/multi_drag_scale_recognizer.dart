@@ -55,7 +55,20 @@ class MultiDragScaleGestureRecognizer({
   final _DragState _drag = _DragState();
   final _ScaleState _scale = _ScaleState();
 
-  int get pointerCount => _drag.count;
+  /// The number of pointers taking part in the gesture.
+  ///
+  /// The `PointerPanZoom` protocol does not report how many fingers are on the
+  /// trackpad, only that a gesture is happening, so each trackpad gesture
+  /// counts as two -- the minimum it can be. This matches Flutter's
+  /// [ScaleGestureRecognizer].
+  int get pointerCount => (2 * _scale.panZooms.length) + _drag.count;
+
+  /// Arena entries for trackpad gestures that have not been accepted yet; drag
+  /// pointers keep theirs on their own [_DragPointerState].
+  final Map<int, GestureArenaEntry> _panZoomArenaEntries = {};
+
+  /// Whether enough inputs are present for a scale gesture at all.
+  bool get _canScale => pointerCount >= 2;
 
   @override
   void addAllowedPointer(PointerDownEvent event) {
@@ -90,6 +103,69 @@ class MultiDragScaleGestureRecognizer({
     }
   }
 
+  /// Trackpad gestures are only of interest when scale callbacks are in play;
+  /// they carry no per-finger pointers for drag callbacks to key off.
+  @override
+  bool isPointerPanZoomAllowed(PointerPanZoomStartEvent event) =>
+      hasScale && super.isPointerPanZoomAllowed(event);
+
+  @override
+  void addAllowedPointerPanZoom(PointerPanZoomStartEvent event) {
+    super.addAllowedPointerPanZoom(event);
+    assert(
+      !_scale.panZooms.containsKey(event.pointer),
+      'Trackpad gesture ${event.pointer} is already tracked.',
+    );
+    _scale.panZooms[event.pointer] = _PanZoomData.fromStart(event);
+    GestureBinding.instance.pointerRouter.addRoute(
+      event.pointer,
+      _handlePanZoomEvent,
+    );
+    _panZoomArenaEntries[event.pointer] = GestureBinding.instance.gestureArena
+        .add(event.pointer, this);
+
+    _scale.lastTransform = event.transform;
+    _updateScaleFields();
+    _scale.initialFocalPoint = _scale.currentFocalPoint;
+    _scale.resetPanZoomBaseline();
+  }
+
+  void _handlePanZoomEvent(PointerEvent event) {
+    if (event is PointerPanZoomUpdateEvent) {
+      _scale.panZooms[event.pointer] = _PanZoomData.fromUpdate(event);
+      _scale.lastTransform = event.transform;
+      _updateScale(
+        timeStamp: event.timeStamp,
+        kind: event.kind,
+      );
+    } else if (event is PointerPanZoomEndEvent) {
+      _scale.lastTransform = event.transform;
+      _removePanZoom(event.pointer);
+      _onPanZoomRemoved();
+    }
+  }
+
+  /// Stops tracking a trackpad gesture, if it is tracked (idempotently).
+  void _removePanZoom(int pointer) {
+    if (_scale.panZooms.remove(pointer) == null) {
+      return;
+    }
+    GestureBinding.instance.pointerRouter.removeRoute(
+      pointer,
+      _handlePanZoomEvent,
+    );
+    // Still in the map means never accepted, so give the gesture up: left
+    // unresolved, the arena sweep would award it to us over a competing
+    // recognizer that wanted it.
+    _panZoomArenaEntries.remove(pointer)?.resolve(GestureDisposition.rejected);
+  }
+
+  void _onPanZoomRemoved() {
+    _updateScaleFields();
+    _scale.resetPanZoomBaseline();
+    _endScaleIfNeeded();
+  }
+
   void _handleEvent(PointerEvent event) {
     assert(_drag.pointers.containsKey(event.pointer));
     final state = _drag.pointers[event.pointer]!;
@@ -97,7 +173,8 @@ class MultiDragScaleGestureRecognizer({
     if (event is PointerMoveEvent) {
       state._move(event);
       if (hasScale) {
-        _updateScale(event);
+        _scale.lastTransform = event.transform;
+        _updateScale(timeStamp: event.timeStamp, kind: event.kind);
       }
     } else if (event is PointerUpEvent) {
       assert(event.delta == Offset.zero);
@@ -126,16 +203,18 @@ class MultiDragScaleGestureRecognizer({
     }
   }
 
-  void _updateScale(PointerMoveEvent event) {
-    _scale.lastTransform = event.transform;
+  void _updateScale({
+    required Duration timeStamp,
+    required PointerDeviceKind kind,
+  }) {
     _updateScaleFields();
     _updateLines();
     final focalPoint = _scale.currentFocalPoint!;
 
-    if (_drag.count >= 2 && !_scale.active && _checkScaleGestureThreshold()) {
+    if (_canScale && !_scale.active && _checkScaleGestureThreshold()) {
       _scale.active = true;
-      _scale.initialEventTimestamp = event.timeStamp;
-      _scale.velocityTracker = VelocityTracker.withKind(event.kind);
+      _scale.initialEventTimestamp = timeStamp;
+      _scale.velocityTracker = VelocityTracker.withKind(kind);
 
       if (onScaleStart != null) {
         invokeCallback<void>('onScaleStart', () {
@@ -151,8 +230,8 @@ class MultiDragScaleGestureRecognizer({
       }
     }
 
-    if (_scale.active && _drag.count >= 2) {
-      _scale.velocityTracker?.addPosition(event.timeStamp, focalPoint);
+    if (_scale.active && _canScale) {
+      _scale.velocityTracker?.addPosition(timeStamp, focalPoint);
 
       if (onScaleUpdate != null) {
         invokeCallback<void>('onScaleUpdate', () {
@@ -166,7 +245,7 @@ class MultiDragScaleGestureRecognizer({
               rotation: _computeRotationFactor(),
               pointerCount: pointerCount,
               focalPointDelta: _scale.delta,
-              sourceTimeStamp: event.timeStamp,
+              sourceTimeStamp: timeStamp,
             ),
           );
         });
@@ -175,7 +254,7 @@ class MultiDragScaleGestureRecognizer({
   }
 
   void _endScaleIfNeeded() {
-    if (!_scale.active || _drag.count >= 2) {
+    if (!_scale.active || _canScale) {
       return;
     }
     if (onScaleEnd != null) {
@@ -224,11 +303,16 @@ class MultiDragScaleGestureRecognizer({
   }
 
   bool _checkScaleGestureThreshold() {
-    if (_drag.pointers.isEmpty || _scale.initialFocalPoint == null) {
+    if (_scale.initialFocalPoint == null) {
+      return false;
+    }
+    final kind =
+        _drag.pointers.values.firstOrNull?.kind ??
+        _scale.panZooms.values.firstOrNull?.kind;
+    if (kind == null) {
       return false;
     }
 
-    final kind = _drag.pointers.values.first.kind;
     final spanDelta = (_scale.currentSpan - _scale.initialSpan).abs();
     final scaleFactor = _scale.scaleFactor;
     final focalDelta =
@@ -242,6 +326,13 @@ class MultiDragScaleGestureRecognizer({
           state._arenaEntry?.resolve(GestureDisposition.accepted);
         }
       }
+      // Copied and cleared first: resolving runs arena callbacks, which must
+      // not find these entries still pending
+      final panZoomEntries = _panZoomArenaEntries.values.toList();
+      _panZoomArenaEntries.clear();
+      for (final entry in panZoomEntries) {
+        entry.resolve(GestureDisposition.accepted);
+      }
       return true;
     }
     return false;
@@ -254,9 +345,13 @@ class MultiDragScaleGestureRecognizer({
     for (final state in _drag.pointers.values) {
       focalPoint += state.currentPosition;
     }
-    _scale.currentFocalPoint = _drag.pointers.isEmpty
+    for (final panZoom in _scale.panZooms.values) {
+      focalPoint += panZoom.focalPoint;
+    }
+    final inputCount = _drag.pointers.length + _scale.panZooms.length;
+    _scale.currentFocalPoint = inputCount == 0
         ? Offset.zero
-        : focalPoint / _drag.pointers.length.toDouble();
+        : focalPoint / inputCount.toDouble();
 
     if (previousFocalPoint == null) {
       _scale.localFocalPoint = PointerEvent.transformPosition(
@@ -338,7 +433,10 @@ class MultiDragScaleGestureRecognizer({
       final angle2 = math.atan2(nfy - nsy, nfx - nsx);
       factor = angle2 - angle1;
     }
-    return factor;
+    for (final panZoom in _scale.panZooms.values) {
+      factor += panZoom.rotation;
+    }
+    return factor - _scale.initialPanZoomRotationFactor;
   }
 
   bool _isFlingGesture(Velocity velocity) {
@@ -374,6 +472,12 @@ class MultiDragScaleGestureRecognizer({
         _updateLines();
         _endScaleIfNeeded();
       }
+    } else if (_scale.panZooms.containsKey(pointer)) {
+      // The arena already decided, so drop the entry without resolving it:
+      // resolving a lost entry again trips the arena's membership assert
+      _panZoomArenaEntries.remove(pointer);
+      _removePanZoom(pointer);
+      _onPanZoomRemoved();
     }
   }
 
@@ -392,6 +496,11 @@ class MultiDragScaleGestureRecognizer({
       _removeState(pointer);
     }
     assert(_drag.pointers.isEmpty);
+    final panZoomPointers = _scale.panZooms.keys.toList();
+    for (final pointer in panZoomPointers) {
+      _removePanZoom(pointer);
+    }
+    assert(_scale.panZooms.isEmpty);
     super.dispose();
   }
 
@@ -404,6 +513,37 @@ class MultiDragScaleGestureRecognizer({
 class _DragState() {
   final Map<int, _DragPointerState> pointers = {};
   int get count => pointers.length;
+}
+
+/// A single trackpad pan/zoom gesture, as reported by the `PointerPanZoom`
+/// protocol.
+///
+/// The protocol describes a whole gesture rather than individual fingers, so
+/// one of these stands for two or more of them; see
+/// [MultiDragScaleGestureRecognizer.pointerCount].
+class _PanZoomData {
+  _PanZoomData.fromStart(PointerPanZoomStartEvent event)
+    : position = event.position,
+      pan = Offset.zero,
+      scale = 1.0,
+      rotation = 0.0,
+      kind = event.kind;
+
+  _PanZoomData.fromUpdate(PointerPanZoomUpdateEvent event)
+    : position = event.position,
+      pan = event.pan,
+      scale = event.scale,
+      rotation = event.rotation,
+      kind = event.kind;
+
+  final Offset position;
+  final Offset pan;
+  final double scale;
+  final double rotation;
+  final PointerDeviceKind kind;
+
+  /// Where the gesture currently is, panning included.
+  Offset get focalPoint => position + pan;
 }
 
 /// Groups all scale-tracking state for a [MultiDragScaleGestureRecognizer].
@@ -425,16 +565,52 @@ class _ScaleState() {
   VelocityTracker? velocityTracker;
   Duration? initialEventTimestamp;
 
+  /// Live trackpad gestures, keyed by pointer id.
+  final Map<int, _PanZoomData> panZooms = {};
+
+  /// The scale and rotation the trackpad gestures had contributed when the set
+  /// of inputs last changed, so that adding or removing one does not jump.
+  double initialPanZoomScaleFactor = 1.0;
+  double initialPanZoomRotationFactor = 0.0;
+
   // Spans are mean distances from the focal point, so they are always >= 0.
-  double get scaleFactor => initialSpan > 0.0 ? currentSpan / initialSpan : 1.0;
+  double get pointerScaleFactor {
+    return initialSpan > 0.0 ? currentSpan / initialSpan : 1.0;
+  }
 
-  double get horizontalScaleFactor => initialHorizontalSpan > 0.0
-      ? currentHorizontalSpan / initialHorizontalSpan
-      : 1.0;
+  double get scaleFactor => _withPanZoom(pointerScaleFactor);
 
-  double get verticalScaleFactor => initialVerticalSpan > 0.0
-      ? currentVerticalSpan / initialVerticalSpan
-      : 1.0;
+  double get horizontalScaleFactor => _withPanZoom(
+    initialHorizontalSpan > 0.0
+        ? currentHorizontalSpan / initialHorizontalSpan
+        : 1.0,
+  );
+
+  double get verticalScaleFactor => _withPanZoom(
+    initialVerticalSpan > 0.0 ? currentVerticalSpan / initialVerticalSpan : 1.0,
+  );
+
+  double _withPanZoom(double pointerFactor) {
+    var scale = pointerFactor;
+    for (final panZoom in panZooms.values) {
+      scale *= panZoom.scale / initialPanZoomScaleFactor;
+    }
+    return scale;
+  }
+
+  /// Re-baselines the trackpad contribution, so that the factors stay
+  /// continuous across a gesture starting or ending.
+  void resetPanZoomBaseline() {
+    if (panZooms.isEmpty) {
+      initialPanZoomScaleFactor = 1.0;
+      initialPanZoomRotationFactor = 0.0;
+    } else {
+      initialPanZoomScaleFactor = scaleFactor / pointerScaleFactor;
+      initialPanZoomRotationFactor = panZooms.values
+          .map((panZoom) => panZoom.rotation)
+          .reduce((a, b) => a + b);
+    }
+  }
 
   void reset() {
     active = false;
