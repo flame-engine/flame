@@ -3,13 +3,15 @@ import 'package:flame_studio/src/core/game_controller.dart';
 import 'package:flame_studio/src/core/gizmo/gizmo_geometry.dart';
 import 'package:flame_studio/src/core/selection.dart';
 import 'package:flame_studio/src/core/theme.dart';
+import 'package:flame_studio/src/core/viewport_tool.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Draws a gizmo on top of the game for the selected component, showing its
-/// outline, its anchor and the directions of its local axes.
+/// outline, its anchor and the directions of its local axes. While the move
+/// tool is in use, it also shows the handle that moves the component freely.
 ///
 /// The overlay must cover the game widget, but may be larger than it. The
 /// gizmo is updated every frame while a [PositionComponent] is selected.
@@ -66,10 +68,13 @@ class _GizmoOverlayState()
   @override
   Widget build(BuildContext context) {
     final game = ref.watch(gameControllerProvider.select((s) => s.game));
+    final tool = ref.watch(viewportToolProvider);
     return _GizmoPaint(
       geometry: _geometry,
       gameBox: (game?.isAttached ?? false) ? game!.renderBox : null,
       theme: ref.watch(themeProvider),
+      showFreeHandle: tool == ViewportTool.move,
+      activeHandle: ref.watch(activeGizmoHandleProvider),
     );
   }
 }
@@ -78,10 +83,17 @@ class const _GizmoPaint({
   required final List<GizmoGeometry> geometry,
   required final RenderBox? gameBox,
   required final Theme theme,
+  required final bool showFreeHandle,
+  required final GizmoHandle? activeHandle,
 }) extends LeafRenderObjectWidget {
   @override
   RenderObject createRenderObject(BuildContext context) {
-    return _RenderGizmo(geometry, gameBox, theme);
+    return _RenderGizmo()
+      ..geometry = geometry
+      ..gameBox = gameBox
+      ..theme = theme
+      ..showFreeHandle = showFreeHandle
+      ..activeHandle = activeHandle;
   }
 
   @override
@@ -89,24 +101,23 @@ class const _GizmoPaint({
     renderObject
       ..geometry = geometry
       ..gameBox = gameBox
-      ..theme = theme;
+      ..theme = theme
+      ..showFreeHandle = showFreeHandle
+      ..activeHandle = activeHandle;
   }
 }
 
 /// Paints the gizmos, converting their points from the canvas space of the
 /// game into the local space of this render box.
-class _RenderGizmo(
-  List<GizmoGeometry> geometry,
-  RenderBox? gameBox,
-  Theme theme,
-) extends RenderBox {
-  static const double axisLength = 40.0;
+class _RenderGizmo() extends RenderBox {
   static const double arrowSize = 6.0;
   static const double anchorRadius = 4.0;
 
-  List<GizmoGeometry> _geometry = geometry;
-  RenderBox? _gameBox = gameBox;
-  Theme _theme = theme;
+  List<GizmoGeometry> _geometry = const [];
+  RenderBox? _gameBox;
+  Theme? _theme;
+  bool _showFreeHandle = false;
+  GizmoHandle? _activeHandle;
 
   set geometry(List<GizmoGeometry> value) {
     if (!identical(_geometry, value)) {
@@ -129,6 +140,20 @@ class _RenderGizmo(
     }
   }
 
+  set showFreeHandle(bool value) {
+    if (_showFreeHandle != value) {
+      _showFreeHandle = value;
+      markNeedsPaint();
+    }
+  }
+
+  set activeHandle(GizmoHandle? value) {
+    if (_activeHandle != value) {
+      _activeHandle = value;
+      markNeedsPaint();
+    }
+  }
+
   @override
   bool get sizedByParent => true;
 
@@ -138,41 +163,66 @@ class _RenderGizmo(
   @override
   void paint(PaintingContext context, Offset offset) {
     final gameBox = _gameBox;
-    if (_geometry.isEmpty || gameBox == null || !gameBox.attached) {
+    final theme = _theme;
+    if (_geometry.isEmpty ||
+        gameBox == null ||
+        !gameBox.attached ||
+        theme == null) {
       return;
     }
     Offset toLocal(Offset canvasPoint) {
       return globalToLocal(gameBox.localToGlobal(canvasPoint)) + offset;
     }
 
+    Color handleColor(GizmoHandle handle, Color color) {
+      return handle == _activeHandle ? theme.gizmoActiveColor : color;
+    }
+
     final canvas = context.canvas;
     for (final gizmo in _geometry) {
-      final corners = gizmo.corners.map(toLocal).toList();
-      final anchor = toLocal(gizmo.anchor);
-      final outline = Path()..addPolygon(corners, true);
+      final outline = Path()
+        ..addPolygon(gizmo.corners.map(toLocal).toList(), true);
       canvas.drawPath(
         outline,
-        Paint()..color = _theme.gizmoColor.withAlpha(0x22),
+        Paint()..color = theme.gizmoColor.withAlpha(0x22),
       );
       canvas.drawPath(
         outline,
         Paint()
-          ..color = _theme.gizmoColor
+          ..color = theme.gizmoColor
           ..style = PaintingStyle.stroke
           ..strokeWidth = 1.5,
       );
-      _drawAxis(
-        canvas,
-        anchor,
-        toLocal(gizmo.anchor + gizmo.xAxis) - anchor,
-        _theme.gizmoXAxisColor,
-      );
-      _drawAxis(
-        canvas,
-        anchor,
-        toLocal(gizmo.anchor + gizmo.yAxis) - anchor,
-        _theme.gizmoYAxisColor,
-      );
+
+      final anchor = toLocal(gizmo.anchor);
+      if (_showFreeHandle && gizmo.xAxis != Offset.zero) {
+        final color = handleColor(GizmoHandle.free, theme.gizmoColor);
+        final square = Path()
+          ..addPolygon(gizmo.freeHandleCorners.map(toLocal).toList(), true);
+        canvas.drawPath(square, Paint()..color = color.withAlpha(0x88));
+        canvas.drawPath(
+          square,
+          Paint()
+            ..color = color
+            ..style = PaintingStyle.stroke,
+        );
+      }
+      if (gizmo.xAxis != Offset.zero) {
+        _drawArrow(
+          canvas,
+          anchor,
+          toLocal(gizmo.xAxisEnd),
+          handleColor(GizmoHandle.x, theme.gizmoXAxisColor),
+        );
+      }
+      if (gizmo.yAxis != Offset.zero) {
+        _drawArrow(
+          canvas,
+          anchor,
+          toLocal(gizmo.yAxisEnd),
+          handleColor(GizmoHandle.y, theme.gizmoYAxisColor),
+        );
+      }
       canvas.drawCircle(
         anchor,
         anchorRadius,
@@ -182,21 +232,21 @@ class _RenderGizmo(
         anchor,
         anchorRadius,
         Paint()
-          ..color = _theme.gizmoColor
+          ..color = theme.gizmoColor
           ..style = PaintingStyle.stroke
           ..strokeWidth = 1.5,
       );
     }
   }
 
-  void _drawAxis(Canvas canvas, Offset start, Offset direction, Color color) {
+  void _drawArrow(Canvas canvas, Offset start, Offset end, Color color) {
+    final direction = end - start;
     final distance = direction.distance;
     if (distance == 0) {
       return;
     }
     final unit = direction / distance;
     final normal = Offset(-unit.dy, unit.dx);
-    final end = start + unit * axisLength;
     final arrowBase = end - unit * arrowSize;
     canvas.drawLine(
       start,

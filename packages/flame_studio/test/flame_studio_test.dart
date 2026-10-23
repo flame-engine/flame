@@ -6,6 +6,7 @@ import 'package:flame_studio/src/widgets/flame_studio.dart';
 import 'package:flame_studio/src/widgets/panels/inspector/property_editors.dart';
 import 'package:flame_studio/src/widgets/toolbar/viewport_tool_button.dart';
 import 'package:flame_studio/src/widgets/viewport/gizmo_overlay.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -136,6 +137,28 @@ void main() {
 
       expect(find.text('Transform'), findsOneWidget);
       expect(find.text('10'), findsOneWidget);
+
+      await disposeStudio(tester);
+    });
+
+    testWidgets('the move tool moves components by dragging them', (
+      tester,
+    ) async {
+      await pumpStudio(tester);
+      final playerCenter = game.renderBox.localToGlobal(const Offset(18, 28));
+
+      await tester.tap(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is ViewportToolButton && widget.tool == ViewportTool.move,
+        ),
+      );
+      await tester.pump();
+      await tester.dragFrom(playerCenter, const Offset(30, 10));
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(player.position, closeToVector(Vector2(40, 30)));
+      expect(find.text('Transform'), findsOneWidget);
 
       await disposeStudio(tester);
     });

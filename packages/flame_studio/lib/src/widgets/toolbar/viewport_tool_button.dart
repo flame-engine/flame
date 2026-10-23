@@ -36,6 +36,31 @@ class const ViewportToolButton(final ViewportTool tool, {super.key})
           ..addRect(const Rect.fromLTRB(-5, -4, 5, 4))
           ..addRect(const Rect.fromLTRB(-4, -3, 4, 3))
           ..addRect(const Rect.fromLTRB(-1.5, -1.5, 1.5, 1.5)),
+      // Arrows pointing in all four directions.
+      ViewportTool.move =>
+        Path()
+          ..addRect(const Rect.fromLTRB(-3.5, -0.6, 3.5, 0.6))
+          ..addRect(const Rect.fromLTRB(-0.6, -3.5, 0.6, 3.5))
+          ..addPolygon(const [
+            Offset(0, -5.5),
+            Offset(-2, -3),
+            Offset(2, -3),
+          ], true)
+          ..addPolygon(const [
+            Offset(0, 5.5),
+            Offset(-2, 3),
+            Offset(2, 3),
+          ], true)
+          ..addPolygon(const [
+            Offset(-5.5, 0),
+            Offset(-3, -2),
+            Offset(-3, 2),
+          ], true)
+          ..addPolygon(const [
+            Offset(5.5, 0),
+            Offset(3, -2),
+            Offset(3, 2),
+          ], true),
     };
   }
 }

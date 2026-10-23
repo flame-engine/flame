@@ -1,5 +1,6 @@
 import 'package:flame/components.dart'
     show Component, PositionComponent, Vector2;
+import 'package:flame_studio/src/core/gizmo/gizmo_geometry.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// What happens when the user interacts with the game view.
@@ -10,6 +11,10 @@ enum ViewportTool() {
   /// Clicking on the game selects the component under the pointer. The game
   /// does not receive the pointer events.
   select,
+
+  /// Like [select], and dragging the selected component or the handles of its
+  /// gizmo moves it.
+  move,
 }
 
 final viewportToolProvider =
@@ -23,6 +28,23 @@ class ViewportToolController() extends Notifier<ViewportTool> {
 
   // ignore: use_setters_to_change_properties
   void use(ViewportTool tool) => state = tool;
+}
+
+/// The gizmo handle under the pointer, or being dragged, if any.
+final activeGizmoHandleProvider =
+    NotifierProvider<ActiveGizmoHandleController, GizmoHandle?>(
+      ActiveGizmoHandleController.new,
+    );
+
+class ActiveGizmoHandleController() extends Notifier<GizmoHandle?> {
+  @override
+  GizmoHandle? build() {
+    ref.watch(viewportToolProvider);
+    return null;
+  }
+
+  // ignore: use_setters_to_change_properties
+  void set(GizmoHandle? handle) => state = handle;
 }
 
 /// The components that can be selected at [canvasPoint], which is in the

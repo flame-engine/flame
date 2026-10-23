@@ -4,7 +4,7 @@ import 'package:flame_studio/src/widgets/dock/dock_panel.dart';
 import 'package:flame_studio/src/widgets/studio_chrome.dart';
 import 'package:flame_studio/src/widgets/toolbar/flame_studio_toolbar.dart';
 import 'package:flame_studio/src/widgets/viewport/gizmo_overlay.dart';
-import 'package:flame_studio/src/widgets/viewport/select_tool_layer.dart';
+import 'package:flame_studio/src/widgets/viewport/viewport_tool_layer.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -39,7 +39,7 @@ class const UiScaffold({required final Widget gameApp, super.key})
                   children: [
                     gameApp,
                     const IgnorePointer(child: GizmoOverlay()),
-                    const SelectToolLayer(),
+                    const ViewportToolLayer(),
                   ],
                 ),
               ),
