@@ -4,7 +4,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('pickableComponentsAt', () {
+  group('selectableComponentsAt', () {
     testWithFlameGame('returns the components under the point, topmost first', (
       game,
     ) async {
@@ -18,12 +18,12 @@ void main() {
       await game.ready();
 
       // The world origin is at the center of the 800x600 canvas.
-      expect(pickableComponentsAt(game, Vector2(405, 305)), [top, bottom]);
-      expect(pickableComponentsAt(game, Vector2(455, 355)), [
+      expect(selectableComponentsAt(game, Vector2(405, 305)), [top, bottom]);
+      expect(selectableComponentsAt(game, Vector2(455, 355)), [
         elsewhere,
         bottom,
       ]);
-      expect(pickableComponentsAt(game, Vector2(10, 10)), isEmpty);
+      expect(selectableComponentsAt(game, Vector2(10, 10)), isEmpty);
     });
   });
 

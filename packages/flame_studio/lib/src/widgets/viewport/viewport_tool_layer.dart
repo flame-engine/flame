@@ -136,7 +136,10 @@ class _ViewportToolLayerState() extends ConsumerState<ViewportToolLayer> {
       // Clicking a handle keeps the selection.
       return;
     }
-    final candidates = pickableComponentsAt(root, Vector2(point.dx, point.dy));
+    final candidates = selectableComponentsAt(
+      root,
+      Vector2(point.dx, point.dy),
+    );
     ref
         .read(selectedComponentProvider.notifier)
         .select(pickNext(candidates, ref.read(selectedComponentProvider)));
@@ -196,7 +199,7 @@ class _ViewportToolLayerState() extends ConsumerState<ViewportToolLayer> {
     } else if (tool == ViewportTool.move) {
       // Dragging a component moves it freely, selecting it if needed.
       final selected = ref.read(selectedComponentProvider);
-      final candidates = pickableComponentsAt(
+      final candidates = selectableComponentsAt(
         root,
         Vector2(point.dx, point.dy),
       );

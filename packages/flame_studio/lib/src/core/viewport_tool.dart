@@ -57,7 +57,7 @@ class ActiveGizmoHandleController() extends Notifier<GizmoHandle?> {
 
 /// The components that can be selected at [canvasPoint], which is in the
 /// canvas space of the game rooted at [root], with the topmost first.
-List<PositionComponent> pickableComponentsAt(
+List<PositionComponent> selectableComponentsAt(
   Component root,
   Vector2 canvasPoint,
 ) {
