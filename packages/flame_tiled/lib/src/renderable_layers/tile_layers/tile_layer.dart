@@ -9,6 +9,7 @@ import 'package:flame_tiled/src/renderable_layers/tile_layers/hexagonal_tile_lay
 import 'package:flame_tiled/src/renderable_layers/tile_layers/isometric_tile_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/orthogonal_tile_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/staggered_tile_layer.dart';
+import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_chunk.dart';
 import 'package:flame_tiled/src/tile_animation.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
@@ -41,6 +42,13 @@ abstract class FlameTileLayer({
   required final bool ignoreFlip,
   required var Paint Function(double opacity) layerPaintFactory,
   super.filterQuality,
+
+  /// The size of the chunks of this layer, in tiles, for the layers that split
+  /// their tiles in chunks (see [usesChunks]).
+  ///
+  /// Infinite maps are always split, and use the chunk size of the map when
+  /// this is null. Finite maps are only split when this is set.
+  final int? chunkSize,
 }) extends RenderableLayer<TileLayer> with ImageRetainer {
   late Paint _layerPaint = layerPaintFactory(opacity);
 
@@ -79,6 +87,7 @@ abstract class FlameTileLayer({
     required Paint Function(double opacity) layerPaintFactory,
     FilterQuality? filterQuality,
     bool? ignoreFlip,
+    int? chunkSize,
   }) {
     ignoreFlip ??= false;
     final mapOrientation = map.orientation;
@@ -96,6 +105,7 @@ abstract class FlameTileLayer({
         ignoreFlip: ignoreFlip,
         filterQuality: filterQuality,
         layerPaintFactory: layerPaintFactory,
+        chunkSize: chunkSize,
       ),
       MapOrientation.staggered => StaggeredTileLayer(
         layer: layer,
@@ -106,6 +116,7 @@ abstract class FlameTileLayer({
         ignoreFlip: ignoreFlip,
         filterQuality: filterQuality,
         layerPaintFactory: layerPaintFactory,
+        chunkSize: chunkSize,
       ),
       MapOrientation.hexagonal => HexagonalTileLayer(
         layer: layer,
@@ -116,6 +127,7 @@ abstract class FlameTileLayer({
         ignoreFlip: ignoreFlip,
         filterQuality: filterQuality,
         layerPaintFactory: layerPaintFactory,
+        chunkSize: chunkSize,
       ),
       MapOrientation.orthogonal => OrthogonalTileLayer(
         layer: layer,
@@ -126,6 +138,7 @@ abstract class FlameTileLayer({
         ignoreFlip: ignoreFlip,
         filterQuality: filterQuality,
         layerPaintFactory: layerPaintFactory,
+        chunkSize: chunkSize,
       ),
     };
   }
@@ -140,6 +153,123 @@ abstract class FlameTileLayer({
   @override
   void render(Canvas canvas) {
     tiledAtlas.batch?.render(canvas, paint: _layerPaint);
+
+    final view = cullRect;
+    var rendered = 0;
+    for (final chunk in _sortedChunks) {
+      if (view == null || chunk.isVisibleIn(view)) {
+        chunk.batch.render(canvas, paint: _layerPaint);
+        rendered++;
+      }
+    }
+    _renderedChunkCount = rendered;
+  }
+
+  /// The number of chunks that this layer has.
+  @visibleForTesting
+  int get chunkCount => _sortedChunks.length;
+
+  /// The number of chunks that were rendered the last time this layer was.
+  @visibleForTesting
+  int get renderedChunkCount => _renderedChunkCount;
+  int _renderedChunkCount = 0;
+
+  /// Whether the tiles of this layer are split into chunks, which are only
+  /// rendered while they are in view.
+  ///
+  /// This is the case for the layers of infinite maps, and for the layers of
+  /// finite maps when [chunkSize] is set, as long as every tile stays inside of
+  /// its own cell. Tiles that stick out of their cell (oversized tiles and
+  /// tiles with an offset) are painted over the tiles of other cells, in an
+  /// order that chunks would change. Then all of the tiles are kept in
+  /// [TiledAtlas.batch].
+  ///
+  /// Only the tiles of this layer are looked at, and this is decided again
+  /// every time the cache is refreshed, since changing a tile can change it.
+  bool get usesChunks => _usesChunks;
+  bool _usesChunks = false;
+
+  bool _canUseChunks() {
+    if (!map.infinite && chunkSize == null) {
+      return false;
+    }
+    // A quarter turn swaps the width and the height of a tile, so in a cell
+    // that is not square the tile sticks out of it. The tiles of hexagonal maps
+    // are rotated in steps of 60º and keep their size.
+    final quarterTurnsStickOut =
+        map.tileWidth != map.tileHeight &&
+        map.orientation != MapOrientation.hexagonal;
+    final tileIds = <int>{};
+    var hasQuarterTurn = false;
+    layer.forEachTile((_, _, gid) {
+      if (gid.tile != 0) {
+        tileIds.add(gid.tile);
+        hasQuarterTurn = hasQuarterTurn || gid.flips.diagonally;
+      }
+    });
+    if (quarterTurnsStickOut && hasQuarterTurn) {
+      return false;
+    }
+    // Only the tilesets that this layer uses, so that a tileset of bigger
+    // tiles that is used by another layer does not keep this one whole.
+    return tileIds
+        .map(map.tilesetByTileGId)
+        .toSet()
+        .every(
+          (tileset) =>
+              tileset.image != null &&
+              tileset.tileWidth == map.tileWidth &&
+              tileset.tileHeight == map.tileHeight &&
+              tileset.tileOffset == null,
+        );
+  }
+
+  /// The size of a chunk, in tiles. Infinite layers use the chunk size of the
+  /// map, so that a chunk of the layer is a chunk of Tiled.
+  int _chunkWidth = _defaultChunkSize;
+  int _chunkHeight = _defaultChunkSize;
+  static const _defaultChunkSize = 16;
+
+  final _chunks = <(int, int), TileChunk>{};
+
+  /// The chunks in the order that they are rendered, which is row by row.
+  List<TileChunk> _sortedChunks = const [];
+
+  (int, int) _chunkKey(int tx, int ty) => (
+    (tx / _chunkWidth).floor(),
+    (ty / _chunkHeight).floor(),
+  );
+
+  /// Adds a tile to this layer, to the chunk that it belongs to when this layer
+  /// [usesChunks], or else to [TiledAtlas.batch].
+  ///
+  /// [tx] and [ty] are the Tiled coordinates of the tile.
+  @protected
+  void addTile(
+    int tx,
+    int ty, {
+    required MutableRect source,
+    required MutableRSTransform transform,
+    required bool flip,
+  }) {
+    if (!usesChunks) {
+      tiledAtlas.batch?.addTransform(
+        source: source,
+        transform: transform,
+        flip: flip,
+      );
+      return;
+    }
+    final key = _chunkKey(tx, ty);
+    var chunk = _chunks[key];
+    if (chunk == null) {
+      final batch = tiledAtlas.newBatch();
+      if (batch == null) {
+        return;
+      }
+      chunk = _chunks[key] = TileChunk(batch);
+    }
+    chunk.add(source: source, transform: transform, flip: flip);
   }
 
   @protected
@@ -188,8 +318,25 @@ abstract class FlameTileLayer({
     }
 
     tiledAtlas.batch?.clear();
+    _chunks.clear();
+    _sortedChunks = const [];
+    assert(
+      chunkSize == null || chunkSize! > 0,
+      'The chunk size must be at least one tile',
+    );
+    _chunkWidth =
+        chunkSize ?? layer.chunks?.firstOrNull?.width ?? _defaultChunkSize;
+    _chunkHeight =
+        chunkSize ?? layer.chunks?.firstOrNull?.height ?? _defaultChunkSize;
+    _usesChunks = _canUseChunks();
 
     cacheTiles();
+
+    final keys = _chunks.keys.toList()
+      ..sort(
+        (a, b) => a.$2 != b.$2 ? a.$2.compareTo(b.$2) : a.$1.compareTo(b.$1),
+      );
+    _sortedChunks = [for (final key in keys) _chunks[key]!];
   }
 
   /// Transform for Tiled tile `(x, y)`, or `null` if that cell is empty or
@@ -203,7 +350,12 @@ abstract class FlameTileLayer({
         iy >= transforms[ix].length) {
       return null;
     }
-    return transforms[ix][iy];
+    final transform = transforms[ix][iy];
+    if (transform != null) {
+      // The transform can be used to move the tile, out of its chunk.
+      _chunks[_chunkKey(x, y)]?.alwaysVisible = true;
+    }
+    return transform;
   }
 
   /// Stores the [transform] of the Tiled tile `(tx, ty)` in [transforms].

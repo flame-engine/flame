@@ -53,6 +53,16 @@ class TiledAtlas._({
           useAtlas: useAtlas,
         );
 
+  /// Creates a new, empty [SpriteBatch] that draws from the same image as
+  /// [batch], or null if this atlas has no image.
+  SpriteBatch? newBatch() => atlas == null
+      ? null
+      : SpriteBatch(
+          atlas!,
+          imageKey: key,
+          useAtlas: useAtlas,
+        );
+
   /// Returns whether or not this atlas contains [source].
   bool contains(String? source) => offsets.containsKey(source);
 
