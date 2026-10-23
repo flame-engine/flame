@@ -3,6 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flame_studio/src/core/inspector/component_inspectors.dart';
 import 'package:flame_studio/src/widgets/flame_studio.dart';
 import 'package:flame_studio/src/widgets/panels/inspector/property_editors.dart';
+import 'package:flame_studio/src/widgets/viewport/gizmo_overlay.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('FlameStudio', () {
     late _Player player;
+    late FlameGame game;
 
     Future<void> pumpStudio(WidgetTester tester) async {
       tester.view.physicalSize = const Size(1600, 900);
@@ -17,7 +19,7 @@ void main() {
       addTearDown(tester.view.reset);
 
       player = _Player();
-      final game = FlameGame(children: [player, _Enemy()]);
+      game = FlameGame(children: [player, _Enemy()]);
       await tester.pumpWidget(FlameStudio(GameWidget(game: game)));
       // Let the game load, the studio find it, and the tree refresh.
       for (var i = 0; i < 5; i++) {
@@ -79,6 +81,31 @@ void main() {
 
       expect(player.x, 42);
       expect(find.text('42'), findsOneWidget);
+
+      await disposeStudio(tester);
+    });
+
+    testWidgets('draws a gizmo for the selected component', (tester) async {
+      await pumpStudio(tester);
+      final overlay = find.byType(GizmoOverlay);
+      expect(tester.renderObject(overlay), paintsNothing);
+
+      await tester.tap(find.text('_Player'));
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump(const Duration(milliseconds: 16));
+
+      expect(
+        tester.renderObject(overlay),
+        paints
+          ..path()
+          ..path()
+          ..line()
+          ..path()
+          ..line()
+          ..path()
+          ..circle()
+          ..circle(),
+      );
 
       await disposeStudio(tester);
     });

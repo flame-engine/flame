@@ -3,6 +3,7 @@ import 'package:flame_studio/src/widgets/dock/dock_layout.dart';
 import 'package:flame_studio/src/widgets/dock/dock_panel.dart';
 import 'package:flame_studio/src/widgets/studio_chrome.dart';
 import 'package:flame_studio/src/widgets/toolbar/flame_studio_toolbar.dart';
+import 'package:flame_studio/src/widgets/viewport/gizmo_overlay.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -30,7 +31,16 @@ class const UiScaffold({required final Widget gameApp, super.key})
                 rightWidth + 20,
                 20,
               ),
-              child: ClipRect(child: gameApp),
+              child: ClipRect(
+                child: Stack(
+                  fit: StackFit.expand,
+                  textDirection: ref.watch(textDirectionProvider),
+                  children: [
+                    gameApp,
+                    const IgnorePointer(child: GizmoOverlay()),
+                  ],
+                ),
+              ),
             ),
           ),
           Positioned(

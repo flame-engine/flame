@@ -34,4 +34,8 @@ class Theme() {
   final double rowHeight = 22.0;
   final Color fieldColor = const Color(0xFF2A2A2A);
   final Color fieldBorderColor = const Color(0xFF505050);
+
+  final Color gizmoColor = const Color(0xFFFFA726);
+  final Color gizmoXAxisColor = const Color(0xFFE5534B);
+  final Color gizmoYAxisColor = const Color(0xFF57AB5A);
 }
