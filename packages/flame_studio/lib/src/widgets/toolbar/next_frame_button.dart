@@ -16,6 +16,7 @@ class const NextFrameButton({super.key}) extends ConsumerWidget {
         ..close()
         ..addRect(const Rect.fromLTWH(1, -4.5, 3, 9)),
       disabled: !gameState.paused,
+      tooltip: 'Advance the paused game by a single frame',
       onClick: () {
         ref.read(gameControllerProvider.notifier).stepGame();
       },
