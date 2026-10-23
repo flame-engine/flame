@@ -19,14 +19,30 @@ const List<ComponentInspector> defaultComponentInspectors = [
 
 InspectorSection inspectComponent(Component component) {
   return InspectorSection('Component', [
-    StringProperty('Type', () => component.runtimeType.toString()),
-    StringProperty('State', () => _lifecycleState(component)),
+    StringProperty(
+      'Type',
+      () => component.runtimeType.toString(),
+      description: 'The class of the component',
+    ),
+    StringProperty(
+      'State',
+      () => _lifecycleState(component),
+      description: 'Where the component is in its lifecycle',
+    ),
     IntProperty(
       'Priority',
       () => component.priority,
       setValue: (value) => component.priority = value,
+      description:
+          'The order of the component among its siblings. Components with a '
+          'higher priority are updated and rendered after, so on top of, the '
+          'ones with a lower priority',
     ),
-    IntProperty('Children', () => component.children.length),
+    IntProperty(
+      'Children',
+      () => component.children.length,
+      description: 'The number of direct children of the component',
+    ),
     BoolProperty(
       'Debug mode',
       () => component.debugMode,
@@ -39,6 +55,9 @@ InspectorSection inspectComponent(Component component) {
           descendant.debugMode = value;
         }
       },
+      description:
+          'Draws debug information, like the bounding box and position, for '
+          'the component and all of its descendants',
     ),
   ]);
 }
@@ -52,27 +71,40 @@ InspectorSection? inspectPositionComponent(Component component) {
       'Position',
       () => component.position,
       setValue: (value) => component.position = value,
+      description:
+          "The position of the component's anchor, in the coordinate space of "
+          'its parent',
     ),
     Vector2Property(
       'Size',
       () => component.size,
       setValue: (value) => component.size = value,
+      description: 'The size of the component, before scaling',
     ),
     Vector2Property(
       'Scale',
       () => component.scale,
       setValue: (value) => component.scale = value,
       step: 0.01,
+      description:
+          'How much the component and its children are stretched along each '
+          'of its axes. Negative values flip them',
     ),
     DoubleProperty(
       'Angle (°)',
       () => component.angle * 180 / pi,
       setValue: (value) => component.angle = value * pi / 180,
+      description:
+          'The rotation of the component around its anchor, clockwise, in '
+          'degrees',
     ),
     AnchorProperty(
       'Anchor',
       () => component.anchor,
       setValue: (value) => component.anchor = value,
+      description:
+          'The point of the component that is placed at its position, and '
+          'around which it rotates and scales',
     ),
   ]);
 }
@@ -84,6 +116,7 @@ InspectorSection? inspectRendering(Component component) {
         'Visible',
         () => component.isVisible,
         setValue: (value) => component.isVisible = value,
+        description: 'Whether the component and its children are rendered',
       ),
     if (component is HasPaint)
       DoubleProperty(
@@ -93,6 +126,8 @@ InspectorSection? inspectRendering(Component component) {
         step: 0.01,
         min: 0,
         max: 1,
+        description:
+            'How opaque the paint of the component is, from 0 (invisible) to 1',
       ),
   ];
   return properties.isEmpty ? null : InspectorSection('Rendering', properties);
@@ -107,6 +142,7 @@ InspectorSection? inspectTextComponent(Component component) {
       'Text',
       () => component.text,
       setValue: (value) => component.text = value,
+      description: 'The text that is rendered by the component',
     ),
   ]);
 }

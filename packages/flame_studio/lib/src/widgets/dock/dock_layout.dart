@@ -12,6 +12,7 @@ enum DockSide() {
 @immutable
 class const DockTab({
   required final String title,
+  required final String tooltip,
   required final WidgetBuilder builder,
 });
 
@@ -19,10 +20,18 @@ class const DockTab({
 final dockTabsProvider = Provider.family<List<DockTab>, DockSide>(
   (ref, side) => switch (side) {
     DockSide.left => [
-      DockTab(title: 'Hierarchy', builder: (_) => const HierarchyView()),
+      DockTab(
+        title: 'Hierarchy',
+        tooltip: 'The tree of components in the game',
+        builder: (_) => const HierarchyView(),
+      ),
     ],
     DockSide.right => [
-      DockTab(title: 'Inspector', builder: (_) => const InspectorView()),
+      DockTab(
+        title: 'Inspector',
+        tooltip: 'The properties of the selected component',
+        builder: (_) => const InspectorView(),
+      ),
     ],
   },
 );

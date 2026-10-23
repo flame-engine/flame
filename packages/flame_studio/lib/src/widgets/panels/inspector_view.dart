@@ -8,6 +8,7 @@ import 'package:flame_studio/src/core/selection.dart';
 import 'package:flame_studio/src/core/theme.dart';
 import 'package:flame_studio/src/widgets/common/disclosure_triangle.dart';
 import 'package:flame_studio/src/widgets/common/studio_text_field.dart';
+import 'package:flame_studio/src/widgets/common/studio_tooltip.dart';
 import 'package:flame_studio/src/widgets/panels/inspector/property_editors.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -113,9 +114,14 @@ class const _Header(final Component component) extends ConsumerWidget {
               ),
             ),
           ),
-          Text(
-            '#${component.hashCode.toRadixString(16)}',
-            style: TextStyle(color: theme.dimTextColor),
+          StudioTooltip(
+            message:
+                'The identity hash code of the component, which tells apart '
+                'components of the same type',
+            child: Text(
+              '#${component.hashCode.toRadixString(16)}',
+              style: TextStyle(color: theme.dimTextColor),
+            ),
           ),
         ],
       ),
@@ -208,13 +214,28 @@ class const _PropertyRow(final InspectorProperty<Object?> property)
         children: [
           Expanded(
             flex: 2,
-            child: ScrubLabel(property.label, onDrag: onDrag),
+            child: ScrubLabel(
+              property.label,
+              onDrag: onDrag,
+              tooltip: _tooltip(
+                property.description,
+                isDraggable: onDrag != null,
+              ),
+            ),
           ),
           const SizedBox(width: 4),
           Expanded(flex: 3, child: editor),
         ],
       ),
     );
+  }
+
+  static String? _tooltip(String? description, {required bool isDraggable}) {
+    if (!isDraggable) {
+      return description;
+    }
+    const hint = 'Drag the label sideways to change the value.';
+    return description == null ? hint : '$description.\n$hint';
   }
 
   static (ValueChanged<double>?, Widget) _doubleEditor(

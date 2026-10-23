@@ -18,11 +18,13 @@ class InspectorSection(
 ///
 /// The [getValue] callback is invoked every time the Inspector refreshes, so
 /// that the shown value is kept in sync with the running game. When [setValue]
-/// is null, the property is read-only.
+/// is null, the property is read-only. The [description] is shown as the
+/// tooltip of the property.
 sealed class InspectorProperty<T>(
   final String label,
   final T Function() getValue, {
   final void Function(T value)? setValue,
+  final String? description,
 }) {
   bool get isReadOnly => setValue == null;
 }
@@ -33,6 +35,7 @@ class DoubleProperty(
   super.label,
   super.getValue, {
   super.setValue,
+  super.description,
   final double step = 1.0,
   final double? min,
   final double? max,
@@ -42,18 +45,21 @@ class IntProperty(
   super.label,
   super.getValue, {
   super.setValue,
+  super.description,
 }) extends InspectorProperty<int>;
 
 class BoolProperty(
   super.label,
   super.getValue, {
   super.setValue,
+  super.description,
 }) extends InspectorProperty<bool>;
 
 class StringProperty(
   super.label,
   super.getValue, {
   super.setValue,
+  super.description,
 }) extends InspectorProperty<String>;
 
 /// A [Vector2] value. The value passed to `setValue` is always a new vector,
@@ -62,6 +68,7 @@ class Vector2Property(
   super.label,
   super.getValue, {
   super.setValue,
+  super.description,
   final double step = 1.0,
 }) extends InspectorProperty<Vector2>;
 
@@ -69,4 +76,5 @@ class AnchorProperty(
   super.label,
   super.getValue, {
   super.setValue,
+  super.description,
 }) extends InspectorProperty<Anchor>;

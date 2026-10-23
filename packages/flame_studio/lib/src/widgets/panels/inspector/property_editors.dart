@@ -1,6 +1,7 @@
 import 'package:flame/components.dart' show Anchor, Vector2;
 import 'package:flame_studio/src/core/theme.dart';
 import 'package:flame_studio/src/widgets/common/studio_text_field.dart';
+import 'package:flame_studio/src/widgets/common/studio_tooltip.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,6 +21,7 @@ String formatNumber(double value) {
 class const ScrubLabel(
   final String text, {
   final ValueChanged<double>? onDrag,
+  final String? tooltip,
   super.key,
 }) extends ConsumerWidget {
   @override
@@ -32,17 +34,20 @@ class const ScrubLabel(
       style: TextStyle(color: theme.dimTextColor),
     );
     final onDrag = this.onDrag;
-    if (onDrag == null) {
-      return label;
-    }
-    return MouseRegion(
-      cursor: SystemMouseCursors.resizeLeftRight,
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onHorizontalDragUpdate: (details) => onDrag(details.delta.dx),
-        child: label,
-      ),
-    );
+    final result = onDrag == null
+        ? label
+        : MouseRegion(
+            cursor: SystemMouseCursors.resizeLeftRight,
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onHorizontalDragUpdate: (details) => onDrag(details.delta.dx),
+              child: label,
+            ),
+          );
+    final tooltip = this.tooltip;
+    return tooltip == null
+        ? result
+        : StudioTooltip(message: tooltip, child: result);
   }
 }
 
@@ -288,12 +293,14 @@ class const _AnchorCell(
       ),
     );
     final onTap = this.onTap;
-    if (onTap == null) {
-      return cell;
-    }
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(onTap: onTap, child: cell),
+    return StudioTooltip(
+      message: name,
+      child: onTap == null
+          ? cell
+          : MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(onTap: onTap, child: cell),
+            ),
     );
   }
 }

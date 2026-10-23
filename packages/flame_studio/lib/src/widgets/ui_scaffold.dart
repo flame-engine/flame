@@ -1,4 +1,5 @@
 import 'package:flame_studio/src/core/theme.dart';
+import 'package:flame_studio/src/widgets/common/studio_tooltip.dart';
 import 'package:flame_studio/src/widgets/dock/dock_layout.dart';
 import 'package:flame_studio/src/widgets/dock/dock_panel.dart';
 import 'package:flame_studio/src/widgets/studio_chrome.dart';
@@ -63,6 +64,7 @@ class const UiScaffold({required final Widget gameApp, super.key})
             right: 0,
             child: StudioChrome(child: FlameStudioToolbar()),
           ),
+          const Positioned.fill(child: StudioChrome(child: TooltipLayer())),
         ],
       ),
     );

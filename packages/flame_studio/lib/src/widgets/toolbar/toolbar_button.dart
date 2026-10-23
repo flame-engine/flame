@@ -1,9 +1,11 @@
 import 'package:flame_studio/src/core/theme.dart';
+import 'package:flame_studio/src/widgets/common/studio_tooltip.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class const ToolbarButton({
   required final Path icon,
+  final String? tooltip,
   final void Function()? onClick,
   final bool disabled = false,
   final bool toggled = false,
@@ -30,7 +32,8 @@ class ToolbarButtonState() extends ConsumerState<ToolbarButton> {
       ),
     );
 
-    return AspectRatio(
+    final tooltip = widget.tooltip;
+    final button = AspectRatio(
       aspectRatio: 1.25,
       child: widget.disabled
           ? painter
@@ -51,6 +54,9 @@ class ToolbarButtonState() extends ConsumerState<ToolbarButton> {
               ),
             ),
     );
+    return tooltip == null
+        ? button
+        : StudioTooltip(message: tooltip, child: button);
   }
 
   @override

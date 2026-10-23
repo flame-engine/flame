@@ -8,7 +8,7 @@ import 'package:flutter/widgets.dart';
 void main() {
   runFlameStudio(
     Container(
-      color: const Color(0xff6385b9),
+      color: const Color(0xFF1F2933),
       child: GameWidget(game: MyGame()),
     ),
   );

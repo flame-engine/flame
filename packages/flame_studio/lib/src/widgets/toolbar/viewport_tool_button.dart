@@ -13,9 +13,31 @@ class const ViewportToolButton(final ViewportTool tool, {super.key})
     final currentTool = ref.watch(viewportToolProvider);
     return ToolbarButton(
       icon: _icon(tool),
+      tooltip: _tooltip(tool),
       toggled: currentTool == tool,
       onClick: () => ref.read(viewportToolProvider.notifier).use(tool),
     );
+  }
+
+  static String _tooltip(ViewportTool tool) {
+    return switch (tool) {
+      ViewportTool.interact =>
+        'Interact: the game receives the mouse input, as if the studio '
+            "wasn't there",
+      ViewportTool.select =>
+        'Select: click on a component in the game to select it. Click again '
+            'to cycle through overlapping components',
+      ViewportTool.move =>
+        'Move: drag the arrows to move along an axis, or the square or the '
+            'component itself to move freely. Hold Shift to snap to whole '
+            'units',
+      ViewportTool.rotate =>
+        'Rotate: drag the ring to rotate around the anchor. Hold Shift to snap '
+            'to 15°',
+      ViewportTool.scale =>
+        'Scale: drag the axis handles to scale along an axis, or the square to '
+            'scale uniformly. Hold Shift to snap to multiples of 0.1',
+    };
   }
 
   static Path _icon(ViewportTool tool) {

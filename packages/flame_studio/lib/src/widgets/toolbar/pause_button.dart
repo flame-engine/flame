@@ -13,6 +13,7 @@ class const PauseButton({super.key}) extends ConsumerWidget {
         ..addRect(const Rect.fromLTRB(-4, -4.5, -1, 4.5))
         ..addRect(const Rect.fromLTRB(1, -4.5, 4, 4.5)),
       disabled: gameState.paused,
+      tooltip: 'Pause the game',
       onClick: () {
         ref.read(gameControllerProvider.notifier).pauseGame();
       },

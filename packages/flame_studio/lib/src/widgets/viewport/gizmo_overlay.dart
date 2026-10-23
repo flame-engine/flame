@@ -186,34 +186,34 @@ class _RenderGizmo() extends RenderBox {
         outline,
         Paint()..color = theme.gizmoColor.withAlpha(0x22),
       );
-      canvas.drawPath(
-        outline,
-        Paint()
-          ..color = theme.gizmoColor
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.5,
-      );
+      _stroke(canvas, outline, theme.gizmoColor, 1.5);
 
       final anchor = toLocal(gizmo.anchor);
       final isRotating = _tool == ViewportTool.rotate;
       final isScaling = _tool == ViewportTool.scale;
       if (isRotating) {
-        _drawRing(
+        final radius =
+            (toLocal(gizmo.anchor + const Offset(GizmoGeometry.ringRadius, 0)) -
+                    anchor)
+                .distance;
+        _stroke(
           canvas,
-          anchor,
-          (toLocal(gizmo.anchor + const Offset(GizmoGeometry.ringRadius, 0)) -
-                  anchor)
-              .distance,
+          Path()..addOval(Rect.fromCircle(center: anchor, radius: radius)),
           handleColor(GizmoHandle.ring, theme.gizmoRotationColor),
+          2,
         );
         if (gizmo.xAxis != Offset.zero) {
           // Shows the current angle of the component.
-          canvas.drawLine(
-            anchor,
-            toLocal(gizmo.anchor + gizmo.xAxis * GizmoGeometry.ringRadius),
-            Paint()
-              ..color = theme.gizmoXAxisColor
-              ..strokeWidth = 1.5,
+          final end = toLocal(
+            gizmo.anchor + gizmo.xAxis * GizmoGeometry.ringRadius,
+          );
+          _stroke(
+            canvas,
+            Path()
+              ..moveTo(anchor.dx, anchor.dy)
+              ..lineTo(end.dx, end.dy),
+            theme.gizmoXAxisColor,
+            1.5,
           );
         }
       }
@@ -222,110 +222,92 @@ class _RenderGizmo() extends RenderBox {
         final color = handleColor(GizmoHandle.free, theme.gizmoColor);
         final square = Path()
           ..addPolygon(gizmo.freeHandleCorners.map(toLocal).toList(), true);
-        canvas.drawPath(square, Paint()..color = color.withAlpha(0x88));
-        canvas.drawPath(
-          square,
-          Paint()
-            ..color = color
-            ..style = PaintingStyle.stroke,
-        );
+        _fill(canvas, square, color.withAlpha(0xAA));
+        _stroke(canvas, square, color, 1);
       }
-      final drawAxis = isScaling ? _drawBoxedLine : _drawArrow;
-      if (!isRotating && gizmo.xAxis != Offset.zero) {
-        drawAxis(
-          canvas,
-          anchor,
-          toLocal(gizmo.xAxisEnd),
-          handleColor(GizmoHandle.x, theme.gizmoXAxisColor),
-        );
+      if (!isRotating) {
+        for (final (handle, axis, end, color) in [
+          (GizmoHandle.x, gizmo.xAxis, gizmo.xAxisEnd, theme.gizmoXAxisColor),
+          (GizmoHandle.y, gizmo.yAxis, gizmo.yAxisEnd, theme.gizmoYAxisColor),
+        ]) {
+          if (axis != Offset.zero) {
+            _drawAxis(
+              canvas,
+              anchor,
+              toLocal(end),
+              handleColor(handle, color),
+              boxed: isScaling,
+            );
+          }
+        }
       }
-      if (!isRotating && gizmo.yAxis != Offset.zero) {
-        drawAxis(
-          canvas,
-          anchor,
-          toLocal(gizmo.yAxisEnd),
-          handleColor(GizmoHandle.y, theme.gizmoYAxisColor),
-        );
-      }
-      canvas.drawCircle(
-        anchor,
-        anchorRadius,
-        Paint()..color = const Color(0xFFFFFFFF),
-      );
-      canvas.drawCircle(
-        anchor,
-        anchorRadius,
-        Paint()
-          ..color = theme.gizmoColor
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.5,
-      );
+      final anchorCircle = Path()
+        ..addOval(Rect.fromCircle(center: anchor, radius: anchorRadius));
+      _fill(canvas, anchorCircle, const Color(0xFFFFFFFF));
+      _stroke(canvas, anchorCircle, theme.gizmoColor, 1.5);
     }
   }
 
-  void _drawRing(Canvas canvas, Offset center, double radius, Color color) {
-    canvas.drawCircle(
-      center,
-      radius,
+  /// Strokes [path] over a dark halo, so that it stands out on any background.
+  void _stroke(Canvas canvas, Path path, Color color, double width) {
+    canvas.drawPath(
+      path,
+      Paint()
+        ..color = _theme!.gizmoHaloColor
+        ..style = PaintingStyle.stroke
+        ..strokeJoin = StrokeJoin.round
+        ..strokeWidth = width + 2,
+    );
+    canvas.drawPath(
+      path,
       Paint()
         ..color = color
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 2,
+        ..strokeWidth = width,
     );
   }
 
-  /// Draws a line ending in a square, the handle of the scale tool.
-  void _drawBoxedLine(Canvas canvas, Offset start, Offset end, Color color) {
+  /// Fills [path] over a dark halo, so that it stands out on any background.
+  void _fill(Canvas canvas, Path path, Color color) {
+    canvas.drawPath(
+      path,
+      Paint()
+        ..color = _theme!.gizmoHaloColor
+        ..style = PaintingStyle.stroke
+        ..strokeJoin = StrokeJoin.round
+        ..strokeWidth = 2,
+    );
+    canvas.drawPath(path, Paint()..color = color);
+  }
+
+  /// Draws an axis from [start] to [end], ending in an arrow head, or in a
+  /// square when [boxed], which is the handle of the scale tool.
+  void _drawAxis(
+    Canvas canvas,
+    Offset start,
+    Offset end,
+    Color color, {
+    required bool boxed,
+  }) {
     final direction = end - start;
     final distance = direction.distance;
     if (distance == 0) {
       return;
     }
     final unit = direction / distance;
-    final normal = Offset(-unit.dy, unit.dx);
-    const half = arrowSize / 2;
-    final boxStart = end - unit * arrowSize;
-    canvas.drawLine(
-      start,
-      boxStart,
-      Paint()
-        ..color = color
-        ..strokeWidth = 2,
+    final normal = Offset(-unit.dy, unit.dx) * (arrowSize / 2);
+    final headBase = end - unit * arrowSize;
+    _stroke(
+      canvas,
+      Path()
+        ..moveTo(start.dx, start.dy)
+        ..lineTo(headBase.dx, headBase.dy),
+      color,
+      2,
     );
-    canvas.drawPath(
-      Path()..addPolygon([
-        boxStart + normal * half,
-        end + normal * half,
-        end - normal * half,
-        boxStart - normal * half,
-      ], true),
-      Paint()..color = color,
-    );
-  }
-
-  void _drawArrow(Canvas canvas, Offset start, Offset end, Color color) {
-    final direction = end - start;
-    final distance = direction.distance;
-    if (distance == 0) {
-      return;
-    }
-    final unit = direction / distance;
-    final normal = Offset(-unit.dy, unit.dx);
-    final arrowBase = end - unit * arrowSize;
-    canvas.drawLine(
-      start,
-      arrowBase,
-      Paint()
-        ..color = color
-        ..strokeWidth = 2,
-    );
-    canvas.drawPath(
-      Path()..addPolygon([
-        end,
-        arrowBase + normal * (arrowSize / 2),
-        arrowBase - normal * (arrowSize / 2),
-      ], true),
-      Paint()..color = color,
-    );
+    final head = boxed
+        ? [headBase + normal, end + normal, end - normal, headBase - normal]
+        : [end, headBase + normal, headBase - normal];
+    _fill(canvas, Path()..addPolygon(head, true), color);
   }
 }

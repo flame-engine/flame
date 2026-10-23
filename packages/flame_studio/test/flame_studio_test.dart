@@ -4,11 +4,13 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_studio/src/core/inspector/component_inspectors.dart';
 import 'package:flame_studio/src/core/viewport_tool.dart';
+import 'package:flame_studio/src/widgets/common/studio_tooltip.dart';
 import 'package:flame_studio/src/widgets/flame_studio.dart';
 import 'package:flame_studio/src/widgets/panels/inspector/property_editors.dart';
 import 'package:flame_studio/src/widgets/toolbar/viewport_tool_button.dart';
 import 'package:flame_studio/src/widgets/viewport/gizmo_overlay.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -99,18 +101,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 100));
       await tester.pump(const Duration(milliseconds: 16));
 
-      expect(
-        tester.renderObject(overlay),
-        paints
-          ..path()
-          ..path()
-          ..line()
-          ..path()
-          ..line()
-          ..path()
-          ..circle()
-          ..circle(),
-      );
+      expect(tester.renderObject(overlay), paints..path());
 
       await disposeStudio(tester);
     });
@@ -190,6 +181,30 @@ void main() {
       await disposeStudio(tester);
     });
 
+    testWidgets('shows tooltips when hovering over buttons', (tester) async {
+      await pumpStudio(tester);
+      final moveButton = find.byWidgetPredicate(
+        (widget) =>
+            widget is ViewportToolButton && widget.tool == ViewportTool.move,
+      );
+      final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
+      await mouse.addPointer(location: Offset.zero);
+      addTearDown(mouse.removePointer);
+
+      await mouse.moveTo(tester.getCenter(moveButton));
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(find.textContaining('Move: drag the arrows'), findsNothing);
+
+      await tester.pump(StudioTooltip.delay);
+      expect(find.textContaining('Move: drag the arrows'), findsOneWidget);
+
+      await mouse.moveTo(Offset.zero);
+      await tester.pump();
+      expect(find.textContaining('Move: drag the arrows'), findsNothing);
+
+      await disposeStudio(tester);
+    });
+
     testWidgets('debug mode is applied to all descendants', (tester) async {
       await pumpStudio(tester);
       await tester.tap(find.text('FlameGame<World>'));
@@ -232,6 +247,15 @@ void main() {
   });
 
   group('inspectors', () {
+    test('describe all of their properties', () {
+      final component = TextComponent();
+      for (final inspector in defaultComponentInspectors) {
+        for (final property in [...?inspector(component)?.properties]) {
+          expect(property.description, isNotNull, reason: property.label);
+        }
+      }
+    });
+
     test('only PositionComponents have a Transform section', () {
       expect(inspectPositionComponent(Component()), isNull);
       expect(inspectPositionComponent(PositionComponent()), isNotNull);

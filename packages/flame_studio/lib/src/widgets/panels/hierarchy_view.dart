@@ -5,6 +5,7 @@ import 'package:flame_studio/src/core/selection.dart';
 import 'package:flame_studio/src/core/theme.dart';
 import 'package:flame_studio/src/widgets/common/disclosure_triangle.dart';
 import 'package:flame_studio/src/widgets/common/studio_text_field.dart';
+import 'package:flame_studio/src/widgets/common/studio_tooltip.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -49,10 +50,15 @@ class _HierarchyViewState() extends ConsumerState<HierarchyView> {
       children: [
         Padding(
           padding: const EdgeInsets.all(6),
-          child: StudioTextField(
-            value: _filter,
-            placeholder: 'Filter',
-            onChanged: (value) => setState(() => _filter = value),
+          child: StudioTooltip(
+            message:
+                'Only show the components whose type contains this text, '
+                'together with their ancestors',
+            child: StudioTextField(
+              value: _filter,
+              placeholder: 'Filter',
+              onChanged: (value) => setState(() => _filter = value),
+            ),
           ),
         ),
         Expanded(

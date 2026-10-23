@@ -27,6 +27,7 @@ class Theme() {
   final Color dimTextColor = const Color(0xFF9A9A9A);
   final Color accentColor = const Color(0xFFC78938);
   final Color hoverColor = const Color(0x14FFFFFF);
+  final Color tooltipColor = const Color(0xF0202020);
 
   final double tabBarHeight = 26.0;
   final Color tabBarColor = const Color(0xFF2C2C2C);
@@ -41,4 +42,5 @@ class Theme() {
   final Color gizmoYAxisColor = const Color(0xFF57AB5A);
   final Color gizmoRotationColor = const Color(0xFF4A90E2);
   final Color gizmoActiveColor = const Color(0xFFFFEB3B);
+  final Color gizmoHaloColor = const Color(0xB3000000);
 }
