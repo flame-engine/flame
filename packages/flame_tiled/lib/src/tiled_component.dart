@@ -85,9 +85,9 @@ class TiledComponent<T extends FlameGame>(
   /// Maps with a lot of tiles can be made cheaper to render by setting
   /// [chunkSize], for example to 16. The tiles are then split in chunks of that
   /// many tiles, and the chunks outside of the view are skipped. Infinite maps
-  /// always do this. It works for every orientation of map, but not for layers
-  /// with tiles that are taller than the cells. See
-  /// [RenderableTiledMap.fromString] for the details.
+  /// always do this. It works for every orientation of map, and for tiles that
+  /// are taller than the cells. See [RenderableTiledMap.fromString] for the
+  /// details.
   ///
   /// The parallax factors of the layers are calculated against the camera that
   /// renders the map, pass a [camera] to use a specific one instead.
