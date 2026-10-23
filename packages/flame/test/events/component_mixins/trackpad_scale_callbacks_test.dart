@@ -186,16 +186,50 @@ void main() {
         expect(competitor.won, isTrue);
       },
     );
+
+    testWidgets(
+      'stays silent for a gesture over which a competitor has won',
+      (tester) async {
+        final events = <String>[];
+        final recognizer = MultiDragScaleGestureRecognizer()
+          ..hasScale = true
+          ..onScaleStart = ((_) => events.add('start'))
+          ..onScaleUpdate = ((_) => events.add('update'))
+          ..onScaleEnd = ((_) => events.add('end'));
+        addTearDown(recognizer.dispose);
+        final competitor = _ArenaProbe(eager: true);
+        addTearDown(competitor.dispose);
+
+        final pointer = TestPointer(1, PointerDeviceKind.trackpad);
+        final start = pointer.panZoomStart(const Offset(400, 300));
+        recognizer.addPointerPanZoom(start);
+        competitor.addPointerPanZoom(start);
+        // Closing the arena hands the gesture to the eager competitor
+        await tester.sendEventToBinding(start);
+        await tester.sendEventToBinding(
+          pointer.panZoomUpdate(const Offset(400, 300), scale: 1.5),
+        );
+        await tester.sendEventToBinding(pointer.panZoomEnd());
+
+        expect(competitor.won, isTrue);
+        expect(events, isEmpty);
+      },
+    );
   });
 }
 
 /// Joins the arena for a trackpad gesture and records whether it won.
-class _ArenaProbe() extends GestureRecognizer {
+///
+/// An [eager] probe claims the gesture as soon as it joins.
+class _ArenaProbe({final bool eager = false}) extends GestureRecognizer {
   bool? won;
 
   @override
   void addAllowedPointerPanZoom(PointerPanZoomStartEvent event) {
-    GestureBinding.instance.gestureArena.add(event.pointer, this);
+    final entry = GestureBinding.instance.gestureArena.add(event.pointer, this);
+    if (eager) {
+      entry.resolve(GestureDisposition.accepted);
+    }
   }
 
   @override

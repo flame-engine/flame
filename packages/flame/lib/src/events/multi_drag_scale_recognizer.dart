@@ -139,16 +139,17 @@ class MultiDragScaleGestureRecognizer({
         kind: event.kind,
       );
     } else if (event is PointerPanZoomEndEvent) {
-      _scale.panZooms.remove(event.pointer);
-      _removePanZoom(event.pointer);
       _scale.lastTransform = event.transform;
-      _updateScaleFields();
-      _scale.resetPanZoomBaseline();
-      _endScaleIfNeeded();
+      _removePanZoom(event.pointer);
+      _onPanZoomRemoved();
     }
   }
 
+  /// Stops tracking a trackpad gesture, if it is tracked (idempotently).
   void _removePanZoom(int pointer) {
+    if (_scale.panZooms.remove(pointer) == null) {
+      return;
+    }
     GestureBinding.instance.pointerRouter.removeRoute(
       pointer,
       _handlePanZoomEvent,
@@ -157,6 +158,12 @@ class MultiDragScaleGestureRecognizer({
     // unresolved, the arena sweep would award it to us over a competing
     // recognizer that wanted it.
     _panZoomArenaEntries.remove(pointer)?.resolve(GestureDisposition.rejected);
+  }
+
+  void _onPanZoomRemoved() {
+    _updateScaleFields();
+    _scale.resetPanZoomBaseline();
+    _endScaleIfNeeded();
   }
 
   void _handleEvent(PointerEvent event) {
@@ -319,10 +326,13 @@ class MultiDragScaleGestureRecognizer({
           state._arenaEntry?.resolve(GestureDisposition.accepted);
         }
       }
-      for (final entry in _panZoomArenaEntries.values) {
+      // Copied and cleared first: resolving runs arena callbacks, which must
+      // not find these entries still pending
+      final panZoomEntries = _panZoomArenaEntries.values.toList();
+      _panZoomArenaEntries.clear();
+      for (final entry in panZoomEntries) {
         entry.resolve(GestureDisposition.accepted);
       }
-      _panZoomArenaEntries.clear();
       return true;
     }
     return false;
@@ -462,6 +472,12 @@ class MultiDragScaleGestureRecognizer({
         _updateLines();
         _endScaleIfNeeded();
       }
+    } else if (_scale.panZooms.containsKey(pointer)) {
+      // The arena already decided, so drop the entry without resolving it:
+      // resolving a lost entry again trips the arena's membership assert
+      _panZoomArenaEntries.remove(pointer);
+      _removePanZoom(pointer);
+      _onPanZoomRemoved();
     }
   }
 
@@ -484,7 +500,7 @@ class MultiDragScaleGestureRecognizer({
     for (final pointer in panZoomPointers) {
       _removePanZoom(pointer);
     }
-    _scale.panZooms.clear();
+    assert(_scale.panZooms.isEmpty);
     super.dispose();
   }
 
