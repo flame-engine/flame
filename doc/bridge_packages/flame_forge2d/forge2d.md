@@ -185,6 +185,41 @@ access the parts of the Forge2D API that `Forge2DWorld` doesn't wrap, like creat
 polling the raw event streams.
 
 
+### Ray casts
+
+`Forge2DWorld` wraps the ray cast queries of the physics world: `castRayClosest` returns the
+closest hit, `castRayAll` returns every hit sorted from nearest to farthest, and `castRay` calls a
+callback for every candidate hit. They all take an `origin` and a `translation`, the direction and
+length of the ray, in world coordinates.
+
+To see what a ray hits, for example while debugging, you can add a `RayCastComponent` to the world.
+It casts its ray on every update and renders it, with a small circle drawn at each hit point. Which
+hits it looks for is decided by its `mode`:
+
+- `RayCastMode.closest` (the default) finds the closest hit and ends the ray there. This is the
+  cheapest mode, since the physics world can stop looking once it knows the closest shape.
+- `RayCastMode.farthest` finds every hit and ends the ray at the farthest one.
+- `RayCastMode.all` finds every hit and renders the ray in its full length, with every hit marked.
+
+When nothing is hit, the ray is rendered to its end. The `origin` and `translation` vectors can be
+modified in place to move the ray, and the last result is available as `hit`, `hits` (sorted from
+nearest to farthest) and `endPoint`, so the component can also be used to react to what the ray
+hits.
+
+```dart
+final ray = RayCastComponent(
+  origin: Vector2(0, 0),
+  translation: Vector2(10, 0),
+  mode: RayCastMode.all,
+  paint: Paint()..color = Colors.green,
+);
+world.add(ray);
+
+// Later, for example to make the ray follow a body:
+ray.origin.setFrom(player.position);
+```
+
+
 ## BodyComponent
 
 The `BodyComponent` is a wrapper for the `Forge2D` body, which is the body that the physics engine
