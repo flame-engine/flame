@@ -153,15 +153,68 @@ void main() {
 ```
 
 The `sampling` and `tolerance` arguments control how the contours are followed, see
-[](#from-a-path). The vertices of each polygon are available in `polygons`.
+[](#from-a-path). The vertices of each polygon are available in `polygons`, and `path.toPolygons()`
+gives the same polygons, in the coordinates of the path, without making a component.
 
-Contours with fewer than three vertices, like open lines, are rendered but do not become polygons.
+Open contours and degenerate ones, with fewer than three vertices or no area, are rendered but do
+not become polygons.
 By default, the polygons whose vertices all lie inside of the largest polygon are left out as well,
 since the largest one already covers them; the eyes of a face are an example of this. Pass
 `filter: false` to keep every polygon, for example when the inner contours should be hit by rays.
 
 The `PathHitbox` is the hitbox counterpart of the `PathComponent`, see
 [](../collision_detection.md#pathhitbox).
+
+
+### Convex pieces
+
+Some consumers of polygons only accept convex ones with a limited number of vertices, like the
+shapes of physics engines such as Box2D, which take at most 8 vertices. The `convexPieces` function
+splits a simple polygon, convex or concave, into such pieces: it first splits the polygon into
+triangles by ear clipping, and then merges neighboring triangles as long as they stay convex and
+within `maxVertices`, which defaults to `8` (the Hertel-Mehlhorn algorithm). The pieces are made of
+copies of the vertices of the polygon and go in the same direction.
+
+A polygon that touches itself at a vertex, like the outline of two shapes that meet at a corner, is
+split there first, and a hole that touches the outline at a vertex is filled. The parts of a
+polygon that crosses itself may be left out.
+
+Engines also reject the polygons that are too small for their tolerances, so two more arguments
+clean up the result:
+
+- `minDistance`: Of the consecutive vertices closer than this, only the first one is kept, and the
+  vertices closer than half of it to the line through their neighbors are left out.
+- `minWidth`: The pieces narrower than this are left out.
+
+Both default to `0`, which keeps every vertex and every piece. For Box2D, `minDistance` is 4 times
+its linear slop and `minWidth` twice it.
+
+The cost grows about with the square of the number of vertices, so split the polygons when loading
+and not in every tick. The polygons from `Path.toPolygons` are a convenient input, since they follow
+each contour of a path with straight edges and are already simplified according to their
+`sampling`:
+
+```dart
+void main() {
+  // A U shape, which is concave.
+  final path = Path()
+    ..addPolygon(const [
+      Offset(0, 0),
+      Offset(40, 0),
+      Offset(40, 40),
+      Offset(30, 40),
+      Offset(30, 10),
+      Offset(10, 10),
+      Offset(10, 40),
+      Offset(0, 40),
+    ], true);
+
+  final pieces = [
+    for (final polygon in path.toPolygons())
+      ...convexPieces(polygon),
+  ];
+}
+```
 
 
 ## RectangleComponent

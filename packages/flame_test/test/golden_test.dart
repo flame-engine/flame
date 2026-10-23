@@ -1,8 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/palette.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:material_ui/material_ui.dart';
 
 void main() {
   group('Golden tests', () {
@@ -15,7 +15,7 @@ void main() {
           CircleComponent(
             radius: 10,
             position: Vector2.all(100),
-            paint: Paint()..color = Colors.white,
+            paint: BasicPalette.white.paint(),
           ),
         );
       },
@@ -30,7 +30,7 @@ void main() {
     testGolden(
       'Same test but with testGolden',
       (game, tester) async {
-        final paint = Paint()..color = Colors.white;
+        final paint = BasicPalette.white.paint();
         game.add(
           CircleComponent(radius: 10, position: Vector2.all(100), paint: paint),
         );
@@ -41,7 +41,7 @@ void main() {
     testGolden(
       'Same test, but with smaller size',
       (game, tester) async {
-        final paint = Paint()..color = Colors.white;
+        final paint = BasicPalette.white.paint();
         game.add(
           CircleComponent(radius: 10, position: Vector2.all(100), paint: paint),
         );

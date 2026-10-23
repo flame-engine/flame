@@ -84,6 +84,9 @@ which takes minutes. To compare a change, run it on both branches.
   logic and inputs on a two-level tree.
 - `render_components_benchmark.dart`: render pass over a randomized tree onto
   a mock canvas.
+- `culling_benchmark.dart`: draws 10k components through a camera, with and
+  without `CullWhenOffscreen`. It runs once with most components off-screen,
+  and once with all of them on-screen, to show what the check costs.
 - `components_at_point_benchmark.dart`: pointer hit testing
   (`componentsAtPoint`) with and without the hit-test cache.
 - `collision_detection_benchmark.dart`: the collision detection system with
@@ -100,6 +103,11 @@ which takes minutes. To compare a change, run it on both branches.
   shapes, the effect of the simplification tolerance of `walkContours` next to
   the samples before they are simplified, and polygon-polygon intersection
   cost.
+- `image_contour_benchmark.dart`: a standalone suite, not part of
+  `main.dart`, that measures tracing the outlines of images with
+  `Uint8ListExtension.contour`, including a transparent image for the
+  scan of the pixels alone, splitting stars of growing size with
+  `convexPieces`, and the whole way from the pixels to the convex pieces.
 - `ray_intersection_benchmark.dart`: `rayIntersection` on polygon hitboxes
   that are sampled from a concave and from a convex `Path` contour, with one
   precomputed ray for each hitbox in every tick.

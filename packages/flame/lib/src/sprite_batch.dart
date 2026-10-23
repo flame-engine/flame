@@ -96,14 +96,14 @@ class BatchItem({
     final result = Matrix4(
       transform.scos,  transform.ssin,  0, 0,
       -transform.ssin, transform.scos,  0, 0,
-      0,               0,               0, 0,
+      0,               0,               1, 0,
       transform.tx,    transform.ty,    0, 1,
     );
     // dart format on
     result
-      ..translateByDouble(source.width / 2, source.height / 2, 1, 1)
+      ..translateByDouble(source.width / 2, source.height / 2, 0, 1)
       ..rotateY(flip ? pi : 0)
-      ..translateByDouble(-source.width / 2, -source.height / 2, 1, 1);
+      ..translateByDouble(-source.width / 2, -source.height / 2, 0, 1);
     return _cachedMatrix = result;
   }
 
@@ -277,6 +277,18 @@ class SpriteBatch(
   // Used to not create new Paint objects in [render] and
   // [generateFlippedAtlas].
   final _emptyPaint = Paint();
+
+  // Used to blend the item colors with their sprites in the non-atlas path.
+  //
+  // Antialiasing is disabled because the color and the sprite are rasterized
+  // separately before they are blended: with antialiasing, their edge pixels
+  // would only be partially covered, and blending two partially covered
+  // pixels doesn't give the same result as blending the opaque pixels and then
+  // applying the coverage (e.g. an opaque color and sprite with srcOut would
+  // leave a visible fringe instead of being fully transparent). The edges are
+  // antialiased by a clip around the layer instead, see [render].
+  final _colorPaint = Paint()..isAntiAlias = false;
+  final _spritePaint = Paint()..isAntiAlias = false;
 
   Future<void> _makeFlippedAtlas() async {
     _flippedAtlasStatus = FlippedAtlasStatus.generating;
@@ -637,24 +649,60 @@ class SpriteBatch(
         renderPaint,
       );
     } else {
-      for (final batchItem in _batchItems) {
-        renderPaint.blendMode = blendMode ?? renderPaint.blendMode;
-
-        // Use the original (non-expanded) rect for the background color so
-        // that per-item colors match the atlas path behavior.
-        final colorRect = Offset.zero & batchItem.source.size;
-
+      for (final (slot, batchItem) in _batchItems.indexed) {
         canvas
           ..save()
-          ..transform32(batchItem.matrix.storage)
-          ..drawRect(colorRect, batchItem.paint)
-          ..drawImageRect(
+          ..transform32(batchItem.matrix.storage);
+
+        // Items without an explicit color get the default color as their
+        // background, see [defaultColor].
+        if (_colors[slot] == _defaultColor) {
+          canvas.drawRect(
+            Offset.zero & batchItem.source.size,
+            batchItem.paint,
+          );
+        }
+
+        if (hasNoColors) {
+          canvas.drawImageRect(
             atlas,
             batchItem.source,
             batchItem.destination,
             renderPaint,
-          )
-          ..restore();
+          );
+        } else {
+          // Like drawAtlas, the sprite (source) is blended with its color
+          // (destination) only, and the result is then drawn onto the canvas
+          // with the render paint.
+          //
+          // The color and the sprite are drawn without antialiasing so that
+          // their edges blend exactly, and the clip applies antialiasing to
+          // the edges of the result instead. The clip also keeps the render
+          // paint from affecting the canvas outside of the item, unless the
+          // paint has an image filter that has to draw outside of it.
+          if (renderPaint.imageFilter == null) {
+            canvas.clipRect(
+              batchItem.destination,
+              doAntiAlias: renderPaint.isAntiAlias,
+            );
+          }
+          _colorPaint.color = _colors[slot];
+          _spritePaint
+            ..blendMode = actualBlendMode!
+            ..filterQuality = renderPaint.filterQuality;
+          canvas
+            ..saveLayer(batchItem.destination, renderPaint)
+            ..drawRect(batchItem.destination, _colorPaint)
+            ..drawImageRect(
+              atlas,
+              batchItem.source,
+              batchItem.destination,
+              _spritePaint,
+            )
+            ..restore();
+        }
+
+        canvas.restore();
       }
     }
   }

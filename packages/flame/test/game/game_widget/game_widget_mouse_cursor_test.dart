@@ -1,6 +1,7 @@
 import 'package:flame/game.dart';
+import 'package:flame_test/flame_test.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:material_ui/material_ui.dart';
 
 void main() {
   Finder byMouseCursor(MouseCursor cursor) {
@@ -12,8 +13,8 @@ void main() {
   group('GameWidget - MouseCursor', () {
     testWidgets('renders with the initial cursor', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: GameWidget(
+        FlameTestApp(
+          child: GameWidget(
             game: FlameGame(),
             mouseCursor: SystemMouseCursors.grab,
           ),
@@ -30,8 +31,8 @@ void main() {
       final game = FlameGame();
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: GameWidget(
+        FlameTestApp(
+          child: GameWidget(
             game: game,
             mouseCursor: SystemMouseCursors.grab,
           ),

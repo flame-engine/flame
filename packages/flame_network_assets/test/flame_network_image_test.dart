@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:flame/palette.dart';
 import 'package:flame_network_assets/flame_network_assets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:material_ui/material_ui.dart' hide Image;
 import 'package:mocktail/mocktail.dart';
 import 'package:path/path.dart' as path;
 
@@ -60,7 +60,7 @@ void main() {
       final canvas = Canvas(recorder);
       canvas.drawRect(
         const Rect.fromLTWH(0, 0, 50, 50),
-        Paint()..color = Colors.pink,
+        BasicPalette.pink.paint(),
       );
       final picture = recorder.endRecording();
       image = await picture.toImage(50, 50);
