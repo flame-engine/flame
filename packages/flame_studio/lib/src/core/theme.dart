@@ -39,5 +39,6 @@ class Theme() {
   final Color gizmoColor = const Color(0xFFFFA726);
   final Color gizmoXAxisColor = const Color(0xFFE5534B);
   final Color gizmoYAxisColor = const Color(0xFF57AB5A);
+  final Color gizmoRotationColor = const Color(0xFF4A90E2);
   final Color gizmoActiveColor = const Color(0xFFFFEB3B);
 }

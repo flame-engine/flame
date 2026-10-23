@@ -6,15 +6,22 @@ import 'package:flame_studio/src/core/gizmo/canvas_mapping.dart';
 import 'package:flutter/foundation.dart';
 
 /// The parts of a gizmo that can be dragged.
+///
+/// What dragging a handle does depends on the tool in use: for example, the x
+/// handle moves the component along its local x axis with the move tool, and
+/// scales it along that axis with the scale tool.
 enum GizmoHandle() {
-  /// The arrow of the local x axis, which moves along that axis.
+  /// The handle on the local x axis.
   x,
 
-  /// The arrow of the local y axis, which moves along that axis.
+  /// The handle on the local y axis.
   y,
 
-  /// The square between the axes, which moves freely.
+  /// The square between the axes, which affects both axes at once.
   free,
+
+  /// The ring around the anchor, used for rotating.
+  ring,
 }
 
 /// The outline, anchor and axes of a [PositionComponent] in the canvas space
@@ -35,6 +42,7 @@ class const GizmoGeometry({
   static const double axisLength = 40.0;
   static const double freeHandleStart = 8.0;
   static const double freeHandleEnd = 18.0;
+  static const double ringRadius = 50.0;
 
   /// How far from a handle, in logical pixels, a pointer may be to grab it.
   static const double handleTolerance = 6.0;
@@ -102,8 +110,15 @@ class const GizmoGeometry({
   ];
 
   /// The handle at [point], which is in canvas space, if any.
-  GizmoHandle? handleAt(Offset point) {
+  ///
+  /// When [ring] is true, only the rotation ring is considered, otherwise
+  /// only the axes and the square between them are.
+  GizmoHandle? handleAt(Offset point, {bool ring = false}) {
     final offset = point - anchor;
+    if (ring) {
+      final isOnRing = (offset.distance - ringRadius).abs() <= handleTolerance;
+      return isOnRing ? GizmoHandle.ring : null;
+    }
     // The coordinates of the point along each axis, and its distance from it.
     final alongX = _dot(offset, xAxis);
     final alongY = _dot(offset, yAxis);

@@ -1,13 +1,17 @@
 import 'package:collection/collection.dart';
 import 'package:flame/components.dart'
-    show CameraComponent, Component, PositionComponent, Vector2;
+    show Component, PositionComponent, Vector2;
 import 'package:flame_studio/src/core/game_controller.dart';
 import 'package:flame_studio/src/core/gizmo/canvas_mapping.dart';
+import 'package:flame_studio/src/core/gizmo/gizmo_drag.dart';
 import 'package:flame_studio/src/core/gizmo/gizmo_geometry.dart';
 import 'package:flame_studio/src/core/gizmo/move_drag.dart';
+import 'package:flame_studio/src/core/gizmo/rotate_drag.dart';
+import 'package:flame_studio/src/core/gizmo/scale_drag.dart';
 import 'package:flame_studio/src/core/selection.dart';
 import 'package:flame_studio/src/core/viewport_tool.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -27,7 +31,7 @@ class _ViewportToolLayerState() extends ConsumerState<ViewportToolLayer> {
   /// Where the pointer went down, in global coordinates. Drags are measured
   /// from this point, so that the drag slop doesn't offset the component.
   Offset? _downPosition;
-  MoveDrag? _drag;
+  GizmoDrag? _drag;
 
   @override
   Widget build(BuildContext context) {
@@ -35,24 +39,24 @@ class _ViewportToolLayerState() extends ConsumerState<ViewportToolLayer> {
     if (tool == ViewportTool.interact) {
       return const SizedBox.shrink();
     }
-    final canMove = tool == ViewportTool.move;
+    final canDrag = tool != ViewportTool.select;
     return MouseRegion(
       cursor: _cursor,
-      onHover: canMove ? (event) => _hover(event.position) : null,
+      onHover: canDrag ? (event) => _hover(event.position) : null,
       onExit: (_) => _setActiveHandle(null),
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         dragStartBehavior: DragStartBehavior.down,
         onTapUp: (details) => _select(details.globalPosition),
-        onPanDown: canMove
+        onPanDown: canDrag
             ? (details) => _downPosition = details.globalPosition
             : null,
-        onPanStart: canMove ? (_) => _startDrag() : null,
-        onPanUpdate: canMove
+        onPanStart: canDrag ? (_) => _startDrag() : null,
+        onPanUpdate: canDrag
             ? (details) => _updateDrag(details.globalPosition)
             : null,
-        onPanEnd: canMove ? (_) => _endDrag() : null,
-        onPanCancel: canMove ? _endDrag : null,
+        onPanEnd: canDrag ? (_) => _endDrag() : null,
+        onPanCancel: canDrag ? _endDrag : null,
       ),
     );
   }
@@ -73,11 +77,17 @@ class _ViewportToolLayerState() extends ConsumerState<ViewportToolLayer> {
   /// gizmo it belongs to.
   (GizmoGeometry, GizmoHandle)? _handleAt(Offset canvasPoint) {
     final selected = ref.read(selectedComponentProvider);
-    if (selected is! PositionComponent) {
+    final tool = ref.read(viewportToolProvider);
+    if (selected is! PositionComponent ||
+        tool == ViewportTool.interact ||
+        tool == ViewportTool.select) {
       return null;
     }
     for (final geometry in GizmoGeometry.of(selected)) {
-      final handle = geometry.handleAt(canvasPoint);
+      final handle = geometry.handleAt(
+        canvasPoint,
+        ring: tool == ViewportTool.rotate,
+      );
       if (handle != null) {
         return (geometry, handle);
       }
@@ -111,7 +121,11 @@ class _ViewportToolLayerState() extends ConsumerState<ViewportToolLayer> {
     _setActiveHandle(handle);
     final cursor = handle == null
         ? SystemMouseCursors.precise
-        : SystemMouseCursors.move;
+        : switch (ref.read(viewportToolProvider)) {
+            ViewportTool.rotate => SystemMouseCursors.grab,
+            ViewportTool.scale => SystemMouseCursors.resizeUpLeftDownRight,
+            _ => SystemMouseCursors.move,
+          };
     if (cursor != _cursor) {
       setState(() => _cursor = cursor);
     }
@@ -124,15 +138,19 @@ class _ViewportToolLayerState() extends ConsumerState<ViewportToolLayer> {
       return;
     }
     final (root, point) = target;
-    final PositionComponent component;
-    final GizmoHandle handle;
-    final CameraComponent? camera;
+    final tool = ref.read(viewportToolProvider);
     final hit = _handleAt(point);
     if (hit != null) {
-      component = ref.read(selectedComponentProvider)! as PositionComponent;
-      handle = hit.$2;
-      camera = hit.$1.camera;
-    } else {
+      final component =
+          ref.read(selectedComponentProvider)! as PositionComponent;
+      final (geometry, handle) = hit;
+      _drag = switch (tool) {
+        ViewportTool.rotate => RotateDrag.start(component, geometry, point),
+        ViewportTool.scale => ScaleDrag.start(component, handle, geometry),
+        _ => MoveDrag.start(component, handle, camera: geometry.camera),
+      };
+      _setActiveHandle(handle);
+    } else if (tool == ViewportTool.move) {
       // Dragging a component moves it freely, selecting it if needed.
       final selected = ref.read(selectedComponentProvider);
       final candidates = pickableComponentsAt(
@@ -146,18 +164,14 @@ class _ViewportToolLayerState() extends ConsumerState<ViewportToolLayer> {
         return;
       }
       ref.read(selectedComponentProvider.notifier).select(picked);
-      component = picked;
-      handle = GizmoHandle.free;
-      camera =
-          GizmoGeometry.of(
-                picked,
-              )
+      final camera =
+          GizmoGeometry.of(picked)
               .firstWhereOrNull((geometry) => geometry.containsPoint(point))
               ?.camera ??
           camerasFor(picked).firstOrNull;
+      _drag = MoveDrag.start(picked, GizmoHandle.free, camera: camera);
+      _setActiveHandle(GizmoHandle.free);
     }
-    _drag = MoveDrag.start(component, handle, camera: camera);
-    _setActiveHandle(handle);
   }
 
   void _updateDrag(Offset globalPosition) {
@@ -174,7 +188,10 @@ class _ViewportToolLayerState() extends ConsumerState<ViewportToolLayer> {
     final delta =
         gameBox.globalToLocal(globalPosition) -
         gameBox.globalToLocal(downPosition);
-    drag.update(Vector2(delta.dx, delta.dy));
+    drag.update(
+      Vector2(delta.dx, delta.dy),
+      snap: HardwareKeyboard.instance.isShiftPressed,
+    );
     ref.read(gameControllerProvider.notifier).repaint();
   }
 

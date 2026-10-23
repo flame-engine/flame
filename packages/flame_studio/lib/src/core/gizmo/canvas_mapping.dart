@@ -8,6 +8,7 @@ import 'package:flame/components.dart'
         Vector2,
         World;
 import 'package:flame/game.dart' show FlameGame;
+import 'package:flutter/foundation.dart';
 
 /// Converts [point] from the local coordinate space of [component] into the
 /// canvas space of the game, which is in logical pixels relative to the
@@ -78,4 +79,59 @@ List<CameraComponent?> camerasFor(Component component) {
       .whereType<CameraComponent>()
       .where((camera) => camera.world == world.first)
       .toList();
+}
+
+/// The linear part of the transform from the parent space of a component,
+/// where its position and angle live, into the canvas space of the game.
+///
+/// The transform is given by the images of the parent's unit vectors, which
+/// are the columns `(a, b)` and `(c, d)` of its matrix.
+@immutable
+class const ParentToCanvas._(
+  final double a,
+  final double b,
+  final double c,
+  final double d,
+) {
+  /// The transform of the parent of [component], as seen through [camera].
+  ///
+  /// Returns null when the parent space can't be mapped to the canvas, or is
+  /// degenerate (for example, scaled to zero).
+  static ParentToCanvas? of(
+    PositionComponent component, {
+    CameraComponent? camera,
+  }) {
+    final parent = component.parent;
+    if (parent == null) {
+      return null;
+    }
+    final origin = localToCanvas(parent, Vector2.zero(), camera: camera);
+    final unitX = localToCanvas(parent, Vector2(1, 0), camera: camera);
+    final unitY = localToCanvas(parent, Vector2(0, 1), camera: camera);
+    if (origin == null || unitX == null || unitY == null) {
+      return null;
+    }
+    final transform = ParentToCanvas._(
+      unitX.x - origin.x,
+      unitX.y - origin.y,
+      unitY.x - origin.x,
+      unitY.y - origin.y,
+    );
+    return transform.determinant.abs() < 1e-12 ? null : transform;
+  }
+
+  double get determinant => a * d - c * b;
+
+  /// Whether the transform mirrors the parent space, which reverses the
+  /// direction of rotations.
+  bool get isMirrored => determinant < 0;
+
+  /// Converts a distance in the canvas space into the parent space.
+  Vector2 canvasToParent(Vector2 delta) {
+    final determinant = this.determinant;
+    return Vector2(
+      (d * delta.x - c * delta.y) / determinant,
+      (a * delta.y - b * delta.x) / determinant,
+    );
+  }
 }

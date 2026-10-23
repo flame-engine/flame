@@ -15,6 +15,14 @@ enum ViewportTool() {
   /// Like [select], and dragging the selected component or the handles of its
   /// gizmo moves it.
   move,
+
+  /// Like [select], and dragging the ring of the gizmo rotates the selected
+  /// component around its anchor.
+  rotate,
+
+  /// Like [select], and dragging the handles of the gizmo scales the selected
+  /// component.
+  scale,
 }
 
 final viewportToolProvider =

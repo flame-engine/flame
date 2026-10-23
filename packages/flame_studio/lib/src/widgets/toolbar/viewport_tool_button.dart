@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame_studio/src/core/viewport_tool.dart';
 import 'package:flame_studio/src/widgets/toolbar/toolbar_button.dart';
 import 'package:flutter/widgets.dart';
@@ -61,6 +63,44 @@ class const ViewportToolButton(final ViewportTool tool, {super.key})
             Offset(3, -2),
             Offset(3, 2),
           ], true),
+      ViewportTool.rotate => _rotateIcon(),
+      // A frame with a filled corner.
+      ViewportTool.scale =>
+        Path()
+          ..addRect(const Rect.fromLTRB(-5, -5, 5, -4))
+          ..addRect(const Rect.fromLTRB(4, -5, 5, 5))
+          ..addRect(const Rect.fromLTRB(-5, 4, 5, 5))
+          ..addRect(const Rect.fromLTRB(-5, -5, -4, 5))
+          ..addRect(const Rect.fromLTRB(-5, 0, 0, 5)),
     };
+  }
+
+  /// A circular arrow.
+  static Path _rotateIcon() {
+    const start = -0.8 * pi;
+    const sweep = 1.5 * pi;
+    const end = start + sweep;
+    final arc = Path()
+      ..arcTo(
+        Rect.fromCircle(center: Offset.zero, radius: 4.6),
+        start,
+        sweep,
+        true,
+      )
+      ..arcTo(
+        Rect.fromCircle(center: Offset.zero, radius: 3.4),
+        end,
+        -sweep,
+        false,
+      )
+      ..close();
+    final tip = Offset(cos(end), sin(end)) * 4;
+    final tangent = Offset(-sin(end), cos(end));
+    final normal = Offset(cos(end), sin(end));
+    return arc..addPolygon([
+      tip + tangent * 2.2,
+      tip + normal * 2.2,
+      tip - normal * 2.2,
+    ], true);
   }
 }

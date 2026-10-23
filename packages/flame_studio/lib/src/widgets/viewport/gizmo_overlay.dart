@@ -10,8 +10,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Draws a gizmo on top of the game for the selected component, showing its
-/// outline, its anchor and the directions of its local axes. While the move
-/// tool is in use, it also shows the handle that moves the component freely.
+/// outline, its anchor and the directions of its local axes, together with
+/// the handles of the tool in use.
 ///
 /// The overlay must cover the game widget, but may be larger than it. The
 /// gizmo is updated every frame while a [PositionComponent] is selected.
@@ -73,7 +73,7 @@ class _GizmoOverlayState()
       geometry: _geometry,
       gameBox: (game?.isAttached ?? false) ? game!.renderBox : null,
       theme: ref.watch(themeProvider),
-      showFreeHandle: tool == ViewportTool.move,
+      tool: tool,
       activeHandle: ref.watch(activeGizmoHandleProvider),
     );
   }
@@ -83,7 +83,7 @@ class const _GizmoPaint({
   required final List<GizmoGeometry> geometry,
   required final RenderBox? gameBox,
   required final Theme theme,
-  required final bool showFreeHandle,
+  required final ViewportTool tool,
   required final GizmoHandle? activeHandle,
 }) extends LeafRenderObjectWidget {
   @override
@@ -92,7 +92,7 @@ class const _GizmoPaint({
       ..geometry = geometry
       ..gameBox = gameBox
       ..theme = theme
-      ..showFreeHandle = showFreeHandle
+      ..tool = tool
       ..activeHandle = activeHandle;
   }
 
@@ -102,7 +102,7 @@ class const _GizmoPaint({
       ..geometry = geometry
       ..gameBox = gameBox
       ..theme = theme
-      ..showFreeHandle = showFreeHandle
+      ..tool = tool
       ..activeHandle = activeHandle;
   }
 }
@@ -116,7 +116,7 @@ class _RenderGizmo() extends RenderBox {
   List<GizmoGeometry> _geometry = const [];
   RenderBox? _gameBox;
   Theme? _theme;
-  bool _showFreeHandle = false;
+  ViewportTool _tool = ViewportTool.interact;
   GizmoHandle? _activeHandle;
 
   set geometry(List<GizmoGeometry> value) {
@@ -140,9 +140,9 @@ class _RenderGizmo() extends RenderBox {
     }
   }
 
-  set showFreeHandle(bool value) {
-    if (_showFreeHandle != value) {
-      _showFreeHandle = value;
+  set tool(ViewportTool value) {
+    if (_tool != value) {
+      _tool = value;
       markNeedsPaint();
     }
   }
@@ -195,7 +195,30 @@ class _RenderGizmo() extends RenderBox {
       );
 
       final anchor = toLocal(gizmo.anchor);
-      if (_showFreeHandle && gizmo.xAxis != Offset.zero) {
+      final isRotating = _tool == ViewportTool.rotate;
+      final isScaling = _tool == ViewportTool.scale;
+      if (isRotating) {
+        _drawRing(
+          canvas,
+          anchor,
+          (toLocal(gizmo.anchor + const Offset(GizmoGeometry.ringRadius, 0)) -
+                  anchor)
+              .distance,
+          handleColor(GizmoHandle.ring, theme.gizmoRotationColor),
+        );
+        if (gizmo.xAxis != Offset.zero) {
+          // Shows the current angle of the component.
+          canvas.drawLine(
+            anchor,
+            toLocal(gizmo.anchor + gizmo.xAxis * GizmoGeometry.ringRadius),
+            Paint()
+              ..color = theme.gizmoXAxisColor
+              ..strokeWidth = 1.5,
+          );
+        }
+      }
+      final showsFreeHandle = _tool == ViewportTool.move || isScaling;
+      if (showsFreeHandle && gizmo.xAxis != Offset.zero) {
         final color = handleColor(GizmoHandle.free, theme.gizmoColor);
         final square = Path()
           ..addPolygon(gizmo.freeHandleCorners.map(toLocal).toList(), true);
@@ -207,16 +230,17 @@ class _RenderGizmo() extends RenderBox {
             ..style = PaintingStyle.stroke,
         );
       }
-      if (gizmo.xAxis != Offset.zero) {
-        _drawArrow(
+      final drawAxis = isScaling ? _drawBoxedLine : _drawArrow;
+      if (!isRotating && gizmo.xAxis != Offset.zero) {
+        drawAxis(
           canvas,
           anchor,
           toLocal(gizmo.xAxisEnd),
           handleColor(GizmoHandle.x, theme.gizmoXAxisColor),
         );
       }
-      if (gizmo.yAxis != Offset.zero) {
-        _drawArrow(
+      if (!isRotating && gizmo.yAxis != Offset.zero) {
+        drawAxis(
           canvas,
           anchor,
           toLocal(gizmo.yAxisEnd),
@@ -237,6 +261,46 @@ class _RenderGizmo() extends RenderBox {
           ..strokeWidth = 1.5,
       );
     }
+  }
+
+  void _drawRing(Canvas canvas, Offset center, double radius, Color color) {
+    canvas.drawCircle(
+      center,
+      radius,
+      Paint()
+        ..color = color
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2,
+    );
+  }
+
+  /// Draws a line ending in a square, the handle of the scale tool.
+  void _drawBoxedLine(Canvas canvas, Offset start, Offset end, Color color) {
+    final direction = end - start;
+    final distance = direction.distance;
+    if (distance == 0) {
+      return;
+    }
+    final unit = direction / distance;
+    final normal = Offset(-unit.dy, unit.dx);
+    const half = arrowSize / 2;
+    final boxStart = end - unit * arrowSize;
+    canvas.drawLine(
+      start,
+      boxStart,
+      Paint()
+        ..color = color
+        ..strokeWidth = 2,
+    );
+    canvas.drawPath(
+      Path()..addPolygon([
+        boxStart + normal * half,
+        end + normal * half,
+        end - normal * half,
+        boxStart - normal * half,
+      ], true),
+      Paint()..color = color,
+    );
   }
 
   void _drawArrow(Canvas canvas, Offset start, Offset end, Color color) {

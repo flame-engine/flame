@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_studio/src/core/inspector/component_inspectors.dart';
@@ -159,6 +161,31 @@ void main() {
 
       expect(player.position, closeToVector(Vector2(40, 30)));
       expect(find.text('Transform'), findsOneWidget);
+
+      await disposeStudio(tester);
+    });
+
+    testWidgets('the rotate tool rotates components with the ring', (
+      tester,
+    ) async {
+      await pumpStudio(tester);
+      // The anchor of the player is its top-left corner, at (10, 20).
+      final ringPoint = game.renderBox.localToGlobal(const Offset(60, 20));
+
+      await tester.tap(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is ViewportToolButton &&
+              widget.tool == ViewportTool.rotate,
+        ),
+      );
+      await tester.tap(find.text('_Player'));
+      await tester.pump();
+      await tester.dragFrom(ringPoint, const Offset(-50, 50));
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(player.angle, closeTo(pi / 2, 1e-9));
+      expect(player.position, closeToVector(Vector2(10, 20)));
 
       await disposeStudio(tester);
     });
