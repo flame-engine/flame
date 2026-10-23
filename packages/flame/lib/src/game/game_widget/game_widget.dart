@@ -209,37 +209,9 @@ class GameWidget<T extends Game> extends StatefulWidget {
 class GameWidgetState<T extends Game>() extends State<GameWidget<T>> {
   late T currentGame;
 
-  Future<void> get loaderFuture => _loaderFuture ??= (() async {
-    final game = currentGame;
-    final gameGeneration = _gameGeneration;
-    assert(game.hasLayout);
-    await game.load();
-    if (_isStale(gameGeneration)) {
-      return;
-    }
-    game.mount();
-    // Wait for the whole component tree to be loaded and mounted, so that
-    // the game does not start, and the loading widget is not removed,
-    // until every component added during the initial load is ready.
-    await game.ready();
-    if (_isStale(gameGeneration)) {
-      return;
-    }
-    if (!game.isPaused) {
-      game.update(0);
-    }
-  })();
-
-  /// Whether the loader that captured [gameGeneration] is no longer current,
-  /// either because the widget was disposed or because the game instance was
-  /// swapped since then. A generation counter is used instead of comparing
-  /// game identities, so that swapping to another game and back to the
-  /// original one while it is still loading also invalidates the old loader.
-  bool _isStale(int gameGeneration) =>
-      !mounted || gameGeneration != _gameGeneration;
-
-  /// Incremented every time [initCurrentGame] installs a game instance.
-  int _gameGeneration = 0;
+  // Disposing the widget or swapping the game removes the game, which makes
+  // [Game.start] skip the steps it has not run yet.
+  Future<void> get loaderFuture => _loaderFuture ??= currentGame.start();
 
   Future<void>? _loaderFuture;
 
@@ -294,7 +266,6 @@ class GameWidgetState<T extends Game>() extends State<GameWidget<T>> {
       currentGame = widget.game!;
     }
     initGameStateListener(currentGame, _onGameStateChange);
-    _gameGeneration++;
     _loaderFuture = null;
   }
 
