@@ -561,12 +561,14 @@ class RenderableTiledMap(
       visibleRect = _visibleRectInMap(camera.visibleWorldRect);
       _viewCenter.setValues(visibleRect.center.dx, visibleRect.center.dy);
     }
+    // The camera above can be the camera of the game when the map is rendered
+    // in a viewport or directly by the game, where its view does not match
+    // what is shown. Only the camera that is rendering the map can be used to
+    // skip what it does not show.
+    final canCull =
+        camera != null && identical(camera, CameraComponent.currentCamera);
     for (final layer in renderableLayers) {
-      layer.updateView(
-        _viewCenter,
-        visibleRect,
-        hasCamera: camera != null,
-      );
+      layer.updateView(_viewCenter, visibleRect, canCull: canCull);
     }
     super.renderTree(canvas);
   }

@@ -170,13 +170,14 @@ abstract class RenderableLayer<T extends Layer>({
   Rect get visibleRect => _visibleRect ??= _mapRect;
   Rect? _visibleRect;
 
-  /// Whether [visibleRect] is the view of a camera, see [updateView].
-  bool _hasCamera = false;
+  /// Whether [visibleRect] is the view of the camera that renders this layer,
+  /// see [updateView].
+  bool _canCull = false;
 
   /// The area that this layer can limit its rendering to, or null if it has to
   /// render everything.
   @protected
-  Rect? get cullRect => _hasCamera ? visibleRect : null;
+  Rect? get cullRect => _canCull ? visibleRect : null;
 
   Rect get _mapRect {
     final size = TiledComponent.computeSize(
@@ -206,17 +207,20 @@ abstract class RenderableLayer<T extends Layer>({
   ///
   /// See https://doc.mapeditor.org/en/latest/manual/layers/#parallax-scrolling-factor
   ///
-  /// [hasCamera] is false when the map is rendered without a camera. In that
-  /// case [visibleRect] is the area of the map and not a view, so the layer
-  /// must not skip anything because it is outside of it.
+  /// [canCull] is true when [visibleRect] is the view of the camera that is
+  /// rendering the map, so that the layer can skip what is outside of it. It is
+  /// false when the map is rendered without a camera, in which case
+  /// [visibleRect] is the area of the map, and when the map is not rendered
+  /// through the camera that [visibleRect] comes from, like a map in the
+  /// viewport of a camera or added directly to the game.
   @internal
   @mustCallSuper
   void updateView(
     Vector2 viewCenter,
     Rect visibleRect, {
-    bool hasCamera = true,
+    bool canCull = true,
   }) {
-    _hasCamera = hasCamera;
+    _canCull = canCull;
     final parentParallaxX = parentLayer?.parallaxX ?? 1;
     final parentParallaxY = parentLayer?.parallaxY ?? 1;
     final x = offsetX + viewCenter.x * parentParallaxX * (1 - layer.parallaxX);

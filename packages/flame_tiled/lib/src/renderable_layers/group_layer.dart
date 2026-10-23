@@ -33,11 +33,11 @@ class GroupLayer({
   void updateView(
     Vector2 viewCenter,
     Rect visibleRect, {
-    bool hasCamera = true,
+    bool canCull = true,
   }) {
-    super.updateView(viewCenter, visibleRect, hasCamera: hasCamera);
+    super.updateView(viewCenter, visibleRect, canCull: canCull);
     for (final child in layers) {
-      child.updateView(viewCenter, this.visibleRect, hasCamera: hasCamera);
+      child.updateView(viewCenter, this.visibleRect, canCull: canCull);
     }
   }
 }

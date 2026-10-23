@@ -37,6 +37,28 @@ TestAssetBundle _bundle(String map) => TestAssetBundle(
 
 typedef _Loaded = ({FlameGame game, TiledComponent map, FlameTileLayer layer});
 
+/// Loads the map [file], without adding it to a game.
+Future<TiledComponent> _loadMap(
+  String file, {
+  int? chunkSize,
+  CameraComponent? camera,
+}) async {
+  TiledAtlas.atlasMap.clear();
+  final bundle = _bundle(file);
+  Flame.bundle = bundle;
+  return await TiledComponent.load(
+    'assets/tiles/$file',
+    Vector2.all(_tileSize),
+    bundle: bundle,
+    images: Images(bundle: bundle),
+    chunkSize: chunkSize,
+    camera: camera,
+  );
+}
+
+FlameTileLayer _firstTileLayer(TiledComponent map) =>
+    map.tileMap.renderableLayers.whereType<FlameTileLayer>().first;
+
 /// Loads the map [file] and shows it through a camera that looks at
 /// [cameraPosition].
 Future<_Loaded> _load(
@@ -46,16 +68,7 @@ Future<_Loaded> _load(
   int? chunkSize,
 }) async {
   final size = viewSize ?? Vector2.all(100);
-  TiledAtlas.atlasMap.clear();
-  final bundle = _bundle(file);
-  Flame.bundle = bundle;
-  final map = await TiledComponent.load(
-    'assets/tiles/$file',
-    Vector2.all(_tileSize),
-    bundle: bundle,
-    images: Images(bundle: bundle),
-    chunkSize: chunkSize,
-  );
+  final map = await _loadMap(file, chunkSize: chunkSize);
   final world = World();
   final camera = CameraComponent(
     world: world,
@@ -67,11 +80,22 @@ Future<_Loaded> _load(
   game.onGameResize(size);
   await world.ensureAdd(map);
   game.update(0);
-  return (
-    game: game,
-    map: map,
-    layer: map.tileMap.renderableLayers.whereType<FlameTileLayer>().first,
+  return (game: game, map: map, layer: _firstTileLayer(map));
+}
+
+/// A game with a world and a camera that looks far away from the maps, so
+/// that a map that is culled by it renders nothing.
+Future<FlameGame> _gameLookingAway() async {
+  final world = World();
+  final camera = CameraComponent(
+    world: world,
+    viewport: FixedSizeViewport(100, 100),
+  )..viewfinder.position = Vector2.all(-5000);
+  final game = await initializeGame(
+    () => FlameGame(world: world, camera: camera),
   );
+  game.onGameResize(Vector2.all(100));
+  return game;
 }
 
 void render(FlameGame game) => game.render(Canvas(PictureRecorder()));
@@ -211,9 +235,18 @@ void main() {
       expect(loaded.layer.renderedChunkCount, 1);
     });
 
-    test('tiles that stick out of their cell are not split', () async {
+    test('only the layers with tiles that stick out are not split', () async {
+      // The "Floor" layer only uses the tileset of 16 x 16 tiles, and the
+      // "Walls" layer also uses the tileset of 32 x 32 tiles.
       final loaded = await _load(_oversized);
-      expect(loaded.layer.chunkCount, 0);
+      final layers = loaded.map.tileMap.renderableLayers
+          .whereType<FlameTileLayer>();
+      final floor = layers.singleWhere((layer) => layer.layer.name == 'Floor');
+      final walls = layers.singleWhere((layer) => layer.layer.name == 'Walls');
+      expect(floor.usesChunks, isTrue);
+      expect(floor.chunkCount, greaterThan(0));
+      expect(walls.usesChunks, isFalse);
+      expect(walls.chunkCount, 0);
     });
 
     test('tiles with an offset are not split', () async {
@@ -221,6 +254,53 @@ void main() {
         _tileOffset,
       );
       expect(loaded.layer.chunkCount, 0);
+    });
+
+    test('a map in the viewport of a camera is not culled', () async {
+      final game = await _gameLookingAway();
+      final map = await _loadMap(_infinite);
+      await game.camera.viewport.ensureAdd(map);
+      render(game);
+
+      final layer = _firstTileLayer(map);
+      expect(layer.chunkCount, 16);
+      expect(layer.renderedChunkCount, 16);
+    });
+
+    test('a map that is added to the game directly is not culled', () async {
+      final game = await _gameLookingAway();
+      final map = await _loadMap(_infinite);
+      await game.ensureAdd(map);
+      render(game);
+
+      final layer = _firstTileLayer(map);
+      expect(layer.chunkCount, 16);
+      expect(layer.renderedChunkCount, 16);
+    });
+
+    test('a map is not culled by the view of another camera', () async {
+      // The map follows the parallax of a camera that is not the one that
+      // renders it, so the view of that camera is not what is shown.
+      final game = await _gameLookingAway();
+      // Its world is not in the game, so this camera does not render anything.
+      final other = CameraComponent(world: World())
+        ..viewfinder.position = Vector2.all(5000);
+      await game.ensureAdd(other);
+      final map = await _loadMap(_infinite, camera: other);
+      await game.world.ensureAdd(map);
+      render(game);
+
+      final layer = _firstTileLayer(map);
+      expect(layer.renderedChunkCount, 16);
+    });
+
+    test('a map in the world is culled by the camera of the game', () async {
+      final game = await _gameLookingAway();
+      final map = await _loadMap(_infinite);
+      await game.world.ensureAdd(map);
+      render(game);
+
+      expect(_firstTileLayer(map).renderedChunkCount, 0);
     });
 
     test('a tile that is handed out stays visible when moved away', () async {

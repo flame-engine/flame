@@ -297,6 +297,30 @@ void main() {
       expect(_layerOf(component).chunkCount, 0);
     });
 
+    test('stops when a tile is turned a quarter after loading', () async {
+      Future<TiledComponent> loadTurned({int? chunkSize}) async {
+        final component = await _load(_isometric2To1, chunkSize: chunkSize);
+        component.tileMap.setTileData(
+          layerId: _layerOf(component).layer.id!,
+          x: 4,
+          y: 4,
+          gid: Gid(1, const Flips.defaults().copyWith(diagonally: true)),
+        );
+        return component;
+      }
+
+      final split = await _load(_isometric2To1, chunkSize: _chunkSize);
+      expect(_layerOf(split).usesChunks, isTrue);
+
+      final turned = await loadTurned(chunkSize: _chunkSize);
+      expect(_layerOf(turned).usesChunks, isFalse);
+      expect(_layerOf(turned).chunkCount, 0);
+      expect(
+        await renderMapToPng(turned),
+        orderedEquals(await renderMapToPng(await loadTurned())),
+      );
+    });
+
     test('is used for square cells when a tile is turned a quarter', () async {
       final component = await _load(
         _isometric,

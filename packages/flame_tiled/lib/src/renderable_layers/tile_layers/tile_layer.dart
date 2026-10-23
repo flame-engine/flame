@@ -183,34 +183,45 @@ abstract class FlameTileLayer({
   /// tiles with an offset) are painted over the tiles of other cells, in an
   /// order that chunks would change. Then all of the tiles are kept in
   /// [TiledAtlas.batch].
-  late final bool usesChunks = _canUseChunks();
+  ///
+  /// Only the tiles of this layer are looked at, and this is decided again
+  /// every time the cache is refreshed, since changing a tile can change it.
+  bool get usesChunks => _usesChunks;
+  bool _usesChunks = false;
 
   bool _canUseChunks() {
     if (!map.infinite && chunkSize == null) {
       return false;
     }
-    final fitsCells = map.tilesets.every(
-      (tileset) =>
-          tileset.image != null &&
-          tileset.tileWidth == map.tileWidth &&
-          tileset.tileHeight == map.tileHeight &&
-          tileset.tileOffset == null,
-    );
-    if (!fitsCells) {
-      return false;
-    }
     // A quarter turn swaps the width and the height of a tile, so in a cell
     // that is not square the tile sticks out of it. The tiles of hexagonal maps
     // are rotated in steps of 60º and keep their size.
-    if (map.tileWidth != map.tileHeight &&
-        map.orientation != MapOrientation.hexagonal) {
-      var hasQuarterTurn = false;
-      layer.forEachTile((_, _, gid) {
+    final quarterTurnsStickOut =
+        map.tileWidth != map.tileHeight &&
+        map.orientation != MapOrientation.hexagonal;
+    final tileIds = <int>{};
+    var hasQuarterTurn = false;
+    layer.forEachTile((_, _, gid) {
+      if (gid.tile != 0) {
+        tileIds.add(gid.tile);
         hasQuarterTurn = hasQuarterTurn || gid.flips.diagonally;
-      });
-      return !hasQuarterTurn;
+      }
+    });
+    if (quarterTurnsStickOut && hasQuarterTurn) {
+      return false;
     }
-    return true;
+    // Only the tilesets that this layer uses, so that a tileset of bigger
+    // tiles that is used by another layer does not keep this one whole.
+    return tileIds
+        .map(map.tilesetByTileGId)
+        .toSet()
+        .every(
+          (tileset) =>
+              tileset.image != null &&
+              tileset.tileWidth == map.tileWidth &&
+              tileset.tileHeight == map.tileHeight &&
+              tileset.tileOffset == null,
+        );
   }
 
   /// The size of a chunk, in tiles. Infinite layers use the chunk size of the
@@ -317,6 +328,7 @@ abstract class FlameTileLayer({
         chunkSize ?? layer.chunks?.firstOrNull?.width ?? _defaultChunkSize;
     _chunkHeight =
         chunkSize ?? layer.chunks?.firstOrNull?.height ?? _defaultChunkSize;
+    _usesChunks = _canUseChunks();
 
     cacheTiles();
 
