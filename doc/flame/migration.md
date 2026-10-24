@@ -417,11 +417,9 @@ class MyGame extends FlameGame with ScaleCallbacks, DragCallbacks {
 }
 ```
 
-Note that trackpad pinch gestures are not currently recognized by the new system:
-`MultiDragScaleGestureRecognizer` does not yet handle Flutter's `PointerPanZoom` events, which is how
-a trackpad pinch reaches a scale recognizer. Touchscreen pinches are unaffected.
-
-See [Scale Events](inputs/scale_events.md) for the full replacement API.
+See [Scale Events](inputs/scale_events.md) for the full replacement API, including
+[trackpad gestures](inputs/scale_events.md#trackpad-gestures), which the old detector never
+supported.
 
 
 ### `MultiTouchTapDetector` and `MultiTouchDragDetector` removed

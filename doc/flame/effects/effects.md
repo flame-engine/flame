@@ -73,6 +73,8 @@ There are multiple pre-built effects provided by Flame, and you can also
 - [`OpacityToEffect`](color_effects.md#opacitytoeffect)
 - [`OpacityByEffect`](color_effects.md#opacitybyeffect)
 - [`ColorEffect`](color_effects.md#coloreffect)
+- [`WarpEffect.by`](warp_effects.md#warpeffectby)
+- [`WarpEffect.to`](warp_effects.md#warpeffectto)
 - [`SequenceEffect`](sequence_effect.md)
 - [`CombinedEffect`](combined_effect.md)
 - [`RemoveEffect`](remove_effect.md)
@@ -133,6 +135,7 @@ Scale Effects             <scale_effects.md>
 Size Effects              <size_effects.md>
 Anchor Effects            <anchor_effects.md>
 Color Effects             <color_effects.md>
+Warp Effects              <warp_effects.md>
 Sequence Effect           <sequence_effect.md>
 Combined Effect           <combined_effect.md>
 Remove Effect             <remove_effect.md>

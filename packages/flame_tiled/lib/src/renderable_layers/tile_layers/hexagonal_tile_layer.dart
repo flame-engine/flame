@@ -17,6 +17,7 @@ class HexagonalTileLayer({
   required super.ignoreFlip,
   required super.layerPaintFactory,
   super.filterQuality,
+  super.chunkSize,
 }) extends FlameTileLayer {
   @override
   void cacheTiles() {
@@ -114,9 +115,11 @@ class HexagonalTileLayer({
         storeTransform(tx, ty, transform);
         // A second pass is only needed in the case of staggery.
         if (map.staggerAxis == StaggerAxis.x && staggerY > 0) {
-          xSecondPass.add(TileTransform(src, transform, flips, batch));
+          xSecondPass.add(TileTransform(tx, ty, src, transform, flips));
         } else {
-          batch.addTransform(
+          addTile(
+            tx,
+            ty,
             source: src,
             transform: transform,
             flip: shouldFlip(flips),
@@ -128,7 +131,9 @@ class HexagonalTileLayer({
       }
 
       for (final tile in xSecondPass) {
-        tile.batch.addTransform(
+        addTile(
+          tile.tx,
+          tile.ty,
           source: tile.source,
           transform: tile.transform,
           flip: shouldFlip(tile.flip),

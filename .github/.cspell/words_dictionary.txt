@@ -1,4 +1,5 @@
 # actual english words (or common abbreviations) missing from CSpell
+bilinearly
 bloodlust
 collidable
 collidables
@@ -30,3 +31,4 @@ thumbstick
 trackpad
 underutilize
 untinted
+unwarped

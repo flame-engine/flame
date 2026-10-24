@@ -69,6 +69,7 @@ abstract class RenderableLayer<T extends Layer>({
     required Map<Tile, TileFrames> animationFrames,
     required TiledAtlas atlas,
     required Paint Function(double opacity) layerPaintFactory,
+    int? chunkSize,
     FilterQuality? filterQuality,
     bool? ignoreFlip,
     Images? images,
@@ -85,6 +86,7 @@ abstract class RenderableLayer<T extends Layer>({
         ignoreFlip: ignoreFlip,
         filterQuality: filterQuality,
         layerPaintFactory: layerPaintFactory,
+        chunkSize: chunkSize,
       );
     } else if (layer is ImageLayer) {
       return await FlameImageLayer.load(
@@ -168,6 +170,15 @@ abstract class RenderableLayer<T extends Layer>({
   Rect get visibleRect => _visibleRect ??= _mapRect;
   Rect? _visibleRect;
 
+  /// Whether [visibleRect] is the view of the camera that renders this layer,
+  /// see [updateView].
+  bool _canCull = false;
+
+  /// The area that this layer can limit its rendering to, or null if it has to
+  /// render everything.
+  @protected
+  Rect? get cullRect => _canCull ? visibleRect : null;
+
   Rect get _mapRect {
     final size = TiledComponent.computeSize(
       map.orientation,
@@ -195,9 +206,21 @@ abstract class RenderableLayer<T extends Layer>({
   /// the parent of this layer.
   ///
   /// See https://doc.mapeditor.org/en/latest/manual/layers/#parallax-scrolling-factor
+  ///
+  /// [canCull] is true when [visibleRect] is the view of the camera that is
+  /// rendering the map, so that the layer can skip what is outside of it. It is
+  /// false when the map is rendered without a camera, in which case
+  /// [visibleRect] is the area of the map, and when the map is not rendered
+  /// through the camera that [visibleRect] comes from, like a map in the
+  /// viewport of a camera or added directly to the game.
   @internal
   @mustCallSuper
-  void updateView(Vector2 viewCenter, Rect visibleRect) {
+  void updateView(
+    Vector2 viewCenter,
+    Rect visibleRect, {
+    bool canCull = true,
+  }) {
+    _canCull = canCull;
     final parentParallaxX = parentLayer?.parallaxX ?? 1;
     final parentParallaxY = parentLayer?.parallaxY ?? 1;
     final x = offsetX + viewCenter.x * parentParallaxX * (1 - layer.parallaxX);

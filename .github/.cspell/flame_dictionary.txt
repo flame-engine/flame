@@ -5,21 +5,31 @@ Audioplayers # A Flutter plugin to play multiple simultaneously audio files http
 BGUG # Break Guns Using Gems, a game by BlueFire https://github.com/bluefireteam/bgug
 Bodymovin # An After Effects extension to export Lottie animations https://aescripts.com/bodymovin/
 emberquest # Ember Quest, our platformer tutorial game
+firstgid # The first global tile id of a tileset in a Tiled map
 fscene # The website of Flutter Scene https://fscene.dev
 Hermione # A character from the book Harry Potter
+hexsidelength # The length of the side of the hexagons of a Tiled map
 Kenobi # Eminent Jedi Master, General of the Republic Army, Obi-Wan Kenobi
 Nakama # An open-source server designed to power modern games and apps https://github.com/Allan-Nava/nakama-flutter
+nextlayerid # The next id for a layer in a Tiled map file
+nextobjectid # The next id for an object in a Tiled map file
 Overmind # A character in the game StarCraft
 padracing # A pad racing game by BlueFire https://github.com/flame-engine/flame/tree/main/examples/games/padracing
 Prosser # A character from the book The Hitchhiker's Guide to the Galaxy
+renderorder # The order that the tiles of a Tiled map are rendered in
 riverpod # A state management library for Flutter https://github.com/rrousselGit/riverpod
 spineboy # Name of a famous character used as an example for Spine https://en.esotericsoftware.com/spine-examples-spineboy
 spineboys # Plural of spineboy
 Spritecow # A handy tool for locating sprites within a spritesheet http://www.spritecow.com/
+staggeraxis # The axis that the rows of a staggered or hexagonal Tiled map shift on
+staggerindex # Which rows of a staggered or hexagonal Tiled map are shifted
 Supabase # Supabase, one of our sponsors https://supabase.com/
 terminui # A terminal UI library for Flutter
 texturepacker # a packed spritesheet format
+tilecount # The number of tiles of a tileset in a Tiled map file
+tileheight # The height of a tile in a Tiled map file
 Tilemap # What tile maps are called within Tiled
+tilewidth # The width of a tile in a Tiled map file
 typled # A grid map and sprite sheet tool https://github.com/erickzanardo/typled
 vantablack # brand name for a famous super-black ink known as the darkest ever made
 Weasley # Ron Weasley, a character from the book Harry Potter

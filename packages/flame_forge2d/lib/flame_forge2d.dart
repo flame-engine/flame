@@ -7,3 +7,4 @@ export 'contact_events_dispatcher.dart';
 export 'forge2d_game.dart';
 export 'forge2d_viewfinder.dart';
 export 'forge2d_world.dart';
+export 'ray_cast_component.dart';

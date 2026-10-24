@@ -1,5 +1,6 @@
 export 'src/geometry/circle_component.dart';
 export 'src/geometry/constants.dart';
+export 'src/geometry/convex_pieces.dart';
 export 'src/geometry/line.dart';
 export 'src/geometry/line_segment.dart';
 export 'src/geometry/path_component.dart';

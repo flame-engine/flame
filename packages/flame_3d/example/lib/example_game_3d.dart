@@ -4,6 +4,7 @@ import 'package:flame/events.dart';
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
+import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d_example/components/player.dart';
 import 'package:flame_3d_example/components/room_bounds.dart';
 import 'package:flame_3d_example/example_camera_3d.dart';
@@ -15,6 +16,7 @@ class ExampleGame3D()
     extends FlameGame3D<World3D, ExampleCamera3D>
     with DragCallbacks, ScrollCallbacks, HasKeyboardHandlerComponents {
   late final Player player;
+  Msaa _msaa = Msaa.off;
 
   this
     : super(
@@ -46,12 +48,18 @@ class ExampleGame3D()
               ? CameraMode.player
               : CameraMode.drag;
           return KeyEventResult.handled;
+        } else if (event.logicalKey == LogicalKeyboardKey.keyO) {
+          _msaa = _msaa == Msaa.off ? Msaa.sample4 : Msaa.off;
+          return KeyEventResult.handled;
         }
       }
     }
 
     return super.onKeyEvent(event, keysPressed);
   }
+
+  @override
+  Msaa msaa() => _msaa;
 
   @override
   FutureOr<void> onLoad() async {

@@ -10,6 +10,19 @@ import 'package:tiled/tiled.dart';
 
 bool _defaultTilesetPackingFilter(Tileset _) => true;
 
+/// Collapses the `.` and `..` segments of an asset [path].
+String _normalizePath(String path) {
+  final segments = <String>[];
+  for (final segment in path.split('/')) {
+    if (segment == '..' && segments.isNotEmpty && segments.last != '..') {
+      segments.removeLast();
+    } else if (segment != '.' && segment.isNotEmpty) {
+      segments.add(segment);
+    }
+  }
+  return segments.join('/');
+}
+
 /// One image atlas for all Tiled image sets in a map.
 ///
 /// Please note that [TiledAtlas] should not be reused without [clone] as it may
@@ -36,6 +49,16 @@ class TiledAtlas._({
       ? null
       : SpriteBatch(
           atlas,
+          imageKey: key,
+          useAtlas: useAtlas,
+        );
+
+  /// Creates a new, empty [SpriteBatch] that draws from the same image as
+  /// [batch], or null if this atlas has no image.
+  SpriteBatch? newBatch() => atlas == null
+      ? null
+      : SpriteBatch(
+          atlas!,
           imageKey: key,
           useAtlas: useAtlas,
         );
@@ -118,22 +141,20 @@ class TiledAtlas._({
 
     final mappedImageList = tilesetImageList.map((entry) {
       final tiledImage = entry.$2;
-      var tileImageSource = tiledImage.source!;
       final tilesetSource = entry.$1;
 
-      if (tilesetSource != null) {
-        final tilesetParts = tilesetSource.split('/');
-        final imageParts = tileImageSource.split('/');
+      // Tiled writes an image source relative to the file that declares it,
+      // which for an external tileset is the `.tsx`, not the map.
+      final tilesetDirectory = tilesetSource == null
+          ? ''
+          : tilesetSource.substring(0, tilesetSource.lastIndexOf('/') + 1);
 
-        if (tilesetParts.length != imageParts.length) {
-          tileImageSource = [
-            ...tilesetParts.sublist(0, tilesetParts.length - 1),
-            ...imageParts,
-          ].join('/');
-        }
-      }
-
-      return ('$imagesDirectory$tileImageSource', tiledImage);
+      return (
+        _normalizePath(
+          '$imagesDirectory$tilesetDirectory${tiledImage.source!}',
+        ),
+        tiledImage,
+      );
     });
 
     if (mappedImageList.isEmpty) {

@@ -82,6 +82,13 @@ class TiledComponent<T extends FlameGame>(
   /// can be changed by setting `useAtlas` to `false`. This will make the map
   /// be rendered with `Canvas.drawImageRect` calls instead.
   ///
+  /// Maps with a lot of tiles can be made cheaper to render by setting
+  /// [chunkSize], for example to 16. The tiles are then split in chunks of that
+  /// many tiles, and the chunks outside of the view are skipped. Infinite maps
+  /// always do this. It works for every orientation of map, but not for layers
+  /// with tiles that are taller than the cells. See
+  /// [RenderableTiledMap.fromString] for the details.
+  ///
   /// The parallax factors of the layers are calculated against the camera that
   /// renders the map, pass a [camera] to use a specific one instead.
   static Future<TiledComponent> load(
@@ -97,6 +104,7 @@ class TiledComponent<T extends FlameGame>(
     bool Function(Tileset)? tsxPackingFilter,
     bool useAtlas = true,
     Paint Function(double opacity)? layerPaintFactory,
+    int? chunkSize,
     double atlasPackingSpacingX = 0,
     double atlasPackingSpacingY = 0,
     ComponentKey? key,
@@ -116,6 +124,7 @@ class TiledComponent<T extends FlameGame>(
         tsxPackingFilter: tsxPackingFilter,
         useAtlas: useAtlas,
         layerPaintFactory: layerPaintFactory,
+        chunkSize: chunkSize,
         atlasPackingSpacingX: atlasPackingSpacingX,
         atlasPackingSpacingY: atlasPackingSpacingY,
         package: package,

@@ -16,6 +16,7 @@ class OrthogonalTileLayer({
   required super.ignoreFlip,
   required super.layerPaintFactory,
   super.filterQuality,
+  super.chunkSize,
 }) extends FlameTileLayer {
   @override
   void cacheTiles() {
@@ -64,7 +65,9 @@ class OrthogonalTileLayer({
         );
         storeTransform(tx, ty, transform);
 
-        batch.addTransform(
+        addTile(
+          tx,
+          ty,
           source: src,
           transform: transform,
           flip: shouldFlip(flips),
