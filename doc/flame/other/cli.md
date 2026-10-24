@@ -261,6 +261,9 @@ like playing music in them by checking `isHotReloadShadow` on the game. Values t
 references to other components inside of collections, and fields that can't be written, are
 reported as skipped.
 
+The merge reads the game through the VM Service URI of the game that was started last, so pass
+`--uri` together with `--port` when the reload goes to another `flame run`.
+
 
 ### logs
 
