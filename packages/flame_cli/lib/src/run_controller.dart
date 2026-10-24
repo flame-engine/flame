@@ -86,8 +86,7 @@ class RunController({
     _controlPortFile.writeAsStringSync(_server.port.toString());
     _server.listen(_handleConnection);
     _out.writeln(
-      'flame run: the reload, restart, stop and status commands reach this '
-      'game on port '
+      'flame run: reload, restart, stop and status reach this game on port '
       '${_server.port}.',
     );
     final ownershipTimer = Timer.periodic(

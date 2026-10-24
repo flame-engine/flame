@@ -87,7 +87,7 @@ To reach a game that was not started last, address it explicitly. Every `flame r
 things needed for that when it starts:
 
 ```text
-flame run: the reload, restart, stop and status commands reach this game on port 50312.
+flame run: reload, restart, stop and status reach this game on port 50312.
 ...
 A Dart VM Service on macOS is available at: http://127.0.0.1:50300/abc123=/
 ```

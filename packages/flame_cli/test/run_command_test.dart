@@ -123,8 +123,7 @@ void main() {
     expect(
       out.toString(),
       contains(
-        'flame run: the reload, restart, stop and status commands reach this '
-        'game',
+        'flame run: reload, restart, stop and status reach this game',
       ),
     );
     expect(err.toString(), 'Something went wrong\n');
