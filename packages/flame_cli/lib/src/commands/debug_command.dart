@@ -1,6 +1,7 @@
 import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/commands/flame_command.dart';
+import 'package:flame_cli/src/commands/inspect_command.dart';
 import 'package:flame_cli/src/flame_connection.dart';
 import 'package:io/io.dart';
 
@@ -31,9 +32,11 @@ class DebugCommand(super.out, super.workingDirectory) extends FlameCommand {
   String get invocation => 'flame debug [on|off]';
 
   bool? _enable;
+  int? _componentId;
 
   @override
   void validate() {
+    _componentId = componentIdOption(this, 'component');
     final rest = argResults!.rest;
     _enable = switch (rest) {
       [] => null,
@@ -45,17 +48,13 @@ class DebugCommand(super.out, super.workingDirectory) extends FlameCommand {
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
-    final componentId = argResults!.option('component');
+    final componentId = _componentId;
     final target = componentId == null
         ? 'the game'
         : 'the component $componentId';
     final enable = _enable;
     if (enable == null) {
-      final response = await connection.call(
-        'getDebugMode',
-        args: {'id': ?componentId},
-      );
-      final enabled = response['debug_mode'] == true;
+      final enabled = await connection.getDebugMode(id: componentId);
       writeResult(
         {'debugMode': enabled, 'component': componentId},
         'Debug mode is ${enabled ? 'on' : 'off'} for $target.',
@@ -63,13 +62,7 @@ class DebugCommand(super.out, super.workingDirectory) extends FlameCommand {
       return ExitCode.success.code;
     }
 
-    await connection.call(
-      'setDebugMode',
-      args: {
-        'debug_mode': enable.toString(),
-        'id': ?componentId,
-      },
-    );
+    await connection.setDebugMode(debugMode: enable, id: componentId);
     writeResult(
       {'debugMode': enable, 'component': componentId},
       'Turned debug mode ${enable ? 'on' : 'off'} for $target.',

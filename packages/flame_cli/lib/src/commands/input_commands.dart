@@ -4,6 +4,7 @@ import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/commands/flame_command.dart';
 import 'package:flame_cli/src/flame_connection.dart';
+import 'package:flame_cli/src/game_responses.dart';
 import 'package:io/io.dart';
 
 /// Sends taps, drags and key presses to the game.
@@ -82,17 +83,14 @@ class _TapCommand(super.out, super.workingDirectory) extends FlameCommand {
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
-    final position = await _target.resolve(connection.call);
-    await connection.call(
-      'tap',
-      args: {'x': '${position.x}', 'y': '${position.y}'},
-    );
+    final position = await _target.resolve(connection);
+    await connection.tap(position);
     final at = _target.component == null ? 'at ' : '';
     writeResult(
       {
         'input': 'tap',
         'position': _positionJson(position),
-        'component': ?_target.component,
+        'component': ?_target.component?.toJson(),
       },
       'Tapped $at${_target.describe(position)}.',
     );
@@ -191,25 +189,16 @@ class _DragCommand(super.out, super.workingDirectory) extends FlameCommand {
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
-    final from = await _from.resolve(connection.call);
-    final to = await _to.resolve(connection.call);
-    await connection.call(
-      'drag',
-      args: {
-        'fromX': '${from.x}',
-        'fromY': '${from.y}',
-        'toX': '${to.x}',
-        'toY': '${to.y}',
-        'steps': '$_steps',
-      },
-    );
+    final from = await _from.resolve(connection);
+    final to = await _to.resolve(connection);
+    await connection.drag(from, to, steps: _steps);
     writeResult(
       {
         'input': 'drag',
         'from': _positionJson(from),
         'to': _positionJson(to),
-        'fromComponent': ?_from.component,
-        'toComponent': ?_to.component,
+        'fromComponent': ?_from.component?.toJson(),
+        'toComponent': ?_to.component?.toJson(),
         'steps': _steps,
       },
       'Dragged from ${_from.describe(from)} to ${_to.describe(to)}.',
@@ -259,7 +248,7 @@ class _KeyCommand(super.out, super.workingDirectory) extends FlameCommand {
   String get invocation => 'flame input key <key name>';
 
   late String _key;
-  late String _action;
+  late KeyAction _action;
 
   @override
   void validate() {
@@ -274,43 +263,36 @@ class _KeyCommand(super.out, super.workingDirectory) extends FlameCommand {
       throw UsageException('Pass either --down or --up, not both.', usage);
     }
     _action = down
-        ? 'down'
+        ? KeyAction.down
         : up
-        ? 'up'
-        : 'press';
+        ? KeyAction.up
+        : KeyAction.press;
   }
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
-    await connection.call('key', args: {'key': _key, 'action': _action});
+    await connection.key(_key, action: _action);
     writeResult(
-      {'input': 'key', 'key': _key, 'action': _action},
+      {'input': 'key', 'key': _key, 'action': _action.name},
       switch (_action) {
-        'down' => 'Pressed $_key down.',
-        'up' => 'Released $_key.',
-        _ => 'Pressed $_key.',
+        KeyAction.down => 'Pressed $_key down.',
+        KeyAction.up => 'Released $_key.',
+        KeyAction.press => 'Pressed $_key.',
       },
     );
     return ExitCode.success.code;
   }
 }
 
-/// Calls a service extension of the game, as [FlameConnection.call] does.
-typedef ServiceExtensionCall = Future<Map<String, dynamic>> Function(
-  String method, {
-  Map<String, String>? args,
-});
-
 /// A point that input is sent to, given either as a [position] in canvas
 /// coordinates or as a [component], whose canvas position is looked up in the
 /// game.
 ///
-/// The [component] is the id of the component, as the tree command prints it,
-/// or the name of its `ComponentKey`, and [anchor] is the point within the
-/// component, where the game uses the center when it is not given.
+/// The [anchor] is the point within the [component], where the game uses the
+/// center when it is not given.
 class InputTarget._({
-  final ({double x, double y})? position,
-  final String? component,
+  final Vector2? position,
+  final ComponentReference? component,
   final String? anchor,
 }) {
   /// Creates a target from a [position] given as `x,y`, or from a
@@ -332,45 +314,24 @@ class InputTarget._({
           command.usage,
         );
       }
-      return InputTarget._(component: component, anchor: anchor);
+      return InputTarget._(
+        component: ComponentReference.parse(component),
+        anchor: anchor,
+      );
     }
     return InputTarget._(position: parsePosition(command, position!));
   }
 
-  /// The arguments of the `getComponentCanvasPosition` service extension,
-  /// where a [component] that is a number is an id and any other one the
-  /// name of a `ComponentKey`.
-  Map<String, String> get componentArgs {
-    final component = this.component!;
-    return {
-      if (int.tryParse(component) != null)
-        'id': component
-      else
-        'key': component,
-      'anchor': ?anchor,
-    };
-  }
-
-  /// Returns the [position], or asks the game through [call] where the
+  /// Returns the [position], or asks the game through [connection] where the
   /// [component] is on the canvas.
-  Future<({double x, double y})> resolve(ServiceExtensionCall call) async {
-    final position = this.position;
-    if (position != null) {
-      return position;
-    }
-    final response = await call(
-      'getComponentCanvasPosition',
-      args: componentArgs,
-    );
-    return (
-      x: (response['x'] as num).toDouble(),
-      y: (response['y'] as num).toDouble(),
-    );
+  Future<Vector2> resolve(FlameConnection connection) async {
+    return position ??
+        await connection.getComponentCanvasPosition(component!, anchor: anchor);
   }
 
   /// Describes the target, which is at the [resolved] canvas position, for
   /// the output of a command.
-  String describe(({double x, double y}) resolved) {
+  String describe(Vector2 resolved) {
     final at =
         '${formatCoordinate(resolved.x)},${formatCoordinate(resolved.y)}';
     return component == null ? at : 'component $component at $at';
@@ -391,12 +352,12 @@ String formatCoordinate(double value) {
   return fixed.replaceFirst(RegExp(r'\.?0+$'), '');
 }
 
-Map<String, double> _positionJson(({double x, double y}) position) {
+Map<String, double> _positionJson(Vector2 position) {
   return {'x': position.x, 'y': position.y};
 }
 
 /// Parses a position given as `x,y`.
-({double x, double y}) parsePosition(Command<int> command, String value) {
+Vector2 parsePosition(Command<int> command, String value) {
   final parts = value.split(',').map(double.tryParse).toList();
   if (parts.length != 2 || parts.any((p) => p == null || !p.isFinite)) {
     throw UsageException(

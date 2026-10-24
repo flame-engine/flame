@@ -103,7 +103,7 @@ class SnapshotAnnotation(
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, Object> toJson() {
     final box = this.box;
     return {
       'id': id,

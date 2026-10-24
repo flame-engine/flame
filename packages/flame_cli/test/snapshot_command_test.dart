@@ -176,17 +176,17 @@ void main() {
   group('formatSnapshotAnnotations', () {
     test('formats one component per line', () {
       expect(
-        formatSnapshotAnnotations([
-          {
-            'id': 1,
-            'name': 'Enemy',
-            'box': [0, 0, 10, 10],
-          },
-          {
-            'id': 2,
-            'name': 'Player',
-            'box': [-5.5, 3.2, 1.4, 2.6],
-          },
+        formatSnapshotAnnotations(const [
+          SnapshotAnnotation(
+            id: 1,
+            name: 'Enemy',
+            box: (x: 0, y: 0, width: 10, height: 10),
+          ),
+          SnapshotAnnotation(
+            id: 2,
+            name: 'Player',
+            box: (x: -5.5, y: 3.2, width: 1.4, height: 2.6),
+          ),
         ]),
         'Enemy (id: 1) box 0,0,10,10\nPlayer (id: 2) box -6,3,1,3\n',
       );

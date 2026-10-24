@@ -1,12 +1,13 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/commands/flame_command.dart';
+import 'package:flame_cli/src/commands/inspect_command.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
 import 'package:flame_cli/src/flame_connection.dart';
+import 'package:flame_cli/src/game_responses.dart';
 import 'package:flame_cli/src/json_output.dart';
 import 'package:image/image.dart' as img;
 import 'package:io/io.dart';
@@ -86,6 +87,8 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
 
   late double _pixelRatio;
   late int? _maxSize;
+  late int? _componentId;
+  late WorldRect? _rect;
 
   @override
   void validate() {
@@ -97,6 +100,7 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
       );
     }
     _pixelRatio = pixelRatio;
+    _componentId = componentIdOption(this, 'component');
 
     final maxSize = argResults!.option('max-size');
     _maxSize = maxSize == null ? null : int.tryParse(maxSize);
@@ -104,6 +108,7 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
       throw UsageException('--max-size has to be a positive integer.', usage);
     }
 
+    _rect = null;
     final rect = argResults!.option('rect');
     if (rect != null) {
       final parts = rect.split(',').map(double.tryParse).toList();
@@ -117,10 +122,11 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
           usage,
         );
       }
+      _rect = (x: parts[0]!, y: parts[1]!, width: parts[2]!, height: parts[3]!);
     }
 
     final world = argResults!.flag('world') || rect != null;
-    if (world && argResults!.option('component') != null) {
+    if (world && _componentId != null) {
       throw UsageException(
         '--component renders a single component, it cannot be combined with '
         '--world or --rect.',
@@ -153,35 +159,29 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
-    final componentId = argResults!.option('component');
-    final rect = argResults!.option('rect');
-    final annotate = argResults!.flag('annotate');
-    final filter = argResults!.option('filter');
+    final componentId = _componentId;
     final maxSize = _maxSize;
-    final options = {
-      'pixelRatio': _pixelRatio.toString(),
-      if (annotate) 'annotate': 'true',
-      'annotationFilter': ?filter,
-      if (maxSize != null) 'maxSize': maxSize.toString(),
-    };
-    final response = componentId == null
-        ? await connection.call(
-            'getGameSnapshot',
-            args: {
-              ...options,
-              if (argResults!.flag('world')) 'world': 'true',
-              'rect': ?rect,
-            },
+    final options = SnapshotOptions(
+      annotate: argResults!.flag('annotate'),
+      annotationFilter: argResults!.option('filter'),
+      maxSize: maxSize,
+    );
+    final snapshot = componentId == null
+        ? await connection.getGameSnapshot(
+            pixelRatio: _pixelRatio,
+            world: argResults!.flag('world'),
+            rect: _rect,
+            options: options,
           )
-        : await connection.call(
-            'getComponentSnapshot',
-            args: {'id': componentId, ...options},
+        : await connection.getComponentSnapshot(
+            componentId,
+            pixelRatio: _pixelRatio,
+            options: options,
           );
 
-    final annotations = response['annotations'] as List?;
-    final pixelRatio = response['pixelRatio'] as num?;
+    final Snapshot(:annotations, :pixelRatio) = snapshot;
     final unsupported = [
-      if (annotate && annotations == null) '--annotate',
+      if (options.annotate && annotations == null) '--annotate',
       if (maxSize != null && pixelRatio == null) '--max-size',
     ];
     if (unsupported.isNotEmpty) {
@@ -192,8 +192,7 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
       );
     }
 
-    final snapshot = response['snapshot'] as String? ?? '';
-    if (snapshot.isEmpty) {
+    if (snapshot.bytes.isEmpty) {
       throw const FlameCliException(
         'The game returned an empty snapshot.',
         exitCode: ExitCode.data,
@@ -203,7 +202,7 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
     final file = File(
       p.join(workingDirectory.path, argResults!.option('output')),
     );
-    final bytes = base64Decode(snapshot);
+    final bytes = snapshot.bytes;
     try {
       await file.writeAsBytes(bytes);
     } on FileSystemException catch (error, stackTrace) {
@@ -227,7 +226,10 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
           'height': info?.height,
           'pixelRatio': pixelRatio ?? _pixelRatio,
           'bytes': bytes.length,
-          'annotations': ?annotations,
+          if (annotations != null)
+            'annotations': [
+              for (final annotation in annotations) annotation.toJson(),
+            ],
         }),
       );
       return ExitCode.success.code;
@@ -238,8 +240,8 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
     }
     if (pixelRatio != null && (pixelRatio - _pixelRatio).abs() > 1e-9) {
       out.writeln(
-        'The image was scaled down to ${response['width']}x'
-        '${response['height']} pixels to fit --max-size, a pixel ratio of '
+        'The image was scaled down to ${snapshot.width}x'
+        '${snapshot.height} pixels to fit --max-size, a pixel ratio of '
         '${_formatPixelRatio(pixelRatio)}.',
       );
     }
@@ -259,18 +261,19 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
 /// one component per line, in the same style as the component tree, with the
 /// box of the component in the pixel coordinates of the image as
 /// `x,y,width,height`.
-String formatSnapshotAnnotations(List<dynamic> annotations) {
+String formatSnapshotAnnotations(List<SnapshotAnnotation> annotations) {
   if (annotations.isEmpty) {
     return 'No visible components were annotated.\n';
   }
   final buffer = StringBuffer();
-  for (final annotation in annotations.cast<Map<String, dynamic>>()) {
-    final box = (annotation['box'] as List)
-        .map((value) => (value as num).round())
-        .join(',');
-    buffer.writeln(
-      '${annotation['name']} (id: ${annotation['id']}) box $box',
-    );
+  for (final SnapshotAnnotation(:id, :name, :box) in annotations) {
+    final pixels = [
+      box.x,
+      box.y,
+      box.width,
+      box.height,
+    ].map((value) => value.round()).join(',');
+    buffer.writeln('$name (id: $id) box $pixels');
   }
   return buffer.toString();
 }

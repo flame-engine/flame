@@ -19,7 +19,7 @@ class PauseCommand(super.out, super.workingDirectory) extends FlameCommand {
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
-    await setPaused(connection, paused: true);
+    await connection.setPaused(paused: true);
     writeResult({'paused': true}, 'Paused the game.');
     return ExitCode.success.code;
   }
@@ -38,7 +38,7 @@ class ResumeCommand(super.out, super.workingDirectory) extends FlameCommand {
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
-    await setPaused(connection, paused: false);
+    await connection.setPaused(paused: false);
     writeResult({'paused': false}, 'Resumed the game.');
     return ExitCode.success.code;
   }
@@ -92,15 +92,15 @@ class StepCommand(super.out, super.workingDirectory) extends FlameCommand {
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
-    final wasPaused = (await connection.call('getPaused'))['paused'] == true;
+    final wasPaused = await connection.getPaused();
     if (!wasPaused) {
-      await setPaused(connection, paused: true);
+      await connection.setPaused(paused: true);
       if (!jsonOutput) {
         out.writeln('Paused the game.');
       }
     }
     for (var i = 0; i < _frames; i++) {
-      await connection.call('step', args: {'step_time': _time.toString()});
+      await connection.step(_time);
     }
     final seconds = (_time * _frames).toStringAsFixed(3);
     writeResult(
@@ -116,12 +116,4 @@ class StepCommand(super.out, super.workingDirectory) extends FlameCommand {
     );
     return ExitCode.success.code;
   }
-}
-
-/// Pauses or resumes the game through the `setPaused` service extension.
-Future<void> setPaused(
-  FlameConnection connection, {
-  required bool paused,
-}) async {
-  await connection.call('setPaused', args: {'paused': paused.toString()});
 }
