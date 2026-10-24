@@ -87,17 +87,18 @@ To reach a game that was not started last, address it explicitly. Every `flame r
 things needed for that when it starts:
 
 ```text
-flame run: the reload and restart commands reach this game on port 50312.
+flame run: reload, restart, stop and status reach this game on port 50312.
 ...
 A Dart VM Service on macOS is available at: http://127.0.0.1:50300/abc123=/
 ```
 
 Pass the URI with `--uri` to the commands that talk to the game, and the port with `--port` to
-`reload` and `restart`:
+`reload`, `restart`, `stop` and `status`:
 
 ```shell
 flame snapshot --uri http://127.0.0.1:50300/abc123=/ --output macos.png
 flame reload --port 50312
+flame stop --port 50312
 ```
 
 A script that drives several instances can keep the URI and the port of each one and pass them
@@ -167,9 +168,10 @@ flame run -d macos
 All the arguments are passed on to `flutter run`, and it works just like `flutter run`, including
 the keys in the terminal such as `r` for hot reload and `q` to quit. Next to the URI, `flame run`
 keeps two more files in `.dart_tool/flame`: `control_port`, through which the [reload and
-restart](#reload-and-restart) commands talk to it, and `log`, which the [logs](#logs) command
-reads. The URI and the port are removed when the game is stopped, the log is kept. The `.dart_tool`
-directory is ignored by version control in Flutter projects, so the files are never committed.
+restart](#reload-and-restart), [stop](#stop) and [status](#status) commands talk to it, and `log`,
+which the [logs](#logs) command reads. The URI and the port are removed when the game is stopped,
+the log is kept. The `.dart_tool` directory is ignored by version control in Flutter projects, so
+the files are never committed.
 
 The files live in the root of the project, the closest directory with a `pubspec.yaml`, no matter
 which subdirectory `flame run` was started from. That ties every running game to its project, and
@@ -178,8 +180,9 @@ the same project can be started several times, see
 
 When an agent or a script starts the game with `flame run` in the background, the other commands
 say that no running game was found until the game has started, so they can be retried until they
-succeed. Since `flame run` reads the terminal input like `flutter run` does, redirect its input
-from `/dev/null` when it runs in the background of an interactive shell:
+succeed, or the script can wait for [status](#status) to succeed. Since `flame run` reads the
+terminal input like `flutter run` does, redirect its input from `/dev/null` when it runs in the
+background of an interactive shell:
 
 ```shell
 flame run -d macos < /dev/null > run.log 2>&1 &
@@ -215,6 +218,59 @@ A hot reload swaps the code but keeps the state of the game, so a change to some
 set when a component was created, such as a paint in its constructor or a position in `onLoad`,
 is only visible after a hot restart. Changes to `update` and `render` methods show up right away.
 Component ids change with a restart, so run `tree` again afterwards.
+
+
+### stop
+
+Stops a game that was started with `flame run`, and waits until it has exited:
+
+```shell
+$ flame stop
+Stopped the game.
+```
+
+This is the same as pressing `q` in the terminal of `flame run`. The command returns once
+`flutter run` has exited and `flame run` has removed the URI and the port of the game, so the next
+`flame run` can be started right away. It takes `--port` (`-p`) like [reload and
+restart](#reload-and-restart). If no game is running it exits with `69`, and if `flutter run` does
+not exit within two minutes it exits with `70`.
+
+
+### status
+
+Shows whether the game that was started with `flame run` is running, and whether it can be
+reached:
+
+```shell
+$ flame status
+Running: yes
+Project: /path/to/my_game
+Control port: 50312
+Process id of flutter run: 12345
+Dart VM Service URI: ws://127.0.0.1:50300/abc123=/ws
+Reachable: yes
+Paused: no
+```
+
+The command exits with `0` only when the game is running and the Flame game in it can be reached
+through the Dart VM Service, and with `69` otherwise. That includes the time while the game is
+still starting, so a script that starts the game in the background can wait for it:
+
+```shell
+flame run -d macos < /dev/null > run.log 2>&1 &
+until flame status > /dev/null; do sleep 1; done
+```
+
+These are the options:
+
+- `--json`: Prints the status as JSON instead of text, with the fields `running`,
+  `projectDirectory`, `controlPort`, `processId`, `vmServiceUri`, `reachable` and `paused`, and
+  an `error` that says why the game is not running or not reachable. Fields that are not known are
+  left out.
+- `--port` (`-p`): The control port of a specific `flame run`, see [run](#run).
+- `--uri` (`-u`): Checks a game that was not started with `flame run` instead, by its Dart VM
+  Service URI. Only the URI, whether the game is reachable and whether it is paused are reported
+  then.
 
 
 ### logs
@@ -470,7 +526,8 @@ anti-aliasing. `--exit-code` makes the command exit with `1` when the images dif
 
 The commands follow the common Unix conventions for exit codes, so that scripts can tell failures
 apart. `flame run` exits with the exit code of `flutter run`, `reload` and `restart` exit with
-`70` when the reload failed, and the other commands use these:
+`70` when the reload failed, `stop` exits with `70` when `flutter run` did not exit, and the other
+commands use these:
 
 - `0`: The command succeeded.
 - `64`: The command was used incorrectly, for example with an invalid option.
