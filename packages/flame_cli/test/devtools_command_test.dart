@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flame_cli/flame_cli.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
+import 'package:vm_service/vm_service.dart' show VmService;
 
 import 'fake_process.dart';
 
@@ -38,6 +39,12 @@ class _FakeConnection(@override final String uri) implements FlameConnection {
   }) {
     throw UnimplementedError();
   }
+
+  @override
+  VmService get service => throw UnimplementedError();
+
+  @override
+  String get isolateId => throw UnimplementedError();
 
   @override
   Future<void> dispose() async {
