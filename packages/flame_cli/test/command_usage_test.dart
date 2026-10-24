@@ -189,6 +189,61 @@ void main() {
     });
   });
 
+  group('wait', () {
+    test('requires a type pattern or an id', () async {
+      await expectUsageError(['wait', 'component'], 'Pass one regular');
+      await expectUsageError(['wait', 'component', 'a', 'b'], 'Pass one');
+      await expectUsageError(['wait', 'component', '('], 'not a valid');
+      await expectUsageError(
+        ['wait', 'component', '--id', 'x'],
+        '--id has to be an integer',
+      );
+    });
+
+    test('validates the count', () async {
+      await expectUsageError(
+        ['wait', 'component', 'a', '--count', '-1'],
+        '--count has to be',
+      );
+      await expectUsageError(
+        ['wait', 'component', 'a', '--at-least', '0'],
+        '--at-least has to be',
+      );
+      await expectUsageError(
+        ['wait', 'component', 'a', '--count', '1', '--gone'],
+        'Pass only one of',
+      );
+    });
+
+    test('validates the attribute conditions', () async {
+      for (final condition in ['position > 1', 'angle.x > 1', 'size.x ~ 1']) {
+        await expectUsageError(
+          ['wait', 'component', 'a', '--where', condition],
+          '--where has to be',
+        );
+      }
+      await expectUsageError(
+        ['wait', 'component', 'a', '--where', 'position.x > a'],
+        '--where has to be',
+      );
+    });
+
+    test('validates the timeout and the interval', () async {
+      await expectUsageError(
+        ['wait', 'paused', '--timeout', '-1'],
+        '--timeout has to be a non-negative',
+      );
+      await expectUsageError(
+        ['wait', 'paused', '--interval', '0'],
+        '--interval has to be a positive',
+      );
+    });
+
+    test('requires an overlay name', () async {
+      await expectUsageError(['wait', 'overlay'], 'Pass the name of one');
+    });
+  });
+
   group('overlay', () {
     test('requires an overlay name', () async {
       await expectUsageError(['overlay', 'show'], 'Pass the name of one');
