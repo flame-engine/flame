@@ -79,7 +79,7 @@ class SetCommand(super.out, super.workingDirectory) extends FlameCommand {
       );
     }
     final info = await connection.call('getComponentInfo', args: {'id': _id});
-    out.write(formatComponentInfo(info));
+    writeComponentInfo(this, info);
     return ExitCode.success.code;
   }
 

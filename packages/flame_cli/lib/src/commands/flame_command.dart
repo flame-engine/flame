@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
+import 'package:flame_cli/src/flame_command_runner.dart';
 import 'package:flame_cli/src/flame_connection.dart';
+import 'package:flame_cli/src/json_output.dart';
 import 'package:flame_cli/src/vm_service_uri_file.dart';
 
 /// Connects to the game at the given URI, as [FlameConnection.connect] does.
@@ -11,11 +13,14 @@ typedef GameConnector = Future<FlameConnection> Function(String uri);
 /// A command that talks to a running game.
 ///
 /// The game is found through the `--uri` option, or if that isn't given,
-/// through the file that `flame run` writes the URI of the game to.
+/// through the file that `flame run` writes the URI of the game to. Every
+/// such command has the `--json` flag, and prints its result with
+/// [writeResult].
 abstract class FlameCommand(
-  final StringSink out,
-  final Directory workingDirectory,
-) extends Command<int> {
+  @override final StringSink out,
+  final Directory workingDirectory, {
+  GameConnector? connect,
+}) extends Command<int> with JsonOutput {
   this {
     argParser.addOption(
       'uri',
@@ -25,7 +30,10 @@ abstract class FlameCommand(
           '`flutter run`. Not needed if the game was started with '
           '`flame run`.',
     );
+    addJsonFlag(argParser);
   }
+
+  final GameConnector? _connect = connect;
 
   /// Validates the options, before a connection to the game is made.
   void validate() {}
@@ -36,9 +44,15 @@ abstract class FlameCommand(
   @override
   Future<int> run() async {
     validate();
+    final runner = this.runner;
     final connection = await connectToGame(
       workingDirectory,
       uriOption: argResults!.option('uri'),
+      connect:
+          _connect ??
+          (runner is FlameCommandRunner
+              ? runner.connect
+              : FlameConnection.connect),
     );
     try {
       return await runWithConnection(connection);

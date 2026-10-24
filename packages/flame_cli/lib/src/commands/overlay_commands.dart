@@ -9,14 +9,6 @@ import 'package:io/io.dart';
 
 /// Lists the registered overlays of the game and which of them are active.
 class OverlaysCommand(super.out, super.workingDirectory) extends FlameCommand {
-  this {
-    argParser.addFlag(
-      'json',
-      negatable: false,
-      help: 'Print the overlays as JSON instead of text.',
-    );
-  }
-
   @override
   String get name => 'overlays';
 
@@ -33,7 +25,7 @@ class OverlaysCommand(super.out, super.workingDirectory) extends FlameCommand {
     final overlays = (response['overlays'] as List).cast<String>();
     final active = ((response['active'] as List?) ?? []).cast<String>();
 
-    if (argResults!.flag('json')) {
+    if (jsonOutput) {
       out.writeln(toJsonOutput({'overlays': overlays, 'active': active}));
       return ExitCode.success.code;
     }
@@ -97,7 +89,10 @@ class _SetOverlayCommand(
       'setOverlay',
       args: {'overlay': _overlay, 'active': active.toString()},
     );
-    out.writeln('${active ? 'Showed' : 'Hid'} the overlay $_overlay.');
+    writeResult(
+      {'overlay': _overlay, 'shown': active},
+      '${active ? 'Showed' : 'Hid'} the overlay $_overlay.',
+    );
     return ExitCode.success.code;
   }
 }
@@ -123,7 +118,10 @@ class _OnlyOverlayCommand(super.out, super.workingDirectory)
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
     await connection.call('navigateToOverlay', args: {'overlay': _overlay});
-    out.writeln('Showed only the overlay $_overlay.');
+    writeResult(
+      {'overlay': _overlay, 'shown': true, 'othersHidden': true},
+      'Showed only the overlay $_overlay.',
+    );
     return ExitCode.success.code;
   }
 }

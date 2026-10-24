@@ -86,6 +86,10 @@ isolate that runs the game. Every `id` parameter is the `hashCode` of a componen
   coordinates, with `steps` updates in between.
 - `ext.flame_devtools.key`: Delivers the `key` with the given name to the `onKeyEvent` of the
   game, where `action` is `press`, `down` or `up`.
+- `ext.flame_devtools.getComponentCanvasPosition`: Returns the `x`, `y` in canvas coordinates of
+  the `anchor` (the center by default) of the `PositionComponent` with the given `id`, or with
+  the `ComponentKey` named `key`, through the camera that shows it. It fails if the component is
+  not visible on the canvas.
 
 If you have multiple games in your app, only the last one created is connected, see
 `DevToolsService.initWithGame` to change it.

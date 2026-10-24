@@ -129,6 +129,20 @@ void main() {
     });
   });
 
+  group('findComponentNodes', () {
+    test('returns every match in depth first order', () {
+      final ids = findComponentNodes(
+        _tree,
+        (node) => node['id'] != 2,
+      ).map((node) => node['id']);
+      expect(ids, [1, 3, 4]);
+    });
+
+    test('returns an empty list when nothing matches', () {
+      expect(findComponentNodes(_tree, (_) => false), isEmpty);
+    });
+  });
+
   test('formatComponentInfo prints one field per line', () {
     expect(
       formatComponentInfo({

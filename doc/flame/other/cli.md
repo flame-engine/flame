@@ -16,6 +16,9 @@ flame pause
 flame snapshot --output snapshot.png
 ```
 
+Every command except `run` also takes `--json`, which prints the result and any error as JSON, see
+[using the CLI from scripts and agents](#using-the-cli-from-scripts-and-agents).
+
 
 ## Installation
 
@@ -87,17 +90,18 @@ To reach a game that was not started last, address it explicitly. Every `flame r
 things needed for that when it starts:
 
 ```text
-flame run: the reload and restart commands reach this game on port 50312.
+flame run: reload, restart, stop and status reach this game on port 50312.
 ...
 A Dart VM Service on macOS is available at: http://127.0.0.1:50300/abc123=/
 ```
 
 Pass the URI with `--uri` to the commands that talk to the game, and the port with `--port` to
-`reload` and `restart`:
+`reload`, `restart`, `stop` and `status`:
 
 ```shell
 flame snapshot --uri http://127.0.0.1:50300/abc123=/ --output macos.png
 flame reload --port 50312
+flame stop --port 50312
 ```
 
 A script that drives several instances can keep the URI and the port of each one and pass them
@@ -167,9 +171,10 @@ flame run -d macos
 All the arguments are passed on to `flutter run`, and it works just like `flutter run`, including
 the keys in the terminal such as `r` for hot reload and `q` to quit. Next to the URI, `flame run`
 keeps two more files in `.dart_tool/flame`: `control_port`, through which the [reload and
-restart](#reload-and-restart) commands talk to it, and `log`, which the [logs](#logs) command
-reads. The URI and the port are removed when the game is stopped, the log is kept. The `.dart_tool`
-directory is ignored by version control in Flutter projects, so the files are never committed.
+restart](#reload-and-restart), [stop](#stop) and [status](#status) commands talk to it, and `log`,
+which the [logs](#logs) command reads. The URI and the port are removed when the game is stopped,
+the log is kept. The `.dart_tool` directory is ignored by version control in Flutter projects, so
+the files are never committed.
 
 The files live in the root of the project, the closest directory with a `pubspec.yaml`, no matter
 which subdirectory `flame run` was started from. That ties every running game to its project, and
@@ -178,8 +183,9 @@ the same project can be started several times, see
 
 When an agent or a script starts the game with `flame run` in the background, the other commands
 say that no running game was found until the game has started, so they can be retried until they
-succeed. Since `flame run` reads the terminal input like `flutter run` does, redirect its input
-from `/dev/null` when it runs in the background of an interactive shell:
+succeed, or the script can wait for [status](#status) to succeed. Since `flame run` reads the
+terminal input like `flutter run` does, redirect its input from `/dev/null` when it runs in the
+background of an interactive shell:
 
 ```shell
 flame run -d macos < /dev/null > run.log 2>&1 &
@@ -215,6 +221,59 @@ A hot reload swaps the code but keeps the state of the game, so a change to some
 set when a component was created, such as a paint in its constructor or a position in `onLoad`,
 is only visible after a hot restart. Changes to `update` and `render` methods show up right away.
 Component ids change with a restart, so run `tree` again afterwards.
+
+
+### stop
+
+Stops a game that was started with `flame run`, and waits until it has exited:
+
+```shell
+$ flame stop
+Stopped the game.
+```
+
+This is the same as pressing `q` in the terminal of `flame run`. The command returns once
+`flutter run` has exited and `flame run` has removed the URI and the port of the game, so the next
+`flame run` can be started right away. It takes `--port` (`-p`) like [reload and
+restart](#reload-and-restart). If no game is running it exits with `69`, and if `flutter run` does
+not exit within two minutes it exits with `70`.
+
+
+### status
+
+Shows whether the game that was started with `flame run` is running, and whether it can be
+reached:
+
+```shell
+$ flame status
+Running: yes
+Project: /path/to/my_game
+Control port: 50312
+Process id of flutter run: 12345
+Dart VM Service URI: ws://127.0.0.1:50300/abc123=/ws
+Reachable: yes
+Paused: no
+```
+
+The command exits with `0` only when the game is running and the Flame game in it can be reached
+through the Dart VM Service, and with `69` otherwise. That includes the time while the game is
+still starting, so a script that starts the game in the background can wait for it:
+
+```shell
+flame run -d macos < /dev/null > run.log 2>&1 &
+until flame status > /dev/null; do sleep 1; done
+```
+
+These are the options:
+
+- `--json`: Prints the status as JSON instead of text, with the fields `running`,
+  `projectDirectory`, `controlPort`, `processId`, `vmServiceUri`, `reachable` and `paused`, and
+  an `error` that says why the game is not running or not reachable. Fields that are not known are
+  left out.
+- `--port` (`-p`): The control port of a specific `flame run`, see [run](#run).
+- `--uri` (`-u`): Checks a game that was not started with `flame run` instead, by its Dart VM
+  Service URI. Only the URI, whether the game is reachable and whether it is paused are reported
+  then.
 
 
 ### logs
@@ -475,12 +534,99 @@ propagation rules. A drag sends a start event, `--steps` update events (10 by de
 spaced between the two positions, and an end event, all at once. If the game has no component
 that handles the event, the command fails with exit code `65` and says which mixin is missing.
 
+Instead of a position, a tap or either end of a drag can target a component, which is easier than
+finding its pixels in a snapshot:
+
+```shell
+$ flame input tap --component 220731871
+Tapped component 220731871 at 412.5,300.
+$ flame input tap --component 220731871 --anchor topLeft
+$ flame input drag --from-component 220731871 600,300
+$ flame input drag 100,300 --to-component 81726354
+$ flame input drag --from-component 220731871 \
+    --to-component 81726354 --to-anchor 0.5,0
+```
+
+A component is given by its id, as `tree` prints it, or by the name of its `ComponentKey`, for
+example `--component player` for a component created with `key: ComponentKey.named('player')`. A
+value that is a number is always used as an id. The component has to be a `PositionComponent`,
+and by default its center is targeted. `--anchor` for a tap, and `--from-anchor` and `--to-anchor`
+for a drag, target another point of the component, either as an anchor name like `topLeft` or
+`bottomCenter`, or as `x,y` between `0` and `1`, where `0,0` is the top left corner.
+
+The game converts the point to canvas coordinates through all the transforms that the component is
+rendered with, including the viewfinder and viewport of the camera when the component is in a
+world, and the command prints where the event was sent. When several cameras show the world, the
+`camera` of the game is used if it is one of them. If the component is not visible on the canvas,
+for example because it is outside of the view of the camera, the command fails with exit code `65`
+instead of sending the event.
+
 Keys are delivered to the `onKeyEvent` of a game with the `HasKeyboardHandlerComponents` or
 `KeyboardEvents` mixin. A key is named like the `LogicalKeyboardKey` constants, for example
 `space`, `enter`, `escape`, `arrowLeft`, `a` or `digit1`, and the name is matched without regard
 to case, spaces and underscores. By default the key is pressed and released right away. Pass
 `--down` to hold it, for example to keep a character walking while stepping the game, and `--up`
 to release it again.
+
+
+### wait
+
+Blocks until a condition holds in the game, or until a timeout is reached, so that a script or an
+agent doesn't have to sleep and guess how long something takes. For example, tap a button and wait
+until the game over overlay is shown:
+
+```shell
+flame input tap 400,300
+flame wait overlay GameOver
+```
+
+The command checks the condition right away and then again at a fixed interval, all over one
+connection to the game. When the condition holds it prints what matched and exits with `0`. When
+the timeout is reached first it says what it found instead and exits with `75`, which is also the
+case when the game doesn't answer in time, for example because it is stopped at a breakpoint. If
+the game stops while waiting it exits with `69` like the other commands.
+
+These are the conditions:
+
+- `wait component <type pattern>`: Waits until a component exists whose type matches the regular
+  expression, matched case insensitively like `tree --filter`, and prints the matching components
+  with their ids and attributes. `Enemy` also matches `EnemyBullet`, use `^Enemy$` to match only
+  the type `Enemy`.
+- `wait overlay <name>`: Waits until the overlay is shown, or with `--hidden` until it is hidden.
+  An overlay that isn't registered fails right away with `65`.
+- `wait paused` and `wait resumed`: Wait until the game loop is paused or running.
+
+The `component` condition takes these options to narrow it down:
+
+- `--id`: Only matches the component with this id. The type pattern can be left out then.
+- `--where` (`-w`): Only matches the components with a numeric attribute that compares to a value,
+  for example `--where "position.x > 100"`. The attributes are `position.x`, `position.y`,
+  `size.x`, `size.y`, `scale.x`, `scale.y`, `angle` and `priority`, and the operators are `<`,
+  `<=`, `>`, `>=`, `==` and `!=`. Quote the condition, since the shell would otherwise treat `>`
+  and `<` as redirecting input and output. It can be given several times, and all of them have to
+  hold.
+- `--count` (`-n`): Waits until exactly this number of components match.
+- `--at-least`: Waits until at least this number of components match.
+- `--gone`: Waits until no components match, for example until a component has been removed.
+
+```shell
+flame wait component Enemy --at-least 3
+flame wait component --id 220731871 --gone
+flame wait component Player --where "position.x >= 500" --timeout 30
+```
+
+These options are shared by all the conditions, in addition to `--uri`:
+
+- `--timeout` (`-t`): The number of seconds to wait, 10 by default. With `0` the condition is
+  checked once, which works as an assertion in a script.
+- `--interval` (`-i`): The number of seconds between two checks, `0.2` by default.
+- `--json`: Prints what matched as JSON instead of text. For `component` that is the list of
+  matching components, with the same fields as in `tree --json` but without the children, for
+  `overlay` the same as `overlays --json`, and for `paused` and `resumed` whether the game is
+  paused.
+
+A paused game doesn't change, so a condition that depends on the game loop only holds once the game
+is resumed or stepped.
 
 
 ### diff
@@ -502,20 +648,117 @@ anti-aliasing. `--exit-code` makes the command exit with `1` when the images dif
 `git diff`, for use in scripts.
 
 
+## Using the CLI from scripts and agents
+
+Every command that prints a result, which is all of them except `run`, takes `--json`. The result
+is then printed as a single JSON value on the standard output instead of as text, so that scripts
+and AI coding agents never have to parse prose:
+
+```shell
+$ flame snapshot --output snapshot.png --json
+{
+  "path": "/path/to/my_game/snapshot.png",
+  "width": 800,
+  "height": 600,
+  "pixelRatio": 1.0,
+  "bytes": 48213
+}
+```
+
+When a command that was called with `--json` fails, the error is printed as JSON on the standard
+output too, in place of the result, and the command exits with the same exit code as without
+`--json`:
+
+```shell
+$ flame step --frames 0 --json
+{
+  "error": {
+    "message": "--frames has to be a positive integer.",
+    "exitCode": 64,
+    "kind": "usage"
+  }
+}
+```
+
+That way the standard output of a command with `--json` always holds exactly one JSON value, and
+a script can check the exit code first and then read either the result or the `error` object. The
+`kind` is the name of the exit code, see [exit codes](#exit-codes), for example `unavailable` when
+no running game was found. Output that is not part of the result, such as the output of
+`flutter create` in `flame create`, goes to the standard error.
+
+These are the results of the commands:
+
+- `create`: The `name` of the game, the absolute `path` of its directory and the `template` it was
+  created from.
+- `reload` and `restart`: Whether the reload succeeded as `ok`, the `message` that `flutter run`
+  reported and all the `output` lines that it printed meanwhile. A failed reload is reported in the
+  result too, with `ok` set to `false` and the exit code `70`, since the compile errors in the
+  `output` are what is needed to fix the code.
+- `stop`: The same `ok`, `message` and `output` as `reload`, where `ok` is `false` when
+  `flutter run` did not exit in time.
+- `status`: The fields that are described in [status](#status). A game that is not running or not
+  reachable is reported in the result too, with the exit code `69`.
+- `logs`: The `path` of the log and the last `lines` of it. `--follow` cannot be combined with
+  `--json`.
+- `devtools`: Starts `dart devtools` with `--machine`, so that its output is one JSON object per
+  line, such as the `server.started` event with the host and port of the DevTools. This is the only
+  command that prints more than one JSON value.
+- `snapshot`: The absolute `path` of the image, its `width` and `height` in pixels, the
+  `pixelRatio` it was rendered with, which is lower than `--pixel-ratio` when `--max-size` scaled
+  it down, and the size of the file in `bytes`. The `width` and `height` are `null` when the image
+  that the game returned is not a valid PNG. With `--annotate` it also has the `annotations`, each
+  with the `id` and `name` of the component and its `box` as `[x, y, width, height]` in the pixels
+  of the image.
+- `tree`: The root of the component tree, or `null` when no component matches `--filter`. Every
+  node has an `id`, a `name`, the `toString` of the component, its `attributes` and its
+  `children`.
+- `inspect` and `set`: The details of the component, the same fields as in the text output.
+- `pause`, `resume` and `step`: Whether the game is `paused` afterwards. `step` also has the number
+  of `frames`, the `frameTime` and `totalTime` in seconds, and whether the game `wasPaused`
+  before.
+- `debug`: Whether the `debugMode` is on, and the `component` it applies to, or `null` for the
+  whole game.
+- `overlays`: The names of all the registered `overlays`, and the `active` ones.
+- `overlay show`, `hide` and `only`: The `overlay` and whether it is `shown`, and for `only` also
+  `othersHidden`.
+- `input tap`, `drag` and `key`: The kind of `input` and what was sent, the `position` of a tap,
+  the `from` and `to` positions and the `steps` of a drag, and the `key` and `action` of a key
+  press. The positions are in canvas coordinates, also when a component was targeted, which is then
+  given as `component` for a tap and as `fromComponent` and `toComponent` for a drag.
+- `diff`: Whether the images are `identical`, the number of `differingPixels` and `totalPixels`,
+  the `percentage` that differs, the `bounds` of the differences with `left`, `top`, `width` and
+  `height` or `null` when the images are identical, and the absolute path of the `output` image or
+  `null`.
+
+`flame run` passes all its arguments on to `flutter run`, so it has no `--json`. Use the
+`--machine` option of `flutter run` for machine readable output of the game itself.
+
+
 ## Exit codes
 
 The commands follow the common Unix conventions for exit codes, so that scripts can tell failures
-apart. `flame run` exits with the exit code of `flutter run`, `reload` and `restart` exit with
-`70` when the reload failed, and the other commands use these:
+apart. The exit codes are stable, and with `--json` the name in parentheses is
+the `kind` of the error:
 
-- `0`: The command succeeded.
-- `64`: The command was used incorrectly, for example with an invalid option.
-- `65`: The game rejected the input, for example because there is no component with the given
-  id, or the input files could not be read.
-- `69`: No running game was found, the game could not be reached, or it runs a version of Flame
-  that does not support the command.
-- `70`: The game reported an error while running the command.
-- `73`: The output file could not be written.
+- `0` (`success`): The command succeeded.
+- `1`: Only from `diff --exit-code`, when the images differ, like `git diff`.
+- `64` (`usage`): The command was used incorrectly, for example with an unknown or invalid option,
+  or a missing argument.
+- `65` (`data`): The game rejected the input, for example because there is no component with the
+  given id or no component handles the input, or an input file could not be read or is invalid,
+  such as a file that is not a PNG image or a `devtools_options.yaml` that is not valid YAML. It
+  is also used when `flame create` would overwrite an existing project.
+- `69` (`unavailable`): No running game was found, the game or `flame run` could not be reached,
+  the game stopped while the command ran, the game runs a version of Flame that does not support
+  the command, or `flutter` or `dart` could not be started.
+- `70` (`software`): The game reported an error while running the command, a reload or restart
+  failed, `flutter run` did not exit after `stop`, or a `flutter` command that `flame create` runs
+  failed.
+- `73` (`cantCreate`): The output file could not be written.
+- `75` (`tempFail`): The condition of `wait` did not hold before the timeout.
+
+`flame run` and `flame devtools` exit with the exit code of `flutter run` and `dart devtools`
+once those have started.
 
 
 ## Compatibility

@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/commands/flame_command.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
 import 'package:flame_cli/src/flame_connection.dart';
+import 'package:flame_cli/src/json_output.dart';
+import 'package:image/image.dart' as img;
 import 'package:io/io.dart';
 import 'package:path/path.dart' as p;
 
@@ -200,8 +203,9 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
     final file = File(
       p.join(workingDirectory.path, argResults!.option('output')),
     );
+    final bytes = base64Decode(snapshot);
     try {
-      await file.writeAsBytes(base64Decode(snapshot));
+      await file.writeAsBytes(bytes);
     } on FileSystemException catch (error, stackTrace) {
       Error.throwWithStackTrace(
         FlameCliException(
@@ -211,6 +215,22 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
         ),
         stackTrace,
       );
+    }
+
+    final path = file.absolute.path;
+    if (jsonOutput) {
+      final info = _pngInfo(bytes);
+      out.writeln(
+        toJsonOutput({
+          'path': path,
+          'width': info?.width,
+          'height': info?.height,
+          'pixelRatio': pixelRatio ?? _pixelRatio,
+          'bytes': bytes.length,
+          'annotations': ?annotations,
+        }),
+      );
+      return ExitCode.success.code;
     }
 
     if (annotations != null) {
@@ -223,7 +243,7 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
         '${_formatPixelRatio(pixelRatio)}.',
       );
     }
-    out.writeln(file.absolute.path);
+    out.writeln(path);
     return ExitCode.success.code;
   }
 
@@ -253,4 +273,12 @@ String formatSnapshotAnnotations(List<dynamic> annotations) {
     );
   }
   return buffer.toString();
+}
+
+img.DecodeInfo? _pngInfo(Uint8List bytes) {
+  try {
+    return img.PngDecoder().startDecode(bytes);
+  } on img.ImageException {
+    return null;
+  }
 }

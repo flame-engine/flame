@@ -136,6 +136,21 @@ void main() {
       await expectUsageError(['input', 'tap', '1,2', '3,4'], 'Pass one');
     });
 
+    test('tap requires either a position or a component', () async {
+      await expectUsageError(
+        ['input', 'tap', '1,2', '--component', '5'],
+        'Pass one position',
+      );
+      await expectUsageError(
+        ['input', 'tap', '1,2', '--anchor', 'topLeft'],
+        '--anchor can only be used together with a component',
+      );
+      await expectUsageError(
+        ['input', 'tap', '-c', '5', '--anchor', '1,2,3'],
+        'An anchor has to be',
+      );
+    });
+
     test('drag requires two positions and positive steps', () async {
       await expectUsageError(['input', 'drag', '1,2'], 'Pass two positions');
       await expectUsageError(['input', 'drag', '1,2', 'x,y'], 'two numbers');
@@ -145,12 +160,106 @@ void main() {
       );
     });
 
+    test('drag replaces positions with components', () async {
+      await expectUsageError(
+        ['input', 'drag', '1,2', '3,4', '--from-component', '5'],
+        'Pass two positions',
+      );
+      await expectUsageError(
+        [
+          'input',
+          'drag',
+          '1,2',
+          '--from-component',
+          '5',
+          '--to-component',
+          '6',
+        ],
+        'Pass two positions',
+      );
+      await expectUsageError(
+        ['input', 'drag', '--to-component', '5', 'x,y'],
+        'two numbers',
+      );
+      await expectUsageError(
+        ['input', 'drag', '1,2', '3,4', '--to-anchor', 'center'],
+        '--to-anchor can only be used together with a component',
+      );
+      await expectUsageError(
+        [
+          'input',
+          'drag',
+          '--from-component',
+          '5',
+          '--from-anchor',
+          'a,b',
+          '1,2',
+        ],
+        'An anchor has to be',
+      );
+    });
+
     test('key requires one key and one direction', () async {
       await expectUsageError(['input', 'key'], 'Pass the name of one key');
       await expectUsageError(
         ['input', 'key', 'space', '--down', '--up'],
         'either --down or --up',
       );
+    });
+  });
+
+  group('wait', () {
+    test('requires a type pattern or an id', () async {
+      await expectUsageError(['wait', 'component'], 'Pass one regular');
+      await expectUsageError(['wait', 'component', 'a', 'b'], 'Pass one');
+      await expectUsageError(['wait', 'component', '('], 'not a valid');
+      await expectUsageError(
+        ['wait', 'component', '--id', 'x'],
+        '--id has to be an integer',
+      );
+    });
+
+    test('validates the count', () async {
+      await expectUsageError(
+        ['wait', 'component', 'a', '--count', '-1'],
+        '--count has to be',
+      );
+      await expectUsageError(
+        ['wait', 'component', 'a', '--at-least', '0'],
+        '--at-least has to be',
+      );
+      await expectUsageError(
+        ['wait', 'component', 'a', '--count', '1', '--gone'],
+        'Pass only one of',
+      );
+    });
+
+    test('validates the attribute conditions', () async {
+      for (final condition in ['position > 1', 'angle.x > 1', 'size.x ~ 1']) {
+        await expectUsageError(
+          ['wait', 'component', 'a', '--where', condition],
+          '--where has to be',
+        );
+      }
+      await expectUsageError(
+        ['wait', 'component', 'a', '--where', 'position.x > a'],
+        '--where has to be',
+      );
+    });
+
+    test('validates the timeout and the interval', () async {
+      await expectUsageError(
+        ['wait', 'paused', '--timeout', '-1'],
+        '--timeout has to be a non-negative',
+      );
+      await expectUsageError(
+        ['wait', 'paused', '--interval', '0'],
+        '--interval has to be a positive',
+      );
+    });
+
+    test('requires an overlay name', () async {
+      await expectUsageError(['wait', 'overlay'], 'Pass the name of one');
     });
   });
 

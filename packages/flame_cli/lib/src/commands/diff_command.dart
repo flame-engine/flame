@@ -4,13 +4,16 @@ import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
 import 'package:flame_cli/src/image_diff.dart';
+import 'package:flame_cli/src/json_output.dart';
 import 'package:image/image.dart' as img;
 import 'package:io/io.dart';
 import 'package:path/path.dart' as p;
 
 /// Compares two PNG images, for example two snapshots.
-class DiffCommand(final StringSink out, final Directory workingDirectory)
-    extends Command<int> {
+class DiffCommand(
+  @override final StringSink out,
+  final Directory workingDirectory,
+) extends Command<int> with JsonOutput {
   this {
     argParser
       ..addOption(
@@ -33,6 +36,7 @@ class DiffCommand(final StringSink out, final Directory workingDirectory)
         negatable: false,
         help: 'Exit with 1 when the images differ, like `git diff`.',
       );
+    addJsonFlag(argParser);
   }
 
   @override
@@ -73,11 +77,11 @@ class DiffCommand(final StringSink out, final Directory workingDirectory)
     }
 
     final result = diffImages(before, after, threshold: threshold);
-    out.writeln(result.summary);
-
     final output = argResults!.option('output');
-    if (output != null) {
-      final file = File(p.join(workingDirectory.path, output));
+    final file = output == null
+        ? null
+        : File(p.join(workingDirectory.path, output));
+    if (file != null) {
       try {
         await file.writeAsBytes(img.encodePng(result.image));
       } on FileSystemException catch (error, stackTrace) {
@@ -90,8 +94,27 @@ class DiffCommand(final StringSink out, final Directory workingDirectory)
           stackTrace,
         );
       }
-      out.writeln(file.absolute.path);
     }
+
+    final bounds = result.bounds;
+    writeResult(
+      {
+        'identical': result.differingPixels == 0,
+        'differingPixels': result.differingPixels,
+        'totalPixels': result.totalPixels,
+        'percentage': result.percentage,
+        'bounds': bounds == null
+            ? null
+            : {
+                'left': bounds.left,
+                'top': bounds.top,
+                'width': bounds.width,
+                'height': bounds.height,
+              },
+        'output': file?.absolute.path,
+      },
+      [result.summary, ?file?.absolute.path].join('\n'),
+    );
 
     if (argResults!.flag('exit-code') && result.differingPixels > 0) {
       return 1;
