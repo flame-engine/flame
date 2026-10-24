@@ -273,6 +273,37 @@ void main() {
         {'input': 'key', 'key': 'space', 'action': 'down'},
       );
     });
+
+    test('input prints the resolved position of a component', () async {
+      final responses = {
+        'getComponentCanvasPosition': {'id': 7, 'x': 10.5, 'y': 20},
+      };
+      expect(
+        await runGameJson(
+          ['input', 'tap', '--component', '7'],
+          responses: responses,
+        ),
+        {
+          'input': 'tap',
+          'position': {'x': 10.5, 'y': 20.0},
+          'component': 7,
+        },
+      );
+      out.clear();
+      expect(
+        await runGameJson(
+          ['input', 'drag', '1,2', '--to-component', 'player'],
+          responses: responses,
+        ),
+        {
+          'input': 'drag',
+          'from': {'x': 1.0, 'y': 2.0},
+          'to': {'x': 10.5, 'y': 20.0},
+          'toComponent': 'player',
+          'steps': 10,
+        },
+      );
+    });
   });
 
   group('diff', () {
