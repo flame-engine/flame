@@ -41,9 +41,18 @@ isolate that runs the game. Every `id` parameter is the `hashCode` of a componen
   parameter and returns `snapshot` (a base64 encoded PNG image), `width` and `height`. With
   `world` set to `true` the world is rendered directly instead of through the camera, and with
   `rect` given as `x,y,width,height` in world coordinates only that part of the world is rendered.
+  The response also holds the `pixelRatio` that the image was rendered with, which is lower than
+  the requested one when the optional `maxSize` parameter, the maximum length in pixels of the
+  longest side of the image, would otherwise be exceeded. With `annotate` set to `true` the
+  outlines of the visible position components are drawn on the image with their id and type, and
+  `annotations` lists them with their `id`, `name` and `box`, as `[x, y, width, height]` in the
+  pixel coordinates of the image. The optional `annotationFilter` is a regular expression that is
+  matched case insensitively against the type to only annotate some components.
 - `ext.flame_devtools.getComponentSnapshot`: Renders a single component. It takes the `id` of the
   component and an optional `pixelRatio` parameter, and returns `snapshot` (a base64 encoded PNG
-  image). It responds with an invalid parameters error if no component with that id was found.
+  image), `width`, `height` and `pixelRatio`. It takes the same `maxSize`, `annotate` and
+  `annotationFilter` parameters as `getGameSnapshot`. It responds with an invalid parameters error
+  if no component with that id was found.
 - `ext.flame_devtools.getComponentTree`: Returns the `component_tree`, where every node has an
   `id`, a `name`, the `toString` of the component, its `attributes` and its `children`. The
   attributes are the `priority` of the component, and for a `PositionComponent` also its

@@ -46,6 +46,28 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
         abbr: 'p',
         help: 'The pixel ratio that the image is rendered with.',
         defaultsTo: '1',
+      )
+      ..addOption(
+        'max-size',
+        abbr: 'm',
+        help:
+            'The maximum length in pixels of the longest side of the image. '
+            'The pixel ratio is lowered to fit, keeping the aspect ratio.',
+      )
+      ..addFlag(
+        'annotate',
+        abbr: 'a',
+        negatable: false,
+        help:
+            'Draw the box of every visible position component on the image, '
+            'labeled with its id and type, and print the boxes.',
+      )
+      ..addOption(
+        'filter',
+        abbr: 'f',
+        help:
+            'Only annotate the components whose type matches this regular '
+            'expression (case insensitive). Needs --annotate.',
       );
   }
 
@@ -60,6 +82,7 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
       'Render the game, the world, or a single component, to a PNG image.';
 
   late double _pixelRatio;
+  late int? _maxSize;
 
   @override
   void validate() {
@@ -71,6 +94,12 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
       );
     }
     _pixelRatio = pixelRatio;
+
+    final maxSize = argResults!.option('max-size');
+    _maxSize = maxSize == null ? null : int.tryParse(maxSize);
+    if (maxSize != null && (_maxSize == null || _maxSize! <= 0)) {
+      throw UsageException('--max-size has to be a positive integer.', usage);
+    }
 
     final rect = argResults!.option('rect');
     if (rect != null) {
@@ -95,26 +124,70 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
         usage,
       );
     }
+
+    final filter = argResults!.option('filter');
+    if (filter != null) {
+      if (!argResults!.flag('annotate')) {
+        throw UsageException(
+          '--filter selects the components to annotate, so it needs '
+          '--annotate.',
+          usage,
+        );
+      }
+      try {
+        RegExp(filter, caseSensitive: false);
+      } on FormatException catch (error, stackTrace) {
+        Error.throwWithStackTrace(
+          UsageException(
+            '--filter is not a valid regular expression: ${error.message}',
+            usage,
+          ),
+          stackTrace,
+        );
+      }
+    }
   }
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
     final componentId = argResults!.option('component');
     final rect = argResults!.option('rect');
-    final pixelRatio = _pixelRatio.toString();
+    final annotate = argResults!.flag('annotate');
+    final filter = argResults!.option('filter');
+    final maxSize = _maxSize;
+    final options = {
+      'pixelRatio': _pixelRatio.toString(),
+      if (annotate) 'annotate': 'true',
+      'annotationFilter': ?filter,
+      if (maxSize != null) 'maxSize': maxSize.toString(),
+    };
     final response = componentId == null
         ? await connection.call(
             'getGameSnapshot',
             args: {
-              'pixelRatio': pixelRatio,
+              ...options,
               if (argResults!.flag('world')) 'world': 'true',
               'rect': ?rect,
             },
           )
         : await connection.call(
             'getComponentSnapshot',
-            args: {'id': componentId, 'pixelRatio': pixelRatio},
+            args: {'id': componentId, ...options},
           );
+
+    final annotations = response['annotations'] as List?;
+    final pixelRatio = response['pixelRatio'] as num?;
+    final unsupported = [
+      if (annotate && annotations == null) '--annotate',
+      if (maxSize != null && pixelRatio == null) '--max-size',
+    ];
+    if (unsupported.isNotEmpty) {
+      throw FlameCliException(
+        'The running game does not support ${unsupported.join(' and ')}, '
+        'update Flame to the latest version.',
+        exitCode: ExitCode.unavailable,
+      );
+    }
 
     final snapshot = response['snapshot'] as String? ?? '';
     if (snapshot.isEmpty) {
@@ -139,7 +212,45 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
         stackTrace,
       );
     }
+
+    if (annotations != null) {
+      out.write(formatSnapshotAnnotations(annotations));
+    }
+    if (pixelRatio != null && (pixelRatio - _pixelRatio).abs() > 1e-9) {
+      out.writeln(
+        'The image was scaled down to ${response['width']}x'
+        '${response['height']} pixels to fit --max-size, a pixel ratio of '
+        '${_formatPixelRatio(pixelRatio)}.',
+      );
+    }
     out.writeln(file.absolute.path);
     return ExitCode.success.code;
   }
+
+  static String _formatPixelRatio(num pixelRatio) {
+    return pixelRatio
+        .toStringAsFixed(4)
+        .replaceFirst(RegExp(r'0+$'), '')
+        .replaceFirst(RegExp(r'\.$'), '');
+  }
+}
+
+/// Formats the annotations returned by the snapshot service extensions with
+/// one component per line, in the same style as the component tree, with the
+/// box of the component in the pixel coordinates of the image as
+/// `x,y,width,height`.
+String formatSnapshotAnnotations(List<dynamic> annotations) {
+  if (annotations.isEmpty) {
+    return 'No visible components were annotated.\n';
+  }
+  final buffer = StringBuffer();
+  for (final annotation in annotations.cast<Map<String, dynamic>>()) {
+    final box = (annotation['box'] as List)
+        .map((value) => (value as num).round())
+        .join(',');
+    buffer.writeln(
+      '${annotation['name']} (id: ${annotation['id']}) box $box',
+    );
+  }
+  return buffer.toString();
 }

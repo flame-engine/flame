@@ -98,6 +98,25 @@ void main() {
       await expectUsageError(['snapshot', '-r', '0,0,-1,5'], '--rect has to');
     });
 
+    test('requires a positive integer maximum size', () async {
+      await expectUsageError(['snapshot', '--max-size', '0'], '--max-size');
+      await expectUsageError(['snapshot', '-m', '1.5'], '--max-size has to');
+    });
+
+    test(
+      'requires --annotate and a valid regular expression for the filter',
+      () async {
+        await expectUsageError(
+          ['snapshot', '--filter', 'player'],
+          'it needs --annotate',
+        );
+        await expectUsageError(
+          ['snapshot', '--annotate', '--filter', '('],
+          '--filter is not',
+        );
+      },
+    );
+
     test('does not combine a component with the world', () async {
       await expectUsageError(
         ['snapshot', '-c', '1', '--world'],

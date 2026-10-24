@@ -280,6 +280,14 @@ These are the options:
   the position components in the world.
 - `--rect` (`-r`): Renders only this part of the world, given as `x,y,width,height` in world
   coordinates, for example `--rect -100,-100,200,200`.
+- `--max-size` (`-m`): The maximum length in pixels of the longest side of the image, for example
+  `--max-size 1024` to keep the image within the limits of an AI model. The image is rendered with
+  a lower pixel ratio when it would be larger, so the aspect ratio is kept and nothing is cropped.
+- `--annotate` (`-a`): Draws the outline of every visible position component on the image,
+  labeled with its id and type, see [annotated snapshots](#annotated-snapshots).
+- `--filter` (`-f`): A regular expression, matched case insensitively against the type of the
+  components like for [tree](#tree), so that only the matching components are annotated. It needs
+  `--annotate`.
 
 A single component is rendered together with its children, but without the camera. For a
 `PositionComponent`, the image covers the component's bounding rectangle, with its anchor, angle
@@ -293,6 +301,34 @@ flame snapshot --component 220731871
 The pixel coordinates of a snapshot of the whole game, at the default pixel ratio, are the same
 coordinates that the [input](#input) commands take, so a position found in the image can be
 tapped directly.
+
+When `--max-size` lowers the pixel ratio, the command prints the size of the image and the pixel
+ratio that it was rendered with before the path. Divide a pixel coordinate by that pixel ratio to
+get the canvas coordinate.
+
+
+#### Annotated snapshots
+
+With `--annotate` the outline of every visible `PositionComponent` is drawn on top of the image,
+together with a label that holds the id of the component and its type. The outlines follow the
+component through the camera, so they are rotated and scaled with the viewfinder and the viewport,
+and they line up with the image in all the modes above, at any pixel ratio. This lets an AI model
+match what it sees in the image with the output of [tree](#tree), and then use the ids with
+[inspect](#inspect), [set](#set) or `snapshot --component`.
+
+The annotated components are also printed, one per line before the path of the image, with their
+bounding box in the pixel coordinates of the image as `x,y,width,height`:
+
+```shell
+$ flame snapshot --annotate --filter 'player|enemy'
+Player (id: 220731871) box 368,268,64,64
+Enemy (id: 220731872) box 568,268,64,64
+/path/to/flame_snapshot.png
+```
+
+Components that are hidden with `HasVisibility`, that have no size, or that are outside of the
+image or the viewport are left out, and the labels are moved apart when they would cover each
+other. In a busy game, use `--filter` to only annotate the components you are interested in.
 
 
 ### tree
