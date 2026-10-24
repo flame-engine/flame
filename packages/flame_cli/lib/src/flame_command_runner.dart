@@ -15,6 +15,7 @@ import 'package:flame_cli/src/commands/overlay_commands.dart';
 import 'package:flame_cli/src/commands/run_command.dart';
 import 'package:flame_cli/src/commands/set_command.dart';
 import 'package:flame_cli/src/commands/snapshot_command.dart';
+import 'package:flame_cli/src/commands/status_command.dart';
 import 'package:flame_cli/src/commands/tree_command.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
 import 'package:io/io.dart';
@@ -51,6 +52,8 @@ class FlameCommandRunner({
     );
     addCommand(ReloadCommand(output, directory));
     addCommand(RestartCommand(output, directory));
+    addCommand(StopCommand(output, directory));
+    addCommand(StatusCommand(output, directory, connect: connect));
     addCommand(LogsCommand(output, directory));
     addCommand(
       DevToolsCommand(
