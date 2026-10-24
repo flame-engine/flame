@@ -55,12 +55,18 @@ class DebugCommand(super.out, super.workingDirectory) extends FlameCommand {
     final enable = _enable;
     if (enable == null) {
       final enabled = await connection.getDebugMode(id: componentId);
-      out.writeln('Debug mode is ${enabled ? 'on' : 'off'} for $target.');
+      writeResult(
+        {'debugMode': enabled, 'component': componentId},
+        'Debug mode is ${enabled ? 'on' : 'off'} for $target.',
+      );
       return ExitCode.success.code;
     }
 
     await connection.setDebugMode(debugMode: enable, id: componentId);
-    out.writeln('Turned debug mode ${enable ? 'on' : 'off'} for $target.');
+    writeResult(
+      {'debugMode': enable, 'component': componentId},
+      'Turned debug mode ${enable ? 'on' : 'off'} for $target.',
+    );
     return ExitCode.success.code;
   }
 }
