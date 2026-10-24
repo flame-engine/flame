@@ -1,4 +1,5 @@
 import 'package:flame_cli/src/flame_cli_exception.dart';
+import 'package:flame_cli/src/game_responses.dart';
 import 'package:io/io.dart';
 import 'package:vm_service/vm_service.dart' hide Error;
 import 'package:vm_service/vm_service_io.dart';
@@ -115,6 +116,145 @@ class FlameConnection._(
   }
 
   Future<void> dispose() => _service.dispose();
+}
+
+/// The service extensions of the game, with typed arguments and results.
+///
+/// They are built on [FlameConnection.call], which is the only place where
+/// the JSON responses of the game are handled untyped.
+extension FlameServiceExtensions on FlameConnection {
+  /// The component tree of the game, or null if the game has no tree.
+  Future<ComponentNode?> getComponentTree() async {
+    final response = await call('getComponentTree');
+    final tree = response['component_tree'] as Map<String, dynamic>?;
+    return tree == null ? null : ComponentNode.fromJson(tree);
+  }
+
+  /// The details of the component with the given [id].
+  Future<ComponentInfo> getComponentInfo(int id) async {
+    return ComponentInfo.fromJson(
+      await call('getComponentInfo', args: {'id': '$id'}),
+    );
+  }
+
+  /// Sets an [attribute] of the position component with the given [id] to
+  /// [value], in the format that the `setPositionComponentAttributes`
+  /// service extension expects.
+  Future<void> setPositionComponentAttribute(
+    int id,
+    String attribute,
+    String value,
+  ) async {
+    await call(
+      'setPositionComponentAttributes',
+      args: {'id': '$id', 'attribute': attribute, 'value': value},
+    );
+  }
+
+  /// Whether the game loop is paused.
+  Future<bool> getPaused() async {
+    final response = await call('getPaused');
+    return response['paused'] == true;
+  }
+
+  /// Pauses or resumes the game loop.
+  Future<void> setPaused({required bool paused}) async {
+    await call('setPaused', args: {'paused': '$paused'});
+  }
+
+  /// Advances the paused game by one frame of [time] seconds.
+  Future<void> step(double time) async {
+    await call('step', args: {'step_time': '$time'});
+  }
+
+  /// Whether the debug mode is on for the game, or for the component with
+  /// the given [id].
+  Future<bool> getDebugMode({int? id}) async {
+    final response = await call('getDebugMode', args: {'id': ?id?.toString()});
+    return response['debug_mode'] == true;
+  }
+
+  /// Turns the debug mode on or off for the game, or for the component with
+  /// the given [id].
+  Future<void> setDebugMode({required bool debugMode, int? id}) async {
+    await call(
+      'setDebugMode',
+      args: {'debug_mode': '$debugMode', 'id': ?id?.toString()},
+    );
+  }
+
+  /// The registered and the shown overlays of the game.
+  Future<Overlays> getOverlays() async {
+    return Overlays.fromJson(await call('getOverlays'));
+  }
+
+  /// Shows or hides the [overlay].
+  Future<void> setOverlay(String overlay, {required bool active}) async {
+    await call('setOverlay', args: {'overlay': overlay, 'active': '$active'});
+  }
+
+  /// Shows the [overlay] and hides all the other ones.
+  Future<void> navigateToOverlay(String overlay) async {
+    await call('navigateToOverlay', args: {'overlay': overlay});
+  }
+
+  /// Renders the game through the camera, or the world directly when
+  /// [world] is true or a [rect] in world coordinates is given.
+  Future<Snapshot> getGameSnapshot({
+    required double pixelRatio,
+    bool world = false,
+    WorldRect? rect,
+  }) async {
+    return Snapshot.fromJson(
+      await call(
+        'getGameSnapshot',
+        args: {
+          'pixelRatio': '$pixelRatio',
+          if (world) 'world': 'true',
+          if (rect != null)
+            'rect': '${rect.x},${rect.y},${rect.width},${rect.height}',
+        },
+      ),
+    );
+  }
+
+  /// Renders the component with the given [id].
+  Future<Snapshot> getComponentSnapshot(
+    int id, {
+    required double pixelRatio,
+  }) async {
+    return Snapshot.fromJson(
+      await call(
+        'getComponentSnapshot',
+        args: {'id': '$id', 'pixelRatio': '$pixelRatio'},
+      ),
+    );
+  }
+
+  /// Taps the game at [position], in canvas coordinates.
+  Future<void> tap(Vector2 position) async {
+    await call('tap', args: {'x': '${position.x}', 'y': '${position.y}'});
+  }
+
+  /// Drags across the game from [from] to [to], in canvas coordinates, with
+  /// [steps] updates in between.
+  Future<void> drag(Vector2 from, Vector2 to, {required int steps}) async {
+    await call(
+      'drag',
+      args: {
+        'fromX': '${from.x}',
+        'fromY': '${from.y}',
+        'toX': '${to.x}',
+        'toY': '${to.y}',
+        'steps': '$steps',
+      },
+    );
+  }
+
+  /// Presses, holds down or releases the [key].
+  Future<void> key(String key, {KeyAction action = KeyAction.press}) async {
+    await call('key', args: {'key': key, 'action': action.name});
+  }
 }
 
 /// Converts the http URI that `flutter run` prints for the Dart VM Service
