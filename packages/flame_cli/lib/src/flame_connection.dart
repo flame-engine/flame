@@ -225,10 +225,13 @@ extension FlameServiceExtensions on FlameConnection {
 
   /// Renders the game through the camera, or the world directly when
   /// [world] is true or a [rect] in world coordinates is given.
+  ///
+  /// See [SnapshotOptions] for the other [options].
   Future<Snapshot> getGameSnapshot({
     required double pixelRatio,
     bool world = false,
     WorldRect? rect,
+    SnapshotOptions options = const SnapshotOptions(),
   }) async {
     return Snapshot.fromJson(
       await call(
@@ -238,20 +241,24 @@ extension FlameServiceExtensions on FlameConnection {
           if (world) 'world': 'true',
           if (rect != null)
             'rect': '${rect.x},${rect.y},${rect.width},${rect.height}',
+          ...options.args,
         },
       ),
     );
   }
 
   /// Renders the component with the given [id].
+  ///
+  /// See [SnapshotOptions] for the other [options].
   Future<Snapshot> getComponentSnapshot(
     int id, {
     required double pixelRatio,
+    SnapshotOptions options = const SnapshotOptions(),
   }) async {
     return Snapshot.fromJson(
       await call(
         'getComponentSnapshot',
-        args: {'id': '$id', 'pixelRatio': '$pixelRatio'},
+        args: {'id': '$id', 'pixelRatio': '$pixelRatio', ...options.args},
       ),
     );
   }
