@@ -29,7 +29,7 @@ import 'package:io/io.dart';
 ///
 /// The message of a failure is printed to the standard error, unless the
 /// command was called with `--json`. Then the failure is printed as the
-/// [jsonError] object to the standard output instead, so that the standard
+/// [JsonError] object to the standard output instead, so that the standard
 /// output of a command with `--json` always holds exactly one JSON value.
 class FlameCommandRunner({
   StringSink? out,
@@ -106,7 +106,9 @@ class FlameCommandRunner({
       return await super.run(args) ?? ExitCode.success.code;
     } on UsageException catch (error) {
       if (_isJsonOutput(args)) {
-        _out.writeln(toJsonOutput(jsonError(error.message, ExitCode.usage)));
+        _out.writeln(
+          toJsonOutput(JsonError(error.message, ExitCode.usage).toJson()),
+        );
       } else {
         _err
           ..writeln(error.message)
@@ -116,7 +118,9 @@ class FlameCommandRunner({
       return ExitCode.usage.code;
     } on FlameCliException catch (error) {
       if (_isJsonOutput(args)) {
-        _out.writeln(toJsonOutput(jsonError(error.message, error.exitCode)));
+        _out.writeln(
+          toJsonOutput(JsonError(error.message, error.exitCode).toJson()),
+        );
       } else {
         _err.writeln(error.message);
       }

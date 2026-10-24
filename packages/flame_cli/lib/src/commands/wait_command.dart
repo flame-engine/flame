@@ -8,6 +8,7 @@ import 'package:flame_cli/src/commands/overlay_commands.dart';
 import 'package:flame_cli/src/component_tree.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
 import 'package:flame_cli/src/flame_connection.dart';
+import 'package:flame_cli/src/game_responses.dart';
 import 'package:io/io.dart';
 
 /// The clock that the wait commands measure the timeout with and wait between
@@ -332,20 +333,17 @@ class _WaitComponentCommand(
     return '$quantity with $_filter';
   }
 
-  bool _matches(Map<String, dynamic> node) {
-    final attributes =
-        (node['attributes'] as Map<String, dynamic>?) ?? const {};
-    return (_type?.hasMatch(node['name'] as String) ?? true) &&
-        (_id == null || node['id'] == _id) &&
-        _where.every((condition) => condition.holdsFor(attributes));
+  bool _matches(ComponentNode node) {
+    return (_type?.hasMatch(node.name) ?? true) &&
+        (_id == null || node.id == _id) &&
+        _where.every((condition) => condition.holdsFor(node.attributes));
   }
 
   @override
   Future<_Check> check(FlameConnection connection) async {
-    final response = await connection.call('getComponentTree');
-    final tree = response['component_tree'] as Map<String, dynamic>?;
+    final tree = await connection.getComponentTree();
     final matches = tree == null
-        ? <Map<String, dynamic>>[]
+        ? const <ComponentNode>[]
         : findComponentNodes(tree, _matches);
     final count = matches.length;
     final exact = _exact;
@@ -367,7 +365,7 @@ class _WaitComponentCommand(
       holds: true,
       json: {
         'components': [
-          for (final node in matches) {...node}..remove('children'),
+          for (final node in matches) node.toJson()..remove('children'),
         ],
       },
     );
@@ -413,10 +411,9 @@ class _WaitOverlayCommand(
 
   @override
   Future<_Check> check(FlameConnection connection) async {
-    final response = await connection.call('getOverlays');
-    final overlays = (response['overlays'] as List).cast<String>();
-    final active = ((response['active'] as List?) ?? []).cast<String>();
-    if (!overlays.contains(_overlay)) {
+    final overlays = await connection.getOverlays();
+    final active = overlays.active;
+    if (!overlays.registered.contains(_overlay)) {
       throw FlameCliException(
         'Unknown overlay: $_overlay, use the overlays command to list them.',
         exitCode: ExitCode.data,
@@ -434,7 +431,7 @@ class _WaitOverlayCommand(
     return _Check(
       'The overlay $_overlay is ${_shown ? 'shown' : 'hidden'}.',
       holds: true,
-      json: {'overlays': overlays, 'active': active},
+      json: overlays.toJson(),
     );
   }
 }
@@ -459,8 +456,7 @@ class _WaitPausedCommand(
 
   @override
   Future<_Check> check(FlameConnection connection) async {
-    final response = await connection.call('getPaused');
-    final isPaused = response['paused'] == true;
+    final isPaused = await connection.getPaused();
     if (isPaused != paused) {
       return _Check('it is ${isPaused ? 'paused' : 'running'}', holds: false);
     }
@@ -476,51 +472,56 @@ class _WaitPausedCommand(
 /// is given to `--where`.
 class _AttributeCondition._(
   final String text,
-  final String _attribute,
-  final int? _index,
+  final double? Function(ComponentAttributes attributes) _read,
   final String _operator,
   final double _value,
 ) {
   static final _pattern = RegExp(
-    r'^\s*([a-z]+)(?:\.([xy]))?\s*(<=|>=|==|!=|<|>)\s*(\S+)\s*$',
+    r'^\s*([a-z]+(?:\.[xy])?)\s*(<=|>=|==|!=|<|>)\s*(\S+)\s*$',
   );
-  static const _vectors = {'position', 'size', 'scale'};
-  static const _numbers = {'angle', 'priority'};
+
+  /// The vector attributes, whose values are float32 in the game.
+  static final _vectors =
+      <String, double? Function(ComponentAttributes attributes)>{
+        'position.x': (attributes) => attributes.position?.x,
+        'position.y': (attributes) => attributes.position?.y,
+        'size.x': (attributes) => attributes.size?.x,
+        'size.y': (attributes) => attributes.size?.y,
+        'scale.x': (attributes) => attributes.scale?.x,
+        'scale.y': (attributes) => attributes.scale?.y,
+      };
+
+  static final _numbers =
+      <String, double? Function(ComponentAttributes attributes)>{
+        'angle': (attributes) => attributes.angle,
+        'priority': (attributes) => attributes.priority?.toDouble(),
+      };
 
   static _AttributeCondition? tryParse(String text) {
     final match = _pattern.firstMatch(text);
     if (match == null) {
       return null;
     }
-    final attribute = match[1]!;
-    final axis = match[2];
-    final number = double.tryParse(match[4]!);
-    final value = axis == null || number == null
+    final name = match[1]!;
+    final vector = _vectors[name];
+    final read = vector ?? _numbers[name];
+    final number = double.tryParse(match[3]!);
+    final value = vector == null || number == null
         ? number
         : Float32List.fromList([number]).first;
-    final isValid = axis == null
-        ? _numbers.contains(attribute)
-        : _vectors.contains(attribute);
-    if (!isValid || value == null || !value.isFinite) {
+    if (read == null || value == null || !value.isFinite) {
       return null;
     }
-    final name = axis == null ? attribute : '$attribute.$axis';
     return _AttributeCondition._(
-      '$name ${match[3]} ${match[4]}',
-      attribute,
-      axis == null ? null : (axis == 'x' ? 0 : 1),
-      match[3]!,
+      '$name ${match[2]} ${match[3]}',
+      read,
+      match[2]!,
       value,
     );
   }
 
-  bool holdsFor(Map<String, dynamic> attributes) {
-    final attribute = attributes[_attribute];
-    final actual = switch ((attribute, _index)) {
-      (final List<dynamic> vector, final int index) => vector[index] as num,
-      (final num number, null) => number,
-      _ => null,
-    };
+  bool holdsFor(ComponentAttributes attributes) {
+    final actual = _read(attributes);
     if (actual == null) {
       return false;
     }
