@@ -87,7 +87,8 @@ class _TapCommand(super.out, super.workingDirectory) extends FlameCommand {
       'tap',
       args: {'x': '${position.x}', 'y': '${position.y}'},
     );
-    out.writeln('Tapped ${_target.describe(position)}.');
+    final at = _target.component == null ? 'at ' : '';
+    out.writeln('Tapped $at${_target.describe(position)}.');
     return ExitCode.success.code;
   }
 }

@@ -323,6 +323,104 @@ void main() {
 
       expectOffset(positionOf(game, component), const Offset(105, 5));
     });
+    testWithFlameGame(
+      'taps a component through a fixed resolution viewport and a moved, '
+      'zoomed and rotated camera',
+      (game) async {
+        game.camera = CameraComponent.withFixedResolution(
+          world: game.world,
+          width: 300,
+          height: 400,
+        );
+        await game.ready();
+        game.camera.viewfinder
+          ..position = Vector2(20, -10)
+          ..zoom = 1.7
+          ..angle = 0.7;
+        final tapper = _Tapper();
+        await game.world.ensureAdd(tapper);
+
+        final position = positionOf(
+          game,
+          tapper,
+          anchor: const Anchor(0.25, 0.75),
+        );
+        expect(InputConnector.tap(game, position!), isNull);
+        expect(tapper.taps.single.x, closeTo(5, 1e-4));
+        expect(tapper.taps.single.y, closeTo(15, 1e-4));
+      },
+    );
+
+    testWithFlameGame('taps a component through a moved viewport', (
+      game,
+    ) async {
+      game.camera = CameraComponent(
+        world: game.world,
+        viewport: FixedSizeViewport(300, 200)
+          ..position = Vector2(500, 400)
+          ..anchor = Anchor.center,
+      );
+      await game.ready();
+      game.camera.viewfinder.angle = 0.7;
+      final tapper = _Tapper();
+      await game.world.ensureAdd(tapper);
+
+      expect(InputConnector.tap(game, positionOf(game, tapper)!), isNull);
+      expect(tapper.taps.single.x, closeTo(10, 1e-4));
+      expect(tapper.taps.single.y, closeTo(10, 1e-4));
+    });
+
+    testWithFlameGame('taps a component through a camera in a world', (
+      game,
+    ) async {
+      final world = World();
+      final camera = CameraComponent(
+        world: world,
+        viewport: FixedSizeViewport(300, 200)..position = Vector2(10, 20),
+      );
+      await game.ensureAdd(world);
+      await game.world.ensureAdd(camera);
+      camera.viewfinder.zoom = 1.5;
+      game.camera.viewfinder.angle = 0.1;
+      final tapper = _Tapper();
+      await world.ensureAdd(tapper);
+
+      expect(InputConnector.tap(game, positionOf(game, tapper)!), isNull);
+      expect(tapper.taps.single.x, closeTo(10, 1e-4));
+      expect(tapper.taps.single.y, closeTo(10, 1e-4));
+    });
+
+    testWithFlameGame('finds a component on the backdrop', (game) async {
+      game.camera = CameraComponent.withFixedResolution(
+        world: game.world,
+        width: 300,
+        height: 400,
+      );
+      await game.ready();
+      final component = PositionComponent(
+        position: Vector2(10, 10),
+        size: Vector2(20, 20),
+      );
+      await game.camera.backdrop.ensureAdd(component);
+
+      expectOffset(positionOf(game, component), const Offset(205, 30));
+    });
+
+    testWithFlameGame('reports components on the camera', (game) async {
+      final component = PositionComponent(size: Vector2(10, 10));
+      await game.camera.ensureAdd(component);
+
+      expect(errorOf(game, component), contains('not visible'));
+    });
+
+    testWithFlameGame('reports worlds only shown from within', (game) async {
+      final world = World();
+      final component = PositionComponent(size: Vector2(10, 10));
+      await game.ensureAdd(world);
+      await world.ensureAddAll([CameraComponent(world: world), component]);
+
+      expect(errorOf(game, component), contains('no camera'));
+    });
   });
 
   group('InputConnector.parseAnchor', () {

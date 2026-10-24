@@ -196,7 +196,7 @@ class InputConnector() extends DevToolsConnector {
   /// component, and for a component in a [World] through the viewfinder and
   /// the viewport of the camera that shows the world, which is
   /// [FlameGame.camera] when it shows the world and otherwise the first other
-  /// camera that does.
+  /// camera that does, not counting the cameras within the world itself.
   ///
   /// Returns an error message instead of a position if the component is not a
   /// [PositionComponent], or if it is not visible on the canvas.
@@ -218,21 +218,33 @@ class InputConnector() extends DevToolsConnector {
       anchor.y * component.height,
     );
     Component current = component;
+    final visitedWorlds = <World>{};
     while (!identical(current, game)) {
       var parent = current.parent;
       if (current is World) {
         final camera = _cameraOf(game, current);
-        if (camera == null) {
+        if (camera == null || !visitedWorlds.add(current)) {
           return _failure('$description is in a world that no camera shows.');
         }
         point = _throughCamera(camera, point!);
         parent = camera.parent;
       } else if (current is Viewfinder && parent is CameraComponent) {
-        point = _throughCamera(parent, point!);
+        point = (parent.world?.isMounted ?? false)
+            ? _throughCamera(parent, point!)
+            : null;
       } else if (current is Route && !current.isRendered) {
         point = null;
-      } else if (current is CoordinateTransform) {
-        point = (current as CoordinateTransform).localToParent(point!);
+      } else {
+        if (current is CoordinateTransform) {
+          point = (current as CoordinateTransform).localToParent(point!);
+        }
+        if (parent is CameraComponent &&
+            !identical(current, parent.viewport) &&
+            point != null) {
+          point = identical(current, parent.backdrop)
+              ? _throughViewport(parent, point)
+              : null;
+        }
       }
       if (point == null) {
         return _failure('$description is not visible on the canvas.');
@@ -278,27 +290,41 @@ class InputConnector() extends DevToolsConnector {
     return Anchor(parts[0]!, parts[1]!);
   }
 
+  /// Finds the camera that shows [world], ignoring the cameras within the
+  /// world itself, since they can only show it when another camera does.
   static CameraComponent? _cameraOf(FlameGame game, World world) {
-    if (identical(game.camera.world, world)) {
+    bool showsWorld(CameraComponent camera) =>
+        identical(camera.world, world) &&
+        camera.isMounted &&
+        !camera.ancestors().contains(world);
+
+    if (showsWorld(game.camera)) {
       return game.camera;
     }
-    for (final camera in game.descendants().whereType<CameraComponent>()) {
-      if (identical(camera.world, world)) {
-        return camera;
-      }
-    }
-    return null;
+    return game
+        .descendants()
+        .whereType<CameraComponent>()
+        .where(
+          showsWorld,
+        )
+        .firstOrNull;
   }
 
   /// Moves [point] from the coordinates of the world of [camera] to the
   /// coordinates of the parent of [camera], or to null if the viewport does
   /// not show it.
   static Vector2? _throughCamera(CameraComponent camera, Vector2 point) {
-    final viewportPoint = camera.viewfinder.localToParent(point);
-    if (!camera.viewport.containsLocalPoint(viewportPoint)) {
+    return _throughViewport(camera, camera.viewfinder.localToParent(point));
+  }
+
+  /// Moves [point] from the coordinates that the viewport of [camera] renders
+  /// the world and the backdrop in to the coordinates of the parent of
+  /// [camera], or to null if the viewport clips it.
+  static Vector2? _throughViewport(CameraComponent camera, Vector2 point) {
+    if (!camera.viewport.containsLocalPoint(point)) {
       return null;
     }
-    return camera.viewport.localToParent(viewportPoint);
+    return camera.viewport.localToParent(point);
   }
 
   static ({Offset? position, String? error}) _failure(String error) {
