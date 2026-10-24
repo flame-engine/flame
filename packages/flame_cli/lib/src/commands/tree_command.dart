@@ -23,11 +23,6 @@ class TreeCommand(super.out, super.workingDirectory) extends FlameCommand {
         'depth',
         abbr: 'd',
         help: 'The number of levels below the game to show.',
-      )
-      ..addFlag(
-        'json',
-        negatable: false,
-        help: 'Print the tree as JSON instead of text.',
       );
   }
 
@@ -80,11 +75,11 @@ class TreeCommand(super.out, super.workingDirectory) extends FlameCommand {
       );
     }
     if (tree == null) {
-      out.writeln(argResults!.flag('json') ? 'null' : 'No components match.');
+      writeResult(null, 'No components match.');
       return ExitCode.success.code;
     }
 
-    if (argResults!.flag('json')) {
+    if (jsonOutput) {
       out.writeln(toJsonOutput(tree));
     } else {
       out.write(formatComponentTree(tree, maxDepth: _maxDepth));

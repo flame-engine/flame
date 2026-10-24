@@ -6,6 +6,7 @@ import 'package:flame_cli/src/commands/flame_command.dart';
 import 'package:flame_cli/src/commands/run_command.dart';
 import 'package:flame_cli/src/devtools_options.dart';
 import 'package:flame_cli/src/flame_connection.dart';
+import 'package:flame_cli/src/json_output.dart';
 
 /// Opens the Flutter DevTools for the running game with `dart devtools`,
 /// where the Flame tab holds the Flame DevTools extension.
@@ -15,6 +16,10 @@ import 'package:flame_cli/src/flame_connection.dart';
 /// is checked to be reachable before the DevTools are started. The Flame
 /// extension is enabled in the `devtools_options.yaml` of the project, so
 /// that the DevTools show the Flame tab without asking.
+///
+/// With `--json`, `dart devtools` is started with `--machine`, so that its
+/// output is one JSON object per line, and the other messages go to the
+/// standard error.
 class DevToolsCommand(
   final Directory workingDirectory, {
   ProcessStarter? startProcess,
@@ -43,6 +48,7 @@ class DevToolsCommand(
             'the URL of the DevTools is printed, to open it in a browser of '
             'your choice.',
       );
+    addJsonFlag(argParser);
   }
 
   final ProcessStarter _startProcess = startProcess ?? Process.start;
@@ -70,9 +76,11 @@ class DevToolsCommand(
     final uri = connection.uri;
     await connection.dispose();
 
+    final jsonOutput = argResults!.flag(jsonFlag);
+    final launchBrowser = argResults!.flag('launch-browser');
     final optionsFile = devToolsOptionsFile(workingDirectory);
     if (enableFlameExtension(optionsFile)) {
-      (out ?? stdout).writeln(
+      (jsonOutput ? err ?? stderr : out ?? stdout).writeln(
         'Enabled the Flame DevTools extension in ${optionsFile.path}.',
       );
     }
@@ -81,7 +89,11 @@ class DevToolsCommand(
       _startProcess,
       [
         'devtools',
-        if (!argResults!.flag('launch-browser')) '--no-launch-browser',
+        if (jsonOutput) ...[
+          '--machine',
+          if (launchBrowser) '--launch-browser',
+        ],
+        if (!launchBrowser) '--no-launch-browser',
         uri,
       ],
       workingDirectory: workingDirectory,

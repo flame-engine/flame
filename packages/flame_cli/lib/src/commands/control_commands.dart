@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
+import 'package:flame_cli/src/json_output.dart';
 import 'package:flame_cli/src/project_files.dart';
 import 'package:flame_cli/src/run_controller.dart';
 import 'package:io/io.dart';
@@ -34,21 +36,28 @@ class RestartCommand(super.out, super.workingDirectory)
       'Hot restart the game, which has to have been started with `flame run`.';
 }
 
+/// Stops the game through `flame run`.
+class StopCommand(super.out, super.workingDirectory)
+    extends _RunRequestCommand {
+  this : super(request: RunRequest.stop);
+
+  @override
+  String get name => 'stop';
+
+  @override
+  String get description =>
+      'Stop the game, which has to have been started with `flame run`, and '
+      'wait until it has exited.';
+}
+
 abstract class _RunRequestCommand(
-  final StringSink out,
+  @override final StringSink out,
   final Directory workingDirectory, {
   required final RunRequest request,
-}) extends Command<int> {
+}) extends Command<int> with JsonOutput {
   this {
-    argParser.addOption(
-      'port',
-      abbr: 'p',
-      help:
-          'The control port of the `flame run` to send the request to, which '
-          'it prints when it starts. Only needed when several games were '
-          'started from the same project and the request is for one that '
-          'was not started last.',
-    );
+    addPortOption(argParser);
+    addJsonFlag(argParser);
   }
 
   @override
@@ -56,11 +65,7 @@ abstract class _RunRequestCommand(
 
   @override
   Future<int> run() async {
-    final portOption = argResults!.option('port');
-    final port = portOption == null ? null : int.tryParse(portOption);
-    if (portOption != null && (port == null || port <= 0)) {
-      throw UsageException('--port has to be a positive integer.', usage);
-    }
+    final port = parsePortOption(argResults!, usage);
     final response = await sendRunRequest(
       workingDirectory,
       request,
@@ -68,6 +73,16 @@ abstract class _RunRequestCommand(
     );
     final ok = response['ok'] == true;
     final message = response['message'];
+    if (jsonOutput) {
+      out.writeln(
+        toJsonOutput({
+          'ok': ok,
+          'message': message,
+          'output': (response['output'] as List?) ?? const [],
+        }),
+      );
+      return (ok ? ExitCode.success : ExitCode.software).code;
+    }
     final output = ok ? const [] : (response['output'] as List?) ?? const [];
     for (final line in output) {
       out.writeln(line);
@@ -79,6 +94,50 @@ abstract class _RunRequestCommand(
   }
 }
 
+/// Adds the `--port` option, which chooses the `flame run` that a request is
+/// sent to.
+void addPortOption(ArgParser argParser) {
+  argParser.addOption(
+    'port',
+    abbr: 'p',
+    help:
+        'The control port of the `flame run` to send the request to, which '
+        'it prints when it starts. Only needed when several games were '
+        'started from the same project and the request is for one that '
+        'was not started last.',
+  );
+}
+
+/// Parses the `--port` option that [addPortOption] added, and throws a
+/// [UsageException] with [usage] when it is not a port number.
+int? parsePortOption(ArgResults argResults, String usage) {
+  final portOption = argResults.option('port');
+  final port = portOption == null ? null : int.tryParse(portOption);
+  if (portOption != null && (port == null || port <= 0 || port > 65535)) {
+    throw UsageException(
+      '--port has to be an integer between 1 and 65535.',
+      usage,
+    );
+  }
+  return port;
+}
+
+/// Finds the control port of the `flame run` of the project that
+/// [workingDirectory] is in.
+///
+/// Returns null if no game that was started with `flame run` is found.
+int? findControlPort(Directory workingDirectory) {
+  final portFile = findProjectFile(workingDirectory, controlPortFileName);
+  if (portFile == null) {
+    return null;
+  }
+  try {
+    return int.tryParse(portFile.readAsStringSync().trim());
+  } on FileSystemException {
+    return null;
+  }
+}
+
 /// Sends [request] to the `flame run` of the project that [workingDirectory]
 /// is in, or to the one listening on [port] if given, and returns its
 /// response.
@@ -87,13 +146,7 @@ Future<Map<String, dynamic>> sendRunRequest(
   RunRequest request, {
   int? port,
 }) async {
-  var targetPort = port;
-  if (targetPort == null) {
-    final portFile = findProjectFile(workingDirectory, controlPortFileName);
-    targetPort = portFile == null
-        ? null
-        : int.tryParse(portFile.readAsStringSync().trim());
-  }
+  final targetPort = port ?? findControlPort(workingDirectory);
   if (targetPort == null) {
     throw const FlameCliException(
       'No game that was started with `flame run` was found, so there is '

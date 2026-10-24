@@ -56,7 +56,10 @@ class DebugCommand(super.out, super.workingDirectory) extends FlameCommand {
         args: {'id': ?componentId},
       );
       final enabled = response['debug_mode'] == true;
-      out.writeln('Debug mode is ${enabled ? 'on' : 'off'} for $target.');
+      writeResult(
+        {'debugMode': enabled, 'component': componentId},
+        'Debug mode is ${enabled ? 'on' : 'off'} for $target.',
+      );
       return ExitCode.success.code;
     }
 
@@ -67,7 +70,10 @@ class DebugCommand(super.out, super.workingDirectory) extends FlameCommand {
         'id': ?componentId,
       },
     );
-    out.writeln('Turned debug mode ${enable ? 'on' : 'off'} for $target.');
+    writeResult(
+      {'debugMode': enable, 'component': componentId},
+      'Turned debug mode ${enable ? 'on' : 'off'} for $target.',
+    );
     return ExitCode.success.code;
   }
 }

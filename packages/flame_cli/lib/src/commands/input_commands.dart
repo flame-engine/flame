@@ -88,7 +88,14 @@ class _TapCommand(super.out, super.workingDirectory) extends FlameCommand {
       args: {'x': '${position.x}', 'y': '${position.y}'},
     );
     final at = _target.component == null ? 'at ' : '';
-    out.writeln('Tapped $at${_target.describe(position)}.');
+    writeResult(
+      {
+        'input': 'tap',
+        'position': _positionJson(position),
+        'component': ?_target.component,
+      },
+      'Tapped $at${_target.describe(position)}.',
+    );
     return ExitCode.success.code;
   }
 }
@@ -196,7 +203,15 @@ class _DragCommand(super.out, super.workingDirectory) extends FlameCommand {
         'steps': '$_steps',
       },
     );
-    out.writeln(
+    writeResult(
+      {
+        'input': 'drag',
+        'from': _positionJson(from),
+        'to': _positionJson(to),
+        'fromComponent': ?_from.component,
+        'toComponent': ?_to.component,
+        'steps': _steps,
+      },
       'Dragged from ${_from.describe(from)} to ${_to.describe(to)}.',
     );
     return ExitCode.success.code;
@@ -268,11 +283,14 @@ class _KeyCommand(super.out, super.workingDirectory) extends FlameCommand {
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
     await connection.call('key', args: {'key': _key, 'action': _action});
-    out.writeln(switch (_action) {
-      'down' => 'Pressed $_key down.',
-      'up' => 'Released $_key.',
-      _ => 'Pressed $_key.',
-    });
+    writeResult(
+      {'input': 'key', 'key': _key, 'action': _action},
+      switch (_action) {
+        'down' => 'Pressed $_key down.',
+        'up' => 'Released $_key.',
+        _ => 'Pressed $_key.',
+      },
+    );
     return ExitCode.success.code;
   }
 }
@@ -371,6 +389,10 @@ class InputTarget._({
 String formatCoordinate(double value) {
   final fixed = value.toStringAsFixed(2);
   return fixed.replaceFirst(RegExp(r'\.?0+$'), '');
+}
+
+Map<String, double> _positionJson(({double x, double y}) position) {
+  return {'x': position.x, 'y': position.y};
 }
 
 /// Parses a position given as `x,y`.
