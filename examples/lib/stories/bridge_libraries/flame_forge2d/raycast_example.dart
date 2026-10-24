@@ -1,27 +1,43 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
-import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:material_ui/material_ui.dart' show Canvas, Colors, Paint;
+import 'package:material_ui/material_ui.dart' show Colors, Paint;
 
 class RaycastExample() extends Forge2DExampleGame with MouseMoveCallbacks {
   static const String description = '''
     This example shows how ray casts can be used to find the nearest and
     farthest shapes.
-    The red ray finds the nearest shape and the blue ray the farthest shape.
+    The red ray finds the nearest shape, the blue ray the farthest shape and
+    the green ray marks every shape that it passes through.
+    All rays are `RayCastComponent`s, which cast and render their rays on
+    every update.
   ''';
 
   final random = Random();
 
-  final redPoints = <Vector2>[];
-  final bluePoints = <Vector2>[];
-
-  Box? nearestBox;
-  Box? farthestBox;
+  final redRay = RayCastComponent(
+    paint: Paint()
+      ..color = Colors.red
+      ..strokeWidth = 0.5,
+    hitRadius: 1,
+  );
+  final blueRay = RayCastComponent(
+    paint: Paint()
+      ..color = Colors.blue
+      ..strokeWidth = 0.5,
+    mode: RayCastMode.farthest,
+    hitRadius: 1,
+  );
+  final greenRay = RayCastComponent(
+    paint: Paint()
+      ..color = Colors.green
+      ..strokeWidth = 0.5,
+    mode: RayCastMode.all,
+    hitRadius: 1,
+  );
 
   this : super(gravity: Vector2.zero());
 
@@ -37,22 +53,7 @@ class RaycastExample() extends Forge2DExampleGame with MouseMoveCallbacks {
         world.add(Box(Vector2(i * 10, j * 20 - 20)));
       }
     }
-    world.add(
-      LineComponent(
-        redPoints,
-        Paint()
-          ..color = Colors.red
-          ..strokeWidth = 1,
-      ),
-    );
-    world.add(
-      LineComponent(
-        bluePoints,
-        Paint()
-          ..color = Colors.blue
-          ..strokeWidth = 1,
-      ),
-    );
+    world.addAll([redRay, blueRay, greenRay]);
   }
 
   @override
@@ -65,48 +66,25 @@ class RaycastExample() extends Forge2DExampleGame with MouseMoveCallbacks {
     );
 
     final worldPosition = screenToWorld(event.canvasPosition);
-    final redRayTarget = worldPosition + Vector2(0, 2);
-    fireRedRay(rayStart, redRayTarget);
-
-    final blueRayTarget = worldPosition - Vector2(0, 2);
-    fireBlueRay(rayStart, blueRayTarget);
+    aimRay(redRay, rayStart, worldPosition + Vector2(0, 2));
+    aimRay(blueRay, rayStart, worldPosition - Vector2(0, 2));
+    aimRay(greenRay, rayStart, worldPosition);
 
     super.onMouseMove(event);
   }
 
-  void fireBlueRay(Vector2 rayStart, Vector2 rayTarget) {
-    bluePoints.clear();
-    bluePoints.add(rayStart);
-
-    final hits = world.castRayAll(rayStart, rayTarget - rayStart);
-    if (hits.isNotEmpty) {
-      // The hits are sorted from nearest to farthest.
-      final farthestHit = hits.last;
-      bluePoints.add(farthestHit.point.clone());
-      farthestBox = farthestHit.shape.userData as Box?;
-    } else {
-      bluePoints.add(rayTarget);
-      farthestBox = null;
-    }
-  }
-
-  void fireRedRay(Vector2 rayStart, Vector2 rayTarget) {
-    redPoints.clear();
-    redPoints.add(rayStart);
-
-    final nearestHit = world.castRayClosest(rayStart, rayTarget - rayStart);
-    if (nearestHit != null) {
-      redPoints.add(nearestHit.point.clone());
-      nearestBox = nearestHit.shape.userData as Box?;
-    } else {
-      redPoints.add(rayTarget);
-      nearestBox = null;
-    }
+  void aimRay(RayCastComponent ray, Vector2 rayStart, Vector2 rayTarget) {
+    ray.origin.setFrom(rayStart);
+    ray.translation
+      ..setFrom(rayTarget)
+      ..sub(rayStart);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
+    final nearestBox = redRay.hit?.shape.userData as Box?;
+    final farthestBox = blueRay.hit?.shape.userData as Box?;
     world.children.whereType<Box>().forEach((component) {
       if ((component == nearestBox) && (component == farthestBox)) {
         component.paint.color = Colors.yellow;
@@ -118,32 +96,6 @@ class RaycastExample() extends Forge2DExampleGame with MouseMoveCallbacks {
         component.paint.color = Colors.white;
       }
     });
-  }
-}
-
-class LineComponent(final List<Vector2> points, final Paint paint)
-    extends Component {
-  final Path path = Path();
-
-  @override
-  void update(double dt) {
-    path
-      ..reset()
-      ..addPolygon(
-        points.map((p) => p.toOffset()).toList(growable: false),
-        false,
-      );
-  }
-
-  @override
-  void render(Canvas canvas) {
-    for (var i = 0; i < points.length - 1; ++i) {
-      canvas.drawLine(
-        points[i].toOffset(),
-        points[i + 1].toOffset(),
-        paint,
-      );
-    }
   }
 }
 

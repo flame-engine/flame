@@ -30,10 +30,14 @@ class GroupLayer({
   }
 
   @override
-  void updateView(Vector2 viewCenter, Rect visibleRect) {
-    super.updateView(viewCenter, visibleRect);
+  void updateView(
+    Vector2 viewCenter,
+    Rect visibleRect, {
+    bool canCull = true,
+  }) {
+    super.updateView(viewCenter, visibleRect, canCull: canCull);
     for (final child in layers) {
-      child.updateView(viewCenter, this.visibleRect);
+      child.updateView(viewCenter, this.visibleRect, canCull: canCull);
     }
   }
 }
