@@ -1,69 +1,96 @@
 import 'dart:math';
 
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/geometry.dart';
 import 'package:flame_studio/flame_studio.dart';
 import 'package:flutter/widgets.dart';
 
 void main() {
   runFlameStudio(
     Container(
-      color: const Color(0xff6385b9),
-      child: GameWidget(game: MyGame()),
+      color: const Color(0xFF1F2933),
+      child: GameWidget(game: ExampleGame()),
     ),
   );
 }
 
-class MyGame() extends FlameGame {
+/// A small scene to try out the studio with: a player with nested
+/// components, a crate, a text label and a couple of moving coins.
+class ExampleGame() extends FlameGame {
   @override
   Color backgroundColor() => const Color(0x00000000);
 
   @override
   void onLoad() {
-    final size = findGame()!.canvasSize;
-    final random = Random();
-    for (var i = 0; i < 10; i++) {
-      final speed = random.nextDouble() * 500;
-      final angle = random.nextDouble() * 12;
-      add(
-        Circle(
-          radius: random.nextDouble() * 10 + 10,
-          position: Vector2(
-            (0.8 * random.nextDouble() + 0.1) * size.x,
-            (0.8 * random.nextDouble() + 0.1) * size.y,
-          ),
-          velocity: Vector2(speed * sin(angle), speed * cos(angle)),
-        ),
-      );
-    }
+    addAll([
+      Player(position: Vector2(200, 300)),
+      Crate(position: Vector2(470, 220)),
+      Coin(restPosition: Vector2(330, 480), phase: 0),
+      Coin(restPosition: Vector2(330, 540), phase: pi),
+      Label(),
+    ]);
   }
 }
 
-class Circle({
-  required final Vector2 velocity,
-  required super.position,
-  super.radius = 15.0,
-}) extends CircleComponent {
-  final Vector2 gameSize = Vector2.zero();
+class Player({required super.position}) extends RectangleComponent {
+  this
+    : super(
+        size: Vector2.all(72),
+        anchor: Anchor.center,
+        paint: Paint()..color = const Color(0xFF26A69A),
+        children: [
+          Eye(position: Vector2(22, 26)),
+          Eye(position: Vector2(50, 26)),
+        ],
+      );
+}
 
-  @override
-  void onGameResize(Vector2 size) {
-    super.onGameResize(size);
-    gameSize.setFrom(size);
-  }
+class Eye({required super.position}) extends CircleComponent {
+  this
+    : super(
+        radius: 6,
+        anchor: Anchor.center,
+        paint: Paint()..color = const Color(0xFFFFFFFF),
+      );
+}
+
+class Crate({required super.position}) extends RectangleComponent {
+  this
+    : super(
+        size: Vector2.all(56),
+        anchor: Anchor.center,
+        paint: Paint()..color = const Color(0xFF8D6E63),
+      );
+}
+
+/// A coin that moves from side to side around [restPosition].
+class Coin({
+  required final Vector2 restPosition,
+  required final double phase,
+}) extends CircleComponent {
+  this
+    : super(
+        radius: 12,
+        anchor: Anchor.center,
+        position: restPosition.clone(),
+        paint: Paint()..color = const Color(0xFFFFD54F),
+      );
+
+  double _time = 0;
 
   @override
   void update(double dt) {
-    var newX = x + velocity.x * dt;
-    var newY = y + velocity.y * dt;
-    if (newX < 0 || newX > gameSize.x - 2 * radius) {
-      velocity.x = -velocity.x;
-      newX = newX < 0 ? 0 : gameSize.x - 2 * radius;
-    }
-    if (newY < 0 || newY > gameSize.y - 2 * radius) {
-      velocity.y = -velocity.y;
-      newY = newY < 0 ? 0 : gameSize.y - 2 * radius;
-    }
-    position.setValues(newX, newY);
+    super.update(dt);
+    _time += dt;
+    position.x = restPosition.x + 160 * sin(_time * 1.5 + phase);
   }
+}
+
+class Label() extends TextComponent {
+  this
+    : super(
+        text: 'Flame Studio',
+        position: Vector2(332, 40),
+        anchor: Anchor.topCenter,
+      );
 }

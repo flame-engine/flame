@@ -15,6 +15,7 @@ class const StartButton({super.key}) extends ConsumerWidget {
         ..lineTo(6, 0)
         ..close(),
       disabled: !gameState.paused,
+      tooltip: 'Resume the game',
       onClick: () {
         ref.read(gameControllerProvider.notifier).resumeGame();
       },

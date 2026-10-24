@@ -1,7 +1,9 @@
 import 'package:flame_studio/src/core/theme.dart';
+import 'package:flame_studio/src/core/viewport_tool.dart';
 import 'package:flame_studio/src/widgets/toolbar/next_frame_button.dart';
 import 'package:flame_studio/src/widgets/toolbar/pause_button.dart';
 import 'package:flame_studio/src/widgets/toolbar/start_button.dart';
+import 'package:flame_studio/src/widgets/toolbar/viewport_tool_button.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -41,8 +43,23 @@ class const FlameStudioToolbar({super.key}) extends ConsumerWidget {
         children: [
           Padding(
             padding: EdgeInsets.fromLTRB(gap * 2, gap, gap * 10, gap * 2),
-            child: Image.asset('logo_flame.png', fit: BoxFit.scaleDown),
+            child: Image.asset(
+              'assets/logo_flame.png',
+              package: 'flame_studio',
+              fit: BoxFit.scaleDown,
+              // When flame_studio is itself the app (as in its example), its
+              // assets are not prefixed with the package name.
+              errorBuilder: (_, _, _) => Image.asset(
+                'assets/logo_flame.png',
+                fit: BoxFit.scaleDown,
+              ),
+            ),
           ),
+          for (final tool in ViewportTool.values)
+            Padding(
+              padding: EdgeInsets.all(gap),
+              child: ViewportToolButton(tool),
+            ),
           Expanded(child: Container()),
           for (final button in middleButtons)
             Padding(padding: EdgeInsets.all(gap), child: button),
