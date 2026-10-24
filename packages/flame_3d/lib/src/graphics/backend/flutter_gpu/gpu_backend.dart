@@ -103,6 +103,7 @@ base class GpuBackend({gpu.GpuContext? gpuContext}) extends base.GpuBackend {
     required int width,
     required int height,
     required Color clearValue,
+    int msaaSampleCount = 1,
   }) {
     final colorTexture = _FlutterGpuTexture(
       _context.createTexture(
@@ -112,17 +113,43 @@ base class GpuBackend({gpu.GpuContext? gpuContext}) extends base.GpuBackend {
         format: gpu.PixelFormat.r8g8b8a8UNormInt,
       ),
     );
+
+    // Silently ignore the request for MSAA if the device does not support it.
+    var effectiveMsaaSampleCount = msaaSampleCount;
+    if (msaaSampleCount > 1 && !_context.doesSupportOffscreenMSAA) {
+      effectiveMsaaSampleCount = 1;
+    }
+
+    final multisampleColorTexture = effectiveMsaaSampleCount > 1
+        ? _context.createTexture(
+            gpu.StorageMode.deviceTransient,
+            width,
+            height,
+            format: gpu.PixelFormat.r8g8b8a8UNormInt,
+            sampleCount: msaaSampleCount,
+            enableShaderReadUsage: false,
+          )
+        : null;
+
     final depthTexture = _context.createTexture(
       gpu.StorageMode.deviceTransient,
       width,
       height,
       format: _context.defaultDepthStencilFormat,
+      sampleCount: effectiveMsaaSampleCount,
+      enableShaderReadUsage: effectiveMsaaSampleCount == 1,
     );
     return _FlutterGpuRenderTarget(
       colorTexture,
       gpu.RenderTarget.singleColor(
         gpu.ColorAttachment(
-          texture: colorTexture.raw,
+          texture: multisampleColorTexture ?? colorTexture.raw,
+          resolveTexture: effectiveMsaaSampleCount > 1
+              ? colorTexture.raw
+              : null,
+          storeAction: effectiveMsaaSampleCount > 1
+              ? gpu.StoreAction.multisampleResolve
+              : gpu.StoreAction.store,
           clearValue: Vector4Utils.fromColor(clearValue),
         ),
         depthStencilAttachment: gpu.DepthStencilAttachment(

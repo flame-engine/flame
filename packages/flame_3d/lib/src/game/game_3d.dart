@@ -17,4 +17,16 @@ mixin Game3D on Game {
     super.render(canvas);
     device.end();
   }
+
+  /// Gets the multisample anti-aliasing configuration.
+  ///
+  /// Either one sample per pixel (no msaa) or four samples per pixel are
+  /// supported.
+  ///
+  /// A subset of OpenGLES-only devices do not support this functionality and
+  /// will silently fall back to [Msaa.off].
+  ///
+  /// **Four sample MSAA is currently only supported in the mobile and desktop
+  /// backends, it is silently ignored for the web.**
+  Msaa msaa() => Msaa.off;
 }

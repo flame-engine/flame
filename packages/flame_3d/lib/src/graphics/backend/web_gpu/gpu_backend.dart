@@ -167,6 +167,7 @@ base class GpuBackend._(
     required int width,
     required int height,
     required Color clearValue,
+    int msaaSampleCount = 1,
   }) {
     final canvas = OffscreenCanvas(width, height);
     final context = canvas.contextGPU()
