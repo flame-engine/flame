@@ -100,5 +100,12 @@ flame input key space
 flame diff before.png after.png --output diff.png
 ```
 
+Pass `--json` to any command except `run` to get the result, or the error when it fails, as JSON
+on the standard output, for use in scripts and by AI coding agents:
+
+```shell
+flame snapshot --json
+```
+
 Run `flame --help` for all the commands and options, and see the
 [documentation](https://docs.flame-engine.org/latest/flame/other/cli.html) for more information.

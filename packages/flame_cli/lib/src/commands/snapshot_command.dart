@@ -6,6 +6,7 @@ import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/commands/flame_command.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
 import 'package:flame_cli/src/flame_connection.dart';
+import 'package:image/image.dart' as img;
 import 'package:io/io.dart';
 import 'package:path/path.dart' as p;
 
@@ -127,8 +128,9 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
     final file = File(
       p.join(workingDirectory.path, argResults!.option('output')),
     );
+    final bytes = base64Decode(snapshot);
     try {
-      await file.writeAsBytes(base64Decode(snapshot));
+      await file.writeAsBytes(bytes);
     } on FileSystemException catch (error, stackTrace) {
       Error.throwWithStackTrace(
         FlameCliException(
@@ -139,7 +141,15 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
         stackTrace,
       );
     }
-    out.writeln(file.absolute.path);
+    final path = file.absolute.path;
+    final info = img.PngDecoder().startDecode(bytes);
+    writeResult({
+      'path': path,
+      'width': info?.width,
+      'height': info?.height,
+      'pixelRatio': _pixelRatio,
+      'bytes': bytes.length,
+    }, path);
     return ExitCode.success.code;
   }
 }

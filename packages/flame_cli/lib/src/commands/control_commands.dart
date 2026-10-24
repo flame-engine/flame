@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
+import 'package:flame_cli/src/json_output.dart';
 import 'package:flame_cli/src/project_files.dart';
 import 'package:flame_cli/src/run_controller.dart';
 import 'package:io/io.dart';
@@ -35,10 +36,10 @@ class RestartCommand(super.out, super.workingDirectory)
 }
 
 abstract class _RunRequestCommand(
-  final StringSink out,
+  @override final StringSink out,
   final Directory workingDirectory, {
   required final RunRequest request,
-}) extends Command<int> {
+}) extends Command<int> with JsonOutput {
   this {
     argParser.addOption(
       'port',
@@ -49,6 +50,7 @@ abstract class _RunRequestCommand(
           'started from the same project and the request is for one that '
           'was not started last.',
     );
+    addJsonFlag(argParser);
   }
 
   @override
@@ -68,6 +70,16 @@ abstract class _RunRequestCommand(
     );
     final ok = response['ok'] == true;
     final message = response['message'];
+    if (jsonOutput) {
+      out.writeln(
+        toJsonOutput({
+          'ok': ok,
+          'message': message,
+          'output': (response['output'] as List?) ?? const [],
+        }),
+      );
+      return (ok ? ExitCode.success : ExitCode.software).code;
+    }
     final output = ok ? const [] : (response['output'] as List?) ?? const [];
     for (final line in output) {
       out.writeln(line);

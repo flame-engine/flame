@@ -4,12 +4,15 @@ import 'dart:io';
 import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
+import 'package:flame_cli/src/json_output.dart';
 import 'package:flame_cli/src/project_files.dart';
 import 'package:io/io.dart';
 
 /// Prints the output of the `flutter run` that `flame run` started.
-class LogsCommand(final StringSink out, final Directory workingDirectory)
-    extends Command<int> {
+class LogsCommand(
+  @override final StringSink out,
+  final Directory workingDirectory,
+) extends Command<int> with JsonOutput {
   this {
     argParser
       ..addOption(
@@ -26,6 +29,7 @@ class LogsCommand(final StringSink out, final Directory workingDirectory)
             'Keep printing new output until the game is stopped or Ctrl+C is '
             'pressed.',
       );
+    addJsonFlag(argParser);
   }
 
   @override
@@ -45,6 +49,10 @@ class LogsCommand(final StringSink out, final Directory workingDirectory)
     if (lines == null || lines < 0) {
       throw UsageException('--lines has to be a non-negative integer.', usage);
     }
+    final follow = argResults!.flag('follow');
+    if (follow && jsonOutput) {
+      throw UsageException('--follow cannot be combined with --json.', usage);
+    }
 
     final logFile = findProjectFile(workingDirectory, logFileName);
     if (logFile == null) {
@@ -58,11 +66,18 @@ class LogsCommand(final StringSink out, final Directory workingDirectory)
     final content = logFile.readAsStringSync();
     final allLines = const LineSplitter().convert(content);
     final start = allLines.length > lines ? allLines.length - lines : 0;
-    for (final line in allLines.skip(start)) {
+    final lastLines = allLines.skip(start).toList();
+    if (jsonOutput) {
+      out.writeln(
+        toJsonOutput({'path': logFile.absolute.path, 'lines': lastLines}),
+      );
+      return ExitCode.success.code;
+    }
+    for (final line in lastLines) {
       out.writeln(line);
     }
 
-    if (argResults!.flag('follow')) {
+    if (follow) {
       await _follow(logFile, content.length);
     }
     return ExitCode.success.code;

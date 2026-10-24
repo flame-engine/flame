@@ -5,6 +5,7 @@ import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/commands/run_command.dart';
 import 'package:flame_cli/src/create_templates.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
+import 'package:flame_cli/src/json_output.dart';
 import 'package:io/io.dart';
 import 'package:path/path.dart' as p;
 
@@ -15,12 +16,15 @@ import 'package:path/path.dart' as p;
 /// It runs `flutter create` for the platform folders and the pubspec, writes
 /// the files of the chosen template on top, and adds the Flame packages with
 /// `flutter pub add`, so that the newest compatible versions are used.
+///
+/// With `--json`, the output of `flutter` goes to the standard error, so that
+/// the standard output only holds the result.
 class CreateCommand(
-  final StringSink out,
+  @override final StringSink out,
   final Directory workingDirectory, {
   ProcessStarter? startProcess,
   StringSink? err,
-}) extends Command<int> {
+}) extends Command<int> with JsonOutput {
   this {
     argParser
       ..addOption(
@@ -75,6 +79,7 @@ class CreateCommand(
         'overwrite',
         help: 'Overwrite the files of a game that already exists.',
       );
+    addJsonFlag(argParser);
   }
 
   final ProcessStarter _startProcess = startProcess ?? Process.start;
@@ -169,7 +174,12 @@ class CreateCommand(
     );
 
     final relative = p.relative(directory.path, from: workingDirectory.path);
-    out.writeln(
+    writeResult(
+      {
+        'name': projectName,
+        'path': directory.absolute.path,
+        'template': template.name,
+      },
       '\nCreated the Flame game $projectName in $relative from the '
       '${template.name} template.\n'
       '\n'
@@ -208,7 +218,7 @@ class CreateCommand(
       arguments,
       workingDirectory: workingDirectory ?? this.workingDirectory,
     );
-    await forwardOutput(process, out, _err);
+    await forwardOutput(process, jsonOutput ? _err : out, _err);
     final exitCode = await process.exitCode;
     if (exitCode != 0 && !ignoreFailure) {
       throw FlameCliException(
