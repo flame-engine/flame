@@ -87,6 +87,8 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
       },
     ) as PositionComponent;
 
+    // The ancestors might have moved while the hitbox was removed.
+    _validAabb = false;
     _transformListener = () {
       _validAabb = false;
       onAabbChanged?.call();
@@ -123,6 +125,7 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
       hitboxParent.size.removeListener(_parentSizeListener!);
     }
     _transformAncestors.forEach((t) => t.removeListener(_transformListener));
+    _transformAncestors.clear();
 
     // End all active collisions before removing from collision detection.
     // This ensures the parent component's activeCollisions is properly cleaned
