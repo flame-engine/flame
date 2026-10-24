@@ -8,7 +8,6 @@ import 'package:flame_cli/src/commands/overlay_commands.dart';
 import 'package:flame_cli/src/component_tree.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
 import 'package:flame_cli/src/flame_connection.dart';
-import 'package:flame_cli/src/json_output.dart';
 import 'package:io/io.dart';
 
 /// The clock that the wait commands measure the timeout with and wait between
@@ -108,11 +107,6 @@ abstract class _WaitConditionCommand(
         abbr: 'i',
         help: 'The number of seconds between two checks of the condition.',
         defaultsTo: '0.2',
-      )
-      ..addFlag(
-        'json',
-        negatable: false,
-        help: 'Print what matched as JSON instead of text.',
       );
   }
 
@@ -160,9 +154,7 @@ abstract class _WaitConditionCommand(
         ),
       );
       if (result.holds) {
-        out.writeln(
-          argResults!.flag('json') ? toJsonOutput(result.json) : result.text,
-        );
+        writeResult(result.json, result.text);
         return ExitCode.success.code;
       }
 

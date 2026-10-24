@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/commands/control_commands.dart';
 import 'package:flame_cli/src/commands/create_command.dart';
@@ -15,13 +16,21 @@ import 'package:flame_cli/src/commands/overlay_commands.dart';
 import 'package:flame_cli/src/commands/run_command.dart';
 import 'package:flame_cli/src/commands/set_command.dart';
 import 'package:flame_cli/src/commands/snapshot_command.dart';
+import 'package:flame_cli/src/commands/status_command.dart';
 import 'package:flame_cli/src/commands/tree_command.dart';
 import 'package:flame_cli/src/commands/wait_command.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
+import 'package:flame_cli/src/flame_connection.dart';
+import 'package:flame_cli/src/json_output.dart';
 import 'package:io/io.dart';
 
 /// The runner of the `flame` command, which returns the exit code instead of
 /// throwing when a command fails.
+///
+/// The message of a failure is printed to the standard error, unless the
+/// command was called with `--json`. Then the failure is printed as the
+/// [jsonError] object to the standard output instead, so that the standard
+/// output of a command with `--json` always holds exactly one JSON value.
 class FlameCommandRunner({
   StringSink? out,
   StringSink? err,
@@ -37,7 +46,7 @@ class FlameCommandRunner({
         'Create Flame games, and launch, observe, change and play the ones '
             'that are running in debug mode.',
       ) {
-    final output = out ?? stdout;
+    final output = _out;
     final directory = workingDirectory ?? Directory.current;
     addCommand(
       CreateCommand(output, directory, startProcess: startProcess, err: err),
@@ -53,6 +62,8 @@ class FlameCommandRunner({
     );
     addCommand(ReloadCommand(output, directory));
     addCommand(RestartCommand(output, directory));
+    addCommand(StopCommand(output, directory));
+    addCommand(StatusCommand(output, directory, connect: connect));
     addCommand(LogsCommand(output, directory));
     addCommand(
       DevToolsCommand(
@@ -80,21 +91,55 @@ class FlameCommandRunner({
     addCommand(DiffCommand(output, directory));
   }
 
+  final StringSink _out = out ?? stdout;
   final StringSink _err = err ?? stderr;
+
+  /// Connects the commands to the running game.
+  final GameConnector connect = connect ?? FlameConnection.connect;
+
+  bool? _jsonOutput;
 
   @override
   Future<int> run(Iterable<String> args) async {
+    _jsonOutput = null;
     try {
       return await super.run(args) ?? ExitCode.success.code;
     } on UsageException catch (error) {
-      _err
-        ..writeln(error.message)
-        ..writeln()
-        ..writeln(error.usage);
+      if (_isJsonOutput(args)) {
+        _out.writeln(toJsonOutput(jsonError(error.message, ExitCode.usage)));
+      } else {
+        _err
+          ..writeln(error.message)
+          ..writeln()
+          ..writeln(error.usage);
+      }
       return ExitCode.usage.code;
     } on FlameCliException catch (error) {
-      _err.writeln(error.message);
+      if (_isJsonOutput(args)) {
+        _out.writeln(toJsonOutput(jsonError(error.message, error.exitCode)));
+      } else {
+        _err.writeln(error.message);
+      }
       return error.exitCode.code;
     }
+  }
+
+  @override
+  Future<int?> runCommand(ArgResults topLevelResults) {
+    var results = topLevelResults;
+    for (var command = results.command; command != null;) {
+      results = command;
+      command = command.command;
+    }
+    _jsonOutput = results.options.contains(jsonFlag) && results.flag(jsonFlag);
+    return super.runCommand(topLevelResults);
+  }
+
+  /// Whether the command was called with `--json`, which is known from the
+  /// parsed arguments once they could be parsed, and is otherwise looked up
+  /// in the raw [args], to also report invalid arguments as JSON.
+  bool _isJsonOutput(Iterable<String> args) {
+    return _jsonOutput ??
+        args.takeWhile((arg) => arg != '--').contains('--$jsonFlag');
   }
 }

@@ -117,12 +117,66 @@ void main() {
       await expectUsageError(['input', 'tap', '1,2', '3,4'], 'Pass one');
     });
 
+    test('tap requires either a position or a component', () async {
+      await expectUsageError(
+        ['input', 'tap', '1,2', '--component', '5'],
+        'Pass one position',
+      );
+      await expectUsageError(
+        ['input', 'tap', '1,2', '--anchor', 'topLeft'],
+        '--anchor can only be used together with a component',
+      );
+      await expectUsageError(
+        ['input', 'tap', '-c', '5', '--anchor', '1,2,3'],
+        'An anchor has to be',
+      );
+    });
+
     test('drag requires two positions and positive steps', () async {
       await expectUsageError(['input', 'drag', '1,2'], 'Pass two positions');
       await expectUsageError(['input', 'drag', '1,2', 'x,y'], 'two numbers');
       await expectUsageError(
         ['input', 'drag', '1,2', '3,4', '--steps', '0'],
         '--steps has to be',
+      );
+    });
+
+    test('drag replaces positions with components', () async {
+      await expectUsageError(
+        ['input', 'drag', '1,2', '3,4', '--from-component', '5'],
+        'Pass two positions',
+      );
+      await expectUsageError(
+        [
+          'input',
+          'drag',
+          '1,2',
+          '--from-component',
+          '5',
+          '--to-component',
+          '6',
+        ],
+        'Pass two positions',
+      );
+      await expectUsageError(
+        ['input', 'drag', '--to-component', '5', 'x,y'],
+        'two numbers',
+      );
+      await expectUsageError(
+        ['input', 'drag', '1,2', '3,4', '--to-anchor', 'center'],
+        '--to-anchor can only be used together with a component',
+      );
+      await expectUsageError(
+        [
+          'input',
+          'drag',
+          '--from-component',
+          '5',
+          '--from-anchor',
+          'a,b',
+          '1,2',
+        ],
+        'An anchor has to be',
       );
     });
 
