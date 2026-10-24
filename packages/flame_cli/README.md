@@ -65,13 +65,15 @@ flame tree
 flame snapshot --component 220731871
 ```
 
-Hot reload or restart the game after changing the code, read its output, and open the Flutter
-DevTools with the Flame tab for the game:
+Hot reload or restart the game after changing the code, read its output, open the Flutter
+DevTools with the Flame tab for the game, check whether it is running and stop it:
 
 ```shell
 flame reload
 flame logs
 flame devtools
+flame status
+flame stop
 ```
 
 Pause the game, step it forward a number of frames, inspect and change components, turn on the
@@ -89,8 +91,9 @@ flame overlay show PauseMenu
 A running game is tied to its project, so games from different projects never interfere. Several
 instances of one project can run at once, for example on two devices: the commands go to the one
 started last, and any other one can be addressed with the URI and the port that `flame run` prints,
-through `--uri` and, for `reload` and `restart`, `--port`. The same `--uri` option reaches a game
-that was started in another way, with the Dart VM Service URI that `flutter run` prints.
+through `--uri` and, for `reload`, `restart`, `stop` and `status`, `--port`. The same `--uri`
+option reaches a game that was started in another way, with the Dart VM Service URI that
+`flutter run` prints.
 
 Play the game by sending taps, drags and key presses, and compare two snapshots:
 
