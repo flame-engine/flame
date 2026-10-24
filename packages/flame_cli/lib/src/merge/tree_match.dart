@@ -1,3 +1,5 @@
+import 'package:flame_cli/src/flame_cli_exception.dart';
+
 /// A component in a tree that the `HotReloadConnector` of the game described,
 /// where the [id] is its index in the depth first order of the tree.
 class TreeNode({
@@ -210,7 +212,7 @@ TreeMatch matchTrees({
   }
 
   if (old.root.type != updated.root.type || old.root.type != live.root.type) {
-    throw StateError(
+    throw FlameCliException(
       'The game class changed from ${live.root.type} to '
       '${updated.root.type}, which needs a hot restart.',
     );

@@ -836,15 +836,27 @@ class Component({
   /// `flame reload --merge` uses it to find the live component that a newly
   /// built copy of the tree corresponds to. It is only set in debug mode.
   @internal
-  int? debugDeclarationIndex;
-  int _debugDeclarationCount = 0;
+  int? get debugDeclarationIndex => _debugDeclarationIndices[this];
+
+  @internal
+  set debugDeclarationIndex(int? index) {
+    _debugDeclarationIndices[this] = index;
+  }
+
+  static final _debugDeclarationIndices = Expando<int>();
+  static final _debugDeclarationCounts = Expando<int>();
 
   void _addChild(Component child) {
     assert(() {
-      if (!isMounted &&
-          !child.isMounted &&
-          child.debugDeclarationIndex == null) {
-        child.debugDeclarationIndex = _debugDeclarationCount++;
+      final isMove = child._parent != null && child._parent != this;
+      if (!isMounted && !child.isMounted) {
+        if (isMove || child.debugDeclarationIndex == null) {
+          final count = _debugDeclarationCounts[this] ?? 0;
+          _debugDeclarationCounts[this] = count + 1;
+          child.debugDeclarationIndex = count;
+        }
+      } else if (isMove) {
+        child.debugDeclarationIndex = null;
       }
       return true;
     }());

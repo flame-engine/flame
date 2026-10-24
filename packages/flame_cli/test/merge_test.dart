@@ -293,6 +293,7 @@ void main() {
 
       expect(writer.writes, isEmpty);
       expect(report.conflicts.single, contains('kept its runtime value'));
+      expect(report.isEmpty, isFalse);
     });
 
     test('writes through the deepest field that can be written', () async {
@@ -331,6 +332,22 @@ void main() {
       );
 
       expect(writer.writes, ['live 2 target from live 1']);
+    });
+
+    test('skips a reference to a new component that is not added', () async {
+      final target = [_field('target')];
+      final updated = _tree([('Player', 0, null), ('Enemy', null, null)]);
+
+      final report = await run(
+        {
+          Slot.old: {target: 'null'},
+          Slot.updated: {target: 'component:3'},
+        },
+        updated: updated,
+      );
+
+      expect(writer.writes, isEmpty);
+      expect(report.skipped.single, contains('does not have'));
     });
 
     test('skips an object that holds references to components', () async {

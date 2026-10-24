@@ -234,23 +234,21 @@ class Heap._(
         final instance = await _instance(value.id!, count: maxElements);
         add(path, 'length:${instance.length}');
         final elements = instance.elements ?? const [];
-        await Future.wait([
-          for (final (index, element) in elements.indexed)
-            visit(element, [...path, IndexSegment(index)]),
-        ]);
+        for (final (index, element) in elements.indexed) {
+          await visit(element, [...path, IndexSegment(index)]);
+        }
         return;
       }
       if (kind == InstanceKind.kMap) {
         final instance = await _instance(value.id!, count: maxElements);
         add(path, 'length:${instance.length}');
         final associations = instance.associations ?? const <MapAssociation>[];
-        await Future.wait([
-          for (final association in associations)
-            if (_primitiveKey(association) case final key?)
-              _primitive(key).then(
-                (key) => visit(association.value, [...path, EntrySegment(key)]),
-              ),
-        ]);
+        for (final association in associations) {
+          if (_primitiveKey(association) case final key?) {
+            final entry = EntrySegment(await _primitive(key));
+            await visit(association.value, [...path, entry]);
+          }
+        }
         return;
       }
 
@@ -266,11 +264,11 @@ class Heap._(
       }
 
       final instance = await _instance(value.id!);
-      await Future.wait([
-        for (final field in instance.fields ?? const <BoundField>[])
-          if (_segment(field) case final segment? when !_isExcluded(segment))
-            visit(field.value, [...path, segment]),
-      ]);
+      for (final field in instance.fields ?? const <BoundField>[]) {
+        if (_segment(field) case final segment? when !_isExcluded(segment)) {
+          await visit(field.value, [...path, segment]);
+        }
+      }
     }
 
     await visit(

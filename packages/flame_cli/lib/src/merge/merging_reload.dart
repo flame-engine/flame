@@ -85,9 +85,12 @@ Future<bool> mergingReload({
     _printReport(report, out);
     return true;
   } finally {
-    await connection.call('disposeHotReloadShadows');
-    if (!wasPaused) {
-      await setPaused(connection, paused: false);
+    try {
+      await connection.call('disposeHotReloadShadows');
+    } finally {
+      if (!wasPaused) {
+        await setPaused(connection, paused: false);
+      }
     }
   }
 }

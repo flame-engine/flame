@@ -83,7 +83,6 @@ class HotReloadConnector() extends DevToolsConnector {
     final connector = _instance!;
     try {
       final shadow = await connector._builds[slot]!;
-      connector._shadows[slot] = shadow;
       return connector._describe(slot, shadow);
     } finally {
       connector._builds.remove(slot);
@@ -109,7 +108,7 @@ class HotReloadConnector() extends DevToolsConnector {
   @internal
   static void buildShadow(String slot, FlameGame Function() create) {
     final connector = _instance!;
-    connector._builds[slot] = connector._build(create);
+    connector._builds[slot] = connector._build(slot, create)..ignore();
   }
 
   /// The component at [index] in the last description of the tree in [slot],
@@ -152,7 +151,7 @@ class HotReloadConnector() extends DevToolsConnector {
     HotReloadConnector.component('live', liveIndex).removeFromParent();
   }
 
-  Future<FlameGame> _build(FlameGame Function() create) async {
+  Future<FlameGame> _build(String slot, FlameGame Function() create) async {
     final FlameGame shadow;
     _isBuildingShadow = true;
     try {
@@ -160,6 +159,7 @@ class HotReloadConnector() extends DevToolsConnector {
     } finally {
       _isBuildingShadow = false;
     }
+    _shadows[slot] = shadow;
     shadow
       ..markAsHotReloadShadow()
       ..images = game.images
@@ -207,6 +207,6 @@ class HotReloadConnector() extends DevToolsConnector {
     }
     _shadows.clear();
     _builds.clear();
-    _snapshots.removeWhere((slot, _) => slot != 'live');
+    _snapshots.clear();
   }
 }

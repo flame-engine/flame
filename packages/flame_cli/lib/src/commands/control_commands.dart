@@ -61,6 +61,13 @@ class ReloadCommand(super.out, super.workingDirectory)
       return await super.run();
     }
     final port = parsePortOption(arguments, usage);
+    if (port != null && arguments.option('uri') == null) {
+      throw UsageException(
+        '--port with --merge needs --uri, the VM Service URI of the game '
+        'that the port belongs to.',
+        usage,
+      );
+    }
     final connection = await connectToGame(
       workingDirectory,
       uriOption: arguments.option('uri'),

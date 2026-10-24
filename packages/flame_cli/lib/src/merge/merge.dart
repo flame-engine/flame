@@ -117,6 +117,7 @@ class MergeReport() {
 
   bool get isEmpty =>
       updated.isEmpty &&
+      conflicts.isEmpty &&
       skipped.isEmpty &&
       added.isEmpty &&
       removed.isEmpty &&
@@ -171,13 +172,20 @@ Future<MergeReport> merge({
     };
   }
 
+  final adoptedIds = {
+    for (final (:newId, liveParent: _) in match.added)
+      ...updated.subtree(newId),
+  };
+
   WriteSource? componentSource(String value) {
     final reference = value.substring('component:'.length);
     if (reference.startsWith('${Slot.updated.name}:')) {
-      return ComponentValue(
-        Slot.updated,
-        int.parse(reference.substring(Slot.updated.name.length + 1)),
+      final newId = int.parse(
+        reference.substring(Slot.updated.name.length + 1),
       );
+      return adoptedIds.contains(newId)
+          ? ComponentValue(Slot.updated, newId)
+          : null;
     }
     final liveId = match.oldToLive[int.tryParse(reference)];
     return liveId == null ? null : ComponentValue(Slot.live, liveId);
@@ -277,7 +285,7 @@ Future<MergeReport> merge({
         if (source == null) {
           report.skipped.add(
             '$label $display, since it refers to a component that the live '
-            'game no longer has.',
+            'game does not have.',
           );
           done.addAll(changedUnder);
           handled = true;
