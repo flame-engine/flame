@@ -1,11 +1,13 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flame_cli/flame_cli.dart';
 import 'package:test/test.dart';
 
 const _uri = 'http://127.0.0.1:1/abc=/';
 
-typedef _Handler = Map<String, dynamic> Function(
+typedef _Handler = FutureOr<Map<String, dynamic>> Function(
   String method,
   Map<String, String>? args,
 );
@@ -24,7 +26,7 @@ class _FakeConnection(final _Handler handler) implements FlameConnection {
     Map<String, String>? args,
   }) async {
     calls.add(method);
-    return handler(method, args);
+    return await handler(method, args);
   }
 
   @override
@@ -298,6 +300,38 @@ void main() {
       );
     });
 
+    test('compares vector attributes with float32 precision', () async {
+      final x = Float32List.fromList([100.1]).first;
+      final exitCode = await run(
+        [
+          'component',
+          'player',
+          '-w',
+          'position.x == 100.1',
+          '-w',
+          'position.y >= 0.3',
+          '-t',
+          '0',
+        ],
+        sequence('getComponentTree', [
+          _tree([
+            _node(
+              2,
+              'Player',
+              attributes: {
+                'position': [
+                  x,
+                  Float32List.fromList([0.3]).first,
+                ],
+              },
+            ),
+          ]),
+        ]),
+      );
+
+      expect(exitCode, ExitCode.success.code);
+    });
+
     test('does not match components without the attribute', () async {
       final exitCode = await run(
         ['component', '--id', '2', '--where', 'size.y < 5', '-t', '0'],
@@ -331,6 +365,20 @@ void main() {
           },
         ],
       });
+    });
+
+    test('times out when the game does not answer', () async {
+      final exitCode = await run(
+        ['component', 'enemy', '--timeout', '0.05'],
+        (_, _) => Completer<Map<String, dynamic>>().future,
+      );
+
+      expect(exitCode, ExitCode.tempFail.code);
+      expect(
+        err.toString(),
+        'Timed out after 0.05 seconds waiting for a component with a type '
+        'matching enemy, the game did not answer.\n',
+      );
     });
 
     test('fails when the game stops while waiting', () async {

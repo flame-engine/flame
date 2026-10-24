@@ -460,8 +460,9 @@ flame wait overlay GameOver
 
 The command checks the condition right away and then again at a fixed interval, all over one
 connection to the game. When the condition holds it prints what matched and exits with `0`. When
-the timeout is reached first it says what it found instead and exits with `75`, and if the game
-stops while waiting it exits with `69` like the other commands.
+the timeout is reached first it says what it found instead and exits with `75`, which is also the
+case when the game doesn't answer in time, for example because it is stopped at a breakpoint. If
+the game stops while waiting it exits with `69` like the other commands.
 
 These are the conditions:
 
@@ -535,8 +536,8 @@ apart. `flame run` exits with the exit code of `flutter run`, `reload` and `rest
 - `64`: The command was used incorrectly, for example with an invalid option.
 - `65`: The game rejected the input, for example because there is no component with the given
   id, or the input files could not be read.
-- `69`: No running game was found, the game could not be reached, or it runs a version of Flame
-  that does not support the command.
+- `69`: No running game was found, the game could not be reached or stopped while the command
+  ran, or it runs a version of Flame that does not support the command.
 - `70`: The game reported an error while running the command.
 - `73`: The output file could not be written.
 - `75`: The condition of `wait` did not hold before the timeout.

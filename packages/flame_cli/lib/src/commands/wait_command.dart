@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/command_categories.dart';
@@ -149,7 +150,15 @@ abstract class _WaitConditionCommand(
   Future<int> runWithConnection(FlameConnection connection) async {
     final elapsed = clock.start();
     while (true) {
-      final result = await check(connection);
+      final left = _timeout - elapsed();
+      final result = await check(connection).timeout(
+        left > _interval ? left : _interval,
+        onTimeout: () => throw FlameCliException(
+          'Timed out after ${_formatSeconds(_timeout)} waiting for '
+          '$condition, the game did not answer.',
+          exitCode: ExitCode.tempFail,
+        ),
+      );
       if (result.holds) {
         out.writeln(
           argResults!.flag('json') ? toJsonOutput(result.json) : result.text,
@@ -493,7 +502,10 @@ class _AttributeCondition._(
     }
     final attribute = match[1]!;
     final axis = match[2];
-    final value = double.tryParse(match[4]!);
+    final number = double.tryParse(match[4]!);
+    final value = axis == null || number == null
+        ? number
+        : Float32List.fromList([number]).first;
     final isValid = axis == null
         ? _numbers.contains(attribute)
         : _vectors.contains(attribute);
