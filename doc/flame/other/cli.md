@@ -521,7 +521,8 @@ These are the results of the commands:
   line, such as the `server.started` event with the host and port of the DevTools. This is the only
   command that prints more than one JSON value.
 - `snapshot`: The absolute `path` of the image, its `width` and `height` in pixels, the
-  `pixelRatio` and the size of the file in `bytes`.
+  `pixelRatio` and the size of the file in `bytes`. The `width` and `height` are `null` when the
+  image that the game returned is not a valid PNG.
 - `tree`: The root of the component tree, or `null` when no component matches `--filter`. Every
   node has an `id`, a `name`, the `toString` of the component, its `attributes` and its
   `children`.

@@ -134,6 +134,38 @@ void main() {
       });
     });
 
+    test('snapshot prints no size when the image cannot be read', () async {
+      final truncated = img
+          .encodePng(img.Image(width: 4, height: 3))
+          .sublist(
+            0,
+            20,
+          );
+      final responses = {
+        'getGameSnapshot': {'snapshot': base64Encode(truncated)},
+      };
+      expect(
+        await runGameJson(['snapshot'], responses: responses),
+        containsPair('width', null),
+      );
+
+      out.clear();
+      final runner = FlameCommandRunner(
+        out: out,
+        err: err,
+        workingDirectory: directory,
+        connect: (_) async => _FakeConnection(responses),
+      );
+      expect(
+        await runner.run(['snapshot', '--uri', _uri]),
+        ExitCode.success.code,
+      );
+      expect(
+        out.toString().trim(),
+        p.join(directory.path, 'flame_snapshot.png'),
+      );
+    });
+
     test('pause and resume print the paused state', () async {
       expect(await runGameJson(['pause']), {'paused': true});
       out.clear();

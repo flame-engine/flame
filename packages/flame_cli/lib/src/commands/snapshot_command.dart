@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/command_categories.dart';
@@ -142,7 +143,7 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
       );
     }
     final path = file.absolute.path;
-    final info = img.PngDecoder().startDecode(bytes);
+    final info = jsonOutput ? _pngInfo(bytes) : null;
     writeResult({
       'path': path,
       'width': info?.width,
@@ -151,5 +152,13 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
       'bytes': bytes.length,
     }, path);
     return ExitCode.success.code;
+  }
+}
+
+img.DecodeInfo? _pngInfo(Uint8List bytes) {
+  try {
+    return img.PngDecoder().startDecode(bytes);
+  } on img.ImageException {
+    return null;
   }
 }
