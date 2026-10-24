@@ -71,19 +71,12 @@ abstract class _RunRequestCommand(
       request,
       port: port,
     );
-    final ok = response['ok'] == true;
-    final message = response['message'];
+    final RunResponse(:ok, :message) = response;
     if (jsonOutput) {
-      out.writeln(
-        toJsonOutput({
-          'ok': ok,
-          'message': message,
-          'output': (response['output'] as List?) ?? const [],
-        }),
-      );
+      out.writeln(toJsonOutput(response.toJson()));
       return (ok ? ExitCode.success : ExitCode.software).code;
     }
-    final output = ok ? const [] : (response['output'] as List?) ?? const [];
+    final output = ok ? const <String>[] : response.output;
     for (final line in output) {
       out.writeln(line);
     }
@@ -141,7 +134,7 @@ int? findControlPort(Directory workingDirectory) {
 /// Sends [request] to the `flame run` of the project that [workingDirectory]
 /// is in, or to the one listening on [port] if given, and returns its
 /// response.
-Future<Map<String, dynamic>> sendRunRequest(
+Future<RunResponse> sendRunRequest(
   Directory workingDirectory,
   RunRequest request, {
   int? port,
@@ -181,7 +174,7 @@ Future<Map<String, dynamic>> sendRunRequest(
         .bind(socket)
         .transform(const LineSplitter())
         .first;
-    return json.decode(line) as Map<String, dynamic>;
+    return RunResponse.fromJson(json.decode(line) as Map<String, dynamic>);
   } on Object catch (error, stackTrace) {
     Error.throwWithStackTrace(
       FlameCliException(
