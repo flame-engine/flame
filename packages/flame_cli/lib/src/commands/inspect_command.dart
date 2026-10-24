@@ -2,6 +2,7 @@ import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/commands/flame_command.dart';
 import 'package:flame_cli/src/flame_connection.dart';
+import 'package:flame_cli/src/game_responses.dart';
 import 'package:flame_cli/src/json_output.dart';
 import 'package:io/io.dart';
 
@@ -28,7 +29,7 @@ class InspectCommand(super.out, super.workingDirectory) extends FlameCommand {
   @override
   String get invocation => 'flame inspect <component id>';
 
-  late String _id;
+  late int _id;
 
   @override
   void validate() {
@@ -37,9 +38,9 @@ class InspectCommand(super.out, super.workingDirectory) extends FlameCommand {
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
-    final info = await connection.call('getComponentInfo', args: {'id': _id});
+    final info = await connection.getComponentInfo(_id);
     if (argResults!.flag('json')) {
-      out.writeln(toJsonOutput(info));
+      out.writeln(toJsonOutput(info.toJson()));
       return ExitCode.success.code;
     }
 
@@ -49,33 +50,64 @@ class InspectCommand(super.out, super.workingDirectory) extends FlameCommand {
 }
 
 /// Reads the single component id argument of a command.
-String componentIdArgument(Command<int> command) {
+int componentIdArgument(Command<int> command) {
   final rest = command.argResults!.rest;
-  if (rest.length != 1 || int.tryParse(rest.single) == null) {
+  final id = rest.length == 1 ? int.tryParse(rest.single) : null;
+  if (id == null) {
     throw UsageException(
       'Pass the id of one component, use the tree command to list the ids.',
       command.usage,
     );
   }
-  return rest.single;
+  return id;
 }
 
-/// Formats the response of the `getComponentInfo` service extension with one
-/// line per field.
-String formatComponentInfo(Map<String, dynamic> info) {
-  final attributes = (info['attributes'] as Map<String, dynamic>?) ?? const {};
-  final buffer = StringBuffer()
-    ..writeln('type: ${info['name']}')
-    ..writeln('id: ${info['id']}')
-    ..writeln('parent: ${info['parent'] ?? 'none'}')
-    ..writeln('children: ${info['childCount']}')
-    ..writeln('debugMode: ${info['debugMode']}');
-  for (final entry in attributes.entries) {
-    final value = entry.value;
-    buffer.writeln(
-      '${entry.key}: ${value is List ? value.join(', ') : value}',
+/// Reads the [option] of a command that holds the id of a component.
+///
+/// Returns null when the option is not given.
+int? componentIdOption(Command<int> command, String option) {
+  final value = command.argResults!.option(option);
+  if (value == null) {
+    return null;
+  }
+  final id = int.tryParse(value);
+  if (id == null) {
+    throw UsageException(
+      '--$option has to be the id of a component, use the tree command to '
+      'list the ids.',
+      command.usage,
     );
   }
-  buffer.writeln('toString: ${info['toString']}');
+  return id;
+}
+
+/// Formats the details of a component with one line per field.
+String formatComponentInfo(ComponentInfo info) {
+  final attributes = info.attributes;
+  final buffer = StringBuffer()
+    ..writeln('type: ${info.name}')
+    ..writeln('id: ${info.id}')
+    ..writeln('parent: ${info.parent ?? 'none'}')
+    ..writeln('children: ${info.childCount}')
+    ..writeln('debugMode: ${info.debugMode}');
+  void writeVector(String name, Vector2? vector) {
+    if (vector != null) {
+      buffer.writeln('$name: ${vector.x}, ${vector.y}');
+    }
+  }
+
+  if (attributes.priority case final priority?) {
+    buffer.writeln('priority: $priority');
+  }
+  writeVector('position', attributes.position);
+  writeVector('size', attributes.size);
+  if (attributes.angle case final angle?) {
+    buffer.writeln('angle: $angle');
+  }
+  writeVector('scale', attributes.scale);
+  if (attributes.anchor case final anchor?) {
+    buffer.writeln('anchor: $anchor');
+  }
+  buffer.writeln('toString: ${info.toStringText}');
   return buffer.toString();
 }

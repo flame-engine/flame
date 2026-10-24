@@ -60,37 +60,36 @@ class StatusCommand(
       throw UsageException('--uri cannot be combined with --port.', usage);
     }
 
-    final status = uriOption == null
+    var status = uriOption == null
         ? await _runStatus(port ?? findControlPort(workingDirectory))
-        : <String, Object?>{'running': true, 'vmServiceUri': uriOption};
-    final uri = status['vmServiceUri'] as String?;
-    if (status['running'] == true && uri != null) {
-      status.addAll(await _gameStatus(uri));
+        : GameStatus(running: true, vmServiceUri: uriOption);
+    final uri = status.vmServiceUri;
+    if (status.running && uri != null) {
+      status = await _withGameStatus(status, uri);
       if (uriOption != null) {
-        status['running'] = status['reachable'];
+        status = status.copyWith(running: status.reachable ?? false);
       }
     }
 
-    status.removeWhere((_, value) => value == null);
     if (argResults!.flag('json')) {
-      out.writeln(toJsonOutput(status));
+      out.writeln(toJsonOutput(status.toJson()));
     } else {
       _printStatus(status);
     }
-    final ok = status['running'] == true && status['reachable'] == true;
+    final ok = status.running && status.reachable == true;
     return (ok ? ExitCode.success : ExitCode.unavailable).code;
   }
 
-  Future<Map<String, Object?>> _runStatus(int? port) async {
+  Future<GameStatus> _runStatus(int? port) async {
     if (port == null) {
-      return {
-        'running': false,
-        'error':
+      return const GameStatus(
+        running: false,
+        error:
             'No game that was started with `flame run` was found for this '
             'project.',
-      };
+      );
     }
-    final Map<String, dynamic> response;
+    final RunResponse response;
     try {
       response = await sendRunRequest(
         workingDirectory,
@@ -98,64 +97,121 @@ class StatusCommand(
         port: port,
       );
     } on FlameCliException catch (error) {
-      return {'running': false, 'controlPort': port, 'error': error.message};
+      return GameStatus(
+        running: false,
+        controlPort: port,
+        error: error.message,
+      );
     }
-    final uri = response['vmServiceUri'] as String?;
-    return {
-      'running': true,
-      'projectDirectory': response['projectDirectory'],
-      'controlPort': response['controlPort'] ?? port,
-      'processId': response['processId'],
-      'vmServiceUri': uri,
-      if (uri == null) 'reachable': false,
-      if (uri == null)
-        'error':
-            'The game is still starting, it has not reported its Dart VM '
-            'Service URI yet.',
-    };
+    final runStatus = response.status;
+    final uri = runStatus?.vmServiceUri;
+    return GameStatus(
+      running: true,
+      projectDirectory: runStatus?.projectDirectory,
+      controlPort: runStatus?.controlPort ?? port,
+      processId: runStatus?.processId,
+      vmServiceUri: uri,
+      reachable: uri == null ? false : null,
+      error: uri == null
+          ? 'The game is still starting, it has not reported its Dart VM '
+                'Service URI yet.'
+          : null,
+    );
   }
 
-  Future<Map<String, Object?>> _gameStatus(String uri) async {
+  Future<GameStatus> _withGameStatus(GameStatus status, String uri) async {
     final FlameConnection connection;
     try {
       connection = await _connect(uri);
     } on FlameCliException catch (error) {
-      return {'reachable': false, 'error': error.message};
+      return status.copyWith(reachable: false, error: error.message);
     }
     try {
-      final response = await connection.call('getPaused');
-      return {'reachable': true, 'paused': response['paused']};
+      return status.copyWith(
+        reachable: true,
+        paused: await connection.getPaused(),
+      );
     } on FlameCliException {
-      return {'reachable': true};
+      return status.copyWith(reachable: true);
     } finally {
       await connection.dispose();
     }
   }
 
-  void _printStatus(Map<String, Object?> status) {
-    String yesOrNo(Object? value) => value == true ? 'yes' : 'no';
+  void _printStatus(GameStatus status) {
+    const yesOrNo = {true: 'yes', false: 'no'};
 
-    out.writeln('Running: ${yesOrNo(status['running'])}');
+    out.writeln('Running: ${yesOrNo[status.running]}');
     final fields = {
-      'Project': status['projectDirectory'],
-      'Control port': status['controlPort'],
-      'Process id of flutter run': status['processId'],
-      'Dart VM Service URI': status['vmServiceUri'],
+      'Project': status.projectDirectory,
+      'Control port': status.controlPort,
+      'Process id of flutter run': status.processId,
+      'Dart VM Service URI': status.vmServiceUri,
     };
     for (final MapEntry(:key, :value) in fields.entries) {
       if (value != null) {
         out.writeln('$key: $value');
       }
     }
-    if (status.containsKey('reachable')) {
-      out.writeln('Reachable: ${yesOrNo(status['reachable'])}');
+    if (status.reachable case final reachable?) {
+      out.writeln('Reachable: ${yesOrNo[reachable]}');
     }
-    if (status.containsKey('paused')) {
-      out.writeln('Paused: ${yesOrNo(status['paused'])}');
+    if (status.paused case final paused?) {
+      out.writeln('Paused: ${yesOrNo[paused]}');
     }
-    final error = status['error'];
-    if (error != null) {
+    if (status.error case final error?) {
       out.writeln(error);
     }
+  }
+}
+
+/// What `flame status` reports about a game, where the fields that are not
+/// known are null.
+class const GameStatus({
+  /// Whether `flame run` answered, or with `--uri` whether the game could be
+  /// reached.
+  required final bool running,
+  final String? projectDirectory,
+  final int? controlPort,
+  final int? processId,
+  final String? vmServiceUri,
+
+  /// Whether the Flame game could be reached through [vmServiceUri].
+  final bool? reachable,
+  final bool? paused,
+
+  /// Why the game is not running or not reachable.
+  final String? error,
+}) {
+  /// A copy of this status where the given fields are replaced.
+  GameStatus copyWith({
+    bool? running,
+    bool? reachable,
+    bool? paused,
+    String? error,
+  }) {
+    return GameStatus(
+      running: running ?? this.running,
+      projectDirectory: projectDirectory,
+      controlPort: controlPort,
+      processId: processId,
+      vmServiceUri: vmServiceUri,
+      reachable: reachable ?? this.reachable,
+      paused: paused ?? this.paused,
+      error: error ?? this.error,
+    );
+  }
+
+  Map<String, Object> toJson() {
+    return {
+      'running': running,
+      'projectDirectory': ?projectDirectory,
+      'controlPort': ?controlPort,
+      'processId': ?processId,
+      'vmServiceUri': ?vmServiceUri,
+      'reachable': ?reachable,
+      'paused': ?paused,
+      'error': ?error,
+    };
   }
 }

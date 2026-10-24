@@ -17,6 +17,77 @@ enum RunRequest(
   status(null),
 }
 
+/// The response of `flame run` to a [RunRequest], sent back as one line of
+/// JSON on the control port.
+class const RunResponse({
+  /// Whether the request succeeded.
+  required final bool ok,
+
+  /// The line that `flutter run` printed when it was done, or why the
+  /// request failed.
+  required final String message,
+
+  /// All the lines that `flutter run` printed while the request ran.
+  final List<String> output = const [],
+
+  /// What `flame run` reports about itself, for a [RunRequest.status].
+  final RunStatus? status,
+}) {
+  factory RunResponse.fromJson(Map<String, dynamic> json) {
+    final status = json['status'] as Map<String, dynamic>?;
+    return RunResponse(
+      ok: json['ok'] == true,
+      message: json['message'] as String? ?? '',
+      output: (json['output'] as List? ?? const []).cast<String>(),
+      status: status == null ? null : RunStatus.fromJson(status),
+    );
+  }
+
+  Map<String, Object> toJson() {
+    return {
+      'ok': ok,
+      'message': message,
+      'output': output,
+      if (status case final status?) 'status': status.toJson(),
+    };
+  }
+}
+
+/// What a `flame run` reports about itself and the `flutter run` that it
+/// manages.
+class const RunStatus({
+  /// The directory of the project that the game was started in.
+  required final String projectDirectory,
+
+  /// The loopback port that `flame run` accepts [RunRequest]s on.
+  required final int controlPort,
+
+  /// The process id of `flutter run`.
+  required final int processId,
+
+  /// The Dart VM Service URI of the game, which is null while the game is
+  /// still starting.
+  final String? vmServiceUri,
+}) {
+  factory RunStatus.fromJson(Map<String, dynamic> json) {
+    return RunStatus(
+      projectDirectory: json['projectDirectory'] as String,
+      controlPort: json['controlPort'] as int,
+      processId: json['processId'] as int,
+      vmServiceUri: json['vmServiceUri'] as String?,
+    );
+  }
+
+  Map<String, Object> toJson() {
+    return {
+      'projectDirectory': projectDirectory,
+      'controlPort': controlPort,
+      'processId': processId,
+      'vmServiceUri': ?vmServiceUri,
+    };
+  }
+}
+
 /// Manages a `flutter run` [process] that was started by `flame run`.
 ///
 /// It mirrors the output of the process to the terminal and to the log file
@@ -180,11 +251,11 @@ class RunController({
               .where((request) => request.name == line.trim())
               .firstOrNull;
           final response = switch (request) {
-            null => {'ok': false, 'message': 'Unknown request: $line'},
+            null => RunResponse(ok: false, message: 'Unknown request: $line'),
             RunRequest.status => _status(),
             _ => await _enqueue(request),
           };
-          socket.writeln(json.encode(response));
+          socket.writeln(json.encode(response.toJson()));
           await socket.flush();
           await socket.close();
         })
@@ -193,21 +264,23 @@ class RunController({
         });
   }
 
-  Future<Map<String, dynamic>> _enqueue(RunRequest request) {
+  Future<RunResponse> _enqueue(RunRequest request) {
     final result = _requests.then((_) => _perform(request));
     _requests = result.then((_) {}, onError: (Object _) {});
     return result;
   }
 
-  Map<String, dynamic> _status() {
-    return {
-      'ok': true,
-      'message': 'flutter run is running.',
-      'projectDirectory': projectDirectory.path,
-      'controlPort': _server.port,
-      'processId': process.pid,
-      'vmServiceUri': _vmServiceUri ?? _readOwnVmServiceUri(),
-    };
+  RunResponse _status() {
+    return RunResponse(
+      ok: true,
+      message: 'flutter run is running.',
+      status: RunStatus(
+        projectDirectory: projectDirectory.path,
+        controlPort: _server.port,
+        processId: process.pid,
+        vmServiceUri: _vmServiceUri ?? _readOwnVmServiceUri(),
+      ),
+    );
   }
 
   String? _readOwnVmServiceUri() {
@@ -223,7 +296,7 @@ class RunController({
     }
   }
 
-  Future<Map<String, dynamic>> _stop() async {
+  Future<RunResponse> _stop() async {
     if (!_exited) {
       try {
         process.stdin.writeln(RunRequest.stop.key);
@@ -234,23 +307,26 @@ class RunController({
     }
     try {
       await _stopped.future.timeout(responseTimeout);
-      return {'ok': true, 'message': 'Stopped the game.'};
+      return const RunResponse(ok: true, message: 'Stopped the game.');
     } on TimeoutException {
-      return {
-        'ok': false,
-        'message':
+      return RunResponse(
+        ok: false,
+        message:
             'flutter run did not stop within ${responseTimeout.inSeconds} '
             'seconds.',
-      };
+      );
     }
   }
 
-  Future<Map<String, dynamic>> _perform(RunRequest request) async {
+  Future<RunResponse> _perform(RunRequest request) async {
     if (request == RunRequest.stop) {
       return await _stop();
     }
     if (_exited) {
-      return {'ok': false, 'message': 'flutter run has already stopped.'};
+      return const RunResponse(
+        ok: false,
+        message: 'flutter run has already stopped.',
+      );
     }
     final output = <String>[];
     final done = Completer<String>();
@@ -278,7 +354,7 @@ class RunController({
       );
       final ok =
           message.startsWith('Reloaded') || message.startsWith('Restarted');
-      return {'ok': ok, 'message': message, 'output': output};
+      return RunResponse(ok: ok, message: message, output: output);
     } finally {
       await subscription.cancel();
     }

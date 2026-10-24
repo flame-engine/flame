@@ -29,21 +29,19 @@ class OverlaysCommand(super.out, super.workingDirectory) extends FlameCommand {
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
-    final response = await connection.call('getOverlays');
-    final overlays = (response['overlays'] as List).cast<String>();
-    final active = ((response['active'] as List?) ?? []).cast<String>();
-
+    final overlays = await connection.getOverlays();
     if (argResults!.flag('json')) {
-      out.writeln(toJsonOutput({'overlays': overlays, 'active': active}));
+      out.writeln(toJsonOutput(overlays.toJson()));
       return ExitCode.success.code;
     }
 
-    if (overlays.isEmpty) {
+    if (overlays.registered.isEmpty) {
       out.writeln('The game has no registered overlays.');
       return ExitCode.success.code;
     }
-    for (final overlay in overlays) {
-      out.writeln('$overlay${active.contains(overlay) ? ' (shown)' : ''}');
+    for (final overlay in overlays.registered) {
+      final shown = overlays.active.contains(overlay) ? ' (shown)' : '';
+      out.writeln('$overlay$shown');
     }
     return ExitCode.success.code;
   }
@@ -93,10 +91,7 @@ class _SetOverlayCommand(
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
-    await connection.call(
-      'setOverlay',
-      args: {'overlay': _overlay, 'active': active.toString()},
-    );
+    await connection.setOverlay(_overlay, active: active);
     out.writeln('${active ? 'Showed' : 'Hid'} the overlay $_overlay.');
     return ExitCode.success.code;
   }
@@ -122,7 +117,7 @@ class _OnlyOverlayCommand(super.out, super.workingDirectory)
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
-    await connection.call('navigateToOverlay', args: {'overlay': _overlay});
+    await connection.navigateToOverlay(_overlay);
     out.writeln('Showed only the overlay $_overlay.');
     return ExitCode.success.code;
   }

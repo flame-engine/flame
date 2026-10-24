@@ -51,7 +51,7 @@ class SetCommand(super.out, super.workingDirectory) extends FlameCommand {
   @override
   String get invocation => 'flame set <component id> [options]';
 
-  late String _id;
+  late int _id;
   late Map<String, String> _values;
 
   @override
@@ -72,14 +72,10 @@ class SetCommand(super.out, super.workingDirectory) extends FlameCommand {
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
-    for (final entry in _values.entries) {
-      await connection.call(
-        'setPositionComponentAttributes',
-        args: {'id': _id, 'attribute': entry.key, 'value': entry.value},
-      );
+    for (final MapEntry(:key, :value) in _values.entries) {
+      await connection.setPositionComponentAttribute(_id, key, value);
     }
-    final info = await connection.call('getComponentInfo', args: {'id': _id});
-    out.write(formatComponentInfo(info));
+    out.write(formatComponentInfo(await connection.getComponentInfo(_id)));
     return ExitCode.success.code;
   }
 
