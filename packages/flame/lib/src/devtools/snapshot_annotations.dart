@@ -35,10 +35,13 @@ class SnapshotOptions({
     if (filter != null) {
       try {
         annotationFilter = RegExp(filter, caseSensitive: false);
-      } on FormatException catch (error) {
-        throw FormatException(
-          'annotationFilter is not a valid regular expression: '
-          '${error.message}',
+      } on FormatException catch (error, stackTrace) {
+        Error.throwWithStackTrace(
+          FormatException(
+            'annotationFilter is not a valid regular expression: '
+            '${error.message}',
+          ),
+          stackTrace,
         );
       }
     }
