@@ -448,7 +448,8 @@ Tapped component 220731871 at 412.5,300.
 $ flame input tap --component 220731871 --anchor topLeft
 $ flame input drag --from-component 220731871 600,300
 $ flame input drag 100,300 --to-component 81726354
-$ flame input drag --from-component 220731871 --to-component 81726354 --to-anchor 0.5,0
+$ flame input drag --from-component 220731871 \
+    --to-component 81726354 --to-anchor 0.5,0
 ```
 
 A component is given by its id, as `tree` prints it, or by the name of its `ComponentKey`, for
