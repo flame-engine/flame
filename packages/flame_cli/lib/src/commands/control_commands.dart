@@ -4,16 +4,45 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/command_categories.dart';
+import 'package:flame_cli/src/commands/flame_command.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
 import 'package:flame_cli/src/json_output.dart';
+import 'package:flame_cli/src/merge/merging_reload.dart';
 import 'package:flame_cli/src/project_files.dart';
 import 'package:flame_cli/src/run_controller.dart';
 import 'package:io/io.dart';
 
-/// Hot reloads the game through `flame run`.
+/// Hot reloads the game through `flame run`, and with `--merge` also applies
+/// the changes of the code that sets up the components, see [mergingReload].
 class ReloadCommand(super.out, super.workingDirectory)
     extends _RunRequestCommand {
-  this : super(request: RunRequest.reload);
+  this : super(request: RunRequest.reload) {
+    argParser
+      ..addFlag(
+        'merge',
+        abbr: 'm',
+        negatable: false,
+        help:
+            'Also apply the changes to constructors and onLoad methods to '
+            'the live components, keeping their state. The game has to have '
+            'a constructor that takes no arguments.',
+      )
+      ..addFlag(
+        'keep-runtime',
+        negatable: false,
+        help:
+            'With --merge, keep a value that changed while the game was '
+            'running when the code changed it too, instead of replacing it '
+            'with the value from the code.',
+      )
+      ..addOption(
+        'uri',
+        abbr: 'u',
+        help:
+            'With --merge, the Dart VM Service URI of the running game. Not '
+            'needed if the game was started with `flame run`.',
+      );
+  }
 
   @override
   String get name => 'reload';
@@ -21,6 +50,33 @@ class ReloadCommand(super.out, super.workingDirectory)
   @override
   String get description =>
       'Hot reload the game, which has to have been started with `flame run`.';
+
+  @override
+  Future<int> run() async {
+    final arguments = argResults!;
+    if (!arguments.flag('merge')) {
+      if (arguments.flag('keep-runtime')) {
+        throw UsageException('--keep-runtime needs --merge.', usage);
+      }
+      return await super.run();
+    }
+    final port = parsePortOption(arguments, usage);
+    final connection = await connectToGame(
+      workingDirectory,
+      uriOption: arguments.option('uri'),
+    );
+    try {
+      final ok = await mergingReload(
+        connection: connection,
+        reload: () => sendRunRequest(workingDirectory, request, port: port),
+        out: out,
+        keepRuntime: arguments.flag('keep-runtime'),
+      );
+      return (ok ? ExitCode.success : ExitCode.software).code;
+    } finally {
+      await connection.dispose();
+    }
+  }
 }
 
 /// Hot restarts the game through `flame run`.

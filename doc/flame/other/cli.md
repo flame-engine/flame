@@ -219,8 +219,53 @@ started from the same project, see [run](#run).
 
 A hot reload swaps the code but keeps the state of the game, so a change to something that was
 set when a component was created, such as a paint in its constructor or a position in `onLoad`,
-is only visible after a hot restart. Changes to `update` and `render` methods show up right away.
-Component ids change with a restart, so run `tree` again afterwards.
+is only visible after a hot restart, unless the reload is done with `--merge` as described below.
+Changes to `update` and `render` methods show up right away. Component ids change with a
+restart, so run `tree` again afterwards.
+
+
+#### Merging the setup code into the live game
+
+With `--merge` (`-m`), `flame reload` also applies the changes to the code that sets up the
+components, while the components keep their state:
+
+```shell
+$ flame reload --merge
+Reloaded 1 of 904 libraries in 56ms.
+Updated:
+  World #1 > Player #0 speed
+  World #1 > RectangleComponent #1 _size
+Added:
+  World #1 > CircleComponent #1
+```
+
+To find out what the code declares, the game is paused and copies of it, called shadows, are
+built with the constructor of the game class that takes no arguments: two with the old code before
+the reload, and one with the new code after it. A shadow is loaded and mounted, but never shown or
+updated. The fields of the components in the shadows and in the live game are then read through
+the Dart VM Service and compared as a three way merge:
+
+- A value that is the same in the old and the new shadow wasn't changed by the code, so the live
+  value is kept, also when it changed while the game was running.
+- A value that differs between the old and the new shadow was changed by the code, and is written
+  to the live component. If the live value had changed too, the value from the code wins and the
+  conflict is reported, or with `--keep-runtime` the live value is kept.
+- A value that differs between the two old shadows isn't deterministic, for example because it is
+  random, and is never written.
+- Components that the new code declares and the live game doesn't have yet are added, and the ones
+  that the code doesn't declare anymore are removed. Components that were added while the game
+  was running, like a spawned bullet, are left alone.
+
+A component counts as declared by its parent when it was added before the parent was mounted,
+which covers the children that are passed to a constructor and the ones added in `onLoad`.
+Declared components are matched with the live ones by their order, and between the old and the new
+code like the lines of a text diff, so give components that are hard to tell apart a named
+`ComponentKey`.
+
+Since the shadows run the constructors and the `onLoad` methods of the game, skip side effects
+like playing music in them by checking `isHotReloadShadow` on the game. Values that hold
+references to other components inside of collections, and fields that can't be written, are
+reported as skipped.
 
 
 ### stop

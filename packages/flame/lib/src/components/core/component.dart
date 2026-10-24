@@ -825,7 +825,29 @@ class Component({
     }
   }
 
+  /// The position of this component among the children that its parent
+  /// declared, which are the ones that were added to the parent before it was
+  /// mounted, such as the children that are passed to its constructor and the
+  /// ones that it adds in [onLoad].
+  ///
+  /// It is null for a component that was added to a mounted parent, which is
+  /// how a component that was spawned while the game was running is told
+  /// apart from one that the code of its parent declares. A reload with
+  /// `flame reload --merge` uses it to find the live component that a newly
+  /// built copy of the tree corresponds to. It is only set in debug mode.
+  @internal
+  int? debugDeclarationIndex;
+  int _debugDeclarationCount = 0;
+
   void _addChild(Component child) {
+    assert(() {
+      if (!isMounted &&
+          !child.isMounted &&
+          child.debugDeclarationIndex == null) {
+        child.debugDeclarationIndex = _debugDeclarationCount++;
+      }
+      return true;
+    }());
     final game = findGame() ?? child.findGame();
     if ((!isMounted && !child.isMounted) || game == null) {
       child._parent?._detachChild(child);
