@@ -28,46 +28,105 @@ class InputCommand(StringSink out, Directory workingDirectory)
 }
 
 class _TapCommand(super.out, super.workingDirectory) extends FlameCommand {
+  this {
+    argParser
+      ..addOption(
+        'component',
+        abbr: 'c',
+        help:
+            'Tap a component instead of a position: its id, from the tree '
+            'command, or the name of its ComponentKey.',
+      )
+      ..addOption(
+        'anchor',
+        abbr: 'a',
+        help:
+            'The point of the component to tap, as a name like center or '
+            'topLeft, or as x,y between 0 and 1.',
+        defaultsTo: 'center',
+      );
+  }
+
   @override
   String get name => 'tap';
 
   @override
   String get description =>
-      'Tap the game at a position, in the same coordinates as a snapshot.';
+      'Tap the game at a position, in the same coordinates as a snapshot, or '
+      'on a component.';
 
   @override
-  String get invocation => 'flame input tap <x,y>';
+  String get invocation =>
+      'flame input tap <x,y>\n'
+      '       flame input tap --component <id or key> [--anchor <anchor>]';
 
-  late ({double x, double y}) _position;
+  late InputTarget _target;
 
   @override
   void validate() {
     final rest = argResults!.rest;
-    if (rest.length != 1) {
-      throw UsageException('Pass one position as x,y.', usage);
+    final component = argResults!.option('component');
+    if (rest.length != (component == null ? 1 : 0)) {
+      throw UsageException(
+        'Pass one position as x,y, or a component with --component.',
+        usage,
+      );
     }
-    _position = parsePosition(this, rest.single);
+    _target = InputTarget.parse(
+      this,
+      position: rest.firstOrNull,
+      component: component,
+      anchor: _anchorOption(this, 'anchor', component),
+    );
   }
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
+    final position = await _target.resolve(connection.call);
     await connection.call(
       'tap',
-      args: {'x': '${_position.x}', 'y': '${_position.y}'},
+      args: {'x': '${position.x}', 'y': '${position.y}'},
     );
-    out.writeln('Tapped at ${_position.x},${_position.y}.');
+    out.writeln('Tapped ${_target.describe(position)}.');
     return ExitCode.success.code;
   }
 }
 
 class _DragCommand(super.out, super.workingDirectory) extends FlameCommand {
   this {
-    argParser.addOption(
-      'steps',
-      abbr: 's',
-      help: 'The number of drag updates between the start and the end.',
-      defaultsTo: '10',
-    );
+    argParser
+      ..addOption(
+        'from-component',
+        help:
+            'Start the drag on a component instead of a position: its id, '
+            'from the tree command, or the name of its ComponentKey.',
+      )
+      ..addOption(
+        'to-component',
+        help:
+            'End the drag on a component instead of a position: its id, '
+            'from the tree command, or the name of its ComponentKey.',
+      )
+      ..addOption(
+        'from-anchor',
+        help:
+            'The point of the component that the drag starts on, as a name '
+            'like center or topLeft, or as x,y between 0 and 1.',
+        defaultsTo: 'center',
+      )
+      ..addOption(
+        'to-anchor',
+        help:
+            'The point of the component that the drag ends on, as a name '
+            'like center or topLeft, or as x,y between 0 and 1.',
+        defaultsTo: 'center',
+      )
+      ..addOption(
+        'steps',
+        abbr: 's',
+        help: 'The number of drag updates between the start and the end.',
+        defaultsTo: '10',
+      );
   }
 
   @override
@@ -76,23 +135,45 @@ class _DragCommand(super.out, super.workingDirectory) extends FlameCommand {
   @override
   String get description =>
       'Drag across the game from one position to another, in the same '
-      'coordinates as a snapshot.';
+      'coordinates as a snapshot, or from or to a component.';
 
   @override
-  String get invocation => 'flame input drag <from x,y> <to x,y>';
+  String get invocation =>
+      'flame input drag <from x,y> <to x,y>\n'
+      '       flame input drag --from-component <id or key> <to x,y>\n'
+      '       flame input drag <from x,y> --to-component <id or key>\n'
+      '       flame input drag --from-component <id or key> '
+      '--to-component <id or key>';
 
-  late ({double x, double y}) _from;
-  late ({double x, double y}) _to;
+  late InputTarget _from;
+  late InputTarget _to;
   late int _steps;
 
   @override
   void validate() {
-    final rest = argResults!.rest;
-    if (rest.length != 2) {
-      throw UsageException('Pass two positions as x,y, from and to.', usage);
+    final rest = [...argResults!.rest];
+    final fromComponent = argResults!.option('from-component');
+    final toComponent = argResults!.option('to-component');
+    final componentCount = [fromComponent, toComponent].nonNulls.length;
+    if (rest.length != 2 - componentCount) {
+      throw UsageException(
+        'Pass two positions as x,y, from and to, where --from-component or '
+        '--to-component replaces one of them.',
+        usage,
+      );
     }
-    _from = parsePosition(this, rest[0]);
-    _to = parsePosition(this, rest[1]);
+    _from = InputTarget.parse(
+      this,
+      position: fromComponent == null ? rest.removeAt(0) : null,
+      component: fromComponent,
+      anchor: _anchorOption(this, 'from-anchor', fromComponent),
+    );
+    _to = InputTarget.parse(
+      this,
+      position: toComponent == null ? rest.removeAt(0) : null,
+      component: toComponent,
+      anchor: _anchorOption(this, 'to-anchor', toComponent),
+    );
     final steps = int.tryParse(argResults!.option('steps')!);
     if (steps == null || steps < 1) {
       throw UsageException('--steps has to be a positive integer.', usage);
@@ -102,19 +183,38 @@ class _DragCommand(super.out, super.workingDirectory) extends FlameCommand {
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
+    final from = await _from.resolve(connection.call);
+    final to = await _to.resolve(connection.call);
     await connection.call(
       'drag',
       args: {
-        'fromX': '${_from.x}',
-        'fromY': '${_from.y}',
-        'toX': '${_to.x}',
-        'toY': '${_to.y}',
+        'fromX': '${from.x}',
+        'fromY': '${from.y}',
+        'toX': '${to.x}',
+        'toY': '${to.y}',
         'steps': '$_steps',
       },
     );
-    out.writeln('Dragged from ${_from.x},${_from.y} to ${_to.x},${_to.y}.');
+    out.writeln(
+      'Dragged from ${_from.describe(from)} to ${_to.describe(to)}.',
+    );
     return ExitCode.success.code;
   }
+}
+
+/// Reads the anchor option [name], which is only allowed together with a
+/// [component].
+String? _anchorOption(Command<int> command, String name, String? component) {
+  if (!command.argResults!.wasParsed(name)) {
+    return null;
+  }
+  if (component == null) {
+    throw UsageException(
+      '--$name can only be used together with a component.',
+      command.usage,
+    );
+  }
+  return command.argResults!.option(name);
 }
 
 class _KeyCommand(super.out, super.workingDirectory) extends FlameCommand {
@@ -174,6 +274,102 @@ class _KeyCommand(super.out, super.workingDirectory) extends FlameCommand {
     });
     return ExitCode.success.code;
   }
+}
+
+/// Calls a service extension of the game, as [FlameConnection.call] does.
+typedef ServiceExtensionCall = Future<Map<String, dynamic>> Function(
+  String method, {
+  Map<String, String>? args,
+});
+
+/// A point that input is sent to, given either as a [position] in canvas
+/// coordinates or as a [component], whose canvas position is looked up in the
+/// game.
+///
+/// The [component] is the id of the component, as the tree command prints it,
+/// or the name of its `ComponentKey`, and [anchor] is the point within the
+/// component, where the game uses the center when it is not given.
+class InputTarget._({
+  final ({double x, double y})? position,
+  final String? component,
+  final String? anchor,
+}) {
+  /// Creates a target from a [position] given as `x,y`, or from a
+  /// [component] with an optional [anchor] when no position is given.
+  ///
+  /// Throws a [UsageException] for [command] when the position or the anchor
+  /// is invalid.
+  factory InputTarget.parse(
+    Command<int> command, {
+    String? position,
+    String? component,
+    String? anchor,
+  }) {
+    if (component != null) {
+      if (anchor != null && !_isAnchor(anchor)) {
+        throw UsageException(
+          'An anchor has to be a name like center, or two numbers separated '
+          'by a comma, got $anchor.',
+          command.usage,
+        );
+      }
+      return InputTarget._(component: component, anchor: anchor);
+    }
+    return InputTarget._(position: parsePosition(command, position!));
+  }
+
+  /// The arguments of the `getComponentCanvasPosition` service extension,
+  /// where a [component] that is a number is an id and any other one the
+  /// name of a `ComponentKey`.
+  Map<String, String> get componentArgs {
+    final component = this.component!;
+    return {
+      if (int.tryParse(component) != null)
+        'id': component
+      else
+        'key': component,
+      'anchor': ?anchor,
+    };
+  }
+
+  /// Returns the [position], or asks the game through [call] where the
+  /// [component] is on the canvas.
+  Future<({double x, double y})> resolve(ServiceExtensionCall call) async {
+    final position = this.position;
+    if (position != null) {
+      return position;
+    }
+    final response = await call(
+      'getComponentCanvasPosition',
+      args: componentArgs,
+    );
+    return (
+      x: (response['x'] as num).toDouble(),
+      y: (response['y'] as num).toDouble(),
+    );
+  }
+
+  /// Describes the target, which is at the [resolved] canvas position, for
+  /// the output of a command.
+  String describe(({double x, double y}) resolved) {
+    final at =
+        '${formatCoordinate(resolved.x)},${formatCoordinate(resolved.y)}';
+    return component == null ? at : 'component $component at $at';
+  }
+
+  static bool _isAnchor(String value) {
+    if (RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+      return true;
+    }
+    final parts = value.split(',').map(double.tryParse).toList();
+    return parts.length == 2 && parts.every((p) => p != null && p.isFinite);
+  }
+}
+
+/// Formats a canvas coordinate with at most two decimals.
+String formatCoordinate(double value) {
+  final fixed = value.toStringAsFixed(2);
+  return fixed.replaceFirst(RegExp(r'\.?0+$'), '');
 }
 
 /// Parses a position given as `x,y`.

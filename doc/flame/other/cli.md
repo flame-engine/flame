@@ -439,6 +439,32 @@ propagation rules. A drag sends a start event, `--steps` update events (10 by de
 spaced between the two positions, and an end event, all at once. If the game has no component
 that handles the event, the command fails with exit code `65` and says which mixin is missing.
 
+Instead of a position, a tap or either end of a drag can target a component, which is easier than
+finding its pixels in a snapshot:
+
+```shell
+$ flame input tap --component 220731871
+Tapped component 220731871 at 412.5,300.
+$ flame input tap --component 220731871 --anchor topLeft
+$ flame input drag --from-component 220731871 600,300
+$ flame input drag 100,300 --to-component 81726354
+$ flame input drag --from-component 220731871 --to-component 81726354 --to-anchor 0.5,0
+```
+
+A component is given by its id, as `tree` prints it, or by the name of its `ComponentKey`, for
+example `--component player` for a component created with `key: ComponentKey.named('player')`. A
+value that is a number is always used as an id. The component has to be a `PositionComponent`,
+and by default its center is targeted. `--anchor` for a tap, and `--from-anchor` and `--to-anchor`
+for a drag, target another point of the component, either as an anchor name like `topLeft` or
+`bottomCenter`, or as `x,y` between `0` and `1`, where `0,0` is the top left corner.
+
+The game converts the point to canvas coordinates through all the transforms that the component is
+rendered with, including the viewfinder and viewport of the camera when the component is in a
+world, and the command prints where the event was sent. When several cameras show the world, the
+`camera` of the game is used if it is one of them. If the component is not visible on the canvas,
+for example because it is outside of the view of the camera, the command fails with exit code `65`
+instead of sending the event.
+
 Keys are delivered to the `onKeyEvent` of a game with the `HasKeyboardHandlerComponents` or
 `KeyboardEvents` mixin. A key is named like the `LogicalKeyboardKey` constants, for example
 `space`, `enter`, `escape`, `arrowLeft`, `a` or `digit1`, and the name is matched without regard
