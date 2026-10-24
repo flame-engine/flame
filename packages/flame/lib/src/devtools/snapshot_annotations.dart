@@ -148,6 +148,7 @@ class SnapshotAnnotation(
       final mapped = _mapToSpace(
         component,
         [Vector2.zero(), Vector2(size.x, 0), size.clone(), Vector2(0, size.y)],
+        root,
         space,
         (world) => cameras.putIfAbsent(world, () => _cameraOf(world)),
       );
@@ -327,13 +328,15 @@ class SnapshotAnnotation(
   }
 
   /// Maps [points] from the local coordinates of [component] to the
-  /// coordinates of [space], together with the area of the viewport that the
-  /// points are clipped to when they are seen through a camera.
+  /// coordinates of [space], in which the snapshot renders [root], together
+  /// with the area of the viewport that the points are clipped to when they
+  /// are seen through a camera.
   ///
   /// Returns null if the component isn't rendered in [space].
   static ({List<Vector2> points, Rect? clip})? _mapToSpace(
     Component component,
     List<Vector2> points,
+    Component root,
     Component space,
     CameraComponent? Function(World world) cameraOf,
   ) {
@@ -346,6 +349,7 @@ class SnapshotAnnotation(
           mapped = mapped.map(current.positionOf).toList();
         case Viewport():
           mapped = mapped.map(current.localToGlobal).toList();
+          clip = _viewportRect(current);
         case Viewfinder():
           final camera = current.camera;
           mapped = mapped.map(camera.localToGlobal).toList();
@@ -365,6 +369,12 @@ class SnapshotAnnotation(
       final parent = current.parent;
       if (parent == null) {
         return null;
+      }
+      if (parent is CameraComponent &&
+          current == parent.backdrop &&
+          current != root) {
+        mapped = mapped.map(parent.viewport.localToGlobal).toList();
+        clip = _viewportRect(parent.viewport);
       }
       current = parent;
     }

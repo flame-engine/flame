@@ -248,6 +248,45 @@ void main() {
       _expectBox(annotations.last, const Rect.fromLTWH(2, 4, 6, 8));
     });
 
+    testWithFlameGame('maps the backdrop through the viewport', (game) async {
+      final backdrop = RectangleComponent(
+        position: Vector2(10, 20),
+        size: Vector2(30, 40),
+        paint: Paint()..color = const Color(0xFFFFFFFF),
+      );
+      game.camera = CameraComponent(
+        viewport: FixedSizeViewport(200, 200)..position = Vector2(50, 60),
+        backdrop: backdrop,
+        world: game.world,
+      );
+      await game.ready();
+
+      final annotation = GameSnapshotConnector.annotateGame(game).single;
+      final image = await GameSnapshotConnector.snapshotGame(game);
+
+      expect(annotation.id, backdrop.hashCode);
+      _expectBox(annotation, const Rect.fromLTWH(60, 80, 30, 40));
+      expect(await _pixelAt(image, 75, 100), const Color(0xFFFFFFFF));
+      image.dispose();
+      _expectBox(
+        ComponentSnapshotConnector.annotateComponent(backdrop).single,
+        const Rect.fromLTWH(0, 0, 30, 40),
+      );
+    });
+
+    testWithFlameGame('clips viewport components', (game) async {
+      game.camera.viewport = FixedSizeViewport(100, 100);
+      await game.ready();
+      await game.camera.viewport.ensureAddAll([
+        PositionComponent(position: Vector2(10, 10), size: Vector2(10, 10)),
+        PositionComponent(position: Vector2(200, 10), size: Vector2(10, 10)),
+      ]);
+
+      final annotations = GameSnapshotConnector.annotateGame(game);
+
+      _expectBox(annotations.single, const Rect.fromLTWH(10, 10, 10, 10));
+    });
+
     testWithFlameGame('clips the world to the viewport', (game) async {
       game.camera.viewport = FixedSizeViewport(100, 100);
       game.camera.viewfinder.anchor = Anchor.topLeft;
