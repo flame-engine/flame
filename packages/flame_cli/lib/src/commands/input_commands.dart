@@ -4,6 +4,7 @@ import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/commands/flame_command.dart';
 import 'package:flame_cli/src/flame_connection.dart';
+import 'package:flame_cli/src/game_responses.dart';
 import 'package:io/io.dart';
 
 /// Sends taps, drags and key presses to the game.
@@ -38,7 +39,7 @@ class _TapCommand(super.out, super.workingDirectory) extends FlameCommand {
   @override
   String get invocation => 'flame input tap <x,y>';
 
-  late ({double x, double y}) _position;
+  late Vector2 _position;
 
   @override
   void validate() {
@@ -51,10 +52,7 @@ class _TapCommand(super.out, super.workingDirectory) extends FlameCommand {
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
-    await connection.call(
-      'tap',
-      args: {'x': '${_position.x}', 'y': '${_position.y}'},
-    );
+    await connection.tap(_position);
     out.writeln('Tapped at ${_position.x},${_position.y}.');
     return ExitCode.success.code;
   }
@@ -81,8 +79,8 @@ class _DragCommand(super.out, super.workingDirectory) extends FlameCommand {
   @override
   String get invocation => 'flame input drag <from x,y> <to x,y>';
 
-  late ({double x, double y}) _from;
-  late ({double x, double y}) _to;
+  late Vector2 _from;
+  late Vector2 _to;
   late int _steps;
 
   @override
@@ -102,16 +100,7 @@ class _DragCommand(super.out, super.workingDirectory) extends FlameCommand {
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
-    await connection.call(
-      'drag',
-      args: {
-        'fromX': '${_from.x}',
-        'fromY': '${_from.y}',
-        'toX': '${_to.x}',
-        'toY': '${_to.y}',
-        'steps': '$_steps',
-      },
-    );
+    await connection.drag(_from, _to, steps: _steps);
     out.writeln('Dragged from ${_from.x},${_from.y} to ${_to.x},${_to.y}.');
     return ExitCode.success.code;
   }
@@ -143,7 +132,7 @@ class _KeyCommand(super.out, super.workingDirectory) extends FlameCommand {
   String get invocation => 'flame input key <key name>';
 
   late String _key;
-  late String _action;
+  late KeyAction _action;
 
   @override
   void validate() {
@@ -158,26 +147,26 @@ class _KeyCommand(super.out, super.workingDirectory) extends FlameCommand {
       throw UsageException('Pass either --down or --up, not both.', usage);
     }
     _action = down
-        ? 'down'
+        ? KeyAction.down
         : up
-        ? 'up'
-        : 'press';
+        ? KeyAction.up
+        : KeyAction.press;
   }
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
-    await connection.call('key', args: {'key': _key, 'action': _action});
+    await connection.key(_key, action: _action);
     out.writeln(switch (_action) {
-      'down' => 'Pressed $_key down.',
-      'up' => 'Released $_key.',
-      _ => 'Pressed $_key.',
+      KeyAction.down => 'Pressed $_key down.',
+      KeyAction.up => 'Released $_key.',
+      KeyAction.press => 'Pressed $_key.',
     });
     return ExitCode.success.code;
   }
 }
 
 /// Parses a position given as `x,y`.
-({double x, double y}) parsePosition(Command<int> command, String value) {
+Vector2 parsePosition(Command<int> command, String value) {
   final parts = value.split(',').map(double.tryParse).toList();
   if (parts.length != 2 || parts.any((p) => p == null || !p.isFinite)) {
     throw UsageException(

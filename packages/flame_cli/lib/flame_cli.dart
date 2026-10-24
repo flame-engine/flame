@@ -11,6 +11,7 @@ export 'src/devtools_options.dart';
 export 'src/flame_cli_exception.dart';
 export 'src/flame_command_runner.dart';
 export 'src/flame_connection.dart';
+export 'src/game_responses.dart';
 export 'src/image_diff.dart';
 export 'src/json_output.dart';
 export 'src/project_files.dart';
