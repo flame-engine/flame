@@ -76,7 +76,9 @@ void main() {
       final tree = {
         'id': 1,
         'name': 'MyGame',
-        'attributes': <String, dynamic>{},
+        'toString': 'MyGame()',
+        'isPositionComponent': false,
+        'attributes': {'priority': 0},
         'children': <Object>[],
       };
       expect(
@@ -103,7 +105,19 @@ void main() {
     });
 
     test('inspect and set print the component info', () async {
-      final info = {'id': 1, 'name': 'Player', 'childCount': 0};
+      final info = {
+        'id': 1,
+        'name': 'Player',
+        'toString': 'Player()',
+        'parent': 2,
+        'childCount': 0,
+        'debugMode': false,
+        'attributes': {
+          'priority': 0,
+          'position': [1.0, 2.0],
+          'angle': 1.0,
+        },
+      };
       final responses = {'getComponentInfo': info};
       expect(await runGameJson(['inspect', '1'], responses: responses), info);
 
@@ -201,7 +215,7 @@ void main() {
       out.clear();
       expect(
         await runGameJson(['debug', 'off', '--component', '7']),
-        {'debugMode': false, 'component': '7'},
+        {'debugMode': false, 'component': 7},
       );
     });
 
@@ -272,7 +286,7 @@ void main() {
         {
           'input': 'tap',
           'position': {'x': 10.5, 'y': 20.0},
-          'component': '7',
+          'component': 7,
         },
       );
       out.clear();

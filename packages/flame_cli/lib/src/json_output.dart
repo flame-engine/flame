@@ -24,20 +24,22 @@ void addJsonFlag(ArgParser parser) {
   );
 }
 
-/// The JSON object that is printed instead of the message when a command that
-/// was called with `--json` fails.
+/// The error that is printed as JSON instead of the message when a command
+/// that was called with `--json` fails.
 ///
-/// The `kind` is the name of the [exitCode] in [ExitCode], such as `usage`
-/// or `unavailable`, so that the error can be told apart without looking up
-/// the number.
-Map<String, Object?> jsonError(String message, ExitCode exitCode) {
-  return {
-    'error': {
-      'message': message,
-      'exitCode': exitCode.code,
-      'kind': exitCodeName(exitCode),
-    },
-  };
+/// The `kind` in the JSON is the name of the [exitCode] in [ExitCode], such
+/// as `usage` or `unavailable`, so that the error can be told apart without
+/// looking up the number.
+class const JsonError(final String message, final ExitCode exitCode) {
+  Map<String, Object> toJson() {
+    return {
+      'error': {
+        'message': message,
+        'exitCode': exitCode.code,
+        'kind': exitCodeName(exitCode),
+      },
+    };
+  }
 }
 
 /// The name of [exitCode] as it is called in [ExitCode], for the exit codes

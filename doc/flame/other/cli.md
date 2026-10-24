@@ -625,7 +625,8 @@ These are the results of the commands:
 - `input tap`, `drag` and `key`: The kind of `input` and what was sent, the `position` of a tap,
   the `from` and `to` positions and the `steps` of a drag, and the `key` and `action` of a key
   press. The positions are in canvas coordinates, also when a component was targeted, which is then
-  given as `component` for a tap and as `fromComponent` and `toComponent` for a drag.
+  given as `component` for a tap and as `fromComponent` and `toComponent` for a drag, either as
+  the number of its id or as the name of its `ComponentKey`.
 - `diff`: Whether the images are `identical`, the number of `differingPixels` and `totalPixels`,
   the `percentage` that differs, the `bounds` of the differences with `left`, `top`, `width` and
   `height` or `null` when the images are identical, and the absolute path of the `output` image or

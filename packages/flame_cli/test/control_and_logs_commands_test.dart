@@ -72,7 +72,7 @@ void main() {
   test('stop sends a stop request and prints the result', () async {
     final requests = <String>[];
     final server = await _respondingServer(
-      {'ok': true, 'message': 'Stopped the game.'},
+      (_) => const RunResponse(ok: true, message: 'Stopped the game.'),
       requests: requests,
     );
 
@@ -85,10 +85,12 @@ void main() {
   });
 
   test('stop fails when flutter run does not stop', () async {
-    final server = await _respondingServer({
-      'ok': false,
-      'message': 'flutter run did not stop within 120 seconds.',
-    });
+    final server = await _respondingServer(
+      (_) => const RunResponse(
+        ok: false,
+        message: 'flutter run did not stop within 120 seconds.',
+      ),
+    );
 
     final exitCode = await runner.run(['stop', '-p', '${server.port}']);
     await server.close();
@@ -123,13 +125,19 @@ void main() {
 
     Future<ServerSocket> runningGame({String? vmServiceUri}) async {
       final requests = <String>[];
-      final server = await _respondingServer({
-        'ok': true,
-        'message': 'flutter run is running.',
-        'projectDirectory': directory.path,
-        'processId': 4242,
-        'vmServiceUri': vmServiceUri,
-      }, requests: requests);
+      final server = await _respondingServer(
+        (port) => RunResponse(
+          ok: true,
+          message: 'flutter run is running.',
+          status: RunStatus(
+            projectDirectory: directory.path,
+            controlPort: port,
+            processId: 4242,
+            vmServiceUri: vmServiceUri,
+          ),
+        ),
+        requests: requests,
+      );
       addTearDown(() => expect(requests, everyElement('status')));
       projectFile(directory, controlPortFileName)
         ..createSync(recursive: true)
@@ -309,7 +317,7 @@ void main() {
 /// Starts a control port server that records every request in [requests] and
 /// answers it with [response].
 Future<ServerSocket> _respondingServer(
-  Map<String, dynamic> response, {
+  RunResponse Function(int port) response, {
   List<String>? requests,
 }) async {
   final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
@@ -318,7 +326,7 @@ Future<ServerSocket> _respondingServer(
       line,
     ) {
       requests?.add(line);
-      socket.writeln(json.encode(response));
+      socket.writeln(json.encode(response(server.port).toJson()));
       socket.close();
     });
   });

@@ -64,15 +64,11 @@ class TreeCommand(super.out, super.workingDirectory) extends FlameCommand {
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
-    final response = await connection.call('getComponentTree');
-    var tree = response['component_tree'] as Map<String, dynamic>?;
+    var tree = await connection.getComponentTree();
 
     final filter = _filter;
     if (tree != null && filter != null) {
-      tree = filterComponentTree(
-        tree,
-        (node) => filter.hasMatch(node['name'] as String),
-      );
+      tree = filterComponentTree(tree, (node) => filter.hasMatch(node.name));
     }
     if (tree == null) {
       writeResult(null, 'No components match.');
@@ -80,7 +76,7 @@ class TreeCommand(super.out, super.workingDirectory) extends FlameCommand {
     }
 
     if (jsonOutput) {
-      out.writeln(toJsonOutput(tree));
+      out.writeln(toJsonOutput(tree.toJson()));
     } else {
       out.write(formatComponentTree(tree, maxDepth: _maxDepth));
     }
