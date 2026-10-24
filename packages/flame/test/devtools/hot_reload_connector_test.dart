@@ -63,6 +63,30 @@ void main() {
 
       expect(child.debugDeclarationIndex, 0);
     });
+
+    testWithFlameGame('is cleared when the component moves to a new parent', (
+      game,
+    ) async {
+      final child = Component();
+      final first = Component(children: [child]);
+      final second = Component(children: [Component()]);
+      await game.world.ensureAddAll([first, second]);
+      child.parent = second;
+      await game.ready();
+
+      expect(child.parent, same(second));
+      expect(child.debugDeclarationIndex, isNull);
+    });
+
+    test('is given again when the component moves before mounting', () {
+      final child = Component();
+      final first = Component(children: [Component(), child]);
+      final second = Component(children: [child]);
+
+      expect(first.children, hasLength(1));
+      expect(second.children.single, same(child));
+      expect(child.debugDeclarationIndex, 0);
+    });
   });
 
   group('HotReloadConnector', () {
