@@ -14,20 +14,26 @@ abstract class Event<R>({
   /// The original Flutter raw event that triggered this Flame event.
   required var R raw,
 }) {
-  /// If this flag is false (default), the event will be delivered to the first
-  /// component that can handle it. If that component sets this flag to true,
-  /// the event will propagate further down the component tree to other eligible
-  /// components.
+  /// Whether the event should propagate further down the component tree to
+  /// other eligible components after the current one.
+  ///
+  /// It is reset before each component receives the event. For most events it
+  /// is reset to false, so only the first component that can handle the event
+  /// receives it unless that component sets this flag to true. Events that
+  /// are delivered to every eligible component, such as scroll and keyboard
+  /// events, reset it to true instead, and a component can set it to false to
+  /// stop them.
   bool continuePropagation = false;
 
   @internal
   void deliverToComponents<T extends Component>(
     Component rootComponent,
-    void Function(T component) eventHandler,
-  ) {
+    void Function(T component) eventHandler, {
+    bool deliverToAll = false,
+  }) {
     rootComponent.propagateToChildren<T>(
       (component) {
-        continuePropagation = false;
+        continuePropagation = deliverToAll;
         eventHandler(component);
         return continuePropagation;
       },
