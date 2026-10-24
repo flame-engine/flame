@@ -247,7 +247,7 @@ Running: yes
 Project: /path/to/my_game
 Control port: 50312
 Process id of flutter run: 12345
-Dart VM Service URI: http://127.0.0.1:50300/abc123=/
+Dart VM Service URI: ws://127.0.0.1:50300/abc123=/ws
 Reachable: yes
 Paused: no
 ```

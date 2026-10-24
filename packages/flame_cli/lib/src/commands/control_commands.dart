@@ -97,12 +97,15 @@ void addPortOption(ArgParser argParser) {
 }
 
 /// Parses the `--port` option that [addPortOption] added, and throws a
-/// [UsageException] with [usage] when it is not a positive integer.
+/// [UsageException] with [usage] when it is not a port number.
 int? parsePortOption(ArgResults argResults, String usage) {
   final portOption = argResults.option('port');
   final port = portOption == null ? null : int.tryParse(portOption);
-  if (portOption != null && (port == null || port <= 0)) {
-    throw UsageException('--port has to be a positive integer.', usage);
+  if (portOption != null && (port == null || port <= 0 || port > 65535)) {
+    throw UsageException(
+      '--port has to be an integer between 1 and 65535.',
+      usage,
+    );
   }
   return port;
 }

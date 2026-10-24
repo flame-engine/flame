@@ -62,6 +62,13 @@ void main() {
     expect(err.toString(), contains('--port has to be'));
   });
 
+  for (final command in ['stop', 'status']) {
+    test('$command rejects a port that is out of range', () async {
+      expect(await runner.run([command, '-p', '70000']), ExitCode.usage.code);
+      expect(err.toString(), contains('between 1 and 65535'));
+    });
+  }
+
   test('stop sends a stop request and prints the result', () async {
     final requests = <String>[];
     final server = await _respondingServer(
@@ -201,6 +208,7 @@ void main() {
       expect(status['running'], isTrue);
       expect(status['reachable'], isFalse);
       expect(status['error'], contains('still starting'));
+      expect(status.containsKey('vmServiceUri'), isFalse);
       expect(connectedUris, isEmpty);
     });
 

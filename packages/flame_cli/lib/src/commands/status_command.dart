@@ -71,6 +71,7 @@ class StatusCommand(
       }
     }
 
+    status.removeWhere((_, value) => value == null);
     if (argResults!.flag('json')) {
       out.writeln(toJsonOutput(status));
     } else {

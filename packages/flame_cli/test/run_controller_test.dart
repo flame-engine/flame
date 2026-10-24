@@ -140,10 +140,12 @@ void main() {
       projectFile(directory, controlPortFileName).readAsStringSync(),
     );
     final starting = await sendRunRequest(directory, RunRequest.status);
-    projectFile(
-      directory,
-      vmServiceUriFileName,
-    ).writeAsStringSync('ws://127.0.0.1:1/abc=/ws\n');
+    final uriFile = projectFile(directory, vmServiceUriFileName)
+      ..writeAsStringSync('');
+    await settle();
+    final empty = await sendRunRequest(directory, RunRequest.status);
+    uriFile.writeAsStringSync('ws://127.0.0.1:1/abc=/ws\n');
+    await settle();
     final started = await sendRunRequest(directory, RunRequest.status);
 
     expect(starting, {
@@ -154,6 +156,7 @@ void main() {
       'processId': 4242,
       'vmServiceUri': null,
     });
+    expect(empty['vmServiceUri'], isNull);
     expect(started['vmServiceUri'], 'ws://127.0.0.1:1/abc=/ws');
     expect(process.input, isEmpty);
   });

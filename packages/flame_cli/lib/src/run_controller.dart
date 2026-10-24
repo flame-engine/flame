@@ -129,9 +129,7 @@ class RunController({
 
     if (owner == '${_server.port}') {
       _ownsFiles = true;
-      if (_vmServiceUri == null && _vmServiceUriFile.existsSync()) {
-        _vmServiceUri = _vmServiceUriFile.readAsStringSync();
-      }
+      _vmServiceUri ??= _readOwnVmServiceUri();
     } else if (owner == null) {
       // The newer flame run has stopped and removed the files, so this one
       // takes the project back.
