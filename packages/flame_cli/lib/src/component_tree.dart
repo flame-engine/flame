@@ -86,6 +86,19 @@ Map<String, dynamic>? filterComponentTree(
   return {...node, 'children': children};
 }
 
+/// Returns the nodes of the tree that [matches], in depth first order, with
+/// the matches that are inside of other matches included.
+List<Map<String, dynamic>> findComponentNodes(
+  Map<String, dynamic> node,
+  bool Function(Map<String, dynamic> node) matches,
+) {
+  return [
+    if (matches(node)) node,
+    for (final child in node['children'] as List)
+      ...findComponentNodes(child as Map<String, dynamic>, matches),
+  ];
+}
+
 String _formatVector(List<dynamic> values) {
   return values.map((value) => _formatNumber(value as num)).join(',');
 }

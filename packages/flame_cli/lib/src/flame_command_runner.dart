@@ -16,6 +16,7 @@ import 'package:flame_cli/src/commands/run_command.dart';
 import 'package:flame_cli/src/commands/set_command.dart';
 import 'package:flame_cli/src/commands/snapshot_command.dart';
 import 'package:flame_cli/src/commands/tree_command.dart';
+import 'package:flame_cli/src/commands/wait_command.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
 import 'package:io/io.dart';
 
@@ -28,6 +29,7 @@ class FlameCommandRunner({
   ProcessStarter? startProcess,
   GameConnector? connect,
   Stream<List<int>>? input,
+  WaitClock? waitClock,
 }) extends CommandRunner<int> {
   this
     : super(
@@ -64,6 +66,9 @@ class FlameCommandRunner({
     addCommand(SnapshotCommand(output, directory));
     addCommand(TreeCommand(output, directory));
     addCommand(InspectCommand(output, directory));
+    addCommand(
+      WaitCommand(output, directory, connect: connect, clock: waitClock),
+    );
     addCommand(SetCommand(output, directory));
     addCommand(PauseCommand(output, directory));
     addCommand(ResumeCommand(output, directory));

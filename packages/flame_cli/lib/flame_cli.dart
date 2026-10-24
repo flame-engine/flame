@@ -5,6 +5,7 @@ export 'src/commands/create_command.dart' show validateProjectName;
 export 'src/commands/flame_command.dart' show GameConnector, connectToGame;
 export 'src/commands/inspect_command.dart' show formatComponentInfo;
 export 'src/commands/run_command.dart' show ProcessStarter;
+export 'src/commands/wait_command.dart' show WaitClock;
 export 'src/component_tree.dart';
 export 'src/create_templates.dart';
 export 'src/devtools_options.dart';

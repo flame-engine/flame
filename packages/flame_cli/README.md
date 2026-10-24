@@ -92,11 +92,14 @@ started last, and any other one can be addressed with the URI and the port that 
 through `--uri` and, for `reload` and `restart`, `--port`. The same `--uri` option reaches a game
 that was started in another way, with the Dart VM Service URI that `flutter run` prints.
 
-Play the game by sending taps, drags and key presses, and compare two snapshots:
+Play the game by sending taps, drags and key presses, wait until something happens in the game,
+and compare two snapshots:
 
 ```shell
 flame input tap 400,300
 flame input key space
+flame wait overlay GameOver --timeout 5
+flame wait component Enemy --gone
 flame diff before.png after.png --output diff.png
 ```
 
