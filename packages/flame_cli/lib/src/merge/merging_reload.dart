@@ -1,8 +1,17 @@
-import 'package:flame_cli/src/commands/game_loop_commands.dart';
 import 'package:flame_cli/src/flame_connection.dart';
 import 'package:flame_cli/src/merge/heap.dart';
 import 'package:flame_cli/src/merge/merge.dart';
 import 'package:flame_cli/src/merge/tree_match.dart';
+import 'package:flame_cli/src/run_controller.dart';
+
+/// What [mergingReload] did.
+class const MergingReloadResult(
+  /// The response of `flame run` to the hot reload.
+  final RunResponse response,
+
+  /// What the merge changed, or null when the hot reload failed.
+  final MergeReport? report,
+);
 
 /// Hot reloads the game through [reload], and merges the changes of the code
 /// that sets up the components into the live game, keeping their state.
@@ -15,17 +24,16 @@ import 'package:flame_cli/src/merge/tree_match.dart';
 /// new copy are applied to the live game, see [merge].
 ///
 /// The game is paused while this happens, and resumed afterwards if it was
-/// running. Returns whether the reload worked.
-Future<bool> mergingReload({
+/// running.
+Future<MergingReloadResult> mergingReload({
   required FlameConnection connection,
-  required Future<Map<String, dynamic>> Function() reload,
-  required StringSink out,
+  required Future<RunResponse> Function() reload,
   bool keepRuntime = false,
 }) async {
   final heap = await Heap.connect(connection.service, connection.isolateId);
-  final wasPaused = (await connection.call('getPaused'))['paused'] == true;
+  final wasPaused = await connection.getPaused();
   if (!wasPaused) {
-    await setPaused(connection, paused: true);
+    await connection.setPaused(paused: true);
   }
 
   Future<ComponentTree> buildShadow(Slot slot) async {
@@ -44,18 +52,9 @@ Future<bool> mergingReload({
     final check = await buildShadow(Slot.check);
 
     final response = await reload();
-    final message = response['message'];
-    if (response['ok'] != true) {
-      final output = (response['output'] as List?) ?? const [];
-      for (final line in output) {
-        out.writeln(line);
-      }
-      if (output.isEmpty || output.last != message) {
-        out.writeln(message);
-      }
-      return false;
+    if (!response.ok) {
+      return MergingReloadResult(response, null);
     }
-    out.writeln(message);
 
     final live = ComponentTree.fromJson(
       await connection.call('getHotReloadTree'),
@@ -82,38 +81,14 @@ Future<bool> mergingReload({
       writer: HeapMergeWriter(heap),
       keepRuntime: keepRuntime,
     );
-    _printReport(report, out);
-    return true;
+    return MergingReloadResult(response, report);
   } finally {
     try {
       await connection.call('disposeHotReloadShadows');
     } finally {
       if (!wasPaused) {
-        await setPaused(connection, paused: false);
+        await connection.setPaused(paused: false);
       }
     }
   }
-}
-
-void _printReport(MergeReport report, StringSink out) {
-  if (report.isEmpty) {
-    out.writeln('The code declares no changes to the components.');
-    return;
-  }
-  void section(String title, List<String> lines) {
-    if (lines.isEmpty) {
-      return;
-    }
-    out.writeln(title);
-    for (final line in lines) {
-      out.writeln('  $line');
-    }
-  }
-
-  section('Updated:', report.updated);
-  section('Added:', report.added);
-  section('Removed:', report.removed);
-  section('Conflicts:', report.conflicts);
-  section('Skipped:', report.skipped);
-  section('Warnings:', report.warnings);
 }

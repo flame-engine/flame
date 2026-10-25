@@ -6,6 +6,7 @@ import 'package:flame_cli/flame_cli.dart';
 import 'package:flame_cli/src/commands/snapshot_command.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
+import 'package:vm_service/vm_service.dart' show VmService;
 
 final _png = base64Encode([137, 80, 78, 71]);
 
@@ -13,6 +14,12 @@ final _png = base64Encode([137, 80, 78, 71]);
 /// calls.
 class _FakeConnection(final Map<String, dynamic> response)
     implements FlameConnection {
+  @override
+  VmService get service => throw UnimplementedError();
+
+  @override
+  String get isolateId => throw UnimplementedError();
+
   final calls = <(String, Map<String, String>?)>[];
 
   @override

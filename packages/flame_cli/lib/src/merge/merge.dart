@@ -122,6 +122,22 @@ class MergeReport() {
       added.isEmpty &&
       removed.isEmpty &&
       warnings.isEmpty;
+
+  /// The lists of lines with their titles, in the order they are printed.
+  List<(String, List<String>)> get sections => [
+    ('Updated', updated),
+    ('Added', added),
+    ('Removed', removed),
+    ('Conflicts', conflicts),
+    ('Skipped', skipped),
+    ('Warnings', warnings),
+  ];
+
+  Map<String, List<String>> toJson() {
+    return {
+      for (final (title, lines) in sections) title.toLowerCase(): lines,
+    };
+  }
 }
 
 /// Applies the changes that the code made between the old and the new tree

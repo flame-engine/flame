@@ -7,6 +7,7 @@ import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/commands/flame_command.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
 import 'package:flame_cli/src/json_output.dart';
+import 'package:flame_cli/src/merge/merge.dart';
 import 'package:flame_cli/src/merge/merging_reload.dart';
 import 'package:flame_cli/src/project_files.dart';
 import 'package:flame_cli/src/run_controller.dart';
@@ -61,27 +62,68 @@ class ReloadCommand(super.out, super.workingDirectory)
       return await super.run();
     }
     final port = parsePortOption(arguments, usage);
-    if (port != null && arguments.option('uri') == null) {
-      throw UsageException(
-        '--port with --merge needs --uri, the VM Service URI of the game '
-        'that the port belongs to.',
-        usage,
-      );
-    }
     final connection = await connectToGame(
       workingDirectory,
-      uriOption: arguments.option('uri'),
+      uriOption: arguments.option('uri') ?? await _vmServiceUri(port),
     );
     try {
-      final ok = await mergingReload(
+      final MergingReloadResult(:response, :report) = await mergingReload(
         connection: connection,
         reload: () => sendRunRequest(workingDirectory, request, port: port),
-        out: out,
         keepRuntime: arguments.flag('keep-runtime'),
       );
-      return (ok ? ExitCode.success : ExitCode.software).code;
+      if (jsonOutput) {
+        out.writeln(
+          toJsonOutput({...response.toJson(), 'merge': ?report?.toJson()}),
+        );
+      } else {
+        _printResponse(response);
+        if (report != null) {
+          _printReport(report);
+        }
+      }
+      return (response.ok ? ExitCode.success : ExitCode.software).code;
     } finally {
       await connection.dispose();
+    }
+  }
+
+  /// The VM Service URI of the game of the `flame run` on [port], since the
+  /// URI that the last `flame run` of the project wrote belongs to another
+  /// game when several were started.
+  Future<String?> _vmServiceUri(int? port) async {
+    if (port == null) {
+      return null;
+    }
+    final response = await sendRunRequest(
+      workingDirectory,
+      RunRequest.status,
+      port: port,
+    );
+    final uri = response.status?.vmServiceUri;
+    if (uri == null) {
+      throw FlameCliException(
+        'The `flame run` on port $port does not know the Dart VM Service URI '
+        'of its game yet, pass it with --uri.',
+        exitCode: ExitCode.unavailable,
+      );
+    }
+    return uri;
+  }
+
+  void _printReport(MergeReport report) {
+    if (report.isEmpty) {
+      out.writeln('The code declares no changes to the components.');
+      return;
+    }
+    for (final (title, lines) in report.sections) {
+      if (lines.isEmpty) {
+        continue;
+      }
+      out.writeln('$title:');
+      for (final line in lines) {
+        out.writeln('  $line');
+      }
     }
   }
 }
@@ -134,11 +176,18 @@ abstract class _RunRequestCommand(
       request,
       port: port,
     );
-    final RunResponse(:ok, :message) = response;
     if (jsonOutput) {
       out.writeln(toJsonOutput(response.toJson()));
-      return (ok ? ExitCode.success : ExitCode.software).code;
+    } else {
+      _printResponse(response);
     }
+    return (response.ok ? ExitCode.success : ExitCode.software).code;
+  }
+
+  /// Prints the message of [response], after the output of `flutter run`
+  /// when the request failed.
+  void _printResponse(RunResponse response) {
+    final RunResponse(:ok, :message) = response;
     final output = ok ? const <String>[] : response.output;
     for (final line in output) {
       out.writeln(line);
@@ -146,7 +195,6 @@ abstract class _RunRequestCommand(
     if (output.isEmpty || output.last != message) {
       out.writeln(message);
     }
-    return (ok ? ExitCode.success : ExitCode.software).code;
   }
 }
 

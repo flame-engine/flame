@@ -294,6 +294,14 @@ void main() {
       expect(writer.writes, isEmpty);
       expect(report.conflicts.single, contains('kept its runtime value'));
       expect(report.isEmpty, isFalse);
+      expect(report.toJson(), {
+        'updated': isEmpty,
+        'added': isEmpty,
+        'removed': isEmpty,
+        'conflicts': hasLength(1),
+        'skipped': isEmpty,
+        'warnings': isEmpty,
+      });
     });
 
     test('writes through the deepest field that can be written', () async {
