@@ -8,14 +8,6 @@ import 'package:io/io.dart';
 
 /// Prints information about a single component.
 class InspectCommand(super.out, super.workingDirectory) extends FlameCommand {
-  this {
-    argParser.addFlag(
-      'json',
-      negatable: false,
-      help: 'Print the information as JSON instead of text.',
-    );
-  }
-
   @override
   String get name => 'inspect';
 
@@ -38,14 +30,17 @@ class InspectCommand(super.out, super.workingDirectory) extends FlameCommand {
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
-    final info = await connection.getComponentInfo(_id);
-    if (argResults!.flag('json')) {
-      out.writeln(toJsonOutput(info.toJson()));
-      return ExitCode.success.code;
-    }
-
-    out.write(formatComponentInfo(info));
+    writeComponentInfo(this, await connection.getComponentInfo(_id));
     return ExitCode.success.code;
+  }
+}
+
+/// Prints the details of a component as the result of [command].
+void writeComponentInfo(FlameCommand command, ComponentInfo info) {
+  if (command.jsonOutput) {
+    command.out.writeln(toJsonOutput(info.toJson()));
+  } else {
+    command.out.write(formatComponentInfo(info));
   }
 }
 

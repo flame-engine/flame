@@ -16,6 +16,9 @@ flame pause
 flame snapshot --output snapshot.png
 ```
 
+Every command except `run` also takes `--json`, which prints the result and any error as JSON, see
+[using the CLI from scripts and agents](#using-the-cli-from-scripts-and-agents).
+
 
 ## Installation
 
@@ -522,21 +525,112 @@ anti-aliasing. `--exit-code` makes the command exit with `1` when the images dif
 `git diff`, for use in scripts.
 
 
+## Using the CLI from scripts and agents
+
+Every command that prints a result, which is all of them except `run`, takes `--json`. The result
+is then printed as a single JSON value on the standard output instead of as text, so that scripts
+and AI coding agents never have to parse prose:
+
+```shell
+$ flame snapshot --output snapshot.png --json
+{
+  "path": "/path/to/my_game/snapshot.png",
+  "width": 800,
+  "height": 600,
+  "pixelRatio": 1.0,
+  "bytes": 48213
+}
+```
+
+When a command that was called with `--json` fails, the error is printed as JSON on the standard
+output too, in place of the result, and the command exits with the same exit code as without
+`--json`:
+
+```shell
+$ flame step --frames 0 --json
+{
+  "error": {
+    "message": "--frames has to be a positive integer.",
+    "exitCode": 64,
+    "kind": "usage"
+  }
+}
+```
+
+That way the standard output of a command with `--json` always holds exactly one JSON value, and
+a script can check the exit code first and then read either the result or the `error` object. The
+`kind` is the name of the exit code, see [exit codes](#exit-codes), for example `unavailable` when
+no running game was found. Output that is not part of the result, such as the output of
+`flutter create` in `flame create`, goes to the standard error.
+
+These are the results of the commands:
+
+- `create`: The `name` of the game, the absolute `path` of its directory and the `template` it was
+  created from.
+- `reload` and `restart`: Whether the reload succeeded as `ok`, the `message` that `flutter run`
+  reported and all the `output` lines that it printed meanwhile. A failed reload is reported in the
+  result too, with `ok` set to `false` and the exit code `70`, since the compile errors in the
+  `output` are what is needed to fix the code.
+- `stop`: The same `ok`, `message` and `output` as `reload`, where `ok` is `false` when
+  `flutter run` did not exit in time.
+- `status`: The fields that are described in [status](#status). A game that is not running or not
+  reachable is reported in the result too, with the exit code `69`.
+- `logs`: The `path` of the log and the last `lines` of it. `--follow` cannot be combined with
+  `--json`.
+- `devtools`: Starts `dart devtools` with `--machine`, so that its output is one JSON object per
+  line, such as the `server.started` event with the host and port of the DevTools. This is the only
+  command that prints more than one JSON value.
+- `snapshot`: The absolute `path` of the image, its `width` and `height` in pixels, the
+  `pixelRatio` and the size of the file in `bytes`. The `width` and `height` are `null` when the
+  image that the game returned is not a valid PNG.
+- `tree`: The root of the component tree, or `null` when no component matches `--filter`. Every
+  node has an `id`, a `name`, the `toString` of the component, its `attributes` and its
+  `children`.
+- `inspect` and `set`: The details of the component, the same fields as in the text output.
+- `pause`, `resume` and `step`: Whether the game is `paused` afterwards. `step` also has the number
+  of `frames`, the `frameTime` and `totalTime` in seconds, and whether the game `wasPaused`
+  before.
+- `debug`: Whether the `debugMode` is on, and the `component` it applies to, or `null` for the
+  whole game.
+- `overlays`: The names of all the registered `overlays`, and the `active` ones.
+- `overlay show`, `hide` and `only`: The `overlay` and whether it is `shown`, and for `only` also
+  `othersHidden`.
+- `input tap`, `drag` and `key`: The kind of `input` and what was sent, the `position` of a tap,
+  the `from` and `to` positions and the `steps` of a drag, and the `key` and `action` of a key
+  press.
+- `diff`: Whether the images are `identical`, the number of `differingPixels` and `totalPixels`,
+  the `percentage` that differs, the `bounds` of the differences with `left`, `top`, `width` and
+  `height` or `null` when the images are identical, and the absolute path of the `output` image or
+  `null`.
+
+`flame run` passes all its arguments on to `flutter run`, so it has no `--json`. Use the
+`--machine` option of `flutter run` for machine readable output of the game itself.
+
+
 ## Exit codes
 
 The commands follow the common Unix conventions for exit codes, so that scripts can tell failures
-apart. `flame run` exits with the exit code of `flutter run`, `reload` and `restart` exit with
-`70` when the reload failed, `stop` exits with `70` when `flutter run` did not exit, and the other
-commands use these:
+apart. The exit codes are stable, and with `--json` the name in parentheses is
+the `kind` of the error:
 
-- `0`: The command succeeded.
-- `64`: The command was used incorrectly, for example with an invalid option.
-- `65`: The game rejected the input, for example because there is no component with the given
-  id, or the input files could not be read.
-- `69`: No running game was found, the game could not be reached, or it runs a version of Flame
-  that does not support the command.
-- `70`: The game reported an error while running the command.
-- `73`: The output file could not be written.
+- `0` (`success`): The command succeeded.
+- `1`: Only from `diff --exit-code`, when the images differ, like `git diff`.
+- `64` (`usage`): The command was used incorrectly, for example with an unknown or invalid option,
+  or a missing argument.
+- `65` (`data`): The game rejected the input, for example because there is no component with the
+  given id or no component handles the input, or an input file could not be read or is invalid,
+  such as a file that is not a PNG image or a `devtools_options.yaml` that is not valid YAML. It
+  is also used when `flame create` would overwrite an existing project.
+- `69` (`unavailable`): No running game was found, the game or `flame run` could not be reached,
+  the game runs a version of Flame that does not support the command, or `flutter` or `dart` could
+  not be started.
+- `70` (`software`): The game reported an error while running the command, a reload or restart
+  failed, `flutter run` did not exit after `stop`, or a `flutter` command that `flame create` runs
+  failed.
+- `73` (`cantCreate`): The output file could not be written.
+
+`flame run` and `flame devtools` exit with the exit code of `flutter run` and `dart devtools`
+once those have started.
 
 
 ## Compatibility

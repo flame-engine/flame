@@ -17,25 +17,20 @@ import 'package:io/io.dart';
 /// that scripts can wait for the game to start or check that it is still
 /// there.
 class StatusCommand(
-  final StringSink out,
+  @override final StringSink out,
   final Directory workingDirectory, {
   GameConnector? connect,
-}) extends Command<int> {
+}) extends Command<int> with JsonOutput {
   this {
-    argParser
-      ..addOption(
-        'uri',
-        abbr: 'u',
-        help:
-            'The Dart VM Service URI of a game that was not started with '
-            '`flame run`, to check whether it is reachable.',
-      )
-      ..addFlag(
-        'json',
-        negatable: false,
-        help: 'Print the status as JSON instead of text.',
-      );
+    argParser.addOption(
+      'uri',
+      abbr: 'u',
+      help:
+          'The Dart VM Service URI of a game that was not started with '
+          '`flame run`, to check whether it is reachable.',
+    );
     addPortOption(argParser);
+    addJsonFlag(argParser);
   }
 
   final GameConnector _connect = connect ?? FlameConnection.connect;
@@ -71,7 +66,7 @@ class StatusCommand(
       }
     }
 
-    if (argResults!.flag('json')) {
+    if (jsonOutput) {
       out.writeln(toJsonOutput(status.toJson()));
     } else {
       _printStatus(status);
