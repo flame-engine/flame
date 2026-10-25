@@ -110,6 +110,72 @@ void main() {
     expect(result.message, contains('stopped before'));
   });
 
+  test(
+    'presses q for a stop and responds once the files are removed',
+    () async {
+      final portFile = projectFile(directory, controlPortFileName);
+      final uriFile = projectFile(directory, vmServiceUriFileName)
+        ..writeAsStringSync('ws://127.0.0.1:1/abc=/ws');
+      final response = sendRunRequest(directory, RunRequest.stop);
+      await _untilInput(process, 'q\n');
+      process.exit(0);
+
+      final RunResponse(:ok, :message) = await response;
+      expect(ok, isTrue);
+      expect(message, 'Stopped the game.');
+      expect(portFile.existsSync(), isFalse);
+      expect(uriFile.existsSync(), isFalse);
+      expect(await running, 0);
+    },
+  );
+
+  test('reports when flutter run does not stop', () async {
+    final result = await sendRunRequest(directory, RunRequest.stop);
+
+    expect(result.ok, isFalse);
+    expect(result.message, contains('did not stop within'));
+    expect(process.input, 'q\n');
+  });
+
+  test('answers a status request without pressing a key', () async {
+    final port = int.parse(
+      projectFile(directory, controlPortFileName).readAsStringSync(),
+    );
+    final starting = await sendRunRequest(directory, RunRequest.status);
+    final uriFile = projectFile(directory, vmServiceUriFileName)
+      ..writeAsStringSync('');
+    await settle();
+    final empty = await sendRunRequest(directory, RunRequest.status);
+    uriFile.writeAsStringSync('ws://127.0.0.1:1/abc=/ws\n');
+    await settle();
+    final started = await sendRunRequest(directory, RunRequest.status);
+
+    expect(starting.toJson(), {
+      'ok': true,
+      'message': 'flutter run is running.',
+      'output': <String>[],
+      'status': {
+        'projectDirectory': directory.path,
+        'controlPort': port,
+        'processId': 4242,
+      },
+    });
+    expect(empty.status?.vmServiceUri, isNull);
+    expect(started.status?.vmServiceUri, 'ws://127.0.0.1:1/abc=/ws');
+    expect(process.input, isEmpty);
+  });
+
+  test('answers a status request while another request waits', () async {
+    final reload = sendRunRequest(directory, RunRequest.reload);
+    await _untilInput(process, 'r\n');
+
+    final status = await sendRunRequest(directory, RunRequest.status);
+    expect(status.ok, isTrue);
+
+    process.printLine('Reloaded 1 of 2 libraries in 123ms.');
+    expect((await reload).ok, isTrue);
+  });
+
   test('rejects unknown requests', () async {
     final port = int.parse(
       projectFile(directory, controlPortFileName).readAsStringSync(),

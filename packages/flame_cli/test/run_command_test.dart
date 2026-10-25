@@ -122,7 +122,9 @@ void main() {
     expect(out.toString(), contains('Launching lib/main.dart\n'));
     expect(
       out.toString(),
-      contains('flame run: the reload and restart commands reach this game'),
+      contains(
+        'flame run: reload, restart, stop and status reach this game',
+      ),
     );
     expect(err.toString(), 'Something went wrong\n');
     expect(
@@ -147,6 +149,31 @@ void main() {
     await input.close();
 
     expect(process.input, 'r');
+  });
+
+  test('is stopped by flame stop', () async {
+    final process = FakeProcess();
+    final running = createRunner(_starter((_, _, _) => process)).run(['run']);
+    final portFile = projectFile(directory.absolute, controlPortFileName);
+    while (!portFile.existsSync()) {
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+    }
+
+    final stopOut = StringBuffer();
+    final stopping = FlameCommandRunner(
+      out: stopOut,
+      err: err,
+      workingDirectory: directory,
+    ).run(['stop']);
+    while (process.input != 'q\n') {
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+    }
+    process.exit(0);
+
+    expect(await stopping, ExitCode.success.code);
+    expect(stopOut.toString(), 'Stopped the game.\n');
+    expect(portFile.existsSync(), isFalse);
+    expect(await running, ExitCode.success.code);
   });
 
   test('prints an introduction before the help of flutter run', () async {
