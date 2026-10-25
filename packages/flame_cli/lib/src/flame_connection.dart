@@ -231,6 +231,23 @@ extension FlameServiceExtensions on FlameConnection {
     );
   }
 
+  /// Where the [component] is on the canvas, at its [anchor], which is either
+  /// a name like `center` or `x,y` between 0 and 1, and the center when it is
+  /// not given.
+  Future<Vector2> getComponentCanvasPosition(
+    ComponentReference component, {
+    String? anchor,
+  }) async {
+    final response = await call(
+      'getComponentCanvasPosition',
+      args: {...component.args, 'anchor': ?anchor},
+    );
+    return (
+      x: (response['x'] as num).toDouble(),
+      y: (response['y'] as num).toDouble(),
+    );
+  }
+
   /// Taps the game at [position], in canvas coordinates.
   Future<void> tap(Vector2 position) async {
     await call('tap', args: {'x': '${position.x}', 'y': '${position.y}'});
