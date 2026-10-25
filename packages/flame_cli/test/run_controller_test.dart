@@ -62,7 +62,7 @@ void main() {
       ..printLine('Performing hot reload...')
       ..printLine('Reloaded 1 of 2 libraries in 123ms.');
 
-    expect(await response, {
+    expect((await response).toJson(), {
       'ok': true,
       'message': 'Reloaded 1 of 2 libraries in 123ms.',
       'output': [
@@ -77,7 +77,7 @@ void main() {
     await _untilInput(process, 'R\n');
     process.printLine('Restarted application in 456ms.');
 
-    expect((await response)['ok'], isTrue);
+    expect((await response).ok, isTrue);
   });
 
   test('reports a failed reload with the output', () async {
@@ -88,16 +88,16 @@ void main() {
       ..printLine('Try again after fixing the above error(s).');
 
     final result = await response;
-    expect(result['ok'], isFalse);
-    expect(result['message'], 'Try again after fixing the above error(s).');
-    expect(result['output'], contains('lib/main.dart:3:1: Error: Expected ;'));
+    expect(result.ok, isFalse);
+    expect(result.message, 'Try again after fixing the above error(s).');
+    expect(result.output, contains('lib/main.dart:3:1: Error: Expected ;'));
   });
 
   test('reports a timeout when flutter run does not answer', () async {
     final result = await sendRunRequest(directory, RunRequest.reload);
 
-    expect(result['ok'], isFalse);
-    expect(result['message'], contains('did not report the result'));
+    expect(result.ok, isFalse);
+    expect(result.message, contains('did not report the result'));
   });
 
   test('reports when the process stops during a request', () async {
@@ -106,8 +106,8 @@ void main() {
     process.exit(0);
 
     final result = await response;
-    expect(result['ok'], isFalse);
-    expect(result['message'], contains('stopped before'));
+    expect(result.ok, isFalse);
+    expect(result.message, contains('stopped before'));
   });
 
   test('rejects unknown requests', () async {
@@ -162,7 +162,7 @@ void main() {
       expect(portFile.readAsStringSync(), isNot('1'));
       expect(uriFile.readAsStringSync(), 'ws://127.0.0.1:1/old=/ws');
       final result = await sendRunRequest(directory, RunRequest.reload);
-      expect(result['message'], contains('did not report'));
+      expect(result.message, contains('did not report'));
 
       process.printLine('again');
       await settle();

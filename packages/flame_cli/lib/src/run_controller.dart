@@ -14,6 +14,32 @@ enum RunRequest(
   restart('R'),
 }
 
+/// The response of `flame run` to a [RunRequest], sent back as one line of
+/// JSON on the control port.
+class const RunResponse({
+  /// Whether the request succeeded.
+  required final bool ok,
+
+  /// The line that `flutter run` printed when it was done, or why the
+  /// request failed.
+  required final String message,
+
+  /// All the lines that `flutter run` printed while the request ran.
+  final List<String> output = const [],
+}) {
+  factory RunResponse.fromJson(Map<String, dynamic> json) {
+    return RunResponse(
+      ok: json['ok'] == true,
+      message: json['message'] as String? ?? '',
+      output: (json['output'] as List? ?? const []).cast<String>(),
+    );
+  }
+
+  Map<String, Object> toJson() {
+    return {'ok': ok, 'message': message, 'output': output};
+  }
+}
+
 /// Manages a `flutter run` [process] that was started by `flame run`.
 ///
 /// It mirrors the output of the process to the terminal and to the log file
@@ -173,9 +199,9 @@ class RunController({
               .where((request) => request.name == line.trim())
               .firstOrNull;
           final response = request == null
-              ? {'ok': false, 'message': 'Unknown request: $line'}
+              ? RunResponse(ok: false, message: 'Unknown request: $line')
               : await _enqueue(request);
-          socket.writeln(json.encode(response));
+          socket.writeln(json.encode(response.toJson()));
           await socket.flush();
           await socket.close();
         })
@@ -184,15 +210,18 @@ class RunController({
         });
   }
 
-  Future<Map<String, dynamic>> _enqueue(RunRequest request) {
+  Future<RunResponse> _enqueue(RunRequest request) {
     final result = _requests.then((_) => _perform(request));
     _requests = result.then((_) {}, onError: (Object _) {});
     return result;
   }
 
-  Future<Map<String, dynamic>> _perform(RunRequest request) async {
+  Future<RunResponse> _perform(RunRequest request) async {
     if (_exited) {
-      return {'ok': false, 'message': 'flutter run has already stopped.'};
+      return const RunResponse(
+        ok: false,
+        message: 'flutter run has already stopped.',
+      );
     }
     final output = <String>[];
     final done = Completer<String>();
@@ -220,7 +249,7 @@ class RunController({
       );
       final ok =
           message.startsWith('Reloaded') || message.startsWith('Restarted');
-      return {'ok': ok, 'message': message, 'output': output};
+      return RunResponse(ok: ok, message: message, output: output);
     } finally {
       await subscription.cancel();
     }

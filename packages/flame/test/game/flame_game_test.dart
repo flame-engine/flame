@@ -404,6 +404,71 @@ void main() {
     );
   });
 
+  group('start:', () {
+    test('loads and mounts the whole tree without a widget', () async {
+      final child = _MyAsyncComponent();
+      final parent = Component(children: [child]);
+      final game = FlameGame(world: World(children: [parent]))
+        ..onGameResize(Vector2.all(100));
+
+      await game.start();
+
+      expect(game.isMounted, isTrue);
+      expect(parent.isMounted, isTrue);
+      expect(child.isMounted, isTrue);
+      expect(game.hasLifecycleEvents, isFalse);
+    });
+
+    test('runs the first update', () async {
+      final game = _UpdateCountingGame()..onGameResize(Vector2.all(100));
+
+      await game.start();
+
+      expect(game.updateCount, 1);
+    });
+
+    test('skips the first update of a paused game', () async {
+      final game = _UpdateCountingGame()
+        ..onGameResize(Vector2.all(100))
+        ..isPaused = true;
+
+      await game.start();
+
+      expect(game.isMounted, isTrue);
+      expect(game.updateCount, 0);
+    });
+
+    test('does not mount a game removed while it was loading', () async {
+      final onLoad = Completer<void>();
+      final game = _LoadAwaitingGame(onLoad.future)
+        ..onGameResize(Vector2.all(100));
+
+      final start = game.start();
+      game.finalizeRemoval();
+      onLoad.complete();
+      await start;
+
+      expect(game.isLoaded, isTrue);
+      expect(game.isMounted, isFalse);
+      expect(game.updateCount, 0);
+    });
+
+    test('a later start supersedes one still loading', () async {
+      final onLoad = Completer<void>();
+      final game = _LoadAwaitingGame(onLoad.future)
+        ..onGameResize(Vector2.all(100));
+
+      final firstStart = game.start();
+      game.finalizeRemoval();
+      final secondStart = game.start();
+      onLoad.complete();
+      await Future.wait([firstStart, secondStart]);
+
+      expect(game.isMounted, isTrue);
+      expect(game.updateCount, 1);
+    });
+  });
+
   group('pauseWhenBackgrounded:', () {
     testWidgets(
       'game resumes when widget is rebuilt',
@@ -632,6 +697,22 @@ class _OnAttachGame(final VoidCallback onAttachCallback) extends FlameGame {
   Future<void>? onLoad() {
     return Future.delayed(const Duration(seconds: 1));
   }
+}
+
+class _UpdateCountingGame() extends FlameGame {
+  int updateCount = 0;
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    updateCount++;
+  }
+}
+
+class _LoadAwaitingGame(final Future<void> onLoadFuture)
+    extends _UpdateCountingGame {
+  @override
+  Future<void> onLoad() => onLoadFuture;
 }
 
 class _CompleterGame() extends FlameGame {

@@ -1,14 +1,14 @@
-import 'package:flame/components.dart';
-import 'package:flame/game.dart';
+import 'dart:async';
+
+import 'package:flame/components.dart' show Component;
 import 'package:flame_studio/src/core/game_controller.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final componentTreeProvider =
-    StateNotifierProvider<ComponentTreeObserver, ComponentTreeState>((ref) {
-      final gameState = ref.watch(gameControllerProvider);
-      return ComponentTreeObserver(gameState.game as FlameGame?);
-    });
+    NotifierProvider<ComponentTreeObserver, ComponentTreeState>(
+      ComponentTreeObserver.new,
+    );
 
 @immutable
 class const ComponentTreeNode._(
@@ -52,25 +52,26 @@ class ComponentTreeState(Component? rootComponent) {
   int get hashCode => root?.hashCode ?? 0;
 }
 
-class ComponentTreeObserver(Component? rootComponent)
-    extends StateNotifier<ComponentTreeState> {
-  this : super(ComponentTreeState(rootComponent)) {
-    if (rootComponent != null) {
-      _refresh();
-    }
-  }
-
+/// Periodically takes a snapshot of the component tree of the current game.
+///
+/// Listeners are only notified when the structure of the tree changes.
+class ComponentTreeObserver() extends Notifier<ComponentTreeState> {
   static const Duration refreshFrequency = Duration(milliseconds: 300);
 
-  void _refresh() {
-    if (!mounted) {
-      // The Future.delayed may complete after the observer was disposed.
-      return;
+  @override
+  ComponentTreeState build() {
+    final game = ref.watch(gameControllerProvider.select((s) => s.game));
+    final root = switch (game) {
+      final Component component => component,
+      _ => null,
+    };
+    if (root != null) {
+      final timer = Timer.periodic(
+        refreshFrequency,
+        (_) => state = ComponentTreeState(root),
+      );
+      ref.onDispose(timer.cancel);
     }
-    final newState = ComponentTreeState(state.root!.component);
-    if (newState != state) {
-      state = newState;
-    }
-    Future.delayed(refreshFrequency, _refresh);
+    return ComponentTreeState(root);
   }
 }
