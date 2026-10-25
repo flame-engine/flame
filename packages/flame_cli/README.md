@@ -65,6 +65,13 @@ flame tree
 flame snapshot --component 220731871
 ```
 
+Annotate the snapshot with the box, id and type of every visible component, so that what is seen
+in the image can be matched with the ids, and keep the image within the size limits of AI models:
+
+```shell
+flame snapshot --annotate --filter 'player|enemy' --max-size 1024
+```
+
 Hot reload or restart the game after changing the code, read its output, open the Flutter
 DevTools with the Flame tab for the game, check whether it is running and stop it:
 
