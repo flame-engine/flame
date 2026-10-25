@@ -148,6 +148,33 @@ void main() {
       });
     });
 
+    test('snapshot prints the annotations and the used pixel ratio', () async {
+      final png = img.encodePng(img.Image(width: 4, height: 3));
+      final annotation = {
+        'id': 7,
+        'name': 'Player',
+        'box': [1, 0, 2, 2],
+      };
+      final result = await runGameJson(
+        ['snapshot', '--annotate', '--max-size', '4', '--pixel-ratio', '2'],
+        responses: {
+          'getGameSnapshot': {
+            'snapshot': base64Encode(png),
+            'pixelRatio': 0.5,
+            'annotations': [annotation],
+          },
+        },
+      );
+      expect(result, {
+        'path': p.join(directory.path, 'flame_snapshot.png'),
+        'width': 4,
+        'height': 3,
+        'pixelRatio': 0.5,
+        'bytes': png.length,
+        'annotations': [annotation],
+      });
+    });
+
     test('snapshot prints no size when the image cannot be read', () async {
       final truncated = img
           .encodePng(img.Image(width: 4, height: 3))

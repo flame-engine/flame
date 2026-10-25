@@ -47,7 +47,29 @@ void main() {
       'snapshot': base64Encode([1, 2, 3]),
     });
     expect(snapshot.bytes, [1, 2, 3]);
+    expect(snapshot.annotations, isNull);
     expect(Snapshot.fromJson({}).bytes, isEmpty);
+  });
+
+  test('Snapshot reads the pixel ratio, size and annotations', () {
+    final annotation = {
+      'id': 7,
+      'name': 'Player',
+      'box': [1.0, 2.5, 30.0, 40.0],
+    };
+    final snapshot = Snapshot.fromJson({
+      'snapshot': base64Encode([1]),
+      'pixelRatio': 0.5,
+      'width': 400,
+      'height': 300,
+      'annotations': [annotation],
+    });
+    expect(snapshot.pixelRatio, 0.5);
+    expect(snapshot.width, 400);
+    expect(snapshot.height, 300);
+    final player = snapshot.annotations!.single;
+    expect(player.box, (x: 1.0, y: 2.5, width: 30.0, height: 40.0));
+    expect(player.toJson(), annotation);
   });
 
   test('RunResponse reads and writes the control port JSON', () {

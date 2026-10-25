@@ -7,6 +7,10 @@ typedef Vector2 = ({double x, double y});
 /// A rectangle in world coordinates, with its top left corner at `x` and `y`.
 typedef WorldRect = ({double x, double y, double width, double height});
 
+/// A rectangle in the pixel coordinates of an image, with its top left corner
+/// at `x` and `y`.
+typedef PixelRect = ({double x, double y, double width, double height});
+
 /// A component that the game is asked about, either by its [ComponentId] or
 /// by the [ComponentKeyName] of its `ComponentKey`.
 sealed class const ComponentReference() {
@@ -204,10 +208,91 @@ class const Overlays({
 /// A PNG image that the snapshot service extensions rendered.
 class const Snapshot(
   /// The encoded PNG image.
-  final Uint8List bytes,
-) {
+  final Uint8List bytes, {
+
+  /// The pixel ratio that the image was rendered with, which is lower than
+  /// the requested one when it was scaled down to fit a maximum size. It is
+  /// null when the game does not report it.
+  final double? pixelRatio,
+
+  /// The width of the image in pixels, when the game reports it.
+  final int? width,
+
+  /// The height of the image in pixels, when the game reports it.
+  final int? height,
+
+  /// The components that were annotated on the image, or null when the
+  /// image was not annotated or the game does not support annotations.
+  final List<SnapshotAnnotation>? annotations,
+}) {
   factory Snapshot.fromJson(Map<String, dynamic> json) {
-    return Snapshot(base64Decode(json['snapshot'] as String? ?? ''));
+    final annotations = json['annotations'] as List?;
+    return Snapshot(
+      base64Decode(json['snapshot'] as String? ?? ''),
+      pixelRatio: (json['pixelRatio'] as num?)?.toDouble(),
+      width: (json['width'] as num?)?.toInt(),
+      height: (json['height'] as num?)?.toInt(),
+      annotations: annotations == null
+          ? null
+          : [
+              for (final annotation in annotations)
+                SnapshotAnnotation.fromJson(
+                  annotation as Map<String, dynamic>,
+                ),
+            ],
+    );
+  }
+}
+
+/// How a snapshot is annotated and how large it may be.
+class const SnapshotOptions({
+  /// Whether the visible position components are annotated on the image.
+  final bool annotate = false,
+
+  /// Only the components whose type matches this regular expression are
+  /// annotated, when it is given.
+  final String? annotationFilter,
+
+  /// The maximum length in pixels of the longest side of the image.
+  final int? maxSize,
+}) {
+  /// The arguments of the snapshot service extensions for these options.
+  Map<String, String> get args {
+    return {
+      if (annotate) 'annotate': 'true',
+      'annotationFilter': ?annotationFilter,
+      if (maxSize case final maxSize?) 'maxSize': '$maxSize',
+    };
+  }
+}
+
+/// A component that was annotated on a snapshot, with its [box] in the pixel
+/// coordinates of the image.
+class const SnapshotAnnotation({
+  required final int id,
+  required final String name,
+  required final PixelRect box,
+}) {
+  factory SnapshotAnnotation.fromJson(Map<String, dynamic> json) {
+    final box = (json['box'] as List).cast<num>();
+    return SnapshotAnnotation(
+      id: json['id'] as int,
+      name: json['name'] as String,
+      box: (
+        x: box[0].toDouble(),
+        y: box[1].toDouble(),
+        width: box[2].toDouble(),
+        height: box[3].toDouble(),
+      ),
+    );
+  }
+
+  Map<String, Object> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'box': [box.x, box.y, box.width, box.height],
+    };
   }
 }
 
