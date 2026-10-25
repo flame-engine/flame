@@ -1,18 +1,20 @@
 import 'package:flame_cli/flame_cli.dart';
 import 'package:test/test.dart';
 
-Map<String, dynamic> _node(
+ComponentNode _node(
   int id,
   String name, {
-  Map<String, dynamic> attributes = const {},
-  List<Map<String, dynamic>> children = const [],
+  ComponentAttributes attributes = const ComponentAttributes(),
+  List<ComponentNode> children = const [],
 }) {
-  return {
-    'id': id,
-    'name': name,
-    'attributes': attributes,
-    'children': children,
-  };
+  return ComponentNode(
+    id: id,
+    name: name,
+    toStringText: '$name()',
+    isPositionComponent: attributes.position != null,
+    attributes: attributes,
+    children: children,
+  );
 }
 
 final _tree = _node(
@@ -26,14 +28,14 @@ final _tree = _node(
         _node(
           3,
           'Player',
-          attributes: {
-            'priority': 2,
-            'position': [10.0, 20.5],
-            'size': [32.0, 32.0],
-            'angle': 0.0,
-            'scale': [1.0, 1.0],
-            'anchor': 'center',
-          },
+          attributes: const ComponentAttributes(
+            priority: 2,
+            position: (x: 10, y: 20.5),
+            size: (x: 32, y: 32),
+            angle: 0,
+            scale: (x: 1, y: 1),
+            anchor: 'center',
+          ),
         ),
       ],
     ),
@@ -66,28 +68,32 @@ void main() {
 
   group('formatAttributes', () {
     test('leaves out default values', () {
-      expect(formatAttributes({'priority': 0}), '');
+      expect(formatAttributes(const ComponentAttributes(priority: 0)), '');
       expect(
-        formatAttributes({
-          'priority': 0,
-          'position': [0, 0],
-          'size': [1, 2],
-          'angle': 0,
-          'scale': [1, 1],
-          'anchor': 'topLeft',
-        }),
+        formatAttributes(
+          const ComponentAttributes(
+            priority: 0,
+            position: (x: 0, y: 0),
+            size: (x: 1, y: 2),
+            angle: 0,
+            scale: (x: 1, y: 1),
+            anchor: 'topLeft',
+          ),
+        ),
         'position 0,0, size 1,2',
       );
     });
 
     test('shows angle and scale when they are not the default', () {
       expect(
-        formatAttributes({
-          'position': [1.234, 5],
-          'size': [10, 10],
-          'angle': 1.5707,
-          'scale': [2, 2],
-        }),
+        formatAttributes(
+          const ComponentAttributes(
+            position: (x: 1.234, y: 5),
+            size: (x: 10, y: 10),
+            angle: 1.5707,
+            scale: (x: 2, y: 2),
+          ),
+        ),
         'position 1.23,5, size 10,10, angle 1.57, scale 2,2',
       );
     });
@@ -97,7 +103,7 @@ void main() {
     test('keeps matching nodes and their ancestors', () {
       final filtered = filterComponentTree(
         _tree,
-        (node) => node['name'] == 'Player',
+        (node) => node.name == 'Player',
       );
 
       expect(
@@ -112,7 +118,7 @@ void main() {
     test('keeps the children of a matching node', () {
       final filtered = filterComponentTree(
         _tree,
-        (node) => node['name'] == 'World',
+        (node) => node.name == 'World',
       );
 
       expect(
@@ -129,21 +135,59 @@ void main() {
     });
   });
 
+  group('ComponentNode', () {
+    test('reads and writes the JSON of the game', () {
+      final json = {
+        'id': 1,
+        'name': 'MyGame',
+        'toString': 'MyGame()',
+        'isPositionComponent': false,
+        'attributes': {'priority': 0},
+        'children': [
+          {
+            'id': 3,
+            'name': 'Player',
+            'toString': 'Player()',
+            'isPositionComponent': true,
+            'attributes': {
+              'priority': 2,
+              'position': [10.0, 20.5],
+              'size': [32.0, 32.0],
+              'angle': 0.5,
+              'scale': [1.0, 2.0],
+              'anchor': 'center',
+            },
+            'children': <Object>[],
+          },
+        ],
+      };
+
+      final node = ComponentNode.fromJson(json);
+      final player = node.children.single;
+      expect(player.attributes.position, (x: 10.0, y: 20.5));
+      expect(player.attributes.scale, (x: 1.0, y: 2.0));
+      expect(player.attributes.angle, 0.5);
+      expect(node.toJson(), json);
+    });
+  });
+
   test('formatComponentInfo prints one field per line', () {
     expect(
-      formatComponentInfo({
-        'id': 3,
-        'name': 'Player',
-        'toString': 'Player()',
-        'parent': 2,
-        'childCount': 0,
-        'debugMode': false,
-        'attributes': {
-          'priority': 2,
-          'position': [10.0, 20.0],
-          'anchor': 'center',
-        },
-      }),
+      formatComponentInfo(
+        const ComponentInfo(
+          id: 3,
+          name: 'Player',
+          toStringText: 'Player()',
+          parent: 2,
+          childCount: 0,
+          debugMode: false,
+          attributes: ComponentAttributes(
+            priority: 2,
+            position: (x: 10, y: 20),
+            anchor: 'center',
+          ),
+        ),
+      ),
       'type: Player\n'
       'id: 3\n'
       'parent: 2\n'

@@ -1,11 +1,12 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/commands/flame_command.dart';
+import 'package:flame_cli/src/commands/inspect_command.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
 import 'package:flame_cli/src/flame_connection.dart';
+import 'package:flame_cli/src/game_responses.dart';
 import 'package:io/io.dart';
 import 'package:path/path.dart' as p;
 
@@ -60,6 +61,8 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
       'Render the game, the world, or a single component, to a PNG image.';
 
   late double _pixelRatio;
+  late int? _componentId;
+  late WorldRect? _rect;
 
   @override
   void validate() {
@@ -71,7 +74,9 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
       );
     }
     _pixelRatio = pixelRatio;
+    _componentId = componentIdOption(this, 'component');
 
+    _rect = null;
     final rect = argResults!.option('rect');
     if (rect != null) {
       final parts = rect.split(',').map(double.tryParse).toList();
@@ -85,10 +90,11 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
           usage,
         );
       }
+      _rect = (x: parts[0]!, y: parts[1]!, width: parts[2]!, height: parts[3]!);
     }
 
     final world = argResults!.flag('world') || rect != null;
-    if (world && argResults!.option('component') != null) {
+    if (world && _componentId != null) {
       throw UsageException(
         '--component renders a single component, it cannot be combined with '
         '--world or --rect.',
@@ -99,25 +105,19 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
-    final componentId = argResults!.option('component');
-    final rect = argResults!.option('rect');
-    final pixelRatio = _pixelRatio.toString();
-    final response = componentId == null
-        ? await connection.call(
-            'getGameSnapshot',
-            args: {
-              'pixelRatio': pixelRatio,
-              if (argResults!.flag('world')) 'world': 'true',
-              'rect': ?rect,
-            },
+    final componentId = _componentId;
+    final snapshot = componentId == null
+        ? await connection.getGameSnapshot(
+            pixelRatio: _pixelRatio,
+            world: argResults!.flag('world'),
+            rect: _rect,
           )
-        : await connection.call(
-            'getComponentSnapshot',
-            args: {'id': componentId, 'pixelRatio': pixelRatio},
+        : await connection.getComponentSnapshot(
+            componentId,
+            pixelRatio: _pixelRatio,
           );
 
-    final snapshot = response['snapshot'] as String? ?? '';
-    if (snapshot.isEmpty) {
+    if (snapshot.bytes.isEmpty) {
       throw const FlameCliException(
         'The game returned an empty snapshot.',
         exitCode: ExitCode.data,
@@ -128,7 +128,7 @@ class SnapshotCommand(super.out, super.workingDirectory) extends FlameCommand {
       p.join(workingDirectory.path, argResults!.option('output')),
     );
     try {
-      await file.writeAsBytes(base64Decode(snapshot));
+      await file.writeAsBytes(snapshot.bytes);
     } on FileSystemException catch (error, stackTrace) {
       Error.throwWithStackTrace(
         FlameCliException(
