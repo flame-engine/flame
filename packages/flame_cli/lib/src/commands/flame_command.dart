@@ -18,8 +18,9 @@ typedef GameConnector = Future<FlameConnection> Function(String uri);
 /// [writeResult].
 abstract class FlameCommand(
   @override final StringSink out,
-  final Directory workingDirectory,
-) extends Command<int> with JsonOutput {
+  final Directory workingDirectory, {
+  GameConnector? connect,
+}) extends Command<int> with JsonOutput {
   this {
     argParser.addOption(
       'uri',
@@ -31,6 +32,8 @@ abstract class FlameCommand(
     );
     addJsonFlag(argParser);
   }
+
+  final GameConnector? _connect = connect;
 
   /// Validates the options, before a connection to the game is made.
   void validate() {}
@@ -45,9 +48,11 @@ abstract class FlameCommand(
     final connection = await connectToGame(
       workingDirectory,
       uriOption: argResults!.option('uri'),
-      connect: runner is FlameCommandRunner
-          ? runner.connect
-          : FlameConnection.connect,
+      connect:
+          _connect ??
+          (runner is FlameCommandRunner
+              ? runner.connect
+              : FlameConnection.connect),
     );
     try {
       return await runWithConnection(connection);

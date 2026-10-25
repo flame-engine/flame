@@ -74,6 +74,18 @@ ComponentNode? filterComponentTree(
   return node.withChildren(children);
 }
 
+/// Returns the nodes of the tree that [matches], in depth first order, with
+/// the matches that are inside of other matches included.
+List<ComponentNode> findComponentNodes(
+  ComponentNode node,
+  bool Function(ComponentNode node) matches,
+) {
+  return [
+    if (matches(node)) node,
+    for (final child in node.children) ...findComponentNodes(child, matches),
+  ];
+}
+
 String _formatVector(Vector2 vector) {
   return '${_formatNumber(vector.x)},${_formatNumber(vector.y)}';
 }
