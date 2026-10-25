@@ -75,7 +75,7 @@ class SetCommand(super.out, super.workingDirectory) extends FlameCommand {
     for (final MapEntry(:key, :value) in _values.entries) {
       await connection.setPositionComponentAttribute(_id, key, value);
     }
-    out.write(formatComponentInfo(await connection.getComponentInfo(_id)));
+    writeComponentInfo(this, await connection.getComponentInfo(_id));
     return ExitCode.success.code;
   }
 

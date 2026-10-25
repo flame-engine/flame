@@ -5,6 +5,7 @@ import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
+import 'package:flame_cli/src/json_output.dart';
 import 'package:flame_cli/src/project_files.dart';
 import 'package:flame_cli/src/run_controller.dart';
 import 'package:io/io.dart';
@@ -50,12 +51,13 @@ class StopCommand(super.out, super.workingDirectory)
 }
 
 abstract class _RunRequestCommand(
-  final StringSink out,
+  @override final StringSink out,
   final Directory workingDirectory, {
   required final RunRequest request,
-}) extends Command<int> {
+}) extends Command<int> with JsonOutput {
   this {
     addPortOption(argParser);
+    addJsonFlag(argParser);
   }
 
   @override
@@ -70,6 +72,10 @@ abstract class _RunRequestCommand(
       port: port,
     );
     final RunResponse(:ok, :message) = response;
+    if (jsonOutput) {
+      out.writeln(toJsonOutput(response.toJson()));
+      return (ok ? ExitCode.success : ExitCode.software).code;
+    }
     final output = ok ? const <String>[] : response.output;
     for (final line in output) {
       out.writeln(line);

@@ -20,7 +20,7 @@ class PauseCommand(super.out, super.workingDirectory) extends FlameCommand {
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
     await connection.setPaused(paused: true);
-    out.writeln('Paused the game.');
+    writeResult({'paused': true}, 'Paused the game.');
     return ExitCode.success.code;
   }
 }
@@ -39,7 +39,7 @@ class ResumeCommand(super.out, super.workingDirectory) extends FlameCommand {
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
     await connection.setPaused(paused: false);
-    out.writeln('Resumed the game.');
+    writeResult({'paused': false}, 'Resumed the game.');
     return ExitCode.success.code;
   }
 }
@@ -92,15 +92,25 @@ class StepCommand(super.out, super.workingDirectory) extends FlameCommand {
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
-    if (!await connection.getPaused()) {
+    final wasPaused = await connection.getPaused();
+    if (!wasPaused) {
       await connection.setPaused(paused: true);
-      out.writeln('Paused the game.');
+      if (!jsonOutput) {
+        out.writeln('Paused the game.');
+      }
     }
     for (var i = 0; i < _frames; i++) {
       await connection.step(_time);
     }
     final seconds = (_time * _frames).toStringAsFixed(3);
-    out.writeln(
+    writeResult(
+      {
+        'paused': true,
+        'wasPaused': wasPaused,
+        'frames': _frames,
+        'frameTime': _time,
+        'totalTime': _time * _frames,
+      },
       'Stepped $_frames ${_frames == 1 ? 'frame' : 'frames'}, $seconds '
       'seconds in total.',
     );

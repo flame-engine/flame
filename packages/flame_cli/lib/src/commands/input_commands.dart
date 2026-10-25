@@ -53,7 +53,10 @@ class _TapCommand(super.out, super.workingDirectory) extends FlameCommand {
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
     await connection.tap(_position);
-    out.writeln('Tapped at ${_position.x},${_position.y}.');
+    writeResult(
+      {'input': 'tap', 'position': _positionJson(_position)},
+      'Tapped at ${_position.x},${_position.y}.',
+    );
     return ExitCode.success.code;
   }
 }
@@ -101,7 +104,15 @@ class _DragCommand(super.out, super.workingDirectory) extends FlameCommand {
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
     await connection.drag(_from, _to, steps: _steps);
-    out.writeln('Dragged from ${_from.x},${_from.y} to ${_to.x},${_to.y}.');
+    writeResult(
+      {
+        'input': 'drag',
+        'from': _positionJson(_from),
+        'to': _positionJson(_to),
+        'steps': _steps,
+      },
+      'Dragged from ${_from.x},${_from.y} to ${_to.x},${_to.y}.',
+    );
     return ExitCode.success.code;
   }
 }
@@ -156,13 +167,20 @@ class _KeyCommand(super.out, super.workingDirectory) extends FlameCommand {
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
     await connection.key(_key, action: _action);
-    out.writeln(switch (_action) {
-      KeyAction.down => 'Pressed $_key down.',
-      KeyAction.up => 'Released $_key.',
-      KeyAction.press => 'Pressed $_key.',
-    });
+    writeResult(
+      {'input': 'key', 'key': _key, 'action': _action.name},
+      switch (_action) {
+        KeyAction.down => 'Pressed $_key down.',
+        KeyAction.up => 'Released $_key.',
+        KeyAction.press => 'Pressed $_key.',
+      },
+    );
     return ExitCode.success.code;
   }
+}
+
+Map<String, double> _positionJson(Vector2 position) {
+  return {'x': position.x, 'y': position.y};
 }
 
 /// Parses a position given as `x,y`.
