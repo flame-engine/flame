@@ -167,6 +167,12 @@ class Svg(
       );
 
       picture.dispose();
+      // The cache evicts its oldest entry without disposing it.
+      if (_imageCache.size >= cacheSize) {
+        final oldest = _imageCache.keys.first;
+        _imageCache.getValue(oldest)?.dispose();
+        _imageCache.clear(oldest);
+      }
       _imageCache.setValue(cacheKey, image);
       return image;
     }

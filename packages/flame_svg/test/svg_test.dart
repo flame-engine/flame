@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
+import 'dart:ui' as ui show Image;
 
 import 'package:flame/extensions.dart';
 import 'package:flame_svg/svg.dart' as flame_svg;
@@ -38,6 +39,30 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 200));
       svgInstance.dispose();
       svgInstance.dispose();
+    });
+
+    test('disposes the images evicted from the cache', () async {
+      final svg = flame_svg.Svg(
+        svgInstance.pictureInfo,
+        pixelRatio: 1,
+        cacheSize: 2,
+      );
+      final images = <ui.Image>[];
+      ui.Image.onCreate = images.add;
+      addTearDown(() => ui.Image.onCreate = null);
+      for (var size = 10.0; size < 15; size++) {
+        svg.render(Canvas(PictureRecorder()), Vector2.all(size));
+      }
+      expect(svg.cacheUsage, 2);
+      expect(images.map((image) => image.debugDisposed), [
+        true,
+        true,
+        true,
+        false,
+        false,
+      ]);
+      svg.dispose();
+      expect(images.every((image) => image.debugDisposed), isTrue);
     });
 
     test('load from svg string', () async {
