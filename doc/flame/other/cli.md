@@ -533,6 +533,66 @@ to case, spaces and underscores. By default the key is pressed and released righ
 to release it again.
 
 
+### wait
+
+Blocks until a condition holds in the game, or until a timeout is reached, so that a script or an
+agent doesn't have to sleep and guess how long something takes. For example, tap a button and wait
+until the game over overlay is shown:
+
+```shell
+flame input tap 400,300
+flame wait overlay GameOver
+```
+
+The command checks the condition right away and then again at a fixed interval, all over one
+connection to the game. When the condition holds it prints what matched and exits with `0`. When
+the timeout is reached first it says what it found instead and exits with `75`, which is also the
+case when the game doesn't answer in time, for example because it is stopped at a breakpoint. If
+the game stops while waiting it exits with `69` like the other commands.
+
+These are the conditions:
+
+- `wait component <type pattern>`: Waits until a component exists whose type matches the regular
+  expression, matched case insensitively like `tree --filter`, and prints the matching components
+  with their ids and attributes. `Enemy` also matches `EnemyBullet`, use `^Enemy$` to match only
+  the type `Enemy`.
+- `wait overlay <name>`: Waits until the overlay is shown, or with `--hidden` until it is hidden.
+  An overlay that isn't registered fails right away with `65`.
+- `wait paused` and `wait resumed`: Wait until the game loop is paused or running.
+
+The `component` condition takes these options to narrow it down:
+
+- `--id`: Only matches the component with this id. The type pattern can be left out then.
+- `--where` (`-w`): Only matches the components with a numeric attribute that compares to a value,
+  for example `--where "position.x > 100"`. The attributes are `position.x`, `position.y`,
+  `size.x`, `size.y`, `scale.x`, `scale.y`, `angle` and `priority`, and the operators are `<`,
+  `<=`, `>`, `>=`, `==` and `!=`. Quote the condition, since the shell would otherwise treat `>`
+  and `<` as redirecting input and output. It can be given several times, and all of them have to
+  hold.
+- `--count` (`-n`): Waits until exactly this number of components match.
+- `--at-least`: Waits until at least this number of components match.
+- `--gone`: Waits until no components match, for example until a component has been removed.
+
+```shell
+flame wait component Enemy --at-least 3
+flame wait component --id 220731871 --gone
+flame wait component Player --where "position.x >= 500" --timeout 30
+```
+
+These options are shared by all the conditions, in addition to `--uri`:
+
+- `--timeout` (`-t`): The number of seconds to wait, 10 by default. With `0` the condition is
+  checked once, which works as an assertion in a script.
+- `--interval` (`-i`): The number of seconds between two checks, `0.2` by default.
+- `--json`: Prints what matched as JSON instead of text. For `component` that is the list of
+  matching components, with the same fields as in `tree --json` but without the children, for
+  `overlay` the same as `overlays --json`, and for `paused` and `resumed` whether the game is
+  paused.
+
+A paused game doesn't change, so a condition that depends on the game loop only holds once the game
+is resumed or stepped.
+
+
 ### diff
 
 Compares two PNG images, for example two snapshots, and reports how much and where they differ:
@@ -651,12 +711,13 @@ the `kind` of the error:
   such as a file that is not a PNG image or a `devtools_options.yaml` that is not valid YAML. It
   is also used when `flame create` would overwrite an existing project.
 - `69` (`unavailable`): No running game was found, the game or `flame run` could not be reached,
-  the game runs a version of Flame that does not support the command, or `flutter` or `dart` could
-  not be started.
+  the game stopped while the command ran, the game runs a version of Flame that does not support
+  the command, or `flutter` or `dart` could not be started.
 - `70` (`software`): The game reported an error while running the command, a reload or restart
   failed, `flutter run` did not exit after `stop`, or a `flutter` command that `flame create` runs
   failed.
 - `73` (`cantCreate`): The output file could not be written.
+- `75` (`tempFail`): The condition of `wait` did not hold before the timeout.
 
 `flame run` and `flame devtools` exit with the exit code of `flutter run` and `dart devtools`
 once those have started.

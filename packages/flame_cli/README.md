@@ -96,13 +96,15 @@ option reaches a game that was started in another way, with the Dart VM Service 
 `flutter run` prints.
 
 Play the game by sending taps, drags and key presses, to a position or to a component from the
-tree, and compare two snapshots:
+tree, wait until something happens in the game, and compare two snapshots:
 
 ```shell
 flame input tap 400,300
 flame input tap --component 220731871
 flame input drag --from-component 220731871 600,300
 flame input key space
+flame wait overlay GameOver --timeout 5
+flame wait component Enemy --gone
 flame diff before.png after.png --output diff.png
 ```
 

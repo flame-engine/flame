@@ -52,6 +52,7 @@ String exitCodeName(ExitCode exitCode) {
     ExitCode.unavailable => 'unavailable',
     ExitCode.software => 'software',
     ExitCode.cantCreate => 'cantCreate',
+    ExitCode.tempFail => 'tempFail',
     _ => 'error',
   };
 }

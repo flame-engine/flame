@@ -33,6 +33,10 @@ void main() {
       inExclusiveRange(positions[2], positions[3]),
     );
     expect(
+      commandPosition('wait'),
+      inExclusiveRange(positions[2], positions[3]),
+    );
+    expect(
       commandPosition('step'),
       inExclusiveRange(positions[3], positions[4]),
     );

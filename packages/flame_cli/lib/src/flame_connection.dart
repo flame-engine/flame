@@ -14,6 +14,15 @@ class FlameConnection._(
   final String _isolateId,
   final Set<String> _extensions,
 ) {
+  /// Creates a connection through a [service] that is already connected, to
+  /// the isolate with [isolateId] that registered the Flame [extensions].
+  FlameConnection.withService(
+    String uri,
+    VmService service,
+    String isolateId,
+    Set<String> extensions,
+  ) : this._(uri, service, isolateId, extensions);
+
   static const _extensionPrefix = 'ext.flame_devtools.';
 
   /// Connects to the Dart VM Service at [uri] and finds the isolate that runs
@@ -95,6 +104,15 @@ class FlameConnection._(
       );
       return response.json ?? {};
     } on RPCError catch (error, stackTrace) {
+      if (_isDisconnected(error)) {
+        Error.throwWithStackTrace(
+          const FlameCliException(
+            'The game is no longer running, the connection to it was closed.',
+            exitCode: ExitCode.unavailable,
+          ),
+          stackTrace,
+        );
+      }
       Error.throwWithStackTrace(
         FlameCliException(
           error.details ?? error.message,
@@ -116,6 +134,13 @@ class FlameConnection._(
   }
 
   Future<void> dispose() => _service.dispose();
+
+  static bool _isDisconnected(RPCError error) {
+    return error.code == RPCErrorKind.kServiceDisappeared.code ||
+        error.code == RPCErrorKind.kConnectionDisposed.code ||
+        (error.code == RPCErrorKind.kServerError.code &&
+            error.message == RPCErrorKind.kConnectionDisposed.message);
+  }
 }
 
 /// The service extensions of the game, with typed arguments and results.

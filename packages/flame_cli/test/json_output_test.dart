@@ -577,6 +577,7 @@ void main() {
       ExitCode.unavailable,
       ExitCode.software,
       ExitCode.cantCreate,
+      ExitCode.tempFail,
     ]) {
       expect(exitCode.toString(), startsWith('${exitCodeName(exitCode)}:'));
     }
