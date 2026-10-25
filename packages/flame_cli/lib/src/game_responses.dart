@@ -7,6 +7,47 @@ typedef Vector2 = ({double x, double y});
 /// A rectangle in world coordinates, with its top left corner at `x` and `y`.
 typedef WorldRect = ({double x, double y, double width, double height});
 
+/// A component that the game is asked about, either by its [ComponentId] or
+/// by the [ComponentKeyName] of its `ComponentKey`.
+sealed class const ComponentReference() {
+  /// A reference from a command line value, where a number is an id and any
+  /// other value the name of a `ComponentKey`.
+  factory ComponentReference.parse(String value) {
+    final id = int.tryParse(value);
+    return id == null ? ComponentKeyName(value) : ComponentId(id);
+  }
+
+  /// The arguments that identify the component in a service extension call.
+  Map<String, String> get args;
+
+  /// The reference in the JSON output of a command.
+  Object toJson();
+}
+
+/// A component given by its id, as the tree command prints it.
+class const ComponentId(final int id) extends ComponentReference {
+  @override
+  Map<String, String> get args => {'id': '$id'};
+
+  @override
+  Object toJson() => id;
+
+  @override
+  String toString() => '$id';
+}
+
+/// A component given by the name of its `ComponentKey`.
+class const ComponentKeyName(final String name) extends ComponentReference {
+  @override
+  Map<String, String> get args => {'key': name};
+
+  @override
+  Object toJson() => name;
+
+  @override
+  String toString() => name;
+}
+
 /// What a key event that is sent to the game does with the key.
 enum KeyAction() {
   /// Presses the key down and releases it again.

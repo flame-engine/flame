@@ -95,10 +95,13 @@ through `--uri` and, for `reload`, `restart`, `stop` and `status`, `--port`. The
 option reaches a game that was started in another way, with the Dart VM Service URI that
 `flutter run` prints.
 
-Play the game by sending taps, drags and key presses, and compare two snapshots:
+Play the game by sending taps, drags and key presses, to a position or to a component from the
+tree, and compare two snapshots:
 
 ```shell
 flame input tap 400,300
+flame input tap --component 220731871
+flame input drag --from-component 220731871 600,300
 flame input key space
 flame diff before.png after.png --output diff.png
 ```

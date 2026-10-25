@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flame/camera.dart';
+import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/devtools/dev_tools_connector.dart';
@@ -12,10 +14,52 @@ import 'package:flutter/services.dart';
 ///
 /// Positions are in canvas coordinates, the same ones that a snapshot of the
 /// game uses, and the events are delivered through the same dispatchers that
-/// real input goes through.
+/// real input goes through. The canvas position of a component, to tap or drag
+/// it without knowing where it is on the screen, is reported by the
+/// `ext.flame_devtools.getComponentCanvasPosition` service extension.
 class InputConnector() extends DevToolsConnector {
   @override
   void init() {
+    registerExtension(
+      'ext.flame_devtools.getComponentCanvasPosition',
+      (method, parameters) async {
+        final anchor = parseAnchor(parameters['anchor']);
+        if (anchor == null) {
+          return _invalidParams(
+            'The anchor has to be a name like center, or two numbers '
+            'separated by a comma, got ${parameters['anchor']}.',
+          );
+        }
+        final key = parameters['key'];
+        final component = key != null
+            ? game.findByKeyName<Component>(key)
+            : findComponent<Component>(int.tryParse(parameters['id'] ?? ''));
+        if (component == null) {
+          return _invalidParams(
+            key != null
+                ? 'No component with the key $key was found.'
+                : 'No component with the id ${parameters['id']} was found.',
+          );
+        }
+        final (:position, :error) = canvasPositionOf(
+          game,
+          component,
+          anchor: anchor,
+        );
+        if (position == null) {
+          return _invalidParams(error!);
+        }
+        return ServiceExtensionResponse.result(
+          json.encode({
+            'id': component.hashCode,
+            'name': component.runtimeType.toString(),
+            'x': position.dx,
+            'y': position.dy,
+          }),
+        );
+      },
+    );
+
     registerExtension(
       'ext.flame_devtools.tap',
       (method, parameters) async {
@@ -143,6 +187,148 @@ class InputConnector() extends DevToolsConnector {
       DragEndEvent(1, DragEndDetails(localPosition: to, globalPosition: to)),
     );
     return null;
+  }
+
+  /// Finds the position of [anchor] within [component] in canvas coordinates,
+  /// the same ones that [tap] and [drag] take.
+  ///
+  /// The position goes through the transforms of all the ancestors of the
+  /// component, and for a component in a [World] through the viewfinder and
+  /// the viewport of the camera that shows the world, which is
+  /// [FlameGame.camera] when it shows the world and otherwise the first other
+  /// camera that does, not counting the cameras within the world itself.
+  ///
+  /// Returns an error message instead of a position if the component is not a
+  /// [PositionComponent], or if it is not visible on the canvas.
+  static ({Offset? position, String? error}) canvasPositionOf(
+    FlameGame game,
+    Component component, {
+    Anchor anchor = Anchor.center,
+  }) {
+    final description = '${component.runtimeType} ${component.hashCode}';
+    if (component is! PositionComponent) {
+      return _failure(
+        '$description is not a PositionComponent, so it has no position to '
+        'target.',
+      );
+    }
+
+    Vector2? point = Vector2(
+      anchor.x * component.width,
+      anchor.y * component.height,
+    );
+    Component current = component;
+    final visitedWorlds = <World>{};
+    while (!identical(current, game)) {
+      var parent = current.parent;
+      if (current is World) {
+        final camera = _cameraOf(game, current);
+        if (camera == null || !visitedWorlds.add(current)) {
+          return _failure('$description is in a world that no camera shows.');
+        }
+        point = _throughCamera(camera, point!);
+        parent = camera.parent;
+      } else if (current is Viewfinder && parent is CameraComponent) {
+        point = (parent.world?.isMounted ?? false)
+            ? _throughCamera(parent, point!)
+            : null;
+      } else if (current is Route && !current.isRendered) {
+        point = null;
+      } else {
+        if (current is CoordinateTransform) {
+          point = (current as CoordinateTransform).localToParent(point!);
+        }
+        if (parent is CameraComponent &&
+            !identical(current, parent.viewport) &&
+            point != null) {
+          point = identical(current, parent.backdrop)
+              ? _throughViewport(parent, point)
+              : null;
+        }
+      }
+      if (point == null) {
+        return _failure('$description is not visible on the canvas.');
+      }
+      if (parent == null) {
+        return _failure('$description is not mounted in the game.');
+      }
+      current = parent;
+    }
+
+    final position = point!.toOffset();
+    final canvasSize = game.canvasSize;
+    if (position.dx < 0 ||
+        position.dy < 0 ||
+        position.dx > canvasSize.x ||
+        position.dy > canvasSize.y) {
+      return _failure(
+        '$description is not visible on the canvas, it is at '
+        '${position.dx},${position.dy}.',
+      );
+    }
+    return (position: position, error: null);
+  }
+
+  /// Parses an anchor given as a name like `center` or `topLeft`, or as two
+  /// numbers separated by a comma, where `0,0` is the top left corner and
+  /// `1,1` the bottom right corner.
+  ///
+  /// A null [value] is the center, and an invalid one returns null.
+  static Anchor? parseAnchor(String? value) {
+    if (value == null) {
+      return Anchor.center;
+    }
+    for (final anchor in Anchor.values) {
+      if (anchor.name.toLowerCase() == value.toLowerCase()) {
+        return anchor;
+      }
+    }
+    final parts = value.split(',').map(double.tryParse).toList();
+    if (parts.length != 2 || parts.any((p) => p == null || !p.isFinite)) {
+      return null;
+    }
+    return Anchor(parts[0]!, parts[1]!);
+  }
+
+  /// Finds the camera that shows [world], ignoring the cameras within the
+  /// world itself, since they can only show it when another camera does.
+  static CameraComponent? _cameraOf(FlameGame game, World world) {
+    bool showsWorld(CameraComponent camera) =>
+        identical(camera.world, world) &&
+        camera.isMounted &&
+        !camera.ancestors().contains(world);
+
+    if (showsWorld(game.camera)) {
+      return game.camera;
+    }
+    return game
+        .descendants()
+        .whereType<CameraComponent>()
+        .where(
+          showsWorld,
+        )
+        .firstOrNull;
+  }
+
+  /// Moves [point] from the coordinates of the world of [camera] to the
+  /// coordinates of the parent of [camera], or to null if the viewport does
+  /// not show it.
+  static Vector2? _throughCamera(CameraComponent camera, Vector2 point) {
+    return _throughViewport(camera, camera.viewfinder.localToParent(point));
+  }
+
+  /// Moves [point] from the coordinates that the viewport of [camera] renders
+  /// the world and the backdrop in to the coordinates of the parent of
+  /// [camera], or to null if the viewport clips it.
+  static Vector2? _throughViewport(CameraComponent camera, Vector2 point) {
+    if (!camera.viewport.containsLocalPoint(point)) {
+      return null;
+    }
+    return camera.viewport.localToParent(point);
+  }
+
+  static ({Offset? position, String? error}) _failure(String error) {
+    return (position: null, error: 'The component $error');
   }
 
   /// Presses [key] in the game, where [action] is `press` for a key down
