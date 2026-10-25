@@ -1,19 +1,20 @@
+import 'dart:async';
+
 import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final gameControllerProvider =
-    StateNotifierProvider<_GameController, _GameState>(
-      (ref) => _GameController(),
-    );
+final gameControllerProvider = NotifierProvider<GameController, GameState>(
+  GameController.new,
+);
 
 @immutable
-class const _GameState({final Game? game, final bool paused = false}) {
-  _GameState copyWith({
+class const GameState({final Game? game, final bool paused = false}) {
+  GameState copyWith({
     Game? game,
     bool? paused,
   }) {
-    return _GameState(
+    return GameState(
       game: game ?? this.game,
       paused: paused ?? this.paused,
     );
@@ -21,25 +22,38 @@ class const _GameState({final Game? game, final bool paused = false}) {
 
   @override
   bool operator ==(Object other) =>
-      other is _GameState && game == other.game && paused == other.paused;
+      other is GameState && game == other.game && paused == other.paused;
 
   @override
   int get hashCode => Object.hash(game, paused);
 }
 
-class _GameController() extends StateNotifier<_GameState> {
-  this : super(const _GameState()) {
+/// Keeps track of the [Game] running inside the studio, and allows to pause,
+/// resume and step it.
+///
+/// The game is discovered by searching the widget tree for a [GameWidget],
+/// which is repeated periodically so that games which are attached later (for
+/// example after a menu screen) or replaced are picked up as well.
+class GameController() extends Notifier<GameState> {
+  static const Duration pollFrequency = Duration(milliseconds: 500);
+
+  @override
+  GameState build() {
     WidgetsFlutterBinding.ensureInitialized();
+    final timer = Timer.periodic(pollFrequency, (_) => _poll());
+    ref.onDispose(timer.cancel);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final game = _findGame();
-      useGame(game);
+      if (ref.mounted) {
+        _poll();
+      }
     });
+    return const GameState();
   }
 
   bool get isPaused => state.paused;
 
   void useGame(Game? game) {
-    state = state.copyWith(game: game);
+    state = GameState(game: game, paused: game?.isPaused ?? false);
   }
 
   void pauseGame() {
@@ -54,6 +68,28 @@ class _GameController() extends StateNotifier<_GameState> {
 
   void stepGame() {
     state.game!.stepEngine();
+  }
+
+  /// Repaints the game, so that changes made from the studio are visible even
+  /// while the game is paused.
+  void repaint() {
+    final game = state.game;
+    if (game != null && game.isAttached) {
+      game.renderBox.markNeedsPaint();
+    }
+  }
+
+  void _poll() {
+    final game = state.game;
+    if (game == null || !game.isAttached) {
+      final newGame = _findGame();
+      if (newGame != game) {
+        useGame(newGame);
+      }
+    } else if (game.isPaused != state.paused) {
+      // The game may pause or resume itself.
+      state = state.copyWith(paused: game.isPaused);
+    }
   }
 
   static Game? _findGame() {

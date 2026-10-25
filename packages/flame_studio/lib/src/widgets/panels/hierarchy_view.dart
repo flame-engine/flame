@@ -1,225 +1,210 @@
-import 'package:flame/components.dart' hide Matrix4;
+import 'package:flame/components.dart' show Component;
 import 'package:flame_studio/src/core/component_tree.dart';
+import 'package:flame_studio/src/core/hierarchy_expansion.dart';
+import 'package:flame_studio/src/core/selection.dart';
+import 'package:flame_studio/src/core/theme.dart';
+import 'package:flame_studio/src/widgets/common/disclosure_triangle.dart';
+import 'package:flame_studio/src/widgets/common/studio_text_field.dart';
+import 'package:flame_studio/src/widgets/common/studio_tooltip.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// Shows the component tree of the game, and allows to select a component.
+///
+/// When the filter is not empty, only the components whose type name contains
+/// the filter are shown, together with their ancestors.
 class const HierarchyView({super.key}) extends ConsumerStatefulWidget {
+  static const double indentWidth = 14.0;
+
   @override
-  HierarchyViewState createState() => HierarchyViewState();
+  ConsumerState<HierarchyView> createState() => _HierarchyViewState();
 }
 
-class HierarchyViewState() extends ConsumerState<ConsumerStatefulWidget> {
-  Component? selectedComponent;
-  Set<Component> expandedComponents = {};
+class _HierarchyViewState() extends ConsumerState<HierarchyView> {
+  String _filter = '';
 
   @override
   Widget build(BuildContext context) {
-    final componentTree = ref.watch(componentTreeProvider).root;
-    if (componentTree == null) {
-      return Container();
-    }
-
-    final listItems = <Widget>[];
-    _buildList(componentTree, 0, listItems);
-
-    return ListView(
-      padding: const EdgeInsets.all(8),
-      children: listItems,
-    );
-  }
-
-  void _buildList(ComponentTreeNode node, int depth, List<Widget> out) {
-    out.add(_ListItem(this, node, depth, isFirst: out.isEmpty));
-    final isExpanded = expandedComponents.contains(node.component);
-    if (isExpanded && node.hasChildren) {
-      for (final childNode in node.children!) {
-        _buildList(childNode, depth + 1, out);
-      }
-      out.add(_ClosingBrace(depth));
-    }
-  }
-
-  /// Used by the expander icons in the gutter: the component expands/collapses
-  /// without affecting the selection state.
-  void toggle(Component component) {
-    setState(() {
-      if (expandedComponents.contains(component)) {
-        expandedComponents.remove(component);
-      } else {
-        expandedComponents.add(component);
+    final theme = ref.watch(themeProvider);
+    final root = ref.watch(componentTreeProvider).root;
+    final expanded = ref.watch(hierarchyExpansionProvider);
+    final selected = ref.watch(selectedComponentProvider);
+    ref.listen(selectedComponentProvider, (_, component) {
+      if (component != null) {
+        ref.read(hierarchyExpansionProvider.notifier).reveal(component);
       }
     });
-  }
 
-  void toggleOrSelect(Component component) {
-    final isExpanded = expandedComponents.contains(component);
-    final isSelected = selectedComponent == component;
-    setState(() {
-      if (isExpanded && isSelected) {
-        expandedComponents.remove(component);
+    final rows = <_RowData>[];
+    if (root != null) {
+      final query = _filter.trim().toLowerCase();
+      if (query.isEmpty) {
+        _flatten(root, 0, expanded, rows);
       } else {
-        expandedComponents.add(component);
+        _flattenFiltered(root, 0, query, rows);
       }
-      selectedComponent = component;
-    });
-  }
-}
-
-// ignore: prefer_const_constructors_in_immutables
-class _ListItem(
-  final HierarchyViewState state,
-  final ComponentTreeNode node,
-  final int indent, {
-  required final bool isFirst,
-}) extends StatelessWidget {
-  this : super(key: ObjectKey(node.component));
-
-  @override
-  Widget build(BuildContext context) {
-    final isSelected = state.selectedComponent == node.component;
-    final isExpanded = state.expandedComponents.contains(node.component);
-    final hasChildren = node.hasChildren;
-
-    Widget expanderIcon = _ExpanderIcon(
-      hasChildren: hasChildren,
-      isExpanded: isExpanded,
-      isFirst: isFirst,
-      isLast: indent == 0 && !(isExpanded && hasChildren),
-    );
-    if (hasChildren) {
-      expanderIcon = MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-          onTap: () => state.toggle(node.component),
-          child: expanderIcon,
-        ),
-      );
     }
-    final componentName = MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => state.toggleOrSelect(node.component),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4.0),
-            color: isSelected ? const Color(0xffc78938) : null,
-          ),
-          child: Text(
-            node.name,
-            style: const TextStyle(
-              color: Color(0xffffffff),
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(6),
+          child: StudioTooltip(
+            message:
+                'Only show the components whose type contains this text, '
+                'together with their ancestors',
+            child: StudioTextField(
+              value: _filter,
+              placeholder: 'Filter',
+              onChanged: (value) => setState(() => _filter = value),
             ),
           ),
         ),
-      ),
-    );
-    final punctuation = Transform(
-      transform: Matrix4.translationValues(-3.0, 0, 0),
-      child: Text(
-        hasChildren ? (isExpanded ? ' {' : ' {...}') : ',',
-        style: const TextStyle(color: Color(0x66f5d49a)),
-      ),
-    );
-
-    return Row(
-      children: [
-        expanderIcon,
-        SizedBox(width: 15.0 * indent),
-        componentName,
-        punctuation,
+        Expanded(
+          child: root == null
+              ? Center(
+                  child: Text(
+                    'Waiting for a game…',
+                    style: TextStyle(color: theme.dimTextColor),
+                  ),
+                )
+              : ListView.builder(
+                  itemCount: rows.length,
+                  itemExtent: theme.rowHeight,
+                  itemBuilder: (context, index) {
+                    final row = rows[index];
+                    return _HierarchyRow(
+                      row,
+                      isSelected: row.node.component == selected,
+                      canToggle: _filter.trim().isEmpty,
+                      key: ObjectKey(row.node.component),
+                    );
+                  },
+                ),
+        ),
       ],
     );
   }
-}
 
-class const _ClosingBrace(final int indent) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        _ExpanderIcon(hasChildren: false, isLast: indent == 0),
-        SizedBox(width: 15.0 * indent + 5.0),
-        const Text('}', style: TextStyle(color: Color(0x66f5d49a))),
-      ],
-    );
-  }
-}
-
-class const _ExpanderIcon({
-  required final bool hasChildren,
-  final bool isExpanded = false,
-  final bool isFirst = false,
-  final bool isLast = false,
-}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      size: const Size(15, 20),
-      painter: _ExpanderIconPainter(this),
-    );
-  }
-}
-
-class _ExpanderIconPainter(final _ExpanderIcon icon) extends CustomPainter {
-  static final _paint = Paint()
-    ..color = const Color(0xFFFFFFFF)
-    ..style = PaintingStyle.stroke;
-
-  @override
-  bool shouldRepaint(_ExpanderIconPainter old) =>
-      (icon.hasChildren != old.icon.hasChildren) ||
-      (icon.isExpanded != old.icon.isExpanded);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    const iconSize = 10.0;
-    const halfSize = iconSize / 2;
-    final xExtent = size.width / 2;
-    final yExtent = size.height / 2;
-    canvas.save();
-    canvas.translate(xExtent, yExtent);
-    if (icon.hasChildren) {
-      if (!icon.isFirst) {
-        canvas.drawLine(
-          Offset(0, -yExtent),
-          const Offset(0, -halfSize),
-          _paint,
-        );
-      }
-      canvas.drawRect(
-        const Rect.fromLTWH(-halfSize, -halfSize, iconSize, iconSize),
-        _paint,
-      );
-      canvas.drawLine(
-        const Offset(-iconSize / 4, 0),
-        const Offset(iconSize / 4, 0),
-        _paint,
-      );
-      if (!icon.isExpanded) {
-        canvas.drawLine(
-          const Offset(0, -iconSize / 4),
-          const Offset(0, iconSize / 4),
-          _paint,
-        );
-      }
-      if (!icon.isLast) {
-        canvas.drawLine(
-          const Offset(0, halfSize),
-          Offset(0, yExtent),
-          _paint,
-        );
-      }
-    } else {
-      canvas.drawLine(
-        Offset(0, icon.isFirst ? 0 : -yExtent),
-        Offset(0, icon.isLast ? -2.0 : yExtent),
-        _paint,
-      );
-      if (icon.isLast) {
-        canvas.drawCircle(Offset.zero, 2.0, _paint);
+  static void _flatten(
+    ComponentTreeNode node,
+    int depth,
+    Set<Component> expanded,
+    List<_RowData> out,
+  ) {
+    final isExpanded = expanded.contains(node.component);
+    out.add(_RowData(node, depth, isExpanded: isExpanded));
+    if (isExpanded && node.hasChildren) {
+      for (final child in node.children!) {
+        _flatten(child, depth + 1, expanded, out);
       }
     }
-    canvas.restore();
+  }
+
+  /// Adds [node] to [out] if it or any of its descendants matches the [query],
+  /// and returns whether it was added.
+  static bool _flattenFiltered(
+    ComponentTreeNode node,
+    int depth,
+    String query,
+    List<_RowData> out,
+  ) {
+    final index = out.length;
+    var hasMatchingChild = false;
+    out.add(_RowData(node, depth, isExpanded: false));
+    for (final child in node.children ?? const <ComponentTreeNode>[]) {
+      hasMatchingChild |= _flattenFiltered(child, depth + 1, query, out);
+    }
+    if (!hasMatchingChild && !node.name.toLowerCase().contains(query)) {
+      out.removeRange(index, out.length);
+      return false;
+    }
+    out[index] = _RowData(node, depth, isExpanded: hasMatchingChild);
+    return true;
+  }
+}
+
+class const _RowData(
+  final ComponentTreeNode node,
+  final int depth, {
+  required final bool isExpanded,
+});
+
+class const _HierarchyRow(
+  final _RowData row, {
+  required final bool isSelected,
+  required final bool canToggle,
+  super.key,
+}) extends ConsumerStatefulWidget {
+  @override
+  ConsumerState<_HierarchyRow> createState() => _HierarchyRowState();
+}
+
+class _HierarchyRowState() extends ConsumerState<_HierarchyRow> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = ref.watch(themeProvider);
+    final row = widget.row;
+    final node = row.node;
+
+    Widget expander = const SizedBox(width: 16);
+    if (node.hasChildren) {
+      expander = DisclosureTriangle(
+        isExpanded: row.isExpanded,
+        color: widget.isSelected ? theme.textColor : theme.dimTextColor,
+      );
+      if (widget.canToggle) {
+        expander = GestureDetector(
+          onTap: () => ref
+              .read(hierarchyExpansionProvider.notifier)
+              .toggle(node.component),
+          child: expander,
+        );
+      }
+    }
+
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () =>
+            ref.read(selectedComponentProvider.notifier).select(node.component),
+        child: Container(
+          color: widget.isSelected
+              ? theme.accentColor
+              : (_isHovered ? theme.hoverColor : null),
+          padding: EdgeInsets.only(
+            left: 4 + row.depth * HierarchyView.indentWidth,
+            right: 8,
+          ),
+          child: Row(
+            children: [
+              expander,
+              Expanded(
+                child: Text(
+                  node.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              if (node.hasChildren && !row.isExpanded)
+                Text(
+                  '${node.children!.length}',
+                  style: TextStyle(
+                    color: widget.isSelected
+                        ? theme.textColor
+                        : theme.dimTextColor,
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
