@@ -93,15 +93,8 @@ void testWithGame<T extends FlameGame>(
 }
 
 Future<T> initializeGame<T extends FlameGame>(CreateFunction<T> create) async {
-  final game = create();
-  game.onGameResize(Vector2(800, 600));
-  // ignore: invalid_use_of_internal_member
-  await game.load();
-  // ignore: invalid_use_of_internal_member
-  game.mount();
-  // The same startup sequence as the GameWidget uses; see [FlameGame.ready].
-  await game.ready();
-  game.update(0);
+  final game = create()..onGameResize(Vector2(800, 600));
+  await game.start();
   return game;
 }
 

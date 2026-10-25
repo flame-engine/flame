@@ -96,7 +96,7 @@ class PadRacingGame() extends Forge2DGame with KeyboardEvents {
         ScaleEffect.to(
           Vector2.all(playZoom),
           EffectController(duration: 1.0),
-          onComplete: () => start(numberOfPlayers: numberOfPlayers),
+          onComplete: () => startRace(numberOfPlayers: numberOfPlayers),
         ),
       )
       ..add(
@@ -107,7 +107,7 @@ class PadRacingGame() extends Forge2DGame with KeyboardEvents {
       );
   }
 
-  void start({required int numberOfPlayers}) {
+  void startRace({required int numberOfPlayers}) {
     isGameOver = false;
     overlays.remove('menu');
     startCamera.removeFromParent();

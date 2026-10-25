@@ -146,9 +146,42 @@ abstract mixin class Game() {
   /// that never completes keeps the game on the loading widget forever.
   Future<void> ready() async {}
 
+  /// Incremented on every [start] and every removal, so that a [start] that
+  /// was overtaken by either one stops instead of mounting a removed game.
+  int _startGeneration = 0;
+
+  /// Loads and mounts the game, waits until it is [ready] and runs the first
+  /// update tick.
+  ///
+  /// This is the same startup sequence that the `GameWidget` runs, so it can
+  /// be used to run a game without a widget, for example to render it to an
+  /// image. The game needs a size before it starts, so call [onGameResize]
+  /// first.
+  ///
+  /// If the game is removed before startup finishes, the remaining steps are
+  /// skipped.
+  @mustCallSuper
+  Future<void> start() async {
+    assertHasLayout();
+    final generation = ++_startGeneration;
+    await load();
+    if (generation != _startGeneration) {
+      return;
+    }
+    mount();
+    await ready();
+    if (generation != _startGeneration) {
+      return;
+    }
+    if (!isPaused) {
+      update(0);
+    }
+  }
+
   @mustCallSuper
   @internal
   void finalizeRemoval() {
+    _startGeneration++;
     onRemove();
   }
 

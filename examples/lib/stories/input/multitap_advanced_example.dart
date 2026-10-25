@@ -18,8 +18,7 @@ class MultitapAdvancedExample()
 
   final Map<int, Rect> taps = {};
 
-  Vector2? start;
-  Vector2? end;
+  _Drag? _drag;
   Rect? panRect;
 
   @override
@@ -40,29 +39,28 @@ class MultitapAdvancedExample()
   @override
   void onDragCancel(DragCancelEvent event) {
     super.onDragCancel(event);
-    end = null;
-    start = null;
+    _drag = null;
     panRect = null;
   }
 
   @override
   void onDragStart(DragStartEvent event) {
     super.onDragStart(event);
-    end = null;
-    start = event.canvasPosition;
+    _drag = (start: event.canvasPosition, end: null);
   }
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    end = event.canvasStartPosition;
+    final drag = _drag;
+    if (drag != null) {
+      _drag = (start: drag.start, end: event.canvasStartPosition);
+    }
   }
 
   @override
   void onDragEnd(DragEndEvent event) {
     super.onDragEnd(event);
-    final start = this.start;
-    final end = this.end;
-    if (start != null && end != null) {
+    if (_drag case (:final start, end: final end?)) {
       panRect = start.toPositionedRect(end - start);
     }
   }
@@ -80,3 +78,5 @@ class MultitapAdvancedExample()
     }
   }
 }
+
+typedef _Drag = ({Vector2 start, Vector2? end});
