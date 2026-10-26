@@ -8,6 +8,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_chunk.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -235,7 +236,7 @@ void main() {
       expect(loaded.layer.renderedChunkCount, 1);
     });
 
-    test('only the layers with tiles that stick out are not split', () async {
+    test('only the layers with tiles that stick out use runs', () async {
       // The "Floor" layer only uses the tileset of 16 x 16 tiles, and the
       // "Walls" layer also uses the tileset of 32 x 32 tiles.
       final loaded = await _load(_oversized);
@@ -243,17 +244,18 @@ void main() {
           .whereType<FlameTileLayer>();
       final floor = layers.singleWhere((layer) => layer.layer.name == 'Floor');
       final walls = layers.singleWhere((layer) => layer.layer.name == 'Walls');
-      expect(floor.usesChunks, isTrue);
+      expect(floor.split, TileLayerSplit.chunks);
       expect(floor.chunkCount, greaterThan(0));
-      expect(walls.usesChunks, isFalse);
-      expect(walls.chunkCount, 0);
+      expect(walls.split, TileLayerSplit.runs);
+      expect(walls.chunkCount, greaterThan(1));
     });
 
-    test('tiles with an offset are not split', () async {
+    test('tiles with an offset are split in runs', () async {
       final loaded = await _load(
         _tileOffset,
       );
-      expect(loaded.layer.chunkCount, 0);
+      expect(loaded.layer.split, TileLayerSplit.runs);
+      expect(loaded.layer.chunkCount, greaterThan(1));
     });
 
     test('a map in the viewport of a camera is not culled', () async {

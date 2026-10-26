@@ -6,6 +6,32 @@ import 'package:flame/sprite.dart';
 import 'package:flame_tiled/src/mutable_rect.dart';
 import 'package:meta/meta.dart';
 
+/// How the tiles of a tile layer are split, so that the parts that are out of
+/// view can be skipped.
+@internal
+enum TileLayerSplit() {
+  /// All of the tiles are drawn with a single batch.
+  none,
+
+  /// The tiles are split in squares of neighboring tiles. The squares are drawn
+  /// row by row, which only paints the tiles in the same order as [none] when
+  /// no tile reaches into another cell.
+  chunks,
+
+  /// The tiles are split in runs: tiles that follow each other in one row, in
+  /// the order they are painted in. The runs are drawn in that order too, so
+  /// they paint the tiles exactly like [none], even when tiles overlap.
+  runs,
+}
+
+/// A run of [TileLayerSplit.runs]: the tiles of the row [ty] from the column
+/// [startX] to [endX], which are drawn by [chunk].
+@internal
+class TileRun(final int ty, final int startX, final TileChunk chunk) {
+  /// The column of the last tile of the run.
+  late int endX = startX;
+}
+
 /// A group of neighboring tiles of a tile layer that are drawn with their own
 /// [SpriteBatch], so that the whole group can be skipped while it is outside of
 /// the view.
