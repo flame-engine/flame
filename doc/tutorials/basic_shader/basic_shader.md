@@ -5,7 +5,7 @@ This tutorial will give you a brief understanding of how to create and use basic
 engine.
 
 This tutorial assumes that you have a working Flame project set up. If you don't, please follow
-the [](bare_flame_game.md) tutorial first.
+the [](../bare_flame_game.md) tutorial first.
 
 The tutorial consists of 4 steps. We will create a simple outline shader for sprites which have a
 transparent background layer.
