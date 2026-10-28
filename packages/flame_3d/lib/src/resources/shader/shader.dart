@@ -87,8 +87,14 @@ class Shader._(
   void setMatrix4(String key, Matrix4 matrix) => _set(key, matrix.storage);
 
   /// Set a [Color] at the given [key].
-  void setColor(String key, Color color) =>
-      _set(key, _colorBytesCache.putIfAbsent(color, () => color.storage));
+  void setColor(String key, Color color) {
+    _colorBuf
+      ..[0] = color.r
+      ..[1] = color.g
+      ..[2] = color.b
+      ..[3] = color.a;
+    return _set(key, _colorBuf);
+  }
 
   /// Bind all uniform data and textures to the [device].
   void bind(GraphicsDevice device) {
@@ -159,7 +165,7 @@ class Shader._(
   static final _scalarData = ByteData(4);
   static final _scalarBuf = _scalarData.buffer.asFloat32List();
 
-  static final Map<Color, Float32List> _colorBytesCache = {};
+  static final _colorBuf = Float32List(4);
 
   static GpuShader Function(String key) _assetLibrary(String assetName) {
     return (key) => GpuBackend.instance.loadShaderLibrary(assetName)[key];
