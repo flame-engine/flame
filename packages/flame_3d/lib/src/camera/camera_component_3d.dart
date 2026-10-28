@@ -1,5 +1,6 @@
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/game.dart';
+import 'package:meta/meta.dart';
 
 enum CameraProjection() {
   perspective,
@@ -86,8 +87,31 @@ class CameraComponent3D({
   final Matrix4 _viewProjectionMatrix = Matrix4.zero();
 
   /// The frustum of the [viewProjectionMatrix].
-  Frustum get frustum => _frustum..setFromMatrix(viewProjectionMatrix);
+  ///
+  /// While a frustum is held through [holdFrustum], the frustum computed when
+  /// the hold started is returned instead of a recomputed one.
+  Frustum get frustum => _frustumHolds > 0
+      ? _frustum
+      : (_frustum..setFromMatrix(viewProjectionMatrix));
   final Frustum _frustum = Frustum();
+  int _frustumHolds = 0;
+
+  /// Computes the [frustum] once and keeps returning it until every hold is
+  /// released with [releaseFrustum].
+  ///
+  /// Used while rendering a pass, where the camera does not move but the
+  /// frustum is read once per culled component.
+  @internal
+  void holdFrustum() {
+    if (_frustumHolds == 0) {
+      _frustum.setFromMatrix(viewProjectionMatrix);
+    }
+    _frustumHolds++;
+  }
+
+  /// Releases a hold started with [holdFrustum].
+  @internal
+  void releaseFrustum() => _frustumHolds--;
 
   /// Rotates the camera's yaw and pitch.
   ///
