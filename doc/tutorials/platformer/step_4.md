@@ -76,8 +76,9 @@ add(
 ```
 
 The `SizeEffect` is best explained by going to their
-[docs](../../flame/effects.md#sizeeffectby). In short, we simply reduce the size of the star
-by -24 pixels in both directions and we make it pulse infinitely using the `EffectController`.
+[docs](../../flame/effects/size_effects.md#sizeeffect-by). In short, we simply reduce the size of
+the star by -24 pixels in both directions and we make it pulse infinitely using the
+`EffectController`.
 
 Don't forget to add the star to your `lib/ember_quest.dart` file by doing:
 
@@ -160,7 +161,7 @@ The water drop enemy is an animation just like Ember, so this class is extending
 `SpriteAnimationComponent` class but it uses all of the previous code we have used for the Star and
 the Platform. The only difference will be instead of the `SizeEffect`, we are going to use the
 `MoveEffect`. The best resource for information will be their [help
-docs](../../flame/effects.md#sizeeffectby).
+docs](../../flame/effects/move_effects.md#movebyeffect).
 
 In short, the `MoveEffect` will last for 3 seconds, alternate directions, and run infinitely. It
 will move our enemy to the left, 128 pixels (-2 x image width).
