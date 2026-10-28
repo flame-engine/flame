@@ -8,6 +8,6 @@ class JointsInfo() {
   List<Matrix4> jointTransforms = [];
 
   void setSurface(int surfaceIndex) {
-    jointTransforms = jointTransformsPerSurface[surfaceIndex] ?? [];
+    jointTransforms = jointTransformsPerSurface[surfaceIndex] ?? const [];
   }
 }
