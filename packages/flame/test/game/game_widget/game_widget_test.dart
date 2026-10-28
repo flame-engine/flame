@@ -367,7 +367,7 @@ void main() {
     });
 
     testWidgets(
-      'handles keys when focused regardless of being KeyboardKeys',
+      'does not handle keys when the game is not KeyboardKeys',
       (tester) async {
         final game = FlameGame();
 
@@ -382,7 +382,7 @@ void main() {
 
         final handled = await simulateKeyDownEvent(LogicalKeyboardKey.keyA);
 
-        expect(handled, isTrue);
+        expect(handled, isFalse);
       },
     );
 

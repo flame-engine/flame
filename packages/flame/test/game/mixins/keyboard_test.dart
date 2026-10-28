@@ -13,7 +13,7 @@ class _InvalidGame()
 void main() {
   group('Keyboard events', () {
     test(
-      'game with KeyboardEvents can handle key events',
+      'game with KeyboardEvents ignores key events by default',
       () {
         final validGame = _ValidGame();
         const event = KeyDownEvent(
@@ -22,10 +22,10 @@ void main() {
           timeStamp: Duration.zero,
         );
 
-        // Should just work with the default implementation
+        // The default implementation lets the event reach other handlers.
         expect(
           validGame.onKeyEvent(event, {}),
-          KeyEventResult.handled,
+          KeyEventResult.ignored,
         );
       },
     );

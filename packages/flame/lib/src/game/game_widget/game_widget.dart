@@ -352,7 +352,9 @@ class GameWidgetState<T extends Game>() extends State<GameWidget<T>> {
         HardwareKeyboard.instance.logicalKeysPressed,
       );
     }
-    return KeyEventResult.handled;
+    // The game doesn't listen to key events, so let them reach the widgets
+    // above, like the back button on Android popping the route.
+    return KeyEventResult.ignored;
   }
 
   @override

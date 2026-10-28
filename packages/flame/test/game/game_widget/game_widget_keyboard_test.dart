@@ -19,6 +19,8 @@ class _KeyboardEventsGame() extends FlameGame with KeyboardEvents {
   }
 }
 
+class _DefaultKeyboardEventsGame() extends FlameGame with KeyboardEvents;
+
 class _KeyboardHandlerComponent() extends Component with KeyboardHandler {
   final List<String> keysPressed = [];
 
@@ -105,6 +107,64 @@ void main() {
       await tester.sendKeyDownEvent(LogicalKeyboardKey.keyC);
 
       expect(game.keysPressed, ['a', 'b', 'c']);
+    });
+
+    group('key events that the game does not consume', () {
+      // Records the key events that reach a handler above the GameWidget. On
+      // Android, the back button only pops the route when its key event is not
+      // handled. The test key simulator can't send `goBack`, so `escape` is
+      // used instead, which goes through the same path in the GameWidget.
+      Future<List<LogicalKeyboardKey>> sendKey(
+        WidgetTester tester,
+        FlameGame game,
+      ) async {
+        final receivedKeys = <LogicalKeyboardKey>[];
+        await tester.pumpWidget(
+          _GamePage(
+            child: Focus(
+              onKeyEvent: (_, event) {
+                receivedKeys.add(event.logicalKey);
+                return KeyEventResult.handled;
+              },
+              child: GameWidget(game: game),
+            ),
+          ),
+        );
+        await tester.sendKeyDownEvent(LogicalKeyboardKey.escape);
+        return receivedKeys;
+      }
+
+      testWidgets(
+        'reach the widgets above a game without KeyboardEvents',
+        (tester) async {
+          final receivedKeys = await sendKey(tester, FlameGame());
+
+          expect(receivedKeys, [LogicalKeyboardKey.escape]);
+        },
+      );
+
+      testWidgets(
+        'reach the widgets above a game with the default KeyboardEvents',
+        (tester) async {
+          final receivedKeys = await sendKey(
+            tester,
+            _DefaultKeyboardEventsGame(),
+          );
+
+          expect(receivedKeys, [LogicalKeyboardKey.escape]);
+        },
+      );
+
+      testWidgets(
+        'do not reach the widgets above when the game handles them',
+        (tester) async {
+          final game = _KeyboardEventsGame();
+          final receivedKeys = await sendKey(tester, game);
+
+          expect(game.keysPressed, hasLength(1));
+          expect(receivedKeys, isEmpty);
+        },
+      );
     });
 
     testWidgets(

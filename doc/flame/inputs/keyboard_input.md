@@ -38,6 +38,11 @@ will trigger `SystemSoundType.alert`.
 `KeyEventResult.skipRemainingHandlers` is very similar to `.ignored`, apart from the fact that will
 skip any other handler widget and will straight up play the alert sound.
 
+Return `KeyEventResult.ignored` for the keys that your game doesn't use, so they can still reach
+the widgets above the `GameWidget`. For example, if the back button on Android is reported as
+handled, the route is not popped. The default implementation of `onKeyEvent` ignores all key
+events, and so does a game without `KeyboardEvents`.
+
 Minimal example:
 
 ```dart

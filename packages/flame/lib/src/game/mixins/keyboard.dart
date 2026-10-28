@@ -33,6 +33,12 @@ mixin HasKeyboardHandlerComponents<W extends World> on FlameGame<W>
 ///
 /// Override [onKeyEvent] to customize the keyboard handling behavior.
 mixin KeyboardEvents on Game {
+  /// Called when the game has the focus and receives a key event.
+  ///
+  /// Return [KeyEventResult.handled] for the events that the game consumes
+  /// and [KeyEventResult.ignored] for the rest, so that they can reach the
+  /// widgets above the game, like the back button on Android popping the
+  /// route. The default implementation ignores all key events.
   KeyEventResult onKeyEvent(
     KeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
@@ -44,6 +50,6 @@ mixin KeyboardEvents on Game {
       'HasKeyboardHandlerComponents removes the necessity of KeyboardEvents',
     );
 
-    return KeyEventResult.handled;
+    return KeyEventResult.ignored;
   }
 }
