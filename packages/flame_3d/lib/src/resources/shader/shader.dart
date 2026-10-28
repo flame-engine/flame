@@ -42,6 +42,7 @@ class Shader._(
 
   final Map<String, GpuUniformSlot> _slots = {};
   final Map<String, _SlotBinding> _bindings = {};
+  final Map<String, _UniformField> _fields = {};
 
   /// Set a [Texture] at the given [key].
   void setTexture(String key, Texture texture) {
@@ -92,12 +93,12 @@ class Shader._(
 
   /// Bind all uniform data and textures to the [device].
   void bind(GraphicsDevice device) {
-    for (final MapEntry(:key, :value) in _bindings.entries) {
-      switch (value) {
-        case _UniformBinding(:final resource):
-          device.bindUniform(_slots[key]!, resource);
-        case _TextureBinding(:final resource):
-          device.bindTexture(_slots[key]!, resource);
+    for (final binding in _bindings.values) {
+      switch (binding) {
+        case _UniformBinding(:final slot, :final resource):
+          device.bindUniform(slot, resource);
+        case _TextureBinding(:final slot, :final resource):
+          device.bindTexture(slot, resource);
       }
     }
   }
@@ -107,6 +108,7 @@ class Shader._(
     // Always clear up old data to prevent memory leaks.
     _slots.clear();
     _bindings.clear();
+    _fields.clear();
 
     final shader = _getShader(entryPoint);
     for (final name in slots) {
@@ -116,6 +118,10 @@ class Shader._(
   }
 
   void _set(String key, Float32List data) {
+    (_fields[key] ?? _resolveField(key)).write(data);
+  }
+
+  _UniformField _resolveField(String key) {
     final (slot, field, index) = parseKey(key);
 
     final binding = switch (_bindings.putIfAbsent(
@@ -126,10 +132,14 @@ class Shader._(
       _ => throw StateError('Slot "$key" is a sampler block, not a uniform'),
     };
 
-    return switch (field) {
-      final field? => binding.setField(field, index, data),
-      _ => binding.setRaw(data),
-    };
+    return _fields[key] = _UniformField(
+      binding,
+      switch (field) {
+        final field? => binding.memberOffset(field),
+        _ => null,
+      },
+      index,
+    );
   }
 
   /// Parse a uniform key into (structName, memberName, arrayIndex).
@@ -177,21 +187,19 @@ class _UniformBinding(super.slot) extends _SlotBinding<ByteBuffer> {
   final Float32List _data = Float32List(
     slot.sizeInBytes! ~/ Float32List.bytesPerElement,
   );
-  final Map<String, int> _memberOffsets = {};
 
-  /// Write a struct member (optionally array-indexed) directly into the buffer.
-  void setField(String member, int? index, Float32List data) {
-    final baseOffset = _memberOffsets.putIfAbsent(
-      member,
-      () {
-        final bytes = slot.getMemberOffsetInBytes(member);
-        if (bytes == null) {
-          throw StateError('Field "$member" not found in uniform struct');
-        }
-        return bytes ~/ Float32List.bytesPerElement;
-      },
-    );
+  /// The offset of a struct [member] within the buffer, in floats.
+  int memberOffset(String member) {
+    final bytes = slot.getMemberOffsetInBytes(member);
+    if (bytes == null) {
+      throw StateError('Field "$member" not found in uniform struct');
+    }
+    return bytes ~/ Float32List.bytesPerElement;
+  }
 
+  /// Write a struct member (optionally array-indexed) directly into the buffer,
+  /// starting from the member's [baseOffset].
+  void setField(int baseOffset, int? index, Float32List data) {
     final offset = switch (index) {
       final i? => baseOffset + i * _std140ArrayStride(data.length),
       _ => baseOffset,
@@ -214,3 +222,19 @@ class _UniformBinding(super.slot) extends _SlotBinding<ByteBuffer> {
 
 class _TextureBinding(super.slot, @override var Texture resource)
     extends _SlotBinding<Texture>;
+
+/// A uniform key resolved once to the binding and offset it writes to.
+class _UniformField(
+  final _UniformBinding _binding,
+  final int? _memberOffset,
+  final int? _index,
+) {
+  void write(Float32List data) {
+    switch (_memberOffset) {
+      case final offset?:
+        _binding.setField(offset, _index, data);
+      case null:
+        _binding.setRaw(data);
+    }
+  }
+}
