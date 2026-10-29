@@ -123,6 +123,10 @@ On the widget level, it is possible to use the
 the game is focused or not.
 
 `GameWidget` has an optional `focusNode` parameter that allow its focus to be controlled externally.
+The `focusNode` can be changed while the game is running, for example to keep one node per game
+when several games are shown in the same `GameWidget`. If the old node had the focus, the new one
+takes it over. `GameWidget` only disposes the node that it creates itself, so a `focusNode` that you
+pass has to be disposed by you.
 
 By default `GameWidget` has its `autofocus` set to true, which means it will get focused once it is
 mounted, and again whenever its `game` is replaced by a new one. To override that behavior, set
