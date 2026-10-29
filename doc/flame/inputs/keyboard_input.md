@@ -125,7 +125,8 @@ the game is focused or not.
 `GameWidget` has an optional `focusNode` parameter that allow its focus to be controlled externally.
 
 By default `GameWidget` has its `autofocus` set to true, which means it will get focused once it is
-mounted. To override that behavior, set `autofocus` to false.
+mounted, and again whenever its `game` is replaced by a new one. To override that behavior, set
+`autofocus` to false.
 
 For a more complete example, see the
 [keyboard input example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/keyboard_example.dart).
