@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:examples/commons/culling_story.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -10,14 +11,18 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart' show KeyEventResult;
 
 class CullingExample({
-  final bool culled = true,
-  final int amount = 10000,
-}) extends FlameGame with KeyboardEvents {
+  bool culled = true,
+  final int amount = cullingSprites,
+  @override var double cameraSpeed = 1,
+}) extends FlameGame with KeyboardEvents, CullingControls {
   static const description = '''
 The camera slowly moves over a big field of animated sprites. Only a few of
 them are on-screen at any time. Press C, or use the "Culled" knob, to turn
 `CullWhenOffscreen` on and off. Compare the frame rate and the number of
 sprites that are drawn on each frame.
+
+The "Sprites" knob changes how many sprites there are, and the "Camera speed"
+knob how fast the camera moves.
   ''';
 
   static const _fieldSize = 4000.0;
@@ -25,10 +30,28 @@ sprites that are drawn on each frame.
   /// How many components were rendered in the previous frame.
   static int renderedThisFrame = 0;
 
-  late bool _culled = culled;
+  bool _culled = culled;
   late final CullingStatusText _statusText;
   late final TextComponent _renderedText;
   double _time = 0;
+
+  @override
+  bool get culled => _culled;
+
+  @override
+  set culled(bool value) {
+    if (value == _culled) {
+      return;
+    }
+    _culled = value;
+    if (!isLoaded) {
+      return;
+    }
+    _statusText.culled = value;
+    for (final sprite in world.children.query<_AnimatedSprite>()) {
+      sprite.cullingEnabled = value;
+    }
+  }
 
   @override
   Future<void> onLoad() async {
@@ -81,11 +104,8 @@ sprites that are drawn on each frame.
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.keyC) {
-      _culled = !_culled;
-      _statusText.culled = _culled;
-      for (final box in world.children.query<_AnimatedSprite>()) {
-        box.cullingEnabled = _culled;
-      }
+      culled = !culled;
+      reportKnob(cullingCulledKnob, culled);
       return KeyEventResult.handled;
     }
     return super.onKeyEvent(event, keysPressed);
@@ -94,7 +114,7 @@ sprites that are drawn on each frame.
   @override
   void update(double dt) {
     super.update(dt);
-    _time += dt;
+    _time += dt * cameraSpeed;
     camera.viewfinder.position = Vector2(
       cos(_time * 0.3) * _fieldSize * 0.2,
       sin(_time * 0.2) * _fieldSize * 0.2,
@@ -108,6 +128,12 @@ sprites that are drawn on each frame.
     super.render(canvas);
   }
 }
+
+/// How many sprites the culling examples have by default.
+const cullingSprites = 10000;
+
+/// The numbers of sprites that the "Sprites" knob offers.
+const cullingSpriteAmounts = [1000, 5000, 10000, 20000, 50000];
 
 /// The text style of the HUD of the culling examples.
 final TextPaint cullingHudText = TextPaint(
