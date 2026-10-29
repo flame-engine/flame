@@ -40,6 +40,9 @@ knob how fast the camera moves.
 
   @override
   set culled(bool value) {
+    if (value == _culled) {
+      return;
+    }
     _culled = value;
     if (!isLoaded) {
       return;

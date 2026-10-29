@@ -70,6 +70,9 @@ Dart. It does not include the work of the GPU.
 
   @override
   set culled(bool value) {
+    if (value == _culled) {
+      return;
+    }
     _culled = value;
     if (!isLoaded) {
       return;
@@ -85,6 +88,9 @@ Dart. It does not include the work of the GPU.
   bool get bigView => _bigView;
 
   set bigView(bool value) {
+    if (value == _bigView) {
+      return;
+    }
     _bigView = value;
     if (isLoaded) {
       camera.world = value ? world : _emptyWorld;

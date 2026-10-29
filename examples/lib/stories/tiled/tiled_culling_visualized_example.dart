@@ -26,10 +26,11 @@ camera that moves around, and it is the one that does the culling. The white box
 shows what it sees.
 
 The map is split into chunks of 16 x 16 tiles (the "Chunk size" knob changes
-it), which are the shapes of the grid. A chunk is green if the small camera draws it. The small camera skips the
-chunks that are not green, since they are out of its view. Flame compares the
-view with the smallest box around each chunk, so a chunk of an isometric map
-can be green when the view only touches the corner of its box.
+it), which are the shapes of the grid. A chunk is green if the small camera
+draws it. The small camera skips the chunks that are not green, since they are
+out of its view. Flame compares the view with the smallest box around each
+chunk, so a chunk of an isometric map can be green when the view only touches
+the corner of its box.
 
 Use the "Orientation" knob to change the kind of map: orthogonal, isometric,
 staggered or hexagonal.
@@ -38,9 +39,8 @@ The "Isometric, tall tiles" map has trees and rocks that are taller than their
 cells, and are painted over the tiles behind them. Chunks would change which
 tile is painted on top, so that map is split into runs instead: pieces of one
 row, of up to four times the chunk size (64 tiles by default), which are drawn
-in the same order as the tiles. The
-shapes are then the runs, which are long and thin, and they reach up to fit the
-trees and rocks.
+in the same order as the tiles. The shapes are then the runs, which are long and
+thin, and they reach up to fit the trees and rocks.
 
 Press C, or use the "Culled" knob, to turn culling on and off. With culling off,
 the small camera draws every chunk, so they are all green.
@@ -100,6 +100,9 @@ It does not include the work of the GPU.
   bool get bigView => _bigView;
 
   set bigView(bool value) {
+    if (value == _bigView) {
+      return;
+    }
     _bigView = value;
     if (isLoaded) {
       camera.world = value ? world : _emptyWorld;
