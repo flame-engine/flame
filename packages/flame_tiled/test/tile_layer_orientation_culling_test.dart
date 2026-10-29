@@ -5,6 +5,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_chunk.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -281,23 +282,30 @@ void main() {
   }
 
   group('culling of maps with cells that are not square', () {
-    test('is used when no tile is turned a quarter', () async {
+    test('uses chunks when no tile is turned a quarter', () async {
       final component = await _load(_isometric2To1, chunkSize: _chunkSize);
+      expect(_layerOf(component).split, TileLayerSplit.chunks);
       expect(_layerOf(component).chunkCount, greaterThan(4));
     });
 
-    test('is not used when a tile is turned a quarter', () async {
+    test('uses runs when a tile is turned a quarter', () async {
       // A turned tile of 16 x 8 units is 8 x 16 units, which sticks out of its
       // cell.
-      final component = await _load(
+      final whole = await _load(_isometric2To1, quarterTurns: true);
+      final split = await _load(
         _isometric2To1,
         chunkSize: _chunkSize,
         quarterTurns: true,
       );
-      expect(_layerOf(component).chunkCount, 0);
+      expect(_layerOf(split).split, TileLayerSplit.runs);
+      expect(_layerOf(split).chunkCount, greaterThan(4));
+      expect(
+        await renderMapToPng(split),
+        orderedEquals(await renderMapToPng(whole)),
+      );
     });
 
-    test('stops when a tile is turned a quarter after loading', () async {
+    test('uses runs when a tile is turned a quarter after loading', () async {
       Future<TiledComponent> loadTurned({int? chunkSize}) async {
         final component = await _load(_isometric2To1, chunkSize: chunkSize);
         component.tileMap.setTileData(
@@ -310,23 +318,24 @@ void main() {
       }
 
       final split = await _load(_isometric2To1, chunkSize: _chunkSize);
-      expect(_layerOf(split).usesChunks, isTrue);
+      expect(_layerOf(split).split, TileLayerSplit.chunks);
 
       final turned = await loadTurned(chunkSize: _chunkSize);
-      expect(_layerOf(turned).usesChunks, isFalse);
-      expect(_layerOf(turned).chunkCount, 0);
+      expect(_layerOf(turned).split, TileLayerSplit.runs);
+      expect(_layerOf(turned).chunkCount, greaterThan(4));
       expect(
         await renderMapToPng(turned),
         orderedEquals(await renderMapToPng(await loadTurned())),
       );
     });
 
-    test('is used for square cells when a tile is turned a quarter', () async {
+    test('uses chunks for square cells with tiles turned a quarter', () async {
       final component = await _load(
         _isometric,
         chunkSize: _chunkSize,
         quarterTurns: true,
       );
+      expect(_layerOf(component).split, TileLayerSplit.chunks);
       expect(_layerOf(component).chunkCount, greaterThan(4));
     });
   });
@@ -432,7 +441,8 @@ void main() {
       );
     }
 
-    test('does not split an isometric map with taller tiles', () async {
+    // The render of these maps is compared in tile_layer_run_culling_test.dart.
+    test('splits an isometric map with taller tiles in runs', () async {
       final component = await loadAsset(
         'test_isometric.tmx',
         ['isometric_spritesheet.png'],
@@ -440,12 +450,12 @@ void main() {
       );
       expect(_tileLayersOf(component), isNotEmpty);
       expect(
-        _tileLayersOf(component).map((l) => l.chunkCount),
-        everyElement(0),
+        _tileLayersOf(component).map((l) => l.split),
+        contains(TileLayerSplit.runs),
       );
     });
 
-    test('does not split a staggered map with taller tiles', () async {
+    test('splits a staggered map with taller tiles in runs', () async {
       final component = await loadAsset(
         'iso_staggered_overlap_y_odd.tmx',
         ['dirt_atlas.png'],
@@ -453,8 +463,8 @@ void main() {
       );
       expect(_tileLayersOf(component), isNotEmpty);
       expect(
-        _tileLayersOf(component).map((l) => l.chunkCount),
-        everyElement(0),
+        _tileLayersOf(component).map((l) => l.split),
+        contains(TileLayerSplit.runs),
       );
     });
   });

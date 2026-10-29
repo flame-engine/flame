@@ -108,6 +108,57 @@ void main() {
     });
 
     testWidgets(
+      'a game that replaces another one takes the focus back',
+      (tester) async {
+        // Something else, like a button next to the game, takes the focus.
+        final otherNode = FocusNode();
+        Widget page(FlameGame game) => _GamePage(
+          child: Column(
+            children: [
+              Focus(focusNode: otherNode, child: const SizedBox.square()),
+              Expanded(child: GameWidget(game: game)),
+            ],
+          ),
+        );
+
+        await tester.pumpWidget(page(_KeyboardEventsGame()));
+        otherNode.requestFocus();
+        await tester.pump();
+
+        final newGame = _KeyboardEventsGame();
+        await tester.pumpWidget(page(newGame));
+        await tester.sendKeyDownEvent(LogicalKeyboardKey.keyA);
+
+        expect(otherNode.hasFocus, isFalse);
+        expect(newGame.keysPressed, ['a']);
+      },
+    );
+
+    testWidgets(
+      'a game that replaces another one does not take the focus without '
+      'autofocus',
+      (tester) async {
+        final otherNode = FocusNode();
+        Widget page(FlameGame game) => _GamePage(
+          child: Column(
+            children: [
+              Focus(focusNode: otherNode, child: const SizedBox.square()),
+              Expanded(child: GameWidget(game: game, autofocus: false)),
+            ],
+          ),
+        );
+
+        await tester.pumpWidget(page(_KeyboardEventsGame()));
+        otherNode.requestFocus();
+        await tester.pump();
+
+        await tester.pumpWidget(page(_KeyboardEventsGame()));
+
+        expect(otherNode.hasFocus, isTrue);
+      },
+    );
+
+    testWidgets(
       'game with HasKeyboardHandlerComponents receives key events',
       (tester) async {
         final game = _HasKeyboardHandlerComponentsGame();

@@ -186,7 +186,7 @@ but behind the viewport and with the same transformations as are applied to the
 world, so these components are not static.
 
 You can also add behavioral components as children to the viewfinder, for
-example [effects](effects.md) or other controllers. If you for example would add a
+example [effects](effects/effects.md) or other controllers. If you for example would add a
 `ScaleEffect` you would be able to achieve a smooth zoom in your game.
 
 

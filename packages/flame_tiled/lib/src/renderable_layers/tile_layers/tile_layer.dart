@@ -44,7 +44,7 @@ abstract class FlameTileLayer({
   super.filterQuality,
 
   /// The size of the chunks of this layer, in tiles, for the layers that split
-  /// their tiles in chunks (see [usesChunks]).
+  /// their tiles (see [split]).
   ///
   /// Infinite maps are always split, and use the chunk size of the map when
   /// this is null. Finite maps are only split when this is set.
@@ -174,25 +174,32 @@ abstract class FlameTileLayer({
   int get renderedChunkCount => _renderedChunkCount;
   int _renderedChunkCount = 0;
 
-  /// Whether the tiles of this layer are split into chunks, which are only
-  /// rendered while they are in view.
+  /// How the tiles of this layer are split, so that the parts that are out of
+  /// view are not rendered.
   ///
-  /// This is the case for the layers of infinite maps, and for the layers of
-  /// finite maps when [chunkSize] is set, as long as every tile stays inside of
-  /// its own cell. Tiles that stick out of their cell (oversized tiles and
-  /// tiles with an offset) are painted over the tiles of other cells, in an
-  /// order that chunks would change. Then all of the tiles are kept in
-  /// [TiledAtlas.batch].
+  /// The layers of infinite maps are split, and so are the layers of finite
+  /// maps when [chunkSize] is set. The others are not split, and all of their
+  /// tiles are kept in [TiledAtlas.batch].
+  ///
+  /// A layer where every tile stays inside of its own cell is split in square
+  /// [TileLayerSplit.chunks]. Tiles that stick out of their cell (oversized
+  /// tiles and tiles with an offset) are painted over the tiles of other cells,
+  /// in an order that chunks would change, so those layers are split in
+  /// [TileLayerSplit.runs] instead.
   ///
   /// Only the tiles of this layer are looked at, and this is decided again
   /// every time the cache is refreshed, since changing a tile can change it.
-  bool get usesChunks => _usesChunks;
-  bool _usesChunks = false;
+  TileLayerSplit get split => _split;
+  TileLayerSplit _split = TileLayerSplit.none;
 
-  bool _canUseChunks() {
+  TileLayerSplit _chooseSplit() {
     if (!map.infinite && chunkSize == null) {
-      return false;
+      return TileLayerSplit.none;
     }
+    return _tilesFitCells() ? TileLayerSplit.chunks : TileLayerSplit.runs;
+  }
+
+  bool _tilesFitCells() {
     // A quarter turn swaps the width and the height of a tile, so in a cell
     // that is not square the tile sticks out of it. The tiles of hexagonal maps
     // are rotated in steps of 60º and keep their size.
@@ -240,10 +247,26 @@ abstract class FlameTileLayer({
     (ty / _chunkHeight).floor(),
   );
 
-  /// Adds a tile to this layer, to the chunk that it belongs to when this layer
-  /// [usesChunks], or else to [TiledAtlas.batch].
+  /// The runs of the layers that are split in [TileLayerSplit.runs], in the
+  /// order that the tiles were added, which is the order they are painted in.
+  final _runs = <TileChunk>[];
+
+  /// The runs of each row, to find the runs of a tile in [transformAt].
+  final _runsByRow = <int, List<TileRun>>{};
+
+  /// The run that the next tile is added to, if it is in the same row.
+  TileRun? _currentRun;
+
+  /// How many cells of a row a run covers at most. A run only covers one row,
+  /// so it is longer than the side of a chunk, to keep the number of runs (and
+  /// of draw calls) down.
+  int get _runLength => 4 * _chunkWidth;
+
+  /// Adds a tile to this layer: to the chunk or the run that it belongs to
+  /// when this layer is [split], or else to [TiledAtlas.batch].
   ///
-  /// [tx] and [ty] are the Tiled coordinates of the tile.
+  /// [tx] and [ty] are the Tiled coordinates of the tile. The tiles have to be
+  /// added in the order that they are painted in.
   @protected
   void addTile(
     int tx,
@@ -252,24 +275,45 @@ abstract class FlameTileLayer({
     required MutableRSTransform transform,
     required bool flip,
   }) {
-    if (!usesChunks) {
-      tiledAtlas.batch?.addTransform(
-        source: source,
-        transform: transform,
-        flip: flip,
-      );
-      return;
+    switch (split) {
+      case TileLayerSplit.none:
+        tiledAtlas.batch?.addTransform(
+          source: source,
+          transform: transform,
+          flip: flip,
+        );
+      case TileLayerSplit.chunks:
+        final key = _chunkKey(tx, ty);
+        var chunk = _chunks[key];
+        if (chunk == null) {
+          final batch = tiledAtlas.newBatch();
+          if (batch == null) {
+            return;
+          }
+          chunk = _chunks[key] = TileChunk(batch);
+        }
+        chunk.add(source: source, transform: transform, flip: flip);
+      case TileLayerSplit.runs:
+        var run = _currentRun;
+        // A run only goes forward along one row, so that the tiles keep the
+        // order they are painted in. The second pass of the rows of staggered
+        // and hexagonal maps goes back, and starts new runs.
+        if (run == null ||
+            run.ty != ty ||
+            tx <= run.endX ||
+            tx >= run.startX + _runLength) {
+          final batch = tiledAtlas.newBatch();
+          if (batch == null) {
+            return;
+          }
+          run = _currentRun = TileRun(ty, tx, TileChunk(batch));
+          _runs.add(run.chunk);
+          _runsByRow.putIfAbsent(ty, () => []).add(run);
+        }
+        run
+          ..endX = tx
+          ..chunk.add(source: source, transform: transform, flip: flip);
     }
-    final key = _chunkKey(tx, ty);
-    var chunk = _chunks[key];
-    if (chunk == null) {
-      final batch = tiledAtlas.newBatch();
-      if (batch == null) {
-        return;
-      }
-      chunk = _chunks[key] = TileChunk(batch);
-    }
-    chunk.add(source: source, transform: transform, flip: flip);
   }
 
   @protected
@@ -319,6 +363,9 @@ abstract class FlameTileLayer({
 
     tiledAtlas.batch?.clear();
     _chunks.clear();
+    _runs.clear();
+    _runsByRow.clear();
+    _currentRun = null;
     _sortedChunks = const [];
     assert(
       chunkSize == null || chunkSize! > 0,
@@ -328,10 +375,15 @@ abstract class FlameTileLayer({
         chunkSize ?? layer.chunks?.firstOrNull?.width ?? _defaultChunkSize;
     _chunkHeight =
         chunkSize ?? layer.chunks?.firstOrNull?.height ?? _defaultChunkSize;
-    _usesChunks = _canUseChunks();
+    _split = _chooseSplit();
 
     cacheTiles();
+    _currentRun = null;
 
+    if (split == TileLayerSplit.runs) {
+      _sortedChunks = List.of(_runs);
+      return;
+    }
     final keys = _chunks.keys.toList()
       ..sort(
         (a, b) => a.$2 != b.$2 ? a.$2.compareTo(b.$2) : a.$1.compareTo(b.$1),
@@ -352,8 +404,13 @@ abstract class FlameTileLayer({
     }
     final transform = transforms[ix][iy];
     if (transform != null) {
-      // The transform can be used to move the tile, out of its chunk.
+      // The transform can be used to move the tile, out of its chunk or run.
       _chunks[_chunkKey(x, y)]?.alwaysVisible = true;
+      for (final run in _runsByRow[y] ?? const <TileRun>[]) {
+        if (run.startX <= x && x <= run.endX) {
+          run.chunk.alwaysVisible = true;
+        }
+      }
     }
     return transform;
   }

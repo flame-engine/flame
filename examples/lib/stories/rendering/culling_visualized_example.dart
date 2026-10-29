@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:examples/commons/culling_story.dart';
 import 'package:examples/stories/rendering/culling_example.dart';
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
@@ -11,9 +12,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart' show KeyEventResult;
 
 class CullingVisualizedExample({
-  final bool culled = true,
-  final int amount = 10000,
-}) extends FlameGame with KeyboardEvents {
+  bool culled = true,
+  final int amount = cullingSprites,
+  @override var double cameraSpeed = 1,
+  bool bigView = true,
+}) extends FlameGame with KeyboardEvents, CullingControls {
   static const description = '''
 See which sprites `CullWhenOffscreen` skips. The big view shows the whole field.
 The small view in the bottom right corner is a second camera that moves around,
@@ -27,8 +30,11 @@ only the sprites near the white box are bright. With culling off, the small
 camera draws every sprite, so all of them are bright.
 
 The FPS at the top is for the whole game. While the big view is on, it sets the
-FPS, because it always draws every sprite. Press V to hide the big view. Then
-the FPS is the FPS of the small camera alone.
+FPS, because it always draws every sprite. Press V, or use the "Big view" knob,
+to hide the big view. Then the FPS is the FPS of the small camera alone.
+
+The "Sprites" knob changes how many sprites there are, and the "Camera speed"
+knob how fast the small camera moves.
 
 The "draw time" line is how long the small camera needs to draw its sprites in
 Dart. It does not include the work of the GPU.
@@ -51,13 +57,45 @@ Dart. It does not include the work of the GPU.
   int innerRenderCount = 0;
   int _lastInnerRenderCount = 0;
 
-  late bool _culled = culled;
+  bool _culled = culled;
+  bool _bigView = bigView;
   late final CullingStatusText _statusText;
   late final World _emptyWorld;
-  bool _bigViewVisible = true;
   late final TextComponent _countText;
   late final TextComponent _timeText;
   double _time = 0;
+
+  @override
+  bool get culled => _culled;
+
+  @override
+  set culled(bool value) {
+    if (value == _culled) {
+      return;
+    }
+    _culled = value;
+    if (!isLoaded) {
+      return;
+    }
+    _statusText.culled = value;
+    for (final sprite in world.children.query<_Sprite>()) {
+      sprite.cullingEnabled = value;
+    }
+  }
+
+  /// Whether the big view shows the whole field. When it is hidden, only the
+  /// small camera draws the sprites.
+  bool get bigView => _bigView;
+
+  set bigView(bool value) {
+    if (value == _bigView) {
+      return;
+    }
+    _bigView = value;
+    if (isLoaded) {
+      camera.world = value ? world : _emptyWorld;
+    }
+  }
 
   @override
   Future<void> onLoad() async {
@@ -78,6 +116,7 @@ Dart. It does not include the work of the GPU.
     // The big camera looks at this empty world when the big view is hidden.
     _emptyWorld = World();
     add(_emptyWorld);
+    camera.world = _bigView ? world : _emptyWorld;
 
     // The default camera is the big one, and it shows the whole field.
     camera.viewfinder.visibleGameSize = Vector2.all(_fieldSize * 1.05);
@@ -158,16 +197,13 @@ Dart. It does not include the work of the GPU.
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.keyC) {
-      _culled = !_culled;
-      _statusText.culled = _culled;
-      for (final sprite in world.children.query<_Sprite>()) {
-        sprite.cullingEnabled = _culled;
-      }
+      culled = !culled;
+      reportKnob(cullingCulledKnob, culled);
       return KeyEventResult.handled;
     }
     if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.keyV) {
-      _bigViewVisible = !_bigViewVisible;
-      camera.world = _bigViewVisible ? world : _emptyWorld;
+      bigView = !bigView;
+      reportKnob(cullingBigViewKnob, bigView);
       return KeyEventResult.handled;
     }
     return super.onKeyEvent(event, keysPressed);
@@ -176,7 +212,7 @@ Dart. It does not include the work of the GPU.
   @override
   void update(double dt) {
     super.update(dt);
-    _time += dt;
+    _time += dt * cameraSpeed;
     innerCamera.viewfinder.position = Vector2(
       cos(_time * 0.3) * _fieldSize * 0.35,
       sin(_time * 0.2) * _fieldSize * 0.35,
