@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flame_cli/flame_cli.dart';
 import 'package:test/test.dart';
+import 'package:vm_service/vm_service.dart' show VmService;
 
 const _uri = 'http://127.0.0.1:1/abc=/';
 
@@ -15,6 +16,12 @@ typedef _Handler = FutureOr<Map<String, dynamic>> Function(
 /// A connection that answers the service extension calls with [handler], and
 /// records the methods that were called.
 class _FakeConnection(final _Handler handler) implements FlameConnection {
+  @override
+  VmService get service => throw UnimplementedError();
+
+  @override
+  String get isolateId => throw UnimplementedError();
+
   final calls = <String>[];
 
   @override
