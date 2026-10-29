@@ -40,10 +40,15 @@ dependencies:
 
 dev_dependencies:
   flame_lint: ^1.5.0-dev.1
+  flutter_test:
+    sdk: flutter
   test: any
 
 flutter:
   uses-material-design: true
+
+  shaders:
+    - shaders/curved_screen.frag
 
   assets:
     - assets/images/animations/

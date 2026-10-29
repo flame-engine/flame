@@ -5,7 +5,6 @@ precision highp float;
 #include <flutter/runtime_effect.glsl>
 
 uniform vec2 uSize;
-uniform float uPixelSize;
 uniform float uWaterLevel;
 uniform float uTime;
 
@@ -45,7 +44,7 @@ vec4 fragment(vec2 uv) {
         fogIntensity = waterProximity * 0.1;
     }
 
-    vec4 baseColor = texture(tGameCanvas, reflectedUv / uPixelSize) * waterColor;
+    vec4 baseColor = texture(tGameCanvas, reflectedUv) * waterColor;
 
     return mix(baseColor, fogColor, fogIntensity);
 }
