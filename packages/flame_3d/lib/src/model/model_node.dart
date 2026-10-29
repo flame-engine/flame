@@ -71,25 +71,25 @@ class ModelNode {
         continue;
       }
 
-      final jointTransforms =
-          (globalToLocalJointMap.entries..sortedBy((e) => e.value))
-              .map((e) => e.key)
-              .map((jointIndex) {
-                final joint = joints[jointIndex];
-                if (joint == null) {
-                  throw StateError('Missing joint $jointIndex');
-                }
+      final jointTransforms = globalToLocalJointMap.entries
+          .sortedBy((e) => e.value)
+          .map((e) => e.key)
+          .map((jointIndex) {
+            final joint = joints[jointIndex];
+            if (joint == null) {
+              throw StateError('Missing joint $jointIndex');
+            }
 
-                final jointNodeIndex = joint.nodeIndex;
-                final jointNode = processedNodes[jointNodeIndex];
+            final jointNodeIndex = joint.nodeIndex;
+            final jointNode = processedNodes[jointNodeIndex];
 
-                final transform = Matrix4.identity()
-                  ..multiply(jointNode?.combinedTransform ?? Matrix4.identity())
-                  ..multiply(joint.inverseBindMatrix);
+            final transform = Matrix4.identity()
+              ..multiply(jointNode?.combinedTransform ?? Matrix4.identity())
+              ..multiply(joint.inverseBindMatrix);
 
-                return transform;
-              })
-              .toList();
+            return transform;
+          })
+          .toList();
 
       jointTransformsPerSurface[index] = jointTransforms;
     }
