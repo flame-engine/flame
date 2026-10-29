@@ -183,6 +183,113 @@ void main() {
         expect(game.keyboardHandler.keysPressed, ['z', 'f', 'i']);
       },
     );
+
+    testWidgets(
+      'a new focusNode takes over the focus and the key events',
+      (tester) async {
+        final game = _KeyboardEventsGame();
+        final oldNode = FocusNode();
+        final newNode = FocusNode();
+
+        await tester.pumpWidget(
+          _GamePage(
+            child: GameWidget(game: game, focusNode: oldNode),
+          ),
+        );
+        await tester.pumpWidget(
+          _GamePage(
+            child: GameWidget(game: game, focusNode: newNode),
+          ),
+        );
+        await tester.sendKeyDownEvent(LogicalKeyboardKey.keyA);
+
+        expect(oldNode.hasFocus, isFalse);
+        expect(newNode.hasFocus, isTrue);
+        expect(game.keysPressed, ['a']);
+
+        // The app gives the focus back to the game through the new node, for
+        // example after a text field had it.
+        newNode.unfocus();
+        await tester.pump();
+        newNode.requestFocus();
+        await tester.pump();
+        await tester.sendKeyDownEvent(LogicalKeyboardKey.keyB);
+
+        expect(game.keysPressed, ['a', 'b']);
+      },
+    );
+
+    testWidgets(
+      'switching between a focusNode and the internal one keeps the focus',
+      (tester) async {
+        final game = _KeyboardEventsGame();
+        final focusNode = FocusNode();
+
+        await tester.pumpWidget(_GamePage(child: GameWidget(game: game)));
+        await tester.pumpWidget(
+          _GamePage(
+            child: GameWidget(game: game, focusNode: focusNode),
+          ),
+        );
+        expect(focusNode.hasFocus, isTrue);
+
+        await tester.pumpWidget(_GamePage(child: GameWidget(game: game)));
+        expect(focusNode.hasFocus, isFalse);
+        await tester.sendKeyDownEvent(LogicalKeyboardKey.keyA);
+
+        expect(game.keysPressed, ['a']);
+      },
+    );
+
+    testWidgets(
+      'a focusNode from the user is not disposed by the GameWidget',
+      (tester) async {
+        final focusNode = FocusNode();
+
+        await tester.pumpWidget(
+          GameWidget(game: _KeyboardEventsGame(), focusNode: focusNode),
+        );
+        await tester.pumpWidget(GameWidget(game: _KeyboardEventsGame()));
+        await tester.pumpWidget(const SizedBox());
+
+        // Using a disposed node throws.
+        expect(() => focusNode.addListener(() {}), returnsNormally);
+      },
+    );
+
+    testWidgets(
+      'an overlay keeps the focus when the focusNode changes',
+      (tester) async {
+        final game = _KeyboardEventsGame();
+        final overlayFocusNode = FocusNode();
+
+        Widget buildPage(FocusNode focusNode) {
+          return _GamePage(
+            child: GameWidget(
+              game: game,
+              focusNode: focusNode,
+              overlayBuilderMap: {
+                'input': (_, _) => Material(
+                  child: TextField(focusNode: overlayFocusNode),
+                ),
+              },
+              initialActiveOverlays: const ['input'],
+            ),
+          );
+        }
+
+        await tester.pumpWidget(buildPage(FocusNode()));
+        await tester.pump();
+        overlayFocusNode.requestFocus();
+        await tester.pump();
+        expect(overlayFocusNode.hasPrimaryFocus, isTrue);
+
+        await tester.pumpWidget(buildPage(FocusNode()));
+        await tester.pump();
+
+        expect(overlayFocusNode.hasPrimaryFocus, isTrue);
+      },
+    );
   });
 
   group('GameWidget.managed', () {
