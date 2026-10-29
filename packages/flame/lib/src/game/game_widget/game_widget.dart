@@ -158,7 +158,8 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// If omitted, defaults to an internally controlled focus node.
   final FocusNode? focusNode;
 
-  /// Whether the [focusNode] requests focus once the game is mounted.
+  /// Whether the [focusNode] requests focus once the game is mounted, and
+  /// again whenever the [game] is replaced by a new one.
   /// Defaults to true.
   final bool autofocus;
 
@@ -313,6 +314,11 @@ class GameWidgetState<T extends Game>() extends State<GameWidget<T>> {
     if (oldWidget.game != widget.game) {
       disposeCurrentGame();
       initCurrentGame();
+      // The new game is mounted like the first one, so it takes the focus in
+      // the same way, even if another widget took it in the meantime.
+      if (widget.autofocus) {
+        _focusNode.requestFocus();
+      }
     }
   }
 
