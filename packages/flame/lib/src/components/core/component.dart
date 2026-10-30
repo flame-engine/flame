@@ -219,6 +219,35 @@ class Component({
   void _setRemovingBit() => _state |= _removing;
   void _clearRemovingBit() => _state &= ~_removing;
 
+  /// A short, human-readable description of where this component currently is
+  /// in its lifecycle.
+  ///
+  /// The states are checked in order of precedence, so that the most specific
+  /// (and most useful for debugging) state wins:
+  /// - `Removing`: the component is scheduled to be removed from the tree;
+  /// - `Mounted`: the component is currently added to a component tree;
+  /// - `Loaded`: the component finished loading, but is not attached to a
+  ///   component tree;
+  /// - `Loading`: the component is currently executing its [onLoad] step;
+  /// - `Detached`: the component hasn't started loading yet (or has been
+  ///   removed and hasn't been re-added since).
+  ///
+  /// This is meant primarily for debugging tools (such as the DevTools
+  /// extension), which need to display why a component may not be visible in
+  /// the game.
+  String get lifecycleState {
+    if (isRemoving) {
+      return 'Removing';
+    }
+    if (isMounted) {
+      return 'Mounted';
+    }
+    if (isLoaded) {
+      return 'Loaded';
+    }
+    return isLoading ? 'Loading' : 'Detached';
+  }
+
   /// Whether the component has been removed. Originally this flag is `false`,
   /// but it becomes `true` after the component was mounted and then removed
   /// from its parent. The flag becomes `false` again when the component is

@@ -1,5 +1,6 @@
 import 'package:animated_tree_view/animated_tree_view.dart';
 import 'package:devtools_app_shared/ui.dart' as devtools_ui;
+import 'package:flame_devtools/providers/component_lifecycle_state_provider.dart';
 import 'package:flame_devtools/repository.dart';
 import 'package:flame_devtools/widgets/behavior_tree_section.dart';
 import 'package:flame_devtools/widgets/component_priority_form.dart';
@@ -148,6 +149,10 @@ class const ComponentSection({super.key}) extends ConsumerWidget {
                             'Children: ${node.children.length}',
                             style: textStyle,
                           ),
+                          _ComponentLifecycleState(
+                            componentId: node.id,
+                            textStyle: textStyle,
+                          ),
                           ComponentPriorityForm(componentId: node.id),
                           if (node.isPositionComponent)
                             Padding(
@@ -172,6 +177,29 @@ class const ComponentSection({super.key}) extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class const _ComponentLifecycleState({
+  required this.componentId,
+  required this.textStyle,
+}) extends ConsumerWidget {
+  final int componentId;
+  final TextStyle? textStyle;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final lifecycleState = ref.watch(
+      componentLifecycleStateProvider(componentId),
+    );
+
+    return lifecycleState.when(
+      error: (e, s) => const SizedBox.shrink(),
+      loading: () => const SizedBox.shrink(),
+      data: (state) {
+        return Text('Lifecycle: $state', style: textStyle);
+      },
     );
   }
 }
