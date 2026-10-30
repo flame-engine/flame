@@ -31,7 +31,7 @@ Read this file first, then the doc relevant to your task:
    beyond purely ephemeral widget state (hover, focus, animation controllers).
 4. **Lints are `flame_lint` (with DCM), `very_good_analysis` and `bloc_lint`.** Code must pass `flutter analyze` with
    zero issues — never silence a lint project-wide to make it pass.
-5. **Every change ships with tests.** CI enforces **≥ 50% line coverage**
+5. **Every change ships with tests.** Aim for **≥ 50% line coverage**
    (deliberately lower than VGV's usual 100%). Don't chase 100%, but test
    blocs, repositories and non-trivial widgets.
 6. **Desktop only.** Do not add `android/`, `ios/` or `web/` targets unless

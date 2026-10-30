@@ -49,9 +49,6 @@ melos:
 
     format-check:
       run: melos exec dart format . --set-exit-if-changed
-      packageFilters:
-        ignore:
-          - flame_studio
       description: Run `dart format` checks for all packages.
 
     markdown-check:
@@ -94,8 +91,6 @@ melos:
       run: melos exec -c 1 -- flutter test --reporter=json 2>&1 | dart run "$MELOS_ROOT_PATH/scripts/test_formatter.dart"
       packageFilters:
         dirExists: test
-        ignore:
-          - flame_studio
       description: Run `flutter test` for selected packages.
 
     test:seeded:

@@ -4,9 +4,8 @@
 
 ## Coverage target
 
-CI enforces **at least 50% line coverage** (`min_coverage: 50` in
-`.github/workflows/flame_studio.yml`). This is intentionally below VGV's usual 100%.
-Prioritize:
+Aim for **at least 50% line coverage**. CI doesn't enforce it, and it is intentionally below VGV's
+usual 100%. Prioritize:
 
 1. **Repositories and data clients** — pure Dart, cheap to test, high value.
 2. **Blocs/Cubits** — every event handler and resulting state.
