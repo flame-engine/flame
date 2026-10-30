@@ -1,7 +1,11 @@
+import 'dart:async';
+import 'dart:ui' as ui;
+
 import 'package:flame/game.dart';
 import 'package:flame_studio/component_editor/bloc/component_editor_bloc.dart';
 import 'package:flame_studio/component_editor/widgets/preview/preview.dart';
 import 'package:flame_studio/repositories/repositories.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,7 +16,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// hitboxes unless [ComponentEditorState.areHitboxesVisible] is off.
 ///
 /// Paints that use palette colors are drawn with their current value in
-/// [ComponentEditorState.palette].
+/// [ComponentEditorState.palette], and sprites with their image in
+/// [ComponentEditorState.spriteImages], once it is decoded.
 /// {@endtemplate}
 class const ComponentPreview({super.key}) extends StatefulWidget {
   /// {@macro component_preview}
@@ -26,6 +31,51 @@ class _ComponentPreviewState() extends State<ComponentPreview> {
   late final ComponentPreviewGame _game = _createGame(
     context.read<ComponentEditorBloc>().state,
   );
+
+  final Map<String, ui.Image> _images = {};
+  final Set<String> _decoding = {};
+
+  @override
+  void initState() {
+    super.initState();
+    unawaited(
+      _decodeImages(context.read<ComponentEditorBloc>().state.spriteImages),
+    );
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    for (final image in _images.values) {
+      image.dispose();
+    }
+    super.dispose();
+  }
+
+  bool _isDisposed = false;
+
+  /// Decodes the [images] that aren't decoded yet, for the game to draw.
+  /// Files that aren't images are skipped: their sprites stay empty.
+  Future<void> _decodeImages(Map<String, Uint8List> images) async {
+    for (final MapEntry(key: path, value: bytes) in images.entries) {
+      if (_images.containsKey(path) || !_decoding.add(path)) {
+        continue;
+      }
+      try {
+        final codec = await ui.instantiateImageCodec(bytes);
+        final frame = await codec.getNextFrame();
+        codec.dispose();
+        if (_isDisposed) {
+          frame.image.dispose();
+          return;
+        }
+        _images[path] = frame.image;
+        _game.spriteImages = Map.of(_images);
+      } on Exception {
+        continue;
+      }
+    }
+  }
 
   static ComponentPreviewGame _createGame(ComponentEditorState state) {
     return ComponentPreviewGame(
@@ -46,6 +96,12 @@ class _ComponentPreviewState() extends State<ComponentPreview> {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
+        BlocListener<ComponentEditorBloc, ComponentEditorState>(
+          listenWhen: (previous, current) =>
+              previous.spriteImages != current.spriteImages,
+          listener: (context, state) =>
+              unawaited(_decodeImages(state.spriteImages)),
+        ),
         BlocListener<ComponentEditorBloc, ComponentEditorState>(
           listenWhen: (previous, current) => previous.zoom != current.zoom,
           listener: (context, state) => _game.zoom = state.zoom,

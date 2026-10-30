@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flame_studio/repositories/repositories.dart';
@@ -40,6 +42,7 @@ class ComponentEditorBloc({
     on<ComponentEditorSizeChanged>(_onSizeChanged);
     on<ComponentEditorRadiusChanged>(_onRadiusChanged);
     on<ComponentEditorVerticesChanged>(_onVerticesChanged);
+    on<ComponentEditorSpriteChanged>(_onSpriteChanged);
     on<ComponentEditorPaintChanged>(_onPaintChanged);
     on<ComponentEditorCollisionChanged>(_onCollisionChanged);
     on<ComponentEditorPaletteChanged>(_onPaletteChanged);
@@ -101,6 +104,8 @@ class ComponentEditorBloc({
       // Paints keep the last known value of their palette colors.
     }
 
+    await _loadSpriteImages(emit);
+
     try {
       final taken = await _loadTakenClassNames();
       if (isSaving()) {
@@ -142,6 +147,28 @@ class ComponentEditorBloc({
         if (other.name != name)
           for (final className in other.generatedClassNames) className: other,
     };
+  }
+
+  /// Loads the images the component draws that aren't loaded yet. Images
+  /// that can't be read are left out: the preview draws their sprites as
+  /// empty ones.
+  Future<void> _loadSpriteImages(Emitter<ComponentEditorState> emit) async {
+    for (final image in state.component.usedImages) {
+      if (state.spriteImages.containsKey(image)) {
+        continue;
+      }
+      try {
+        final bytes = await _componentRepository.readImage(
+          _project.path,
+          image,
+        );
+        emit(
+          state.copyWith(spriteImages: {...state.spriteImages, image: bytes}),
+        );
+      } on Exception {
+        continue;
+      }
+    }
   }
 
   void _onNodeSelected(
@@ -290,6 +317,26 @@ class ComponentEditorBloc({
       }
       return node;
     });
+  }
+
+  /// The first image picked also sets the size to the one of its region,
+  /// like Flame sizes a sprite component that has no size.
+  Future<void> _onSpriteChanged(
+    ComponentEditorSpriteChanged event,
+    Emitter<ComponentEditorState> emit,
+  ) async {
+    _editSelected(emit, (node) {
+      if (node case final SpritedComponent node) {
+        final edited = node.copyWithSprite(event.sprite);
+        return switch (edited) {
+          final SizedComponent sized when node.sprite.image == null =>
+            sized.copyWithSize(event.sprite.srcSize),
+          _ => edited,
+        };
+      }
+      return node;
+    });
+    await _loadSpriteImages(emit);
   }
 
   void _onPaintChanged(

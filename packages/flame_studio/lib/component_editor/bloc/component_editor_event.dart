@@ -146,6 +146,18 @@ final class const ComponentEditorVerticesChanged(
   List<Object> get props => [vertices];
 }
 
+/// The user edited the sprite of the selected [SpritedComponent].
+final class const ComponentEditorSpriteChanged(
+  /// The new sprite.
+  final ComponentSprite sprite,
+) extends ComponentEditorEvent {
+  /// Creates a [ComponentEditorSpriteChanged] event.
+  this;
+
+  @override
+  List<Object> get props => [sprite];
+}
+
 /// The user edited the paint of the selected [PaintedComponent].
 final class const ComponentEditorPaintChanged(
   /// The new paint.

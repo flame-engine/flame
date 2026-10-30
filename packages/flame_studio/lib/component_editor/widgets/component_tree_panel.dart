@@ -111,6 +111,7 @@ class const ComponentTreePanel({super.key}) extends StatelessWidget {
       ComponentType.position => Icons.crop_free,
       ComponentType.circle => Icons.circle_outlined,
       ComponentType.polygon => Icons.pentagon_outlined,
+      ComponentType.sprite => Icons.image_outlined,
       ComponentType.rectangleHitbox => Icons.select_all,
       ComponentType.circleHitbox => Icons.track_changes,
       ComponentType.polygonHitbox => Icons.hexagon_outlined,

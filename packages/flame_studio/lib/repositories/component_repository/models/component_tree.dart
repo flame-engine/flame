@@ -114,6 +114,17 @@ extension ComponentTree on Component {
     };
   }
 
+  /// The asset paths of the images the nodes of this tree draw.
+  Set<String> get usedImages {
+    return {
+      for (final node in nodes)
+        if (node case SpritedComponent(
+          sprite: ComponentSprite(:final String image),
+        ))
+          image,
+    };
+  }
+
   /// Returns a copy of this tree whose paints have the current value of
   /// their palette color in [palette] as their color (see
   /// [ComponentPaint.resolvedColor]), which is what they draw with.
@@ -141,11 +152,11 @@ extension ComponentTree on Component {
   /// The names of the classes this component reserves in the generated
   /// code: the class of the root, and the class of every child.
   ///
-  /// Only children that have children of their own get a class, but every
-  /// child reserves one, so adding children to a node never makes its class
-  /// clash with the classes of another component. Generated classes are
-  /// public, so the classes of two components of a project must not share
-  /// names, or a library importing both wouldn't compile.
+  /// Only children that have children of their own, or that load a sprite,
+  /// get a class, but every child reserves one, so editing a node never
+  /// makes its class clash with the classes of another component. Generated
+  /// classes are public, so the classes of two components of a project must
+  /// not share names, or a library importing both wouldn't compile.
   Set<String> get generatedClassNames {
     return {
       generatedClassName,

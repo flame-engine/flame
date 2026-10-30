@@ -1,7 +1,10 @@
+import 'dart:ui' as ui;
+
 import 'package:flame/collisions.dart' as flame;
 import 'package:flame/components.dart' as flame;
 import 'package:flame_studio/component_editor/widgets/preview/preview_hitboxes.dart';
 import 'package:flame_studio/component_editor/widgets/preview/preview_position_component.dart';
+import 'package:flame_studio/component_editor/widgets/preview/preview_sprite_component.dart';
 import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flutter/painting.dart';
 
@@ -14,8 +17,13 @@ import 'package:flutter/painting.dart';
 /// Children use their own anchor (Flame's default top left one unless
 /// edited) and angle, and are positioned relative to their parent, like in
 /// the generated code.
-flame.PositionComponent buildFlameComponent(Component component) {
-  return _placeRoot(_build(component));
+///
+/// Sprites draw the [images] of their image, by asset path.
+flame.PositionComponent buildFlameComponent(
+  Component component, {
+  Map<String, ui.Image> images = const {},
+}) {
+  return _placeRoot(_build(component, images));
 }
 
 flame.PositionComponent _placeRoot(flame.PositionComponent root) {
@@ -26,13 +34,18 @@ flame.PositionComponent _placeRoot(flame.PositionComponent root) {
   return root;
 }
 
-flame.PositionComponent _build(Component component) {
+flame.PositionComponent _build(
+  Component component,
+  Map<String, ui.Image> images,
+) {
   final target = switch (component) {
     RectangleComponent() => flame.RectangleComponent(),
     CircleComponent() => flame.CircleComponent(),
     PolygonComponent(:final vertices) => flame.PolygonComponent(
       _vectors(vertices),
     ),
+    // Flame's SpriteComponent can't be mounted without a sprite.
+    SpriteComponent() => PreviewSpriteComponent(),
     // Outlined, since a plain PositionComponent would be invisible.
     PositionComponent() => PreviewPositionComponent(),
     // Hitboxes draw nothing either, so they are outlined too.
@@ -42,9 +55,11 @@ flame.PositionComponent _build(Component component) {
       _vectors(vertices),
     ),
   };
-  applyProperties(target, component);
+  applyProperties(target, component, images: images);
   // Children added before mounting are stored right away, in order.
-  component.children.map(_build).forEach(target.add);
+  for (final child in component.children) {
+    target.add(_build(child, images));
+  }
   return target;
 }
 
@@ -81,18 +96,23 @@ bool haveSameShape(Component a, Component b) {
 /// [haveSameShape]).
 ///
 /// Like in [buildFlameComponent], the root stays centered.
-void applyTree(flame.PositionComponent target, Component component) {
-  _placeRoot(_applyNode(target, component));
+void applyTree(
+  flame.PositionComponent target,
+  Component component, {
+  Map<String, ui.Image> images = const {},
+}) {
+  _placeRoot(_applyNode(target, component, images));
 }
 
 flame.PositionComponent _applyNode(
   flame.PositionComponent target,
   Component component,
+  Map<String, ui.Image> images,
 ) {
-  applyProperties(target, component);
+  applyProperties(target, component, images: images);
   final children = target.children.whereType<flame.PositionComponent>();
   for (final (index, child) in children.indexed) {
-    _applyNode(child, component.children[index]);
+    _applyNode(child, component.children[index], images);
   }
   return target;
 }
@@ -116,8 +136,9 @@ flame.PositionComponent flameNodeAt(
 /// that has them is previewed correctly.
 T applyProperties<T extends flame.PositionComponent>(
   T target,
-  Component component,
-) {
+  Component component, {
+  Map<String, ui.Image> images = const {},
+}) {
   if (component case final PositionedComponent positioned) {
     applyPosition(target, positioned.position);
   }
@@ -137,6 +158,10 @@ T applyProperties<T extends flame.PositionComponent>(
   if (component case final PaintedComponent painted
       when target is flame.HasPaint) {
     applyPaint(target as flame.HasPaint, painted.paint);
+  }
+  if (component case final SpritedComponent sprited
+      when target is PreviewSpriteComponent) {
+    applySprite(target as PreviewSpriteComponent, sprited.sprite, images);
   }
   if (component case final HitboxComponent hitbox
       when target is flame.ShapeHitbox) {
@@ -178,6 +203,26 @@ void applyPaint(flame.HasPaint target, ComponentPaint paint) {
       PaintStyle.fill => PaintingStyle.fill,
       PaintStyle.stroke => PaintingStyle.stroke,
     };
+}
+
+/// Applies [sprite] to [target], which draws nothing while its image is not
+/// one of [images].
+void applySprite(
+  PreviewSpriteComponent target,
+  ComponentSprite sprite,
+  Map<String, ui.Image> images,
+) {
+  final image = images[sprite.image];
+  target.sprite = image == null
+      ? null
+      : flame.Sprite(
+          image,
+          srcPosition: flame.Vector2(
+            sprite.srcPosition.x,
+            sprite.srcPosition.y,
+          ),
+          srcSize: flame.Vector2(sprite.srcSize.width, sprite.srcSize.height),
+        );
 }
 
 /// Applies [collision] to [target].
