@@ -198,7 +198,7 @@ class const _ComponentLifecycleState({
       error: (e, s) => const SizedBox.shrink(),
       loading: () => const SizedBox.shrink(),
       data: (state) {
-        return Text('Lifecycle: $state', style: textStyle);
+        return Text('Lifecycle: ${state.display}', style: textStyle);
       },
     );
   }

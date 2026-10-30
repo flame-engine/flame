@@ -46,7 +46,7 @@ class ComponentTreeConnector() extends DevToolsConnector {
             'parent': component.parent?.hashCode,
             'childCount': component.children.length,
             'debugMode': component.debugMode,
-            'lifecycleState': component.lifecycleState,
+            'lifecycleState': component.lifecycleState.name,
             'attributes': componentAttributes(component),
           }),
         );

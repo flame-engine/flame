@@ -10,7 +10,7 @@ void main() {
     test('a freshly created component is Detached', () {
       final component = Component();
 
-      expect(component.lifecycleState, 'Detached');
+      expect(component.lifecycleState, ComponentLifecycleState.detached);
     });
 
     test('a component whose onLoad never completes is Loading', () async {
@@ -18,7 +18,7 @@ void main() {
       final component = _PendingLoadComponent();
       game.add(component);
 
-      expect(component.lifecycleState, 'Loading');
+      expect(component.lifecycleState, ComponentLifecycleState.loading);
       component.completeLoading();
     });
 
@@ -29,7 +29,7 @@ void main() {
       component.completeLoading();
       await component.loaded;
 
-      expect(component.lifecycleState, 'Loaded');
+      expect(component.lifecycleState, ComponentLifecycleState.loaded);
     });
 
     testWithFlameGame('a mounted component is Mounted', (game) async {
@@ -37,7 +37,7 @@ void main() {
       game.add(component);
       await game.ready();
 
-      expect(component.lifecycleState, 'Mounted');
+      expect(component.lifecycleState, ComponentLifecycleState.mounted);
     });
 
     testWithFlameGame(
@@ -50,11 +50,11 @@ void main() {
 
         final removed = component.removed;
         component.removeFromParent();
-        expect(component.lifecycleState, 'Removing');
+        expect(component.lifecycleState, ComponentLifecycleState.removing);
 
         game.update(0);
         await removed;
-        expect(component.lifecycleState, 'Loaded');
+        expect(component.lifecycleState, ComponentLifecycleState.loaded);
       },
     );
   });

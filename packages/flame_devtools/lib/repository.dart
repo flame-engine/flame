@@ -43,6 +43,8 @@ abstract final class Repository() {
       'ext.flame_devtools.getComponentInfo',
       args: {'id': id.toString()},
     );
+    // The raw enum name, e.g. `mounted`; parsed into
+    // [ComponentLifecycleState] by the provider.
     return infoResponse.json!['lifecycleState'] as String;
   }
 
