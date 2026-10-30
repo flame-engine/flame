@@ -69,6 +69,21 @@ void main() {
         expect(root.aabb.center, closeToVector3(Vector3(2, 1, 0)));
       },
     );
+
+    testWithFlameGame(
+      'aabb of a parent follows its child when the child moves',
+      (game) async {
+        final child = _Box();
+        final parent = _Group(children: [child]);
+        await game.world.ensureAdd(parent);
+
+        expect(parent.aabb.center, closeToVector3(Vector3.zero()));
+
+        child.position.setValues(5, 0, 0);
+
+        expect(parent.aabb.center, closeToVector3(Vector3(5, 0, 0)));
+      },
+    );
   });
 }
 
