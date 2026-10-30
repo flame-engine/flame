@@ -1,0 +1,46 @@
+name: flame_studio
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - packages/flame_studio/**
+      - .github/workflows/flame_studio.yml
+  pull_request:
+    paths:
+      - packages/flame_studio/**
+      - .github/workflows/flame_studio.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/flame_studio
+    steps:
+      - uses: actions/checkout@v7
+      - uses: subosito/flutter-action@v2
+        with:
+          cache: true
+      - uses: bluefireteam/melos-action@v3
+      - run: dart format --set-exit-if-changed lib test
+      - run: flutter analyze lib test
+      - name: Install DCM
+        uses: CQLabs/setup-dcm@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - run: dcm analyze lib test
+      - name: Run bloc lint
+        run: |
+          dart pub global activate bloc_tools
+          bloc lint .
+      - run: flutter test --coverage --test-randomize-ordering-seed random
+      - uses: VeryGoodOpenSource/very_good_coverage@v3
+        with:
+          path: packages/flame_studio/coverage/lcov.info
+          min_coverage: 50

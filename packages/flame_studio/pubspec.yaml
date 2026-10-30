@@ -1,8 +1,8 @@
 name: flame_studio
 resolution: workspace
-description: An IDE-like environment for developing and debugging Flame games.
-version: 0.0.0
+description: "Create Flame components visually."
 publish_to: none
+version: 1.0.0+1
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_studio
 funding:
   - https://opencollective.com/blue-fire
@@ -14,20 +14,28 @@ environment:
   flutter: ">=3.47.0"
 
 dependencies:
-  collection: ^1.17.1
+  bloc: ^9.2.1
+  dart_style: ^3.1.14
+  equatable: ^3.0.0
+  file_selector: ^1.1.0
   flame: ^2.0.0-dev.1
+  flex_color_picker: ^3.8.0
   flutter:
     sdk: flutter
-  flutter_riverpod: ^3.0.3
-  meta: ^1.12.0
+  flutter_bloc: ^9.1.1
+  path: ^1.9.0
+  pub_semver: ^2.2.1
+  shared_preferences: ^2.5.6
 
 dev_dependencies:
+  bloc_lint: ^0.4.3
+  bloc_test: ^10.0.0
   flame_lint: ^1.5.0-dev.1
   flame_test: ^3.0.0-dev.1
   flutter_test:
     sdk: flutter
-  test: any
+  mocktail: ^1.0.4
+  very_good_analysis: ^11.0.0
 
 flutter:
-  assets:
-    - assets/logo_flame.png
+  uses-material-design: true
