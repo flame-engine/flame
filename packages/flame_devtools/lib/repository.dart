@@ -38,6 +38,16 @@ abstract final class Repository() {
     );
   }
 
+  static Future<String> getComponentLifecycleState({required int id}) async {
+    final infoResponse = await serviceManager.callServiceExtensionOnMainIsolate(
+      'ext.flame_devtools.getComponentInfo',
+      args: {'id': id.toString()},
+    );
+    // The raw enum name, e.g. `mounted`; parsed into
+    // [ComponentLifecycleState] by the provider.
+    return infoResponse.json!['lifecycleState'] as String;
+  }
+
   static Future<int> getComponentPriority({required int id}) async {
     final infoResponse = await serviceManager.callServiceExtensionOnMainIsolate(
       'ext.flame_devtools.getComponentInfo',
