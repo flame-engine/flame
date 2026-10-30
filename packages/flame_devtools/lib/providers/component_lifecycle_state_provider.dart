@@ -2,8 +2,8 @@ import 'package:flame/devtools.dart' show ComponentLifecycleState;
 import 'package:flame_devtools/repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final componentLifecycleStateProvider =
-    FutureProvider.autoDispose.family<ComponentLifecycleState, int>((
+final componentLifecycleStateProvider = FutureProvider.autoDispose
+    .family<ComponentLifecycleState, int>((
       ref,
       id,
     ) async {
