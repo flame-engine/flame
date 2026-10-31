@@ -5,10 +5,8 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/services.dart';
-import 'package:material_ui/material_ui.dart' hide Image;
 import 'package:trex_game/background/horizon.dart';
 import 'package:trex_game/game_over.dart';
 import 'package:trex_game/player.dart';
@@ -21,7 +19,7 @@ enum GameState() {
 
 class TRexGame()
     extends FlameGame
-    with KeyboardEvents, TapCallbacks, HasCollisionDetection {
+    with KeyboardCallbacks, TapCallbacks, HasCollisionDetection {
   static const String description = '''
     A game similar to the game in chrome that you get to play while offline.
     Press space or tap/click the screen to jump, the more obstacles you manage
@@ -94,15 +92,11 @@ class TRexGame()
   bool get isIntro => state == GameState.intro;
 
   @override
-  KeyEventResult onKeyEvent(
-    KeyEvent event,
-    Set<LogicalKeyboardKey> keysPressed,
-  ) {
-    if (keysPressed.contains(LogicalKeyboardKey.enter) ||
-        keysPressed.contains(LogicalKeyboardKey.space)) {
+  void onKeyPress(KeyPressEvent event) {
+    if (event.logicalKey
+        case LogicalKeyboardKey.enter || LogicalKeyboardKey.space) {
       onAction();
     }
-    return KeyEventResult.handled;
   }
 
   @override

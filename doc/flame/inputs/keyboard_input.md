@@ -116,6 +116,42 @@ add(
 ```
 
 
+### KeyboardCallbacks
+
+Add the `KeyboardCallbacks` mixin to any `Component`, including the `FlameGame` itself, to receive
+keyboard events while the game has focus. It adds three callbacks, each receiving its own event
+type:
+
+- `onKeyPress(KeyPressEvent)` when a key is pressed down.
+- `onKeyHold(KeyHoldEvent)` repeatedly while a key is held down, at the OS's repeat rate.
+- `onKeyRelease(KeyReleaseEvent)` when a key is released.
+
+All three extend `KeyboardEvent`, which carries the `logicalKey` and `physicalKey` of the key
+stroke, the `keysPressed` at the time, and helpers such as `isShiftPressed`, `isControlPressed`,
+`isAltPressed`, `isMetaPressed` and `isCapsLockOn`. Press and hold events also carry the
+`character` the key stroke produced, if any. The original Flutter
+[`KeyEvent`](https://api.flutter.dev/flutter/services/KeyEvent-class.html) is available as `raw`.
+
+```dart
+class Player extends PositionComponent with KeyboardCallbacks {
+  @override
+  void onKeyPress(KeyPressEvent event) {
+    if (event.logicalKey == LogicalKeyboardKey.space) {
+      event.isShiftPressed ? jumpHigher() : jump();
+    }
+  }
+}
+```
+
+To handle every kind of key event in one place, override `onKeyboardEvent(KeyboardEvent)` instead.
+Its default implementation is what calls the three callbacks above, so overriding it without
+calling `super` means they are no longer called.
+
+Unlike tap events, keyboard events have no position, so they are delivered to **every**
+`KeyboardCallbacks` component (or game) by default. A component can opt to set
+`event.continuePropagation = false` to stop the event from reaching the components after it.
+
+
 ### Controlling focus
 
 On the widget level, it is possible to use the
