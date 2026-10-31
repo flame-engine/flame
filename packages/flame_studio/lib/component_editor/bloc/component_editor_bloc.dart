@@ -326,7 +326,7 @@ class ComponentEditorBloc({
     Emitter<ComponentEditorState> emit,
   ) async {
     _editSelected(emit, (node) {
-      if (node case final SpritedComponent node) {
+      if (node case final SpriteBackedComponent node) {
         final edited = node.copyWithSprite(event.sprite);
         return switch (edited) {
           final SizedComponent sized when node.sprite.image == null =>

@@ -118,7 +118,7 @@ extension ComponentTree on Component {
   Set<String> get usedImages {
     return {
       for (final node in nodes)
-        if (node case SpritedComponent(
+        if (node case SpriteBackedComponent(
           sprite: ComponentSprite(:final String image),
         ))
           image,

@@ -40,7 +40,7 @@ void main() {
       expect(component, isA<AnchoredComponent>());
       expect(component, isA<RotatedComponent>());
       expect(component, isA<SizedComponent>());
-      expect(component, isA<SpritedComponent>());
+      expect(component, isA<SpriteBackedComponent>());
       expect(component, isNot(isA<PaintedComponent>()));
     });
 

@@ -20,7 +20,7 @@ final class const SpriteComponent({
         AnchoredComponent,
         RotatedComponent,
         SizedComponent,
-        SpritedComponent {
+        SpriteBackedComponent {
   /// {@macro sprite_component}
   this;
 

@@ -17,8 +17,8 @@ class _MockComponentRepository() extends Mock implements ComponentRepository;
 
 /// A 1x1 PNG.
 final Uint8List _png = base64Decode(
-  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk'
-  'YPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
+  // ignore: lines_longer_than_80_chars, split it would look like misspellings.
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
 );
 
 void main() {

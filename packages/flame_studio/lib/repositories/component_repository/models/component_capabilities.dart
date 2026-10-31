@@ -106,8 +106,8 @@ abstract interface class VerticesComponent() {
 }
 
 /// A [Component] that draws a [ComponentSprite].
-abstract interface class SpritedComponent() {
-  /// Creates a [SpritedComponent].
+abstract interface class SpriteBackedComponent() {
+  /// Creates a [SpriteBackedComponent].
   this;
 
   /// The sprite of the component.

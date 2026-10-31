@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 /// {@template sprite_editor}
 /// Edits a [ComponentSprite] in a [SpriteEditorDialog]. Used by every
-/// [SpritedComponent].
+/// [SpriteBackedComponent].
 /// {@endtemplate}
 class const SpriteEditor({
   /// The project whose images can be picked.

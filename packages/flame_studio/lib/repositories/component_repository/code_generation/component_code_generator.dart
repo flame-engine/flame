@@ -134,7 +134,7 @@ class const ComponentCodeGenerator() {
         ..writeln('  /// The `${child.name}` child component.')
         ..writeln('  final $type ${dartMemberName(child.name)} = $value;');
     }
-    if (component case SpritedComponent(:final sprite)
+    if (component case SpriteBackedComponent(:final sprite)
         when sprite.image != null) {
       _writeOnLoad(buffer, sprite);
     }
@@ -167,7 +167,7 @@ class const ComponentCodeGenerator() {
   static bool _hasClass(Component component) {
     return component.children.isNotEmpty ||
         switch (component) {
-          SpritedComponent(:final sprite) => sprite.image != null,
+          SpriteBackedComponent(:final sprite) => sprite.image != null,
           _ => false,
         };
   }

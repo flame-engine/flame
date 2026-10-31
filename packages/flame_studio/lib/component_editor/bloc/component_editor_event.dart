@@ -146,7 +146,7 @@ final class const ComponentEditorVerticesChanged(
   List<Object> get props => [vertices];
 }
 
-/// The user edited the sprite of the selected [SpritedComponent].
+/// The user edited the sprite of the selected [SpriteBackedComponent].
 final class const ComponentEditorSpriteChanged(
   /// The new sprite.
   final ComponentSprite sprite,

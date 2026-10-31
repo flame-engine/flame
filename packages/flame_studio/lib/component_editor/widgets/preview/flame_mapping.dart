@@ -159,9 +159,9 @@ T applyProperties<T extends flame.PositionComponent>(
       when target is flame.HasPaint) {
     applyPaint(target as flame.HasPaint, painted.paint);
   }
-  if (component case final SpritedComponent sprited
+  if (component case final SpriteBackedComponent spriteBacked
       when target is PreviewSpriteComponent) {
-    applySprite(target as PreviewSpriteComponent, sprited.sprite, images);
+    applySprite(target as PreviewSpriteComponent, spriteBacked.sprite, images);
   }
   if (component case final HitboxComponent hitbox
       when target is flame.ShapeHitbox) {

@@ -101,10 +101,10 @@ class const PropertiesPanel({
             onChanged: (vertices) =>
                 bloc.add(ComponentEditorVerticesChanged(vertices)),
           ),
-        if (component case final SpritedComponent sprited)
+        if (component case final SpriteBackedComponent spriteBacked)
           SpriteEditor(
             project: project,
-            value: sprited.sprite,
+            value: spriteBacked.sprite,
             onChanged: (sprite) =>
                 bloc.add(ComponentEditorSpriteChanged(sprite)),
           ),
