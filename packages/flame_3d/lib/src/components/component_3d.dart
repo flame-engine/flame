@@ -182,15 +182,19 @@ abstract class Component3D({
     }
   }
 
-  /// Mark this component's world transform as needing recomputation.
+  /// Mark this component's world transform, and therefore its AABB, as
+  /// needing recomputation.
   ///
   /// This propagates down to child [Component3D]s so the entire subtree
   /// stays consistent.
   void _markWorldTransformDirty() {
-    if (_worldTransformDirty) {
+    // The world transform and the AABB are recomputed independently, so one
+    // can be dirty while the other is not. Only stop when both already are.
+    if (_worldTransformDirty && _aabbDirty) {
       return;
     }
     _worldTransformDirty = true;
+    _aabbDirty = true;
     for (final child in _childComponents) {
       child._markWorldTransformDirty();
     }
@@ -198,6 +202,8 @@ abstract class Component3D({
 
   void _onTransformChanged() {
     _markWorldTransformDirty();
-    markAabbDirty();
+    if (parent case final Component3D parent) {
+      parent.markAabbDirty();
+    }
   }
 }
