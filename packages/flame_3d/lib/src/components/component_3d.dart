@@ -137,6 +137,17 @@ abstract class Component3D({
   void onMount() {
     super.onMount();
     _markWorldTransformDirty();
+    if (parent case final Component3D parent) {
+      parent.markAabbDirty();
+    }
+  }
+
+  @override
+  void onRemove() {
+    if (parent case final Component3D parent) {
+      parent.markAabbDirty();
+    }
+    super.onRemove();
   }
 
   void _recomputeAabb() {
