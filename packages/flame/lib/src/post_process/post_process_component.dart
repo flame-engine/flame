@@ -81,6 +81,7 @@ class PostProcessComponent<T extends PostProcess>({
 
     if (rectChildren.isEmpty) {
       (_maybeBoundingSize ??= NotifyingVector2.zero()).setZero();
+      return;
     }
 
     final boundingBox = rectChildren
