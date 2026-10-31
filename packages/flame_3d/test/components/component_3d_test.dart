@@ -84,6 +84,51 @@ void main() {
         expect(parent.aabb.center, closeToVector3(Vector3(5, 0, 0)));
       },
     );
+
+    testWithFlameGame(
+      'aabb of a parent includes a child added after it was computed',
+      (game) async {
+        final parent = _Group(children: [_Box()]);
+        await game.world.ensureAdd(parent);
+
+        expect(parent.aabb.max, closeToVector3(Vector3.all(0.5)));
+
+        await parent.ensureAdd(_Box(position: Vector3(10, 0, 0)));
+
+        expect(parent.aabb.max, closeToVector3(Vector3(10.5, 0.5, 0.5)));
+      },
+    );
+
+    testWithFlameGame(
+      'aabb of an ancestor includes a deeply nested child added later',
+      (game) async {
+        final middle = _Group(children: [_Box()]);
+        final root = _Group(children: [middle]);
+        await game.world.ensureAdd(root);
+
+        expect(root.aabb.max, closeToVector3(Vector3.all(0.5)));
+
+        await middle.ensureAdd(_Box(position: Vector3(0, 10, 0)));
+
+        expect(root.aabb.max, closeToVector3(Vector3(0.5, 10.5, 0.5)));
+      },
+    );
+
+    testWithFlameGame(
+      'aabb of a parent shrinks when a child is removed',
+      (game) async {
+        final child = _Box(position: Vector3(10, 0, 0));
+        final parent = _Group(children: [_Box(), child]);
+        await game.world.ensureAdd(parent);
+
+        expect(parent.aabb.max, closeToVector3(Vector3(10.5, 0.5, 0.5)));
+
+        parent.remove(child);
+        await game.ready();
+
+        expect(parent.aabb.max, closeToVector3(Vector3.all(0.5)));
+      },
+    );
   });
 }
 
