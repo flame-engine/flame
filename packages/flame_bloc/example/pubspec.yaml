@@ -11,12 +11,12 @@ environment:
   flutter: ">=3.47.0"
 
 dependencies:
-  equatable: ^2.0.5
+  equatable: ^3.0.0
   flame: ^2.0.0-dev.1
   flame_bloc: ^2.0.0-dev.1
   flutter:
     sdk: flutter
-  flutter_bloc: ^8.1.2
+  flutter_bloc: ^9.1.1
   material_ui: ^1.0.0
 
 dev_dependencies:
