@@ -48,7 +48,12 @@ class World3D({
       renderSize,
       msaaSampleCount: gameRef.msaa().sampleCount,
     );
-    super.renderFromCamera(canvas);
+    camera.holdFrustum();
+    try {
+      super.renderFromCamera(canvas);
+    } finally {
+      camera.releaseFrustum();
+    }
     context.flush();
 
     final image = gameRef.device.endPass();
