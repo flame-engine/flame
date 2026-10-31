@@ -23,6 +23,65 @@ void main() {
   );
 
   group(ComponentPreviewGame, () {
+    group('sprites', () {
+      const sprite = SpriteComponent(
+        name: 'Player',
+        size: ComponentSize(width: 10, height: 20),
+        sprite: ComponentSprite(
+          image: 'a.png',
+          srcPosition: ComponentPosition(x: 2, y: 3),
+          srcSize: ComponentSize(width: 4, height: 5),
+        ),
+      );
+
+      testWithGame(
+        'stay empty, keeping their size, until their image is there',
+        () => ComponentPreviewGame(component: sprite),
+        (game) async {
+          await game.ready();
+
+          final preview = game.preview as PreviewSpriteComponent;
+          expect(preview.sprite, isNull);
+          expect(preview.size, equals(flame.Vector2(10, 20)));
+
+          final image = await generateImage(8, 8);
+          game.spriteImages = {'a.png': image};
+
+          expect(preview.sprite?.image, equals(image));
+          expect(preview.sprite?.srcPosition, equals(flame.Vector2(2, 3)));
+          expect(preview.sprite?.srcSize, equals(flame.Vector2(4, 5)));
+          expect(preview.size, equals(flame.Vector2(10, 20)));
+        },
+      );
+
+      testWithGame(
+        'are built with the images the game already has',
+        () => ComponentPreviewGame(
+          component: const RectangleComponent(name: 'a'),
+        ),
+        (game) async {
+          await game.ready();
+          final image = await generateImage(8, 8);
+          game
+            ..spriteImages = {'a.png': image}
+            ..show(sprite);
+          await game.ready();
+
+          expect((game.preview as PreviewSpriteComponent).sprite, isNotNull);
+        },
+      );
+
+      test('outline themselves without a sprite', () {
+        final canvas = _MockCanvas();
+        PreviewSpriteComponent()
+          ..size = flame.Vector2.all(10)
+          ..render(canvas);
+
+        verify(() => canvas.drawLine(any(), any(), any()))
+            .called(greaterThan(0));
+      });
+    });
+
     testWithGame(
       'renders the component at the center of the world',
       () => ComponentPreviewGame(component: component),

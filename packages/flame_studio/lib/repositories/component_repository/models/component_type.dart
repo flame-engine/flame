@@ -21,6 +21,9 @@ enum ComponentType({
   /// A polygon, backed by Flame's `PolygonComponent`.
   polygon(key: 'polygon', label: 'Polygon'),
 
+  /// A region of an image, backed by Flame's `SpriteComponent`.
+  sprite(key: 'sprite', label: 'Sprite'),
+
   /// A rectangular hitbox, backed by Flame's `RectangleHitbox`.
   rectangleHitbox(key: 'rectangleHitbox', label: 'Rectangle hitbox'),
 
@@ -44,7 +47,7 @@ enum ComponentType({
   /// children and have no children of their own (see `HitboxComponent`).
   bool get isHitbox => switch (this) {
     rectangleHitbox || circleHitbox || polygonHitbox => true,
-    rectangle || position || circle || polygon => false,
+    rectangle || position || circle || polygon || sprite => false,
   };
 
   /// Whether components of this type are shaped by vertices, and start

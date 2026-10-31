@@ -8,6 +8,7 @@ part 'polygon_hitbox_component.dart';
 part 'position_component.dart';
 part 'rectangle_component.dart';
 part 'rectangle_hitbox_component.dart';
+part 'sprite_component.dart';
 
 /// {@template component}
 /// A Flame component definition that belongs to a project.
@@ -48,6 +49,7 @@ sealed class const Component({
         name: name,
         vertices: ComponentVertices(polygonShape.vertices),
       ),
+      ComponentType.sprite => SpriteComponent(name: name),
       ComponentType.rectangleHitbox => RectangleHitboxComponent(name: name),
       ComponentType.circleHitbox => CircleHitboxComponent(name: name),
       ComponentType.polygonHitbox => PolygonHitboxComponent(
@@ -69,6 +71,7 @@ sealed class const Component({
       ComponentType.position => PositionComponent._fromJson(json),
       ComponentType.circle => CircleComponent._fromJson(json),
       ComponentType.polygon => PolygonComponent._fromJson(json),
+      ComponentType.sprite => SpriteComponent._fromJson(json),
       ComponentType.rectangleHitbox => RectangleHitboxComponent._fromJson(json),
       ComponentType.circleHitbox => CircleHitboxComponent._fromJson(json),
       ComponentType.polygonHitbox => PolygonHitboxComponent._fromJson(json),

@@ -76,6 +76,10 @@ final class const ComponentEditorState({
   /// [ComponentPaint.paletteColor]).
   final Palette palette = const Palette(),
 
+  /// The contents of the images the [component] draws, by asset path (see
+  /// [ComponentSprite.image]). Images that can't be read are missing.
+  final Map<String, Uint8List> spriteImages = const {},
+
   /// The zoom of the preview, `1` being the actual size.
   ///
   /// It is an editor preference, remembered for each component, not part
@@ -136,6 +140,7 @@ final class const ComponentEditorState({
     bool? isSelectionHighlighted,
     bool? areHitboxesVisible,
     Palette? palette,
+    Map<String, Uint8List>? spriteImages,
     double? zoom,
   }) {
     return ComponentEditorState(
@@ -149,6 +154,7 @@ final class const ComponentEditorState({
           isSelectionHighlighted ?? this.isSelectionHighlighted,
       areHitboxesVisible: areHitboxesVisible ?? this.areHitboxesVisible,
       palette: palette ?? this.palette,
+      spriteImages: spriteImages ?? this.spriteImages,
       zoom: zoom ?? this.zoom,
     );
   }
@@ -164,6 +170,7 @@ final class const ComponentEditorState({
     isSelectionHighlighted,
     areHitboxesVisible,
     palette,
+    spriteImages,
     zoom,
   ];
 }

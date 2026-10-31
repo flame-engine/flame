@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:flame/components.dart' as flame;
 import 'package:flame/game.dart';
 import 'package:flame_studio/component_editor/widgets/preview/flame_mapping.dart';
@@ -9,7 +11,7 @@ import 'package:flutter/painting.dart';
 /// {@template component_preview_game}
 /// A Flame game that renders a [Component] and its children, centered on
 /// screen and scaled by [zoom], and highlights one of them. Hitboxes are
-/// outlined while [areHitboxesVisible].
+/// outlined while [areHitboxesVisible], and sprites draw their [spriteImages].
 ///
 /// The game only renders: the component being edited is owned by the
 /// `ComponentEditorBloc` and pushed here with [show].
@@ -19,6 +21,7 @@ class ComponentPreviewGame({
   var List<int>? _highlightedPath,
   var double _zoom = 1,
   var bool _areHitboxesVisible = true,
+  var Map<String, ui.Image> _spriteImages = const {},
 }) extends FlameGame {
   /// {@macro component_preview_game}
   this;
@@ -51,6 +54,15 @@ class ComponentPreviewGame({
     }
   }
 
+  /// The images sprites draw, by asset path (see [ComponentSprite.image]).
+  Map<String, ui.Image> get spriteImages => _spriteImages;
+  set spriteImages(Map<String, ui.Image> value) {
+    _spriteImages = value;
+    if (isLoaded) {
+      applyTree(_preview, _component, images: _spriteImages);
+    }
+  }
+
   @override
   Color backgroundColor() => const Color(0xFF1E1E1E);
 
@@ -78,7 +90,7 @@ class ComponentPreviewGame({
       return;
     }
     if (haveSameShape(previous, component)) {
-      applyTree(_preview, component);
+      applyTree(_preview, component, images: _spriteImages);
       _updateHighlight();
     } else {
       _rebuild();
@@ -94,7 +106,7 @@ class ComponentPreviewGame({
     if (isLoaded) {
       _preview.removeFromParent();
     }
-    _preview = buildFlameComponent(_component);
+    _preview = buildFlameComponent(_component, images: _spriteImages);
     world.add(_preview);
     _applyHitboxesVisibility();
     _updateHighlight();

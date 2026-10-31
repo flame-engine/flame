@@ -12,7 +12,8 @@ import 'package:pub_semver/pub_semver.dart';
 /// (`class Player extends $Player`). Every child is exposed through a
 /// getter, named after the child, on the component it is inside. Children
 /// that have children of their own get a generated class too, so their
-/// children have getters as well; the others are plain Flame components.
+/// children have getters as well, and so do those that load a sprite, which
+/// Flame does in `onLoad`; the others are plain Flame components.
 ///
 /// Every component type has a case in [generate], and every property is
 /// written the same way `flame_mapping.dart` applies it to the preview.
@@ -75,7 +76,7 @@ class const ComponentCodeGenerator() {
       arguments: _arguments(component, palette, withPosition: false),
     );
     for (final node in component.nodes.skip(1)) {
-      if (node.children.isEmpty) {
+      if (!_hasClass(node)) {
         continue;
       }
       _writeClass(
@@ -122,20 +123,61 @@ class const ComponentCodeGenerator() {
     }
 
     for (final child in children) {
-      final type = child.children.isEmpty
-          ? _flameClass(child)
-          : dartChildClassName(rootName, child.name);
-      final value = child.children.isEmpty
-          ? '$type(${_list(_arguments(child, palette, withPosition: true))})'
-          : '$type()';
+      final type = _hasClass(child)
+          ? dartChildClassName(rootName, child.name)
+          : _flameClass(child);
+      final value = _hasClass(child)
+          ? '$type()'
+          : '$type(${_list(_arguments(child, palette, withPosition: true))})';
       buffer
         ..writeln()
         ..writeln('  /// The `${child.name}` child component.')
         ..writeln('  final $type ${dartMemberName(child.name)} = $value;');
     }
+    if (component case SpriteBackedComponent(:final sprite)
+        when sprite.image != null) {
+      _writeOnLoad(buffer, sprite);
+    }
     buffer
       ..writeln('}')
       ..writeln();
+  }
+
+  /// Writes the `onLoad` that loads [sprite] through the images of the game,
+  /// without `HasGameReference`, which subclasses may want to mix in with
+  /// their own game type.
+  void _writeOnLoad(StringBuffer buffer, ComponentSprite sprite) {
+    final arguments = [
+      "'${_escape(sprite.image!)}'",
+      'srcPosition: ${_vector(sprite.srcPosition.x, sprite.srcPosition.y)}',
+      'srcSize: ${_vector(sprite.srcSize.width, sprite.srcSize.height)}',
+      'images: findGame()?.images',
+    ];
+    buffer
+      ..writeln()
+      ..writeln('  /// Loads the sprite; overrides must call `super.onLoad`.')
+      ..writeln('  @override')
+      ..writeln('  Future<void> onLoad() async {')
+      ..writeln('    sprite = await Sprite.load(${_list(arguments)});')
+      ..writeln('  }');
+  }
+
+  /// Whether the child [component] gets a generated class, rather than
+  /// being a plain Flame component.
+  static bool _hasClass(Component component) {
+    return component.children.isNotEmpty ||
+        switch (component) {
+          SpriteBackedComponent(:final sprite) => sprite.image != null,
+          _ => false,
+        };
+  }
+
+  /// Escapes [value] for a single quoted string.
+  static String _escape(String value) {
+    return value.replaceAllMapped(
+      RegExp(r"[\\'$]"),
+      (match) => '\\${match[0]}',
+    );
   }
 
   static String _flameClass(Component component) {
@@ -144,6 +186,7 @@ class const ComponentCodeGenerator() {
       PositionComponent() => 'PositionComponent',
       CircleComponent() => 'CircleComponent',
       PolygonComponent() => 'PolygonComponent',
+      SpriteComponent() => 'SpriteComponent',
       RectangleHitboxComponent() => 'RectangleHitbox',
       CircleHitboxComponent() => 'CircleHitbox',
       PolygonHitboxComponent() => 'PolygonHitbox',
