@@ -1,4 +1,5 @@
 import 'package:flame/components.dart' show Component, HasWorldRef;
+import 'package:flame/extensions.dart' show Matrix4Extension;
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
@@ -137,6 +138,17 @@ abstract class Component3D({
   void onMount() {
     super.onMount();
     _markWorldTransformDirty();
+    if (parent case final Component3D parent) {
+      parent.markAabbDirty();
+    }
+  }
+
+  @override
+  void onRemove() {
+    if (parent case final Component3D parent) {
+      parent.markAabbDirty();
+    }
+    super.onRemove();
   }
 
   void _recomputeAabb() {
@@ -160,10 +172,12 @@ abstract class Component3D({
     }
 
     if (!initialized) {
-      // No geometry and no children, so degenerate to point at position.
+      // No geometry and no children, so degenerate to point at the world
+      // position.
+      final world = worldTransformMatrix;
       _cachedAabb
-        ..min.setFrom(position)
-        ..max.setFrom(position);
+        ..min.setValues(world.m41, world.m42, world.m43)
+        ..max.setValues(world.m41, world.m42, world.m43);
     }
   }
 
@@ -182,15 +196,19 @@ abstract class Component3D({
     }
   }
 
-  /// Mark this component's world transform as needing recomputation.
+  /// Mark this component's world transform, and therefore its AABB, as
+  /// needing recomputation.
   ///
   /// This propagates down to child [Component3D]s so the entire subtree
   /// stays consistent.
   void _markWorldTransformDirty() {
-    if (_worldTransformDirty) {
+    // The world transform and the AABB are recomputed independently, so one
+    // can be dirty while the other is not. Only stop when both already are.
+    if (_worldTransformDirty && _aabbDirty) {
       return;
     }
     _worldTransformDirty = true;
+    _aabbDirty = true;
     for (final child in _childComponents) {
       child._markWorldTransformDirty();
     }
@@ -198,6 +216,8 @@ abstract class Component3D({
 
   void _onTransformChanged() {
     _markWorldTransformDirty();
-    markAabbDirty();
+    if (parent case final Component3D parent) {
+      parent.markAabbDirty();
+    }
   }
 }
