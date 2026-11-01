@@ -6,6 +6,7 @@ import 'package:flame_cli/flame_cli.dart';
 import 'package:image/image.dart' as img;
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
+import 'package:vm_service/vm_service.dart' show VmService;
 
 import 'fake_process.dart';
 
@@ -15,6 +16,12 @@ const _uri = 'http://127.0.0.1:1/abc=/';
 /// and records the calls that were made.
 class _FakeConnection(final Map<String, Map<String, dynamic>> responses)
     implements FlameConnection {
+  @override
+  VmService get service => throw UnimplementedError();
+
+  @override
+  String get isolateId => throw UnimplementedError();
+
   final calls = <(String, Map<String, String>?)>[];
 
   @override
