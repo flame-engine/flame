@@ -12,6 +12,7 @@ import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
 part 'component_list.dart';
+part 'component_pool.dart';
 part 'component_tree_root.dart';
 part 'custom_traversal.dart';
 
@@ -895,6 +896,7 @@ class Component({
       } else if (!child.isRemoved) {
         root._dequeueAdd(child, this);
         child._parent = null;
+        child._onDetached();
       } else if (isRemoving) {
         // This parent is being removed from the tree, and the child was
         // already marked as removed during ancestor removal propagation.
@@ -902,10 +904,12 @@ class Component({
         // via removeAll(children) in onRemove), so detach it.
         children._remove(child);
         child._parent = null;
+        child._onDetached();
       }
     } else {
       _detachChild(child);
       child._parent = null;
+      child._onDetached();
     }
   }
 
@@ -1096,6 +1100,7 @@ class Component({
       _remove(parent);
       assert(_parent == null);
     }
+    _onDetached();
     return _LifecycleEventStatus.done;
   }
 
@@ -1349,8 +1354,15 @@ class Component({
         }
         _addChild(child);
       }
+      // The children whose removal was pending are now detached. They are
+      // notified only after the shared temporary collections are cleared, so
+      // that the notification may safely re-enter the component tree.
+      final detached = _tmpPendingRemoves.isEmpty
+          ? null
+          : _tmpPendingRemoves.toList(growable: false);
       _tmpChildren.clear();
       _tmpPendingRemoves.clear();
+      detached?.forEach((child) => child._onDetached());
     }
   }
 
@@ -1376,6 +1388,22 @@ class Component({
     _setRemovedBit();
     _removeCompleter?.complete();
     _removeCompleter = null;
+  }
+
+  /// Called once this component has been detached from its parent and is no
+  /// longer part of any component tree, either because it was removed, or
+  /// because it was removed before it could be mounted.
+  ///
+  /// This is not called when the component is moved to a new parent, nor for
+  /// the descendants of a removed component, since those stay attached to
+  /// their parent.
+  ///
+  /// A [PooledComponent] is returned to the pool it was acquired from.
+  void _onDetached() {
+    final self = this;
+    if (self is PooledComponent) {
+      self._pool?._release(self);
+    }
   }
 
   void _remove(Component parent) {

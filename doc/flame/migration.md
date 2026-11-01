@@ -952,6 +952,44 @@ A `HasTimeScale` time scale of `0` (or `pause()`) now stops the update pass for 
 instead of updating it with a `dt` of `0`, which is what `Route.stopTime()` relies on.
 
 
+### `ComponentPool` requires the `PooledComponent` mixin
+
+`ComponentPool` used to find out that a component could be reused by waiting on its `removed`
+future. That future also completes when a component is moved to a new parent, or when one of its
+ancestors is removed, so the pool could hand out components that were still in use. It also never
+got back the components that were removed before they were mounted, and it only got the others back
+after a delay, so they could not be reused within the same tick.
+
+The pool now gets its components back at the exact moment they are detached from the component
+tree, which requires the pooled components to mix in `PooledComponent`:
+
+```dart
+// Before
+class Bullet extends SpriteComponent {
+  @override
+  void onMount() {
+    super.onMount();
+    velocity.setZero();
+  }
+}
+
+// After
+class Bullet extends SpriteComponent with PooledComponent {
+  @override
+  void onAcquire() {
+    velocity.setZero();
+  }
+}
+```
+
+The mixin also provides the `onAcquire` and `onRelease` hooks. Reset the state left over from the
+previous use in `onAcquire` rather than in `onMount`. `onAcquire` runs before `acquire()` hands the
+component back, so values you set right after acquiring it, like its position, are kept. `onMount`
+runs later, so a reset there would wipe them out. A component that is moved to a new
+parent, or whose ancestor is removed, is no longer returned to the pool, and an acquired component
+that ends up not being added to the component tree can be returned with `ComponentPool.release`.
+
+
 ### `flame_tiled` layers are components
 
 `RenderableTiledMap` is now a `Component` and every layer of the map is a `RenderableLayer`, which

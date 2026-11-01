@@ -92,7 +92,7 @@ class _BallWorld() extends World with TapCallbacks {
 /// simulates the ball bouncing up and down as it travels outward.
 class _PooledBall()
     extends PositionComponent
-    with HasGameRef, ParentIsA<_BallWorld> {
+    with HasGameRef, ParentIsA<_BallWorld>, PooledComponent {
   static const _radius = 4.0;
   static const _bounceSpeed = 8.0;
   static const _maxShadowOffset = 16.0;
@@ -128,12 +128,11 @@ class _PooledBall()
   }
 
   @override
-  void onMount() {
-    super.onMount();
-    // Only reset internal visual state — velocity and position are set by the
-    // caller between acquire() and add(), so we must not touch them here.
+  void onAcquire() {
+    // Reset the state left over from the previous use. This runs before
+    // acquire() hands the ball back, so the position and velocity set in
+    // onTapDown are kept.
     _bouncePhase = 0;
-    _ball.scale = Vector2.all(1);
   }
 
   @override

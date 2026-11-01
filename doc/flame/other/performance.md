@@ -123,7 +123,7 @@ provides the `ComponentPool` class to make object pooling easy and efficient.
 
 The `ComponentPool` class manages a pool of reusable components. It automatically handles
 the component lifecycle: when a pooled component is removed from its parent, it is
-returned to the pool for reuse.
+returned to the pool for reuse. The pooled components must mix in `PooledComponent`.
 
 **Creating a pool:**
 
@@ -158,12 +158,21 @@ void spawnBullet(Vector2 position, Vector2 velocity) {
 
 **Returning components to the pool:**
 
-Components are returned to the pool **automatically** when they are removed from the game
-tree. Simply call `removeFromParent()` on the component. There is no manual release step.
+Components are returned to the pool **automatically** when they are detached from the
+component tree. Simply call `removeFromParent()` on the component, and it can be acquired
+again right away, even within the same tick.
 
 ```dart
-class Bullet extends SpriteComponent with CollisionCallbacks {
-  Vector2 velocity = Vector2.zero();
+class Bullet extends SpriteComponent with CollisionCallbacks, PooledComponent {
+  final Vector2 velocity = Vector2.zero();
+
+  @override
+  void onAcquire() {
+    // Reset the state left over from the previous use. This runs before
+    // acquire() hands the bullet back, so the position and velocity set in
+    // spawnBullet are kept.
+    velocity.setZero();
+  }
 
   @override
   void update(double dt) {
@@ -182,14 +191,23 @@ class Bullet extends SpriteComponent with CollisionCallbacks {
     // Return to pool on collision. No manual release needed.
     removeFromParent();
   }
+}
+```
 
-  @override
-  void onMount() {
-    super.onMount();
-    // Reset visual/internal state here so the component is clean when reused.
-    // Caller-configured state (position, velocity) should NOT be reset here
-    // because it is set between acquire() and add().
-  }
+Moving a pooled component to a new parent does not return it to the pool, and neither
+does removing one of its ancestors, since the component stays attached to its parent in
+both cases. It is returned once it is removed from its own parent.
+
+Override `onRelease()` in the component to react to it being returned to the pool, for
+example to let go of resources that it does not need while it waits to be reused.
+
+If you acquire a component and end up not adding it to the component tree, return it to
+the pool with `release()`:
+
+```dart
+final bullet = bulletPool.acquire();
+if (!canShoot) {
+  bulletPool.release(bullet);
 }
 ```
 
@@ -214,27 +232,32 @@ bulletPool.clear();
 
 ```{note}
 Clearing only affects components currently in the pool. Components that are in use
-(acquired but not yet released) are not affected.
+(acquired but not yet released) are not affected, and are still returned to the pool once
+they are removed.
 ```
 
 
 ### Best Practices
 
-1. **No special mixin needed**: Any `Component` subclass can be pooled. Just pass a factory
-   function to `ComponentPool` and you're ready to go.
+1. **Mix in `PooledComponent`**: Any `Component` subclass can be pooled once it mixes in
+   `PooledComponent`. Then pass a factory function to `ComponentPool` and you're ready to go.
 
-2. **Use `onMount` to reset internal state**: Reset visual or internal properties (e.g.
-   animation frame, bounce phase) in `onMount()`. Do not reset caller-configured state
-   (like position or velocity) there, since those are set between `acquire()` and `add()`.
+2. **Use `onAcquire` to reset state**: Reset the state left over from the previous use (e.g.
+   animation frame, velocity) in `onAcquire()`. It runs before `acquire()` hands the
+   component back, so anything you set on it after acquiring it (like its position) is kept.
 
 3. **Just call `removeFromParent()`**: Components are returned to the pool automatically
-   when removed. There is no manual release method to call.
+   when removed. Only call `release()` for acquired components that were never added to the
+   component tree.
 
-4. **Set appropriate pool sizes**: Set `maxSize` based on your game's needs. Too small and
+4. **Don't hold on to released components**: Once a component is returned to the pool it
+   can be handed out again, so don't keep using it through an old reference.
+
+5. **Set appropriate pool sizes**: Set `maxSize` based on your game's needs. Too small and
    you'll create new objects frequently; too large and you'll waste memory.
 
-5. **Use `initialSize` for warm-up**: Set `initialSize` to pre-create commonly used
+6. **Use `initialSize` for warm-up**: Set `initialSize` to pre-create commonly used
    components, reducing frame drops during gameplay.
 
-6. **Pool behavior is LIFO**: The pool uses a stack (Last In, First Out) internally, meaning
+7. **Pool behavior is LIFO**: The pool uses a stack (Last In, First Out) internally, meaning
    the most recently returned component will be the next one acquired.
