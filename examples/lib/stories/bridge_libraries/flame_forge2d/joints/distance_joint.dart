@@ -25,9 +25,9 @@ class DistanceJointWorld()
   }
 
   @override
-  Future<void> onTapDown(TapDownEvent info) async {
-    super.onTapDown(info);
-    final tap = info.localPosition;
+  Future<void> onTapDown(TapDownEvent event) async {
+    super.onTapDown(event);
+    final tap = event.localPosition;
 
     final first = Ball(tap);
     final second = Ball(Vector2(tap.x + 3, tap.y + 3));
