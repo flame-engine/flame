@@ -35,6 +35,7 @@ linter:
     - avoid_print
     - avoid_redundant_argument_values
     - avoid_relative_lib_imports
+    - avoid_renaming_method_parameters
     - avoid_return_types_on_setters
     - avoid_returning_null_for_void
     - avoid_returning_this
@@ -68,6 +69,7 @@ linter:
     - empty_constructor_bodies
     - empty_container_bodies
     - empty_statements
+    - eol_at_end_of_file
     - exhaustive_cases
     - file_names
     - flutter_style_todos
@@ -183,6 +185,7 @@ linter:
     - use_raw_strings
     - use_rethrow_when_possible
     - use_setters_to_change_properties
+    - use_string_buffers
     - use_super_parameters
     - use_test_throws_matchers
     - use_truncating_division

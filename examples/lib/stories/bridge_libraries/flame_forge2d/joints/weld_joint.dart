@@ -108,9 +108,9 @@ class WeldJointWorld()
   }
 
   @override
-  Future<void> onTapDown(TapDownEvent info) async {
-    super.onTapDown(info);
-    final ball = Ball(info.localPosition, radius: 5);
+  Future<void> onTapDown(TapDownEvent event) async {
+    super.onTapDown(event);
+    final ball = Ball(event.localPosition, radius: 5);
     add(ball);
   }
 }

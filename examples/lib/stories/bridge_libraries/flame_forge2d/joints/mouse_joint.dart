@@ -36,8 +36,8 @@ class MouseJointWorld()
   }
 
   @override
-  void onDragStart(DragStartEvent info) {
-    super.onDragStart(info);
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
     if (mouseJoint != null) {
       return;
     }
@@ -57,13 +57,13 @@ class MouseJointWorld()
   }
 
   @override
-  void onDragUpdate(DragUpdateEvent info) {
-    mouseJoint?.target = info.localEndPosition;
+  void onDragUpdate(DragUpdateEvent event) {
+    mouseJoint?.target = event.localEndPosition;
   }
 
   @override
-  void onDragEnd(DragEndEvent info) {
-    super.onDragEnd(info);
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
     _destroyMouseJoint();
   }
 
