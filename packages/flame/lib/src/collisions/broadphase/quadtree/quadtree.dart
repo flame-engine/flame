@@ -71,7 +71,7 @@ class QuadTree<T extends Hitbox<T>>({
           childSize.dx,
           childSize.dy,
         );
-      default:
+      case _QuadTreeZone.root:
         assert(false, 'Invalid child index $box $zone');
         return Rect.zero;
     }
