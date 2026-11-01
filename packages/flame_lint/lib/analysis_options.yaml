@@ -56,6 +56,7 @@ linter:
     - collection_methods_unrelated_type
     - combinators_ordering
     - comment_references
+    - conditional_uri_does_not_exist
     - constant_identifier_names
     - control_flow_in_finally
     - curly_braces_in_flow_control_structures
@@ -126,6 +127,7 @@ linter:
     - prefer_is_not_empty
     - prefer_is_not_operator
     - prefer_iterable_wheretype
+    - prefer_mixin
     - prefer_null_aware_method_calls
     - prefer_null_aware_operators
     - prefer_single_quotes
