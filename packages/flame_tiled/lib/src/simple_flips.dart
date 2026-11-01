@@ -116,7 +116,7 @@ class SimpleFlips(
       flip = true;
     } else {
       // this should be exhaustive
-      throw 'Invalid combination of booleans: $flips';
+      throw StateError('Invalid combination of booleans: $flips');
     }
 
     return SimpleFlips(angle, cos, sin, flip: flip);

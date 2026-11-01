@@ -131,7 +131,7 @@ class QuadTree<T extends Hitbox<T>>({
       if (quadrant != _QuadTreeZone.root) {
         final children = node.children[quadrant.value];
         if (children == null) {
-          throw 'Invalid index $quadrant';
+          throw StateError('Invalid index $quadrant');
         }
         finalNode = _add(
           children as QuadTreeNode<T>,
@@ -170,7 +170,7 @@ class QuadTree<T extends Hitbox<T>>({
       if (quadrant != _QuadTreeZone.root) {
         final children = node.children[quadrant.value];
         if (children == null) {
-          throw 'Invalid index $quadrant';
+          throw StateError('Invalid index $quadrant');
         }
         children.hitboxes.add(value);
         _hitboxAtNode[value as ShapeHitbox] = children;
@@ -205,7 +205,7 @@ class QuadTree<T extends Hitbox<T>>({
     var hitboxesInside = node.hitboxes.length;
     for (final child in node.children) {
       if (child == null) {
-        throw 'Child must be not null';
+        throw StateError('Child must be not null');
       }
       _tryMergeRecursive(child);
       if (_noChildren(child)) {
@@ -219,7 +219,7 @@ class QuadTree<T extends Hitbox<T>>({
       for (var i = 0; i < node.children.length; i++) {
         final child = node.children[i];
         if (child == null) {
-          throw 'Child must be not null';
+          throw StateError('Child must be not null');
         }
         node.hitboxes.addAll(child.hitboxes);
         child.hitboxes.clear();
@@ -233,7 +233,7 @@ class QuadTree<T extends Hitbox<T>>({
     var id = -1;
     final values = <T>[];
     if (node == null) {
-      throw '$node not found';
+      throw ArgumentError('$node not found');
     }
     id = node.id;
     values.addAll(node.hitboxes as List<T>);

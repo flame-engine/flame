@@ -97,6 +97,7 @@ linter:
     - noop_primitive_operations
     - null_closures
     - omit_local_variable_types
+    - only_throw_errors
     - package_names
     - package_prefixed_library_names
     - parameter_assignments
