@@ -65,8 +65,8 @@ mixin ComponentViewportMargin<T extends FlameGame>
 
   @override
   @mustCallSuper
-  void onGameResize(Vector2 gameSize) {
-    super.onGameResize(gameSize);
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
     if (isMounted) {
       _updateMargins();
     }

@@ -3,7 +3,8 @@ repository: https://github.com/flame-engine/flame
 workspace:
   - doc/flame/examples
   - doc/tutorials/**/app
-  - packages/**
+  - packages/*
+  - packages/*/*
   - examples
   - examples/games/**
 
