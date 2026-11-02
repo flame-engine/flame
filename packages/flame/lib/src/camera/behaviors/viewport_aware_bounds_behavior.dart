@@ -20,11 +20,13 @@ class ViewportAwareBoundsBehavior({
   required var Shape _boundsShape,
   super.key,
 }) extends Component with ParentIsA<Viewfinder> {
-  late Rect _visibleWorldRect;
+  /// The size of the world region visible through the viewport that the
+  /// current bounds were calculated for.
+  final Vector2 _visibleWorldSize = Vector2.zero();
+  final Vector2 _currentVisibleWorldSize = Vector2.zero();
 
   @override
   void onLoad() {
-    _visibleWorldRect = parent.visibleWorldRect;
     parent.transform.scale.addListener(_updateCameraBoundsIfNeeded);
     viewport.transform.scale.addListener(_updateCameraBoundsIfNeeded);
   }
@@ -56,64 +58,87 @@ class ViewportAwareBoundsBehavior({
   /// Returns the camera viewport.
   Viewport get viewport => parent.camera.viewport;
 
-  /// Calls [_updateCameraBounds] if the [_visibleWorldRect] differs from
-  /// viewfinder visible world rect.
+  /// Calls [_updateCameraBounds] if the size of the visible world region
+  /// differs from the one that the current bounds were calculated for.
   void _updateCameraBoundsIfNeeded() {
-    if (_visibleWorldRect != parent.visibleWorldRect) {
+    _computeVisibleWorldSize(_currentVisibleWorldSize);
+    if (_currentVisibleWorldSize != _visibleWorldSize) {
       _updateCameraBounds();
     }
   }
 
   /// Triggers an update of the current camera bounds.
   void _updateCameraBounds() {
-    _visibleWorldRect = parent.visibleWorldRect;
+    _computeVisibleWorldSize(_visibleWorldSize);
     final boundedBehavior = parent.firstChild<BoundedPositionBehavior>();
     boundedBehavior?.bounds = _calculateViewportAwareBounds();
   }
 
-  /// This method calculates adapts the [_boundsShape] so that none
-  /// of the viewport can go outside of the bounds.
-  /// It returns the [_boundsShape] if it fails to calculates new bounds.
-  Shape _calculateViewportAwareBounds() {
-    final worldSize = Vector2(
-      _boundsShape
-          .support(
-            _boundsShape.nearestPoint(
-              _boundsShape.center + Vector2(1, 0),
-            ),
-          )
-          .x,
-      _boundsShape
-          .support(
-            _boundsShape.nearestPoint(
-              _boundsShape.center + Vector2(0, 1),
-            ),
-          )
-          .y,
-    );
-
+  /// Computes the size of the axis-aligned box around the world region that
+  /// is visible through the viewport, taking the zoom and angle of the
+  /// viewfinder into account.
+  void _computeVisibleWorldSize(Vector2 output) {
     final viewportSize = viewport.virtualSize;
-    if (_boundsShape is Rectangle) {
-      return Rectangle.fromCenter(
-        center: _boundsShape.center,
-        size: worldSize - viewportSize,
-      );
-    } else if (_boundsShape is RoundedRectangle) {
-      final halfSize = (worldSize - viewportSize) / 2;
-      return RoundedRectangle.fromPoints(
-        _boundsShape.center - halfSize,
-        _boundsShape.center + halfSize,
-        (_boundsShape as RoundedRectangle).radius,
-      );
-    } else if (_boundsShape is Circle) {
-      final diameter =
-          max(worldSize.x, worldSize.y) - max(viewportSize.x, viewportSize.y);
-      final radius = diameter / 2;
-      return Circle(
-        _boundsShape.center,
-        radius,
+    final zoom = parent.zoom;
+    final angle = parent.angle;
+    if (angle == 0) {
+      output.setValues(viewportSize.x / zoom, viewportSize.y / zoom);
+    } else {
+      final cosAngle = cos(angle).abs();
+      final sinAngle = sin(angle).abs();
+      output.setValues(
+        (viewportSize.x * cosAngle + viewportSize.y * sinAngle) / zoom,
+        (viewportSize.x * sinAngle + viewportSize.y * cosAngle) / zoom,
       );
     }
-    return _boundsShape;
+  }
+
+  /// Calculates the region within which the viewfinder's position has to stay
+  /// so that none of the viewport goes outside of [_boundsShape].
+  ///
+  /// If the visible region is larger than the bounds along an axis, the
+  /// returned region collapses to the center of the bounds along that axis.
+  ///
+  /// It returns the [_boundsShape] if the shape is not supported.
+  Shape _calculateViewportAwareBounds() {
+    final shape = _boundsShape;
+    final center = shape.center;
+    if (shape is Circle) {
+      // The rectangular viewport is fully within the circle only when all of
+      // its corners are, so the viewfinder has to stay at least half of the
+      // visible region's diagonal away from the circle's edge.
+      final halfDiagonal = viewport.virtualSize.length / (2 * parent.zoom);
+      return Circle(center, max(0, shape.radius - halfDiagonal));
+    }
+
+    final aabb = shape.aabb;
+    final halfWidth = max(
+      0.0,
+      (aabb.max.x - aabb.min.x - _visibleWorldSize.x) / 2,
+    );
+    final halfHeight = max(
+      0.0,
+      (aabb.max.y - aabb.min.y - _visibleWorldSize.y) / 2,
+    );
+    if (shape is Rectangle) {
+      return Rectangle.fromLTRB(
+        center.x - halfWidth,
+        center.y - halfHeight,
+        center.x + halfWidth,
+        center.y + halfHeight,
+      );
+    } else if (shape is RoundedRectangle) {
+      // Shrinking the rounded rectangle while keeping its radius is exact as
+      // long as the result is large enough to fit the radius; the constructor
+      // reduces the radius otherwise.
+      return RoundedRectangle.fromLTRBR(
+        center.x - halfWidth,
+        center.y - halfHeight,
+        center.x + halfWidth,
+        center.y + halfHeight,
+        shape.radius,
+      );
+    }
+    return shape;
   }
 }
