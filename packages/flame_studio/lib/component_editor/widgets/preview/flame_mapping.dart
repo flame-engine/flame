@@ -20,7 +20,7 @@ import 'package:flutter/painting.dart';
 ///
 /// Sprites draw the [images] of their image, by asset path.
 flame.PositionComponent buildFlameComponent(
-  Component component, {
+  ComponentData component, {
   Map<String, ui.Image> images = const {},
 }) {
   return _placeRoot(_build(component, images));
@@ -35,23 +35,23 @@ flame.PositionComponent _placeRoot(flame.PositionComponent root) {
 }
 
 flame.PositionComponent _build(
-  Component component,
+  ComponentData component,
   Map<String, ui.Image> images,
 ) {
   final target = switch (component) {
-    RectangleComponent() => flame.RectangleComponent(),
-    CircleComponent() => flame.CircleComponent(),
-    PolygonComponent(:final vertices) => flame.PolygonComponent(
+    RectangleComponentData() => flame.RectangleComponent(),
+    CircleComponentData() => flame.CircleComponent(),
+    PolygonComponentData(:final vertices) => flame.PolygonComponent(
       _vectors(vertices),
     ),
     // Flame's SpriteComponent can't be mounted without a sprite.
-    SpriteComponent() => PreviewSpriteComponent(),
+    SpriteComponentData() => PreviewSpriteComponent(),
     // Outlined, since a plain PositionComponent would be invisible.
-    PositionComponent() => PreviewPositionComponent(),
+    PositionComponentData() => PreviewPositionComponent(),
     // Hitboxes draw nothing either, so they are outlined too.
-    RectangleHitboxComponent() => PreviewRectangleHitbox(),
-    CircleHitboxComponent() => PreviewCircleHitbox(),
-    PolygonHitboxComponent(:final vertices) => PreviewPolygonHitbox(
+    RectangleHitboxData() => PreviewRectangleHitbox(),
+    CircleHitboxData() => PreviewCircleHitbox(),
+    PolygonHitboxData(:final vertices) => PreviewPolygonHitbox(
       _vectors(vertices),
     ),
   };
@@ -74,7 +74,7 @@ List<flame.Vector2> _vectors(ComponentVertices vertices) => [
 /// Polygons with different vertices don't have the same shape: a Flame
 /// polygon can't change its number of vertices, nor be given new ones from
 /// outside.
-bool haveSameShape(Component a, Component b) {
+bool haveSameShape(ComponentData a, ComponentData b) {
   if (a.type != b.type || a.children.length != b.children.length) {
     return false;
   }
@@ -98,7 +98,7 @@ bool haveSameShape(Component a, Component b) {
 /// Like in [buildFlameComponent], the root stays centered.
 void applyTree(
   flame.PositionComponent target,
-  Component component, {
+  ComponentData component, {
   Map<String, ui.Image> images = const {},
 }) {
   _placeRoot(_applyNode(target, component, images));
@@ -106,7 +106,7 @@ void applyTree(
 
 flame.PositionComponent _applyNode(
   flame.PositionComponent target,
-  Component component,
+  ComponentData component,
   Map<String, ui.Image> images,
 ) {
   applyProperties(target, component, images: images);
@@ -136,7 +136,7 @@ flame.PositionComponent flameNodeAt(
 /// that has them is previewed correctly.
 T applyProperties<T extends flame.PositionComponent>(
   T target,
-  Component component, {
+  ComponentData component, {
   Map<String, ui.Image> images = const {},
 }) {
   if (component case final PositionedComponent positioned) {

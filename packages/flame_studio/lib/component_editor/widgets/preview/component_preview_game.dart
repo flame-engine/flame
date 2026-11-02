@@ -9,7 +9,7 @@ import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flutter/painting.dart';
 
 /// {@template component_preview_game}
-/// A Flame game that renders a [Component] and its children, centered on
+/// A Flame game that renders a [ComponentData] and its children, centered on
 /// screen and scaled by [zoom], and highlights one of them. Hitboxes are
 /// outlined while [areHitboxesVisible], and sprites draw their [spriteImages].
 ///
@@ -17,7 +17,7 @@ import 'package:flutter/painting.dart';
 /// `ComponentEditorBloc` and pushed here with [show].
 /// {@endtemplate}
 class ComponentPreviewGame({
-  required var Component _component,
+  required var ComponentData _component,
   var List<int>? _highlightedPath,
   var double _zoom = 1,
   var bool _areHitboxesVisible = true,
@@ -29,7 +29,7 @@ class ComponentPreviewGame({
   late flame.PositionComponent _preview;
 
   /// The Flame component currently rendering the previewed root
-  /// [Component]. Its children render the [Component] children.
+  /// [ComponentData]. Its children render the [ComponentData] children.
   flame.PositionComponent get preview => _preview;
 
   /// Draws the border around the highlighted node.
@@ -82,7 +82,7 @@ class ComponentPreviewGame({
   /// The existing Flame components are updated in place, unless components
   /// were added, removed or changed type, or polygons got new vertices (see
   /// [haveSameShape]).
-  void show(Component component, {List<int>? highlightedPath}) {
+  void show(ComponentData component, {List<int>? highlightedPath}) {
     final previous = _component;
     _component = component;
     _highlightedPath = highlightedPath;
@@ -129,7 +129,7 @@ class ComponentPreviewGame({
         : null;
   }
 
-  static bool _hasBounds(Component node) {
+  static bool _hasBounds(ComponentData node) {
     return node is SizedComponent ||
         node is RadiusComponent ||
         node is VerticesComponent;

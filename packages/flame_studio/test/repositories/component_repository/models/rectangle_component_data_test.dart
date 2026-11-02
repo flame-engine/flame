@@ -2,39 +2,39 @@ import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group(PositionComponent, () {
-    const component = PositionComponent(
+  group(RectangleComponentData, () {
+    const component = RectangleComponentData(
       name: 'Player',
       position: ComponentPosition(x: 1, y: 2),
       anchor: ComponentAnchor.center,
       angle: ComponentAngle(radians: 1.5),
       size: ComponentSize(width: 10, height: 20),
-      children: [RectangleComponent(name: 'rectangle1')],
+      paint: ComponentPaint(color: 0xFF00FF00, style: PaintStyle.stroke),
+      children: [RectangleComponentData(name: 'rectangle1')],
     );
 
     test('supports value equality', () {
       expect(
-        const PositionComponent(name: 'Player'),
-        equals(const PositionComponent(name: 'Player')),
+        const RectangleComponentData(name: 'Player'),
+        equals(const RectangleComponentData(name: 'Player')),
       );
-      expect(component, isNot(equals(const PositionComponent(name: 'Player'))));
       expect(
-        const PositionComponent(name: 'Player'),
-        isNot(equals(const RectangleComponent(name: 'Player'))),
+        component,
+        isNot(equals(const RectangleComponentData(name: 'Player'))),
       );
     });
 
-    test('is a position component with a position and a size', () {
-      expect(component.type, equals(ComponentType.position));
+    test('is a rectangle with a position, a size and a paint', () {
+      expect(component.type, equals(ComponentType.rectangle));
       expect(component, isA<PositionedComponent>());
       expect(component, isA<AnchoredComponent>());
       expect(component, isA<RotatedComponent>());
       expect(component, isA<SizedComponent>());
-      expect(component, isNot(isA<PaintedComponent>()));
+      expect(component, isA<PaintedComponent>());
     });
 
     test('round-trips through JSON', () {
-      expect(Component.fromJson(component.toJson()), equals(component));
+      expect(ComponentData.fromJson(component.toJson()), equals(component));
     });
 
     test('toJson includes the type, properties and children', () {
@@ -42,7 +42,7 @@ void main() {
         component.toJson(),
         equals({
           'name': 'Player',
-          'type': 'position',
+          'type': 'rectangle',
           'children': [
             {
               'name': 'rectangle1',
@@ -59,6 +59,7 @@ void main() {
           'anchor': {'x': 0.5, 'y': 0.5},
           'angle': {'radians': 1.5},
           'size': {'width': 10.0, 'height': 20.0},
+          'paint': {'color': 0xFF00FF00, 'style': 'stroke'},
         }),
       );
     });
@@ -90,7 +91,7 @@ void main() {
       final json = component.toJson()..remove('anchor');
 
       expect(
-        (Component.fromJson(json) as AnchoredComponent).anchor,
+        (ComponentData.fromJson(json) as AnchoredComponent).anchor,
         equals(ComponentAnchor.topLeft),
       );
     });
@@ -110,7 +111,7 @@ void main() {
       final json = component.toJson()..remove('angle');
 
       expect(
-        (Component.fromJson(json) as RotatedComponent).angle,
+        (ComponentData.fromJson(json) as RotatedComponent).angle,
         equals(ComponentAngle.zero),
       );
     });
@@ -123,6 +124,17 @@ void main() {
       expect(
         copy.toJson()..remove('size'),
         equals(component.toJson()..remove('size')),
+      );
+    });
+
+    test('copyWithPaint replaces only the paint', () {
+      const paint = ComponentPaint(color: 0xFF0000FF);
+      final copy = component.copyWithPaint(paint);
+
+      expect(copy.paint, equals(paint));
+      expect(
+        copy.toJson()..remove('paint'),
+        equals(component.toJson()..remove('paint')),
       );
     });
 

@@ -5,21 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// {@template component_editor_page}
-/// The editor screen for a [Component] of a [Project].
+/// The editor screen for a [ComponentData] of a [Project].
 /// {@endtemplate}
 class const ComponentEditorPage({
   /// The project the component belongs to.
   required final Project project,
 
   /// The component being edited.
-  required final Component component,
+  required final ComponentData component,
   super.key,
 }) extends StatelessWidget {
   /// {@macro component_editor_page}
   this;
 
   /// Creates a route to the [ComponentEditorPage] for [component].
-  static Route<void> route(Project project, Component component) {
+  static Route<void> route(Project project, ComponentData component) {
     return MaterialPageRoute<void>(
       builder: (_) =>
           ComponentEditorPage(project: project, component: component),

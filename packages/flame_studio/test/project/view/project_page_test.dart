@@ -21,7 +21,7 @@ class _MockProjectBloc()
 
 void main() {
   const project = Project(path: '/projects/my_game');
-  const player = RectangleComponent(name: 'Player');
+  const player = RectangleComponentData(name: 'Player');
 
   setUpAll(() => registerFallbackValue(const ProjectComponentsRequested()));
 
@@ -126,7 +126,7 @@ void main() {
         const ProjectState(
           status: ProjectStatus.ready,
           components: [
-            RectangleComponent(name: 'Enemy'),
+            RectangleComponentData(name: 'Enemy'),
             player,
           ],
         ),

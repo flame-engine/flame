@@ -20,7 +20,7 @@ void main() {
 
     test('fileName is the snake_case name of the component', () {
       expect(
-        generator.fileName(const RectangleComponent(name: 'PlayerShip')),
+        generator.fileName(const RectangleComponentData(name: 'PlayerShip')),
         equals('player_ship.generated.dart'),
       );
     });
@@ -28,7 +28,7 @@ void main() {
     test('generates a root without children', () {
       expect(
         generator.generate(
-          const RectangleComponent(
+          const RectangleComponentData(
             name: 'player',
             // The root position is set by whoever uses the component.
             position: ComponentPosition(x: 5, y: 5),
@@ -53,10 +53,10 @@ class \$Player extends RectangleComponent {
         'with children', () {
       expect(
         generator.generate(
-          const RectangleComponent(
+          const RectangleComponentData(
             name: 'player',
             children: [
-              RectangleComponent(
+              RectangleComponentData(
                 name: 'head',
                 position: ComponentPosition(x: 10),
                 paint: ComponentPaint(
@@ -64,13 +64,13 @@ class \$Player extends RectangleComponent {
                   style: PaintStyle.stroke,
                 ),
                 children: [
-                  RectangleComponent(
+                  RectangleComponentData(
                     name: 'eye',
                     size: ComponentSize(width: 5, height: 5),
                   ),
                 ],
               ),
-              RectangleComponent(
+              RectangleComponentData(
                 name: 'left_arm',
                 position: ComponentPosition(x: -4, y: 30),
               ),
@@ -128,11 +128,11 @@ class \$PlayerHead extends RectangleComponent {
     test('generates position components without paints', () {
       expect(
         generator.generate(
-          const PositionComponent(
+          const PositionComponentData(
             name: 'player',
             size: ComponentSize(width: 10, height: 20),
             children: [
-              PositionComponent(
+              PositionComponentData(
                 name: 'body',
                 position: ComponentPosition(x: 1, y: 2),
               ),
@@ -169,11 +169,11 @@ class $Player extends PositionComponent {
     test('generates circles with a radius instead of a size', () {
       expect(
         generator.generate(
-          const CircleComponent(
+          const CircleComponentData(
             name: 'ball',
             radius: ComponentRadius(radius: 10),
             children: [
-              CircleComponent(
+              CircleComponentData(
                 name: 'core',
                 position: ComponentPosition(x: 1, y: 2),
                 radius: ComponentRadius(radius: 2.5),
@@ -210,10 +210,10 @@ class \$Ball extends CircleComponent {
     test('generates polygons with their vertices', () {
       expect(
         generator.generate(
-          const PolygonComponent(
+          const PolygonComponentData(
             name: 'ship',
             children: [
-              PolygonComponent(
+              PolygonComponentData(
                 name: 'wing',
                 position: ComponentPosition(x: 1, y: 2),
                 vertices: ComponentVertices([
@@ -252,22 +252,22 @@ class \$Ship extends PolygonComponent {
     test('generates the angle of children, but not of the root', () {
       expect(
         generator.generate(
-          const PositionComponent(
+          const PositionComponentData(
             name: 'player',
             // The root angle is set by whoever uses the component.
             angle: ComponentAngle(radians: 1),
             children: [
-              PositionComponent(
+              PositionComponentData(
                 name: 'head',
                 angle: ComponentAngle(radians: 0.5),
                 children: [
-                  PositionComponent(
+                  PositionComponentData(
                     name: 'eye',
                     angle: ComponentAngle(radians: 2),
                   ),
                 ],
               ),
-              PositionComponent(name: 'body'),
+              PositionComponentData(name: 'body'),
             ],
           ),
         ),
@@ -320,22 +320,22 @@ class $PlayerHead extends PositionComponent {
     test('generates the anchor of children, but not of the root', () {
       expect(
         generator.generate(
-          const PositionComponent(
+          const PositionComponentData(
             name: 'player',
             // The root anchor is set by whoever uses the component.
             anchor: ComponentAnchor.center,
             children: [
-              PositionComponent(
+              PositionComponentData(
                 name: 'head',
                 anchor: ComponentAnchor.bottomCenter,
                 children: [
-                  PositionComponent(
+                  PositionComponentData(
                     name: 'eye',
                     anchor: ComponentAnchor(x: 0.25, y: 1),
                   ),
                 ],
               ),
-              PositionComponent(name: 'body'),
+              PositionComponentData(name: 'body'),
             ],
           ),
         ),
@@ -393,11 +393,11 @@ class $PlayerHead extends PositionComponent {
         'collisions', () {
       expect(
         generator.generate(
-          const PositionComponent(
+          const PositionComponentData(
             name: 'player',
             children: [
-              RectangleHitboxComponent(name: 'body'),
-              CircleHitboxComponent(
+              RectangleHitboxData(name: 'body'),
+              CircleHitboxData(
                 name: 'head',
                 position: ComponentPosition(x: 1, y: 2),
                 radius: ComponentRadius(radius: 5),
@@ -406,7 +406,7 @@ class $PlayerHead extends PositionComponent {
                   isSolid: true,
                 ),
               ),
-              PolygonHitboxComponent(
+              PolygonHitboxData(
                 name: 'tail',
                 vertices: ComponentVertices([
                   ComponentVertex(0, 0),
@@ -466,9 +466,9 @@ class $Player extends PositionComponent {
     test('imports dart:ui when any node has a paint', () {
       expect(
         generator.generate(
-          const PositionComponent(
+          const PositionComponentData(
             name: 'player',
-            children: [RectangleComponent(name: 'body')],
+            children: [RectangleComponentData(name: 'body')],
           ),
         ),
         allOf(
@@ -481,7 +481,7 @@ class $Player extends PositionComponent {
     test('pads colors to 8 hex digits', () {
       expect(
         generator.generate(
-          const RectangleComponent(
+          const RectangleComponentData(
             name: 'Ghost',
             paint: ComponentPaint(color: 0x00000001),
           ),
@@ -496,11 +496,11 @@ class $Player extends PositionComponent {
       );
 
       final code = generator.generate(
-        const RectangleComponent(
+        const RectangleComponentData(
           name: 'Player',
           paint: ComponentPaint(paletteColor: 'dark_grey'),
           children: [
-            CircleComponent(
+            CircleComponentData(
               name: 'eye',
               paint: ComponentPaint(color: 0xFF0000FF),
             ),
@@ -516,7 +516,7 @@ class $Player extends PositionComponent {
 
     test('uses the color value when the palette color is missing', () {
       final code = generator.generate(
-        const RectangleComponent(
+        const RectangleComponentData(
           name: 'Player',
           paint: ComponentPaint(color: 0xFF00FF00, paletteColor: 'missing'),
         ),
@@ -535,7 +535,7 @@ class $Player extends PositionComponent {
 
       test('loads the sprite of the root in onLoad', () {
         final code = generator.generate(
-          const SpriteComponent(
+          const SpriteComponentData(
             name: 'player',
             size: ComponentSize(width: 10, height: 20),
             sprite: sprite,
@@ -562,9 +562,9 @@ class $Player extends PositionComponent {
 
       test('gives leaf children that load a sprite a class', () {
         final code = generator.generate(
-          const PositionComponent(
+          const PositionComponentData(
             name: 'player',
-            children: [SpriteComponent(name: 'head', sprite: sprite)],
+            children: [SpriteComponentData(name: 'head', sprite: sprite)],
           ),
         );
 
@@ -575,9 +575,9 @@ class $Player extends PositionComponent {
 
       test('leaves sprites without an image as plain components', () {
         final code = generator.generate(
-          const PositionComponent(
+          const PositionComponentData(
             name: 'player',
-            children: [SpriteComponent(name: 'head')],
+            children: [SpriteComponentData(name: 'head')],
           ),
         );
 
@@ -587,7 +587,7 @@ class $Player extends PositionComponent {
 
       test('escapes the image path', () {
         final code = generator.generate(
-          const SpriteComponent(
+          const SpriteComponentData(
             name: 'player',
             sprite: ComponentSprite(image: "assets/it's.png"),
           ),

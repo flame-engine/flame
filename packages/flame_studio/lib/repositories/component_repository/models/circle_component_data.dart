@@ -1,93 +1,92 @@
-part of 'component.dart';
+part of 'component_data.dart';
 
-/// {@template circle_hitbox_component}
-/// A round hitbox with a position, an anchor, an angle, a radius and a
-/// collision.
+/// {@template circle_component_data}
+/// A circle with a position, an anchor, an angle, a radius and a paint.
 /// {@endtemplate}
-final class const CircleHitboxComponent({
+final class const CircleComponentData({
   required super.name,
   @override final ComponentPosition position = const ComponentPosition(),
   @override final ComponentAnchor anchor = ComponentAnchor.topLeft,
   @override final ComponentAngle angle = ComponentAngle.zero,
   @override final ComponentRadius radius = const ComponentRadius(),
-  @override final ComponentCollision collision = const ComponentCollision(),
+  @override final ComponentPaint paint = const ComponentPaint(),
   super.children,
-}) extends Component
+}) extends ComponentData
     implements
         PositionedComponent,
         AnchoredComponent,
         RotatedComponent,
         RadiusComponent,
-        HitboxComponent {
-  /// {@macro circle_hitbox_component}
+        PaintedComponent {
+  /// {@macro circle_component_data}
   this;
 
-  /// Reads the properties of a [CircleHitboxComponent] from its JSON
-  /// representation. Use [Component.fromJson], which also reads the
+  /// Reads the properties of a [CircleComponentData] from its JSON
+  /// representation. Use [ComponentData.fromJson], which also reads the
   /// children.
   factory _fromJson(Map<String, dynamic> json) {
-    return CircleHitboxComponent(
+    return CircleComponentData(
       name: json['name'] as String,
       position: ComponentPosition.fromJson(json['position']),
       anchor: ComponentAnchor.fromJson(json['anchor']),
       angle: ComponentAngle.fromJson(json['angle']),
       radius: ComponentRadius.fromJson(json['radius']),
-      collision: ComponentCollision.fromJson(json['collision']),
+      paint: ComponentPaint.fromJson(json['paint']),
     );
   }
 
   @override
-  ComponentType get type => ComponentType.circleHitbox;
+  ComponentType get type => ComponentType.circle;
 
   @override
-  CircleHitboxComponent copyWithPosition(ComponentPosition position) {
+  CircleComponentData copyWithPosition(ComponentPosition position) {
     return _copyWith(position: position);
   }
 
   @override
-  CircleHitboxComponent copyWithAnchor(ComponentAnchor anchor) {
+  CircleComponentData copyWithAnchor(ComponentAnchor anchor) {
     return _copyWith(anchor: anchor);
   }
 
   @override
-  CircleHitboxComponent copyWithAngle(ComponentAngle angle) {
+  CircleComponentData copyWithAngle(ComponentAngle angle) {
     return _copyWith(angle: angle);
   }
 
   @override
-  CircleHitboxComponent copyWithRadius(ComponentRadius radius) {
+  CircleComponentData copyWithRadius(ComponentRadius radius) {
     return _copyWith(radius: radius);
   }
 
   @override
-  CircleHitboxComponent copyWithCollision(ComponentCollision collision) {
-    return _copyWith(collision: collision);
+  CircleComponentData copyWithPaint(ComponentPaint paint) {
+    return _copyWith(paint: paint);
   }
 
   @override
-  CircleHitboxComponent copyWithName(String name) => _copyWith(name: name);
+  CircleComponentData copyWithName(String name) => _copyWith(name: name);
 
   @override
-  CircleHitboxComponent copyWithChildren(List<Component> children) {
+  CircleComponentData copyWithChildren(List<ComponentData> children) {
     return _copyWith(children: children);
   }
 
-  CircleHitboxComponent _copyWith({
+  CircleComponentData _copyWith({
     String? name,
     ComponentPosition? position,
     ComponentAnchor? anchor,
     ComponentAngle? angle,
     ComponentRadius? radius,
-    ComponentCollision? collision,
-    List<Component>? children,
+    ComponentPaint? paint,
+    List<ComponentData>? children,
   }) {
-    return CircleHitboxComponent(
+    return CircleComponentData(
       name: name ?? this.name,
       position: position ?? this.position,
       anchor: anchor ?? this.anchor,
       angle: angle ?? this.angle,
       radius: radius ?? this.radius,
-      collision: collision ?? this.collision,
+      paint: paint ?? this.paint,
       children: children ?? this.children,
     );
   }
@@ -99,7 +98,7 @@ final class const CircleHitboxComponent({
     'anchor': anchor.toJson(),
     'angle': angle.toJson(),
     'radius': radius.toJson(),
-    'collision': collision.toJson(),
+    'paint': paint.toJson(),
   };
 
   @override
@@ -109,6 +108,6 @@ final class const CircleHitboxComponent({
     anchor,
     angle,
     radius,
-    collision,
+    paint,
   ];
 }

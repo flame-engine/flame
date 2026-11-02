@@ -2,35 +2,38 @@ import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group(SpriteComponent, () {
+  group(SpriteComponentData, () {
     const sprite = ComponentSprite(
       image: 'assets/images/player.png',
       srcPosition: ComponentPosition(x: 16),
       srcSize: ComponentSize(width: 8, height: 4),
     );
-    const component = SpriteComponent(
+    const component = SpriteComponentData(
       name: 'Player',
       position: ComponentPosition(x: 1, y: 2),
       anchor: ComponentAnchor.center,
       angle: ComponentAngle(radians: 1.5),
       size: ComponentSize(width: 10, height: 20),
       sprite: sprite,
-      children: [RectangleComponent(name: 'rectangle1')],
+      children: [RectangleComponentData(name: 'rectangle1')],
     );
 
-    test('is created by Component.create', () {
+    test('is created by ComponentData.create', () {
       expect(
-        Component.create('Player', ComponentType.sprite),
-        equals(const SpriteComponent(name: 'Player')),
+        ComponentData.create('Player', ComponentType.sprite),
+        equals(const SpriteComponentData(name: 'Player')),
       );
     });
 
     test('supports value equality', () {
       expect(
-        const SpriteComponent(name: 'Player'),
-        equals(const SpriteComponent(name: 'Player')),
+        const SpriteComponentData(name: 'Player'),
+        equals(const SpriteComponentData(name: 'Player')),
       );
-      expect(component, isNot(equals(const SpriteComponent(name: 'Player'))));
+      expect(
+        component,
+        isNot(equals(const SpriteComponentData(name: 'Player'))),
+      );
     });
 
     test('is a sprite with the position component properties', () {
@@ -45,7 +48,7 @@ void main() {
     });
 
     test('round-trips through JSON', () {
-      expect(Component.fromJson(component.toJson()), equals(component));
+      expect(ComponentData.fromJson(component.toJson()), equals(component));
     });
 
     test('copyWith methods replace one property', () {
@@ -69,12 +72,12 @@ void main() {
     });
 
     test('its tree lists the images it uses', () {
-      const tree = PositionComponent(
+      const tree = PositionComponentData(
         name: 'root',
         children: [
-          SpriteComponent(name: 'a', sprite: sprite),
-          SpriteComponent(name: 'b', sprite: sprite),
-          SpriteComponent(name: 'c'),
+          SpriteComponentData(name: 'a', sprite: sprite),
+          SpriteComponentData(name: 'b', sprite: sprite),
+          SpriteComponentData(name: 'c'),
         ],
       );
       expect(tree.usedImages, equals({'assets/images/player.png'}));

@@ -1,12 +1,12 @@
-part of 'component.dart';
+part of 'component_data.dart';
 
-/// {@template sprite_component}
+/// {@template sprite_component_data}
 /// A sprite with a position, an anchor, an angle and a size.
 ///
 /// The size is the one the sprite is drawn with, whatever the size of its
 /// region of the image is.
 /// {@endtemplate}
-final class const SpriteComponent({
+final class const SpriteComponentData({
   required super.name,
   @override final ComponentPosition position = const ComponentPosition(),
   @override final ComponentAnchor anchor = ComponentAnchor.topLeft,
@@ -14,21 +14,21 @@ final class const SpriteComponent({
   @override final ComponentSize size = const ComponentSize(),
   @override final ComponentSprite sprite = const ComponentSprite(),
   super.children,
-}) extends Component
+}) extends ComponentData
     implements
         PositionedComponent,
         AnchoredComponent,
         RotatedComponent,
         SizedComponent,
         SpriteBackedComponent {
-  /// {@macro sprite_component}
+  /// {@macro sprite_component_data}
   this;
 
-  /// Reads the properties of a [SpriteComponent] from its JSON
-  /// representation. Use [Component.fromJson], which also reads the
+  /// Reads the properties of a [SpriteComponentData] from its JSON
+  /// representation. Use [ComponentData.fromJson], which also reads the
   /// children.
   factory _fromJson(Map<String, dynamic> json) {
-    return SpriteComponent(
+    return SpriteComponentData(
       name: json['name'] as String,
       position: ComponentPosition.fromJson(json['position']),
       anchor: ComponentAnchor.fromJson(json['anchor']),
@@ -42,48 +42,48 @@ final class const SpriteComponent({
   ComponentType get type => ComponentType.sprite;
 
   @override
-  SpriteComponent copyWithPosition(ComponentPosition position) {
+  SpriteComponentData copyWithPosition(ComponentPosition position) {
     return _copyWith(position: position);
   }
 
   @override
-  SpriteComponent copyWithAnchor(ComponentAnchor anchor) {
+  SpriteComponentData copyWithAnchor(ComponentAnchor anchor) {
     return _copyWith(anchor: anchor);
   }
 
   @override
-  SpriteComponent copyWithAngle(ComponentAngle angle) {
+  SpriteComponentData copyWithAngle(ComponentAngle angle) {
     return _copyWith(angle: angle);
   }
 
   @override
-  SpriteComponent copyWithSize(ComponentSize size) {
+  SpriteComponentData copyWithSize(ComponentSize size) {
     return _copyWith(size: size);
   }
 
   @override
-  SpriteComponent copyWithSprite(ComponentSprite sprite) {
+  SpriteComponentData copyWithSprite(ComponentSprite sprite) {
     return _copyWith(sprite: sprite);
   }
 
   @override
-  SpriteComponent copyWithName(String name) => _copyWith(name: name);
+  SpriteComponentData copyWithName(String name) => _copyWith(name: name);
 
   @override
-  SpriteComponent copyWithChildren(List<Component> children) {
+  SpriteComponentData copyWithChildren(List<ComponentData> children) {
     return _copyWith(children: children);
   }
 
-  SpriteComponent _copyWith({
+  SpriteComponentData _copyWith({
     String? name,
     ComponentPosition? position,
     ComponentAnchor? anchor,
     ComponentAngle? angle,
     ComponentSize? size,
     ComponentSprite? sprite,
-    List<Component>? children,
+    List<ComponentData>? children,
   }) {
-    return SpriteComponent(
+    return SpriteComponentData(
       name: name ?? this.name,
       position: position ?? this.position,
       anchor: anchor ?? this.anchor,

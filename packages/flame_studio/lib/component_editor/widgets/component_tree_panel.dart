@@ -19,7 +19,7 @@ class const ComponentTreePanel({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (component, selectedPath) = context
-        .select<ComponentEditorBloc, (Component, List<int>)>(
+        .select<ComponentEditorBloc, (ComponentData, List<int>)>(
           (bloc) => (bloc.state.component, bloc.state.selectedPath),
         );
     final bloc = context.read<ComponentEditorBloc>();
@@ -118,8 +118,8 @@ class const ComponentTreePanel({super.key}) extends StatelessWidget {
     };
   }
 
-  static Iterable<(List<int>, Component)> _flatten(
-    Component node,
+  static Iterable<(List<int>, ComponentData)> _flatten(
+    ComponentData node,
     List<int> path,
   ) sync* {
     yield (path, node);

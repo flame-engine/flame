@@ -25,7 +25,7 @@ class const PropertiesPanel({
   @override
   Widget build(BuildContext context) {
     final (component, selectedPath, palette) = context
-        .select<ComponentEditorBloc, (Component, List<int>, Palette)>(
+        .select<ComponentEditorBloc, (ComponentData, List<int>, Palette)>(
           (bloc) => (
             bloc.state.selectedNode,
             bloc.state.selectedPath,

@@ -16,7 +16,7 @@ void main() {
     registerFallbackValue(Paint());
   });
 
-  const component = RectangleComponent(
+  const component = RectangleComponentData(
     name: 'Player',
     size: ComponentSize(width: 10, height: 20),
     paint: ComponentPaint(color: 0xFFFF0000, style: PaintStyle.stroke),
@@ -24,7 +24,7 @@ void main() {
 
   group(ComponentPreviewGame, () {
     group('sprites', () {
-      const sprite = SpriteComponent(
+      const sprite = SpriteComponentData(
         name: 'Player',
         size: ComponentSize(width: 10, height: 20),
         sprite: ComponentSprite(
@@ -57,7 +57,7 @@ void main() {
       testWithGame(
         'are built with the images the game already has',
         () => ComponentPreviewGame(
-          component: const RectangleComponent(name: 'a'),
+          component: const RectangleComponentData(name: 'a'),
         ),
         (game) async {
           await game.ready();
@@ -116,11 +116,11 @@ void main() {
     testWithGame(
       'renders position components with a preview-only outline',
       () => ComponentPreviewGame(
-        component: const PositionComponent(
+        component: const PositionComponentData(
           name: 'Player',
           size: ComponentSize(width: 10, height: 20),
           children: [
-            PositionComponent(
+            PositionComponentData(
               name: 'position1',
               position: ComponentPosition(x: 5, y: 6),
               size: ComponentSize(width: 1, height: 2),
@@ -144,12 +144,12 @@ void main() {
     testWithGame(
       'renders circles with their radius and paint',
       () => ComponentPreviewGame(
-        component: const CircleComponent(
+        component: const CircleComponentData(
           name: 'Player',
           radius: ComponentRadius(radius: 10),
           paint: ComponentPaint(color: 0xFF00FF00),
           children: [
-            CircleComponent(
+            CircleComponentData(
               name: 'circle1',
               position: ComponentPosition(x: 5, y: 6),
               radius: ComponentRadius(radius: 2),
@@ -169,10 +169,10 @@ void main() {
         expect(child.radius, equals(2));
 
         game.show(
-          const CircleComponent(
+          const CircleComponentData(
             name: 'Player',
             radius: ComponentRadius(radius: 15),
-            children: [CircleComponent(name: 'circle1')],
+            children: [CircleComponentData(name: 'circle1')],
           ),
           highlightedPath: [0],
         );
@@ -184,10 +184,10 @@ void main() {
     );
 
     group('hitboxes', () {
-      const hitboxes = PositionComponent(
+      const hitboxes = PositionComponentData(
         name: 'Player',
         children: [
-          RectangleHitboxComponent(
+          RectangleHitboxData(
             name: 'rectangleHitbox1',
             position: ComponentPosition(x: 1, y: 2),
             size: ComponentSize(width: 10, height: 20),
@@ -196,11 +196,11 @@ void main() {
               isSolid: true,
             ),
           ),
-          CircleHitboxComponent(
+          CircleHitboxData(
             name: 'circleHitbox1',
             radius: ComponentRadius(radius: 5),
           ),
-          PolygonHitboxComponent(
+          PolygonHitboxData(
             name: 'polygonHitbox1',
             vertices: ComponentVertices(ComponentVertices.square),
           ),
@@ -282,7 +282,7 @@ void main() {
     });
 
     group('with children', () {
-      const child = RectangleComponent(
+      const child = RectangleComponentData(
         name: 'rectangle1',
         position: ComponentPosition(x: 5, y: 6),
         size: ComponentSize(width: 1, height: 2),
@@ -380,10 +380,10 @@ void main() {
     testWithGame(
       'renders polygons with their vertices',
       () => ComponentPreviewGame(
-        component: const PolygonComponent(
+        component: const PolygonComponentData(
           name: 'Player',
           children: [
-            PolygonComponent(
+            PolygonComponentData(
               name: 'polygon1',
               vertices: ComponentVertices(ComponentVertices.square),
             ),
@@ -406,14 +406,14 @@ void main() {
     testWithGame(
       'rebuilds polygons whose vertices changed',
       () => ComponentPreviewGame(
-        component: const PolygonComponent(name: 'Player'),
+        component: const PolygonComponentData(name: 'Player'),
       ),
       (game) async {
         await game.ready();
         final preview = game.preview;
 
         game.show(
-          const PolygonComponent(
+          const PolygonComponentData(
             name: 'Player',
             vertices: ComponentVertices(ComponentVertices.square),
           ),
@@ -426,7 +426,7 @@ void main() {
     );
 
     group('highlight', () {
-      const child = RectangleComponent(name: 'rectangle1');
+      const child = RectangleComponentData(name: 'rectangle1');
       final tree = component.copyWithChildren(const [child]);
 
       testWithGame(
@@ -526,7 +526,7 @@ void main() {
     });
 
     test('haveSameShape compares the types and the tree', () {
-      const child = RectangleComponent(name: 'rectangle1');
+      const child = RectangleComponentData(name: 'rectangle1');
 
       expect(
         haveSameShape(
@@ -539,7 +539,7 @@ void main() {
         haveSameShape(component, component.copyWithChildren(const [child])),
         isFalse,
       );
-      const polygon = PolygonComponent(name: 'Player');
+      const polygon = PolygonComponentData(name: 'Player');
       expect(
         haveSameShape(
           polygon,

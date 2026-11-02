@@ -2,39 +2,41 @@ import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group(RectangleComponent, () {
-    const component = RectangleComponent(
+  group(PolygonComponentData, () {
+    const component = PolygonComponentData(
       name: 'Player',
       position: ComponentPosition(x: 1, y: 2),
       anchor: ComponentAnchor.center,
       angle: ComponentAngle(radians: 1.5),
-      size: ComponentSize(width: 10, height: 20),
+      vertices: ComponentVertices(ComponentVertices.square),
       paint: ComponentPaint(color: 0xFF00FF00, style: PaintStyle.stroke),
-      children: [RectangleComponent(name: 'rectangle1')],
+      children: [RectangleComponentData(name: 'rectangle1')],
     );
 
     test('supports value equality', () {
       expect(
-        const RectangleComponent(name: 'Player'),
-        equals(const RectangleComponent(name: 'Player')),
+        const PolygonComponentData(name: 'Player'),
+        equals(const PolygonComponentData(name: 'Player')),
       );
       expect(
         component,
-        isNot(equals(const RectangleComponent(name: 'Player'))),
+        isNot(equals(const PolygonComponentData(name: 'Player'))),
       );
     });
 
-    test('is a rectangle with a position, a size and a paint', () {
-      expect(component.type, equals(ComponentType.rectangle));
+    test('is a polygon with a position, vertices and a paint', () {
+      expect(component.type, equals(ComponentType.polygon));
       expect(component, isA<PositionedComponent>());
       expect(component, isA<AnchoredComponent>());
       expect(component, isA<RotatedComponent>());
-      expect(component, isA<SizedComponent>());
+      expect(component, isA<VerticesComponent>());
+      expect(component, isNot(isA<RadiusComponent>()));
+      expect(component, isNot(isA<SizedComponent>()));
       expect(component, isA<PaintedComponent>());
     });
 
     test('round-trips through JSON', () {
-      expect(Component.fromJson(component.toJson()), equals(component));
+      expect(ComponentData.fromJson(component.toJson()), equals(component));
     });
 
     test('toJson includes the type, properties and children', () {
@@ -42,7 +44,7 @@ void main() {
         component.toJson(),
         equals({
           'name': 'Player',
-          'type': 'rectangle',
+          'type': 'polygon',
           'children': [
             {
               'name': 'rectangle1',
@@ -58,7 +60,14 @@ void main() {
           'position': {'x': 1.0, 'y': 2.0},
           'anchor': {'x': 0.5, 'y': 0.5},
           'angle': {'radians': 1.5},
-          'size': {'width': 10.0, 'height': 20.0},
+          'vertices': {
+            'vertices': [
+              {'x': 0.0, 'y': 0.0},
+              {'x': 50.0, 'y': 0.0},
+              {'x': 50.0, 'y': 50.0},
+              {'x': 0.0, 'y': 50.0},
+            ],
+          },
           'paint': {'color': 0xFF00FF00, 'style': 'stroke'},
         }),
       );
@@ -91,7 +100,7 @@ void main() {
       final json = component.toJson()..remove('anchor');
 
       expect(
-        (Component.fromJson(json) as AnchoredComponent).anchor,
+        (ComponentData.fromJson(json) as AnchoredComponent).anchor,
         equals(ComponentAnchor.topLeft),
       );
     });
@@ -111,19 +120,19 @@ void main() {
       final json = component.toJson()..remove('angle');
 
       expect(
-        (Component.fromJson(json) as RotatedComponent).angle,
+        (ComponentData.fromJson(json) as RotatedComponent).angle,
         equals(ComponentAngle.zero),
       );
     });
 
-    test('copyWithSize replaces only the size', () {
-      const size = ComponentSize(width: 1, height: 2);
-      final copy = component.copyWithSize(size);
+    test('copyWithVertices replaces only the vertices', () {
+      const vertices = ComponentVertices();
+      final copy = component.copyWithVertices(vertices);
 
-      expect(copy.size, equals(size));
+      expect(copy.vertices, equals(vertices));
       expect(
-        copy.toJson()..remove('size'),
-        equals(component.toJson()..remove('size')),
+        copy.toJson()..remove('vertices'),
+        equals(component.toJson()..remove('vertices')),
       );
     });
 

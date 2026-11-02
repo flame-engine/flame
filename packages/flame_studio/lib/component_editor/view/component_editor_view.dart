@@ -132,11 +132,11 @@ class const ComponentEditorView({
     ];
     final rootFix = switch (rootOwner) {
       null => null,
-      Component(:final name, :final generatedClassName)
+      ComponentData(:final name, :final generatedClassName)
           when generatedClassName == rootClass =>
         '"$name" generates the same class, $rootClass: delete one of the '
             'two components.',
-      Component(:final name) =>
+      ComponentData(:final name) =>
         'A child of "$name" generates $rootClass, the class of this '
             'component: rename that child.',
     };

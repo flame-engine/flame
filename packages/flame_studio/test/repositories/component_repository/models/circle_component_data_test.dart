@@ -2,38 +2,40 @@ import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group(PolygonComponent, () {
-    const component = PolygonComponent(
+  group(CircleComponentData, () {
+    const component = CircleComponentData(
       name: 'Player',
       position: ComponentPosition(x: 1, y: 2),
       anchor: ComponentAnchor.center,
       angle: ComponentAngle(radians: 1.5),
-      vertices: ComponentVertices(ComponentVertices.square),
+      radius: ComponentRadius(radius: 10),
       paint: ComponentPaint(color: 0xFF00FF00, style: PaintStyle.stroke),
-      children: [RectangleComponent(name: 'rectangle1')],
+      children: [RectangleComponentData(name: 'rectangle1')],
     );
 
     test('supports value equality', () {
       expect(
-        const PolygonComponent(name: 'Player'),
-        equals(const PolygonComponent(name: 'Player')),
+        const CircleComponentData(name: 'Player'),
+        equals(const CircleComponentData(name: 'Player')),
       );
-      expect(component, isNot(equals(const PolygonComponent(name: 'Player'))));
+      expect(
+        component,
+        isNot(equals(const CircleComponentData(name: 'Player'))),
+      );
     });
 
-    test('is a polygon with a position, vertices and a paint', () {
-      expect(component.type, equals(ComponentType.polygon));
+    test('is a circle with a position, a radius and a paint', () {
+      expect(component.type, equals(ComponentType.circle));
       expect(component, isA<PositionedComponent>());
       expect(component, isA<AnchoredComponent>());
       expect(component, isA<RotatedComponent>());
-      expect(component, isA<VerticesComponent>());
-      expect(component, isNot(isA<RadiusComponent>()));
+      expect(component, isA<RadiusComponent>());
       expect(component, isNot(isA<SizedComponent>()));
       expect(component, isA<PaintedComponent>());
     });
 
     test('round-trips through JSON', () {
-      expect(Component.fromJson(component.toJson()), equals(component));
+      expect(ComponentData.fromJson(component.toJson()), equals(component));
     });
 
     test('toJson includes the type, properties and children', () {
@@ -41,7 +43,7 @@ void main() {
         component.toJson(),
         equals({
           'name': 'Player',
-          'type': 'polygon',
+          'type': 'circle',
           'children': [
             {
               'name': 'rectangle1',
@@ -57,14 +59,7 @@ void main() {
           'position': {'x': 1.0, 'y': 2.0},
           'anchor': {'x': 0.5, 'y': 0.5},
           'angle': {'radians': 1.5},
-          'vertices': {
-            'vertices': [
-              {'x': 0.0, 'y': 0.0},
-              {'x': 50.0, 'y': 0.0},
-              {'x': 50.0, 'y': 50.0},
-              {'x': 0.0, 'y': 50.0},
-            ],
-          },
+          'radius': {'radius': 10.0},
           'paint': {'color': 0xFF00FF00, 'style': 'stroke'},
         }),
       );
@@ -97,7 +92,7 @@ void main() {
       final json = component.toJson()..remove('anchor');
 
       expect(
-        (Component.fromJson(json) as AnchoredComponent).anchor,
+        (ComponentData.fromJson(json) as AnchoredComponent).anchor,
         equals(ComponentAnchor.topLeft),
       );
     });
@@ -117,19 +112,19 @@ void main() {
       final json = component.toJson()..remove('angle');
 
       expect(
-        (Component.fromJson(json) as RotatedComponent).angle,
+        (ComponentData.fromJson(json) as RotatedComponent).angle,
         equals(ComponentAngle.zero),
       );
     });
 
-    test('copyWithVertices replaces only the vertices', () {
-      const vertices = ComponentVertices();
-      final copy = component.copyWithVertices(vertices);
+    test('copyWithRadius replaces only the radius', () {
+      const radius = ComponentRadius(radius: 3);
+      final copy = component.copyWithRadius(radius);
 
-      expect(copy.vertices, equals(vertices));
+      expect(copy.radius, equals(radius));
       expect(
-        copy.toJson()..remove('vertices'),
-        equals(component.toJson()..remove('vertices')),
+        copy.toJson()..remove('radius'),
+        equals(component.toJson()..remove('radius')),
       );
     });
 

@@ -1,30 +1,30 @@
-part of 'component.dart';
+part of 'component_data.dart';
 
-/// {@template position_component}
+/// {@template position_component_data}
 /// A plain component with a position, an anchor and a size, that draws
 /// nothing itself: a container for its children.
 /// {@endtemplate}
-final class const PositionComponent({
+final class const PositionComponentData({
   required super.name,
   @override final ComponentPosition position = const ComponentPosition(),
   @override final ComponentAnchor anchor = ComponentAnchor.topLeft,
   @override final ComponentAngle angle = ComponentAngle.zero,
   @override final ComponentSize size = const ComponentSize(),
   super.children,
-}) extends Component
+}) extends ComponentData
     implements
         PositionedComponent,
         AnchoredComponent,
         RotatedComponent,
         SizedComponent {
-  /// {@macro position_component}
+  /// {@macro position_component_data}
   this;
 
-  /// Reads the properties of a [PositionComponent] from its JSON
-  /// representation. Use [Component.fromJson], which also reads the
+  /// Reads the properties of a [PositionComponentData] from its JSON
+  /// representation. Use [ComponentData.fromJson], which also reads the
   /// children.
   factory _fromJson(Map<String, dynamic> json) {
-    return PositionComponent(
+    return PositionComponentData(
       name: json['name'] as String,
       position: ComponentPosition.fromJson(json['position']),
       anchor: ComponentAnchor.fromJson(json['anchor']),
@@ -37,42 +37,42 @@ final class const PositionComponent({
   ComponentType get type => ComponentType.position;
 
   @override
-  PositionComponent copyWithPosition(ComponentPosition position) {
+  PositionComponentData copyWithPosition(ComponentPosition position) {
     return _copyWith(position: position);
   }
 
   @override
-  PositionComponent copyWithAnchor(ComponentAnchor anchor) {
+  PositionComponentData copyWithAnchor(ComponentAnchor anchor) {
     return _copyWith(anchor: anchor);
   }
 
   @override
-  PositionComponent copyWithAngle(ComponentAngle angle) {
+  PositionComponentData copyWithAngle(ComponentAngle angle) {
     return _copyWith(angle: angle);
   }
 
   @override
-  PositionComponent copyWithSize(ComponentSize size) {
+  PositionComponentData copyWithSize(ComponentSize size) {
     return _copyWith(size: size);
   }
 
   @override
-  PositionComponent copyWithName(String name) => _copyWith(name: name);
+  PositionComponentData copyWithName(String name) => _copyWith(name: name);
 
   @override
-  PositionComponent copyWithChildren(List<Component> children) {
+  PositionComponentData copyWithChildren(List<ComponentData> children) {
     return _copyWith(children: children);
   }
 
-  PositionComponent _copyWith({
+  PositionComponentData _copyWith({
     String? name,
     ComponentPosition? position,
     ComponentAnchor? anchor,
     ComponentAngle? angle,
     ComponentSize? size,
-    List<Component>? children,
+    List<ComponentData>? children,
   }) {
-    return PositionComponent(
+    return PositionComponentData(
       name: name ?? this.name,
       position: position ?? this.position,
       anchor: anchor ?? this.anchor,
