@@ -29,6 +29,24 @@ void main() {
         'anchor': 'center',
       });
     });
+
+    test('reports the text of a text component', () {
+      final component = TextComponent(text: 'Hello', priority: 2);
+
+      expect(componentAttributes(component), {
+        'priority': 2,
+        'position': [0.0, 0.0],
+        'size': [component.width, component.height],
+        'angle': 0.0,
+        'scale': [1.0, 1.0],
+        'anchor': 'topLeft',
+        'text': 'Hello',
+      });
+    });
+
+    test('reports an empty text', () {
+      expect(componentAttributes(TextComponent())['text'], '');
+    });
   });
 
   group('ComponentTreeNode', () {
@@ -44,7 +62,22 @@ void main() {
 
       expect(playerNode.id, player.hashCode);
       expect(playerNode.attributes['position'], [5.0, 6.0]);
+      expect(playerNode.isTextComponent, isFalse);
+      expect(playerNode.attributes, isNot(contains('text')));
       expect(worldNode.attributes, {'priority': game.world.priority});
+    });
+
+    testWithFlameGame('marks a text component', (game) async {
+      final label = TextComponent(text: 'Score');
+      await game.world.ensureAdd(label);
+
+      final node = ComponentTreeNode.fromComponent(game);
+      final worldNode = node.children.singleWhere((c) => c.name == 'World');
+      final labelNode = worldNode.children.single;
+
+      expect(labelNode.isTextComponent, isTrue);
+      expect(labelNode.attributes['text'], 'Score');
+      expect(worldNode.isTextComponent, isFalse);
     });
 
     test('survives a round trip through JSON', () {
@@ -57,12 +90,15 @@ void main() {
         attributes: {
           'priority': 1,
           'position': [1.0, 2.0],
+          'text': '',
         },
+        isTextComponent: true,
       );
 
       final decoded = ComponentTreeNode.fromJson(node.toJson());
 
       expect(decoded.toJson(), node.toJson());
+      expect(decoded.isTextComponent, isTrue);
     });
 
     test('reads JSON without attributes', () {
@@ -75,6 +111,7 @@ void main() {
       });
 
       expect(decoded.attributes, isEmpty);
+      expect(decoded.isTextComponent, isFalse);
     });
   });
 }

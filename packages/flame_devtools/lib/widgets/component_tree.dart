@@ -7,6 +7,7 @@ import 'package:flame_devtools/widgets/component_snapshot.dart';
 import 'package:flame_devtools/widgets/component_tree_model.dart';
 import 'package:flame_devtools/widgets/debug_mode_button.dart';
 import 'package:flame_devtools/widgets/position_component_attributes_form.dart';
+import 'package:flame_devtools/widgets/text_component_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -156,6 +157,8 @@ class const ComponentSection({super.key}) extends ConsumerWidget {
                                 componentId: node.id,
                               ),
                             ),
+                          if (node.isTextComponent)
+                            TextComponentForm(componentId: node.id),
                           BehaviorTreeSection(
                             id: node.id,
                             fetch: (id) => Repository.getBehaviorTree(id: id),
