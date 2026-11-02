@@ -1,5 +1,5 @@
-import 'package:flame/collisions.dart' as flame;
-import 'package:flame/components.dart' as flame;
+import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
 import 'package:flame_studio/component_editor/widgets/widgets.dart';
 import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flame_test/flame_test.dart';
@@ -42,15 +42,15 @@ void main() {
 
           final preview = game.preview as PreviewSpriteComponent;
           expect(preview.sprite, isNull);
-          expect(preview.size, equals(flame.Vector2(10, 20)));
+          expect(preview.size, equals(Vector2(10, 20)));
 
           final image = await generateImage(8, 8);
           game.spriteImages = {'a.png': image};
 
           expect(preview.sprite?.image, equals(image));
-          expect(preview.sprite?.srcPosition, equals(flame.Vector2(2, 3)));
-          expect(preview.sprite?.srcSize, equals(flame.Vector2(4, 5)));
-          expect(preview.size, equals(flame.Vector2(10, 20)));
+          expect(preview.sprite?.srcPosition, equals(Vector2(2, 3)));
+          expect(preview.sprite?.srcSize, equals(Vector2(4, 5)));
+          expect(preview.size, equals(Vector2(10, 20)));
         },
       );
 
@@ -74,7 +74,7 @@ void main() {
       test('outline themselves without a sprite', () {
         final canvas = _MockCanvas();
         PreviewSpriteComponent()
-          ..size = flame.Vector2.all(10)
+          ..size = Vector2.all(10)
           ..render(canvas);
 
         verify(() => canvas.drawLine(any(), any(), any()))
@@ -88,10 +88,10 @@ void main() {
       (game) async {
         await game.ready();
 
-        final preview = game.preview as flame.RectangleComponent;
+        final preview = game.preview as RectangleComponent;
         expect(game.world.children, contains(preview));
-        expect(preview.anchor, equals(flame.Anchor.center));
-        expect(preview.size, equals(flame.Vector2(10, 20)));
+        expect(preview.anchor, equals(Anchor.center));
+        expect(preview.size, equals(Vector2(10, 20)));
         expect(preview.paint.color, equals(const Color(0xFFFF0000)));
         expect(preview.paint.style, equals(PaintingStyle.stroke));
       },
@@ -109,7 +109,7 @@ void main() {
         );
 
         expect(game.preview, same(preview));
-        expect(preview.size, equals(flame.Vector2(30, 40)));
+        expect(preview.size, equals(Vector2(30, 40)));
       },
     );
 
@@ -133,11 +133,11 @@ void main() {
 
         final preview = game.preview;
         expect(preview, isA<PreviewPositionComponent>());
-        expect(preview.size, equals(flame.Vector2(10, 20)));
-        final child = preview.children.single as flame.PositionComponent;
+        expect(preview.size, equals(Vector2(10, 20)));
+        final child = preview.children.single as PositionComponent;
         expect(child, isA<PreviewPositionComponent>());
-        expect(child.position, equals(flame.Vector2(5, 6)));
-        expect(child.size, equals(flame.Vector2(1, 2)));
+        expect(child.position, equals(Vector2(5, 6)));
+        expect(child.size, equals(Vector2(1, 2)));
       },
     );
 
@@ -160,12 +160,12 @@ void main() {
       (game) async {
         await game.ready();
 
-        final preview = game.preview as flame.CircleComponent;
+        final preview = game.preview as CircleComponent;
         expect(preview.radius, equals(10));
-        expect(preview.size, equals(flame.Vector2(20, 20)));
+        expect(preview.size, equals(Vector2(20, 20)));
         expect(preview.paint.color, equals(const Color(0xFF00FF00)));
-        final child = preview.children.single as flame.CircleComponent;
-        expect(child.position, equals(flame.Vector2(5, 6)));
+        final child = preview.children.single as CircleComponent;
+        expect(child.position, equals(Vector2(5, 6)));
         expect(child.radius, equals(2));
 
         game.show(
@@ -217,14 +217,14 @@ void main() {
           expect(rectangle, isA<PreviewRectangleHitbox>());
           rectangle as PreviewRectangleHitbox;
           // Keeps its own size rather than filling its parent.
-          expect(rectangle.size, equals(flame.Vector2(10, 20)));
-          expect(rectangle.position, equals(flame.Vector2(1, 2)));
-          expect(rectangle.collisionType, equals(flame.CollisionType.passive));
+          expect(rectangle.size, equals(Vector2(10, 20)));
+          expect(rectangle.position, equals(Vector2(1, 2)));
+          expect(rectangle.collisionType, equals(CollisionType.passive));
           expect(rectangle.isSolid, isTrue);
           expect(circle, isA<PreviewCircleHitbox>());
           // Keeps its own radius rather than filling its parent.
           expect((circle as PreviewCircleHitbox).radius, equals(5));
-          expect(circle.collisionType, equals(flame.CollisionType.active));
+          expect(circle.collisionType, equals(CollisionType.active));
           expect(polygon, isA<PreviewPolygonHitbox>());
           for (final hitbox in [rectangle, circle, polygon]) {
             expect((hitbox as PreviewHitbox).isVisible, isTrue);
@@ -296,12 +296,12 @@ void main() {
           await game.ready();
 
           final children = game.preview.children
-              .whereType<flame.RectangleComponent>()
+              .whereType<RectangleComponent>()
               .toList();
           expect(children, hasLength(1));
-          expect(children.single.anchor, equals(flame.Anchor.topLeft));
-          expect(children.single.position, equals(flame.Vector2(5, 6)));
-          expect(children.single.size, equals(flame.Vector2(1, 2)));
+          expect(children.single.anchor, equals(Anchor.topLeft));
+          expect(children.single.position, equals(Vector2(5, 6)));
+          expect(children.single.size, equals(Vector2(1, 2)));
         },
       );
 
@@ -316,9 +316,9 @@ void main() {
           await game.ready();
 
           final rendered = game.preview.children
-              .whereType<flame.PositionComponent>()
+              .whereType<PositionComponent>()
               .single;
-          expect(rendered.anchor, equals(const flame.Anchor(0.25, 1)));
+          expect(rendered.anchor, equals(const Anchor(0.25, 1)));
         },
       );
 
@@ -333,7 +333,7 @@ void main() {
           await game.ready();
 
           final rendered = game.preview.children
-              .whereType<flame.PositionComponent>()
+              .whereType<PositionComponent>()
               .single;
           expect(rendered.angle, equals(1));
         },
@@ -354,9 +354,9 @@ void main() {
 
           expect(game.preview, same(preview));
           final rendered = preview.children
-              .whereType<flame.PositionComponent>()
+              .whereType<PositionComponent>()
               .single;
-          expect(rendered.position, equals(flame.Vector2(-3, 0)));
+          expect(rendered.position, equals(Vector2(-3, 0)));
         },
       );
 
@@ -394,10 +394,10 @@ void main() {
       (game) async {
         await game.ready();
 
-        final preview = game.preview as flame.PolygonComponent;
+        final preview = game.preview as PolygonComponent;
         expect(preview.vertices, hasLength(3));
-        expect(preview.size, equals(flame.Vector2(50, 50)));
-        final child = flameNodeAt(preview, [0]) as flame.PolygonComponent;
+        expect(preview.size, equals(Vector2(50, 50)));
+        final child = flameNodeAt(preview, [0]) as PolygonComponent;
         expect(child.vertices, hasLength(4));
         expect(game.highlight.target, same(child));
       },
@@ -421,7 +421,7 @@ void main() {
         await game.ready();
 
         expect(game.preview, isNot(same(preview)));
-        expect((game.preview as flame.PolygonComponent).vertices, hasLength(4));
+        expect((game.preview as PolygonComponent).vertices, hasLength(4));
       },
     );
 
@@ -474,7 +474,7 @@ void main() {
           await game.ready();
 
           final rendered = game.preview.children
-              .whereType<flame.PositionComponent>()
+              .whereType<PositionComponent>()
               .single;
           expect(game.highlight.target, same(rendered));
         },
@@ -569,14 +569,14 @@ void main() {
       ),
       (game) async {
         await game.ready();
-        expect(game.preview.position, equals(flame.Vector2.zero()));
-        expect(game.preview.anchor, equals(flame.Anchor.center));
+        expect(game.preview.position, equals(Vector2.zero()));
+        expect(game.preview.anchor, equals(Anchor.center));
         expect(game.preview.angle, equals(0));
 
         game.show(
           component.copyWithPosition(const ComponentPosition(x: 7, y: 8)),
         );
-        expect(game.preview.position, equals(flame.Vector2.zero()));
+        expect(game.preview.position, equals(Vector2.zero()));
       },
     );
 
@@ -668,11 +668,8 @@ void main() {
     test('polygon hitboxes draw a dashed outline along their vertices', () {
       final canvas = _MockCanvas();
       // Edges of 4, 4 and about 5.7 hold one 4px dash each.
-      PreviewPolygonHitbox([
-        flame.Vector2.zero(),
-        flame.Vector2(4, 0),
-        flame.Vector2(0, 4),
-      ]).render(canvas);
+      PreviewPolygonHitbox([Vector2.zero(), Vector2(4, 0), Vector2(0, 4)])
+          .render(canvas);
 
       verify(() => canvas.drawLine(any(), any(), PreviewHitbox.paint))
           .called(3);
@@ -681,7 +678,7 @@ void main() {
 
   group('applyPaint', () {
     test('maps the fill style', () {
-      final target = flame.RectangleComponent();
+      final target = RectangleComponent();
 
       applyPaint(target, const ComponentPaint(color: 0xFF00FF00));
 

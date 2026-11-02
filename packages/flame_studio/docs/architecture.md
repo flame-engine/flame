@@ -320,9 +320,7 @@ the border keeps the same width on screen.
 Domain models avoid `dart:ui`: colors are ARGB `int`s and `PaintStyle` mirrors
 `PaintingStyle`. Conversion to Flame/Flutter types happens only in
 `flame_mapping.dart`. Domain models have a `Data` suffix, so they don't clash
-with Flame's classes, but still import Flame with a prefix
-(`import 'package:flame/components.dart' as flame;`) to make it clear what is
-a Flame type.
+with Flame's classes and Flame is imported without a prefix.
 
 The preview `GameWidget` is created with `autofocus: false`: a focused
 `GameWidget` marks every key event as handled, which would swallow the editor

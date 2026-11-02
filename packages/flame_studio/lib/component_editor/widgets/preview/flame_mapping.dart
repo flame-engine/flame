@@ -1,7 +1,7 @@
 import 'dart:ui' as ui;
 
-import 'package:flame/collisions.dart' as flame;
-import 'package:flame/components.dart' as flame;
+import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
 import 'package:flame_studio/component_editor/widgets/preview/preview_hitboxes.dart';
 import 'package:flame_studio/component_editor/widgets/preview/preview_position_component.dart';
 import 'package:flame_studio/component_editor/widgets/preview/preview_sprite_component.dart';
@@ -19,29 +19,29 @@ import 'package:flutter/painting.dart';
 /// the generated code.
 ///
 /// Sprites draw the [images] of their image, by asset path.
-flame.PositionComponent buildFlameComponent(
+PositionComponent buildFlameComponent(
   ComponentData component, {
   Map<String, ui.Image> images = const {},
 }) {
   return _placeRoot(_build(component, images));
 }
 
-flame.PositionComponent _placeRoot(flame.PositionComponent root) {
+PositionComponent _placeRoot(PositionComponent root) {
   root
-    ..anchor = flame.Anchor.center
+    ..anchor = Anchor.center
     ..angle = 0
     ..position.setZero();
   return root;
 }
 
-flame.PositionComponent _build(
+PositionComponent _build(
   ComponentData component,
   Map<String, ui.Image> images,
 ) {
   final target = switch (component) {
-    RectangleComponentData() => flame.RectangleComponent(),
-    CircleComponentData() => flame.CircleComponent(),
-    PolygonComponentData(:final vertices) => flame.PolygonComponent(
+    RectangleComponentData() => RectangleComponent(),
+    CircleComponentData() => CircleComponent(),
+    PolygonComponentData(:final vertices) => PolygonComponent(
       _vectors(vertices),
     ),
     // Flame's SpriteComponent can't be mounted without a sprite.
@@ -64,8 +64,8 @@ flame.PositionComponent _build(
 }
 
 /// A new list of the [vertices], since Flame changes the list it is given.
-List<flame.Vector2> _vectors(ComponentVertices vertices) => [
-  for (final vertex in vertices.vertices) flame.Vector2(vertex.x, vertex.y),
+List<Vector2> _vectors(ComponentVertices vertices) => [
+  for (final vertex in vertices.vertices) Vector2(vertex.x, vertex.y),
 ];
 
 /// Whether [a] and [b] have the same types arranged in the same tree, so
@@ -97,20 +97,20 @@ bool haveSameShape(ComponentData a, ComponentData b) {
 ///
 /// Like in [buildFlameComponent], the root stays centered.
 void applyTree(
-  flame.PositionComponent target,
+  PositionComponent target,
   ComponentData component, {
   Map<String, ui.Image> images = const {},
 }) {
   _placeRoot(_applyNode(target, component, images));
 }
 
-flame.PositionComponent _applyNode(
-  flame.PositionComponent target,
+PositionComponent _applyNode(
+  PositionComponent target,
   ComponentData component,
   Map<String, ui.Image> images,
 ) {
   applyProperties(target, component, images: images);
-  final children = target.children.whereType<flame.PositionComponent>();
+  final children = target.children.whereType<PositionComponent>();
   for (final (index, child) in children.indexed) {
     _applyNode(child, component.children[index], images);
   }
@@ -119,13 +119,10 @@ flame.PositionComponent _applyNode(
 
 /// The Flame component at [path] in the tree built by
 /// [buildFlameComponent] from [root] (see `ComponentTree` for paths).
-flame.PositionComponent flameNodeAt(
-  flame.PositionComponent root,
-  List<int> path,
-) {
+PositionComponent flameNodeAt(PositionComponent root, List<int> path) {
   var node = root;
   for (final index in path) {
-    node = node.children.whereType<flame.PositionComponent>().elementAt(index);
+    node = node.children.whereType<PositionComponent>().elementAt(index);
   }
   return node;
 }
@@ -134,7 +131,7 @@ flame.PositionComponent flameNodeAt(
 ///
 /// New shared properties should be wired here so that every component type
 /// that has them is previewed correctly.
-T applyProperties<T extends flame.PositionComponent>(
+T applyProperties<T extends PositionComponent>(
   T target,
   ComponentData component, {
   Map<String, ui.Image> images = const {},
@@ -152,51 +149,49 @@ T applyProperties<T extends flame.PositionComponent>(
     applySize(target, sized.size);
   }
   if (component case final RadiusComponent round
-      when target is flame.CircleComponent) {
-    applyRadius(target as flame.CircleComponent, round.radius);
+      when target is CircleComponent) {
+    applyRadius(target as CircleComponent, round.radius);
   }
-  if (component case final PaintedComponent painted
-      when target is flame.HasPaint) {
-    applyPaint(target as flame.HasPaint, painted.paint);
+  if (component case final PaintedComponent painted when target is HasPaint) {
+    applyPaint(target as HasPaint, painted.paint);
   }
   if (component case final SpriteBackedComponent spriteBacked
       when target is PreviewSpriteComponent) {
     applySprite(target as PreviewSpriteComponent, spriteBacked.sprite, images);
   }
-  if (component case final HitboxComponent hitbox
-      when target is flame.ShapeHitbox) {
-    applyCollision(target as flame.ShapeHitbox, hitbox.collision);
+  if (component case final HitboxComponent hitbox when target is ShapeHitbox) {
+    applyCollision(target as ShapeHitbox, hitbox.collision);
   }
   return target;
 }
 
 /// Applies [position] to [target].
-void applyPosition(flame.PositionComponent target, ComponentPosition position) {
+void applyPosition(PositionComponent target, ComponentPosition position) {
   target.position.setValues(position.x, position.y);
 }
 
 /// Applies [anchor] to [target].
-void applyAnchor(flame.PositionComponent target, ComponentAnchor anchor) {
-  target.anchor = flame.Anchor(anchor.x, anchor.y);
+void applyAnchor(PositionComponent target, ComponentAnchor anchor) {
+  target.anchor = Anchor(anchor.x, anchor.y);
 }
 
 /// Applies [angle] to [target].
-void applyAngle(flame.PositionComponent target, ComponentAngle angle) {
+void applyAngle(PositionComponent target, ComponentAngle angle) {
   target.angle = angle.radians;
 }
 
 /// Applies [size] to [target].
-void applySize(flame.PositionComponent target, ComponentSize size) {
+void applySize(PositionComponent target, ComponentSize size) {
   target.size.setValues(size.width, size.height);
 }
 
 /// Applies [radius] to [target], which also sets its size.
-void applyRadius(flame.CircleComponent target, ComponentRadius radius) {
+void applyRadius(CircleComponent target, ComponentRadius radius) {
   target.radius = radius.radius;
 }
 
 /// Applies [paint] to [target].
-void applyPaint(flame.HasPaint target, ComponentPaint paint) {
+void applyPaint(HasPaint target, ComponentPaint paint) {
   target.paint
     ..color = Color(paint.color)
     ..style = switch (paint.style) {
@@ -215,23 +210,20 @@ void applySprite(
   final image = images[sprite.image];
   target.sprite = image == null
       ? null
-      : flame.Sprite(
+      : Sprite(
           image,
-          srcPosition: flame.Vector2(
-            sprite.srcPosition.x,
-            sprite.srcPosition.y,
-          ),
-          srcSize: flame.Vector2(sprite.srcSize.width, sprite.srcSize.height),
+          srcPosition: Vector2(sprite.srcPosition.x, sprite.srcPosition.y),
+          srcSize: Vector2(sprite.srcSize.width, sprite.srcSize.height),
         );
 }
 
 /// Applies [collision] to [target].
-void applyCollision(flame.ShapeHitbox target, ComponentCollision collision) {
+void applyCollision(ShapeHitbox target, ComponentCollision collision) {
   target
     ..collisionType = switch (collision.type) {
-      HitboxCollisionType.active => flame.CollisionType.active,
-      HitboxCollisionType.passive => flame.CollisionType.passive,
-      HitboxCollisionType.inactive => flame.CollisionType.inactive,
+      HitboxCollisionType.active => CollisionType.active,
+      HitboxCollisionType.passive => CollisionType.passive,
+      HitboxCollisionType.inactive => CollisionType.inactive,
     }
     ..isSolid = collision.isSolid;
 }

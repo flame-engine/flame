@@ -1,6 +1,6 @@
 import 'dart:ui' as ui;
 
-import 'package:flame/components.dart' as flame;
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_studio/component_editor/widgets/preview/flame_mapping.dart';
 import 'package:flame_studio/component_editor/widgets/preview/preview_hitboxes.dart';
@@ -26,11 +26,11 @@ class ComponentPreviewGame({
   /// {@macro component_preview_game}
   this;
 
-  late flame.PositionComponent _preview;
+  late PositionComponent _preview;
 
   /// The Flame component currently rendering the previewed root
   /// [ComponentData]. Its children render the [ComponentData] children.
-  flame.PositionComponent get preview => _preview;
+  PositionComponent get preview => _preview;
 
   /// Draws the border around the highlighted node.
   final highlight = SelectionHighlight();
