@@ -19,7 +19,7 @@ tools='claude|copilot|chatgpt|codex|gemini|cursor|windsurf|aider|devin'
 trailer="^[[:space:]]*[a-z-]+:[^<]*<[^>]*(${trailer_addresses})>"
 footer="^[^[:alnum:]]*(generated|created|made|written|authored|built)"
 footer+="[[:space:]]+(with|by|using|in)[^[:alnum:]]*(${tools})"
-session_link='claude\.ai/code/session'
+session_link='https://claude\.ai/code/session_[[:alnum:]]'
 
 if matches=$(grep -Ei -e "$trailer" -e "$footer" -e "$session_link"); then
   cat >&2 <<'EOF'
