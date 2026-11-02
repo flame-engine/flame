@@ -17,6 +17,10 @@ import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 /// of the bounds, when it is false only the viewfinder anchor is considered.
 /// Note that it only works with [Rectangle], [RoundedRectangle] and [Circle]
 /// shapes.
+///
+/// The bounds are recalculated whenever the part of the world that is visible
+/// through the viewport changes in size, i.e. when the zoom level, the angle
+/// or the size of the viewport changes.
 class ViewportAwareBoundsBehavior({
   required var Shape _boundsShape,
   super.key,
@@ -27,21 +31,18 @@ class ViewportAwareBoundsBehavior({
   final Vector2 _currentVisibleWorldSize = Vector2.zero();
 
   @override
-  void onLoad() {
-    parent.transform.scale.addListener(_updateCameraBoundsIfNeeded);
-    viewport.transform.scale.addListener(_updateCameraBoundsIfNeeded);
-  }
-
-  @override
   void onMount() {
     super.onMount();
+    // The viewfinder updates its transform whenever the size of the viewport
+    // changes, so this also catches those changes.
+    parent.transform.addListener(_updateCameraBoundsIfNeeded);
     _updateCameraBounds();
   }
 
   @override
   void onRemove() {
-    viewport.transform.scale.removeListener(_updateCameraBoundsIfNeeded);
-    parent.transform.scale.removeListener(_updateCameraBoundsIfNeeded);
+    parent.transform.removeListener(_updateCameraBoundsIfNeeded);
+    super.onRemove();
   }
 
   /// Returns the bounds that do not take the viewport into account.
