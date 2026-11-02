@@ -105,6 +105,18 @@ abstract interface class VerticesComponent() {
   Component copyWithVertices(ComponentVertices vertices);
 }
 
+/// A [Component] that draws a [ComponentSprite].
+abstract interface class SpriteBackedComponent() {
+  /// Creates a [SpriteBackedComponent].
+  this;
+
+  /// The sprite of the component.
+  ComponentSprite get sprite;
+
+  /// Returns a copy of this component with [sprite] replaced.
+  Component copyWithSprite(ComponentSprite sprite);
+}
+
 /// A [Component] that is a Flame hitbox, with a [ComponentCollision].
 ///
 /// Hitboxes are only children, and have no children of their own: Flame

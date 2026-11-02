@@ -7,6 +7,7 @@ export 'component_paint.dart';
 export 'component_position.dart';
 export 'component_radius.dart';
 export 'component_size.dart';
+export 'component_sprite.dart';
 export 'component_tree.dart';
 export 'component_type.dart';
 export 'component_vertices.dart';

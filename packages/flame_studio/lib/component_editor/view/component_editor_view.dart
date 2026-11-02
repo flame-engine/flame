@@ -82,16 +82,16 @@ class const ComponentEditorView({
                 children: [
                   EditorTopBar(project: project),
                   const Divider(height: 1),
-                  const Expanded(
+                  Expanded(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           width: treePanelWidth,
                           child: ComponentTreePanel(),
                         ),
-                        VerticalDivider(width: 1),
-                        Expanded(
+                        const VerticalDivider(width: 1),
+                        const Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
@@ -101,10 +101,10 @@ class const ComponentEditorView({
                             ],
                           ),
                         ),
-                        VerticalDivider(width: 1),
+                        const VerticalDivider(width: 1),
                         SizedBox(
                           width: propertiesPanelWidth,
-                          child: PropertiesPanel(),
+                          child: PropertiesPanel(project: project),
                         ),
                       ],
                     ),

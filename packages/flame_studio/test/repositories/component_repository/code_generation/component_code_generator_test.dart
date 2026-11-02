@@ -525,5 +525,76 @@ class $Player extends PositionComponent {
       expect(code, isNot(contains('palette.generated.dart')));
       expect(code, contains('const Color(0xFF00FF00)'));
     });
+
+    group('sprites', () {
+      const sprite = ComponentSprite(
+        image: 'assets/images/player.png',
+        srcPosition: ComponentPosition(x: 16),
+        srcSize: ComponentSize(width: 8, height: 4),
+      );
+
+      test('loads the sprite of the root in onLoad', () {
+        final code = generator.generate(
+          const SpriteComponent(
+            name: 'player',
+            size: ComponentSize(width: 10, height: 20),
+            sprite: sprite,
+          ),
+        );
+
+        expect(code, isNot(contains("import 'dart:ui';")));
+        expect(code, contains(r'class $Player extends SpriteComponent {'));
+        expect(code, contains('super(size: Vector2(10, 20));'));
+        expect(
+          code,
+          contains('''
+  Future<void> onLoad() async {
+    sprite = await Sprite.load(
+      'assets/images/player.png',
+      srcPosition: Vector2(16, 0),
+      srcSize: Vector2(8, 4),
+      images: findGame()?.images,
+    );
+  }
+'''),
+        );
+      });
+
+      test('gives leaf children that load a sprite a class', () {
+        final code = generator.generate(
+          const PositionComponent(
+            name: 'player',
+            children: [SpriteComponent(name: 'head', sprite: sprite)],
+          ),
+        );
+
+        expect(code, contains(r'final $PlayerHead head = $PlayerHead();'));
+        expect(code, contains(r'class $PlayerHead extends SpriteComponent {'));
+        expect(code, contains('Sprite.load('));
+      });
+
+      test('leaves sprites without an image as plain components', () {
+        final code = generator.generate(
+          const PositionComponent(
+            name: 'player',
+            children: [SpriteComponent(name: 'head')],
+          ),
+        );
+
+        expect(code, contains('final SpriteComponent head = SpriteComponent('));
+        expect(code, isNot(contains('onLoad')));
+      });
+
+      test('escapes the image path', () {
+        final code = generator.generate(
+          const SpriteComponent(
+            name: 'player',
+            sprite: ComponentSprite(image: "assets/it's.png"),
+          ),
+        );
+
+        expect(code, contains(r"'assets/it\'s.png'"));
+      });
+    });
   });
 }

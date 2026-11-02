@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flame_studio/component_editor/component_editor.dart';
@@ -199,6 +200,102 @@ void main() {
         ),
       ],
     );
+
+    group('ComponentEditorSpriteChanged', () {
+      const image = 'assets/images/a.png';
+      const sprite = ComponentSprite(
+        image: image,
+        srcSize: ComponentSize(width: 16, height: 32),
+      );
+      final bytes = Uint8List.fromList([1, 2, 3]);
+
+      ComponentEditorBloc buildSpriteBloc(Component component) {
+        return ComponentEditorBloc(
+          project: project,
+          component: component,
+          componentRepository: componentRepository,
+          projectRepository: projectRepository,
+          editorPreferencesRepository: editorPreferencesRepository,
+        );
+      }
+
+      test('the first image also sets the size, and is loaded', () async {
+        when(() => componentRepository.readImage(project.path, image))
+            .thenAnswer((_) async => bytes);
+        final bloc = buildSpriteBloc(const SpriteComponent(name: 'Player'))
+          ..add(const ComponentEditorSpriteChanged(sprite));
+        await pumpEventQueue();
+
+        expect(
+          bloc.state.component,
+          equals(
+            const SpriteComponent(
+              name: 'Player',
+              size: ComponentSize(width: 16, height: 32),
+              sprite: sprite,
+            ),
+          ),
+        );
+        expect(bloc.state.spriteImages, equals({image: bytes}));
+      });
+
+      test('later changes keep the size', () async {
+        when(() => componentRepository.readImage(project.path, image))
+            .thenAnswer((_) async => bytes);
+        const size = ComponentSize(width: 5, height: 5);
+        final bloc = buildSpriteBloc(
+          const SpriteComponent(
+            name: 'Player',
+            size: size,
+            sprite: ComponentSprite(image: image),
+          ),
+        )..add(const ComponentEditorSpriteChanged(sprite));
+        await pumpEventQueue();
+
+        expect((bloc.state.component as SpriteComponent).size, equals(size));
+      });
+
+      test('an image that cannot be read keeps the sprite', () async {
+        when(() => componentRepository.readImage(project.path, image))
+            .thenThrow(Exception());
+        final bloc = buildSpriteBloc(const SpriteComponent(name: 'Player'))
+          ..add(const ComponentEditorSpriteChanged(sprite));
+        await pumpEventQueue();
+
+        expect(
+          (bloc.state.component as SpriteComponent).sprite,
+          equals(sprite),
+        );
+        expect(bloc.state.spriteImages, isEmpty);
+      });
+
+      blocTest<ComponentEditorBloc, ComponentEditorState>(
+        'is ignored by components without a sprite',
+        build: buildBloc,
+        act: (bloc) => bloc.add(const ComponentEditorSpriteChanged(sprite)),
+        expect: () => const <ComponentEditorState>[],
+      );
+
+      test('started loads the images of the tree', () async {
+        when(() => componentRepository.readImage(project.path, image))
+            .thenAnswer((_) async => bytes);
+        when(() => componentRepository.getComponents(project.path))
+            .thenAnswer((_) async => const []);
+        when(
+          () =>
+              componentRepository.isComponentCodeUpToDate(any(), any(), any()),
+        ).thenAnswer((_) async => true);
+        final bloc = buildSpriteBloc(
+          const PositionComponent(
+            name: 'Player',
+            children: [SpriteComponent(name: 'head', sprite: sprite)],
+          ),
+        )..add(const ComponentEditorStarted());
+        await pumpEventQueue();
+
+        expect(bloc.state.spriteImages, equals({image: bytes}));
+      });
+    });
 
     group('ComponentEditorCollisionChanged', () {
       const collision = ComponentCollision(isSolid: true);

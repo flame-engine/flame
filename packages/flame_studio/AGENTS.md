@@ -57,7 +57,9 @@ three pass.
 - Features: `home` (open project + recent projects), `project` (dashboard:
   list/add/edit/delete components; adding asks for a name and a component
   type), `project_settings` (settings dialog: generated code output path,
-  stored in `<project>/.flame_studio/settings.json`), `palette` (dialog to
+  stored in `<project>/.flame_studio/settings.json`), `sprite_editor` (dialog
+  to pick a project image and select the sprite's region on it — see
+  "Sprites" in [docs/architecture.md](docs/architecture.md)), `palette` (dialog to
   manage the project's named colors, stored in
   `<project>/.flame_studio/palette.json` and generated as `GamePalette` in
   `palette.generated.dart`; paint colors can be picked from it and their
@@ -91,7 +93,11 @@ three pass.
   itself, useful as a container) and `circle` (a Flame `CircleComponent`:
   position, anchor and angle — children only —, radius, and paint; the radius is its own
   `ComponentRadius` property, since Flame circles take a radius, not a
-  size) and the hitboxes `rectangleHitbox`, `circleHitbox` and
+  size), `sprite` (a Flame `SpriteComponent`: position, anchor and angle —
+  children only —, size, and a `ComponentSprite`: an image under the project's
+  `assets/` and the region of it, picked in the sprite editor dialog,
+  `lib/sprite_editor/`; generated with a class that loads it in `onLoad` — see
+  "Sprites" in [docs/architecture.md](docs/architecture.md)) and the hitboxes `rectangleHitbox`, `circleHitbox` and
   `polygonHitbox` (Flame's `RectangleHitbox`, `CircleHitbox` and
   `PolygonHitbox`: their shape's geometry plus a `ComponentCollision` —
   collision type and solid —, no paint; children only, never roots, and

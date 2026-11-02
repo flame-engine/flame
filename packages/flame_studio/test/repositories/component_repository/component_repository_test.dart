@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flame_studio/clients/clients.dart';
 import 'package:flame_studio/repositories/repositories.dart';
@@ -340,6 +341,42 @@ void main() {
             generator.generate(painted, palette: palette),
           ),
         ).called(1);
+      });
+    });
+
+    group('getImages', () {
+      test('returns the sorted asset paths of the image files', () async {
+        when(() => fileSystem.listFiles('/game/assets', recursive: true))
+            .thenAnswer(
+              (_) async => [
+                '/game/assets/images/b.PNG',
+                '/game/assets/audio/song.mp3',
+                '/game/assets/images/ui/a.png',
+                '/game/assets/a.jpg',
+              ],
+            );
+
+        expect(
+          await repository.getImages('/game'),
+          equals([
+            'assets/a.jpg',
+            'assets/images/b.PNG',
+            'assets/images/ui/a.png',
+          ]),
+        );
+      });
+    });
+
+    group('readImage', () {
+      test('reads the file at the asset path', () async {
+        final bytes = Uint8List.fromList([1, 2]);
+        when(() => fileSystem.readFileBytes('/game/assets/images/a.png'))
+            .thenAnswer((_) async => bytes);
+
+        expect(
+          await repository.readImage('/game', 'assets/images/a.png'),
+          equals(bytes),
+        );
       });
     });
 
