@@ -124,7 +124,9 @@ In this example:
 - A fragment shader (`pixelation.frag`) is loaded and used to apply a pixelation effect.
 
 - The `rasterizeSubtree` method captures the component tree rendering as a texture, which the
-  shader uses to generate the pixelated output.
+  shader uses to generate the pixelated output. The texture is rendered at the post process's
+  `pixelRatio` and covers the whole subtree, so the shader can sample it with coordinates from 0
+  to 1 across `size`.
 
 - The effect dynamically changes over time, creating an animated pixelation effect.
 

@@ -5,6 +5,7 @@ import 'package:flame/src/devtools/connectors/component_tree_connector.dart';
 import 'package:flame/src/devtools/connectors/debug_mode_connector.dart';
 import 'package:flame/src/devtools/connectors/game_loop_connector.dart';
 import 'package:flame/src/devtools/connectors/game_snapshot_connector.dart';
+import 'package:flame/src/devtools/connectors/hot_reload_connector.dart';
 import 'package:flame/src/devtools/connectors/image_cache_connector.dart';
 import 'package:flame/src/devtools/connectors/input_connector.dart';
 import 'package:flame/src/devtools/connectors/overlay_navigation_connector.dart';
@@ -48,6 +49,7 @@ class DevToolsService._() {
     OverlayNavigationConnector(),
     InputConnector(),
     ImageCacheConnector(),
+    HotReloadConnector(),
   ];
 
   /// Adds [connector] to the [connectors], so that it is told about the game

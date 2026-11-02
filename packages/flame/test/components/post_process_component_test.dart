@@ -54,5 +54,36 @@ Future<void> main() async {
       game.update(0);
       expect(postProcess.size, Vector2.all(50));
     });
+
+    testWithFlameGame('has zero size when the last child is removed', (
+      game,
+    ) async {
+      final child = PositionComponent(size: Vector2.all(50));
+      final postProcess = PostProcessComponent(
+        postProcess: PostProcessGroup(postProcesses: []),
+        children: [child],
+      );
+      await game.ensureAdd(postProcess);
+
+      child.removeFromParent();
+      await game.ready();
+
+      expect(postProcess.children, isEmpty);
+      expect(postProcess.size, Vector2.zero());
+    });
+
+    testWithFlameGame(
+      'has zero size when no child is a PositionComponent',
+      (game) async {
+        final postProcess = PostProcessComponent(
+          postProcess: PostProcessGroup(postProcesses: []),
+          children: [Component()],
+        );
+        await game.ensureAdd(postProcess);
+
+        expect(postProcess.children, hasLength(1));
+        expect(postProcess.size, Vector2.zero());
+      },
+    );
   });
 }

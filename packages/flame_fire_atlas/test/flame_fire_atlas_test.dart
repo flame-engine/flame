@@ -122,7 +122,11 @@ void main() {
       expect(
         () => atlas.getSprite('bla'),
         throwsA(
-          equals('There is no selection with the id "bla" on this atlas'),
+          isA<ArgumentError>().having(
+            (e) => e.message,
+            'message',
+            'There is no selection with the id "bla" on this atlas',
+          ),
         ),
       );
     });
@@ -132,7 +136,13 @@ void main() {
 
       expect(
         () => atlas.getSprite('bomb_ptero'),
-        throwsA(equals('Selection "bomb_ptero" is not a Sprite')),
+        throwsA(
+          isA<ArgumentError>().having(
+            (e) => e.message,
+            'message',
+            'Selection "bomb_ptero" is not a Sprite',
+          ),
+        ),
       );
     });
 
@@ -148,7 +158,11 @@ void main() {
       expect(
         () => atlas.getAnimation('bla'),
         throwsA(
-          equals('There is no selection with the id "bla" on this atlas'),
+          isA<ArgumentError>().having(
+            (e) => e.message,
+            'message',
+            'There is no selection with the id "bla" on this atlas',
+          ),
         ),
       );
     });
@@ -158,7 +172,13 @@ void main() {
 
       expect(
         () => atlas.getAnimation('bullet'),
-        throwsA(equals('Selection "bullet" is not an Animation')),
+        throwsA(
+          isA<ArgumentError>().having(
+            (e) => e.message,
+            'message',
+            'Selection "bullet" is not an Animation',
+          ),
+        ),
       );
     });
 

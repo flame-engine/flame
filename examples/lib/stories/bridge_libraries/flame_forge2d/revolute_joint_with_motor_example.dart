@@ -38,9 +38,9 @@ class RevoluteJointWithMotorWorld()
   }
 
   @override
-  void onTapDown(TapDownEvent info) {
-    super.onTapDown(info);
-    final tapPosition = info.localPosition;
+  void onTapDown(TapDownEvent event) {
+    super.onTapDown(event);
+    final tapPosition = event.localPosition;
     List.generate(15, (i) {
       final randomVector = (Vector2.random() - Vector2.all(0.5)).normalized();
       add(Ball(tapPosition + randomVector, radius: random.nextDouble()));
