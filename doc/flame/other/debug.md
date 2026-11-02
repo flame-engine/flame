@@ -44,6 +44,9 @@ anchor of the component in the running game. For a custom anchor, no cell is hig
 value, for example `Anchor(0.2, 0.3)`, is shown next to the grid; clicking a cell replaces it with
 that predefined anchor.
 
+If a selected component is a `TextComponent`, the extension also shows its text in a field. Editing
+the field changes the text in the running game, also while the game is paused.
+
 
 ### Service extensions
 
@@ -69,8 +72,8 @@ isolate that runs the game. Every `id` parameter is the `hashCode` of a componen
   if no component with that id was found.
 - `ext.flame_devtools.getComponentTree`: Returns the `component_tree`, where every node has an
   `id`, a `name`, the `toString` of the component, its `attributes` and its `children`. The
-  attributes are the `priority` of the component, and for a `PositionComponent` also its
-  `position`, `size`, `angle`, `scale` and `anchor`.
+  attributes are the `priority` of the component, for a `PositionComponent` also its `position`,
+  `size`, `angle`, `scale` and `anchor`, and for a `TextComponent` also its `text`.
 - `ext.flame_devtools.getComponentInfo`: Returns the same fields as a tree node for the component
   with the given `id`, without the children, and additionally the id of its `parent`, its
   `childCount` and its `debugMode`.
@@ -85,6 +88,10 @@ isolate that runs the game. Every `id` parameter is the `hashCode` of a componen
   `PositionComponent`. Setting takes the `id`, an `attribute` (`x`, `y`, `width`, `height`,
   `angle`, `scaleX`, `scaleY`, `anchor` or `priority`) and the `value` as a string. The
   `priority` can be set on any component.
+- `ext.flame_devtools.setComponentText`: Changes the text of the `TextComponent` with the given
+  `id` to the `text` parameter. An empty `text` is valid, but a missing one responds with an
+  invalid parameters error. The game is repainted, so that the new text is visible while it is
+  paused.
 - `ext.flame_devtools.getPaused`, `ext.flame_devtools.setPaused` and `ext.flame_devtools.step`:
   Read and change whether the game loop is paused, and step a paused game by `step_time` seconds.
 - `ext.flame_devtools.getDebugMode` and `ext.flame_devtools.setDebugMode`: Read and change the
