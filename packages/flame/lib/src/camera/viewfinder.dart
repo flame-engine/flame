@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/src/camera/behaviors/viewport_aware_bounds_behavior.dart';
+import 'package:flame/src/camera/viewport.dart';
+import 'package:flame/src/camera/viewports/fixed_resolution_viewport.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/notifying_vector2.dart';
 import 'package:flame/src/game/transform2d.dart';
@@ -146,8 +148,9 @@ class Viewfinder({
   /// viewfinder. It is persistent too: if the game size changes, the zoom
   /// will be recalculated to fit the constraint.
   ///
-  /// If you set the [visibleGameSize] you will remove any fixed resolution
-  /// constraints that you might have previously put.
+  /// The zoom is calculated against the viewport's [Viewport.virtualSize], so
+  /// when used together with a [FixedResolutionViewport], the given region is
+  /// fitted within the viewport's resolution.
   Vector2? get visibleGameSize => _visibleGameSize;
   Vector2? _visibleGameSize;
   set visibleGameSize(Vector2? value) {
@@ -200,7 +203,7 @@ class Viewfinder({
   /// Set [zoom] level based on the [_visibleGameSize].
   void _updateZoom() {
     if (_visibleGameSize != null) {
-      final viewportSize = camera.viewport.size;
+      final viewportSize = camera.viewport.virtualSize;
       final zoomX = viewportSize.x / _visibleGameSize!.x;
       final zoomY = viewportSize.y / _visibleGameSize!.y;
       zoom = min(zoomX, zoomY);
