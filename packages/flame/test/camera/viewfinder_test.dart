@@ -303,6 +303,54 @@ void main() {
         expect(camera.visibleWorldRect.size, const Size(400, 300));
       },
     );
+
+    testWithFlameGame(
+      'visibleGameSize is kept when the viewport is resized',
+      (game) async {
+        final world = World()..addToParent(game);
+        final camera = CameraComponent(
+          world: world,
+          viewport: FixedSizeViewport(200, 200),
+        )..addToParent(game);
+        await game.ready();
+
+        camera.viewfinder.visibleGameSize = Vector2(100, 100);
+        expect(camera.viewfinder.zoom, 2);
+
+        camera.viewport.size = Vector2(400, 300);
+        expect(camera.viewfinder.zoom, 3);
+      },
+    );
+
+    testWithFlameGame(
+      'visibleGameSize is kept when the game is resized after replacing the '
+      'viewport',
+      (game) async {
+        final world = World()..addToParent(game);
+        final camera = CameraComponent(world: world)..addToParent(game);
+        await game.ready();
+        camera.viewport = MaxViewport();
+        await game.ready();
+        camera.viewfinder.visibleGameSize = Vector2(100, 100);
+
+        game.onGameResize(Vector2(1000, 500));
+        expect(camera.viewfinder.zoom, 5);
+      },
+    );
+
+    testWithFlameGame(
+      'visibleGameSize can be set before the viewport has a size',
+      (game) async {
+        final world = World()..addToParent(game);
+        final camera = CameraComponent(world: world);
+        camera.viewfinder.visibleGameSize = Vector2(100, 100);
+        expect(camera.viewfinder.zoom, 1);
+
+        camera.addToParent(game);
+        await game.ready();
+        expect(camera.viewfinder.zoom, 6);
+      },
+    );
   });
 }
 
