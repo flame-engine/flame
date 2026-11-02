@@ -47,9 +47,9 @@ class AnimatedBodyWorld()
   }
 
   @override
-  void onTapDown(TapDownEvent info) {
-    super.onTapDown(info);
-    final position = info.localPosition;
+  void onTapDown(TapDownEvent event) {
+    super.onTapDown(event);
+    final position = event.localPosition;
     final spriteSize = Vector2.all(10);
     final animationComponent = SpriteAnimationComponent(
       animation: animation,
