@@ -57,11 +57,24 @@ For a contribution to be accepted:
 - Examples should always be updated or added (if applicable);
 - Tests should always be updated or added (if applicable) -- check the [Test writing guide] for
   more details;
-- The PR title should start with a [conventional commit] prefix (`feat:`, `fix:` etc).
+- The PR title should start with a [conventional commit] prefix (`feat:`, `fix:` etc);
+- The commits and the PR description shouldn't contain any AI attribution, see
+  [Using AI tools](#using-ai-tools).
 
 If the contribution doesn't meet these criteria, a maintainer will discuss it with you on the issue
 or PR. You can still continue to add more commits to the branch you have sent the Pull Request from
 and it will be automatically reflected in the PR.
+
+
+### Using AI tools
+
+You are welcome to use AI tools when contributing to Flame, the same requirements apply to your
+contribution no matter how it was written.
+
+What we don't want is AI attribution cluttering the git history. Don't include `Co-authored-by`
+trailers or "Generated with" footers for AI tools in your commits or in the PR description, and
+don't commit with an AI tool as the author. This is checked by the CI, which will tell you what has
+to be removed.
 
 
 ## Open an issue and fork the repository
