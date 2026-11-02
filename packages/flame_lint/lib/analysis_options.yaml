@@ -197,4 +197,5 @@ linter:
     - use_test_throws_matchers
     - use_truncating_division
     - valid_regexps
+    - var_with_no_type_annotation
     - void_checks
