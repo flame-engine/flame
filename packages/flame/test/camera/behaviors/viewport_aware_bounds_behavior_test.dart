@@ -2,6 +2,7 @@ import 'dart:math' show max, pi, sqrt;
 import 'dart:ui';
 
 import 'package:flame/camera.dart';
+import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
@@ -322,6 +323,62 @@ void main() {
         expect(camera.viewfinder.position, Vector2(50, 50));
       },
     );
+
+    testWithFlameGame('updates when the viewport is resized', (game) async {
+      final world = World()..addToParent(game);
+      final camera = CameraComponent(world: world)..addToParent(game);
+      await game.ready();
+      game.onGameResize(Vector2(400, 300));
+      await _setBounds(game, camera, Rectangle.fromLTRB(0, 0, 1000, 1000));
+      expect(_getBoundsRect(camera), const Rect.fromLTRB(200, 150, 800, 850));
+
+      camera.viewfinder.position = Vector2(200, 150);
+      game.onGameResize(Vector2(800, 600));
+      expect(_getBoundsRect(camera), const Rect.fromLTRB(400, 300, 600, 700));
+      expect(camera.viewfinder.position, Vector2(400, 300));
+    });
+
+    testWithFlameGame(
+      'updates when the viewport is resized without moving the anchor',
+      (game) async {
+        final world = World()..addToParent(game);
+        final camera = CameraComponent(world: world)..addToParent(game);
+        // With a top-left anchor, the viewfinder's anchor point stays in place
+        // when the viewport is resized.
+        camera.viewfinder.anchor = Anchor.topLeft;
+        await game.ready();
+        game.onGameResize(Vector2(400, 300));
+        await _setBounds(game, camera, Rectangle.fromLTRB(0, 0, 1000, 1000));
+        expect(_getBoundsRect(camera)?.size, const Size(600, 700));
+
+        game.onGameResize(Vector2(800, 600));
+        expect(_getBoundsRect(camera)?.size, const Size(200, 400));
+      },
+    );
+
+    testWithFlameGame('updates when the viewport is replaced', (game) async {
+      final camera = await _fixedResolutionCamera(game);
+      await _setBounds(game, camera, Rectangle.fromLTRB(0, 0, 640, 480));
+      expect(_getBoundsRect(camera), const Rect.fromLTRB(160, 120, 480, 360));
+
+      camera.viewport = FixedSizeViewport(400, 200);
+      await game.ready();
+      expect(_getBoundsRect(camera), const Rect.fromLTRB(200, 100, 440, 380));
+    });
+
+    testWithFlameGame('updates when the angle changes', (game) async {
+      final camera = await _fixedResolutionCamera(game);
+      await _setBounds(game, camera, Rectangle.fromLTRB(0, 0, 640, 480));
+      expect(_getBoundsRect(camera), const Rect.fromLTRB(160, 120, 480, 360));
+
+      camera.viewfinder.angle = pi / 2;
+      final bounds = _getBoundsRect(camera)!;
+      // The visible region is now 240x320.
+      expect(bounds.left, closeTo(120, 1e-9));
+      expect(bounds.top, closeTo(160, 1e-9));
+      expect(bounds.right, closeTo(520, 1e-9));
+      expect(bounds.bottom, closeTo(320, 1e-9));
+    });
   });
 }
 
