@@ -2,11 +2,11 @@ import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flutter/material.dart';
 
 /// {@template component_tile}
-/// A list entry for a project [Component], with edit and delete actions.
+/// A list entry for a project [ComponentData], with edit and delete actions.
 /// {@endtemplate}
 class const ComponentTile({
   /// The component shown by this tile.
-  required final Component component,
+  required final ComponentData component,
 
   /// Called when the user wants to edit the component.
   required final VoidCallback onEdit,

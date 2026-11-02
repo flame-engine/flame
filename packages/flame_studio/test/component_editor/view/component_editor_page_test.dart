@@ -24,8 +24,8 @@ class _MockComponentEditorBloc()
 
 void main() {
   const project = Project(path: '/projects/my_game');
-  const component = RectangleComponent(name: 'Player');
-  const edited = RectangleComponent(
+  const component = RectangleComponentData(name: 'Player');
+  const edited = RectangleComponentData(
     name: 'Player',
     size: ComponentSize(width: 10),
   );
@@ -236,9 +236,9 @@ void main() {
       });
 
       testWidgets('preview outlines the hitboxes while shown', (tester) async {
-        const withHitbox = PositionComponent(
+        const withHitbox = PositionComponentData(
           name: 'Player',
-          children: [RectangleHitboxComponent(name: 'rectangleHitbox1')],
+          children: [RectangleHitboxData(name: 'rectangleHitbox1')],
         );
         const state = ComponentEditorState(
           component: withHitbox,
@@ -396,7 +396,7 @@ void main() {
     });
 
     testWidgets('edits the vertices of polygons', (tester) async {
-      const polygon = PolygonComponent(name: 'Player');
+      const polygon = PolygonComponentData(name: 'Player');
       when(() => bloc.state).thenReturn(
         const ComponentEditorState(component: polygon, savedComponent: polygon),
       );
@@ -408,7 +408,7 @@ void main() {
     });
 
     testWidgets('edits the radius of circles', (tester) async {
-      const circle = CircleComponent(name: 'Player');
+      const circle = CircleComponentData(name: 'Player');
       when(() => bloc.state).thenReturn(
         const ComponentEditorState(component: circle, savedComponent: circle),
       );
@@ -441,11 +441,11 @@ void main() {
     });
 
     group('component tree', () {
-      const child = RectangleComponent(
+      const child = RectangleComponentData(
         name: 'rectangle1',
         position: ComponentPosition(x: 5, y: 6),
       );
-      const tree = RectangleComponent(name: 'Player', children: [child]);
+      const tree = RectangleComponentData(name: 'Player', children: [child]);
 
       void stubTree({List<int> selectedPath = const []}) {
         when(() => bloc.state).thenReturn(
@@ -454,7 +454,7 @@ void main() {
             savedComponent: tree,
             selectedPath: selectedPath,
             takenClassNames: const {
-              r'$PlayerEye': RectangleComponent(name: 'player_eye'),
+              r'$PlayerEye': RectangleComponentData(name: 'player_eye'),
             },
           ),
         );
@@ -552,9 +552,9 @@ void main() {
 
       testWidgets('edits the collision of a hitbox, which has no paint and '
           'no children', (tester) async {
-        const withHitbox = PositionComponent(
+        const withHitbox = PositionComponentData(
           name: 'Player',
-          children: [CircleHitboxComponent(name: 'circleHitbox1')],
+          children: [CircleHitboxData(name: 'circleHitbox1')],
         );
         when(() => bloc.state).thenReturn(
           const ComponentEditorState(
@@ -814,18 +814,18 @@ void main() {
       expect(find.text('Could not save the component'), findsOneWidget);
     });
 
-    const playerHead = RectangleComponent(name: 'player_head');
-    const playerRoot = RectangleComponent(name: 'player_');
-    const owner = RectangleComponent(
+    const playerHead = RectangleComponentData(name: 'player_head');
+    const playerRoot = RectangleComponentData(name: 'player_');
+    const owner = RectangleComponentData(
       name: 'pla',
-      children: [RectangleComponent(name: 'yer')],
+      children: [RectangleComponentData(name: 'yer')],
     );
     for (final (description, takenClassNames, messages) in [
       (
         'children',
         {
           r'$PlayerHead': playerHead,
-          r'$Enemy': const RectangleComponent(name: 'Enemy'),
+          r'$Enemy': const RectangleComponentData(name: 'Enemy'),
         },
         [
           r'Rename the children that generate $PlayerHead',
@@ -857,9 +857,9 @@ void main() {
       testWidgets('tells how to fix a classConflict of $description', (
         tester,
       ) async {
-        const tree = RectangleComponent(
+        const tree = RectangleComponentData(
           name: 'Player',
-          children: [RectangleComponent(name: 'head')],
+          children: [RectangleComponentData(name: 'head')],
         );
         whenListen(
           bloc,
@@ -1109,7 +1109,7 @@ void main() {
         unsaved.copyWith(
           status: ComponentEditorStatus.classConflict,
           takenClassNames: {
-            r'$Player': const RectangleComponent(name: 'player_'),
+            r'$Player': const RectangleComponentData(name: 'player_'),
           },
         ),
       );

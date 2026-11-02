@@ -1,92 +1,93 @@
-part of 'component.dart';
+part of 'component_data.dart';
 
-/// {@template rectangle_component}
-/// A rectangle with a position, an anchor, an angle, a size and a paint.
+/// {@template rectangle_hitbox_data}
+/// A rectangular hitbox with a position, an anchor, an angle, a size and a
+/// collision.
 /// {@endtemplate}
-final class const RectangleComponent({
+final class const RectangleHitboxData({
   required super.name,
   @override final ComponentPosition position = const ComponentPosition(),
   @override final ComponentAnchor anchor = ComponentAnchor.topLeft,
   @override final ComponentAngle angle = ComponentAngle.zero,
   @override final ComponentSize size = const ComponentSize(),
-  @override final ComponentPaint paint = const ComponentPaint(),
+  @override final ComponentCollision collision = const ComponentCollision(),
   super.children,
-}) extends Component
+}) extends ComponentData
     implements
         PositionedComponent,
         AnchoredComponent,
         RotatedComponent,
         SizedComponent,
-        PaintedComponent {
-  /// {@macro rectangle_component}
+        HitboxComponent {
+  /// {@macro rectangle_hitbox_data}
   this;
 
-  /// Reads the properties of a [RectangleComponent] from its JSON
-  /// representation. Use [Component.fromJson], which also reads the
+  /// Reads the properties of a [RectangleHitboxData] from its JSON
+  /// representation. Use [ComponentData.fromJson], which also reads the
   /// children.
   factory _fromJson(Map<String, dynamic> json) {
-    return RectangleComponent(
+    return RectangleHitboxData(
       name: json['name'] as String,
       position: ComponentPosition.fromJson(json['position']),
       anchor: ComponentAnchor.fromJson(json['anchor']),
       angle: ComponentAngle.fromJson(json['angle']),
       size: ComponentSize.fromJson(json['size']),
-      paint: ComponentPaint.fromJson(json['paint']),
+      collision: ComponentCollision.fromJson(json['collision']),
     );
   }
 
   @override
-  ComponentType get type => ComponentType.rectangle;
+  ComponentType get type => ComponentType.rectangleHitbox;
 
   @override
-  RectangleComponent copyWithPosition(ComponentPosition position) {
+  RectangleHitboxData copyWithPosition(ComponentPosition position) {
     return _copyWith(position: position);
   }
 
   @override
-  RectangleComponent copyWithAnchor(ComponentAnchor anchor) {
+  RectangleHitboxData copyWithAnchor(ComponentAnchor anchor) {
     return _copyWith(anchor: anchor);
   }
 
   @override
-  RectangleComponent copyWithAngle(ComponentAngle angle) {
+  RectangleHitboxData copyWithAngle(ComponentAngle angle) {
     return _copyWith(angle: angle);
   }
 
   @override
-  RectangleComponent copyWithSize(ComponentSize size) {
+  RectangleHitboxData copyWithSize(ComponentSize size) {
     return _copyWith(size: size);
   }
 
   @override
-  RectangleComponent copyWithPaint(ComponentPaint paint) {
-    return _copyWith(paint: paint);
+  RectangleHitboxData copyWithCollision(ComponentCollision collision) {
+    return _copyWith(collision: collision);
   }
 
   @override
-  RectangleComponent copyWithName(String name) => _copyWith(name: name);
+  RectangleHitboxData copyWithName(String name) => _copyWith(name: name);
 
   @override
-  RectangleComponent copyWithChildren(List<Component> children) {
+  RectangleHitboxData copyWithChildren(List<ComponentData> children) {
     return _copyWith(children: children);
   }
 
-  RectangleComponent _copyWith({
+  RectangleHitboxData _copyWith({
     String? name,
     ComponentPosition? position,
     ComponentAnchor? anchor,
     ComponentAngle? angle,
     ComponentSize? size,
-    ComponentPaint? paint,
-    List<Component>? children,
+    ComponentCollision? collision,
+    List<ComponentData>? children,
   }) {
-    return RectangleComponent(
+    return RectangleHitboxData(
       name: name ?? this.name,
       position: position ?? this.position,
       anchor: anchor ?? this.anchor,
       angle: angle ?? this.angle,
       size: size ?? this.size,
-      paint: paint ?? this.paint,
+      collision: collision ?? this.collision,
       children: children ?? this.children,
     );
   }
@@ -98,7 +99,7 @@ final class const RectangleComponent({
     'anchor': anchor.toJson(),
     'angle': angle.toJson(),
     'size': size.toJson(),
-    'paint': paint.toJson(),
+    'collision': collision.toJson(),
   };
 
   @override
@@ -108,6 +109,6 @@ final class const RectangleComponent({
     anchor,
     angle,
     size,
-    paint,
+    collision,
   ];
 }

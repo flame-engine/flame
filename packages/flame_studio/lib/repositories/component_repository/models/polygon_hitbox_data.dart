@@ -1,92 +1,94 @@
-part of 'component.dart';
+part of 'component_data.dart';
 
-/// {@template rectangle_hitbox_component}
-/// A rectangular hitbox with a position, an anchor, an angle, a size and a
+/// {@template polygon_hitbox_data}
+/// A polygonal hitbox with a position, an anchor, an angle, vertices and a
 /// collision.
+///
+/// Its size is the bounding box of its vertices.
 /// {@endtemplate}
-final class const RectangleHitboxComponent({
+final class const PolygonHitboxData({
   required super.name,
   @override final ComponentPosition position = const ComponentPosition(),
   @override final ComponentAnchor anchor = ComponentAnchor.topLeft,
   @override final ComponentAngle angle = ComponentAngle.zero,
-  @override final ComponentSize size = const ComponentSize(),
+  @override final ComponentVertices vertices = const ComponentVertices(),
   @override final ComponentCollision collision = const ComponentCollision(),
   super.children,
-}) extends Component
+}) extends ComponentData
     implements
         PositionedComponent,
         AnchoredComponent,
         RotatedComponent,
-        SizedComponent,
+        VerticesComponent,
         HitboxComponent {
-  /// {@macro rectangle_hitbox_component}
+  /// {@macro polygon_hitbox_data}
   this;
 
-  /// Reads the properties of a [RectangleHitboxComponent] from its JSON
-  /// representation. Use [Component.fromJson], which also reads the
+  /// Reads the properties of a [PolygonHitboxData] from its JSON
+  /// representation. Use [ComponentData.fromJson], which also reads the
   /// children.
   factory _fromJson(Map<String, dynamic> json) {
-    return RectangleHitboxComponent(
+    return PolygonHitboxData(
       name: json['name'] as String,
       position: ComponentPosition.fromJson(json['position']),
       anchor: ComponentAnchor.fromJson(json['anchor']),
       angle: ComponentAngle.fromJson(json['angle']),
-      size: ComponentSize.fromJson(json['size']),
+      vertices: ComponentVertices.fromJson(json['vertices']),
       collision: ComponentCollision.fromJson(json['collision']),
     );
   }
 
   @override
-  ComponentType get type => ComponentType.rectangleHitbox;
+  ComponentType get type => ComponentType.polygonHitbox;
 
   @override
-  RectangleHitboxComponent copyWithPosition(ComponentPosition position) {
+  PolygonHitboxData copyWithPosition(ComponentPosition position) {
     return _copyWith(position: position);
   }
 
   @override
-  RectangleHitboxComponent copyWithAnchor(ComponentAnchor anchor) {
+  PolygonHitboxData copyWithAnchor(ComponentAnchor anchor) {
     return _copyWith(anchor: anchor);
   }
 
   @override
-  RectangleHitboxComponent copyWithAngle(ComponentAngle angle) {
+  PolygonHitboxData copyWithAngle(ComponentAngle angle) {
     return _copyWith(angle: angle);
   }
 
   @override
-  RectangleHitboxComponent copyWithSize(ComponentSize size) {
-    return _copyWith(size: size);
+  PolygonHitboxData copyWithVertices(ComponentVertices vertices) {
+    return _copyWith(vertices: vertices);
   }
 
   @override
-  RectangleHitboxComponent copyWithCollision(ComponentCollision collision) {
+  PolygonHitboxData copyWithCollision(ComponentCollision collision) {
     return _copyWith(collision: collision);
   }
 
   @override
-  RectangleHitboxComponent copyWithName(String name) => _copyWith(name: name);
+  PolygonHitboxData copyWithName(String name) => _copyWith(name: name);
 
   @override
-  RectangleHitboxComponent copyWithChildren(List<Component> children) {
+  PolygonHitboxData copyWithChildren(List<ComponentData> children) {
     return _copyWith(children: children);
   }
 
-  RectangleHitboxComponent _copyWith({
+  PolygonHitboxData _copyWith({
     String? name,
     ComponentPosition? position,
     ComponentAnchor? anchor,
     ComponentAngle? angle,
-    ComponentSize? size,
+    ComponentVertices? vertices,
     ComponentCollision? collision,
-    List<Component>? children,
+    List<ComponentData>? children,
   }) {
-    return RectangleHitboxComponent(
+    return PolygonHitboxData(
       name: name ?? this.name,
       position: position ?? this.position,
       anchor: anchor ?? this.anchor,
       angle: angle ?? this.angle,
-      size: size ?? this.size,
+      vertices: vertices ?? this.vertices,
       collision: collision ?? this.collision,
       children: children ?? this.children,
     );
@@ -98,7 +100,7 @@ final class const RectangleHitboxComponent({
     'position': position.toJson(),
     'anchor': anchor.toJson(),
     'angle': angle.toJson(),
-    'size': size.toJson(),
+    'vertices': vertices.toJson(),
     'collision': collision.toJson(),
   };
 
@@ -108,7 +110,7 @@ final class const RectangleHitboxComponent({
     position,
     anchor,
     angle,
-    size,
+    vertices,
     collision,
   ];
 }

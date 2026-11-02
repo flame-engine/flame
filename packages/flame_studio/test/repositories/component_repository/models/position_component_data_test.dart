@@ -2,42 +2,42 @@ import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group(RectangleHitboxComponent, () {
-    const component = RectangleHitboxComponent(
+  group(PositionComponentData, () {
+    const component = PositionComponentData(
       name: 'Player',
       position: ComponentPosition(x: 1, y: 2),
       anchor: ComponentAnchor.center,
       angle: ComponentAngle(radians: 1.5),
       size: ComponentSize(width: 10, height: 20),
-      collision: ComponentCollision(
-        type: HitboxCollisionType.passive,
-        isSolid: true,
-      ),
-      children: [RectangleComponent(name: 'rectangle1')],
+      children: [RectangleComponentData(name: 'rectangle1')],
     );
 
     test('supports value equality', () {
       expect(
-        const RectangleHitboxComponent(name: 'Player'),
-        equals(const RectangleHitboxComponent(name: 'Player')),
+        const PositionComponentData(name: 'Player'),
+        equals(const PositionComponentData(name: 'Player')),
       );
       expect(
         component,
-        isNot(equals(const RectangleHitboxComponent(name: 'Player'))),
+        isNot(equals(const PositionComponentData(name: 'Player'))),
+      );
+      expect(
+        const PositionComponentData(name: 'Player'),
+        isNot(equals(const RectangleComponentData(name: 'Player'))),
       );
     });
 
-    test('is a rectangle hitbox with a position, a size and a collision', () {
-      expect(component.type, equals(ComponentType.rectangleHitbox));
+    test('is a position component with a position and a size', () {
+      expect(component.type, equals(ComponentType.position));
       expect(component, isA<PositionedComponent>());
       expect(component, isA<AnchoredComponent>());
       expect(component, isA<RotatedComponent>());
       expect(component, isA<SizedComponent>());
-      expect(component, isA<HitboxComponent>());
+      expect(component, isNot(isA<PaintedComponent>()));
     });
 
     test('round-trips through JSON', () {
-      expect(Component.fromJson(component.toJson()), equals(component));
+      expect(ComponentData.fromJson(component.toJson()), equals(component));
     });
 
     test('toJson includes the type, properties and children', () {
@@ -45,7 +45,7 @@ void main() {
         component.toJson(),
         equals({
           'name': 'Player',
-          'type': 'rectangleHitbox',
+          'type': 'position',
           'children': [
             {
               'name': 'rectangle1',
@@ -62,7 +62,6 @@ void main() {
           'anchor': {'x': 0.5, 'y': 0.5},
           'angle': {'radians': 1.5},
           'size': {'width': 10.0, 'height': 20.0},
-          'collision': {'type': 'passive', 'isSolid': true},
         }),
       );
     });
@@ -94,7 +93,7 @@ void main() {
       final json = component.toJson()..remove('anchor');
 
       expect(
-        (Component.fromJson(json) as AnchoredComponent).anchor,
+        (ComponentData.fromJson(json) as AnchoredComponent).anchor,
         equals(ComponentAnchor.topLeft),
       );
     });
@@ -114,7 +113,7 @@ void main() {
       final json = component.toJson()..remove('angle');
 
       expect(
-        (Component.fromJson(json) as RotatedComponent).angle,
+        (ComponentData.fromJson(json) as RotatedComponent).angle,
         equals(ComponentAngle.zero),
       );
     });
@@ -127,17 +126,6 @@ void main() {
       expect(
         copy.toJson()..remove('size'),
         equals(component.toJson()..remove('size')),
-      );
-    });
-
-    test('copyWithCollision replaces only the collision', () {
-      const collision = ComponentCollision(isSolid: true);
-      final copy = component.copyWithCollision(collision);
-
-      expect(copy.collision, equals(collision));
-      expect(
-        copy.toJson()..remove('collision'),
-        equals(component.toJson()..remove('collision')),
       );
     });
 

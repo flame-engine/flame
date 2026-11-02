@@ -36,10 +36,10 @@ final class const ProjectState({
   final ProjectStatus status = ProjectStatus.initial,
 
   /// The project components, sorted by name.
-  final List<Component> components = const [],
+  final List<ComponentData> components = const [],
 
   /// The last created component.
-  final Component? createdComponent,
+  final ComponentData? createdComponent,
 
   /// The name of the component that already generates the class of the
   /// last rejected name. Only set while the status is
@@ -52,8 +52,8 @@ final class const ProjectState({
   /// Returns a copy of this state with the given fields replaced.
   ProjectState copyWith({
     ProjectStatus? status,
-    List<Component>? components,
-    Component? createdComponent,
+    List<ComponentData>? components,
+    ComponentData? createdComponent,
     String? conflictingComponent,
   }) {
     return ProjectState(

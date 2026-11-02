@@ -2,45 +2,45 @@ import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group(Component, () {
+  group(ComponentData, () {
     group('create', () {
       test('creates a rectangle with default properties', () {
         expect(
-          Component.create('Player', ComponentType.rectangle),
-          equals(const RectangleComponent(name: 'Player')),
+          ComponentData.create('Player', ComponentType.rectangle),
+          equals(const RectangleComponentData(name: 'Player')),
         );
       });
 
       test('creates a position component with default properties', () {
         expect(
-          Component.create('Player', ComponentType.position),
-          equals(const PositionComponent(name: 'Player')),
+          ComponentData.create('Player', ComponentType.position),
+          equals(const PositionComponentData(name: 'Player')),
         );
       });
 
       test('creates a circle with default properties', () {
         expect(
-          Component.create('Player', ComponentType.circle),
-          equals(const CircleComponent(name: 'Player')),
+          ComponentData.create('Player', ComponentType.circle),
+          equals(const CircleComponentData(name: 'Player')),
         );
       });
 
       test('creates a triangle polygon by default', () {
         expect(
-          Component.create('Player', ComponentType.polygon),
-          equals(const PolygonComponent(name: 'Player')),
+          ComponentData.create('Player', ComponentType.polygon),
+          equals(const PolygonComponentData(name: 'Player')),
         );
       });
 
       test('creates a polygon with the given shape', () {
         expect(
-          Component.create(
+          ComponentData.create(
             'Player',
             ComponentType.polygon,
             polygonShape: PolygonShape.square,
           ),
           equals(
-            const PolygonComponent(
+            const PolygonComponentData(
               name: 'Player',
               vertices: ComponentVertices(ComponentVertices.square),
             ),
@@ -50,21 +50,21 @@ void main() {
 
       test('creates hitboxes with default properties', () {
         expect(
-          Component.create('hitbox', ComponentType.rectangleHitbox),
-          equals(const RectangleHitboxComponent(name: 'hitbox')),
+          ComponentData.create('hitbox', ComponentType.rectangleHitbox),
+          equals(const RectangleHitboxData(name: 'hitbox')),
         );
         expect(
-          Component.create('hitbox', ComponentType.circleHitbox),
-          equals(const CircleHitboxComponent(name: 'hitbox')),
+          ComponentData.create('hitbox', ComponentType.circleHitbox),
+          equals(const CircleHitboxData(name: 'hitbox')),
         );
         expect(
-          Component.create(
+          ComponentData.create(
             'hitbox',
             ComponentType.polygonHitbox,
             polygonShape: PolygonShape.square,
           ),
           equals(
-            const PolygonHitboxComponent(
+            const PolygonHitboxData(
               name: 'hitbox',
               vertices: ComponentVertices(ComponentVertices.square),
             ),
@@ -76,35 +76,38 @@ void main() {
     group('fromJson', () {
       test('reads hitboxes', () {
         expect(
-          Component.fromJson(const {'name': 'a', 'type': 'rectangleHitbox'}),
-          equals(const RectangleHitboxComponent(name: 'a')),
+          ComponentData.fromJson(const {
+            'name': 'a',
+            'type': 'rectangleHitbox',
+          }),
+          equals(const RectangleHitboxData(name: 'a')),
         );
         expect(
-          Component.fromJson(const {'name': 'a', 'type': 'circleHitbox'}),
-          equals(const CircleHitboxComponent(name: 'a')),
+          ComponentData.fromJson(const {'name': 'a', 'type': 'circleHitbox'}),
+          equals(const CircleHitboxData(name: 'a')),
         );
         expect(
-          Component.fromJson(const {'name': 'a', 'type': 'polygonHitbox'}),
-          equals(const PolygonHitboxComponent(name: 'a')),
+          ComponentData.fromJson(const {'name': 'a', 'type': 'polygonHitbox'}),
+          equals(const PolygonHitboxData(name: 'a')),
         );
       });
 
       test('reads a polygon', () {
         expect(
-          Component.fromJson(const {'name': 'Player', 'type': 'polygon'}),
-          equals(const PolygonComponent(name: 'Player')),
+          ComponentData.fromJson(const {'name': 'Player', 'type': 'polygon'}),
+          equals(const PolygonComponentData(name: 'Player')),
         );
       });
 
       test('reads a circle', () {
         expect(
-          Component.fromJson(const {
+          ComponentData.fromJson(const {
             'name': 'Player',
             'type': 'circle',
             'radius': {'radius': 10.0},
           }),
           equals(
-            const CircleComponent(
+            const CircleComponentData(
               name: 'Player',
               radius: ComponentRadius(radius: 10),
             ),
@@ -114,14 +117,14 @@ void main() {
 
       test('reads a rectangle', () {
         expect(
-          Component.fromJson(const {'name': 'Player', 'type': 'rectangle'}),
-          isA<RectangleComponent>(),
+          ComponentData.fromJson(const {'name': 'Player', 'type': 'rectangle'}),
+          isA<RectangleComponentData>(),
         );
       });
 
       test('reads a position component with children of other types', () {
         expect(
-          Component.fromJson(const {
+          ComponentData.fromJson(const {
             'name': 'Player',
             'type': 'position',
             'size': {'width': 10.0, 'height': 20.0},
@@ -130,10 +133,10 @@ void main() {
             ],
           }),
           equals(
-            const PositionComponent(
+            const PositionComponentData(
               name: 'Player',
               size: ComponentSize(width: 10, height: 20),
-              children: [RectangleComponent(name: 'rectangle1')],
+              children: [RectangleComponentData(name: 'rectangle1')],
             ),
           ),
         );
@@ -141,7 +144,7 @@ void main() {
 
       test('reads the children and skips invalid ones', () {
         expect(
-          Component.fromJson(const {
+          ComponentData.fromJson(const {
             'name': 'Player',
             'children': [
               {'name': 'rectangle1', 'type': 'rectangle'},
@@ -149,9 +152,9 @@ void main() {
             ],
           }),
           equals(
-            const RectangleComponent(
+            const RectangleComponentData(
               name: 'Player',
-              children: [RectangleComponent(name: 'rectangle1')],
+              children: [RectangleComponentData(name: 'rectangle1')],
             ),
           ),
         );
@@ -159,8 +162,8 @@ void main() {
 
       test('reads components without a type as rectangles', () {
         expect(
-          Component.fromJson(const {'name': 'Player'}),
-          equals(const RectangleComponent(name: 'Player')),
+          ComponentData.fromJson(const {'name': 'Player'}),
+          equals(const RectangleComponentData(name: 'Player')),
         );
       });
     });

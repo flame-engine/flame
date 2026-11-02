@@ -4,7 +4,7 @@ import 'package:flame_studio/repositories/repositories.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 /// {@template component_code_generator}
-/// Generates the Dart source of a [Component] and its children.
+/// Generates the Dart source of a [ComponentData] and its children.
 ///
 /// The root becomes a public class, named after the component with the
 /// `$` prefix of generated code (`player` becomes `$Player`), that extends
@@ -32,7 +32,7 @@ class const ComponentCodeGenerator() {
 
   /// The name of the file generated for [component], such as
   /// `player_ship.generated.dart`.
-  String fileName(Component component) {
+  String fileName(ComponentData component) {
     return '${dartFileName(component.name)}$fileExtension';
   }
 
@@ -41,7 +41,10 @@ class const ComponentCodeGenerator() {
   /// Paints that use a color of [palette] reference its generated class
   /// (see [PaletteCodeGenerator]); the others, including those whose
   /// palette color no longer exists, use their color value.
-  String generate(Component component, {Palette palette = const Palette()}) {
+  String generate(
+    ComponentData component, {
+    Palette palette = const Palette(),
+  }) {
     final rootClass = dartRootClassName(component.name);
     final buffer = StringBuffer()
       ..writeln(header)
@@ -95,7 +98,7 @@ class const ComponentCodeGenerator() {
 
   void _writeClass(
     StringBuffer buffer,
-    Component component, {
+    ComponentData component, {
     required Palette palette,
     required String rootName,
     required String className,
@@ -164,7 +167,7 @@ class const ComponentCodeGenerator() {
 
   /// Whether the child [component] gets a generated class, rather than
   /// being a plain Flame component.
-  static bool _hasClass(Component component) {
+  static bool _hasClass(ComponentData component) {
     return component.children.isNotEmpty ||
         switch (component) {
           SpriteBackedComponent(:final sprite) => sprite.image != null,
@@ -180,23 +183,23 @@ class const ComponentCodeGenerator() {
     );
   }
 
-  static String _flameClass(Component component) {
+  static String _flameClass(ComponentData component) {
     return switch (component) {
-      RectangleComponent() => 'RectangleComponent',
-      PositionComponent() => 'PositionComponent',
-      CircleComponent() => 'CircleComponent',
-      PolygonComponent() => 'PolygonComponent',
-      SpriteComponent() => 'SpriteComponent',
-      RectangleHitboxComponent() => 'RectangleHitbox',
-      CircleHitboxComponent() => 'CircleHitbox',
-      PolygonHitboxComponent() => 'PolygonHitbox',
+      RectangleComponentData() => 'RectangleComponent',
+      PositionComponentData() => 'PositionComponent',
+      CircleComponentData() => 'CircleComponent',
+      PolygonComponentData() => 'PolygonComponent',
+      SpriteComponentData() => 'SpriteComponent',
+      RectangleHitboxData() => 'RectangleHitbox',
+      CircleHitboxData() => 'CircleHitbox',
+      PolygonHitboxData() => 'PolygonHitbox',
     };
   }
 
   /// The arguments of the Flame constructor, one per property. The root
   /// position, angle and anchor are left to whoever uses the component.
   static List<String> _arguments(
-    Component component,
+    ComponentData component,
     Palette palette, {
     required bool withPosition,
   }) {

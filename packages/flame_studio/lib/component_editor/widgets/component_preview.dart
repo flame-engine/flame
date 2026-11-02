@@ -86,7 +86,7 @@ class _ComponentPreviewState() extends State<ComponentPreview> {
     );
   }
 
-  static Component _previewed(ComponentEditorState state) =>
+  static ComponentData _previewed(ComponentEditorState state) =>
       state.component.withPaletteColorsResolved(state.palette);
 
   static List<int>? _highlightedPath(ComponentEditorState state) =>

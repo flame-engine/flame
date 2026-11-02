@@ -18,7 +18,7 @@ class _MockPaletteBloc()
 
 void main() {
   const project = Project(path: '/projects/my_game');
-  const component = RectangleComponent(name: 'Player');
+  const component = RectangleComponentData(name: 'Player');
   const primary = PaletteColor(name: 'primary', color: 0xFFFF0000);
   const accent = PaletteColor(name: 'accent', color: 0xFF00FF00);
 

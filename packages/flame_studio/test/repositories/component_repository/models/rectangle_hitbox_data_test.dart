@@ -2,44 +2,42 @@ import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group(PolygonHitboxComponent, () {
-    const component = PolygonHitboxComponent(
+  group(RectangleHitboxData, () {
+    const component = RectangleHitboxData(
       name: 'Player',
       position: ComponentPosition(x: 1, y: 2),
       anchor: ComponentAnchor.center,
       angle: ComponentAngle(radians: 1.5),
-      vertices: ComponentVertices(ComponentVertices.square),
+      size: ComponentSize(width: 10, height: 20),
       collision: ComponentCollision(
         type: HitboxCollisionType.passive,
         isSolid: true,
       ),
-      children: [RectangleComponent(name: 'rectangle1')],
+      children: [RectangleComponentData(name: 'rectangle1')],
     );
 
     test('supports value equality', () {
       expect(
-        const PolygonHitboxComponent(name: 'Player'),
-        equals(const PolygonHitboxComponent(name: 'Player')),
+        const RectangleHitboxData(name: 'Player'),
+        equals(const RectangleHitboxData(name: 'Player')),
       );
       expect(
         component,
-        isNot(equals(const PolygonHitboxComponent(name: 'Player'))),
+        isNot(equals(const RectangleHitboxData(name: 'Player'))),
       );
     });
 
-    test('is a polygon hitbox with a position, vertices and a collision', () {
-      expect(component.type, equals(ComponentType.polygonHitbox));
+    test('is a rectangle hitbox with a position, a size and a collision', () {
+      expect(component.type, equals(ComponentType.rectangleHitbox));
       expect(component, isA<PositionedComponent>());
       expect(component, isA<AnchoredComponent>());
       expect(component, isA<RotatedComponent>());
-      expect(component, isA<VerticesComponent>());
-      expect(component, isNot(isA<RadiusComponent>()));
-      expect(component, isNot(isA<SizedComponent>()));
+      expect(component, isA<SizedComponent>());
       expect(component, isA<HitboxComponent>());
     });
 
     test('round-trips through JSON', () {
-      expect(Component.fromJson(component.toJson()), equals(component));
+      expect(ComponentData.fromJson(component.toJson()), equals(component));
     });
 
     test('toJson includes the type, properties and children', () {
@@ -47,7 +45,7 @@ void main() {
         component.toJson(),
         equals({
           'name': 'Player',
-          'type': 'polygonHitbox',
+          'type': 'rectangleHitbox',
           'children': [
             {
               'name': 'rectangle1',
@@ -63,14 +61,7 @@ void main() {
           'position': {'x': 1.0, 'y': 2.0},
           'anchor': {'x': 0.5, 'y': 0.5},
           'angle': {'radians': 1.5},
-          'vertices': {
-            'vertices': [
-              {'x': 0.0, 'y': 0.0},
-              {'x': 50.0, 'y': 0.0},
-              {'x': 50.0, 'y': 50.0},
-              {'x': 0.0, 'y': 50.0},
-            ],
-          },
+          'size': {'width': 10.0, 'height': 20.0},
           'collision': {'type': 'passive', 'isSolid': true},
         }),
       );
@@ -103,7 +94,7 @@ void main() {
       final json = component.toJson()..remove('anchor');
 
       expect(
-        (Component.fromJson(json) as AnchoredComponent).anchor,
+        (ComponentData.fromJson(json) as AnchoredComponent).anchor,
         equals(ComponentAnchor.topLeft),
       );
     });
@@ -123,19 +114,19 @@ void main() {
       final json = component.toJson()..remove('angle');
 
       expect(
-        (Component.fromJson(json) as RotatedComponent).angle,
+        (ComponentData.fromJson(json) as RotatedComponent).angle,
         equals(ComponentAngle.zero),
       );
     });
 
-    test('copyWithVertices replaces only the vertices', () {
-      const vertices = ComponentVertices();
-      final copy = component.copyWithVertices(vertices);
+    test('copyWithSize replaces only the size', () {
+      const size = ComponentSize(width: 1, height: 2);
+      final copy = component.copyWithSize(size);
 
-      expect(copy.vertices, equals(vertices));
+      expect(copy.size, equals(size));
       expect(
-        copy.toJson()..remove('vertices'),
-        equals(component.toJson()..remove('vertices')),
+        copy.toJson()..remove('size'),
+        equals(component.toJson()..remove('size')),
       );
     });
 

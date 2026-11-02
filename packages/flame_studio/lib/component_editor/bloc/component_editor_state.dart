@@ -37,10 +37,10 @@ enum ComponentEditorStatus() {
 /// {@endtemplate}
 final class const ComponentEditorState({
   /// The component being edited, including unsaved changes.
-  required final Component component,
+  required final ComponentData component,
 
   /// The component as it was last saved.
-  required final Component savedComponent,
+  required final ComponentData savedComponent,
 
   /// The current status.
   final ComponentEditorStatus status = ComponentEditorStatus.ready,
@@ -53,7 +53,7 @@ final class const ComponentEditorState({
   /// the children of [component] must not generate again (see
   /// [ComponentTree.generatedClassNames]), with the component that
   /// generates each one.
-  final Map<String, Component> takenClassNames = const {},
+  final Map<String, ComponentData> takenClassNames = const {},
 
   /// Whether the generated code doesn't match [savedComponent]: it was
   /// missing or outdated when the editor opened, or the last save didn't
@@ -105,7 +105,7 @@ final class const ComponentEditorState({
   /// The classes of [component] that are generated for other components
   /// too, with the component that generates each one; see
   /// [takenClassNames].
-  Map<String, Component> get conflictingClassNames => {
+  Map<String, ComponentData> get conflictingClassNames => {
     for (final className in component.generatedClassNames)
       if (takenClassNames.containsKey(className))
         className: takenClassNames[className]!,
@@ -117,11 +117,11 @@ final class const ComponentEditorState({
   /// Renaming children here can't fix this clash, and components can't be
   /// renamed: a child of the other component must be renamed, or, if the
   /// clash is between the two roots, one of the components deleted.
-  Component? get rootClassOwner =>
+  ComponentData? get rootClassOwner =>
       takenClassNames[component.generatedClassName];
 
   /// The selected node of the [component] tree.
-  Component get selectedNode => component.nodeAt(selectedPath);
+  ComponentData get selectedNode => component.nodeAt(selectedPath);
 
   /// Whether the selected node is the root [component].
   bool get isRootSelected => selectedPath.isEmpty;
@@ -132,10 +132,10 @@ final class const ComponentEditorState({
   /// Returns a copy of this state with the given fields replaced.
   ComponentEditorState copyWith({
     ComponentEditorStatus? status,
-    Component? component,
-    Component? savedComponent,
+    ComponentData? component,
+    ComponentData? savedComponent,
     List<int>? selectedPath,
-    Map<String, Component>? takenClassNames,
+    Map<String, ComponentData>? takenClassNames,
     bool? isCodeOutdated,
     bool? isSelectionHighlighted,
     bool? areHitboxesVisible,

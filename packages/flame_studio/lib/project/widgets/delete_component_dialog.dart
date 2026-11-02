@@ -2,20 +2,23 @@ import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flutter/material.dart';
 
 /// {@template delete_component_dialog}
-/// Asks the user to confirm the deletion of a [Component].
+/// Asks the user to confirm the deletion of a [ComponentData].
 ///
 /// Pops with `true` when confirmed.
 /// {@endtemplate}
 class const DeleteComponentDialog({
   /// The component to delete.
-  required final Component component,
+  required final ComponentData component,
   super.key,
 }) extends StatelessWidget {
   /// {@macro delete_component_dialog}
   this;
 
   /// Shows the dialog and returns whether the deletion was confirmed.
-  static Future<bool> show(BuildContext context, Component component) async {
+  static Future<bool> show(
+    BuildContext context,
+    ComponentData component,
+  ) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (_) => DeleteComponentDialog(component: component),

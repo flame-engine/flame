@@ -1,4 +1,4 @@
-import 'package:flame/components.dart' as flame;
+import 'package:flame/components.dart';
 import 'package:flame_studio/component_editor/widgets/preview/dashed_outline.dart';
 import 'package:flame_studio/component_editor/widgets/preview/preview_position_component.dart';
 import 'package:flutter/painting.dart';
@@ -11,12 +11,12 @@ import 'package:flutter/painting.dart';
 /// missing. Until there is a [sprite] it is outlined like a
 /// [PreviewPositionComponent], so it stays visible.
 /// {@endtemplate}
-class PreviewSpriteComponent() extends flame.PositionComponent {
+class PreviewSpriteComponent() extends PositionComponent {
   /// {@macro preview_sprite_component}
   this;
 
   /// The sprite drawn, filling the size of the component.
-  flame.Sprite? sprite;
+  Sprite? sprite;
 
   static final _outlinePaint = Paint()
     ..color = PreviewPositionComponent.color
