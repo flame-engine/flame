@@ -228,7 +228,7 @@ class _TestPlan(String input) extends DialogueView {
       } else if (match5 != null) {
         _expected.add(_Command(match5.group(1)!, match5.group(2) ?? ''));
       } else {
-        throw 'Unrecognized test plan line $i: "$line"';
+        throw FormatException('Unrecognized test plan line $i: "$line"');
       }
     }
   }
