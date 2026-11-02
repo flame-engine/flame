@@ -2,7 +2,6 @@ import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
-import 'package:flame_3d/src/camera/camera_component_3d.dart';
 
 /// {@template mesh_component}
 /// An [Object3D] that renders a [Mesh] at the [position] with the [rotation]
@@ -27,10 +26,5 @@ class MeshComponent({
     context
       ..model.setFrom(worldTransformMatrix)
       ..drawMesh(mesh);
-  }
-
-  @override
-  bool isVisible(CameraComponent3D camera) {
-    return camera.frustum.intersectsWithAabb3(aabb);
   }
 }
