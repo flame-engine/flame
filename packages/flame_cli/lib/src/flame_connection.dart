@@ -25,6 +25,13 @@ class FlameConnection._(
 
   static const _extensionPrefix = 'ext.flame_devtools.';
 
+  /// The Dart VM Service, for the commands that read and change objects of
+  /// the game directly, instead of through the service extensions.
+  VmService get service => _service;
+
+  /// The id of the isolate that runs the game.
+  String get isolateId => _isolateId;
+
   /// Connects to the Dart VM Service at [uri] and finds the isolate that runs
   /// the Flame game.
   ///

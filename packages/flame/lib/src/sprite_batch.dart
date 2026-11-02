@@ -635,7 +635,9 @@ class SpriteBatch(
     final actualBlendMode = blendMode ?? defaultBlendMode;
 
     if (!hasNoColors && actualBlendMode == null) {
-      throw 'When setting any colors, a blend mode must be provided.';
+      throw StateError(
+        'When setting any colors, a blend mode must be provided.',
+      );
     }
 
     if (useAtlas && !_flippedAtlasStatus.isGenerating) {

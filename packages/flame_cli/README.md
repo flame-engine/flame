@@ -72,11 +72,13 @@ in the image can be matched with the ids, and keep the image within the size lim
 flame snapshot --annotate --filter 'player|enemy' --max-size 1024
 ```
 
-Hot reload or restart the game after changing the code, read its output, open the Flutter
-DevTools with the Flame tab for the game, check whether it is running and stop it:
+Hot reload or restart the game after changing the code, also merging changes to constructors and
+`onLoad` methods into the live components while they keep their state, read its output, open the
+Flutter DevTools with the Flame tab for the game, check whether it is running and stop it:
 
 ```shell
 flame reload
+flame reload --merge
 flame logs
 flame devtools
 flame status

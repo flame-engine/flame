@@ -19,6 +19,7 @@ linter:
     - always_put_required_named_parameters_first
     - always_use_package_imports
     - annotate_overrides
+    - annotate_redeclares
     - async_return_with_no_await
     - avoid_bool_literals_in_conditional_expressions
     - avoid_catches_without_on_clauses
@@ -56,6 +57,7 @@ linter:
     - collection_methods_unrelated_type
     - combinators_ordering
     - comment_references
+    - conditional_uri_does_not_exist
     - constant_identifier_names
     - control_flow_in_finally
     - curly_braces_in_flow_control_structures
@@ -75,7 +77,9 @@ linter:
     - flutter_style_todos
     - hash_and_equals
     - implementation_imports
+    - implicit_reopen
     - initialize_in_field_declaration
+    - invalid_case_patterns
     - invalid_runtime_check_with_js_interop_types
     - join_return_with_assignment
     - library_names
@@ -86,6 +90,7 @@ linter:
     - missing_code_block_language_in_doc_comment
     - missing_whitespace_between_adjacent_strings
     - no_adjacent_strings_in_list
+    - no_default_cases
     - no_duplicate_case_values
     - no_dynamic_casts
     - no_leading_underscores_for_library_prefixes
@@ -97,6 +102,7 @@ linter:
     - noop_primitive_operations
     - null_closures
     - omit_local_variable_types
+    - only_throw_errors
     - package_names
     - package_prefixed_library_names
     - parameter_assignments
@@ -125,6 +131,7 @@ linter:
     - prefer_is_not_empty
     - prefer_is_not_operator
     - prefer_iterable_wheretype
+    - prefer_mixin
     - prefer_null_aware_method_calls
     - prefer_null_aware_operators
     - prefer_single_quotes
