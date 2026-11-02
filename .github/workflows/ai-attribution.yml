@@ -17,14 +17,4 @@ jobs:
     name: Check for AI attribution
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PR_URL: repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}
-        run: |
-          {
-            gh api "$PR_URL" --jq '.body // ""'
-            gh api --paginate "$PR_URL/commits" \
-              --jq '.[] | "Author: \(.commit.author.name) <\(.commit.author.email)>", .commit.message'
-          } | ./scripts/check-ai-attribution.sh
+      - uses: bluefireteam/no-ai-attribution-action@v1
