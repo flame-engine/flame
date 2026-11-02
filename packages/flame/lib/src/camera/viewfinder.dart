@@ -145,8 +145,8 @@ class Viewfinder({
   /// viewport, and 10 or more game units across the height.
   ///
   /// This property is an alternative way to set the [zoom] level for the
-  /// viewfinder. It is persistent too: if the game size changes, the zoom
-  /// will be recalculated to fit the constraint.
+  /// viewfinder. It is persistent too: if the size of the viewport changes,
+  /// the zoom will be recalculated to fit the constraint.
   ///
   /// The zoom is calculated against the viewport's [Viewport.virtualSize], so
   /// when used together with a [FixedResolutionViewport], the given region is
@@ -202,11 +202,16 @@ class Viewfinder({
 
   /// Set [zoom] level based on the [_visibleGameSize].
   void _updateZoom() {
-    if (_visibleGameSize != null) {
+    final visibleGameSize = _visibleGameSize;
+    if (visibleGameSize != null) {
       final viewportSize = camera.viewport.virtualSize;
-      final zoomX = viewportSize.x / _visibleGameSize!.x;
-      final zoomY = viewportSize.y / _visibleGameSize!.y;
-      zoom = min(zoomX, zoomY);
+      final zoomX = viewportSize.x / visibleGameSize.x;
+      final zoomY = viewportSize.y / visibleGameSize.y;
+      final newZoom = min(zoomX, zoomY);
+      // The viewport can have an empty size before it has been laid out.
+      if (newZoom > 0 && newZoom.isFinite) {
+        zoom = newZoom;
+      }
     }
   }
 
@@ -220,12 +225,6 @@ class Viewfinder({
     return localToGlobal(point);
   }
 
-  @override
-  void onGameResize(Vector2 size) {
-    _updateZoom();
-    super.onGameResize(size);
-  }
-
   /// Called by the viewport when its size changes.
   @internal
   void onViewportResize() {
@@ -234,6 +233,7 @@ class Viewfinder({
       transform.position.x = viewportSize.x * _anchor.x;
       transform.position.y = viewportSize.y * _anchor.y;
       visibleRect = null;
+      _updateZoom();
     }
   }
 
@@ -257,10 +257,7 @@ class Viewfinder({
   }
 
   @internal
-  void updateTransform() {
-    _updateZoom();
-    onViewportResize();
-  }
+  void updateTransform() => onViewportResize();
 
   /// [ScaleProvider]'s API.
   @internal
