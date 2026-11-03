@@ -60,7 +60,7 @@ extension ColorExtension on Color {
     } else if (hexString.length == 6 || hexString.length == 7) {
       return _parseRegex(2, 3, hexString);
     } else {
-      throw 'Invalid format for RGB hex string: $hexString';
+      throw FormatException('Invalid format for RGB hex string: $hexString');
     }
   }
 
@@ -83,7 +83,7 @@ extension ColorExtension on Color {
     } else if (hexString.length == 8 || hexString.length == 9) {
       return _parseRegex(2, 4, hexString);
     } else {
-      throw 'Invalid format for ARGB hex string: $hexString';
+      throw FormatException('Invalid format for ARGB hex string: $hexString');
     }
   }
 

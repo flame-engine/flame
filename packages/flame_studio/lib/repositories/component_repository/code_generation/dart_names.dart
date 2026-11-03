@@ -26,7 +26,8 @@ String dartRootClassName(String name) => '\$${dartClassName(name)}';
 /// [childName] of the root component called [rootName]: the `head` of
 /// `player_ship` becomes `$PlayerShipHead`.
 ///
-/// Only children that have children of their own get a class.
+/// Only children that have children of their own, or that load a sprite,
+/// get a class.
 String dartChildClassName(String rootName, String childName) {
   return '${dartRootClassName(rootName)}${dartClassName(childName)}';
 }
@@ -66,6 +67,7 @@ Set<String> flameMemberNames(ComponentType type) {
     ComponentType.position => _positionComponentMembers,
     ComponentType.circle => _circleComponentMembers,
     ComponentType.polygon => _polygonComponentMembers,
+    ComponentType.sprite => _spriteComponentMembers,
     // Hitboxes have no children, so no getters: the members of their shape
     // are enough.
     ComponentType.rectangleHitbox => _rectangleComponentMembers,
@@ -244,6 +246,37 @@ const Set<String> _polygonComponentMembers = {
   'shrinkToBounds',
   'tint',
   'vertices',
+};
+
+/// Public members of Flame's `SpriteComponent` (Flame 2.0.0-dev.1),
+/// including the inherited ones: the `PositionComponent` ones, plus those
+/// of `HasPaint`, `ImageRetainer` and `RendersSprite`.
+const Set<String> _spriteComponentMembers = {
+  ..._positionComponentMembers,
+  'autoResize',
+  'bleed',
+  'deletePaint',
+  'getAlpha',
+  'getOpacity',
+  'getPaint',
+  'hasPaintLayers',
+  'makeOpaque',
+  'makeTransparent',
+  'opacity',
+  'opacityProviderOf',
+  'opacityProviderOfList',
+  'paint',
+  'paintLayers',
+  'paintLayersInternal',
+  'renderSprite',
+  'retainedImages',
+  'setAlpha',
+  'setColor',
+  'setOpacity',
+  'setPaint',
+  'sprite',
+  'tint',
+  'updateRetainedImages',
 };
 
 /// Public members of Flame's `CircleComponent` (Flame 2.0.0-dev.1),

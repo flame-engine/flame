@@ -17,11 +17,11 @@ void main() {
     const accent = PaletteColor(name: 'accent', color: 0xFF00FF00);
     const palette = Palette(colors: [primary, accent]);
     // Saved without colors, but uses `primary` in the editor.
-    const edited = RectangleComponent(
+    const edited = RectangleComponentData(
       name: 'Player',
       paint: ComponentPaint(paletteColor: 'primary'),
     );
-    const enemy = RectangleComponent(
+    const enemy = RectangleComponentData(
       name: 'Enemy',
       paint: ComponentPaint(paletteColor: 'primary'),
     );
@@ -46,7 +46,7 @@ void main() {
       when(() => componentRepository.getPalette(project.path))
           .thenAnswer((_) async => palette);
       when(() => componentRepository.getComponents(project.path)).thenAnswer(
-        (_) async => const [enemy, RectangleComponent(name: 'Player')],
+        (_) async => const [enemy, RectangleComponentData(name: 'Player')],
       );
       when(
         () => projectRepository.getSettings(project),

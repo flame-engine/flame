@@ -24,7 +24,7 @@ abstract class Intersections<
     } else if (shapeA is T2 && shapeB is T1) {
       return intersect(shapeB, shapeA, overlappingRect: overlappingRect);
     } else {
-      throw 'Unsupported shapes';
+      throw UnsupportedError('Unsupported shapes');
     }
   }
 }
@@ -341,8 +341,10 @@ List<Vector2> intersections(
   final intersectionSystem = _intersectionSystems.firstWhere(
     (system) => system.supportsShapes(shapeA, shapeB),
     orElse: () {
-      throw 'Unsupported intersection detected between: '
-          '${shapeA.runtimeType} and ${shapeB.runtimeType}';
+      throw UnsupportedError(
+        'Unsupported intersection detected between: '
+        '${shapeA.runtimeType} and ${shapeB.runtimeType}',
+      );
     },
   );
   return intersectionSystem.unorderedIntersect(

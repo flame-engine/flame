@@ -1,4 +1,4 @@
-import 'package:flame/components.dart' as flame;
+import 'package:flame/components.dart';
 import 'package:flutter/painting.dart';
 
 /// {@template selection_highlight}
@@ -9,7 +9,7 @@ import 'package:flutter/painting.dart';
 /// [target]: that keeps it on top of overlapping siblings, and the
 /// children of the previewed components match the component tree.
 /// {@endtemplate}
-class SelectionHighlight() extends flame.Component {
+class SelectionHighlight() extends Component {
   /// {@macro selection_highlight}
   this : super(priority: 1 << 30);
 
@@ -25,7 +25,7 @@ class SelectionHighlight() extends flame.Component {
     ..strokeWidth = strokeWidth;
 
   /// The component to highlight, if any.
-  flame.PositionComponent? target;
+  PositionComponent? target;
 
   /// The zoom of the camera, which scales the border too: it is drawn
   /// thinner when zoomed in, so it keeps the same width on screen.

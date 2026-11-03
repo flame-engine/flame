@@ -1,10 +1,10 @@
-part of 'component.dart';
+part of 'component_data.dart';
 
-/// {@template rectangle_hitbox_component}
+/// {@template rectangle_hitbox_data}
 /// A rectangular hitbox with a position, an anchor, an angle, a size and a
 /// collision.
 /// {@endtemplate}
-final class const RectangleHitboxComponent({
+final class const RectangleHitboxData({
   required super.name,
   @override final ComponentPosition position = const ComponentPosition(),
   @override final ComponentAnchor anchor = ComponentAnchor.topLeft,
@@ -12,21 +12,21 @@ final class const RectangleHitboxComponent({
   @override final ComponentSize size = const ComponentSize(),
   @override final ComponentCollision collision = const ComponentCollision(),
   super.children,
-}) extends Component
+}) extends ComponentData
     implements
         PositionedComponent,
         AnchoredComponent,
         RotatedComponent,
         SizedComponent,
         HitboxComponent {
-  /// {@macro rectangle_hitbox_component}
+  /// {@macro rectangle_hitbox_data}
   this;
 
-  /// Reads the properties of a [RectangleHitboxComponent] from its JSON
-  /// representation. Use [Component.fromJson], which also reads the
+  /// Reads the properties of a [RectangleHitboxData] from its JSON
+  /// representation. Use [ComponentData.fromJson], which also reads the
   /// children.
   factory _fromJson(Map<String, dynamic> json) {
-    return RectangleHitboxComponent(
+    return RectangleHitboxData(
       name: json['name'] as String,
       position: ComponentPosition.fromJson(json['position']),
       anchor: ComponentAnchor.fromJson(json['anchor']),
@@ -40,48 +40,48 @@ final class const RectangleHitboxComponent({
   ComponentType get type => ComponentType.rectangleHitbox;
 
   @override
-  RectangleHitboxComponent copyWithPosition(ComponentPosition position) {
+  RectangleHitboxData copyWithPosition(ComponentPosition position) {
     return _copyWith(position: position);
   }
 
   @override
-  RectangleHitboxComponent copyWithAnchor(ComponentAnchor anchor) {
+  RectangleHitboxData copyWithAnchor(ComponentAnchor anchor) {
     return _copyWith(anchor: anchor);
   }
 
   @override
-  RectangleHitboxComponent copyWithAngle(ComponentAngle angle) {
+  RectangleHitboxData copyWithAngle(ComponentAngle angle) {
     return _copyWith(angle: angle);
   }
 
   @override
-  RectangleHitboxComponent copyWithSize(ComponentSize size) {
+  RectangleHitboxData copyWithSize(ComponentSize size) {
     return _copyWith(size: size);
   }
 
   @override
-  RectangleHitboxComponent copyWithCollision(ComponentCollision collision) {
+  RectangleHitboxData copyWithCollision(ComponentCollision collision) {
     return _copyWith(collision: collision);
   }
 
   @override
-  RectangleHitboxComponent copyWithName(String name) => _copyWith(name: name);
+  RectangleHitboxData copyWithName(String name) => _copyWith(name: name);
 
   @override
-  RectangleHitboxComponent copyWithChildren(List<Component> children) {
+  RectangleHitboxData copyWithChildren(List<ComponentData> children) {
     return _copyWith(children: children);
   }
 
-  RectangleHitboxComponent _copyWith({
+  RectangleHitboxData _copyWith({
     String? name,
     ComponentPosition? position,
     ComponentAnchor? anchor,
     ComponentAngle? angle,
     ComponentSize? size,
     ComponentCollision? collision,
-    List<Component>? children,
+    List<ComponentData>? children,
   }) {
-    return RectangleHitboxComponent(
+    return RectangleHitboxData(
       name: name ?? this.name,
       position: position ?? this.position,
       anchor: anchor ?? this.anchor,

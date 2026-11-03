@@ -2,37 +2,41 @@ import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group(CircleComponent, () {
-    const component = CircleComponent(
+  group(PolygonHitboxData, () {
+    const component = PolygonHitboxData(
       name: 'Player',
       position: ComponentPosition(x: 1, y: 2),
       anchor: ComponentAnchor.center,
       angle: ComponentAngle(radians: 1.5),
-      radius: ComponentRadius(radius: 10),
-      paint: ComponentPaint(color: 0xFF00FF00, style: PaintStyle.stroke),
-      children: [RectangleComponent(name: 'rectangle1')],
+      vertices: ComponentVertices(ComponentVertices.square),
+      collision: ComponentCollision(
+        type: HitboxCollisionType.passive,
+        isSolid: true,
+      ),
+      children: [RectangleComponentData(name: 'rectangle1')],
     );
 
     test('supports value equality', () {
       expect(
-        const CircleComponent(name: 'Player'),
-        equals(const CircleComponent(name: 'Player')),
+        const PolygonHitboxData(name: 'Player'),
+        equals(const PolygonHitboxData(name: 'Player')),
       );
-      expect(component, isNot(equals(const CircleComponent(name: 'Player'))));
+      expect(component, isNot(equals(const PolygonHitboxData(name: 'Player'))));
     });
 
-    test('is a circle with a position, a radius and a paint', () {
-      expect(component.type, equals(ComponentType.circle));
+    test('is a polygon hitbox with a position, vertices and a collision', () {
+      expect(component.type, equals(ComponentType.polygonHitbox));
       expect(component, isA<PositionedComponent>());
       expect(component, isA<AnchoredComponent>());
       expect(component, isA<RotatedComponent>());
-      expect(component, isA<RadiusComponent>());
+      expect(component, isA<VerticesComponent>());
+      expect(component, isNot(isA<RadiusComponent>()));
       expect(component, isNot(isA<SizedComponent>()));
-      expect(component, isA<PaintedComponent>());
+      expect(component, isA<HitboxComponent>());
     });
 
     test('round-trips through JSON', () {
-      expect(Component.fromJson(component.toJson()), equals(component));
+      expect(ComponentData.fromJson(component.toJson()), equals(component));
     });
 
     test('toJson includes the type, properties and children', () {
@@ -40,7 +44,7 @@ void main() {
         component.toJson(),
         equals({
           'name': 'Player',
-          'type': 'circle',
+          'type': 'polygonHitbox',
           'children': [
             {
               'name': 'rectangle1',
@@ -56,8 +60,15 @@ void main() {
           'position': {'x': 1.0, 'y': 2.0},
           'anchor': {'x': 0.5, 'y': 0.5},
           'angle': {'radians': 1.5},
-          'radius': {'radius': 10.0},
-          'paint': {'color': 0xFF00FF00, 'style': 'stroke'},
+          'vertices': {
+            'vertices': [
+              {'x': 0.0, 'y': 0.0},
+              {'x': 50.0, 'y': 0.0},
+              {'x': 50.0, 'y': 50.0},
+              {'x': 0.0, 'y': 50.0},
+            ],
+          },
+          'collision': {'type': 'passive', 'isSolid': true},
         }),
       );
     });
@@ -89,7 +100,7 @@ void main() {
       final json = component.toJson()..remove('anchor');
 
       expect(
-        (Component.fromJson(json) as AnchoredComponent).anchor,
+        (ComponentData.fromJson(json) as AnchoredComponent).anchor,
         equals(ComponentAnchor.topLeft),
       );
     });
@@ -109,30 +120,30 @@ void main() {
       final json = component.toJson()..remove('angle');
 
       expect(
-        (Component.fromJson(json) as RotatedComponent).angle,
+        (ComponentData.fromJson(json) as RotatedComponent).angle,
         equals(ComponentAngle.zero),
       );
     });
 
-    test('copyWithRadius replaces only the radius', () {
-      const radius = ComponentRadius(radius: 3);
-      final copy = component.copyWithRadius(radius);
+    test('copyWithVertices replaces only the vertices', () {
+      const vertices = ComponentVertices();
+      final copy = component.copyWithVertices(vertices);
 
-      expect(copy.radius, equals(radius));
+      expect(copy.vertices, equals(vertices));
       expect(
-        copy.toJson()..remove('radius'),
-        equals(component.toJson()..remove('radius')),
+        copy.toJson()..remove('vertices'),
+        equals(component.toJson()..remove('vertices')),
       );
     });
 
-    test('copyWithPaint replaces only the paint', () {
-      const paint = ComponentPaint(color: 0xFF0000FF);
-      final copy = component.copyWithPaint(paint);
+    test('copyWithCollision replaces only the collision', () {
+      const collision = ComponentCollision(isSolid: true);
+      final copy = component.copyWithCollision(collision);
 
-      expect(copy.paint, equals(paint));
+      expect(copy.collision, equals(collision));
       expect(
-        copy.toJson()..remove('paint'),
-        equals(component.toJson()..remove('paint')),
+        copy.toJson()..remove('collision'),
+        equals(component.toJson()..remove('collision')),
       );
     });
 

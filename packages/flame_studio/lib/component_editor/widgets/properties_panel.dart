@@ -14,14 +14,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// the anchor and the angle are only edited on children: the root name is
 /// its file and class name, and the root is placed by whoever uses it.
 /// {@endtemplate}
-class const PropertiesPanel({super.key}) extends StatelessWidget {
+class const PropertiesPanel({
+  /// The project the edited component belongs to.
+  required final Project project,
+  super.key,
+}) extends StatelessWidget {
   /// {@macro properties_panel}
   this;
 
   @override
   Widget build(BuildContext context) {
     final (component, selectedPath, palette) = context
-        .select<ComponentEditorBloc, (Component, List<int>, Palette)>(
+        .select<ComponentEditorBloc, (ComponentData, List<int>, Palette)>(
           (bloc) => (
             bloc.state.selectedNode,
             bloc.state.selectedPath,
@@ -96,6 +100,13 @@ class const PropertiesPanel({super.key}) extends StatelessWidget {
             },
             onChanged: (vertices) =>
                 bloc.add(ComponentEditorVerticesChanged(vertices)),
+          ),
+        if (component case final SpriteBackedComponent spriteBacked)
+          SpriteEditor(
+            project: project,
+            value: spriteBacked.sprite,
+            onChanged: (sprite) =>
+                bloc.add(ComponentEditorSpriteChanged(sprite)),
           ),
         if (component case final PaintedComponent painted)
           PaintEditor(

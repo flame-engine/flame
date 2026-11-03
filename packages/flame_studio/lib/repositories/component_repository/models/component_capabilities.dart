@@ -1,6 +1,6 @@
 import 'package:flame_studio/repositories/repositories.dart';
 
-/// A [Component] that has a [ComponentPosition].
+/// A [ComponentData] that has a [ComponentPosition].
 ///
 /// Implemented by every component type backed by a Flame
 /// `PositionComponent`. The position is only edited on child components:
@@ -13,10 +13,10 @@ abstract interface class PositionedComponent() {
   ComponentPosition get position;
 
   /// Returns a copy of this component with [position] replaced.
-  Component copyWithPosition(ComponentPosition position);
+  ComponentData copyWithPosition(ComponentPosition position);
 }
 
-/// A [Component] that has a [ComponentAnchor].
+/// A [ComponentData] that has a [ComponentAnchor].
 ///
 /// Implemented by every component type backed by a Flame
 /// `PositionComponent`. Like the position, the anchor is only edited on
@@ -29,10 +29,10 @@ abstract interface class AnchoredComponent() {
   ComponentAnchor get anchor;
 
   /// Returns a copy of this component with [anchor] replaced.
-  Component copyWithAnchor(ComponentAnchor anchor);
+  ComponentData copyWithAnchor(ComponentAnchor anchor);
 }
 
-/// A [Component] that has a [ComponentAngle].
+/// A [ComponentData] that has a [ComponentAngle].
 ///
 /// Implemented by every component type backed by a Flame
 /// `PositionComponent`. Like the position, the angle is only edited on
@@ -45,10 +45,10 @@ abstract interface class RotatedComponent() {
   ComponentAngle get angle;
 
   /// Returns a copy of this component with [angle] replaced.
-  Component copyWithAngle(ComponentAngle angle);
+  ComponentData copyWithAngle(ComponentAngle angle);
 }
 
-/// A [Component] that has a [ComponentSize].
+/// A [ComponentData] that has a [ComponentSize].
 ///
 /// Implemented by every component type backed by a Flame
 /// `PositionComponent`.
@@ -60,10 +60,10 @@ abstract interface class SizedComponent() {
   ComponentSize get size;
 
   /// Returns a copy of this component with [size] replaced.
-  Component copyWithSize(ComponentSize size);
+  ComponentData copyWithSize(ComponentSize size);
 }
 
-/// A [Component] that draws with a [ComponentPaint].
+/// A [ComponentData] that draws with a [ComponentPaint].
 abstract interface class PaintedComponent() {
   /// Creates a [PaintedComponent].
   this;
@@ -72,10 +72,10 @@ abstract interface class PaintedComponent() {
   ComponentPaint get paint;
 
   /// Returns a copy of this component with [paint] replaced.
-  Component copyWithPaint(ComponentPaint paint);
+  ComponentData copyWithPaint(ComponentPaint paint);
 }
 
-/// A [Component] that has a [ComponentRadius].
+/// A [ComponentData] that has a [ComponentRadius].
 ///
 /// Implemented by round component types, such as circles, whose Flame size
 /// is derived from the radius.
@@ -87,10 +87,10 @@ abstract interface class RadiusComponent() {
   ComponentRadius get radius;
 
   /// Returns a copy of this component with [radius] replaced.
-  Component copyWithRadius(ComponentRadius radius);
+  ComponentData copyWithRadius(ComponentRadius radius);
 }
 
-/// A [Component] that has [ComponentVertices].
+/// A [ComponentData] that has [ComponentVertices].
 ///
 /// Implemented by polygon component types, whose Flame size is the
 /// bounding box of the vertices.
@@ -102,10 +102,22 @@ abstract interface class VerticesComponent() {
   ComponentVertices get vertices;
 
   /// Returns a copy of this component with [vertices] replaced.
-  Component copyWithVertices(ComponentVertices vertices);
+  ComponentData copyWithVertices(ComponentVertices vertices);
 }
 
-/// A [Component] that is a Flame hitbox, with a [ComponentCollision].
+/// A [ComponentData] that draws a [ComponentSprite].
+abstract interface class SpriteBackedComponent() {
+  /// Creates a [SpriteBackedComponent].
+  this;
+
+  /// The sprite of the component.
+  ComponentSprite get sprite;
+
+  /// Returns a copy of this component with [sprite] replaced.
+  ComponentData copyWithSprite(ComponentSprite sprite);
+}
+
+/// A [ComponentData] that is a Flame hitbox, with a [ComponentCollision].
 ///
 /// Hitboxes are only children, and have no children of their own: Flame
 /// requires a hitbox to be inside a `PositionComponent`.
@@ -117,5 +129,5 @@ abstract interface class HitboxComponent() {
   ComponentCollision get collision;
 
   /// Returns a copy of this component with [collision] replaced.
-  Component copyWithCollision(ComponentCollision collision);
+  ComponentData copyWithCollision(ComponentCollision collision);
 }

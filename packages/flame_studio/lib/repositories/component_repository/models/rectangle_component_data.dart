@@ -1,91 +1,91 @@
-part of 'component.dart';
+part of 'component_data.dart';
 
-/// {@template circle_component}
-/// A circle with a position, an anchor, an angle, a radius and a paint.
+/// {@template rectangle_component_data}
+/// A rectangle with a position, an anchor, an angle, a size and a paint.
 /// {@endtemplate}
-final class const CircleComponent({
+final class const RectangleComponentData({
   required super.name,
   @override final ComponentPosition position = const ComponentPosition(),
   @override final ComponentAnchor anchor = ComponentAnchor.topLeft,
   @override final ComponentAngle angle = ComponentAngle.zero,
-  @override final ComponentRadius radius = const ComponentRadius(),
+  @override final ComponentSize size = const ComponentSize(),
   @override final ComponentPaint paint = const ComponentPaint(),
   super.children,
-}) extends Component
+}) extends ComponentData
     implements
         PositionedComponent,
         AnchoredComponent,
         RotatedComponent,
-        RadiusComponent,
+        SizedComponent,
         PaintedComponent {
-  /// {@macro circle_component}
+  /// {@macro rectangle_component_data}
   this;
 
-  /// Reads the properties of a [CircleComponent] from its JSON
-  /// representation. Use [Component.fromJson], which also reads the
+  /// Reads the properties of a [RectangleComponentData] from its JSON
+  /// representation. Use [ComponentData.fromJson], which also reads the
   /// children.
   factory _fromJson(Map<String, dynamic> json) {
-    return CircleComponent(
+    return RectangleComponentData(
       name: json['name'] as String,
       position: ComponentPosition.fromJson(json['position']),
       anchor: ComponentAnchor.fromJson(json['anchor']),
       angle: ComponentAngle.fromJson(json['angle']),
-      radius: ComponentRadius.fromJson(json['radius']),
+      size: ComponentSize.fromJson(json['size']),
       paint: ComponentPaint.fromJson(json['paint']),
     );
   }
 
   @override
-  ComponentType get type => ComponentType.circle;
+  ComponentType get type => ComponentType.rectangle;
 
   @override
-  CircleComponent copyWithPosition(ComponentPosition position) {
+  RectangleComponentData copyWithPosition(ComponentPosition position) {
     return _copyWith(position: position);
   }
 
   @override
-  CircleComponent copyWithAnchor(ComponentAnchor anchor) {
+  RectangleComponentData copyWithAnchor(ComponentAnchor anchor) {
     return _copyWith(anchor: anchor);
   }
 
   @override
-  CircleComponent copyWithAngle(ComponentAngle angle) {
+  RectangleComponentData copyWithAngle(ComponentAngle angle) {
     return _copyWith(angle: angle);
   }
 
   @override
-  CircleComponent copyWithRadius(ComponentRadius radius) {
-    return _copyWith(radius: radius);
+  RectangleComponentData copyWithSize(ComponentSize size) {
+    return _copyWith(size: size);
   }
 
   @override
-  CircleComponent copyWithPaint(ComponentPaint paint) {
+  RectangleComponentData copyWithPaint(ComponentPaint paint) {
     return _copyWith(paint: paint);
   }
 
   @override
-  CircleComponent copyWithName(String name) => _copyWith(name: name);
+  RectangleComponentData copyWithName(String name) => _copyWith(name: name);
 
   @override
-  CircleComponent copyWithChildren(List<Component> children) {
+  RectangleComponentData copyWithChildren(List<ComponentData> children) {
     return _copyWith(children: children);
   }
 
-  CircleComponent _copyWith({
+  RectangleComponentData _copyWith({
     String? name,
     ComponentPosition? position,
     ComponentAnchor? anchor,
     ComponentAngle? angle,
-    ComponentRadius? radius,
+    ComponentSize? size,
     ComponentPaint? paint,
-    List<Component>? children,
+    List<ComponentData>? children,
   }) {
-    return CircleComponent(
+    return RectangleComponentData(
       name: name ?? this.name,
       position: position ?? this.position,
       anchor: anchor ?? this.anchor,
       angle: angle ?? this.angle,
-      radius: radius ?? this.radius,
+      size: size ?? this.size,
       paint: paint ?? this.paint,
       children: children ?? this.children,
     );
@@ -97,7 +97,7 @@ final class const CircleComponent({
     'position': position.toJson(),
     'anchor': anchor.toJson(),
     'angle': angle.toJson(),
-    'radius': radius.toJson(),
+    'size': size.toJson(),
     'paint': paint.toJson(),
   };
 
@@ -107,7 +107,7 @@ final class const CircleComponent({
     position,
     anchor,
     angle,
-    radius,
+    size,
     paint,
   ];
 }

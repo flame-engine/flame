@@ -15,6 +15,27 @@ void main() {
       expect(FileSystemClient.new, returnsNormally);
     });
 
+    test('listFiles goes into subdirectories when recursive', () async {
+      final directory = _createTempDirectory();
+      File('${directory.path}/a/b.txt').createSync(recursive: true);
+      File('${directory.path}/c.txt').createSync();
+      final client = FileSystemClient(directoryPicker: () async => null);
+
+      expect(await client.listFiles(directory.path), hasLength(1));
+      expect(
+        await client.listFiles(directory.path, recursive: true),
+        hasLength(2),
+      );
+    });
+
+    test('readFileBytes reads the contents of a file', () async {
+      final directory = _createTempDirectory();
+      final file = File('${directory.path}/a.bin')..writeAsBytesSync([1, 2]);
+      final client = FileSystemClient(directoryPicker: () async => null);
+
+      expect(await client.readFileBytes(file.path), equals([1, 2]));
+    });
+
     group('pickDirectory', () {
       test('returns the picked path', () async {
         final client = FileSystemClient(directoryPicker: () async => '/a/b');

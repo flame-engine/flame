@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flame_studio/repositories/repositories.dart';
@@ -6,7 +8,7 @@ part 'component_editor_event.dart';
 part 'component_editor_state.dart';
 
 /// {@template component_editor_bloc}
-/// Edits a [Component] of a [Project], including the tree of components
+/// Edits a [ComponentData] of a [Project], including the tree of components
 /// inside it, and saves it.
 ///
 /// Saving also generates the Dart code of the component in the output
@@ -19,7 +21,7 @@ part 'component_editor_state.dart';
 /// {@endtemplate}
 class ComponentEditorBloc({
   required final Project _project,
-  required Component component,
+  required ComponentData component,
   required final ComponentRepository _componentRepository,
   required final ProjectRepository _projectRepository,
   required final EditorPreferencesRepository _editorPreferencesRepository,
@@ -40,6 +42,7 @@ class ComponentEditorBloc({
     on<ComponentEditorSizeChanged>(_onSizeChanged);
     on<ComponentEditorRadiusChanged>(_onRadiusChanged);
     on<ComponentEditorVerticesChanged>(_onVerticesChanged);
+    on<ComponentEditorSpriteChanged>(_onSpriteChanged);
     on<ComponentEditorPaintChanged>(_onPaintChanged);
     on<ComponentEditorCollisionChanged>(_onCollisionChanged);
     on<ComponentEditorPaletteChanged>(_onPaletteChanged);
@@ -101,6 +104,8 @@ class ComponentEditorBloc({
       // Paints keep the last known value of their palette colors.
     }
 
+    await _loadSpriteImages(emit);
+
     try {
       final taken = await _loadTakenClassNames();
       if (isSaving()) {
@@ -134,7 +139,7 @@ class ComponentEditorBloc({
 
   /// The [ComponentTree.generatedClassNames] of the other components of
   /// the project, with the component that generates each one.
-  Future<Map<String, Component>> _loadTakenClassNames() async {
+  Future<Map<String, ComponentData>> _loadTakenClassNames() async {
     final components = await _componentRepository.getComponents(_project.path);
     final name = state.component.name;
     return {
@@ -142,6 +147,28 @@ class ComponentEditorBloc({
         if (other.name != name)
           for (final className in other.generatedClassNames) className: other,
     };
+  }
+
+  /// Loads the images the component draws that aren't loaded yet. Images
+  /// that can't be read are left out: the preview draws their sprites as
+  /// empty ones.
+  Future<void> _loadSpriteImages(Emitter<ComponentEditorState> emit) async {
+    for (final image in state.component.usedImages) {
+      if (state.spriteImages.containsKey(image)) {
+        continue;
+      }
+      try {
+        final bytes = await _componentRepository.readImage(
+          _project.path,
+          image,
+        );
+        emit(
+          state.copyWith(spriteImages: {...state.spriteImages, image: bytes}),
+        );
+      } on Exception {
+        continue;
+      }
+    }
   }
 
   void _onNodeSelected(
@@ -164,7 +191,7 @@ class ComponentEditorBloc({
     }
     final component = state.component;
     final parentPath = state.selectedPath;
-    final child = Component.create(
+    final child = ComponentData.create(
       component.uniqueChildName(
         event.type,
         takenClassNames: state.takenClassNames.keys.toSet(),
@@ -292,6 +319,26 @@ class ComponentEditorBloc({
     });
   }
 
+  /// The first image picked also sets the size to the one of its region,
+  /// like Flame sizes a sprite component that has no size.
+  Future<void> _onSpriteChanged(
+    ComponentEditorSpriteChanged event,
+    Emitter<ComponentEditorState> emit,
+  ) async {
+    _editSelected(emit, (node) {
+      if (node case final SpriteBackedComponent node) {
+        final edited = node.copyWithSprite(event.sprite);
+        return switch (edited) {
+          final SizedComponent sized when node.sprite.image == null =>
+            sized.copyWithSize(event.sprite.srcSize),
+          _ => edited,
+        };
+      }
+      return node;
+    });
+    await _loadSpriteImages(emit);
+  }
+
   void _onPaintChanged(
     ComponentEditorPaintChanged event,
     Emitter<ComponentEditorState> emit,
@@ -327,7 +374,7 @@ class ComponentEditorBloc({
   /// Replaces the selected node with the result of [edit].
   void _editSelected(
     Emitter<ComponentEditorState> emit,
-    Component Function(Component node) edit,
+    ComponentData Function(ComponentData node) edit,
   ) {
     final component = state.component.updateNodeAt(state.selectedPath, edit);
     if (component == state.component) {
@@ -405,7 +452,7 @@ class ComponentEditorBloc({
     // not have been loaded yet, or may clash with this one already. A
     // component whose classes clash is not saved: its code wouldn't
     // compile, and its file would reserve classes other components own.
-    final Map<String, Component> taken;
+    final Map<String, ComponentData> taken;
     try {
       taken = await _loadTakenClassNames();
     } on Exception {

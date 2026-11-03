@@ -1,92 +1,95 @@
-part of 'component.dart';
+part of 'component_data.dart';
 
-/// {@template rectangle_component}
-/// A rectangle with a position, an anchor, an angle, a size and a paint.
+/// {@template sprite_component_data}
+/// A sprite with a position, an anchor, an angle and a size.
+///
+/// The size is the one the sprite is drawn with, whatever the size of its
+/// region of the image is.
 /// {@endtemplate}
-final class const RectangleComponent({
+final class const SpriteComponentData({
   required super.name,
   @override final ComponentPosition position = const ComponentPosition(),
   @override final ComponentAnchor anchor = ComponentAnchor.topLeft,
   @override final ComponentAngle angle = ComponentAngle.zero,
   @override final ComponentSize size = const ComponentSize(),
-  @override final ComponentPaint paint = const ComponentPaint(),
+  @override final ComponentSprite sprite = const ComponentSprite(),
   super.children,
-}) extends Component
+}) extends ComponentData
     implements
         PositionedComponent,
         AnchoredComponent,
         RotatedComponent,
         SizedComponent,
-        PaintedComponent {
-  /// {@macro rectangle_component}
+        SpriteBackedComponent {
+  /// {@macro sprite_component_data}
   this;
 
-  /// Reads the properties of a [RectangleComponent] from its JSON
-  /// representation. Use [Component.fromJson], which also reads the
+  /// Reads the properties of a [SpriteComponentData] from its JSON
+  /// representation. Use [ComponentData.fromJson], which also reads the
   /// children.
   factory _fromJson(Map<String, dynamic> json) {
-    return RectangleComponent(
+    return SpriteComponentData(
       name: json['name'] as String,
       position: ComponentPosition.fromJson(json['position']),
       anchor: ComponentAnchor.fromJson(json['anchor']),
       angle: ComponentAngle.fromJson(json['angle']),
       size: ComponentSize.fromJson(json['size']),
-      paint: ComponentPaint.fromJson(json['paint']),
+      sprite: ComponentSprite.fromJson(json['sprite']),
     );
   }
 
   @override
-  ComponentType get type => ComponentType.rectangle;
+  ComponentType get type => ComponentType.sprite;
 
   @override
-  RectangleComponent copyWithPosition(ComponentPosition position) {
+  SpriteComponentData copyWithPosition(ComponentPosition position) {
     return _copyWith(position: position);
   }
 
   @override
-  RectangleComponent copyWithAnchor(ComponentAnchor anchor) {
+  SpriteComponentData copyWithAnchor(ComponentAnchor anchor) {
     return _copyWith(anchor: anchor);
   }
 
   @override
-  RectangleComponent copyWithAngle(ComponentAngle angle) {
+  SpriteComponentData copyWithAngle(ComponentAngle angle) {
     return _copyWith(angle: angle);
   }
 
   @override
-  RectangleComponent copyWithSize(ComponentSize size) {
+  SpriteComponentData copyWithSize(ComponentSize size) {
     return _copyWith(size: size);
   }
 
   @override
-  RectangleComponent copyWithPaint(ComponentPaint paint) {
-    return _copyWith(paint: paint);
+  SpriteComponentData copyWithSprite(ComponentSprite sprite) {
+    return _copyWith(sprite: sprite);
   }
 
   @override
-  RectangleComponent copyWithName(String name) => _copyWith(name: name);
+  SpriteComponentData copyWithName(String name) => _copyWith(name: name);
 
   @override
-  RectangleComponent copyWithChildren(List<Component> children) {
+  SpriteComponentData copyWithChildren(List<ComponentData> children) {
     return _copyWith(children: children);
   }
 
-  RectangleComponent _copyWith({
+  SpriteComponentData _copyWith({
     String? name,
     ComponentPosition? position,
     ComponentAnchor? anchor,
     ComponentAngle? angle,
     ComponentSize? size,
-    ComponentPaint? paint,
-    List<Component>? children,
+    ComponentSprite? sprite,
+    List<ComponentData>? children,
   }) {
-    return RectangleComponent(
+    return SpriteComponentData(
       name: name ?? this.name,
       position: position ?? this.position,
       anchor: anchor ?? this.anchor,
       angle: angle ?? this.angle,
       size: size ?? this.size,
-      paint: paint ?? this.paint,
+      sprite: sprite ?? this.sprite,
       children: children ?? this.children,
     );
   }
@@ -98,7 +101,7 @@ final class const RectangleComponent({
     'anchor': anchor.toJson(),
     'angle': angle.toJson(),
     'size': size.toJson(),
-    'paint': paint.toJson(),
+    'sprite': sprite.toJson(),
   };
 
   @override
@@ -108,6 +111,6 @@ final class const RectangleComponent({
     anchor,
     angle,
     size,
-    paint,
+    sprite,
   ];
 }

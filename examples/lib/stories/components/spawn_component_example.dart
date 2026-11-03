@@ -15,10 +15,10 @@ class SpawnComponentExample() extends FlameGame {
 
 class SpawnComponentWorld() extends World with TapCallbacks {
   @override
-  void onTapDown(TapDownEvent info) {
+  void onTapDown(TapDownEvent event) {
     final shapeType = Shapes.values.random();
 
-    final position = info.localPosition;
+    final position = event.localPosition;
     final shape = switch (shapeType) {
       Shapes.rectangle => Rectangle.fromCenter(
         center: position,

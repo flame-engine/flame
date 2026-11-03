@@ -2,8 +2,8 @@ import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group(CircleHitboxComponent, () {
-    const component = CircleHitboxComponent(
+  group(CircleHitboxData, () {
+    const component = CircleHitboxData(
       name: 'Player',
       position: ComponentPosition(x: 1, y: 2),
       anchor: ComponentAnchor.center,
@@ -13,18 +13,15 @@ void main() {
         type: HitboxCollisionType.passive,
         isSolid: true,
       ),
-      children: [RectangleComponent(name: 'rectangle1')],
+      children: [RectangleComponentData(name: 'rectangle1')],
     );
 
     test('supports value equality', () {
       expect(
-        const CircleHitboxComponent(name: 'Player'),
-        equals(const CircleHitboxComponent(name: 'Player')),
+        const CircleHitboxData(name: 'Player'),
+        equals(const CircleHitboxData(name: 'Player')),
       );
-      expect(
-        component,
-        isNot(equals(const CircleHitboxComponent(name: 'Player'))),
-      );
+      expect(component, isNot(equals(const CircleHitboxData(name: 'Player'))));
     });
 
     test('is a circle hitbox with a position, a radius and a collision', () {
@@ -38,7 +35,7 @@ void main() {
     });
 
     test('round-trips through JSON', () {
-      expect(Component.fromJson(component.toJson()), equals(component));
+      expect(ComponentData.fromJson(component.toJson()), equals(component));
     });
 
     test('toJson includes the type, properties and children', () {
@@ -95,7 +92,7 @@ void main() {
       final json = component.toJson()..remove('anchor');
 
       expect(
-        (Component.fromJson(json) as AnchoredComponent).anchor,
+        (ComponentData.fromJson(json) as AnchoredComponent).anchor,
         equals(ComponentAnchor.topLeft),
       );
     });
@@ -115,7 +112,7 @@ void main() {
       final json = component.toJson()..remove('angle');
 
       expect(
-        (Component.fromJson(json) as RotatedComponent).angle,
+        (ComponentData.fromJson(json) as RotatedComponent).angle,
         equals(ComponentAngle.zero),
       );
     });

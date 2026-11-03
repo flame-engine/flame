@@ -1,94 +1,92 @@
-part of 'component.dart';
+part of 'component_data.dart';
 
-/// {@template polygon_hitbox_component}
-/// A polygonal hitbox with a position, an anchor, an angle, vertices and a
+/// {@template circle_hitbox_data}
+/// A round hitbox with a position, an anchor, an angle, a radius and a
 /// collision.
-///
-/// Its size is the bounding box of its vertices.
 /// {@endtemplate}
-final class const PolygonHitboxComponent({
+final class const CircleHitboxData({
   required super.name,
   @override final ComponentPosition position = const ComponentPosition(),
   @override final ComponentAnchor anchor = ComponentAnchor.topLeft,
   @override final ComponentAngle angle = ComponentAngle.zero,
-  @override final ComponentVertices vertices = const ComponentVertices(),
+  @override final ComponentRadius radius = const ComponentRadius(),
   @override final ComponentCollision collision = const ComponentCollision(),
   super.children,
-}) extends Component
+}) extends ComponentData
     implements
         PositionedComponent,
         AnchoredComponent,
         RotatedComponent,
-        VerticesComponent,
+        RadiusComponent,
         HitboxComponent {
-  /// {@macro polygon_hitbox_component}
+  /// {@macro circle_hitbox_data}
   this;
 
-  /// Reads the properties of a [PolygonHitboxComponent] from its JSON
-  /// representation. Use [Component.fromJson], which also reads the
+  /// Reads the properties of a [CircleHitboxData] from its JSON
+  /// representation. Use [ComponentData.fromJson], which also reads the
   /// children.
   factory _fromJson(Map<String, dynamic> json) {
-    return PolygonHitboxComponent(
+    return CircleHitboxData(
       name: json['name'] as String,
       position: ComponentPosition.fromJson(json['position']),
       anchor: ComponentAnchor.fromJson(json['anchor']),
       angle: ComponentAngle.fromJson(json['angle']),
-      vertices: ComponentVertices.fromJson(json['vertices']),
+      radius: ComponentRadius.fromJson(json['radius']),
       collision: ComponentCollision.fromJson(json['collision']),
     );
   }
 
   @override
-  ComponentType get type => ComponentType.polygonHitbox;
+  ComponentType get type => ComponentType.circleHitbox;
 
   @override
-  PolygonHitboxComponent copyWithPosition(ComponentPosition position) {
+  CircleHitboxData copyWithPosition(ComponentPosition position) {
     return _copyWith(position: position);
   }
 
   @override
-  PolygonHitboxComponent copyWithAnchor(ComponentAnchor anchor) {
+  CircleHitboxData copyWithAnchor(ComponentAnchor anchor) {
     return _copyWith(anchor: anchor);
   }
 
   @override
-  PolygonHitboxComponent copyWithAngle(ComponentAngle angle) {
+  CircleHitboxData copyWithAngle(ComponentAngle angle) {
     return _copyWith(angle: angle);
   }
 
   @override
-  PolygonHitboxComponent copyWithVertices(ComponentVertices vertices) {
-    return _copyWith(vertices: vertices);
+  CircleHitboxData copyWithRadius(ComponentRadius radius) {
+    return _copyWith(radius: radius);
   }
 
   @override
-  PolygonHitboxComponent copyWithCollision(ComponentCollision collision) {
+  CircleHitboxData copyWithCollision(ComponentCollision collision) {
     return _copyWith(collision: collision);
   }
 
   @override
-  PolygonHitboxComponent copyWithName(String name) => _copyWith(name: name);
+  CircleHitboxData copyWithName(String name) => _copyWith(name: name);
 
   @override
-  PolygonHitboxComponent copyWithChildren(List<Component> children) {
+  CircleHitboxData copyWithChildren(List<ComponentData> children) {
     return _copyWith(children: children);
   }
 
-  PolygonHitboxComponent _copyWith({
+  CircleHitboxData _copyWith({
     String? name,
     ComponentPosition? position,
     ComponentAnchor? anchor,
     ComponentAngle? angle,
-    ComponentVertices? vertices,
+    ComponentRadius? radius,
     ComponentCollision? collision,
-    List<Component>? children,
+    List<ComponentData>? children,
   }) {
-    return PolygonHitboxComponent(
+    return CircleHitboxData(
       name: name ?? this.name,
       position: position ?? this.position,
       anchor: anchor ?? this.anchor,
       angle: angle ?? this.angle,
-      vertices: vertices ?? this.vertices,
+      radius: radius ?? this.radius,
       collision: collision ?? this.collision,
       children: children ?? this.children,
     );
@@ -100,7 +98,7 @@ final class const PolygonHitboxComponent({
     'position': position.toJson(),
     'anchor': anchor.toJson(),
     'angle': angle.toJson(),
-    'vertices': vertices.toJson(),
+    'radius': radius.toJson(),
     'collision': collision.toJson(),
   };
 
@@ -110,7 +108,7 @@ final class const PolygonHitboxComponent({
     position,
     anchor,
     angle,
-    vertices,
+    radius,
     collision,
   ];
 }

@@ -21,15 +21,15 @@ enum ChildNameError() {
   conflict,
 }
 
-/// Navigates and edits the tree formed by a [Component] and its children.
+/// Navigates and edits the tree formed by a [ComponentData] and its children.
 ///
 /// A node of the tree is addressed by its path: the index of each child to
 /// follow from the root. The root itself is the empty path.
-extension ComponentTree on Component {
+extension ComponentTree on ComponentData {
   /// Returns the node at [path].
   ///
   /// Throws a [RangeError] if there is no node at [path].
-  Component nodeAt(List<int> path) {
+  ComponentData nodeAt(List<int> path) {
     var node = this;
     for (final index in path) {
       node = node.children[index];
@@ -53,9 +53,9 @@ extension ComponentTree on Component {
   /// result of [update].
   ///
   /// Throws a [RangeError] if there is no node at [path].
-  Component updateNodeAt(
+  ComponentData updateNodeAt(
     List<int> path,
-    Component Function(Component node) update,
+    ComponentData Function(ComponentData node) update,
   ) {
     if (path.isEmpty) {
       return update(this);
@@ -71,7 +71,7 @@ extension ComponentTree on Component {
   ///
   /// Hitboxes ([HitboxComponent]) can't have children, and can't be added
   /// to another hitbox.
-  Component addChildAt(List<int> path, Component child) {
+  ComponentData addChildAt(List<int> path, ComponentData child) {
     if (nodeAt(path) is HitboxComponent) {
       throw ArgumentError.value(path, 'path', 'Hitboxes cannot have children');
     }
@@ -84,7 +84,7 @@ extension ComponentTree on Component {
   /// Returns a copy of this tree without the node at [path].
   ///
   /// The root (the empty [path]) cannot be removed.
-  Component removeNodeAt(List<int> path) {
+  ComponentData removeNodeAt(List<int> path) {
     if (path.isEmpty) {
       throw ArgumentError.value(path, 'path', 'The root cannot be removed');
     }
@@ -96,7 +96,7 @@ extension ComponentTree on Component {
   }
 
   /// This component followed by all of its descendants, depth first.
-  Iterable<Component> get nodes sync* {
+  Iterable<ComponentData> get nodes sync* {
     yield this;
     for (final child in children) {
       yield* child.nodes;
@@ -114,10 +114,21 @@ extension ComponentTree on Component {
     };
   }
 
+  /// The asset paths of the images the nodes of this tree draw.
+  Set<String> get usedImages {
+    return {
+      for (final node in nodes)
+        if (node case SpriteBackedComponent(
+          sprite: ComponentSprite(:final String image),
+        ))
+          image,
+    };
+  }
+
   /// Returns a copy of this tree whose paints have the current value of
   /// their palette color in [palette] as their color (see
   /// [ComponentPaint.resolvedColor]), which is what they draw with.
-  Component withPaletteColorsResolved(Palette palette) {
+  ComponentData withPaletteColorsResolved(Palette palette) {
     final node = switch (this) {
       final PaintedComponent painted when painted.paint.paletteColor != null =>
         painted.copyWithPaint(
@@ -141,11 +152,11 @@ extension ComponentTree on Component {
   /// The names of the classes this component reserves in the generated
   /// code: the class of the root, and the class of every child.
   ///
-  /// Only children that have children of their own get a class, but every
-  /// child reserves one, so adding children to a node never makes its class
-  /// clash with the classes of another component. Generated classes are
-  /// public, so the classes of two components of a project must not share
-  /// names, or a library importing both wouldn't compile.
+  /// Only children that have children of their own, or that load a sprite,
+  /// get a class, but every child reserves one, so editing a node never
+  /// makes its class clash with the classes of another component. Generated
+  /// classes are public, so the classes of two components of a project must
+  /// not share names, or a library importing both wouldn't compile.
   Set<String> get generatedClassNames {
     return {
       generatedClassName,
