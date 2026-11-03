@@ -366,6 +366,24 @@ void main() {
       expect(_getBoundsRect(camera), const Rect.fromLTRB(200, 100, 440, 380));
     });
 
+    testWithFlameGame('keeps updating after being mounted again', (game) async {
+      final world = World()..addToParent(game);
+      final camera = CameraComponent(world: world)..addToParent(game);
+      await game.ready();
+      game.onGameResize(Vector2(400, 300));
+      await _setBounds(game, camera, Rectangle.fromLTRB(0, 0, 1000, 1000));
+
+      // Removing the camera and adding it back mounts the behavior again,
+      // without loading it again.
+      camera.removeFromParent();
+      await game.ready();
+      game.add(camera);
+      await game.ready();
+
+      game.onGameResize(Vector2(800, 600));
+      expect(_getBoundsRect(camera), const Rect.fromLTRB(400, 300, 600, 700));
+    });
+
     testWithFlameGame('updates when the angle changes', (game) async {
       final camera = await _fixedResolutionCamera(game);
       await _setBounds(game, camera, Rectangle.fromLTRB(0, 0, 640, 480));
