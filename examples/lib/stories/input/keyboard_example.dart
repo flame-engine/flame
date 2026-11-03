@@ -1,11 +1,10 @@
 import 'package:examples/commons/ember.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
-class KeyboardExample() extends FlameGame with KeyboardEvents {
+class KeyboardExample() extends FlameGame with KeyboardCallbacks {
   static const String description = '''
     Example showcasing how to act on keyboard events.
     It also briefly showcases how to create a game without the FlameGame.
@@ -38,26 +37,22 @@ class KeyboardExample() extends FlameGame with KeyboardEvents {
   }
 
   @override
-  KeyEventResult onKeyEvent(
-    KeyEvent event,
-    Set<LogicalKeyboardKey> keysPressed,
-  ) {
-    final isKeyDown = event is KeyDownEvent;
+  void onKeyPress(KeyPressEvent event) => _steer(event.logicalKey, 1);
 
-    // Avoiding repeat event as we are interested only in
-    // key up and key down event.
-    if (key is! KeyRepeatEvent) {
-      if (event.logicalKey == LogicalKeyboardKey.keyA) {
-        _direction.x += isKeyDown ? -1 : 1;
-      } else if (event.logicalKey == LogicalKeyboardKey.keyD) {
-        _direction.x += isKeyDown ? 1 : -1;
-      } else if (event.logicalKey == LogicalKeyboardKey.keyW) {
-        _direction.y += isKeyDown ? -1 : 1;
-      } else if (event.logicalKey == LogicalKeyboardKey.keyS) {
-        _direction.y += isKeyDown ? 1 : -1;
-      }
+  @override
+  void onKeyRelease(KeyReleaseEvent event) => _steer(event.logicalKey, -1);
+
+  // A press adds the key's direction and its release takes it back off, so
+  // holding opposite keys cancels out
+  void _steer(LogicalKeyboardKey key, double sign) {
+    if (key == LogicalKeyboardKey.keyA) {
+      _direction.x -= sign;
+    } else if (key == LogicalKeyboardKey.keyD) {
+      _direction.x += sign;
+    } else if (key == LogicalKeyboardKey.keyW) {
+      _direction.y -= sign;
+    } else if (key == LogicalKeyboardKey.keyS) {
+      _direction.y += sign;
     }
-
-    return super.onKeyEvent(event, keysPressed);
   }
 }
