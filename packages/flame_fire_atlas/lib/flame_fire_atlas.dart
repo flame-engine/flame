@@ -270,7 +270,7 @@ class FireAtlas({
   ///
   Future<void> loadImage({bool clearImageData = true, Images? images}) async {
     if (imageData == null) {
-      throw 'Attempting on calling load on an already loaded Image';
+      throw StateError('Attempting on calling load on an already loaded Image');
     }
     final imagesCache = images ?? Flame.images;
     _image = await imagesCache.fromBase64(id, imageData!);
@@ -387,11 +387,13 @@ class FireAtlas({
     final selection = selections[selectionId];
 
     if (selection == null) {
-      throw 'There is no selection with the id "$selectionId" on this atlas';
+      throw ArgumentError(
+        'There is no selection with the id "$selectionId" on this atlas',
+      );
     }
 
     if (selection is! SpriteSelection) {
-      throw 'Selection "$selectionId" is not a Sprite';
+      throw ArgumentError('Selection "$selectionId" is not a Sprite');
     }
 
     final image = _assertImageLoaded();
@@ -416,10 +418,12 @@ class FireAtlas({
     final image = _assertImageLoaded();
 
     if (selection == null) {
-      throw 'There is no selection with the id "$selectionId" on this atlas';
+      throw ArgumentError(
+        'There is no selection with the id "$selectionId" on this atlas',
+      );
     }
     if (selection is! AnimationSelection) {
-      throw 'Selection "$selectionId" is not an Animation';
+      throw ArgumentError('Selection "$selectionId" is not an Animation');
     }
 
     final initialX = selection.x.toDouble();

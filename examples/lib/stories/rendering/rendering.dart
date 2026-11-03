@@ -1,4 +1,5 @@
 import 'package:examples/commons/commons.dart';
+import 'package:examples/commons/culling_story.dart';
 import 'package:examples/commons/example_use_case.dart';
 import 'package:examples/stories/rendering/culling_example.dart';
 import 'package:examples/stories/rendering/culling_visualized_example.dart';
@@ -40,27 +41,41 @@ WidgetbookComponent renderingStories() {
       ),
       ExampleUseCase(
         name: 'Culling',
-        builder: (context) => GameWidget(
-          game: CullingExample(
-            culled: context.knobs.boolean(
-              label: 'Culled',
-              initialValue: true,
+        builder: (context) {
+          final knobs = _cullingKnobs(context);
+          return CullingStory(
+            gameKey: knobs.amount,
+            createGame: () => CullingExample(
+              culled: knobs.culled,
+              amount: knobs.amount,
+              cameraSpeed: knobs.cameraSpeed,
             ),
-          ),
-        ),
+            apply: (game) => game
+              ..culled = knobs.culled
+              ..cameraSpeed = knobs.cameraSpeed,
+          );
+        },
         codeLink: baseLink('rendering/culling_example.dart'),
         info: CullingExample.description,
       ),
       ExampleUseCase(
         name: 'Culling (visualized)',
-        builder: (context) => GameWidget(
-          game: CullingVisualizedExample(
-            culled: context.knobs.boolean(
-              label: 'Culled',
-              initialValue: true,
+        builder: (context) {
+          final knobs = _cullingKnobs(context, withBigView: true);
+          return CullingStory(
+            gameKey: knobs.amount,
+            createGame: () => CullingVisualizedExample(
+              culled: knobs.culled,
+              amount: knobs.amount,
+              cameraSpeed: knobs.cameraSpeed,
+              bigView: knobs.bigView,
             ),
-          ),
-        ),
+            apply: (game) => game
+              ..culled = knobs.culled
+              ..cameraSpeed = knobs.cameraSpeed
+              ..bigView = knobs.bigView,
+          );
+        },
         codeLink: baseLink('rendering/culling_visualized_example.dart'),
         info: CullingVisualizedExample.description,
       ),
@@ -137,5 +152,42 @@ WidgetbookComponent renderingStories() {
         info: TextBoxExample.description,
       ),
     ],
+  );
+}
+
+/// The values of the knobs of the culling examples.
+typedef _CullingKnobs = ({
+  bool culled,
+  bool bigView,
+  int amount,
+  double cameraSpeed,
+});
+
+/// The knobs of the culling examples, in the order that they are shown: the
+/// toggles first, and then the other settings.
+///
+/// The "Big view" knob is only added [withBigView], and is otherwise always on.
+_CullingKnobs _cullingKnobs(
+  BuildContext context, {
+  bool withBigView = false,
+}) {
+  final culled = context.knobs.boolean(
+    label: cullingCulledKnob,
+    initialValue: true,
+  );
+  final bigView =
+      !withBigView ||
+      context.knobs.boolean(label: cullingBigViewKnob, initialValue: true);
+  final amount = context.knobs.object.dropdown(
+    label: 'Sprites',
+    initialOption: cullingSprites,
+    options: cullingSpriteAmounts,
+    labelBuilder: (amount) => '$amount',
+  );
+  return (
+    culled: culled,
+    bigView: bigView,
+    amount: amount,
+    cameraSpeed: cameraSpeedKnob(context),
   );
 }

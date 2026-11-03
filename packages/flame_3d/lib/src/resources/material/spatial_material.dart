@@ -55,7 +55,7 @@ class SpatialMaterial({
       );
     }
     for (final (index, transform) in jointTransforms.indexed) {
-      vertexShader.setMatrix4('JointMatrices.joints[$index]', transform);
+      vertexShader.setMatrix4(_jointKeys[index], transform);
     }
   }
 
@@ -92,11 +92,34 @@ class SpatialMaterial({
 
     for (final (index, light) in points.indexed) {
       fragmentShader
-        ..setVector3('Lights.positions[$index]', light.position)
-        ..setColor('Lights.colors[$index]', light.source.color)
-        ..setFloat('Lights.intensities[$index]', light.source.intensity);
+        ..setVector3(
+          _lightKey(_positionKeys, 'positions', index),
+          light.position,
+        )
+        ..setColor(_lightKey(_colorKeys, 'colors', index), light.source.color)
+        ..setFloat(
+          _lightKey(_intensityKeys, 'intensities', index),
+          light.source.intensity,
+        );
     }
   }
 
+  static final _positionKeys = <String>[];
+  static final _colorKeys = <String>[];
+  static final _intensityKeys = <String>[];
+
+  static String _lightKey(List<String> keys, String member, int index) {
+    for (var i = keys.length; i <= index; i++) {
+      keys.add('Lights.$member[$i]');
+    }
+    return keys[index];
+  }
+
   static const _maxJoints = 16;
+
+  static final _jointKeys = List.generate(
+    _maxJoints,
+    (index) => 'JointMatrices.joints[$index]',
+    growable: false,
+  );
 }

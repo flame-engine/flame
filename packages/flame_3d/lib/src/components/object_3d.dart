@@ -63,7 +63,12 @@ abstract class Object3D({
 
   void draw(RenderContext context);
 
+  /// Whether this component itself should be drawn when its [aabb] is not
+  /// fully inside the [camera]'s frustum.
+  ///
+  /// The default implementation checks whether the world-space [aabb]
+  /// intersects the frustum, so a partially visible component is drawn.
   bool isVisible(CameraComponent3D camera) {
-    return camera.frustum.containsVector3(position);
+    return camera.frustum.intersectsWithAabb3(aabb);
   }
 }

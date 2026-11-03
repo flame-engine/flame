@@ -156,9 +156,14 @@ class GameWidget<T extends Game> extends StatefulWidget {
 
   /// The [FocusNode] to control the games focus to receive event inputs.
   /// If omitted, defaults to an internally controlled focus node.
+  ///
+  /// When it is replaced by another node, the new node takes over the focus
+  /// if the old one had it. A node passed here is never disposed by the
+  /// [GameWidget].
   final FocusNode? focusNode;
 
-  /// Whether the [focusNode] requests focus once the game is mounted.
+  /// Whether the [focusNode] requests focus once the game is mounted, and
+  /// again whenever the [game] is replaced by a new one.
   /// Defaults to true.
   final bool autofocus;
 
@@ -215,7 +220,12 @@ class GameWidgetState<T extends Game>() extends State<GameWidget<T>> {
 
   Future<void>? _loaderFuture;
 
-  late FocusNode _focusNode;
+  /// The focus node that is created when [GameWidget.focusNode] is null. It is
+  /// owned, and disposed, by this state.
+  FocusNode? _internalFocusNode;
+
+  FocusNode get _focusNode =>
+      widget.focusNode ?? (_internalFocusNode ??= FocusNode());
 
   /// The number of `build()` functions currently executing.
   int _buildDepth = 0;
@@ -300,7 +310,6 @@ class GameWidgetState<T extends Game>() extends State<GameWidget<T>> {
   void initState() {
     super.initState();
     initCurrentGame();
-    _focusNode = widget.focusNode ?? FocusNode();
     if (widget.autofocus) {
       _focusNode.requestFocus();
     }
@@ -313,6 +322,22 @@ class GameWidgetState<T extends Game>() extends State<GameWidget<T>> {
     if (oldWidget.game != widget.game) {
       disposeCurrentGame();
       initCurrentGame();
+      // The new game is mounted like the first one, so it takes the focus in
+      // the same way, even if another widget took it in the meantime.
+      if (widget.autofocus) {
+        _focusNode.requestFocus();
+      }
+    }
+
+    if (oldWidget.focusNode != widget.focusNode) {
+      // The old node is still attached at this point, the new one is attached
+      // in the next build. Move the focus over so the game keeps receiving
+      // key events. If a descendant, like an overlay, has the focus it is
+      // moved under the new node in the next build, so it keeps the focus.
+      final oldFocusNode = oldWidget.focusNode ?? _internalFocusNode;
+      if (oldFocusNode?.hasPrimaryFocus ?? false) {
+        _focusNode.requestFocus();
+      }
     }
   }
 
@@ -325,11 +350,8 @@ class GameWidgetState<T extends Game>() extends State<GameWidget<T>> {
   @override
   void dispose() {
     disposeCurrentGame(callGameOnDispose: true);
-    // If we received a focus node from the user, they are responsible
-    // for disposing it
-    if (widget.focusNode == null) {
-      _focusNode.dispose();
-    }
+    // A focus node received from the user is disposed by the user.
+    _internalFocusNode?.dispose();
     super.dispose();
   }
 
