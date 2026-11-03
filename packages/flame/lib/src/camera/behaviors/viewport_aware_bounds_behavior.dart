@@ -8,6 +8,7 @@ import 'package:flame/src/camera/viewport.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/mixins/parent_is_a.dart';
 import 'package:flame/src/experimental/geometry/shapes/circle.dart';
+import 'package:flame/src/experimental/geometry/shapes/polygon.dart';
 import 'package:flame/src/experimental/geometry/shapes/rectangle.dart';
 import 'package:flame/src/experimental/geometry/shapes/rounded_rectangle.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
@@ -128,17 +129,93 @@ class ViewportAwareBoundsBehavior({
         center.y + halfHeight,
       );
     } else if (shape is RoundedRectangle) {
-      // Shrinking the rounded rectangle while keeping its radius is exact as
-      // long as the result is large enough to fit the radius; the constructor
-      // reduces the radius otherwise.
-      return RoundedRectangle.fromLTRBR(
+      final radius = shape.radius;
+      if (halfWidth >= radius && halfHeight >= radius) {
+        // Shrinking the rounded rectangle while keeping its radius is exact as
+        // long as the result is large enough to fit the radius.
+        return RoundedRectangle.fromLTRBR(
+          center.x - halfWidth,
+          center.y - halfHeight,
+          center.x + halfWidth,
+          center.y + halfHeight,
+          radius,
+        );
+      }
+      if (halfWidth > 0 && halfHeight > 0) {
+        return _roundedRectangleRegion(center, halfWidth, halfHeight, radius);
+      }
+      return Rectangle.fromLTRB(
         center.x - halfWidth,
         center.y - halfHeight,
         center.x + halfWidth,
         center.y + halfHeight,
-        shape.radius,
       );
     }
     return shape;
+  }
+
+  /// The number of edges that approximate each rounded corner of the region
+  /// calculated by [_roundedRectangleRegion].
+  static const _cornerSegments = 16;
+
+  /// Calculates the region for a [RoundedRectangle] whose radius doesn't fit
+  /// into the shrunk rectangle, i.e. when [halfWidth] or [halfHeight] is
+  /// smaller than the [radius].
+  ///
+  /// The corners of the viewport have to stay within the rounded corners of
+  /// the bounds, so the region is limited by arcs with the same [radius]
+  /// around the corners of a rectangle that is [halfWidth] - [radius] by
+  /// [halfHeight] - [radius] in half-size, at least one of which is negative.
+  /// The arcs are approximated by a polygon with its vertices on them, which
+  /// lies within the exact region since that region is convex.
+  Shape _roundedRectangleRegion(
+    Vector2 center,
+    double halfWidth,
+    double halfHeight,
+    double radius,
+  ) {
+    final arcCenterX = halfWidth - radius;
+    final arcCenterY = halfHeight - radius;
+    // The part of each arc that lies between the horizontal and the vertical
+    // line through the center of the region.
+    final startAngle = arcCenterY < 0
+        ? asin(min(1.0, -arcCenterY / radius))
+        : 0.0;
+    final endAngle = arcCenterX < 0
+        ? acos(min(1.0, -arcCenterX / radius))
+        : pi / 2;
+    if (endAngle - startAngle < 1e-9) {
+      // The viewport only fits at the center, if at all.
+      return Rectangle.fromLTRB(center.x, center.y, center.x, center.y);
+    }
+
+    final vertices = <Vector2>[];
+    void addVertex(double x, double y) {
+      final vertex = Vector2(center.x + x, center.y + y);
+      if (vertices.isEmpty || vertices.last.distanceToSquared(vertex) > 1e-9) {
+        vertices.add(vertex);
+      }
+    }
+
+    // Go around the corners, so that the arcs of neighboring corners meet.
+    const corners = [(1.0, 1.0, false), (-1.0, 1.0, true)];
+    for (final (signX, signY, isReversed) in [
+      ...corners,
+      for (final (signX, signY, isReversed) in corners)
+        (-signX, -signY, isReversed),
+    ]) {
+      for (var i = 0; i <= _cornerSegments; i++) {
+        final t = (isReversed ? _cornerSegments - i : i) / _cornerSegments;
+        final angle = startAngle + (endAngle - startAngle) * t;
+        addVertex(
+          signX * (arcCenterX + radius * cos(angle)),
+          signY * (arcCenterY + radius * sin(angle)),
+        );
+      }
+    }
+    if (vertices.first.distanceToSquared(vertices.last) <= 1e-9) {
+      vertices.removeLast();
+    }
+    return Polygon(vertices);
   }
 }

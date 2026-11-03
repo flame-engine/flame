@@ -186,6 +186,47 @@ void main() {
       );
     });
 
+    testWithFlameGame(
+      'RoundedRectangle with a radius that does not fit into the region',
+      (game) async {
+        final camera = await _fixedResolutionCamera(game);
+        // Half of the diagonal of the 320x240 viewport is 200, so it only
+        // fits into a circle with a radius of 200 at the center.
+        await _setBounds(
+          game,
+          camera,
+          RoundedRectangle.fromLTRBR(0, 0, 400, 400, 200),
+        );
+        final circleRegion = _getBounds(camera)!;
+        expect(circleRegion.aabb.min, Vector2(200, 200));
+        expect(circleRegion.aabb.max, Vector2(200, 200));
+
+        // In a pill-shaped level, the viewport can't get as close to the left
+        // and right ends as to the top and bottom edges.
+        final pill = RoundedRectangle.fromLTRBR(0, 0, 2000, 400, 200);
+        await _setBounds(game, camera, pill);
+        final region = _getBounds(camera)!;
+        expect(region.containsPoint(Vector2(1790, 200)), isTrue);
+        expect(region.containsPoint(Vector2(1810, 200)), isFalse);
+        expect(region.containsPoint(Vector2(1000, 279)), isTrue);
+        expect(region.containsPoint(Vector2(1000, 281)), isFalse);
+        final corners = [
+          Vector2(-160, -120),
+          Vector2(160, -120),
+          Vector2(-160, 120),
+          Vector2(160, 120),
+        ];
+        for (final vertex in (region as Polygon).vertices) {
+          for (final corner in corners) {
+            // The vertices lie on the edge of the region, so their corners
+            // lie on the edge of the bounds.
+            final point = vertex + corner * 0.9999;
+            expect(pill.containsPoint(point), isTrue, reason: '$point');
+          }
+        }
+      },
+    );
+
     testWithFlameGame('Circle away from the origin', (game) async {
       final camera = await _fixedResolutionCamera(game);
       await _setBounds(game, camera, Circle(Vector2(-500, 700), 400));
