@@ -229,11 +229,13 @@ class Viewfinder({
   @internal
   void onViewportResize() {
     if (parent != null) {
+      // The zoom has to be updated first, so that the camera's bounds aren't
+      // updated for the new size of the viewport with the old zoom.
+      _updateZoom();
       final viewportSize = camera.viewport.virtualSize;
       transform.position.x = viewportSize.x * _anchor.x;
       transform.position.y = viewportSize.y * _anchor.y;
       visibleRect = null;
-      _updateZoom();
     }
   }
 

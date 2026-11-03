@@ -4,6 +4,7 @@ import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -349,6 +350,55 @@ void main() {
         camera.addToParent(game);
         await game.ready();
         expect(camera.viewfinder.zoom, 6);
+      },
+    );
+
+    testWithFlameGame(
+      'visibleGameSize keeps the camera in place within viewport-aware bounds '
+      'when the game is resized',
+      (game) async {
+        game.onGameResize(Vector2(400, 300));
+        final camera = game.camera;
+        camera.viewfinder.visibleGameSize = Vector2(400, 300);
+        camera.setBounds(
+          Rectangle.fromLTRB(0, 0, 1000, 1000),
+          considerViewport: true,
+        );
+        await game.ready();
+        camera.viewfinder.position = Vector2(200, 150);
+        game.update(0);
+
+        game.onGameResize(Vector2(800, 600));
+        game.update(0);
+        expect(camera.viewfinder.zoom, 2);
+        expect(camera.viewfinder.position, Vector2(200, 150));
+      },
+    );
+
+    testWithFlameGame(
+      'visibleGameSize keeps the camera in place within viewport-aware bounds '
+      'when the viewport is replaced',
+      (game) async {
+        final world = World()..addToParent(game);
+        final camera = CameraComponent(
+          world: world,
+          viewport: FixedSizeViewport(400, 300),
+        )..addToParent(game);
+        await game.ready();
+        camera.viewfinder.visibleGameSize = Vector2(400, 300);
+        camera.setBounds(
+          Rectangle.fromLTRB(0, 0, 1000, 1000),
+          considerViewport: true,
+        );
+        await game.ready();
+        camera.viewfinder.position = Vector2(200, 150);
+        game.update(0);
+
+        camera.viewport = FixedSizeViewport(800, 600);
+        await game.ready();
+        game.update(0);
+        expect(camera.viewfinder.zoom, 2);
+        expect(camera.viewfinder.position, Vector2(200, 150));
       },
     );
   });
