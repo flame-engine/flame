@@ -105,11 +105,30 @@ class ViewportAwareBoundsBehavior({
     final shape = _boundsShape;
     final center = shape.center;
     if (shape is Circle) {
-      // The rectangular viewport is fully within the circle only when all of
-      // its corners are, so the viewfinder has to stay at least half of the
-      // visible region's diagonal away from the circle's edge.
-      final halfDiagonal = viewport.virtualSize.length / (2 * parent.zoom);
-      return Circle(center, max(0, shape.radius - halfDiagonal));
+      // A circle is a rounded rectangle whose radius is half of its size. It
+      // looks the same at any angle, so the region is calculated for the
+      // viewport before it's rotated, and is then rotated with the viewport,
+      // which keeps it exact.
+      //
+      // The exact region is where four copies of the circle overlap, each
+      // moved by the offset from one corner of the viewport to its center,
+      // since each copy holds the positions where that corner stays within
+      // the circle. It isn't a circle itself: it has a pointed end wherever
+      // two of the copies meet. The polygon from _roundedRectangleRegion is
+      // within a fraction of a unit of it. If the region ever needs to be
+      // exact, or cheaper to check every frame, it could be a dedicated Shape
+      // for that overlap instead: containsPoint would then be four distance
+      // checks, and nearestPoint the nearest point on the four arcs or on
+      // the points where they meet.
+      final radius = shape.radius;
+      final zoom = parent.zoom;
+      return _roundedRectangleRegion(
+        center,
+        radius - viewport.virtualSize.x / (2 * zoom),
+        radius - viewport.virtualSize.y / (2 * zoom),
+        radius,
+        angle: parent.angle,
+      );
     }
 
     final aabb = shape.aabb;
@@ -160,20 +179,22 @@ class ViewportAwareBoundsBehavior({
 
   /// Calculates the region for a [RoundedRectangle] whose radius doesn't fit
   /// into the shrunk rectangle, i.e. when [halfWidth] or [halfHeight] is
-  /// smaller than the [radius].
+  /// smaller than the [radius], which includes a [Circle].
   ///
   /// The corners of the viewport have to stay within the rounded corners of
   /// the bounds, so the region is limited by arcs with the same [radius]
   /// around the corners of a rectangle that is [halfWidth] - [radius] by
   /// [halfHeight] - [radius] in half-size, at least one of which is negative.
   /// The arcs are approximated by a polygon with its vertices on them, which
-  /// lies within the exact region since that region is convex.
+  /// lies within the exact region since that region is convex. The region is
+  /// rotated by [angle] around the [center].
   Shape _roundedRectangleRegion(
     Vector2 center,
     double halfWidth,
     double halfHeight,
-    double radius,
-  ) {
+    double radius, {
+    double angle = 0,
+  }) {
     final arcCenterX = halfWidth - radius;
     final arcCenterY = halfHeight - radius;
     // The part of each arc that lies between the horizontal and the vertical
@@ -184,14 +205,19 @@ class ViewportAwareBoundsBehavior({
     final endAngle = arcCenterX < 0
         ? acos(min(1.0, -arcCenterX / radius))
         : pi / 2;
-    if (endAngle - startAngle < 1e-9) {
+    if (!(endAngle - startAngle >= 1e-9)) {
       // The viewport only fits at the center, if at all.
       return Rectangle.fromLTRB(center.x, center.y, center.x, center.y);
     }
 
+    final cosAngle = cos(angle);
+    final sinAngle = sin(angle);
     final vertices = <Vector2>[];
     void addVertex(double x, double y) {
-      final vertex = Vector2(center.x + x, center.y + y);
+      final vertex = Vector2(
+        center.x + x * cosAngle - y * sinAngle,
+        center.y + x * sinAngle + y * cosAngle,
+      );
       if (vertices.isEmpty || vertices.last.distanceToSquared(vertex) > 1e-9) {
         vertices.add(vertex);
       }

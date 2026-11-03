@@ -1,4 +1,4 @@
-import 'dart:math' show pi;
+import 'dart:math' show max, pi, sqrt;
 import 'dart:ui';
 
 import 'package:flame/camera.dart';
@@ -100,13 +100,17 @@ void main() {
       camera.setBounds(bounds, considerViewport: true);
       game.update(0);
       expect(
-        (_getBounds(camera) as Circle?)?.center,
+        _getBounds(camera)?.aabb.center,
         Vector2(320, 240),
         reason: 'Camera bounds at unexpected location (considerViewport=true)',
       );
-      // The viewport's corners have to stay within the circle, so the
-      // radius is reduced by half of the viewport's diagonal (400 / 2).
-      expect((_getBounds(camera) as Circle?)?.radius, 120);
+      // Moving sideways, the camera stops where the 320x240 viewport's two
+      // corners on that side reach the circle, and likewise moving up or down.
+      _expectCircleRegionSize(
+        camera,
+        sqrt(320 * 320 - 120 * 120) - 160,
+        sqrt(320 * 320 - 160 * 160) - 120,
+      );
 
       // Check bounds after moving away from the center
       // while considerViewport = true
@@ -115,7 +119,7 @@ void main() {
         ..moveBy(Vector2(-320, 0));
       game.update(0);
       expect(
-        (_getBounds(camera) as Circle?)?.center,
+        _getBounds(camera)?.aabb.center,
         Vector2(320, 240),
         reason: 'Camera bounds did not consider viewport after move',
       );
@@ -231,9 +235,47 @@ void main() {
       final camera = await _fixedResolutionCamera(game);
       await _setBounds(game, camera, Circle(Vector2(-500, 700), 400));
 
-      final bounds = _getBounds(camera) as Circle?;
-      expect(bounds?.center, Vector2(-500, 700));
-      expect(bounds?.radius, 200);
+      final center = _getBounds(camera)!.aabb.center;
+      expect(center.x, closeTo(-500, 1e-9));
+      expect(center.y, closeTo(700, 1e-9));
+      _expectCircleRegionSize(
+        camera,
+        sqrt(400 * 400 - 120 * 120) - 160,
+        sqrt(400 * 400 - 160 * 160) - 120,
+      );
+    });
+
+    testWithFlameGame(
+      'Circle lets the corners of the viewport reach it in every direction',
+      (game) async {
+        final camera = await _fixedResolutionCamera(game, height: 180);
+        final circle = Circle(Vector2(100, -50), 300);
+        await _setBounds(game, camera, circle);
+
+        // At every vertex of the region, the farthest corner of the viewport
+        // is on the circle: the viewport doesn't leave it, but the camera
+        // doesn't stop before it either.
+        for (final vertex in (_getBounds(camera)! as Polygon).vertices) {
+          expect(
+            _farthestCornerDistance(camera, circle, vertex),
+            closeTo(300, 1e-3),
+          );
+        }
+      },
+    );
+
+    testWithFlameGame('Circle region turns with the viewfinder', (game) async {
+      final camera = await _fixedResolutionCamera(game, height: 180);
+      camera.viewfinder.angle = pi / 6;
+      final circle = Circle(Vector2(100, -50), 300);
+      await _setBounds(game, camera, circle);
+
+      for (final vertex in (_getBounds(camera)! as Polygon).vertices) {
+        expect(
+          _farthestCornerDistance(camera, circle, vertex),
+          closeTo(300, 1e-3),
+        );
+      }
     });
 
     testWithFlameGame('takes the zoom into account', (game) async {
@@ -270,7 +312,8 @@ void main() {
         expect(_getBoundsRect(camera), const Rect.fromLTRB(100, 120, 100, 280));
 
         await _setBounds(game, camera, Circle(Vector2(50, 50), 150));
-        expect((_getBounds(camera) as Circle?)?.radius, 0);
+        expect(_getBounds(camera)!.aabb.min, Vector2(50, 50));
+        expect(_getBounds(camera)!.aabb.max, Vector2(50, 50));
 
         camera.moveBy(Vector2(500, 500));
         await game.ready();
@@ -284,6 +327,42 @@ void main() {
 
 Shape? _getBounds(CameraComponent camera) =>
     camera.viewfinder.firstChild<BoundedPositionBehavior>()?.bounds;
+
+/// Checks how far the region for circle bounds reaches from their center
+/// along the horizontal and the vertical axis.
+void _expectCircleRegionSize(
+  CameraComponent camera,
+  double halfWidth,
+  double halfHeight,
+) {
+  final aabb = _getBounds(camera)!.aabb;
+  expect((aabb.max.x - aabb.min.x) / 2, closeTo(halfWidth, 1e-3));
+  expect((aabb.max.y - aabb.min.y) / 2, closeTo(halfHeight, 1e-3));
+}
+
+/// The distance between the center of the [circle] and the corner of the
+/// visible region that is farthest from it, with the viewfinder at
+/// [position].
+double _farthestCornerDistance(
+  CameraComponent camera,
+  Circle circle,
+  Vector2 position,
+) {
+  camera.viewfinder.position = position;
+  final size = camera.viewport.virtualSize;
+  return [
+        Vector2.zero(),
+        Vector2(size.x, 0),
+        size.clone(),
+        Vector2(0, size.y),
+      ]
+      .map((corner) {
+        return camera.viewfinder
+            .globalToLocal(corner)
+            .distanceTo(circle.center);
+      })
+      .reduce(max);
+}
 
 Rect? _getBoundsRect(CameraComponent camera) =>
     (_getBounds(camera) as Rectangle?)?.toRect();
