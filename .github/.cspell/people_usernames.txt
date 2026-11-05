@@ -27,6 +27,7 @@ stpasha # github.com/stpasha
 subosito # github.com/subosito
 tavian # tavianator.com
 Tellinghuisen # Author of Statistical Error Propagation (2001)
+ufrshubham # github.com/ufrshubham
 videon # github.com/markvideon
 wolfenrain # github.com/wolfenrain
 xaha # github.com/xvrh

@@ -184,16 +184,24 @@ class ShaderPostProcess extends PostProcess {
   /// Throws if [sampleSubtree] is set and doesn't match the shader, or if it
   /// isn't set and the samplers of the shader can't be looked up by name.
   bool _findWhetherShaderSamplesSubtree(FragmentShader shader) {
-    final ImageSamplerSlot texture;
+    ImageSamplerSlot? texture;
+    var canLookUpSamplers = true;
+    Object? lookUpError;
     try {
       texture = shader.getImageSampler(textureUniform);
     } on UnsupportedError {
+      canLookUpSamplers = false;
+    } on ArgumentError catch (error) {
+      lookUpError = error.message;
+    }
+
+    final sampleSubtree = this.sampleSubtree;
+    if (!canLookUpSamplers) {
       // TODO(ufrshubham): Samplers can't be looked up by name on the web yet,
       // so whether the shader samples the subtree can't be detected there.
       // Once `getImageSampler` is supported on the web in every Flutter
       // version that Flame supports, remove this error, so that
       // `sampleSubtree` is optional on the web too.
-      final sampleSubtree = this.sampleSubtree;
       if (sampleSubtree == null) {
         throw StateError(
           "Samplers can't be looked up by name on the web yet, so "
@@ -202,12 +210,13 @@ class ShaderPostProcess extends PostProcess {
         );
       }
       return sampleSubtree;
-    } on ArgumentError catch (error) {
+    }
+    if (texture == null) {
       if (sampleSubtree ?? false) {
         throw StateError(
           'ShaderPostProcess has sampleSubtree set to true, but its shader '
           "doesn't declare `uniform sampler2D $textureUniform`, or the "
-          "shader compiler removed it because it's unused: ${error.message}",
+          "shader compiler removed it because it's unused: $lookUpError",
         );
       }
       return false;
