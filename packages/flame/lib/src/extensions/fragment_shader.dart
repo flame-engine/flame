@@ -88,9 +88,9 @@ class UniformsSetter(final ui.FragmentShader shader, var int _index) {
       multiplier = 1.0;
     }
 
-    setFloat(color.r / 255 * multiplier);
-    setFloat(color.g / 255 * multiplier);
-    setFloat(color.b / 255 * multiplier);
+    setFloat(color.r * multiplier);
+    setFloat(color.g * multiplier);
+    setFloat(color.b * multiplier);
     setFloat(color.a);
   }
 
