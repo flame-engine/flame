@@ -45,6 +45,13 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
+  shaders:
+    - assets/shaders/drop_shadow.frag
+    - assets/shaders/glow.frag
+    - assets/shaders/pixelation.frag
+    - assets/shaders/stripes.frag
+    - assets/shaders/vignette.frag
+
   assets:
     - assets/images/animations/
     - assets/images/
