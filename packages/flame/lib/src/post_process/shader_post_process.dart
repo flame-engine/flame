@@ -32,10 +32,10 @@ import 'package:meta/meta.dart';
 /// instead of it, which is the default, or over or under it. See
 /// [ShaderPlacement].
 ///
-/// The subtree is rendered at most once per frame. If the shader samples the
-/// subtree and is placed over or under it, the image rasterized for
-/// `uTexture` is also drawn as the subtree, instead of rendering the subtree
-/// a second time.
+/// If the shader samples the subtree and is placed over or under it, the image
+/// rasterized for `uTexture` is also drawn as the subtree, instead of
+/// rendering the subtree a second time, unless [reuseRasterizedSubtree] is
+/// false.
 ///
 /// Set any other uniforms in [updateUniforms]. Look their slots up once, in
 /// [onLoad], with the name-based uniforms of [FragmentShader]:
@@ -70,6 +70,7 @@ class ShaderPostProcess extends PostProcess {
     String assetPath, {
     this.sampleSubtree,
     this.placement = ShaderPlacement.replace,
+    this.reuseRasterizedSubtree = true,
     super.pixelRatio,
   }) : _assetPath = assetPath,
        _program = null;
@@ -80,6 +81,7 @@ class ShaderPostProcess extends PostProcess {
     FragmentProgram program, {
     this.sampleSubtree,
     this.placement = ShaderPlacement.replace,
+    this.reuseRasterizedSubtree = true,
     super.pixelRatio,
   }) : _assetPath = null,
        _program = program;
@@ -98,6 +100,17 @@ class ShaderPostProcess extends PostProcess {
 
   /// Where the shader is drawn relative to the subtree.
   ShaderPlacement placement;
+
+  /// Whether the image rasterized for `uTexture` is also drawn as the
+  /// subtree, when the shader samples the subtree and is placed
+  /// [ShaderPlacement.over] or [ShaderPlacement.under] it.
+  ///
+  /// Reusing the image renders the subtree once per frame instead of twice,
+  /// but draws it at [pixelRatio]. That is as sharp as rendering it again,
+  /// unless [pixelRatio] is lower than the pixel ratio of the screen, for
+  /// example to make the shader cheaper. Set this to false then, so that the
+  /// subtree is rendered again, at the full resolution of the screen.
+  bool reuseRasterizedSubtree;
 
   /// The name of the `vec2` uniform that is set to the size of the post
   /// process.
@@ -241,15 +254,16 @@ class ShaderPostProcess extends PostProcess {
     // set, so this is done every frame, after the uniforms.
     _paint.shader = shader;
     final rect = Offset.zero & size.toSize();
+    final rasterizedSubtree = reuseRasterizedSubtree ? subtree : null;
     switch (placement) {
       case ShaderPlacement.replace:
         canvas.drawRect(rect, _paint);
       case ShaderPlacement.over:
-        _drawSubtree(canvas, subtree);
+        _drawSubtree(canvas, rasterizedSubtree);
         canvas.drawRect(rect, _paint);
       case ShaderPlacement.under:
         canvas.drawRect(rect, _paint);
-        _drawSubtree(canvas, subtree);
+        _drawSubtree(canvas, rasterizedSubtree);
     }
     subtree?.dispose();
   }

@@ -47,18 +47,8 @@ In Flame, the post processing system is modular and flexible, allowing developer
 
 Most post processes draw a fragment shader over the subtree. `ShaderPostProcess` does that for
 you: it loads the shader, keeps track of the time, rasterizes the subtree when the shader samples
-it, and draws the shader over the size of the post process.
-
-Every frame, it sets these uniforms if the shader declares them:
-
-| Uniform               | Value                                                 |
-| --------------------- | ----------------------------------------------------- |
-| `uniform vec2 uSize`  | The size of the post process, in logical pixels.      |
-| `uniform float uTime` | The seconds passed since the post process was loaded. |
-
-To sample the subtree, declare `uniform sampler2D uTexture` as the first sampler of the shader.
-The subtree is then rasterized with `rasterizeSubtree` every frame and given to `uTexture`. A
-shader that only needs these uniforms doesn't need a subclass:
+it, and draws the shader over the size of the post process. A shader that only needs the uniforms
+that `ShaderPostProcess` sets doesn't need a subclass:
 
 ```dart
 PostProcessComponent(
@@ -67,21 +57,25 @@ PostProcessComponent(
 );
 ```
 
+To use a `FragmentProgram` that is already loaded, for example one shared by several post
+processes, use `ShaderPostProcess.fromProgram`.
 
-### Shaders on the web
 
-`ShaderPostProcess` detects whether the shader samples the subtree by looking up `uTexture` by name.
-Flutter can't look up the samplers of a shader by name on the web yet, so if your game runs on the
-web, pass `sampleSubtree` to say whether the shader samples the subtree:
+### Uniforms set by ShaderPostProcess
 
-```dart
-ShaderPostProcess('assets/shaders/grayscale.frag', sampleSubtree: true);
-ShaderPostProcess('assets/shaders/vignette.frag', sampleSubtree: false);
-```
+Every frame, `ShaderPostProcess` sets these uniforms, if the shader declares them:
 
-Without it, loading the post process throws an error on the web. On the other platforms, an error
-is thrown when the shader is loaded if `sampleSubtree` doesn't match whether the shader declares
-`uTexture`, so running the game on one of them catches a wrong value.
+| Uniform                      | Value                                                 |
+| ---------------------------- | ----------------------------------------------------- |
+| `uniform vec2 uSize`         | The size of the post process, in logical pixels.      |
+| `uniform float uTime`        | The seconds passed since the post process was loaded. |
+| `uniform sampler2D uTexture` | The subtree, rasterized with `rasterizeSubtree`.      |
+
+`uTexture` has to be the first sampler of the shader. Sample it with coordinates going from 0 to 1
+across the size of the post process, for example `texture(uTexture, FlutterFragCoord().xy / uSize)`.
+
+
+### Placement
 
 The `placement` decides where the shader is drawn relative to the subtree:
 
@@ -98,24 +92,37 @@ Whether the shader samples the subtree is independent of its placement. For exam
 PostProcessComponent(
   postProcess: ShaderPostProcess(
     'assets/shaders/glow.frag',
-    sampleSubtree: true,
     placement: ShaderPlacement.over,
   ),
   children: [player],
 );
 ```
 
-The subtree is rendered at most once per frame. With `sampleSubtree: true`, it costs a
-`rasterizeSubtree` every frame, which is the expensive part. When such a shader is placed `over` or
-`under` the subtree, the rasterized image is also drawn as the subtree, instead of rendering the
-subtree again. Without `sampleSubtree`, a shader placed `over` or `under` the subtree only renders
-it as usual, without rasterizing it.
 
-To use a `FragmentProgram` that is already loaded, for example one shared by several post
-processes, use `ShaderPostProcess.fromProgram`.
+### Rendering the subtree
+
+A shader that samples the subtree costs a `rasterizeSubtree` every frame, which is the expensive
+part of a post process. A shader that doesn't sample it only costs rendering the subtree as usual,
+when it's placed `over` or `under` the subtree.
+
+When a shader that samples the subtree is placed `over` or `under` it, the image rasterized for
+`uTexture` is also drawn as the subtree by default, so that the subtree is only rendered once per
+frame. The image is rasterized at the `pixelRatio` of the post process, which is the pixel ratio of
+the screen by default, so it's as sharp as rendering the subtree again. If you lower `pixelRatio`,
+for example to make a glow cheaper, set `reuseRasterizedSubtree` to false, so that the subtree is
+rendered again at the full resolution of the screen:
+
+```dart
+ShaderPostProcess(
+  'assets/shaders/glow.frag',
+  placement: ShaderPlacement.over,
+  pixelRatio: 0.5,
+  reuseRasterizedSubtree: false,
+);
+```
 
 
-### Setting uniforms by name
+### Setting other uniforms
 
 Set any other uniforms in `updateUniforms`, using the name of each uniform in the shader instead
 of its position. Look each uniform up once, in `onLoad`, and set it every frame. The slot types,
@@ -147,8 +154,8 @@ class OutlinePostProcess() extends ShaderPostProcess {
 ```
 
 Looking a uniform up by a name that the shader doesn't declare throws an `ArgumentError`, so a
-typo is reported right away. Note that the shader compiler removes uniforms that the shader
-doesn't use, and those can't be looked up either.
+typo is reported right away. Uniforms that the shader compiler removed because they're unused
+can't be looked up either.
 
 Flame adds methods to the uniform slots of `dart:ui` to set them from its own types:
 
@@ -161,23 +168,28 @@ Flame adds methods to the uniform slots of `dart:ui` to set them from its own ty
 These work on any `FragmentShader`, not only in a `ShaderPostProcess`.
 
 
-## Creating a Custom Post Process
+### Shaders on the web
 
-For effects that need more control, for example rendering the subtree several times, implement a
-post process yourself:
+`ShaderPostProcess` detects whether the shader samples the subtree by looking up `uTexture` by name.
+Flutter can't look up the samplers of a shader by name on the web yet, so if your game runs on the
+web, pass `sampleSubtree` to say whether the shader samples the subtree:
 
-1. Subclass `PostProcess`.
-2. Override the `postProcess` method, implementing your rendering logic with `renderSubtree` or
-   `rasterizeSubtree`.
-3. Optionally, implement `onLoad` and `update` methods for managing resources and updating effects
-   each frame.
+```dart
+ShaderPostProcess('assets/shaders/grayscale.frag', sampleSubtree: true);
+ShaderPostProcess('assets/shaders/vignette.frag', sampleSubtree: false);
+```
 
-This system makes it easy to add creative and useful visual effects to your Flame game.
+On the web, `sampleSubtree` is required, and loading the post process without it throws an error.
+
+On the other platforms, `sampleSubtree` is optional, because the shader is checked directly. If you
+pass it anyway and it's wrong, for example `true` for a shader without `uTexture`, loading the post
+process throws an error. So running your game once on another platform checks the values you pass
+for the web.
 
 
-## Example: pixelation
+### Example: pixelation
 
-Here’s an example of creating a pixelation effect using a fragment shader:
+Here’s an example of a pixelation effect made with `ShaderPostProcess`:
 
 ```dart
 class PostProcessGame extends FlameGame {
@@ -264,6 +276,20 @@ void main() {
   fragColor = texture(uTexture, puv);
 }
 ```
+
+
+## Creating a Custom Post Process
+
+For effects that need more control, for example rendering the subtree several times, implement a
+post process yourself:
+
+1. Subclass `PostProcess`.
+2. Override the `postProcess` method, implementing your rendering logic with `renderSubtree` or
+   `rasterizeSubtree`.
+3. Optionally, implement `onLoad` and `update` methods for managing resources and updating effects
+   each frame.
+
+This system makes it easy to add creative and useful visual effects to your Flame game.
 
 
 ## Advanced Example: Crystal Ball
