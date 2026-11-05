@@ -50,6 +50,21 @@ class Model {
 
   Map<int, ProcessedNode> processNodes(AnimationState animation) {
     final processedNodes = <int, ProcessedNode>{};
+    for (final node in _processingOrder) {
+      node.processNode(processedNodes, animation);
+    }
+    return processedNodes;
+  }
+
+  /// The [nodes] ordered so that every node comes after its dependencies.
+  ///
+  /// The order only depends on the node hierarchy, so like [aabb] it is
+  /// computed once, on the first call to [processNodes].
+  List<ModelNode> get _processingOrder => _order ??= _orderNodes();
+  List<ModelNode>? _order;
+
+  List<ModelNode> _orderNodes() {
+    final order = <ModelNode>[];
 
     final inDegree = <int, int>{};
     final adjacencyMap = <int, Set<int>>{};
@@ -72,8 +87,7 @@ class Model {
 
     while (queue.isNotEmpty) {
       final index = queue.removeFirst();
-      final node = nodes[index]!;
-      node.processNode(processedNodes, animation);
+      order.add(nodes[index]!);
       final adjacency = adjacencyMap[index] ?? {};
       for (final dependency in adjacency) {
         inDegree[dependency] = inDegree[dependency]! - 1;
@@ -83,10 +97,10 @@ class Model {
       }
     }
 
-    if (processedNodes.length != nodes.length) {
+    if (order.length != nodes.length) {
       throw StateError('Failed to process all nodes');
     }
 
-    return processedNodes;
+    return order;
   }
 }
