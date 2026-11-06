@@ -152,7 +152,10 @@ class _Orbit({
   @override
   void update(double dt) {
     _angle += dt;
-    target.position = center + Vector2(cos(_angle), sin(_angle)) * radius;
+    target.position.setValues(
+      center.x + cos(_angle) * radius,
+      center.y + sin(_angle) * radius,
+    );
   }
 }
 
@@ -170,7 +173,8 @@ class PixelationPostProcess() extends ShaderPostProcess {
 
   @override
   void updateUniforms(Vector2 size) {
-    _pixels.setVector(size / (6 + 4 * sin(time).abs()));
+    final pixelSize = 6 + 4 * sin(time).abs();
+    _pixels.set(size.x / pixelSize, size.y / pixelSize);
   }
 }
 
@@ -221,7 +225,7 @@ class DropShadowPostProcess() extends ShaderPostProcess {
   @override
   void updateUniforms(Vector2 size) {
     // The light moves, so the shadow circles around the subtree.
-    _offset.setVector(Vector2(cos(time), sin(time)) * 8);
+    _offset.set(cos(time) * 8, sin(time) * 8);
     _color.setColor(color);
   }
 }
