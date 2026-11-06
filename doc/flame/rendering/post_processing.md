@@ -121,6 +121,13 @@ ShaderPostProcess(
 );
 ```
 
+The `filterQuality` decides how the rasterized subtree is sampled, both by the shader through
+`uTexture` and when it's drawn as the subtree. It only makes a difference when the pixels of the
+image don't line up with the pixels of the screen, for example when the post process is rotated or
+zoomed, or when `pixelRatio` is lowered. In those cases, the default, `FilterQuality.low`, keeps
+edges smooth at no noticeable cost. Use `FilterQuality.none` to keep the pixels sharp instead, for
+example for pixel art.
+
 
 ### Setting other uniforms
 

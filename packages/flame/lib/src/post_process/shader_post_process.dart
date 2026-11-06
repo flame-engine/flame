@@ -71,6 +71,7 @@ class ShaderPostProcess extends PostProcess {
     this.sampleSubtree,
     this.placement = ShaderPlacement.replace,
     this.reuseRasterizedSubtree = true,
+    this.filterQuality = FilterQuality.low,
     super.pixelRatio,
   }) : _assetPath = assetPath,
        _program = null;
@@ -82,6 +83,7 @@ class ShaderPostProcess extends PostProcess {
     this.sampleSubtree,
     this.placement = ShaderPlacement.replace,
     this.reuseRasterizedSubtree = true,
+    this.filterQuality = FilterQuality.low,
     super.pixelRatio,
   }) : _assetPath = null,
        _program = program;
@@ -112,6 +114,17 @@ class ShaderPostProcess extends PostProcess {
   /// subtree is rendered again, at the full resolution of the screen.
   bool reuseRasterizedSubtree;
 
+  /// The quality of the filter that the rasterized subtree is sampled with,
+  /// both by the shader through `uTexture` and when it's drawn as the subtree.
+  ///
+  /// It only makes a difference when the pixels of the rasterized subtree
+  /// don't line up with the pixels of the screen, for example when the post
+  /// process is rotated or zoomed, or when [pixelRatio] is lower than the
+  /// pixel ratio of the screen. In those cases, the default,
+  /// [FilterQuality.low], keeps edges smooth at no noticeable cost, while
+  /// [FilterQuality.none] keeps the pixels sharp, for example for pixel art.
+  FilterQuality filterQuality;
+
   /// The name of the `vec2` uniform that is set to the size of the post
   /// process.
   static const sizeUniform = 'uSize';
@@ -128,7 +141,7 @@ class ShaderPostProcess extends PostProcess {
 
   FragmentShader? _shader;
   final Paint _paint = Paint();
-  final Paint _subtreePaint = Paint()..filterQuality = FilterQuality.low;
+  final Paint _subtreePaint = Paint();
   UniformVec2Slot? _size;
   UniformFloatSlot? _time;
   bool _samplesSubtree = false;
@@ -252,7 +265,7 @@ class ShaderPostProcess extends PostProcess {
     Image? subtree;
     if (_samplesSubtree) {
       subtree = rasterizeSubtree();
-      shader.setImageSampler(0, subtree);
+      shader.setImageSampler(0, subtree, filterQuality: filterQuality);
     }
 
     _size?.setVector(size);
@@ -290,7 +303,7 @@ class ShaderPostProcess extends PostProcess {
       rasterized,
       Rect.fromLTWH(0, 0, width, height),
       Rect.fromLTWH(0, 0, width / pixelRatio, height / pixelRatio),
-      _subtreePaint,
+      _subtreePaint..filterQuality = filterQuality,
     );
   }
 }
