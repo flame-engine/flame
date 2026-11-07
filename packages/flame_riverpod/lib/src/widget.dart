@@ -183,7 +183,10 @@ class RiverpodAwareGameWidgetState<T extends Game>()
 
   bool exists(ProviderBase<Object?> provider) {
     _assertNotDisposed();
-    return ProviderScope.containerOf(context, listen: false).exists(provider);
+    return ProviderScope.containerOf(
+      context,
+      listen: false,
+    ).read(provider.exists);
   }
 
   Res read<Res>(ProviderListenable<Res> provider) {
