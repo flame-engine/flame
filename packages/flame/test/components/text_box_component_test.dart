@@ -1,6 +1,7 @@
 import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
 import 'package:flame/palette.dart';
+import 'package:flame/text.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -156,6 +157,134 @@ void main() {
       );
       c.boxConfig = secondConfig;
       expect(c.lines.length, 1);
+    });
+
+    group('maxLines', () {
+      const text = 'The quick brown fox jumps over the lazy dog.';
+      const width = 100.0;
+
+      test('all lines are kept by default', () {
+        final c = TextBoxComponent(
+          text: text,
+          boxConfig: const TextBoxConfig(maxWidth: width),
+        );
+
+        expect(c.boxConfig.maxLines, isNull);
+        expect(c.lines.length, greaterThan(2));
+      });
+
+      test('cuts the text off after the last allowed line', () {
+        final full = TextBoxComponent(
+          text: text,
+          boxConfig: const TextBoxConfig(maxWidth: width),
+        );
+        final limited = TextBoxComponent(
+          text: text,
+          boxConfig: const TextBoxConfig(maxWidth: width, maxLines: 2),
+        );
+
+        expect(limited.lines, full.lines.sublist(0, 2));
+      });
+
+      test('the height of the box only fits the remaining lines', () {
+        final c = TextBoxComponent(
+          text: text,
+          boxConfig: const TextBoxConfig(maxWidth: width, maxLines: 2),
+        );
+
+        expect(c.size.y, 2 * c.lineHeight + 2 * 8);
+      });
+
+      test('does nothing when the text fits', () {
+        final c = TextBoxComponent(
+          text: 'foo',
+          boxConfig: const TextBoxConfig(maxLines: 2),
+        );
+
+        expect(c.lines, ['foo']);
+      });
+
+      test('counts hard line breaks as lines', () {
+        final c = TextBoxComponent(
+          text: 'one\ntwo\nthree',
+          boxConfig: const TextBoxConfig(maxLines: 2),
+        );
+
+        expect(c.lines, ['one', 'two']);
+      });
+
+      test('applies to renderers that split on spaces', () {
+        final c = TextBoxComponent(
+          text: text,
+          textRenderer: _NonTextPaintRenderer(),
+          boxConfig: const TextBoxConfig(maxWidth: width, maxLines: 2),
+        );
+
+        expect(c.lines.length, 2);
+        expect(c.size.y, 2 * c.lineHeight + 2 * 8);
+      });
+
+      test('changing maxLines reflows the text', () {
+        final c = TextBoxComponent(
+          text: text,
+          boxConfig: const TextBoxConfig(maxWidth: width),
+        );
+        final fullLines = List.of(c.lines);
+
+        c.boxConfig = c.boxConfig.copyWith(maxLines: 1);
+        expect(c.lines, fullLines.sublist(0, 1));
+
+        c.boxConfig = const TextBoxConfig(maxWidth: width);
+        expect(c.lines, fullLines);
+      });
+
+      test('changing the text respects maxLines', () {
+        final c = TextBoxComponent(
+          text: 'foo',
+          boxConfig: const TextBoxConfig(maxWidth: width, maxLines: 2),
+        );
+
+        c.text = text;
+        expect(c.lines.length, 2);
+      });
+
+      test('copyWith keeps maxLines', () {
+        const config = TextBoxConfig(maxLines: 3);
+
+        expect(config.copyWith(maxWidth: 10).maxLines, 3);
+        expect(config.copyWith(maxLines: 4).maxLines, 4);
+      });
+
+      test('must be greater than zero', () {
+        expect(() => TextBoxConfig(maxLines: 0), throwsAssertionError);
+      });
+
+      testWithFlameGame(
+        'the typing effect finishes with the last remaining character',
+        (game) async {
+          var completed = 0;
+          final c = TextBoxComponent(
+            text: text,
+            boxConfig: const TextBoxConfig(
+              maxWidth: width,
+              maxLines: 1,
+              timePerChar: 1.0,
+            ),
+            onComplete: () => completed++,
+          );
+          await game.ensureAdd(c);
+          final visibleLength = c.lines.single.length;
+          expect(visibleLength, lessThan(text.length));
+
+          game.update(visibleLength - 1);
+          expect(c.finished, isFalse);
+          expect(completed, 0);
+
+          game.update(1);
+          expect(c.finished, isTrue);
+          expect(completed, 1);
+        },
+      );
     });
 
     test('skip method sets boxConfig timePerChar to 0', () {
@@ -448,4 +577,14 @@ class _FramedTextBox({
     );
     super.render(canvas);
   }
+}
+
+class _NonTextPaintRenderer() extends TextRenderer {
+  final TextPaint _textPaint = TextPaint();
+
+  @override
+  InlineTextElement format(String text) => _textPaint.format(text);
+
+  @override
+  TextRenderer copyWithPaint(Paint paint) => this;
 }
