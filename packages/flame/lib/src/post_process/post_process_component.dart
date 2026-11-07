@@ -138,6 +138,18 @@ extension PostProcessingContextFinder on Component {
       return contextInCamera;
     }
 
+    // A camera renders its world and viewfinder directly rather than as its
+    // own children, so the camera's render context is not on their ancestor
+    // chain and the lookup above cannot find it. Fall back to the cameras
+    // that are currently rendering, from the innermost outwards.
+    final cameras = CameraComponent.currentCameras;
+    for (var i = cameras.length - 1; i >= 0; i--) {
+      final postProcessInCamera = cameras[i].renderContext.currentPostProcess;
+      if (postProcessInCamera is T) {
+        return postProcessInCamera;
+      }
+    }
+
     return null;
   }
 }
