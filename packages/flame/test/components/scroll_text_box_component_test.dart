@@ -98,6 +98,22 @@ lines.''',
       await game.ensureAdd(scrollComponent);
       expect(newLineCount, equals(5));
     });
+
+    testWithFlameGame('respects maxLines', (game) async {
+      final component = ScrollTextBoxComponent(
+        size: Vector2(100, 200),
+        text: 'The quick brown fox jumps over the lazy dog.',
+        boxConfig: const TextBoxConfig(maxLines: 2),
+      );
+      await game.ensureAdd(component);
+      await game.ready();
+
+      final inner = component
+          .descendants()
+          .whereType<TextBoxComponent>()
+          .single;
+      expect(inner.lines.length, 2);
+    });
   });
 }
 
