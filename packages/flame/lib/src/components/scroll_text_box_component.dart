@@ -58,6 +58,7 @@ class ScrollTextBoxComponent<T extends TextRenderer>({
       timePerChar: resolvedBoxConfig.timePerChar,
       dismissDelay: resolvedBoxConfig.dismissDelay,
       growingBox: resolvedBoxConfig.growingBox,
+      maxLines: resolvedBoxConfig.maxLines,
       maxWidth: size.x,
       margins: EdgeInsets.fromLTRB(
         resolvedBoxConfig.margins.left,
