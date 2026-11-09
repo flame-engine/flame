@@ -86,6 +86,10 @@ bounding box both vertically and horizontally.
 
 If you want to change the margins of the box use the `margins` variable in the `TextBoxConfig`.
 
+To limit how many lines are shown, set `maxLines` in the `TextBoxConfig`. Text that would take up
+more lines is cut off after the last allowed line, and the size of the box and the typing effect
+only take the remaining lines into account.
+
 Finally, if you want to simulate a "typing" effect, by showing each character of the string one by
 one as if being typed in real-time, you can provide the `boxConfig.timePerChar` parameter.
 

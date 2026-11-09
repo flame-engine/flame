@@ -19,8 +19,8 @@ dependencies:
   flame: ^2.0.0-dev.1
   flutter:
     sdk: flutter
-  flutter_riverpod: ^3.0.3
-  riverpod: ^3.0.3
+  flutter_riverpod: ^3.5.0
+  riverpod: ^3.5.0
 
 dev_dependencies:
   flame_lint: ^1.5.0-dev.1
