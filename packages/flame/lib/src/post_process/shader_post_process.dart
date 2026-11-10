@@ -262,6 +262,15 @@ class ShaderPostProcess extends PostProcess {
 
   @override
   void postProcess(Vector2 size, Canvas canvas) {
+    if (size.x <= 0 || size.y <= 0) {
+      // There is no area to draw the shader on, and the subtree can't be
+      // rasterized into an empty image.
+      if (placement != ShaderPlacement.replace) {
+        renderSubtree(canvas);
+      }
+      return;
+    }
+
     Image? subtree;
     if (_samplesSubtree) {
       subtree = rasterizeSubtree();
@@ -281,28 +290,36 @@ class ShaderPostProcess extends PostProcess {
       case ShaderPlacement.replace:
         canvas.drawRect(rect, _paint);
       case ShaderPlacement.over:
-        _drawSubtree(canvas, rasterizedSubtree);
+        _drawSubtree(canvas, rasterizedSubtree, rect);
         canvas.drawRect(rect, _paint);
       case ShaderPlacement.under:
         canvas.drawRect(rect, _paint);
-        _drawSubtree(canvas, rasterizedSubtree);
+        _drawSubtree(canvas, rasterizedSubtree, rect);
     }
     subtree?.dispose();
   }
 
   /// Draws the subtree, using the image already rasterized for `uTexture` if
   /// there is one, so that the subtree isn't rendered twice.
-  void _drawSubtree(Canvas canvas, Image? rasterized) {
+  ///
+  /// The image is drawn into [rect], which is where the shader is drawn, so
+  /// that it covers the same area that the shader samples it over. Its size
+  /// is rounded up to whole pixels, so its own size divided by the
+  /// [pixelRatio] can be larger than that.
+  void _drawSubtree(Canvas canvas, Image? rasterized, Rect rect) {
     if (rasterized == null) {
       renderSubtree(canvas);
       return;
     }
-    final width = rasterized.width.toDouble();
-    final height = rasterized.height.toDouble();
     canvas.drawImageRect(
       rasterized,
-      Rect.fromLTWH(0, 0, width, height),
-      Rect.fromLTWH(0, 0, width / pixelRatio, height / pixelRatio),
+      Rect.fromLTWH(
+        0,
+        0,
+        rasterized.width.toDouble(),
+        rasterized.height.toDouble(),
+      ),
+      rect,
       _subtreePaint..filterQuality = filterQuality,
     );
   }
