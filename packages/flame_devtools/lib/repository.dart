@@ -197,6 +197,7 @@ class PositionComponentAttributes({
   required final double angle,
   required final double scaleX,
   required final double scaleY,
+  required final String anchor,
 }) {
   factory PositionComponentAttributes.fromJson(Map<String, dynamic> json) {
     return PositionComponentAttributes(
@@ -207,6 +208,7 @@ class PositionComponentAttributes({
       angle: (json['angle'] as num).toDouble(),
       scaleX: (json['scaleX'] as num).toDouble(),
       scaleY: (json['scaleY'] as num).toDouble(),
+      anchor: json['anchor'] as String,
     );
   }
 }

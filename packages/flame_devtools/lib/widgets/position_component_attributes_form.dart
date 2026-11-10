@@ -1,5 +1,7 @@
 import 'package:flame_devtools/providers/position_component_attributes_provider.dart';
 import 'package:flame_devtools/repository.dart';
+import 'package:flame_devtools/widgets/anchor_picker.dart';
+import 'package:flame_devtools/widgets/angle_form_field.dart';
 import 'package:flame_devtools/widgets/incremental_number_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -97,10 +99,9 @@ class const PositionComponentAttributesForm({
               'Angle',
               style: Theme.of(context).textTheme.labelLarge,
             ),
-            IncrementalNumberFormField<double>(
+            AngleFormField(
               key: Key('angle_field_$componentId'),
-              label: 'Radian',
-              initialValue: attributes.angle,
+              radians: attributes.angle,
               onChanged: (v) {
                 Repository.setComponentAttribute(
                   id: componentId,
@@ -142,6 +143,29 @@ class const PositionComponentAttributesForm({
                   },
                 ),
               ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Anchor',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            AnchorPicker(
+              key: Key('anchor_picker_$componentId'),
+              anchor: attributes.anchor,
+              onSelected: (anchor) async {
+                await Repository.setComponentAttribute(
+                  id: componentId,
+                  attribute: 'anchor',
+                  value: anchor,
+                );
+                // Re-read the attributes so the picker shows the anchor
+                // that is actually set in the running game.
+                if (context.mounted) {
+                  ref.invalidate(
+                    positionComponentAttributesProvider(componentId),
+                  );
+                }
+              },
             ),
           ],
         );
