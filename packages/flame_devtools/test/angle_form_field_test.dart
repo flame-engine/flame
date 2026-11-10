@@ -66,18 +66,26 @@ void main() {
         expect(fieldText(tester), '30.0');
       },
     );
-  });
 
-  group('radiansToDisplayDegrees', () {
-    test('round-trips whole degrees without drift', () {
-      for (var degrees = -720; degrees <= 720; degrees++) {
-        final radians = degreesToRadians(degrees.toDouble());
-        expect(
-          radiansToDisplayDegrees(radians),
-          degrees.toDouble(),
-          reason: '$degrees',
-        );
-      }
-    });
+    testWidgets(
+      'round-trips every whole degree without drift',
+      (tester) async {
+        var radians = 0.0;
+        void onChanged(double value) => radians = value;
+        await pumpField(tester, radians: radians, onChanged: onChanged);
+
+        for (var degrees = -360; degrees <= 360; degrees++) {
+          await tester.enterText(find.byType(TextField), '$degrees');
+          // The game stores the angle in radians and the form reads it back.
+          await pumpField(tester, radians: radians, onChanged: onChanged);
+
+          expect(
+            fieldText(tester),
+            '${degrees.toDouble()}',
+            reason: '$degrees',
+          );
+        }
+      },
+    );
   });
 }
