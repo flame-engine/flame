@@ -8,13 +8,12 @@ import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 
 class FollowComponentExample({required final Vector2 viewportResolution})
     extends FlameGame
-    with HasCollisionDetection, HasKeyboardHandlerComponents {
+    with HasCollisionDetection {
   static const String description = '''
     Move around with W, A, S, D and notice how the camera follows the ember 
     sprite.\n
@@ -48,7 +47,7 @@ class FollowComponentExample({required final Vector2 viewportResolution})
 
 class MovableEmber()
     extends Ember<FollowComponentExample>
-    with CollisionCallbacks, KeyboardHandler {
+    with CollisionCallbacks, KeyboardCallbacks {
   static const double speed = 300;
   static final TextPaint textRenderer = TextPaint(
     style: const TextStyle(color: Colors.white70, fontSize: 12),
@@ -100,35 +99,28 @@ class MovableEmber()
   }
 
   @override
-  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    if (event is KeyRepeatEvent) {
-      return super.onKeyEvent(event, keysPressed);
-    }
-    final isKeyDown = event is KeyDownEvent;
+  void onKeyPress(KeyPressEvent event) {
+    _move(event.logicalKey, isKeyDown: true);
+  }
 
-    final bool handled;
-    if (event.logicalKey == LogicalKeyboardKey.keyA) {
+  @override
+  void onKeyRelease(KeyReleaseEvent event) {
+    _move(event.logicalKey, isKeyDown: false);
+  }
+
+  void _move(LogicalKeyboardKey key, {required bool isKeyDown}) {
+    if (key == LogicalKeyboardKey.keyA) {
       velocity.x = isKeyDown ? -1 : 0;
-      handled = true;
-    } else if (event.logicalKey == LogicalKeyboardKey.keyD) {
+    } else if (key == LogicalKeyboardKey.keyD) {
       velocity.x = isKeyDown ? 1 : 0;
-      handled = true;
-    } else if (event.logicalKey == LogicalKeyboardKey.keyW) {
+    } else if (key == LogicalKeyboardKey.keyW) {
       velocity.y = isKeyDown ? -1 : 0;
-      handled = true;
-    } else if (event.logicalKey == LogicalKeyboardKey.keyS) {
+    } else if (key == LogicalKeyboardKey.keyS) {
       velocity.y = isKeyDown ? 1 : 0;
-      handled = true;
     } else {
-      handled = false;
+      return;
     }
-
-    if (handled) {
-      angle = -velocity.angleToSigned(Vector2(1, 0));
-      return false;
-    } else {
-      return super.onKeyEvent(event, keysPressed);
-    }
+    angle = -velocity.angleToSigned(Vector2(1, 0));
   }
 }
 
