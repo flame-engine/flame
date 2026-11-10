@@ -25,6 +25,9 @@ Flame registers when a `FlameGame` is created in debug mode. Other tools can cal
 extensions through the Dart VM Service. The [Flame CLI](cli.md) uses them to take snapshots of a
 running game from the terminal, which is also useful for scripts and AI coding agents.
 
+If a selected component is a `TextComponent`, the extension also shows its text in a field. Editing
+the field changes the text in the running game, also while the game is paused.
+
 If a selected component has a behavior tree, because it uses the `HasBehaviorTree` mixin of
 [flame_behavior_tree](../../bridge_packages/flame_behavior_tree/flame_behavior_tree.md#debugging),
 the extension also shows the tree, with what each of its nodes is doing, and the contents of its
@@ -63,8 +66,8 @@ isolate that runs the game. Every `id` parameter is the `hashCode` of a componen
   if no component with that id was found.
 - `ext.flame_devtools.getComponentTree`: Returns the `component_tree`, where every node has an
   `id`, a `name`, the `toString` of the component, its `attributes` and its `children`. The
-  attributes are the `priority` of the component, and for a `PositionComponent` also its
-  `position`, `size`, `angle`, `scale` and `anchor`.
+  attributes are the `priority` of the component, for a `PositionComponent` also its `position`,
+  `size`, `angle`, `scale` and `anchor`, and for a `TextComponent` also its `text`.
 - `ext.flame_devtools.getComponentInfo`: Returns the same fields as a tree node for the component
   with the given `id`, without the children, and additionally the id of its `parent`, its
   `childCount` and its `debugMode`.
@@ -79,6 +82,10 @@ isolate that runs the game. Every `id` parameter is the `hashCode` of a componen
   `PositionComponent`. Setting takes the `id`, an `attribute` (`x`, `y`, `width`, `height`,
   `angle`, `scaleX`, `scaleY`, `anchor` or `priority`) and the `value` as a string. The
   `priority` can be set on any component.
+- `ext.flame_devtools.setComponentText`: Changes the text of the `TextComponent` with the given
+  `id` to the `text` parameter. An empty `text` is valid, but a missing one responds with an
+  invalid parameters error. The game is repainted, so that the new text is visible while it is
+  paused.
 - `ext.flame_devtools.getPaused`, `ext.flame_devtools.setPaused` and `ext.flame_devtools.step`:
   Read and change whether the game loop is paused, and step a paused game by `step_time` seconds.
 - `ext.flame_devtools.getDebugMode` and `ext.flame_devtools.setDebugMode`: Read and change the

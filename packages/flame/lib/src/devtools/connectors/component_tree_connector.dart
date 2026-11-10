@@ -63,6 +63,7 @@ class ComponentTreeNode(
   final bool isPositionComponent,
   final List<ComponentTreeNode> children, {
   final Map<String, dynamic> attributes = const {},
+  final bool isTextComponent = false,
 }) {
   ComponentTreeNode.fromComponent(Component component)
     : this(
@@ -72,6 +73,7 @@ class ComponentTreeNode(
         component is PositionComponent,
         component.children.map(ComponentTreeNode.fromComponent).toList(),
         attributes: componentAttributes(component),
+        isTextComponent: component is TextComponent,
       );
 
   ComponentTreeNode.fromJson(Map<String, dynamic> json)
@@ -84,6 +86,7 @@ class ComponentTreeNode(
             .map((e) => ComponentTreeNode.fromJson(e as Map<String, dynamic>))
             .toList(),
         attributes: (json['attributes'] as Map<String, dynamic>?) ?? const {},
+        isTextComponent: (json['isTextComponent'] as bool?) ?? false,
       );
 
   Map<String, dynamic> toJson() {
@@ -92,6 +95,7 @@ class ComponentTreeNode(
       'name': name,
       'toString': toStringText,
       'isPositionComponent': isPositionComponent,
+      'isTextComponent': isTextComponent,
       'attributes': attributes,
       'children': children.map((e) => e.toJson()).toList(),
     };

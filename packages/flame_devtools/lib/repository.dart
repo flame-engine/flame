@@ -175,6 +175,31 @@ abstract final class Repository() {
       },
     );
   }
+
+  /// Gets the text of the text component with the given [id].
+  static Future<String> getComponentText({required int id}) async {
+    final infoResponse = await serviceManager.callServiceExtensionOnMainIsolate(
+      'ext.flame_devtools.getComponentInfo',
+      args: {'id': id.toString()},
+    );
+    final attributes = infoResponse.json!['attributes'] as Map<String, dynamic>;
+    return attributes['text'] as String;
+  }
+
+  /// Sets the text of the text component with the given [id], where an empty
+  /// [text] is a valid value.
+  static Future<void> setComponentText({
+    required int id,
+    required String text,
+  }) async {
+    await serviceManager.callServiceExtensionOnMainIsolate(
+      'ext.flame_devtools.setComponentText',
+      args: {
+        'id': id.toString(),
+        'text': text,
+      },
+    );
+  }
 }
 
 class Overlays({
