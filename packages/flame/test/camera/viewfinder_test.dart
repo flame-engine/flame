@@ -4,6 +4,7 @@ import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -278,6 +279,126 @@ void main() {
           () => cameraComponent.viewfinder.visibleGameSize = Vector2(100, 100),
           returnsNormally,
         );
+      },
+    );
+
+    testWithFlameGame(
+      'visibleGameSize is fitted within the resolution of a '
+      'FixedResolutionViewport',
+      (game) async {
+        game.onGameResize(Vector2(1600, 1200));
+        final world = World()..addToParent(game);
+        final camera = CameraComponent.withFixedResolution(
+          width: 800,
+          height: 600,
+          world: world,
+        )..addToParent(game);
+        await game.ready();
+
+        camera.viewfinder.visibleGameSize = Vector2(400, 200);
+        expect(camera.viewfinder.zoom, 2);
+        expect(camera.visibleWorldRect.size, const Size(400, 300));
+
+        game.onGameResize(Vector2(400, 300));
+        expect(camera.viewfinder.zoom, 2);
+        expect(camera.visibleWorldRect.size, const Size(400, 300));
+      },
+    );
+
+    testWithFlameGame(
+      'visibleGameSize is kept when the viewport is resized',
+      (game) async {
+        final world = World()..addToParent(game);
+        final camera = CameraComponent(
+          world: world,
+          viewport: FixedSizeViewport(200, 200),
+        )..addToParent(game);
+        await game.ready();
+
+        camera.viewfinder.visibleGameSize = Vector2(100, 100);
+        expect(camera.viewfinder.zoom, 2);
+
+        camera.viewport.size = Vector2(400, 300);
+        expect(camera.viewfinder.zoom, 3);
+      },
+    );
+
+    testWithFlameGame(
+      'visibleGameSize is kept when the game is resized after replacing the '
+      'viewport',
+      (game) async {
+        final world = World()..addToParent(game);
+        final camera = CameraComponent(world: world)..addToParent(game);
+        await game.ready();
+        camera.viewport = MaxViewport();
+        await game.ready();
+        camera.viewfinder.visibleGameSize = Vector2(100, 100);
+
+        game.onGameResize(Vector2(1000, 500));
+        expect(camera.viewfinder.zoom, 5);
+      },
+    );
+
+    testWithFlameGame(
+      'visibleGameSize can be set before the viewport has a size',
+      (game) async {
+        final world = World()..addToParent(game);
+        final camera = CameraComponent(world: world);
+        camera.viewfinder.visibleGameSize = Vector2(100, 100);
+        expect(camera.viewfinder.zoom, 1);
+
+        camera.addToParent(game);
+        await game.ready();
+        expect(camera.viewfinder.zoom, 6);
+      },
+    );
+
+    testWithFlameGame(
+      'visibleGameSize keeps the camera in place within viewport-aware bounds '
+      'when the game is resized',
+      (game) async {
+        game.onGameResize(Vector2(400, 300));
+        final camera = game.camera;
+        camera.viewfinder.visibleGameSize = Vector2(400, 300);
+        camera.setBounds(
+          Rectangle.fromLTRB(0, 0, 1000, 1000),
+          considerViewport: true,
+        );
+        await game.ready();
+        camera.viewfinder.position = Vector2(200, 150);
+        game.update(0);
+
+        game.onGameResize(Vector2(800, 600));
+        game.update(0);
+        expect(camera.viewfinder.zoom, 2);
+        expect(camera.viewfinder.position, Vector2(200, 150));
+      },
+    );
+
+    testWithFlameGame(
+      'visibleGameSize keeps the camera in place within viewport-aware bounds '
+      'when the viewport is replaced',
+      (game) async {
+        final world = World()..addToParent(game);
+        final camera = CameraComponent(
+          world: world,
+          viewport: FixedSizeViewport(400, 300),
+        )..addToParent(game);
+        await game.ready();
+        camera.viewfinder.visibleGameSize = Vector2(400, 300);
+        camera.setBounds(
+          Rectangle.fromLTRB(0, 0, 1000, 1000),
+          considerViewport: true,
+        );
+        await game.ready();
+        camera.viewfinder.position = Vector2(200, 150);
+        game.update(0);
+
+        camera.viewport = FixedSizeViewport(800, 600);
+        await game.ready();
+        game.update(0);
+        expect(camera.viewfinder.zoom, 2);
+        expect(camera.viewfinder.position, Vector2(200, 150));
       },
     );
   });
