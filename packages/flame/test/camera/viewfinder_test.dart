@@ -280,6 +280,29 @@ void main() {
         );
       },
     );
+
+    testWithFlameGame(
+      'visibleGameSize is fitted within the resolution of a '
+      'FixedResolutionViewport',
+      (game) async {
+        game.onGameResize(Vector2(1600, 1200));
+        final world = World()..addToParent(game);
+        final camera = CameraComponent.withFixedResolution(
+          width: 800,
+          height: 600,
+          world: world,
+        )..addToParent(game);
+        await game.ready();
+
+        camera.viewfinder.visibleGameSize = Vector2(400, 200);
+        expect(camera.viewfinder.zoom, 2);
+        expect(camera.visibleWorldRect.size, const Size(400, 300));
+
+        game.onGameResize(Vector2(400, 300));
+        expect(camera.viewfinder.zoom, 2);
+        expect(camera.visibleWorldRect.size, const Size(400, 300));
+      },
+    );
   });
 }
 
