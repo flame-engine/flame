@@ -33,7 +33,7 @@ void main() {
   runApp(GameWidget(game: MyGame()));
 }
 
-class MyGame extends FlameGame {
+class MyGame() extends FlameGame {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -64,7 +64,7 @@ void main() {
   runApp(GameWidget(game: MyGame()));
 }
 
-class MyGame extends FlameGame {
+class MyGame() extends FlameGame {
   late final Player player;
 
   @override
@@ -75,8 +75,8 @@ class MyGame extends FlameGame {
 }
 
 /// A square that starts moving in a random direction when it is tapped.
-class Player extends RectangleComponent with TapCallbacks {
-  Player()
+class Player() extends RectangleComponent with TapCallbacks {
+  this
     : super(
         size: Vector2.all(64),
         anchor: Anchor.center,
@@ -157,9 +157,10 @@ import 'package:{{name}}/star.dart';
 
 /// The game: a world with a player that is steered with the arrow keys or
 /// by tapping, and stars to collect.
-class MyGame extends FlameGame<MyWorld>
+class MyGame()
+    extends FlameGame<MyWorld>
     with HasKeyboardHandlerComponents, HasCollisionDetection {
-  MyGame() : super(world: MyWorld());
+  this : super(world: MyWorld());
 
   int score = 0;
 
@@ -179,7 +180,7 @@ class MyGame extends FlameGame<MyWorld>
   }
 }
 
-class MyWorld extends World with TapCallbacks {
+class MyWorld() extends World with TapCallbacks {
   static final _random = Random();
 
   late final Player player;
@@ -209,7 +210,7 @@ class MyWorld extends World with TapCallbacks {
 }
 
 /// Keeps the game logic testable by grouping the shared drawing helpers.
-abstract final class Palette {
+abstract final class Palette() {
   static final player = BasicPalette.white.paint();
   static final star = BasicPalette.yellow.paint();
 }
@@ -230,9 +231,10 @@ import 'package:{{name}}/my_game.dart';
 import 'package:{{name}}/star.dart';
 
 /// The square that the player steers around to collect stars.
-class Player extends RectangleComponent
+class Player()
+    extends RectangleComponent
     with HasGameRef<MyGame>, KeyboardHandler, CollisionCallbacks {
-  Player()
+  this
     : super(
         size: Vector2.all(48),
         anchor: Anchor.center,
@@ -306,9 +308,8 @@ import 'package:flame/components.dart';
 import 'package:{{name}}/my_game.dart';
 
 /// A star that the player collects by touching it.
-class Star extends CircleComponent {
-  Star({required super.position})
-    : super(radius: 12, anchor: Anchor.center, paint: Palette.star);
+class Star({required super.position}) extends CircleComponent {
+  this : super(radius: 12, anchor: Anchor.center, paint: Palette.star);
 
   @override
   Future<void> onLoad() async {
