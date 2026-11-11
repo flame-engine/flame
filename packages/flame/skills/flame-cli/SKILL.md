@@ -36,9 +36,16 @@ condensed reference of every command and option is in
   find it without a `--uri`. Run every other command from the same project directory or one of its
   subdirectories.
 - When running in the background, always redirect the input of `flame run` from `/dev/null` and
-  its output to a file, then wait for `flame status` to succeed before sending other commands.
+  its output to a file, then wait with a bounded number of retries until `flame status` succeeds
+  and a component that the game adds in `onLoad` exists, see
+  [run the game and wait for it](#run-the-game-and-wait-for-it).
 - Always pass `--json` when you are going to read the result of a command programmatically. The
-  standard output then holds exactly one JSON value, either the result or an `error` object.
+  standard output then holds exactly one JSON value, either the result or an `error` object, with
+  two exceptions: `flame devtools --json` prints one JSON event per line, and some failures are
+  reported in the normal result instead of an `error` object. A failed `reload` or `restart`, and
+  a `stop` that timed out, have `ok: false` and the compile errors or output in `output`. A game
+  that is not running or not reachable is reported by `status` with `running` or `reachable`
+  set to `false` and the reason in `error`. Always check the exit code first.
 - Check the exit code of every command, see [exit codes](#exit-codes). Never guess what happened
   from text output.
 - Pause the game with `flame pause` before taking snapshots that are compared or read, and advance
@@ -50,10 +57,11 @@ condensed reference of every command and option is in
   `flame restart`, and prefer giving components that you need to target a
   `ComponentKey.named('player')` key, which `flame input` accepts instead of an id.
 - Use `flame wait` instead of `sleep` to wait for something to happen in the game.
-- After changing code, run `flame reload`. When it exits with `70`, read the compile errors in its
+- After changing code, reload it. When the reload exits with `70`, read the compile errors in its
   output, fix them and reload again.
-- A plain hot reload does not change components that already exist. Use `flame reload --merge` for
-  changes to constructors and `onLoad` methods, or `flame restart` to start over.
+- A plain `flame reload` does not change components that already exist. For changes to
+  constructors, field initializers and `onLoad` methods, run `flame reload --merge` instead of a
+  plain reload, never after it, or `flame restart` to start over.
 - Overlays are Flutter widgets and are never part of a snapshot. Check them with `flame overlays`
   and `flame wait overlay <name>` instead.
 - Always run `flame stop` when you are done, so that no game is left running.
@@ -92,16 +100,32 @@ created, so run both after your first change to see that nothing broke.
 ## Run the game and wait for it
 
 In an interactive terminal, `flame run` works exactly like `flutter run` and takes the same
-arguments. From a script or an agent, run it in the background:
+arguments. From a script or an agent, run it in the background, and wait for it with a limit on
+the retries, so that a build error or a crash is reported instead of waiting forever:
 
 ```shell
 flame run -d macos < /dev/null > run.log 2>&1 &
-until flame status > /dev/null; do sleep 1; done
+run_pid=$!
+for attempt in $(seq 300); do
+  flame status > /dev/null && break
+  kill -0 "$run_pid" 2> /dev/null || break
+  sleep 1
+done
+if ! flame wait component Player --timeout 60 > /dev/null; then
+  tail -n 50 run.log
+  exit 1
+fi
 ```
 
-`flame status` exits with `0` only when the game runs and its Flame game can be reached. Use
-`flame logs --lines 50` to read what the game printed, including exceptions, and to see why it did
-not start. The log is kept after the game has stopped or crashed.
+The first build of a project can take a few minutes, hence the long limit. The loop stops early
+when `flame run` has exited, for example because the build failed.
+
+`flame status` exits with `0` as soon as a `FlameGame` has been created and can be reached, which
+is before its components have loaded. That is why the script also waits for a component that the
+game adds in `onLoad`, here `Player`, before it sends any other command. Replace it with a type
+from your game. When the game never got that far, `flame wait` fails, with `69` when no game is
+running, and the end of the log shows why. Use `flame logs --lines 50` to read what the game
+printed, including exceptions. The log is kept after the game has stopped or crashed.
 
 Pick a desktop device such as `macos`, `linux` or `windows` when you can, since it starts fastest
 and does not need an emulator. Use `flutter devices` to see which devices are available.
@@ -163,16 +187,24 @@ that work into the code afterwards.
 ## Change the code and see the result
 
 1. Edit the code.
-2. Run `flame reload --json`. When it exits with `70`, fix the errors from its `output` and repeat.
-3. Changes to `update` and `render` show up right away. For changes to constructors and `onLoad`,
-   run `flame reload --merge` to apply them to the live components while they keep their state, or
-   `flame restart` to rebuild the game from scratch.
+2. Pick one way to load it:
+   - `flame reload --json` when only method bodies like `update` and `render` changed. Those
+     changes show up right away.
+   - `flame reload --merge --json` when constructors, field initializers or `onLoad` methods
+     changed. Run it instead of a plain reload, not after one: the merge compares shadows built
+     with the old code to shadows built with the new code, so after a plain reload it finds
+     nothing to change.
+   - `flame restart --json` to rebuild the game from scratch.
+3. When the command exits with `70`, fix the errors from its `output` and run it again.
 4. Take a new snapshot, and run `flame tree` again after a restart since the ids have changed.
 
 `flame reload --merge` builds copies of the game, called shadows, with the constructor of the game
 class that takes no arguments, and runs their `onLoad` methods. Guard side effects such as playing
-music or network calls with `if (!isHotReloadShadow)` in the game. Values that differ between two
-runs of the same code, like random positions, are never written to the live game.
+music or network calls with `if (!isHotReloadShadow)` in the game. The live components keep the
+values that the code did not change. When the code and the running game both changed a value, the
+value from the code wins and is reported as a conflict, unless you pass `--keep-runtime`. Values
+that differ between two runs of the same code, like random positions, are never written to the
+live game.
 
 
 ## Play the game
@@ -214,19 +246,26 @@ or step it before waiting for something that depends on the game loop.
 
 ## Check a change end to end
 
-A repeatable check that a feature works, for example after implementing a jump:
+A repeatable check that a feature works, for example after implementing a jump. Start the game and
+wait for it as in [run the game and wait for it](#run-the-game-and-wait-for-it), then:
 
 ```shell
-flame run -d macos < /dev/null > run.log 2>&1 &
-until flame status > /dev/null; do sleep 1; done
 flame pause
 flame snapshot --output before.png --max-size 1024
-flame input key space
+flame input key space --down
 flame step --frames 20
+flame input key space --up
 flame snapshot --output after.png --max-size 1024 --annotate --filter player
 flame wait component Player --where "position.y < 0" --timeout 0
+result=$?
 flame stop
+exit "$result"
 ```
+
+The key is held with `--down` while the game is stepped and released with `--up` afterwards. A
+plain `flame input key space` presses and releases the key right away, so a game that reads the
+pressed keys in `update` would never see it pressed in any of the stepped frames. The exit code of
+the assertion is kept while the game is stopped, so a failed check also fails the script.
 
 Look at both images as well as relying on the `wait` assertion, since a component can be at the
 right position and still be drawn wrongly. Turn behavior that should keep working into a test with
@@ -270,6 +309,9 @@ arguments of `flutter run` so that the commands find it on their own. The `reloa
 | `73` | `cantCreate`  | The output file could not be written.                                 |
 | `75` | `tempFail`    | The condition of `wait` did not hold before the timeout.              |
 
-With `--json`, a failure is printed as `{"error": {"message", "exitCode", "kind"}}` on the
-standard output. When a command exits with `69` while the game is starting, retry it, and when it
-says that the game runs a Flame version without support for the command, update `flame`.
+With `--json`, a failure is usually printed as `{"error": {"message", "exitCode", "kind"}}` on the
+standard output. The exceptions are a failed `reload` or `restart` and a `stop` that timed out,
+which print their normal result with `ok: false`, and `status`, which prints its normal result with
+the reason in `error` when the game is not running or not reachable. When a command exits with `69`
+while the game is starting, retry it a limited number of times, and when it says that the game runs
+a Flame version without support for the command, update `flame`.

@@ -23,8 +23,10 @@ JSON result: `name`, `path` and `template`.
 ## run
 
 `flame run [flutter run arguments]` runs `flutter run` and writes the VM Service URI, the control
-port and the log to `.dart_tool/flame` in the project root. It has no `--json`, use the
-`--machine` option of `flutter run` for machine readable output.
+port and the log to `.dart_tool/flame` in the project root. It has no `--json`. Never pass
+`--machine` on to `flutter run`: `flame run` controls `flutter run` through its terminal input,
+which `--machine` replaces with JSON requests, so `reload`, `restart` and `stop` stop working. Use
+the `--json` output of the other commands instead.
 
 
 ## reload and restart
