@@ -79,7 +79,7 @@ void main() {
       ],
     ]);
     expect(callDirectories, [directory.path, project, project]);
-    expect(read('lib/main.dart'), contains('class MyGame extends FlameGame'));
+    expect(read('lib/main.dart'), contains('class MyGame() extends FlameGame'));
     expect(
       read('test/player_test.dart'),
       contains("import 'package:my_game/main.dart';"),
