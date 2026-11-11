@@ -35,6 +35,7 @@ dev_dependencies:
     sdk: flutter
   material_ui: ^1.0.0
   mocktail: ^1.0.4
+  skills_lint: ^0.5.3+1
   test: any
   vm_service: ^15.0.0
 
