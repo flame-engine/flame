@@ -15,6 +15,26 @@ part 'component_list.dart';
 part 'component_tree_root.dart';
 part 'custom_traversal.dart';
 
+/// The lifecycle phase that a [Component] can be in.
+///
+/// The states are mutually exclusive as reported by `Component.lifecycleState`,
+/// which checks them in order of precedence so that the most specific (and most
+/// useful for debugging) state wins:
+/// - [removing]: the component is scheduled to be removed from the tree;
+/// - [mounted]: the component is currently added to a component tree;
+/// - [loaded]: the component finished loading, but is not attached to a
+///   component tree;
+/// - [loading]: the component is currently executing its `onLoad` step;
+/// - [detached]: the component hasn't started loading yet (or has been removed
+///   and hasn't been re-added since).
+enum ComponentLifecycleState() {
+  removing,
+  mounted,
+  loaded,
+  loading,
+  detached,
+}
+
 /// [Component]s are the basic building blocks for a [FlameGame].
 ///
 /// Components are quite similar to widgets in Flutter, or to GameObjects in
@@ -218,6 +238,29 @@ class Component({
   bool get isRemoving => (_state & _removing) != 0;
   void _setRemovingBit() => _state |= _removing;
   void _clearRemovingBit() => _state &= ~_removing;
+
+  /// The [ComponentLifecycleState] that this component currently is in.
+  ///
+  /// The states are checked in order of precedence, so that the most specific
+  /// (and most useful for debugging) state wins.
+  ///
+  /// This is meant primarily for debugging tools (such as the DevTools
+  /// extension), which need to display why a component may not be visible in
+  /// the game.
+  ComponentLifecycleState get lifecycleState {
+    if (isRemoving) {
+      return ComponentLifecycleState.removing;
+    }
+    if (isMounted) {
+      return ComponentLifecycleState.mounted;
+    }
+    if (isLoaded) {
+      return ComponentLifecycleState.loaded;
+    }
+    return isLoading
+        ? ComponentLifecycleState.loading
+        : ComponentLifecycleState.detached;
+  }
 
   /// Whether the component has been removed. Originally this flag is `false`,
   /// but it becomes `true` after the component was mounted and then removed
