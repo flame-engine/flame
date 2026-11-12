@@ -814,7 +814,7 @@ class _Parser(
     } else if (token.isString) {
       return StringLiteral(token.content);
     } else if (token == Token.constTrue || token == Token.constFalse) {
-      return BoolLiteral(token == Token.constTrue);
+      return BoolLiteral(value: token == Token.constTrue);
     } else if (token.isVariable) {
       final name = token.content;
       if (localVariables?.hasVariable(name) ?? false) {

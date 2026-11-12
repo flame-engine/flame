@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
+import 'package:flame_devtools/material.dart';
 import 'package:flame_devtools/widgets/anchor_picker.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 final _names = Anchor.values.map((anchor) => anchor.name).toList();
