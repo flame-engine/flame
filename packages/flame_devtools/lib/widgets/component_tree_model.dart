@@ -1,8 +1,7 @@
 import 'package:animated_tree_view/animated_tree_view.dart';
 import 'package:flame/devtools.dart';
+import 'package:flame_devtools/material.dart';
 import 'package:flame_devtools/repository.dart';
-// ignore: deprecated_member_use
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 

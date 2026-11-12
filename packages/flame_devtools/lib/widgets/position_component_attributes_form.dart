@@ -1,10 +1,9 @@
+import 'package:flame_devtools/material.dart';
 import 'package:flame_devtools/providers/position_component_attributes_provider.dart';
 import 'package:flame_devtools/repository.dart';
 import 'package:flame_devtools/widgets/anchor_picker.dart';
 import 'package:flame_devtools/widgets/angle_form_field.dart';
 import 'package:flame_devtools/widgets/incremental_number_form_field.dart';
-// ignore: deprecated_member_use
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class const PositionComponentAttributesForm({

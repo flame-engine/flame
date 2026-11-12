@@ -1,8 +1,7 @@
 import 'dart:math';
 
+import 'package:flame_devtools/material.dart';
 import 'package:flame_devtools/widgets/angle_form_field.dart';
-// ignore: deprecated_member_use
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
