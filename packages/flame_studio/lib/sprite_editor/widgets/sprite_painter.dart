@@ -1,7 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flame_studio/sprite_editor/widgets/sprite_view_transform.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template sprite_painter}
 /// Draws the image of the sprite editor, without smoothing so that its

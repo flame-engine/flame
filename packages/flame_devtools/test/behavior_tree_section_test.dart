@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flame_devtools/behavior_tree_snapshot.dart';
+import 'package:flame_devtools/material.dart';
 import 'package:flame_devtools/widgets/behavior_tree_section.dart';
 import 'package:flame_devtools/widgets/behavior_tree_view.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 BehaviorTreeSnapshot _snapshot(String rootType) {

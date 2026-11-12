@@ -1,8 +1,8 @@
 import 'package:flame_studio/component_editor/widgets/property_editors/color_field.dart';
 import 'package:flame_studio/palette/palette.dart';
 import 'package:flame_studio/repositories/repositories.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template palette_view}
 /// Lists the colors of the palette to add, rename, change and remove

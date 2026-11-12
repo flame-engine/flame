@@ -2,7 +2,7 @@ import 'package:flame_studio/component_editor/widgets/property_editors/color_fie
 import 'package:flame_studio/component_editor/widgets/property_editors/enum_field.dart';
 import 'package:flame_studio/component_editor/widgets/property_editors/property_section.dart';
 import 'package:flame_studio/repositories/repositories.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template paint_editor}
 /// Edits a [ComponentPaint]. Used by every [PaintedComponent].
