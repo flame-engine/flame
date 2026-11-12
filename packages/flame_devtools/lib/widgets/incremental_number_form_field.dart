@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flame_devtools/material.dart';
 
 class const IncrementalNumberFormField<T extends num>({
   required final T initialValue,

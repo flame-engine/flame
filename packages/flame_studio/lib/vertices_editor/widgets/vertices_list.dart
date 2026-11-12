@@ -1,7 +1,7 @@
 import 'package:flame_studio/component_editor/widgets/property_editors/number_field.dart';
 import 'package:flame_studio/vertices_editor/bloc/vertices_editor_cubit.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template vertices_list}
 /// The side bar of the vertices editor: a row per vertex, with fields to

@@ -1,5 +1,5 @@
 import 'package:flame_studio/repositories/repositories.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template delete_component_dialog}
 /// Asks the user to confirm the deletion of a [ComponentData].

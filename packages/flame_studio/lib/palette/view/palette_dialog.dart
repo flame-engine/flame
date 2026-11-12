@@ -1,7 +1,7 @@
 import 'package:flame_studio/palette/palette.dart';
 import 'package:flame_studio/repositories/repositories.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template palette_dialog}
 /// A dialog to manage the [Palette] of a [Project].

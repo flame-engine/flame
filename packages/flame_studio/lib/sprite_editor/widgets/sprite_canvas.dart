@@ -6,9 +6,9 @@ import 'package:flame_studio/sprite_editor/bloc/sprite_editor_cubit.dart';
 import 'package:flame_studio/sprite_editor/widgets/sprite_painter.dart';
 import 'package:flame_studio/sprite_editor/widgets/sprite_view_transform.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template sprite_canvas}
 /// The canvas of the sprite editor. It shows the image of the sprite, and

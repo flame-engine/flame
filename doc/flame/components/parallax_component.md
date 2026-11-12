@@ -63,15 +63,14 @@ Future<void> onLoad() async {
 }
 ```
 
-You can set the baseSpeed and layerDelta at any time, for example if your character jumps or your
+You can set the baseVelocity at any time, for example if your character jumps or your
 game speeds up.
 
 ```dart
 @override
 void onLoad() {
-  final parallax = parallaxComponent.parallax;
-  parallax.baseSpeed = Vector2(100, 0);
-  parallax.velocityMultiplierDelta = Vector2(2.0, 1.0);
+  final parallax = parallaxComponent.parallax!;
+  parallax.baseVelocity = Vector2(100, 0);
 }
 ```
 
@@ -106,14 +105,14 @@ final images = [
 ];
 
 final layers = images.map(
-  (image) => ParallaxLayer(
+  (image) async => ParallaxLayer(
     await image,
-    velocityMultiplier: images.indexOf(image) * 2.0,
+    velocityMultiplier: Vector2(images.indexOf(image) * 2.0, 1.0),
   )
 );
 
-final parallaxComponent = ParallaxComponent.fromParallax(
-  Parallax(
+final parallaxComponent = ParallaxComponent(
+  parallax: Parallax(
     await Future.wait(layers),
     baseVelocity: Vector2(50, 0),
   ),
