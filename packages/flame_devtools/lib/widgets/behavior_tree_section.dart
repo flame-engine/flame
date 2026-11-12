@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flame_devtools/behavior_tree_snapshot.dart';
+import 'package:flame_devtools/material.dart';
 import 'package:flame_devtools/widgets/behavior_tree_view.dart';
-import 'package:flutter/material.dart';
 
 /// How often the behavior tree is refreshed while it is live.
 const _refreshInterval = Duration(milliseconds: 500);

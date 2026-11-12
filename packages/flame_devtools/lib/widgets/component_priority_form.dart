@@ -1,7 +1,7 @@
+import 'package:flame_devtools/material.dart';
 import 'package:flame_devtools/providers/component_priority_provider.dart';
 import 'package:flame_devtools/repository.dart';
 import 'package:flame_devtools/widgets/incremental_number_form_field.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class const ComponentPriorityForm({

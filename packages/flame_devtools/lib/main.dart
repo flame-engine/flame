@@ -1,10 +1,10 @@
 import 'package:devtools_extensions/devtools_extensions.dart';
+import 'package:flame_devtools/material.dart';
 import 'package:flame_devtools/widgets/component_tree.dart';
 import 'package:flame_devtools/widgets/debug_mode_button.dart';
 import 'package:flame_devtools/widgets/game_loop_controls.dart';
 import 'package:flame_devtools/widgets/image_cache_panel.dart';
 import 'package:flame_devtools/widgets/overlay_navigation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {

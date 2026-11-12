@@ -1,6 +1,6 @@
 import 'package:flame/devtools.dart';
+import 'package:flame_devtools/material.dart';
 import 'package:flame_devtools/repository.dart';
-import 'package:flutter/material.dart';
 
 /// Shows the images held by the game's image cache, how much memory they take
 /// and how many times each one is retained, with a button to evict the

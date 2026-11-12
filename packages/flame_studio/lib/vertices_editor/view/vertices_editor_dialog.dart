@@ -1,8 +1,8 @@
 import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flame_studio/vertices_editor/bloc/vertices_editor_cubit.dart';
 import 'package:flame_studio/vertices_editor/view/vertices_editor_view.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template vertices_editor_dialog}
 /// A dialog to edit the vertices of a polygon on a canvas.

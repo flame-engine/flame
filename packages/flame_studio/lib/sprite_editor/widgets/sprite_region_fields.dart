@@ -1,8 +1,8 @@
 import 'package:flame_studio/component_editor/widgets/property_editors/number_field.dart';
 import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flame_studio/sprite_editor/bloc/sprite_editor_cubit.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template sprite_region_fields}
 /// Fields to type the exact region of the sprite, in pixels of the image.
