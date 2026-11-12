@@ -68,6 +68,31 @@ jobs:
 
       - name: Run DCM
         run: dcm analyze .
+
+  pana-packages:
+    runs-on: ubuntu-latest
+    outputs:
+      packages: ${{ steps.list.outputs.packages }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dart-lang/setup-dart@v1
+      - run: dart pub global activate pana_workspace
+      - id: list
+        run: echo "packages=$(dart pub global run pana_workspace list --json)" >> "$GITHUB_OUTPUT"
+
+  pana:
+    needs: pana-packages
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(needs.pana-packages.outputs.packages) }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: subosito/flutter-action@v2
+      - uses: bluefireteam/pana_workspace@v0
+        with:
+          packages: ${{ matrix.package }}
   # END LINTING STAGE
 
   # BEGIN TESTING STAGE
