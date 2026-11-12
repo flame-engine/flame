@@ -111,10 +111,12 @@ three pass.
 - `bloc`, `flutter_bloc`, `equatable`, `flame` (**2.0.0-dev** — the
   generated code targets Flame 2; `flame_test` is on the matching 3.0.0-dev),
   `dart_style` (formats the
-  generated code, in `component_repository`), `flex_color_picker`
-  (pinned to 3.x: 4.x depends on the standalone `material_ui` package, whose
-  `MaterialLocalizations` don't match `flutter/material`), `bloc_test`,
-  `flame_test`, `mocktail`, `flame_lint` and `bloc_lint` are dependencies.
+  generated code, in `component_repository`), `material_ui` (import it
+  instead of `flutter/material`, which is deprecated since Flutter 3.50),
+  `flex_color_picker` (4.x, which is built on `material_ui`; mixing it with
+  `flutter/material` widgets breaks, since their `MaterialLocalizations`
+  don't match), `bloc_test`, `flame_test`, `mocktail`, `flame_lint` and
+  `bloc_lint` are dependencies.
 - Toolchain: Flutter stable 3.47 / Dart 3.13. Dart 3.13 lints prefer primary
   constructors (`class const Foo({super.key}) extends Bar {`) — `dart fix --apply`
   handles it.

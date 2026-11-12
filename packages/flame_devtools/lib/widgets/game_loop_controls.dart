@@ -1,5 +1,5 @@
+import 'package:flame_devtools/material.dart';
 import 'package:flame_devtools/repository.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class const GameLoopControls({super.key}) extends StatefulWidget {
@@ -72,7 +72,7 @@ class _GameLoopControlsState() extends State<GameLoopControls> {
 
   void _setPaused(bool paused) {
     setState(() {
-      _paused = Repository.setPaused(paused);
+      _paused = Repository.setPaused(shouldPause: paused);
     });
   }
 

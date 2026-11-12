@@ -68,8 +68,7 @@ abstract final class Repository() {
     return debugModeResponse.json!['debug_mode'] as bool;
   }
 
-  // ignore: avoid_positional_boolean_parameters
-  static Future<bool> setPaused(bool shouldPause) async {
+  static Future<bool> setPaused({required bool shouldPause}) async {
     await serviceManager.callServiceExtensionOnMainIsolate(
       'ext.flame_devtools.setPaused',
       args: {'paused': shouldPause.toString()},

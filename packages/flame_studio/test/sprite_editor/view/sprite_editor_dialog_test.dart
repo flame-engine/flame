@@ -7,8 +7,8 @@ import 'package:flame_studio/sprite_editor/widgets/widgets.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
