@@ -1,5 +1,6 @@
 import 'package:devtools_app_shared/ui.dart' as devtools_ui;
 import 'package:flame_devtools/repository.dart';
+// ignore: deprecated_member_use
 import 'package:flutter/material.dart';
 
 class const OverlayNavigation({super.key}) extends StatefulWidget {

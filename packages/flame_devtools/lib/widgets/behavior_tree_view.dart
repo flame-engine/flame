@@ -1,4 +1,5 @@
 import 'package:flame_devtools/behavior_tree_snapshot.dart';
+// ignore: deprecated_member_use
 import 'package:flutter/material.dart';
 
 /// The width from which the tree and the blackboard are shown next to each

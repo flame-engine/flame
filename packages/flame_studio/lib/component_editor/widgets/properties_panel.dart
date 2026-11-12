@@ -2,8 +2,8 @@ import 'package:flame_studio/component_editor/bloc/component_editor_bloc.dart';
 import 'package:flame_studio/component_editor/widgets/preview/preview_hitboxes.dart';
 import 'package:flame_studio/component_editor/widgets/property_editors/property_editors.dart';
 import 'package:flame_studio/repositories/repositories.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template properties_panel}
 /// Lists an editor for every property of the node selected in the

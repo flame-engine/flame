@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:flame/widgets.dart';
 import 'package:flame_devtools/repository.dart';
+// ignore: deprecated_member_use
 import 'package:flutter/material.dart' hide Image;
 
 class const ComponentSnapshot({

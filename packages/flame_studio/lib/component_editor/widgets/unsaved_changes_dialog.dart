@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// What the user chose in the [UnsavedChangesDialog].
 enum UnsavedChangesDecision() {

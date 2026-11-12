@@ -1,6 +1,6 @@
 import 'package:flame_studio/project_settings/project_settings.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template project_settings_view}
 /// Lets the user edit the project settings and pops once they are saved.

@@ -1,5 +1,6 @@
 import 'package:flame_devtools/behavior_tree_snapshot.dart';
 import 'package:flame_devtools/widgets/behavior_tree_view.dart';
+// ignore: deprecated_member_use
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

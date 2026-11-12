@@ -59,7 +59,6 @@ class ComponentTreeNode(
   final int id,
   final String name,
   final String toStringText,
-  // ignore: avoid_positional_boolean_parameters
   final bool isPositionComponent,
   final List<ComponentTreeNode> children, {
   final Map<String, dynamic> attributes = const {},

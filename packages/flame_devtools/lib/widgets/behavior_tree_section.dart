@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flame_devtools/behavior_tree_snapshot.dart';
 import 'package:flame_devtools/widgets/behavior_tree_view.dart';
+// ignore: deprecated_member_use
 import 'package:flutter/material.dart';
 
 /// How often the behavior tree is refreshed while it is live.

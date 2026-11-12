@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame_devtools/widgets/anchor_picker.dart';
+// ignore: deprecated_member_use
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

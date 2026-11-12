@@ -3,9 +3,9 @@ import 'package:flame_studio/vertices_editor/bloc/vertices_editor_cubit.dart';
 import 'package:flame_studio/vertices_editor/widgets/vertices_painter.dart';
 import 'package:flame_studio/vertices_editor/widgets/vertices_view_transform.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template vertices_canvas}
 /// The canvas of the vertices editor, where the user drags the vertices of

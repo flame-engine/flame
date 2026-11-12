@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flame_devtools/widgets/incremental_number_form_field.dart';
+// ignore: deprecated_member_use
 import 'package:flutter/material.dart';
 
 /// A form field that shows and edits an angle in degrees.

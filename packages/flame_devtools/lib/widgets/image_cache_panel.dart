@@ -1,5 +1,6 @@
 import 'package:flame/devtools.dart';
 import 'package:flame_devtools/repository.dart';
+// ignore: deprecated_member_use
 import 'package:flutter/material.dart';
 
 /// Shows the images held by the game's image cache, how much memory they take
