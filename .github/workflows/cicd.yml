@@ -90,6 +90,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: subosito/flutter-action@v2
+      - name: Install the WebP tools that pana uses for screenshots
+        run: sudo apt-get update && sudo apt-get install -y webp
       - uses: bluefireteam/pana_workspace@v0
         with:
           packages: ${{ matrix.package }}
