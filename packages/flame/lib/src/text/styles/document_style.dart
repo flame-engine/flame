@@ -33,15 +33,7 @@ class DocumentStyle({
   /// value of [height] defaults to 0).
   final double? height,
 
-  /// The distance from the outer edges of the page to the inner content box of
-  /// the document.
-  ///
-  /// Note that the padding is computed from the outer edge of the page, unlike
-  /// HTML where it is computed from the inner edge of the border box.
-  ///
-  /// If the document's horizontal padding exceeds its width, an exception will
-  /// be thrown.
-  final EdgeInsets padding = EdgeInsets.zero,
+  final EdgeInsets? _padding,
 
   /// If present, describes what kind of background and borders to draw for the
   /// document page(s).
@@ -60,6 +52,21 @@ class DocumentStyle({
   BlockStyle? header5,
   BlockStyle? header6,
 }) extends FlameTextStyle {
+  // The styles as they were passed in, before the defaults are applied, so
+  // that [copyWith] only overrides the styles that were actually set.
+  final InlineTextStyle? _rawText = text;
+  final InlineTextStyle? _rawBoldText = boldText;
+  final InlineTextStyle? _rawItalicText = italicText;
+  final InlineTextStyle? _rawCodeText = codeText;
+  final InlineTextStyle? _rawStrikethroughText = strikethroughText;
+  final BlockStyle? _rawParagraph = paragraph;
+  final BlockStyle? _rawHeader1 = header1;
+  final BlockStyle? _rawHeader2 = header2;
+  final BlockStyle? _rawHeader3 = header3;
+  final BlockStyle? _rawHeader4 = header4;
+  final BlockStyle? _rawHeader5 = header5;
+  final BlockStyle? _rawHeader6 = header6;
+
   final InlineTextStyle? _text = FlameTextStyle.merge(
     DocumentStyle.defaultTextStyle,
     text,
@@ -114,6 +121,16 @@ class DocumentStyle({
   /// more details.
   Overflow get overflow => Overflow.expand;
 
+  /// The distance from the outer edges of the page to the inner content box of
+  /// the document.
+  ///
+  /// Note that the padding is computed from the outer edge of the page, unlike
+  /// HTML where it is computed from the inner edge of the border box.
+  ///
+  /// If the document's horizontal padding exceeds its width, an exception will
+  /// be thrown.
+  EdgeInsets get padding => _padding ?? EdgeInsets.zero;
+
   InlineTextStyle get text => _text!;
   InlineTextStyle get boldText => _boldText!;
   InlineTextStyle get italicText => _italicText!;
@@ -142,24 +159,41 @@ class DocumentStyle({
     return DocumentStyle(
       width: other.width ?? width,
       height: other.height ?? height,
-      padding: other.padding,
-      text: FlameTextStyle.merge(_text, other.text),
-      boldText: FlameTextStyle.merge(_boldText, other.boldText),
-      italicText: FlameTextStyle.merge(_italicText, other.italicText),
-      codeText: FlameTextStyle.merge(_codeText, other.codeText),
+      padding: other._padding ?? _padding,
+      text: FlameTextStyle.merge(_text, other._rawText),
+      boldText: FlameTextStyle.merge(_boldText, other._rawBoldText),
+      italicText: FlameTextStyle.merge(_italicText, other._rawItalicText),
+      codeText: FlameTextStyle.merge(_codeText, other._rawCodeText),
       strikethroughText: FlameTextStyle.merge(
         _strikethroughText,
-        other.strikethroughText,
+        other._rawStrikethroughText,
       ),
+      customStyles: _mergeCustomStyles(_customStyles, other._customStyles),
       background: merge(background, other.background) as BackgroundStyle?,
-      paragraph: merge(paragraph, other.paragraph) as BlockStyle?,
-      header1: merge(header1, other.header1) as BlockStyle?,
-      header2: merge(header2, other.header2) as BlockStyle?,
-      header3: merge(header3, other.header3) as BlockStyle?,
-      header4: merge(header4, other.header4) as BlockStyle?,
-      header5: merge(header5, other.header5) as BlockStyle?,
-      header6: merge(header6, other.header6) as BlockStyle?,
+      paragraph: merge(paragraph, other._rawParagraph) as BlockStyle?,
+      header1: merge(header1, other._rawHeader1) as BlockStyle?,
+      header2: merge(header2, other._rawHeader2) as BlockStyle?,
+      header3: merge(header3, other._rawHeader3) as BlockStyle?,
+      header4: merge(header4, other._rawHeader4) as BlockStyle?,
+      header5: merge(header5, other._rawHeader5) as BlockStyle?,
+      header6: merge(header6, other._rawHeader6) as BlockStyle?,
     );
+  }
+
+  static Map<String, InlineTextStyle>? _mergeCustomStyles(
+    Map<String, InlineTextStyle>? styles1,
+    Map<String, InlineTextStyle>? styles2,
+  ) {
+    if (styles1 == null) {
+      return styles2;
+    } else if (styles2 == null) {
+      return styles1;
+    }
+    return {
+      ...styles1,
+      for (final MapEntry(:key, :value) in styles2.entries)
+        key: FlameTextStyle.merge(styles1[key], value)!,
+    };
   }
 
   final Map<FlameTextStyle, Map<FlameTextStyle, FlameTextStyle>>
