@@ -1,6 +1,6 @@
 name: flame_3d
 resolution: workspace
-description: Experimental 3D support for the Flame Engine
+description: Experimental 3D support for the Flame Engine, built on top of Flutter GPU, with a familiar Flame API.
 version: 0.4.0-dev.1
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_3d
 funding:

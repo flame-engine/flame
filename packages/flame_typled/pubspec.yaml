@@ -1,6 +1,6 @@
 name: flame_typled
 resolution: workspace
-description: Typled sprite atlas support for the Flame Engine
+description: Typled sprite atlas support for the Flame Engine, to load sprites from Typled sprite sheets.
 version: 0.2.0-dev.1
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_typled
 funding:

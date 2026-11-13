@@ -1,6 +1,6 @@
 name: flame_network_assets
 resolution: workspace
-description: Network assets support for Flame.
+description: Network assets support for Flame, to load and cache images from the network in your games.
 version: 0.4.0-dev.1
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_network_assets
 funding:

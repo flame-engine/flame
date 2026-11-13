@@ -1,6 +1,6 @@
 name: flame_noise
 resolution: workspace
-description: Integrate the fast_noise package into Flame
+description: Integrates the noises from the fast_noise package into Flame, with noise based effects like shakes.
 version: 0.3.4-dev.1
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_noise
 funding:
@@ -26,3 +26,9 @@ dev_dependencies:
   flame_lint: ^1.5.0-dev.1
   flame_test: ^3.0.0-dev.1
   test: any
+
+pana_workspace:
+  warn_only:
+    - All of the package dependencies are supported in the latest version
+    - Package supports latest stable Dart and Flutter SDKs
+    - 20% or more of the public API has dartdoc comments
