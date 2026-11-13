@@ -1,6 +1,6 @@
 # Flame Spine
 
-Package to add [Spine](http://esotericsoftware.com/) support for the Flame game engine.
+Package to add [Spine](https://esotericsoftware.com/) support for the Flame game engine.
 
 You can read more about the spine-flutter runtime and how to use it in the docs at their
 [site](https://esotericsoftware.com/spine-flutter).

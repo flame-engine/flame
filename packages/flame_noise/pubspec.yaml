@@ -1,6 +1,6 @@
 name: flame_noise
 resolution: workspace
-description: Integrate the fast_noise package into Flame
+description: Integrates the noises from the fast_noise package into Flame, with noise based effects like shakes.
 version: 0.3.4-dev.1
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_noise
 funding:

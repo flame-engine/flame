@@ -3,7 +3,6 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:xml/xml.dart';
-import 'package:xml/xpath.dart';
 
 /// A sprite sheet loaded from an XML file and an image.
 ///
@@ -16,8 +15,10 @@ class XmlSpriteSheet({
 }) {
   this {
     final document = XmlDocument.parse(xml);
-    // ignore: experimental_member_use
-    for (final node in document.xpath('//TextureAtlas/SubTexture')) {
+    final subTextures = document
+        .findAllElements('TextureAtlas')
+        .expand((atlas) => atlas.findElements('SubTexture'));
+    for (final node in subTextures) {
       final name = node.getAttribute('name')!;
       final x = double.parse(node.getAttribute('x')!);
       final y = double.parse(node.getAttribute('y')!);
