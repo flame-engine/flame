@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flame_test/test_paths.dart';
 import 'package:test/test.dart';
 
@@ -113,6 +114,86 @@ void main() {
       expect(
         polygons.single.map((vertex) => vertex - Vector2.all(5)),
         component.polygons.single,
+      );
+    });
+
+    test('takes the given polygons instead of sampling the path', () {
+      final path = Path()..addRect(const Rect.fromLTWH(5, 5, 10, 10));
+      final triangle = [Vector2(5, 5), Vector2(5, 15), Vector2(15, 15)];
+      final component = PathComponent(path: path, polygons: [triangle]);
+
+      expect(
+        component.polygons.single,
+        triangle.map((vertex) => vertex - Vector2.all(5)),
+      );
+    });
+
+    test('the polygons of the path give the sampled ones', () {
+      final path = Path()
+        ..addOval(const Rect.fromLTWH(5, 5, 40, 20))
+        ..addOval(const Rect.fromLTWH(60, 5, 20, 20));
+      final sampled = PathComponent(path: path, sampling: 2);
+      final given = PathComponent(
+        path: path,
+        polygons: path.toPolygons(sampling: 2),
+      );
+
+      expect(given.polygons, hasLength(sampled.polygons.length));
+      for (var i = 0; i < sampled.polygons.length; i++) {
+        expect(given.polygons[i], hasLength(sampled.polygons[i].length));
+        for (var j = 0; j < sampled.polygons[i].length; j++) {
+          expect(
+            given.polygons[i][j],
+            closeToVector(sampled.polygons[i][j], 1e-4),
+          );
+        }
+      }
+    });
+
+    test('the polygons of a component give it again', () {
+      final path = Path()..addOval(const Rect.fromLTWH(5, 5, 40, 20));
+      final first = PathComponent(path: path);
+      final second = PathComponent(
+        path: first.path,
+        polygons: first.polygons,
+      );
+
+      expect(second.polygons, first.polygons);
+    });
+
+    test('copies the given polygons', () {
+      final path = Path()..addRect(const Rect.fromLTWH(0, 0, 10, 10));
+      final polygons = path.toPolygons();
+      final component = PathComponent(path: path, polygons: polygons);
+      polygons.single.first.setValues(100, 100);
+      polygons.clear();
+
+      expect(
+        component.polygons.single,
+        PathComponent(path: path).polygons.single,
+      );
+    });
+
+    test('needs given polygons of three counterclockwise vertices', () {
+      final path = Path()..addRect(const Rect.fromLTWH(0, 0, 10, 10));
+
+      expect(
+        () => PathComponent(
+          path: path,
+          polygons: [
+            [Vector2(0, 0), Vector2(10, 10)],
+          ],
+        ),
+        failsAssert(),
+      );
+      expect(
+        () => PathComponent(
+          path: path,
+          polygons: [
+            [Vector2(0, 0), Vector2(10, 0), Vector2(10, 10)],
+          ],
+        ),
+        failsAssert(),
       );
     });
 
