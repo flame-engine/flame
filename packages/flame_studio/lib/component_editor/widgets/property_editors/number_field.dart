@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template number_field}
 /// A text field that edits a number, by default a non-negative one.

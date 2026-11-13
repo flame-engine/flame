@@ -1,8 +1,8 @@
 import 'package:flame_studio/component_editor/bloc/component_editor_bloc.dart';
 import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template component_tree_panel}
 /// Shows the component being edited and the components inside it as a

@@ -19,10 +19,11 @@ dependencies:
   equatable: ^3.0.0
   file_selector: ^1.1.0
   flame: ^2.0.0-dev.1
-  flex_color_picker: ^3.8.0
+  flex_color_picker: ^4.0.0
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
+  material_ui: ^1.0.0
   path: ^1.9.0
   pub_semver: ^2.2.1
   shared_preferences: ^2.5.6
