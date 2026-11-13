@@ -11,6 +11,11 @@ There are three layers involved when using shaders in Flame:
   and updates uniforms each frame.
 - **GLSL shader** (`.frag` file): the GPU program that determines the final pixel colors.
 
+This tutorial builds the post process on `PostProcess`, to show every step. For most shaders,
+[`ShaderPostProcess`](../../flame/rendering/post_processing.md#shaderpostprocess) does those steps
+for you: it loads the shader, rasterizes the subtree, sets the size and time uniforms, and lets you
+set the other uniforms by name.
+
 
 ## Closure
 
