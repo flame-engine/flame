@@ -780,8 +780,10 @@ These are the results of the commands:
   `height` or `null` when the images are identical, and the absolute path of the `output` image or
   `null`.
 
-`flame run` passes all its arguments on to `flutter run`, so it has no `--json`. Use the
-`--machine` option of `flutter run` for machine readable output of the game itself.
+`flame run` passes all its arguments on to `flutter run`, so it has no `--json`. Don't pass
+`--machine` on to `flutter run` though: `flame run` controls `flutter run` through its terminal
+input, which `--machine` replaces with JSON requests, so the `reload`, `restart` and `stop`
+commands would stop working. Use the `--json` output of the other commands instead.
 
 
 ## Exit codes

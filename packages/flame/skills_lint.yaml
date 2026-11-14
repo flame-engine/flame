@@ -1,0 +1,12 @@
+skills_lint:
+  rules:
+    check-absolute-paths: error
+    check-trailing-whitespace: error
+  directories:
+    - path: "skills"
+      rules:
+        pub-archive-includes-skill: error
+        published-skill-name: error
+        check-relative-paths:
+          severity: error
+          within-skill: true
