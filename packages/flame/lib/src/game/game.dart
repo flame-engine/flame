@@ -71,6 +71,12 @@ abstract mixin class Game() {
     refreshWidget();
   }
 
+  /// Set by the KeyboardDispatcher to receive key events from the game widget.
+  ///
+  /// Unlike the other detectors, setting it doesn't refresh the widget: the
+  /// game widget always listens to key events while it has focus.
+  void Function(KeyEvent event)? keyDetector;
+
   /// This should update the state of the game.
   void update(double dt);
 
