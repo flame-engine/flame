@@ -26,6 +26,15 @@ void main() {
       goldenFile: '_goldens/nine_tile_box_test_2.png',
     );
 
+    testGolden(
+      'Render with sprite smaller than atlas',
+      (game, tester) async {
+        game.add(_MyComponent3());
+      },
+      size: Vector2(300, 200),
+      goldenFile: '_goldens/nine_tile_box_test_3.png',
+    );
+
     test('default tile sizes calculated correctly', () async {
       final sprite = Sprite(await loadImage('speech-bubble-1.png'));
       final nineTileBox = NineTileBox(sprite);
@@ -98,6 +107,33 @@ class _MyComponent2() extends PositionComponent {
       topHeight: 5,
       bottomHeight: 21,
     );
+  }
+
+  @override
+  void render(Canvas canvas) {
+    canvas.drawRect(
+      size.toRect(),
+      bgPaint,
+    );
+    nineTileBox.draw(canvas, Vector2(25, 25), Vector2(250, 150));
+  }
+}
+
+class _MyComponent3() extends PositionComponent {
+  this : super(size: Vector2(300, 200));
+  late final Sprite sprite;
+  late final NineTileBox nineTileBox;
+  final bgPaint = Paint()..color = const Color.fromARGB(255, 57, 113, 158);
+
+  @override
+  Future<void> onLoad() async {
+    final atlas = await loadImage('nine_tile_sprite_atlas.png');
+    sprite = Sprite(
+      atlas,
+      srcPosition: Vector2(16, 16),
+      srcSize: Vector2(48, 48),
+    );
+    nineTileBox = NineTileBox(sprite, tileSize: 16);
   }
 
   @override
