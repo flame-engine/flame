@@ -33,7 +33,7 @@ Package to bridge the `tiled` library into easy-to-use Flame components.
     <img alt="flame_tiled example" width="500px" src="https://raw.githubusercontent.com/flame-engine/flame/master/packages/flame_tiled/example/screenshot.png">
 </p>
 
-More documentation can be found [here](https://docs.flame-engine.org/main/tiled.html).
+More documentation can be found [here](https://docs.flame-engine.org/main/bridge_packages/flame_tiled/flame_tiled.html).
 
 
 ## Contributors (before the package moved into the monorepo)

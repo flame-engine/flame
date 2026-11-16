@@ -30,7 +30,7 @@ The power of [integral_isolates](https://pub.dev/packages/integral_isolates) in 
 ## Usage
 
 Just add the mixin `FlameIsolate` to your component and start utilizing the power of an isolate as
-simple as running the [compute](https://api.flutter.dev/flutter/foundation/compute-constant.html)
+simple as running the [compute](https://api.flutter.dev/flutter/foundation/compute.html)
 function.
 
 Example:
