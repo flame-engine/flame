@@ -1,5 +1,5 @@
+import 'package:flame_devtools/material.dart';
 import 'package:flame_devtools/widgets/incremental_number_form_field.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

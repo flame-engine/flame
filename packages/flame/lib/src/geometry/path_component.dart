@@ -27,6 +27,7 @@ class PathComponent({
 
   /// Whether the polygons that lie inside of the largest one are left out.
   final bool filter = true,
+  List<List<Vector2>>? polygons,
   super.position,
   super.scale,
   super.angle,
@@ -51,12 +52,22 @@ class PathComponent({
   /// vertices all lie inside of the largest polygon are left out too, since
   /// they are details of the shape that it already covers, like the eyes of a
   /// face.
+  ///
+  /// When [polygons] are given, the [path] is not sampled, so that components
+  /// of the same path can share the work of sampling it: they have to be in
+  /// the coordinates of the [path], as [PathExtension.toPolygons] returns
+  /// them, or be the ones of another component, given along with its [path].
+  /// Each one needs three vertices or more, going counterclockwise in the
+  /// screen coordinate system. They are copied and moved along with the path,
+  /// and [sampling], [tolerance] and [filter] are not used.
   this : super(size: path.getBounds().size.toVector2()) {
-    _polygons = this.path.toPolygons(
-      sampling: sampling,
-      tolerance: tolerance,
-      filter: filter,
-    );
+    _polygons = polygons == null
+        ? this.path.toPolygons(
+            sampling: sampling,
+            tolerance: tolerance,
+            filter: filter,
+          )
+        : _rooted(polygons, path.getBounds().topLeft);
     _globalPolygons = [
       for (final polygon in _polygons)
         List.generate(polygon.length, (_) => Vector2.zero(), growable: false),
@@ -91,6 +102,26 @@ class PathComponent({
       UnmodifiableListView([
         for (final polygon in _polygons) UnmodifiableListView(polygon),
       ]);
+
+  /// Copies of the given [polygons], moved from the [origin] of their path to
+  /// the origin of the component, as the [path] is.
+  static List<List<Vector2>> _rooted(
+    List<List<Vector2>> polygons,
+    Offset origin,
+  ) {
+    assert(
+      polygons.every(
+        (polygon) =>
+            polygon.length > 2 && !PolygonComponent.isClockwise(polygon),
+      ),
+      'Each polygon needs three vertices or more, going counterclockwise',
+    );
+    final shift = origin.toVector2();
+    return [
+      for (final polygon in polygons)
+        [for (final vertex in polygon) vertex - shift],
+    ];
+  }
 
   // These lists are used to minimize the amount of objects that are created,
   // and only change the contained objects if the corresponding `ValueCache` is

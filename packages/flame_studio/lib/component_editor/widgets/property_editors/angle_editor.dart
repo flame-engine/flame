@@ -1,7 +1,7 @@
 import 'package:flame_studio/component_editor/widgets/property_editors/number_field.dart';
 import 'package:flame_studio/component_editor/widgets/property_editors/property_section.dart';
 import 'package:flame_studio/repositories/repositories.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template angle_editor}
 /// Edits a [ComponentAngle], in degrees. Used by every [RotatedComponent]

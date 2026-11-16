@@ -6,8 +6,8 @@ import 'package:flame_studio/component_editor/bloc/component_editor_bloc.dart';
 import 'package:flame_studio/component_editor/widgets/preview/preview.dart';
 import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template component_preview}
 /// Renders the component being edited with Flame, at

@@ -2,8 +2,8 @@ import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flame_studio/vertices_editor/bloc/vertices_editor_cubit.dart';
 import 'package:flame_studio/vertices_editor/widgets/widgets.dart';
 import 'package:flame_studio/widgets/widgets.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template vertices_editor_view}
 /// The content of the `VerticesEditorDialog`: the canvas, the list of

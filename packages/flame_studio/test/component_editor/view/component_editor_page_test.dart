@@ -6,10 +6,10 @@ import 'package:flame_studio/component_editor/component_editor.dart';
 import 'package:flame_studio/component_editor/widgets/widgets.dart';
 import 'package:flame_studio/palette/palette.dart';
 import 'package:flame_studio/repositories/repositories.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';

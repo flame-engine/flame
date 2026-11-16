@@ -1,5 +1,5 @@
 import 'package:flame/widgets.dart';
-import 'package:flutter/material.dart';
+import 'package:flame_devtools/material.dart';
 
 /// A 3x3 grid of buttons for choosing one of the nine predefined anchors.
 ///

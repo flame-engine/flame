@@ -1,5 +1,5 @@
+import 'package:flame_devtools/material.dart';
 import 'package:flame_devtools/repository.dart';
-import 'package:flutter/material.dart';
 
 class const DebugModeButton({super.key, final int? id}) extends StatefulWidget {
   @override

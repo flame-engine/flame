@@ -1,6 +1,7 @@
 import 'package:animated_tree_view/animated_tree_view.dart';
 import 'package:devtools_app_shared/ui.dart' as devtools_ui;
 import 'package:flame/devtools.dart';
+import 'package:flame_devtools/material.dart';
 import 'package:flame_devtools/poller.dart';
 import 'package:flame_devtools/providers/component_priority_provider.dart';
 import 'package:flame_devtools/providers/position_component_attributes_provider.dart';
@@ -11,7 +12,6 @@ import 'package:flame_devtools/widgets/component_snapshot.dart';
 import 'package:flame_devtools/widgets/component_tree_model.dart';
 import 'package:flame_devtools/widgets/debug_mode_button.dart';
 import 'package:flame_devtools/widgets/position_component_attributes_form.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// How often the selected component is refreshed while live updates are on.

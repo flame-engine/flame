@@ -1,7 +1,7 @@
 import 'package:flame_studio/component_editor/widgets/property_editors/property_section.dart';
 import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flame_studio/vertices_editor/vertices_editor.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template vertices_editor}
 /// Edits a [ComponentVertices] in a [VerticesEditorDialog]. Used by every

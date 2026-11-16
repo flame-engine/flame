@@ -4,9 +4,9 @@ import 'package:flame_studio/component_editor/bloc/component_editor_bloc.dart';
 import 'package:flame_studio/component_editor/widgets/widgets.dart';
 import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flame_studio/widgets/widgets.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template component_editor_view}
 /// Shows the tree of the component being edited on the left, its preview

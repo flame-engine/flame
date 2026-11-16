@@ -1,7 +1,7 @@
 import 'package:flame_studio/project_settings/project_settings.dart';
 import 'package:flame_studio/repositories/repositories.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template project_settings_dialog}
 /// A dialog to edit the settings of a [Project].

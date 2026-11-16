@@ -92,7 +92,7 @@ void main() {
 
   group('BoolLiteral', () {
     test('simple literal', () {
-      const literal = BoolLiteral(true);
+      const literal = BoolLiteral(value: true);
       expect(literal.value, true);
     });
 

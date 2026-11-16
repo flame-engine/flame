@@ -6,8 +6,9 @@ import 'package:flame/game.dart';
 import 'package:flame/src/devtools/connectors/component_snapshot_connector.dart';
 import 'package:flame/src/devtools/connectors/game_snapshot_connector.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:flutter/material.dart' show Colors;
 import 'package:flutter_test/flutter_test.dart';
+
+const _white = Color(0xFFFFFFFF);
 
 Future<Color> _pixelAt(Image image, int x, int y) async {
   final bytes = (await image.toByteData())!;
@@ -31,7 +32,7 @@ void main() {
       final component = RectangleComponent(
         position: Vector2(50, 60),
         size: Vector2(20, 10),
-        paint: Paint()..color = Colors.white,
+        paint: Paint()..color = _white,
       );
       await game.world.ensureAdd(component);
 
@@ -39,8 +40,8 @@ void main() {
 
       expect(image.width, 20);
       expect(image.height, 10);
-      expect(await _pixelAt(image, 0, 0), Colors.white);
-      expect(await _pixelAt(image, 19, 9), Colors.white);
+      expect(await _pixelAt(image, 0, 0), _white);
+      expect(await _pixelAt(image, 19, 9), _white);
     });
 
     testWithFlameGame('renders a center anchored component', (game) async {
@@ -48,7 +49,7 @@ void main() {
         position: Vector2(50, 60),
         size: Vector2(20, 10),
         anchor: Anchor.center,
-        paint: Paint()..color = Colors.white,
+        paint: Paint()..color = _white,
       );
       await game.world.ensureAdd(component);
 
@@ -56,8 +57,8 @@ void main() {
 
       expect(image.width, 20);
       expect(image.height, 10);
-      expect(await _pixelAt(image, 0, 0), Colors.white);
-      expect(await _pixelAt(image, 19, 9), Colors.white);
+      expect(await _pixelAt(image, 0, 0), _white);
+      expect(await _pixelAt(image, 19, 9), _white);
     });
 
     testWithFlameGame('includes scale and angle in the size', (game) async {
@@ -67,7 +68,7 @@ void main() {
         scale: Vector2.all(2),
         angle: pi / 2,
         anchor: Anchor.center,
-        paint: Paint()..color = Colors.white,
+        paint: Paint()..color = _white,
       );
       await game.world.ensureAdd(component);
 
@@ -75,13 +76,13 @@ void main() {
 
       expect(image.width, 20);
       expect(image.height, 40);
-      expect(await _pixelAt(image, 10, 20), Colors.white);
+      expect(await _pixelAt(image, 10, 20), _white);
     });
 
     testWithFlameGame('scales the image with the pixel ratio', (game) async {
       final component = RectangleComponent(
         size: Vector2(20, 10),
-        paint: Paint()..color = Colors.white,
+        paint: Paint()..color = _white,
       );
       await game.world.ensureAdd(component);
 
@@ -92,7 +93,7 @@ void main() {
 
       expect(image.width, 40);
       expect(image.height, 20);
-      expect(await _pixelAt(image, 39, 19), Colors.white);
+      expect(await _pixelAt(image, 39, 19), _white);
     });
 
     testWithFlameGame('renders the world without the camera', (game) async {
@@ -100,7 +101,7 @@ void main() {
         RectangleComponent(
           position: Vector2(-1000, 500),
           size: Vector2(20, 10),
-          paint: Paint()..color = Colors.white,
+          paint: Paint()..color = _white,
         ),
       );
 
@@ -108,7 +109,7 @@ void main() {
 
       expect(image.width, 20);
       expect(image.height, 10);
-      expect(await _pixelAt(image, 0, 0), Colors.white);
+      expect(await _pixelAt(image, 0, 0), _white);
     });
 
     testWithFlameGame('gives zero sized components a size', (game) async {
@@ -131,7 +132,7 @@ void main() {
         await game.world.ensureAdd(
           RectangleComponent(
             size: Vector2(10, 10),
-            paint: Paint()..color = Colors.white,
+            paint: Paint()..color = _white,
           ),
         );
 
@@ -139,7 +140,7 @@ void main() {
 
         expect(image.width, game.canvasSize.x);
         expect(image.height, game.canvasSize.y);
-        expect(await _pixelAt(image, 5, 5), Colors.white);
+        expect(await _pixelAt(image, 5, 5), _white);
         expect(await _pixelAt(image, 20, 20), const Color(0xFF0000FF));
       },
     );
@@ -189,7 +190,7 @@ void main() {
           RectangleComponent(
             position: Vector2(-1000, -1000),
             size: Vector2(10, 10),
-            paint: Paint()..color = Colors.white,
+            paint: Paint()..color = _white,
           ),
         );
 
@@ -202,7 +203,7 @@ void main() {
         expect(image.width, 40);
         expect(image.height, 20 * 2);
         expect(await _pixelAt(image, 2, 2), const Color(0xFF0000FF));
-        expect(await _pixelAt(image, 20, 20), Colors.white);
+        expect(await _pixelAt(image, 20, 20), _white);
       },
     );
   });

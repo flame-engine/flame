@@ -1,5 +1,5 @@
 import 'package:flame_studio/repositories/repositories.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// The name, type and, for polygons, shape entered in the
 /// [AddComponentDialog].

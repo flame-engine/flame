@@ -8,7 +8,13 @@ ComponentTreeNode _component(
   String toStringText = '',
   List<ComponentTreeNode> children = const [],
 }) {
-  return ComponentTreeNode(id, 'Component', toStringText, false, children);
+  return ComponentTreeNode(
+    id,
+    'Component',
+    toStringText,
+    children,
+    isPositionComponent: false,
+  );
 }
 
 TreeNode<ComponentTreeNode> _child(TreeNode<ComponentTreeNode> node, int id) {
