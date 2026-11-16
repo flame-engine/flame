@@ -297,6 +297,26 @@ Creating objects in constructors, `onLoad`, `onMount` and event handlers is fine
 rarely.
 
 
+### Skip drawing what the camera does not see
+
+- Add `CullWhenOffscreen` to components in the world that are often off screen, such as tiles,
+  trees and enemies, so that they and their children are not drawn while the camera does not see
+  them. Only `render` is skipped, `update`, collisions and effects keep running, and components in
+  the viewport, like a HUD, are never culled.
+- Everything a culled component draws, including its children, has to fit inside its box. Set
+  `cullPadding` for drawing that sticks out, like shadows, and list children that stick out in
+  `cullBoundsChildren` with the `CullBoundsChildren` mixin. Set
+  `CullWhenOffscreen.debugVerifyCulledSubtrees = true` while developing to find mistakes.
+- Pass `chunkSize`, for example `16`, to `TiledComponent.load` for big finite maps, so that only
+  the chunks of tiles that the camera sees are drawn. Infinite maps always do this.
+
+```dart
+class Tree() extends SpriteComponent with CullWhenOffscreen {
+  this : super(size: Vector2.all(32));
+}
+```
+
+
 ### Other performance rules
 
 - Reuse components that are spawned and removed often, such as bullets, with a `ComponentPool`.
