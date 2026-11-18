@@ -19,6 +19,9 @@ In Flame, the post processing system is modular and flexible, allowing developer
 - **`PostProcess`**: Abstract base class for defining custom post-processing effects. Implement
   your effect logic in its `postProcess` method.
 
+- **`ShaderPostProcess`**: A post process that draws a fragment shader, and takes care of loading
+  it, rasterizing the subtree and setting the common uniforms.
+
 - **`PostProcessComponent`**: Applies a post process specifically to its children, enabling
   localized effects.
 
@@ -40,22 +43,160 @@ In Flame, the post processing system is modular and flexible, allowing developer
 ```
 
 
-## Creating a Custom Post Process
+## ShaderPostProcess
 
-To implement a custom post process:
+Most post processes draw a fragment shader over the subtree. `ShaderPostProcess` does that for
+you: it loads the shader, keeps track of the time, rasterizes the subtree when the shader samples
+it, and draws the shader over the size of the post process. A shader that only needs the uniforms
+that `ShaderPostProcess` sets doesn't need a subclass:
 
-1. Subclass `PostProcess`.
-2. Override the `postProcess` method, implementing your rendering logic with `renderSubtree` or
-   `rasterizeSubtree`.
-3. Optionally, implement `onLoad` and `update` methods for managing resources and updating effects
-   each frame.
+```dart
+PostProcessComponent(
+  postProcess: ShaderPostProcess('assets/shaders/grayscale.frag'),
+  children: [player],
+);
+```
 
-This system makes it easy to add creative and useful visual effects to your Flame game.
+To use a `FragmentProgram` that is already loaded, for example one shared by several post
+processes, use `ShaderPostProcess.fromProgram`.
 
 
-## Example: pixelation
+### Uniforms set by ShaderPostProcess
 
-Here’s an example of creating a pixelation effect using a fragment shader:
+Every frame, `ShaderPostProcess` sets these uniforms, if the shader declares them:
+
+| Uniform                      | Value                                                 |
+| ---------------------------- | ----------------------------------------------------- |
+| `uniform vec2 uSize`         | The size of the post process, in logical pixels.      |
+| `uniform float uTime`        | The seconds passed since the post process was loaded. |
+| `uniform sampler2D uTexture` | The subtree, rasterized with `rasterizeSubtree`.      |
+
+`uTexture` has to be the first sampler of the shader. Sample it with coordinates going from 0 to 1
+across the size of the post process, for example `texture(uTexture, FlutterFragCoord().xy / uSize)`.
+
+
+### Placement
+
+The `placement` decides where the shader is drawn relative to the subtree:
+
+| `ShaderPlacement` | What is drawn                              | For example                 |
+| ----------------- | ------------------------------------------ | --------------------------- |
+| `replace`         | Only the shader. This is the default.      | Pixelation, grayscale       |
+| `over`            | The subtree, then the shader on top of it. | Fog, vignette, a glow       |
+| `under`           | The shader, then the subtree on top of it. | A background, a drop shadow |
+
+Whether the shader samples the subtree is independent of its placement. For example, a glow placed
+`over` the subtree can sample `uTexture` to find its edges:
+
+```dart
+PostProcessComponent(
+  postProcess: ShaderPostProcess(
+    'assets/shaders/glow.frag',
+    placement: ShaderPlacement.over,
+  ),
+  children: [player],
+);
+```
+
+
+### Rendering the subtree
+
+A shader that samples the subtree costs a `rasterizeSubtree` every frame, which is the expensive
+part of a post process. A shader that doesn't sample it only costs rendering the subtree as usual,
+when it's placed `over` or `under` the subtree.
+
+When a shader that samples the subtree is placed `over` or `under` it, the image rasterized for
+`uTexture` is also drawn as the subtree by default, so that the subtree is only rendered once per
+frame. The image is rasterized at the `pixelRatio` of the post process, which is the pixel ratio of
+the screen by default, so it's as sharp as rendering the subtree again. If you lower `pixelRatio`,
+for example to make a glow cheaper, set `reuseRasterizedSubtree` to false, so that the subtree is
+rendered again at the full resolution of the screen:
+
+```dart
+ShaderPostProcess(
+  'assets/shaders/glow.frag',
+  placement: ShaderPlacement.over,
+  pixelRatio: 0.5,
+  reuseRasterizedSubtree: false,
+);
+```
+
+The `filterQuality` decides how the rasterized subtree is sampled, both by the shader through
+`uTexture` and when it's drawn as the subtree. It only makes a difference when the pixels of the
+image don't line up with the pixels of the screen, for example when the post process is rotated or
+zoomed, or when `pixelRatio` is lowered. In those cases, the default, `FilterQuality.low`, keeps
+edges smooth at no noticeable cost. Use `FilterQuality.none` to keep the pixels sharp instead, for
+example for pixel art.
+
+
+### Setting other uniforms
+
+Set any other uniforms in `updateUniforms`, using the name of each uniform in the shader instead
+of its position. Look each uniform up once, in `onLoad`, and set it every frame. The slot types,
+like `UniformFloatSlot`, come from `dart:ui`:
+
+```dart
+class OutlinePostProcess() extends ShaderPostProcess {
+  this : super('assets/shaders/outline.frag');
+
+  double outlineWidth = 4;
+  Color outlineColor = Colors.purpleAccent;
+
+  late final UniformFloatSlot _outlineWidth;
+  late final UniformVec4Slot _outlineColor;
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    _outlineWidth = shader.getUniformFloat('uOutlineWidth');
+    _outlineColor = shader.getUniformVec4('uOutlineColor');
+  }
+
+  @override
+  void updateUniforms(Vector2 size) {
+    _outlineWidth.set(outlineWidth);
+    _outlineColor.setColor(outlineColor);
+  }
+}
+```
+
+Looking a uniform up by a name that the shader doesn't declare throws an `ArgumentError`, so a
+typo is reported right away. Uniforms that the shader compiler removed because they're unused
+can't be looked up either.
+
+Flame adds methods to the uniform slots of `dart:ui` to set them from its own types:
+
+- `UniformVec2Slot`: `setVector(Vector2)`, `setSize(Size)` and `setOffset(Offset)`.
+- `UniformVec3Slot`: `setVector(Vector3)`.
+- `UniformVec4Slot`: `setVector(Vector4)` and `setColor(Color, premultiply: false)`.
+- `UniformMat2Slot`, `UniformMat3Slot` and `UniformMat4Slot`: `setMatrix` with a `Matrix2`,
+  `Matrix3` or `Matrix4`.
+
+These work on any `FragmentShader`, not only in a `ShaderPostProcess`.
+
+
+### Shaders on the web
+
+`ShaderPostProcess` detects whether the shader samples the subtree by looking up `uTexture` by name.
+Flutter can't look up the samplers of a shader by name on the web yet, so if your game runs on the
+web, pass `sampleSubtree` to say whether the shader samples the subtree:
+
+```dart
+ShaderPostProcess('assets/shaders/grayscale.frag', sampleSubtree: true);
+ShaderPostProcess('assets/shaders/vignette.frag', sampleSubtree: false);
+```
+
+On the web, `sampleSubtree` is required, and loading the post process without it throws an error.
+
+On the other platforms, `sampleSubtree` is optional, because the shader is checked directly. If you
+pass it anyway and it's wrong, for example `true` for a shader without `uTexture`, loading the post
+process throws an error. So running your game once on another platform checks the values you pass
+for the web.
+
+
+### Example: pixelation
+
+Here’s an example of a pixelation effect made with `ShaderPostProcess`:
 
 ```dart
 class PostProcessGame extends FlameGame {
@@ -66,6 +207,7 @@ class PostProcessGame extends FlameGame {
     world.add(
       PostProcessComponent(
         postProcess: PixelationPostProcess(),
+        position: Vector2(0, 0),
         anchor: Anchor.center,
         children: [
           EmberPlayer(size: Vector2(100, 100)),
@@ -75,60 +217,39 @@ class PostProcessGame extends FlameGame {
   }
 }
 
-class PixelationPostProcess extends PostProcess {
+class PixelationPostProcess() extends ShaderPostProcess {
+  this
+    : super(
+        'packages/flutter_shaders/shaders/pixelation.frag',
+        sampleSubtree: true,
+      );
+
+  late final UniformVec2Slot _pixels;
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-
-    _fragmentProgram = await FragmentProgram.fromAsset(
-      'packages/flutter_shaders/shaders/pixelation.frag',
-    );
+    _pixels = shader.getUniformVec2('uPixels');
   }
 
-  late final FragmentProgram _fragmentProgram;
-  late final FragmentShader _fragmentShader = _fragmentProgram.fragmentShader();
-
-  double _time = 0;
-
   @override
-  void update(double dt) {
-    super.update(dt);
-    _time += dt;
-  }
-
-  late final myPaint = Paint()..shader = _fragmentShader;
-
-  @override
-  void postProcess(Vector2 size, Canvas canvas) {
-    final preRenderedSubtree = rasterizeSubtree();
-
-    _fragmentShader.setFloatUniforms((value) {
-      value
-        ..setVector(size / (20 * sin(_time)))
-        ..setVector(size);
-    });
-
-    _fragmentShader.setImageSampler(0, preRenderedSubtree);
-
-    canvas
-      ..save()
-      ..drawRect(Offset.zero & size.toSize(), myPaint)
-      ..restore();
+  void updateUniforms(Vector2 size) {
+    _pixels.setVector(size / (20 * sin(time)));
   }
 }
-
 ```
 
 In this example:
 
 - A fragment shader (`pixelation.frag`) is loaded and used to apply a pixelation effect.
 
-- The `rasterizeSubtree` method captures the component tree rendering as a texture, which the
-  shader uses to generate the pixelated output. The texture is rendered at the post process's
-  `pixelRatio` and covers the whole subtree, so the shader can sample it with coordinates from 0
-  to 1 across `size`.
+- The shader declares `uTexture` and `sampleSubtree` is true, so `ShaderPostProcess` captures the
+  component tree with `rasterizeSubtree` and passes it to the shader. The texture is rendered at the
+  post process's `pixelRatio` and covers the whole subtree, so the shader can sample it with
+  coordinates from 0 to 1 across `uSize`, which is also set by `ShaderPostProcess`.
 
-- The effect dynamically changes over time, creating an animated pixelation effect.
+- The only other uniform, `uPixels`, is looked up by name in `onLoad` and set from `time` in
+  `updateUniforms`, creating an animated pixelation effect.
 
 This example demonstrates how straightforward it is to add visual effects to your Flame game using
 the post-processing system.
@@ -162,6 +283,20 @@ void main() {
   fragColor = texture(uTexture, puv);
 }
 ```
+
+
+## Creating a Custom Post Process
+
+For effects that need more control, for example rendering the subtree several times, implement a
+post process yourself:
+
+1. Subclass `PostProcess`.
+2. Override the `postProcess` method, implementing your rendering logic with `renderSubtree` or
+   `rasterizeSubtree`.
+3. Optionally, implement `onLoad` and `update` methods for managing resources and updating effects
+   each frame.
+
+This system makes it easy to add creative and useful visual effects to your Flame game.
 
 
 ## Advanced Example: Crystal Ball
