@@ -12,6 +12,16 @@ import 'package:meta/meta.dart';
 /// the 4 sides only in the direction in which they are located and expanding
 /// the center in both directions.
 /// That allows you to have non distorted borders.
+///
+/// When [Sprite.src] does not cover the whole [Sprite.image] (for example, a
+/// sprite inside a spritesheet), each tile is drawn with its own
+/// [Canvas.drawImageRect] call.
+///
+/// If the [Paint] used has a
+/// [Paint.filterQuality] other than [FilterQuality.none], the sampling near a
+/// tile's edges can read pixels from the neighboring tiles of the sheet, so
+/// the seams between tiles bleed with those neighbors. This differs from
+/// [Canvas.drawImageNine], which treats the whole [Sprite.image] as the source.
 class NineTileBox {
   static final _whitePaint = BasicPalette.white.paint();
 
