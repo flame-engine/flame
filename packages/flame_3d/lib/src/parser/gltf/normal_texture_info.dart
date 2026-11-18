@@ -18,6 +18,8 @@ class NormalTextureInfo({
   ///                       * vec3(<normal scale>, <normal scale>, 1.0))
   /// ```
   required final double scale,
+  super.extensions,
+  super.extras,
 }) extends TextureInfo {
   NormalTextureInfo.parse(
     GltfRoot root,
@@ -27,5 +29,7 @@ class NormalTextureInfo({
         index: Parser.ref(root, map, 'index')!,
         texCoord: Parser.integer(map, 'texCoord'),
         scale: Parser.float(map, 'scale') ?? 1.0,
+        extensions: Parser.extensions(map),
+        extras: Parser.extras(map),
       );
 }

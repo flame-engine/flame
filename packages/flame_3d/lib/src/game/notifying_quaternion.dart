@@ -13,6 +13,9 @@ import 'package:flutter/foundation.dart';
 /// order to avoid resource leaks.
 ///
 /// Direct modification of this quaternion's [storage] is not allowed.
+///
+/// Every method of this quaternion that changes its value notifies (`negate`
+/// through `conjugate`).
 /// {@endtemplate}
 class NotifyingQuaternion._() extends Quaternion with ChangeNotifier {
   /// {@macro notifying_quaternion}
@@ -169,5 +172,7 @@ class NotifyingQuaternion._() extends Quaternion with ChangeNotifier {
   }
 
   @override
-  Float32List get storage => super.storage.asUnmodifiableView();
+  Float32List get storage => _unmodifiableStorage;
+  late final Float32List _unmodifiableStorage = super.storage
+      .asUnmodifiableView();
 }

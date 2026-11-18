@@ -159,13 +159,14 @@ class CuboidMesh({
       ),
     ];
 
+    // Counter-clockwise seen from outside, so front faces point outwards.
     final indices = [
-      0, 1, 2, 2, 3, 0, // Face 1
+      0, 2, 1, 2, 0, 3, // Face 1
       4, 5, 6, 6, 7, 4, // Face 2
-      8, 9, 10, 10, 11, 8, // Face 3
-      12, 13, 14, 14, 15, 12, // Face 4
-      16, 17, 18, 18, 19, 16, // Face 5
-      20, 21, 22, 22, 23, 20, // Face 6
+      8, 10, 9, 10, 8, 11, // Face 3
+      12, 14, 13, 14, 12, 15, // Face 4
+      16, 18, 17, 18, 16, 19, // Face 5
+      20, 22, 21, 22, 20, 23, // Face 6
     ];
 
     addSurface(

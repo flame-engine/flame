@@ -173,6 +173,13 @@ class Parser._() {
       (key, value) => MapEntry(key, value! as int),
     );
   }
+
+  static Map<String, Object?>? extensions(Map<String, Object?> map) {
+    final raw = map['extensions'];
+    return raw is Map<String, Object?> ? raw : null;
+  }
+
+  static Object? extras(Map<String, Object?> map) => map['extras'];
 }
 
 extension _Let<T> on T {

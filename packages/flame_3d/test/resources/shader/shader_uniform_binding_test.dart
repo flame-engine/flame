@@ -77,6 +77,7 @@ final class _FakeBackend(var Map<String, int> offsets) extends GpuBackend {
     required int width,
     required int height,
     required GpuPixelFormat format,
+    int mipLevelCount = 1,
   }) => throw UnimplementedError();
 
   @override
@@ -89,6 +90,7 @@ final class _FakeBackend(var Map<String, int> offsets) extends GpuBackend {
   GpuPipeline createPipeline({
     required GpuShader vertexShader,
     required GpuShader fragmentShader,
+    GpuVertexLayout? vertexLayout,
   }) => throw UnimplementedError();
 
   @override
@@ -112,12 +114,18 @@ class _FakeShaderLibrary(final _FakeUniformSlot slot)
 class _FakeShader(final _FakeUniformSlot slot) implements GpuShader {
   @override
   GpuUniformSlot getUniformSlot(String name) => slot;
+
+  @override
+  List<GpuShaderInput>? get inputs => null;
 }
 
 class _FakeUniformSlot(
   @override final int sizeInBytes,
   final Map<String, int> offsets,
 ) implements GpuUniformSlot {
+  @override
+  String get name => 'Block';
+
   @override
   int? getMemberOffsetInBytes(String member) => offsets[member];
 }
@@ -126,7 +134,7 @@ class _RecordingDevice({super.backend}) extends GraphicsDevice {
   final Map<String, Float32List> uniforms = {};
 
   @override
-  void bindUniform(GpuUniformSlot slot, ByteBuffer buffer) {
-    uniforms['Block'] = Float32List.fromList(buffer.asFloat32List());
+  void bindUniformBlock(UniformBlock block) {
+    uniforms['Block'] = Float32List.fromList(block.data);
   }
 }

@@ -1,68 +1,182 @@
 # general development-adjacent terms and expressions
+
 AABB # axis aligned bounding box
 abelian # Abelian Group, also known as commutative group
+accum
 alignof # alignment of
+anims
 ARGB # alpha red green blue
 arities # plural of arity
+arounds
+astar
+backfaces
 backgrounded # moving the app to the background
 backgrounding # moving the app to the background
 backpressure # strategy to deal with excess flow of data
+baumgarte
 BGRA # blue green red alpha
 bimedian # line segment joining the midpoints of opposite sides of a shape
+binormal
 bitfield # data structure consisting of adjacent bits
+bokeh
 broadphase # common division of collision detection between broad and narrow phases
+bvhs
+cand
 cathetus # the non-hypotenuse sides of a right triangle
 clusterized # past tense of clusterize
+coeffs
+crossfade
+crossfaded
+crossfades
+crossfading
+ctrls
+cubicspline
+dandr
+dedup
+depen
+depenetrate
+desaturated
+dhdu
+dhdv
+diegetic
+dzdx
+dzdy
+entrancy
+equirect
+equirectangular
+evals
+flatbuffer
+flipbook
+freefall
+fxaa
+gerstner
 gles # OpenGL for Embedded Systems
 glsl # OpenGL Shading Language
 gltf # OpenGL Transmission Format, a file format for 3D models
 goldens # test files used as reference for Golden Tests
+halfspace
+hanrahan
+headlessly
+headshot
+heightfield
+hemi
 highp # high float precission setting on glsl fragment shaders
 hitbox # the collision box around objects for the purposes of collision detection
 hitboxes # plural of hitbox
+hodgman
+horizontalized
+ibms
 IDAT # PNG data chunk
 IEND # PNG end chunk
 IHDR # PNG header chunk
+impellerc
+imul
+inlines
+interp
 ints # short for integers
+ipsb
 jank # stutter or inconsistent gap or timing
+kawase
+keyframed
 lerp # short for linear interpolation
+lsui
 LTRBR # left top right bottom radius
 LTWH # left top width height
+luma
+materializer
 mediump # medium GLSL float precision
-metalness # a measure of how much a surface reflects light for the purposes of physically based rendering
+metallics
 Minkowski # Minkowski sum, a sum of two sets of vectors, A and B, where the result is the sum of each vector pair
+mipped
 msaa # multisample anti-aliasing, a technique of supersampling used for anti-aliasing
+mtllib
+mult
+multisample
+multisampling
 multitap # support from a device to recognize many taps at the same time
+narkowicz
+narrowphase
+navmesh
+navmeshes
+ndoth
+ndotl
+ndotv
+newmtl
+normalconstant
+octa
 orientable # can be oriented
+orthogonalize
+pade
 pathfinding # computer algorithm to find the best path through a world or maze
 perlin # Perlin Noise, a type of noise generating algorithm
+persp
+pickable
 pixelates # turns an image into large, visible pixels
 platformers # plural of platformer, a genre of video game
+polytope
+precomputes
+prefilter
+premul
 premultiply # multiplying the color channels by the alpha channel
+prepass
+prng
+ptcl
 quadtree # a tree-based data structure where each node has exactly 4 children
+quats
+ramamoorthi
 rasterizing
+readback
+rects
+reinhard
 respawn # when the player character dies and is brought back after some time and penalties
 respawned # past tense of respawn
 retarget # to direct (something) toward a different target
 RGBA # red green blue alpha
 RGBO # red green blue opacity
+rodrigues
+rolloff
+rootmotion
+samp
+sampleable
+schlick
 scos # cosine of a rotation multiplied by the scale factor
 scrollers # plural of scroller, a genre of video game
+segs
 shaderbundle # a file extension used to bundle shaders for GLSL
+shapecast
+shockwaves
+shoemake
+skybox
 slerp # short for spherical linear interpolation, a method to interpolate quaternions
+smoothstep
 spritesheet # a single image packing multiple sprites, normally in a grid
+ssao
 ssin # sine of a rotation multiplied by the scale factor
 subfolders # plural of subfolders
 sublists # plural of sublist
 subrange # a range entirely contained on a given range
 SVGs # plural of SVG
+symplectic
+teleporting
 texel # texture pixel (unit of texture map)
 texels # plural of texel
 tileset # image with a collection of tiles. in games, tiles are small square sprites laid out in a grid to form the game map
 tilesets # plural of tileset
+tris
 truecolor # truecolor rendering
+unbloomed
 uncapturederror # dumb webgpu javascript name
+unclipped
+unforeshortened
+unmirrored
+unoccluded
 unorm # unsigned normalized integer
+unproject
+unrotate
+unskinned
+usemtl
+vecs
+verts
 viewports # plural of viewport
 WASD # movement keys on a keyboard
 WBMP # wireless bitmap image format
@@ -70,3 +184,8 @@ webgpu # gpu standard for web browsers
 WebP # WebP image format
 WGSL # WGSL shader language
 wgslbundle # WGSL shader bundle format
+wireframes
+xoshiro
+yfov
+zfar
+znear

@@ -6,42 +6,70 @@ import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../_fakes/fake_gpu_backend.dart';
+
 void main() {
   group('Material uniform keys', () {
-    late _FakeBackend backend;
-    late _RecordingDevice device;
+    late FakeGpuBackend backend;
+    late GraphicsDevice device;
     late RenderContext3D context;
 
     setUp(() {
-      backend = _FakeBackend();
-      device = _RecordingDevice(backend: backend);
+      // Joint matrix blocks hold 64 matrices, like the built-in shaders.
+      backend = FakeGpuBackend(blockSizes: {'JointMatrices': 4096});
+      device = GraphicsDevice(backend: backend);
       context = RenderContext3D(device);
     });
 
-    void draw(Material material) {
-      expect(material.vertexShader.resource, isNotNull);
-      expect(material.fragmentShader.resource, isNotNull);
-      material
-        ..apply(context)
-        ..vertexShader.bind(device)
-        ..fragmentShader.bind(device);
+    /// Draws a triangle with [material] in a pass and returns the data bound
+    /// to each uniform block, by block name.
+    Map<String, Float32List> draw(
+      Material material, {
+      List<Matrix4>? joints,
+    }) {
+      final surface = Surface(
+        vertices: [
+          Vertex(position: Vector3.zero(), texCoord: Vector2.zero()),
+          Vertex(position: Vector3(1, 0, 0), texCoord: Vector2.zero()),
+          Vertex(position: Vector3(0, 1, 0), texCoord: Vector2.zero()),
+        ],
+        indices: [0, 1, 2],
+        material: material,
+      );
+      device.begin();
+      context.setCamera(Matrix4.identity(), Matrix4.identity());
+      device.beginPass(const Size(8, 8));
+      context
+        ..drawSurface(surface, jointTransforms: joints)
+        ..flush();
+      device
+        ..endPass()
+        ..end();
+      return backend.uniforms;
+    }
+
+    int offsetOf(Material material, String block, String member) {
+      final shader = block == RenderContext3D.jointMatricesBlock
+          ? material.vertexShader
+          : material.fragmentShader;
+      return shader.slot(block).getMemberOffsetInBytes(member)! ~/
+          Float32List.bytesPerElement;
     }
 
     for (final (name, create) in [
       ('UnlitMaterial', UnlitMaterial.new),
       ('SpatialMaterial', SpatialMaterial.new),
     ]) {
-      test('$name writes each joint matrix at its index', () {
+      test('$name gets each joint matrix at its index', () {
         final joints = [
           for (var i = 0; i < 16; i++)
             Matrix4.translationValues(i.toDouble(), i * 2, i * 3),
         ];
-        context.jointsInfo.jointTransforms = joints;
+        final material = create();
 
-        draw(create());
+        final data = draw(material, joints: joints)['JointMatrices']!;
 
-        final data = device.uniforms['JointMatrices']!;
-        final base = backend.offsetOf('JointMatrices', 'joints');
+        final base = offsetOf(material, 'JointMatrices', 'joints');
         for (final (i, joint) in joints.indexed) {
           expect(
             data.sublist(base + i * 16, base + (i + 1) * 16),
@@ -49,29 +77,41 @@ void main() {
           );
         }
       });
+
+      test('$name rejects more joints than the shader holds', () {
+        final joints = [for (var i = 0; i < 65; i++) Matrix4.identity()];
+        expect(
+          () => draw(create(), joints: joints),
+          throwsA(isA<StateError>()),
+        );
+      });
     }
 
-    test('SpatialMaterial writes each point light at its index', () {
+    test('SpatialMaterial gets each point light at its index', () {
       final lights = [
         for (var i = 0; i < 3; i++)
           Light(
             position: Vector3(i.toDouble(), i + 10, i + 20),
             source: PointLight(
               color: Color.fromARGB(255, i * 80, 255 - i * 80, 0),
-              intensity: i + .5,
+              intensity: i + 0.5,
             ),
           ),
+        Light(
+          position: Vector3.zero(),
+          source: AmbientLight(color: const Color(0xFF102030), intensity: 0.7),
+        ),
       ];
       context.lights = lights;
+      final material = SpatialMaterial();
 
-      draw(SpatialMaterial());
-
-      final data = device.uniforms['Lights']!;
-      final positions = backend.offsetOf('Lights', 'positions');
-      final colors = backend.offsetOf('Lights', 'colors');
-      final intensities = backend.offsetOf('Lights', 'intensities');
-      expect(data[backend.offsetOf('Lights', 'numLights')], 3);
-      for (final (i, light) in lights.indexed) {
+      final uniforms = draw(material);
+      final data = uniforms['Lights']!;
+      final positions = offsetOf(material, 'Lights', 'positions');
+      final colors = offsetOf(material, 'Lights', 'colors');
+      final intensities = offsetOf(material, 'Lights', 'intensities');
+      expect(data[offsetOf(material, 'Lights', 'numLights')], 3);
+      for (final (i, light) in lights.take(3).indexed) {
         final color = light.source.color;
         expect(
           data.sublist(positions + i * 4, positions + i * 4 + 3),
@@ -88,101 +128,35 @@ void main() {
           Float32List.fromList([light.source.intensity]).single,
         );
       }
+
+      final ambient = uniforms['AmbientLight']!;
+      final ambientColor = offsetOf(material, 'AmbientLight', 'color');
+      expect(
+        ambient.sublist(ambientColor, ambientColor + 4),
+        orderedEquals(Float32List.fromList([16 / 255, 32 / 255, 48 / 255, 1])),
+      );
+      expect(
+        ambient[offsetOf(material, 'AmbientLight', 'intensity')],
+        Float32List.fromList([0.7]).single,
+      );
+    });
+
+    test('SpatialMaterial gets at most eight point lights', () {
+      context.lights = [
+        for (var i = 0; i < 12; i++)
+          Light(
+            position: Vector3.all(i.toDouble()),
+            source: PointLight(color: const Color(0xFFFFFFFF), intensity: 1),
+          ),
+      ];
+      final material = SpatialMaterial();
+
+      final data = draw(material)['Lights']!;
+
+      expect(
+        data[offsetOf(material, 'Lights', 'numLights')],
+        RenderContext3D.maxPointLights,
+      );
     });
   });
-}
-
-final class _FakeBackend() extends GpuBackend {
-  final Map<String, _FakeUniformSlot> slots = {};
-
-  int offsetOf(String slot, String member) {
-    return slots[slot]!.getMemberOffsetInBytes(member) ~/
-        Float32List.bytesPerElement;
-  }
-
-  @override
-  GpuShaderLibrary loadShaderLibrary(String assetName) {
-    return _FakeShaderLibrary(this);
-  }
-
-  @override
-  GpuTexture createTexture({
-    required GpuStorageMode storageMode,
-    required int width,
-    required int height,
-    required GpuPixelFormat format,
-  }) => throw UnimplementedError();
-
-  @override
-  GpuBuffer createBuffer({
-    required GpuStorageMode storageMode,
-    required int sizeInBytes,
-  }) => throw UnimplementedError();
-
-  @override
-  GpuPipeline createPipeline({
-    required GpuShader vertexShader,
-    required GpuShader fragmentShader,
-  }) => throw UnimplementedError();
-
-  @override
-  GpuRenderTarget createRenderTarget({
-    required int width,
-    required int height,
-    required Color clearValue,
-    int msaaSampleCount = 1,
-  }) => throw UnimplementedError();
-
-  @override
-  GpuFrame beginFrame() => throw UnimplementedError();
-}
-
-class _FakeShaderLibrary(final _FakeBackend backend)
-    implements GpuShaderLibrary {
-  @override
-  GpuShader operator [](String entryPoint) => _FakeShader(backend);
-}
-
-class _FakeShader(final _FakeBackend backend) implements GpuShader {
-  @override
-  GpuUniformSlot getUniformSlot(String name) {
-    if (name.endsWith('Texture')) {
-      return _FakeSamplerSlot();
-    }
-    return backend.slots.putIfAbsent(name, () => _FakeUniformSlot(name));
-  }
-}
-
-class _FakeSamplerSlot() implements GpuUniformSlot {
-  @override
-  int? get sizeInBytes => null;
-
-  @override
-  int? getMemberOffsetInBytes(String member) => null;
-}
-
-class _FakeUniformSlot(final String name) implements GpuUniformSlot {
-  final Map<String, int> _offsets = {};
-
-  @override
-  int get sizeInBytes => 8192;
-
-  @override
-  int getMemberOffsetInBytes(String member) {
-    return _offsets.putIfAbsent(member, () => _offsets.length * 1024);
-  }
-}
-
-class _RecordingDevice({super.backend}) extends GraphicsDevice {
-  final Map<String, Float32List> uniforms = {};
-
-  @override
-  void bindUniform(GpuUniformSlot slot, ByteBuffer buffer) {
-    uniforms[(slot as _FakeUniformSlot).name] = Float32List.fromList(
-      buffer.asFloat32List(),
-    );
-  }
-
-  @override
-  void bindTexture(GpuUniformSlot slot, Texture texture) {}
 }

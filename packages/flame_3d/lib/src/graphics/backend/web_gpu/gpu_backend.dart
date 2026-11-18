@@ -7,6 +7,7 @@ import 'package:flame_3d/src/graphics/backend/gpu_enums.dart';
 import 'package:flame_3d/src/graphics/backend/gpu_handles.dart';
 import 'package:flame_3d/src/graphics/backend/web_gpu/shader_bundle.dart';
 import 'package:flame_3d/src/graphics/backend/web_gpu/web_gpu_interop.dart';
+import 'package:flame_3d/src/resources/texture/texture_sampler.dart';
 import 'package:flutter/services.dart';
 
 /// {@template web_gpu_backend}
@@ -17,15 +18,7 @@ base class GpuBackend._(
   final Map<String, WebShaderBundle> _bundles,
 ) extends base.GpuBackend {
   this
-    : _defaultSampler = _device.createSampler(
-        GPUSamplerDescriptor(
-          magFilter: 'nearest',
-          minFilter: 'nearest',
-          addressModeU: 'clamp-to-edge',
-          addressModeV: 'clamp-to-edge',
-        ),
-      ),
-      _zeroBuffer = _device.createBuffer(
+    : _zeroBuffer = _device.createBuffer(
         GPUBufferDescriptor(
           size: _maxUniformSize(_bundles),
           usage: GPUBufferUsage.uniform,
@@ -71,6 +64,9 @@ base class GpuBackend._(
   /// `GpuBackend.instance` surface that with a clear error.
   static GpuBackend? create() => null;
 
+  /// Whether the browser exposes WebGPU.
+  static bool get isAvailable => webGPU != null;
+
   /// Loads every `.wgslbundle` shader asset declared by the app.
   ///
   /// Bundles are discovered through [AssetManifest], so a game's own custom
@@ -91,7 +87,32 @@ base class GpuBackend._(
 
   final GPUQueue _queue = _device.queue;
 
-  late final GPUSampler _defaultSampler;
+  late final GPUSampler _defaultSampler = _samplerFor(TextureSampler.nearest);
+
+  // The sampler of every distinct sampler value, by key, created once.
+  final List<GPUSampler?> _samplers = List.filled(
+    TextureSampler.keyCount,
+    null,
+  );
+
+  /// The sampler object for [sampler], created on first use.
+  GPUSampler _samplerFor(TextureSampler sampler) {
+    return _samplers[sampler.key] ??= _device.createSampler(
+      GPUSamplerDescriptor(
+        magFilter: sampler.magFilter.name,
+        minFilter: sampler.minFilter.name,
+        mipmapFilter: sampler.mipFilter.name,
+        addressModeU: _addressMode(sampler.wrapU),
+        addressModeV: _addressMode(sampler.wrapV),
+      ),
+    );
+  }
+
+  static String _addressMode(TextureWrap wrap) => switch (wrap) {
+    TextureWrap.clamp => 'clamp-to-edge',
+    TextureWrap.repeat => 'repeat',
+    TextureWrap.mirror => 'mirror-repeat',
+  };
 
   late final GPUTexture _defaultTexture;
 
@@ -103,21 +124,35 @@ base class GpuBackend._(
 
   final Map<_PipelineKey, GPURenderPipeline> _pipelineCache = {};
 
+  final Map<String, _WebGpuShaderLibrary> _libraries = {};
+
+  @override
+  int get uniformAlignment => _uniformAlignment;
+
   @override
   GpuTexture createTexture({
     required GpuStorageMode storageMode,
     required int width,
     required int height,
     required GpuPixelFormat format,
+    int mipLevelCount = 1,
   }) {
     final texture = _device.createTexture(
       GPUTextureDescriptor(
         size: GPUExtent3D(width: width, height: height, depthOrArrayLayers: 1),
         format: _pixelFormat(format),
         usage: GPUTextureUsage.textureBinding | GPUTextureUsage.copyDst,
+        mipLevelCount: mipLevelCount,
       ),
     );
-    return _WebGpuSampledTexture(_queue, texture, width, height);
+    return _WebGpuSampledTexture(
+      _queue,
+      texture,
+      width,
+      height,
+      mipLevelCount,
+      _bytesPerPixel(format),
+    );
   }
 
   @override
@@ -131,16 +166,18 @@ base class GpuBackend._(
         usage:
             GPUBufferUsage.vertex |
             GPUBufferUsage.index |
+            GPUBufferUsage.uniform |
             GPUBufferUsage.copyDst,
       ),
     );
-    return _WebGpuBuffer(_queue, buffer);
+    return _WebGpuBuffer(_queue, buffer, sizeInBytes);
   }
 
   @override
   GpuShaderLibrary loadShaderLibrary(String assetName) {
     final key = _wgslBundleKey(assetName);
-    final bundle = _bundles[key];
+    final unprefixed = _wgslBundleKey(_withoutPackagePrefix(assetName));
+    final bundle = _bundles[key] ?? _bundles[unprefixed];
     if (bundle == null) {
       throw StateError(
         'No web shader bundle found for "$assetName" (expected asset "$key"). '
@@ -148,17 +185,52 @@ base class GpuBackend._(
         'and declare it in pubspec.yaml.',
       );
     }
-    return _WebGpuShaderLibrary(_device, bundle);
+    return _libraries[_bundles.containsKey(key) ? key : unprefixed] ??=
+        _WebGpuShaderLibrary(_device, bundle);
+  }
+
+  @override
+  Future<void> registerShaderLibrary(String assetName, ByteData bytes) async {
+    final key = _wgslBundleKey(assetName);
+    _bundles[key] = WebShaderBundle.fromJson(
+      jsonDecode(
+        utf8.decode(
+          bytes.buffer.asUint8List(
+            bytes.offsetInBytes,
+            bytes.lengthInBytes,
+          ),
+        ),
+      ) as Map<String, dynamic>,
+    );
+    _libraries.remove(key);
   }
 
   @override
   GpuPipeline createPipeline({
     required GpuShader vertexShader,
     required GpuShader fragmentShader,
+    GpuVertexLayout? vertexLayout,
   }) {
     return _WebGpuPipeline(
       vertexShader as _WebGpuShader,
       fragmentShader as _WebGpuShader,
+      vertexLayout == null
+          ? [_standardVertexBufferLayout]
+          : [
+              for (final buffer in vertexLayout.buffers)
+                GPUVertexBufferLayout(
+                  arrayStride: buffer.strideInBytes,
+                  stepMode: buffer.perInstance ? 'instance' : 'vertex',
+                  attributes: [
+                    for (final attribute in buffer.attributes)
+                      GPUVertexAttribute(
+                        format: _vertexFormat(attribute.components),
+                        offset: attribute.offsetInBytes,
+                        shaderLocation: attribute.location,
+                      ),
+                  ],
+                ),
+            ],
     );
   }
 
@@ -186,48 +258,60 @@ base class GpuBackend._(
         usage: GPUTextureUsage.renderAttachment,
       ),
     );
-    return _WebGpuRenderTarget(canvas, context, depth, clearValue);
+    return _WebGpuRenderTarget(
+      width,
+      height,
+      canvas,
+      context,
+      depth,
+      clearValue,
+    );
   }
 
   @override
-  base.GpuFrame beginFrame() => _frame..begin();
+  base.GpuFrame beginFrame() => _frame;
 
   /// Resolves (and caches) the concrete [GPURenderPipeline] for [pipeline]
-  /// under the given [blend], [depthStencil] and [cullMode] state.
-  GPURenderPipeline _resolvePipeline(
-    _WebGpuPipeline pipeline,
-    BlendState blend,
-    DepthStencilState depthStencil,
-    CullMode cullMode,
-  ) {
+  /// under the given render state.
+  GPURenderPipeline _resolvePipeline(_WebGpuPipeline pipeline, int state) {
     return _pipelineCache.putIfAbsent(
-      (pipeline, blend, depthStencil, cullMode),
+      (pipeline, state),
       () => _device.createRenderPipeline(
         GPURenderPipelineDescriptor(
           layout: 'auto',
           vertex: GPUVertexState(
             module: pipeline.vertexModule,
             entryPoint: 'main',
-            buffers: [_vertexBufferLayout],
+            buffers: pipeline.vertexBuffers,
           ),
           fragment: GPUFragmentState(
             module: pipeline.fragmentModule,
             entryPoint: 'main',
-            targets: [_colorTarget(blend)],
+            targets: [_colorTarget(_StateKey.blend(state))],
           ),
           primitive: GPUPrimitiveState(
             topology: 'triangle-list',
-            cullMode: _cullMode(cullMode),
-            frontFace: 'ccw',
+            cullMode: _cullMode(_StateKey.cullMode(state)),
+            frontFace: _StateKey.windingOrder(state) == WindingOrder.clockwise
+                ? 'cw'
+                : 'ccw',
           ),
           depthStencil: GPUDepthStencilState(
             format: _depthFormat,
-            depthWriteEnabled: depthStencil == DepthStencilState.standard,
-            depthCompare: _depthCompare(depthStencil),
+            depthWriteEnabled: _StateKey.depthWrite(state),
+            depthCompare: _depthCompare(_StateKey.depthCompare(state)),
           ),
         ),
       ),
     );
+  }
+
+  static String _withoutPackagePrefix(String assetName) {
+    if (!assetName.startsWith('packages/')) {
+      return assetName;
+    }
+    final packageEnd = assetName.indexOf('/', 'packages/'.length);
+    return packageEnd < 0 ? assetName : assetName.substring(packageEnd + 1);
   }
 
   GPUTexture _solidTexture(int argb) {
@@ -268,8 +352,8 @@ base class GpuBackend._(
   }
 }
 
-/// The fixed vertex buffer layout, matching `Vertex.storage`.
-final _vertexBufferLayout = GPUVertexBufferLayout(
+/// The standard vertex buffer layout, matching `Vertex.storage`.
+final _standardVertexBufferLayout = GPUVertexBufferLayout(
   arrayStride: 80,
   stepMode: 'vertex',
   attributes: [
@@ -282,10 +366,16 @@ final _vertexBufferLayout = GPUVertexBufferLayout(
   ],
 );
 
+int _bytesPerPixel(GpuPixelFormat format) => switch (format) {
+  GpuPixelFormat.rgbaFloat32 => 16,
+  _ => 4,
+};
+
 String _pixelFormat(GpuPixelFormat format) => switch (format) {
   GpuPixelFormat.rgba8888 => 'rgba8unorm',
   GpuPixelFormat.bgra8888 => 'bgra8unorm',
   GpuPixelFormat.rgbaFloat32 => 'rgba32float',
+  GpuPixelFormat.r32Float => 'r32float',
   GpuPixelFormat.depthStencil => _depthFormat,
 };
 
@@ -295,10 +385,23 @@ String _cullMode(CullMode mode) => switch (mode) {
   CullMode.backFace => 'back',
 };
 
-String _depthCompare(DepthStencilState state) => switch (state) {
-  DepthStencilState.standard => 'less',
-  DepthStencilState.depthRead => 'less-equal',
-  DepthStencilState.none => 'always',
+String _depthCompare(CompareFunction compare) => switch (compare) {
+  CompareFunction.never => 'never',
+  CompareFunction.less => 'less',
+  CompareFunction.equal => 'equal',
+  CompareFunction.lessEqual => 'less-equal',
+  CompareFunction.greater => 'greater',
+  CompareFunction.notEqual => 'not-equal',
+  CompareFunction.greaterEqual => 'greater-equal',
+  CompareFunction.always => 'always',
+};
+
+String _vertexFormat(int components) => switch (components) {
+  1 => 'float32',
+  2 => 'float32x2',
+  3 => 'float32x3',
+  4 => 'float32x4',
+  _ => throw ArgumentError.value(components, 'components', 'Must be 1 to 4'),
 };
 
 GPUColorTargetState _colorTarget(BlendState blend) {
@@ -306,43 +409,103 @@ GPUColorTargetState _colorTarget(BlendState blend) {
       GPUBlendComponent(operation: 'add', srcFactor: src, dstFactor: dst);
   return switch (blend) {
     BlendState.opaque => GPUColorTargetState(format: _canvasFormat),
-    BlendState.alphaBlend => GPUColorTargetState(
+    BlendState.alpha => GPUColorTargetState(
+      format: _canvasFormat,
+      blend: GPUBlendState(
+        color: component('src-alpha', 'one-minus-src-alpha'),
+        alpha: component('one', 'one-minus-src-alpha'),
+      ),
+    ),
+    BlendState.premultipliedAlpha => GPUColorTargetState(
       format: _canvasFormat,
       blend: GPUBlendState(
         color: component('one', 'one-minus-src-alpha'),
         alpha: component('one', 'one-minus-src-alpha'),
       ),
     ),
+    // Added light covers nothing: the alpha of the target is kept.
     BlendState.additive => GPUColorTargetState(
       format: _canvasFormat,
       blend: GPUBlendState(
         color: component('one', 'one'),
-        alpha: component('one', 'one'),
+        alpha: component('zero', 'one'),
+      ),
+    ),
+    // Depth only: the target keeps its color and alpha.
+    BlendState.depthOnly => GPUColorTargetState(
+      format: _canvasFormat,
+      blend: GPUBlendState(
+        color: component('zero', 'one'),
+        alpha: component('zero', 'one'),
       ),
     ),
   };
 }
 
-/// Cache key for a concrete render pipeline variant.
-typedef _PipelineKey = (
-  _WebGpuPipeline,
-  BlendState,
-  DepthStencilState,
-  CullMode,
-);
+/// Cache key for a concrete render pipeline variant: the pipeline and its
+/// render state packed by [_StateKey].
+typedef _PipelineKey = (_WebGpuPipeline, int);
 
-class const _WebGpuShaderLibrary(
+/// Packs the render state of a draw into one integer.
+abstract final class _StateKey() {
+  static int pack({
+    required BlendState blend,
+    required CompareFunction depthCompare,
+    required bool depthWrite,
+    required CullMode cullMode,
+    required WindingOrder windingOrder,
+  }) {
+    return blend.index |
+        depthCompare.index << 4 |
+        (depthWrite ? 1 : 0) << 8 |
+        cullMode.index << 9 |
+        windingOrder.index << 12;
+  }
+
+  static BlendState blend(int key) => BlendState.values[key & 0xF];
+
+  static CompareFunction depthCompare(int key) =>
+      CompareFunction.values[(key >> 4) & 0xF];
+
+  static bool depthWrite(int key) => (key >> 8) & 1 == 1;
+
+  static CullMode cullMode(int key) => CullMode.values[(key >> 9) & 0x7];
+
+  static WindingOrder windingOrder(int key) =>
+      WindingOrder.values[(key >> 12) & 0x1];
+}
+
+class _WebGpuShaderLibrary(
   final GPUDevice _device,
   final WebShaderBundle _bundle,
 ) implements GpuShaderLibrary {
+  late final _WebGpuShader _vertex = _WebGpuShader(
+    _device,
+    _bundle.vertex,
+    _bundle.slots,
+    _bundle.inputs == null
+        ? null
+        : [
+            for (final input in _bundle.inputs!)
+              GpuShaderInput(
+                name: input.name,
+                location: input.location,
+                components: input.components,
+              ),
+          ],
+  );
+
+  late final _WebGpuShader _fragment = _WebGpuShader(
+    _device,
+    _bundle.fragment,
+    _bundle.slots,
+    const [],
+  );
+
   @override
   GpuShader operator [](String entryPoint) => switch (entryPoint) {
-    'TextureVertex' => _WebGpuShader(_device, _bundle.vertex, _bundle.slots),
-    'TextureFragment' => _WebGpuShader(
-      _device,
-      _bundle.fragment,
-      _bundle.slots,
-    ),
+    'TextureVertex' => _vertex,
+    'TextureFragment' => _fragment,
     _ => throw StateError('Unknown shader entry point "$entryPoint".'),
   };
 }
@@ -351,6 +514,7 @@ class _WebGpuShader(
   final GPUDevice _device,
   final String _wgsl,
   final Map<String, WebShaderSlot> slots,
+  @override final List<GpuShaderInput>? inputs,
 ) implements GpuShader {
   GPUShaderModule? _module;
 
@@ -358,18 +522,24 @@ class _WebGpuShader(
     GPUShaderModuleDescriptor(code: _wgsl),
   );
 
+  final Map<String, _WebGpuUniformSlot> _slots = {};
+
   @override
   GpuUniformSlot getUniformSlot(String slot) {
-    final reflected = slots[slot];
-    if (reflected == null) {
-      throw StateError('Shader has no uniform slot "$slot".');
-    }
-    return _WebGpuUniformSlot(reflected);
+    return _slots.putIfAbsent(slot, () {
+      final reflected = slots[slot];
+      if (reflected == null) {
+        throw StateError('Shader has no uniform slot "$slot".');
+      }
+      return _WebGpuUniformSlot(slot, reflected);
+    });
   }
 }
 
-class const _WebGpuUniformSlot(final WebShaderSlot slot)
-    implements GpuUniformSlot {
+class const _WebGpuUniformSlot(
+  @override final String name,
+  final WebShaderSlot slot,
+) implements GpuUniformSlot {
   @override
   int? get sizeInBytes => slot.sizeInBytes;
 
@@ -377,42 +547,62 @@ class const _WebGpuUniformSlot(final WebShaderSlot slot)
   int? getMemberOffsetInBytes(String member) => slot.memberOffsets[member];
 }
 
-class const _WebGpuPipeline(
+class _WebGpuPipeline(
   final _WebGpuShader _vertex,
   final _WebGpuShader _fragment,
+  final List<GPUVertexBufferLayout> vertexBuffers,
 ) implements GpuPipeline {
   GPUShaderModule get vertexModule => _vertex.module;
 
   GPUShaderModule get fragmentModule => _fragment.module;
 
   Map<String, WebShaderSlot> get slots => _vertex.slots;
+
+  /// The slots of the pipeline grouped by bind group, computed once.
+  late final Map<int, List<WebShaderSlot>> groups = () {
+    final groups = <int, List<WebShaderSlot>>{};
+    for (final slot in slots.values) {
+      groups.putIfAbsent(slot.group, () => []).add(slot);
+    }
+    return groups;
+  }();
 }
 
-class const _WebGpuBuffer(final GPUQueue _queue, final GPUBuffer raw)
-    implements GpuBuffer {
+class const _WebGpuBuffer(
+  final GPUQueue _queue,
+  final GPUBuffer raw,
+  @override final int sizeInBytes,
+) implements GpuBuffer {
   @override
   void write(ByteData data, {int destinationOffsetInBytes = 0}) {
     _queue.writeBuffer(raw, destinationOffsetInBytes, _padded(data));
   }
 }
 
-class const _WebGpuSampledTexture(
+class _WebGpuSampledTexture(
   final GPUQueue _queue,
   final GPUTexture raw,
   final int _width,
   final int _height,
+  @override final int mipLevelCount,
+  final int _bytesPerPixel,
 ) implements GpuTexture {
+  /// The view bound to shaders, created once.
+  late final GPUTextureView view = raw.createView();
+
   @override
-  void write(ByteData data) {
+  void write(ByteData data, {int mipLevel = 0}) {
+    final width = _width >> mipLevel < 1 ? 1 : _width >> mipLevel;
+    final height = _height >> mipLevel < 1 ? 1 : _height >> mipLevel;
     _queue.writeTexture(
-      GPUImageCopyTexture(texture: raw),
+      GPUImageCopyTexture(texture: raw, mipLevel: mipLevel),
       _padded(data),
       GPUImageDataLayout(
         offset: 0,
-        bytesPerRow: _width * 4,
-        rowsPerImage: _height,
+        bytesPerRow: width * _bytesPerPixel,
+        rowsPerImage: height,
       ),
-      GPUExtent3D(width: _width, height: _height, depthOrArrayLayers: 1),
+      GPUExtent3D(width: width, height: height, depthOrArrayLayers: 1),
     );
   }
 
@@ -422,6 +612,8 @@ class const _WebGpuSampledTexture(
 }
 
 class _WebGpuRenderTarget(
+  @override final int width,
+  @override final int height,
   final OffscreenCanvas canvas,
   final GPUCanvasContext context,
   final GPUTexture depthTexture,
@@ -434,14 +626,11 @@ class _WebGpuRenderTarget(
     a: clearValue.a,
   );
 
-  final _WebGpuColorTexture _colorTexture = _WebGpuColorTexture(
+  final _WebGpuColorTexture colorTexture = _WebGpuColorTexture(
     canvas,
     canvas.width,
     canvas.height,
   );
-
-  @override
-  GpuTexture get colorTexture => _colorTexture;
 }
 
 class _WebGpuColorTexture(final OffscreenCanvas _canvas, int width, int height)
@@ -455,7 +644,10 @@ class _WebGpuColorTexture(final OffscreenCanvas _canvas, int width, int height)
   Image? _retained;
 
   @override
-  void write(ByteData data) =>
+  int get mipLevelCount => 1;
+
+  @override
+  void write(ByteData data, {int mipLevel = 0}) =>
       throw UnsupportedError('A render-target texture cannot be written to.');
 
   @override
@@ -486,57 +678,9 @@ class _WebGpuColorTexture(final OffscreenCanvas _canvas, int width, int height)
   }
 }
 
-class _WebGpuFrame(final GpuBackend _backend) implements base.GpuFrame {
-  final List<List<GPUBuffer>> _uniformPools = [[], [], []];
-  int _frameIndex = 0;
-
-  // Allocation cursor into the current frame's pool.
-  int _bufferIndex = 0;
-  int _cursor = 0;
-
-  /// Resets the transient uniform allocator for a new frame.
-  void begin() {
-    _bufferIndex = 0;
-    _cursor = 0;
-  }
-
-  /// Sub-allocates [data] into this frame's uniform pool, returning the buffer
-  /// it landed in and the (256-aligned) offset it was written at.
-  ///
-  /// The pool grows by a buffer whenever a frame's uniforms outgrow the
-  /// current one, so there is no fixed per-frame uniform budget.
-  (GPUBuffer, int) allocateUniform(ByteData data) {
-    final stride = _align(data.lengthInBytes, _uniformAlignment);
-    if (_cursor + stride > _uniformPoolSize) {
-      _bufferIndex++;
-      _cursor = 0;
-    }
-
-    final pool = _uniformPools[_frameIndex];
-    if (_bufferIndex == pool.length) {
-      pool.add(
-        _backend._device.createBuffer(
-          GPUBufferDescriptor(
-            size: _uniformPoolSize,
-            usage: GPUBufferUsage.uniform | GPUBufferUsage.copyDst,
-          ),
-        ),
-      );
-    }
-
-    final buffer = pool[_bufferIndex];
-    final offset = _cursor;
-    _backend._queue.writeBuffer(buffer, offset, _padded(data));
-    _cursor += stride;
-    return (buffer, offset);
-  }
-
+class const _WebGpuFrame(final GpuBackend _backend) implements base.GpuFrame {
   @override
-  base.GpuRenderPass beginRenderPass(
-    GpuRenderTarget target, {
-    required BlendState blend,
-    required DepthStencilState depthStencil,
-  }) {
+  base.GpuRenderPass beginRenderPass(GpuRenderTarget target) {
     final renderTarget = target as _WebGpuRenderTarget;
     final encoder = _backend._device.createCommandEncoder();
     final pass = encoder.beginRenderPass(
@@ -557,117 +701,173 @@ class _WebGpuFrame(final GpuBackend _backend) implements base.GpuFrame {
         ),
       ),
     );
-    return _WebGpuRenderPass(
-      _backend,
-      this,
-      blend,
-      depthStencil,
-      encoder,
-      pass,
-    );
+    return _WebGpuRenderPass(_backend, renderTarget, encoder, pass);
   }
 
   @override
-  void end() {
-    _frameIndex = (_frameIndex + 1) % _uniformPools.length;
-  }
+  void end() {}
 }
 
 class _WebGpuRenderPass(
   final GpuBackend _backend,
-  final _WebGpuFrame _frame,
-  final BlendState _blend,
-  final DepthStencilState _depthStencil,
+  final _WebGpuRenderTarget _target,
   final GPUCommandEncoder _encoder,
   final GPURenderPassEncoder _pass,
 ) implements base.GpuRenderPass {
-  late _WebGpuPipeline _pipeline;
+  _WebGpuPipeline? _pipeline;
 
-  late GPURenderPipeline _renderPipeline;
+  GPURenderPipeline? _renderPipeline;
 
-  int _indexCount = 0;
+  // The render state, see `GpuFrame.beginRenderPass` for the defaults.
+  BlendState _blend = BlendState.opaque;
+  CompareFunction _depthCompare = CompareFunction.less;
+  bool _depthWrite = true;
+  CullMode _cullMode = CullMode.none;
+  WindingOrder _windingOrder = WindingOrder.counterClockwise;
+  bool _stateChanged = true;
 
   // Bindings accumulated for the current draw, keyed by `_key(group, binding)`.
   final Map<int, (GPUBuffer buffer, int offset, int size)> _uniforms = {};
   final Map<int, GPUTextureView> _textures = {};
+  final Map<int, GPUSampler> _samplers = {};
 
   static int _key(int group, int binding) => (group << 16) | binding;
 
   @override
-  void bindPipeline(GpuPipeline pipeline, CullMode cullMode) {
+  void bindPipeline(GpuPipeline pipeline) {
     _pipeline = pipeline as _WebGpuPipeline;
-    _renderPipeline = _backend._resolvePipeline(
-      _pipeline,
-      _blend,
-      _depthStencil,
-      cullMode,
-    );
-    _pass.setPipeline(_renderPipeline);
+    _stateChanged = true;
   }
 
   @override
-  void bindVertexBuffer(GpuBufferView view, int vertexCount) {
+  void setBlendState(BlendState blend) {
+    _blend = blend;
+    _stateChanged = true;
+  }
+
+  @override
+  void setDepthState({
+    required CompareFunction compare,
+    required bool writeEnabled,
+  }) {
+    _depthCompare = compare;
+    _depthWrite = writeEnabled;
+    _stateChanged = true;
+  }
+
+  @override
+  void setCullMode(CullMode cullMode) {
+    _cullMode = cullMode;
+    _stateChanged = true;
+  }
+
+  @override
+  void setWindingOrder(WindingOrder windingOrder) {
+    _windingOrder = windingOrder;
+    _stateChanged = true;
+  }
+
+  @override
+  void bindVertexBuffer(
+    GpuBuffer buffer, {
+    required int offsetInBytes,
+    required int lengthInBytes,
+    int slot = 0,
+  }) {
     _pass.setVertexBuffer(
-      0,
-      (view.buffer as _WebGpuBuffer).raw,
-      view.offsetInBytes,
-      view.lengthInBytes,
+      slot,
+      (buffer as _WebGpuBuffer).raw,
+      offsetInBytes,
+      lengthInBytes,
     );
   }
 
   @override
   void bindIndexBuffer(
-    GpuBufferView view,
-    GpuIndexType indexType,
-    int indexCount,
-  ) {
+    GpuBuffer buffer, {
+    required int offsetInBytes,
+    required int lengthInBytes,
+    required GpuIndexType indexType,
+  }) {
     _pass.setIndexBuffer(
-      (view.buffer as _WebGpuBuffer).raw,
+      (buffer as _WebGpuBuffer).raw,
       indexType == GpuIndexType.uint16 ? 'uint16' : 'uint32',
-      view.offsetInBytes,
-      view.lengthInBytes,
+      offsetInBytes,
+      lengthInBytes,
     );
-    _indexCount = indexCount;
   }
 
   @override
-  void bindUniform(GpuUniformSlot slot, ByteData data) {
+  void bindUniform(
+    GpuUniformSlot slot,
+    GpuBuffer buffer, {
+    required int offsetInBytes,
+    required int lengthInBytes,
+  }) {
     final reflected = (slot as _WebGpuUniformSlot).slot;
-    final (buffer, offset) = _frame.allocateUniform(data);
     _uniforms[_key(reflected.group, reflected.binding)] = (
-      buffer,
-      offset,
-      data.lengthInBytes,
+      (buffer as _WebGpuBuffer).raw,
+      offsetInBytes,
+      lengthInBytes,
     );
   }
 
   @override
   void bindTexture(
-    covariant _WebGpuUniformSlot slot,
-    covariant _WebGpuSampledTexture texture,
-  ) {
-    final reflected = slot.slot;
-    _textures[_key(reflected.group, reflected.binding)] = texture.raw
-        .createView();
+    GpuUniformSlot slot,
+    GpuTexture texture, {
+    TextureSampler sampler = TextureSampler.nearest,
+  }) {
+    final reflected = (slot as _WebGpuUniformSlot).slot;
+    final key = _key(reflected.group, reflected.binding);
+    _textures[key] = (texture as _WebGpuSampledTexture).view;
+    _samplers[key] = _backend._samplerFor(sampler);
   }
 
   @override
   void clearBindings() {
     _uniforms.clear();
     _textures.clear();
+    _samplers.clear();
   }
 
   @override
-  void draw() {
+  void draw(int vertexCount, {int instanceCount = 1}) {
+    _prepareDraw();
+    _pass.draw(vertexCount, instanceCount);
+  }
+
+  @override
+  void drawIndexed(int indexCount, {int instanceCount = 1}) {
+    _prepareDraw();
+    _pass.drawIndexed(indexCount, instanceCount);
+  }
+
+  void _prepareDraw() {
     final pipeline = _pipeline;
-    final renderPipeline = _renderPipeline;
-
-    final groups = <int, List<WebShaderSlot>>{};
-    for (final slot in pipeline.slots.values) {
-      groups.putIfAbsent(slot.group, () => []).add(slot);
+    if (pipeline == null) {
+      throw StateError('No pipeline bound');
     }
+    if (_stateChanged) {
+      final renderPipeline = _backend._resolvePipeline(
+        pipeline,
+        _StateKey.pack(
+          blend: _blend,
+          depthCompare: _depthCompare,
+          depthWrite: _depthWrite,
+          cullMode: _cullMode,
+          windingOrder: _windingOrder,
+        ),
+      );
+      if (!identical(renderPipeline, _renderPipeline)) {
+        _pass.setPipeline(renderPipeline);
+        _renderPipeline = renderPipeline;
+      }
+      _stateChanged = false;
+    }
+    final renderPipeline = _renderPipeline!;
 
-    for (final MapEntry(key: group, value: slots) in groups.entries) {
+    for (final MapEntry(key: group, value: slots) in pipeline.groups.entries) {
       final entries = <GPUBindGroupEntry>[];
       for (final slot in slots) {
         if (slot.sizeInBytes != null) {
@@ -683,15 +883,14 @@ class _WebGpuRenderPass(
             ),
           );
         } else {
-          final view =
-              _textures[_key(slot.group, slot.binding)] ??
-              _backend._defaultTextureView;
+          final key = _key(slot.group, slot.binding);
+          final view = _textures[key] ?? _backend._defaultTextureView;
           entries
             ..add(GPUBindGroupEntry(binding: slot.binding, resource: view))
             ..add(
               GPUBindGroupEntry(
                 binding: slot.samplerBinding!,
-                resource: _backend._defaultSampler,
+                resource: _samplers[key] ?? _backend._defaultSampler,
               ),
             );
         }
@@ -706,14 +905,21 @@ class _WebGpuRenderPass(
         ),
       );
     }
-
-    _pass.drawIndexed(_indexCount);
   }
 
   @override
-  void submit() {
+  Image submit({void Function()? onCompleted}) {
+    commit(onCompleted: onCompleted);
+    return _target.colorTexture.asImage();
+  }
+
+  @override
+  void commit({void Function()? onCompleted}) {
     _pass.end();
     _backend._queue.submit([_encoder.finish()]);
+    // `GPUQueue.writeBuffer` calls are ordered after the submissions that
+    // precede them, so the buffers of this pass can be rewritten right away.
+    onCompleted?.call();
   }
 }
 
@@ -735,9 +941,6 @@ const _canvasFormat = 'rgba8unorm';
 
 /// Depth attachment format.
 const _depthFormat = 'depth24plus';
-
-/// Size, in bytes, of each per-frame uniform buffer.
-const _uniformPoolSize = 1 << 20;
 
 /// WebGPU minimum uniform buffer offset alignment.
 const _uniformAlignment = 256;

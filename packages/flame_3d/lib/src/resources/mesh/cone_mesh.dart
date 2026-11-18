@@ -104,8 +104,9 @@ class ConeMesh({
       );
     }
 
+    // Counter-clockwise seen from outside, so front faces point outwards.
     for (var i = 0; i < segments; i++) {
-      indices.addAll([0, i + 1, ((i + 1) % segments) + 1]);
+      indices.addAll([0, ((i + 1) % segments) + 1, i + 1]);
     }
 
     addSurface(

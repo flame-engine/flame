@@ -7,33 +7,39 @@ import 'package:flutter/foundation.dart';
 /// This class can be used as a regular [Vector3] class. However, if you do
 /// try to write values the calls will throw.
 ///
-/// Direct modification of this vector's [storage] is not allowed.
+/// The [storage] is an unmodifiable list, so functions that write into a
+/// vector passed to them as an output argument (such as `Matrix4.transform3`)
+/// throw as well.
 /// {@endtemplate}
-class UnmodifiableVector3.zero() extends Vector3 {
+class UnmodifiableVector3._(Float32List values) extends Vector3 {
   /// {@macro unmodifiable_vector_3}
   ///
   /// Constructs a vector using the raw values [x], [y], and [z].
   factory UnmodifiableVector3(double x, double y, double z) =>
-      UnmodifiableVector3.zero().._setValues(x, y, z);
+      UnmodifiableVector3._(
+        Float32List(3)
+          ..[0] = x
+          ..[1] = y
+          ..[2] = z,
+      );
+
+  this : super.fromFloat32List(values.asUnmodifiableView());
 
   /// {@macro unmodifiable_vector_3}
   ///
   /// Create an empty vector.
-  this : super.zero();
+  factory UnmodifiableVector3.zero() => UnmodifiableVector3._(Float32List(3));
 
   /// {@macro unmodifiable_vector_3}
   ///
   /// Create an vector whose values are all [v].
-  factory UnmodifiableVector3.all(double v) =>
-      UnmodifiableVector3.zero().._setValues(v, v, v);
+  factory UnmodifiableVector3.all(double v) => UnmodifiableVector3(v, v, v);
 
   /// {@macro unmodifiable_vector_3}
   ///
   /// Create a copy of the [other] vector.
   factory UnmodifiableVector3.copy(Vector3 other) =>
-      UnmodifiableVector3.zero().._setValues(other.x, other.y, other.z);
-
-  void _setValues(double x, double y, double z) => super.setValues(x, y, z);
+      UnmodifiableVector3(other.x, other.y, other.z);
 
   @override
   void setValues(double x, double y, double z) {
@@ -72,6 +78,36 @@ class UnmodifiableVector3.zero() extends Vector3 {
 
   @override
   void postmultiply(Matrix3 arg) {
+    throw UnsupportedError('Cannot modify an unmodifiable Vector3');
+  }
+
+  @override
+  void reflect(Vector3 normal) {
+    throw UnsupportedError('Cannot modify an unmodifiable Vector3');
+  }
+
+  @override
+  void applyProjection(Matrix4 arg) {
+    throw UnsupportedError('Cannot modify an unmodifiable Vector3');
+  }
+
+  @override
+  void applyAxisAngle(Vector3 axis, double angle) {
+    throw UnsupportedError('Cannot modify an unmodifiable Vector3');
+  }
+
+  @override
+  void applyQuaternion(Quaternion arg) {
+    throw UnsupportedError('Cannot modify an unmodifiable Vector3');
+  }
+
+  @override
+  void applyMatrix3(Matrix3 arg) {
+    throw UnsupportedError('Cannot modify an unmodifiable Vector3');
+  }
+
+  @override
+  void applyMatrix4(Matrix4 arg) {
     throw UnsupportedError('Cannot modify an unmodifiable Vector3');
   }
 
@@ -156,7 +192,57 @@ class UnmodifiableVector3.zero() extends Vector3 {
   }
 
   @override
+  set xz(Vector2 arg) {
+    throw UnsupportedError('Cannot modify an unmodifiable Vector3');
+  }
+
+  @override
   set yx(Vector2 arg) {
+    throw UnsupportedError('Cannot modify an unmodifiable Vector3');
+  }
+
+  @override
+  set yz(Vector2 arg) {
+    throw UnsupportedError('Cannot modify an unmodifiable Vector3');
+  }
+
+  @override
+  set zx(Vector2 arg) {
+    throw UnsupportedError('Cannot modify an unmodifiable Vector3');
+  }
+
+  @override
+  set zy(Vector2 arg) {
+    throw UnsupportedError('Cannot modify an unmodifiable Vector3');
+  }
+
+  @override
+  set xyz(Vector3 arg) {
+    throw UnsupportedError('Cannot modify an unmodifiable Vector3');
+  }
+
+  @override
+  set xzy(Vector3 arg) {
+    throw UnsupportedError('Cannot modify an unmodifiable Vector3');
+  }
+
+  @override
+  set yxz(Vector3 arg) {
+    throw UnsupportedError('Cannot modify an unmodifiable Vector3');
+  }
+
+  @override
+  set yzx(Vector3 arg) {
+    throw UnsupportedError('Cannot modify an unmodifiable Vector3');
+  }
+
+  @override
+  set zxy(Vector3 arg) {
+    throw UnsupportedError('Cannot modify an unmodifiable Vector3');
+  }
+
+  @override
+  set zyx(Vector3 arg) {
     throw UnsupportedError('Cannot modify an unmodifiable Vector3');
   }
 
@@ -174,11 +260,12 @@ class UnmodifiableVector3.zero() extends Vector3 {
   set z(double z) {
     throw UnsupportedError('Cannot modify an unmodifiable Vector3');
   }
-
-  @override
-  Float32List get storage => super.storage.asUnmodifiableView();
 }
 
 extension UnmodifiableVector3Extension on Vector3 {
+  /// Returns an [UnmodifiableVector3] holding a copy of this vector's current
+  /// values.
+  ///
+  /// The copy does not follow later changes of this vector.
   Vector3 asUnmodifiableView() => UnmodifiableVector3(x, y, z);
 }

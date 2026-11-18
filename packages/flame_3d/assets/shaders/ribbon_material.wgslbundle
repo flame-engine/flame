@@ -1,0 +1,77 @@
+{
+  "vertex": "struct CameraMatrices {\n    view: mat4x4<f32>,\n    projection: mat4x4<f32>,\n    viewProjection: mat4x4<f32>,\n}\n\nstruct RibbonView {\n    viewer: vec4<f32>,\n    eye: vec4<f32>,\n    right: vec4<f32>,\n}\n\nstruct VertexOutput {\n    @location(0) fragUv: vec2<f32>,\n    @location(1) fragAcross: f32,\n    @location(2) fragColor: vec4<f32>,\n    @builtin(position) gl_Position: vec4<f32>,\n}\n\nvar<private> vertexPosition_1: vec3<f32>;\nvar<private> instanceModel0_1: vec4<f32>;\nvar<private> instanceModel1_1: vec4<f32>;\nvar<private> instanceModel2_1: vec4<f32>;\nvar<private> instanceModel3_1: vec4<f32>;\nvar<private> instanceColor_1: vec4<f32>;\nvar<private> instanceData_1: vec4<f32>;\n@group(0) @binding(0) \nvar<uniform> camera: CameraMatrices;\n@group(0) @binding(1) \nvar<uniform> ribbonView: RibbonView;\nvar<private> fragUv: vec2<f32>;\nvar<private> fragAcross: f32;\nvar<private> fragColor: vec4<f32>;\nvar<private> gl_Position: vec4<f32>;\n\nfn instanceModelMatrix() -> mat4x4<f32> {\n    var w: f32;\n\n    let _e7 = instanceModel3_1;\n    let _e9 = instanceColor_1;\n    let _e11 = instanceData_1;\n    w = max(_e7.w, min(min(_e9.w, _e11.x), -100000000000000000000000000000000000000f));\n    let _e19 = instanceModel0_1;\n    let _e20 = instanceModel1_1;\n    let _e21 = instanceModel2_1;\n    let _e22 = instanceModel3_1;\n    let _e23 = _e22.xyz;\n    let _e24 = w;\n    let _e28 = vec4<f32>(_e23.x, _e23.y, _e23.z, _e24);\n    return mat4x4<f32>(vec4<f32>(_e19.x, _e19.y, _e19.z, _e19.w), vec4<f32>(_e20.x, _e20.y, _e20.z, _e20.w), vec4<f32>(_e21.x, _e21.y, _e21.z, _e21.w), vec4<f32>(_e28.x, _e28.y, _e28.z, _e28.w));\n}\n\nfn viewRayAt(worldPos: vec3<f32>) -> vec3<f32> {\n    var worldPos_1: vec3<f32>;\n    var d: vec3<f32>;\n    var len: f32;\n    var local: vec3<f32>;\n\n    worldPos_1 = worldPos;\n    let _e26 = ribbonView;\n    if (_e26.viewer.w > 0.5f) {\n        {\n            let _e31 = ribbonView;\n            let _e34 = worldPos_1;\n            d = (_e31.eye.xyz - _e34);\n            let _e37 = d;\n            len = length(_e37);\n            let _e40 = len;\n            if (_e40 > 0.000001f) {\n                let _e43 = d;\n                let _e44 = len;\n                local = (_e43 / vec3(_e44));\n            } else {\n                let _e47 = ribbonView;\n                local = _e47.viewer.xyz;\n            }\n            let _e51 = local;\n            return _e51;\n        }\n    }\n    let _e52 = ribbonView;\n    return _e52.viewer.xyz;\n}\n\nfn sideAxis(tangent: vec3<f32>, fallback: vec3<f32>, toViewer: vec3<f32>) -> vec3<f32> {\n    var tangent_1: vec3<f32>;\n    var fallback_1: vec3<f32>;\n    var toViewer_1: vec3<f32>;\n    var side: vec3<f32>;\n    var sLen: f32;\n    var fb: vec3<f32>;\n    var fLen: f32;\n\n    tangent_1 = tangent;\n    fallback_1 = fallback;\n    toViewer_1 = toViewer;\n    let _e30 = tangent_1;\n    let _e31 = toViewer_1;\n    side = cross(_e30, _e31);\n    let _e34 = side;\n    sLen = length(_e34);\n    let _e37 = sLen;\n    if (_e37 > 0.000001f) {\n        {\n            let _e40 = side;\n            let _e41 = sLen;\n            return (_e40 / vec3(_e41));\n        }\n    }\n    let _e44 = fallback_1;\n    let _e45 = toViewer_1;\n    fb = cross(_e44, _e45);\n    let _e48 = fb;\n    fLen = length(_e48);\n    let _e51 = fLen;\n    if (_e51 > 0.000001f) {\n        {\n            let _e54 = fb;\n            let _e55 = fLen;\n            return (_e54 / vec3(_e55));\n        }\n    }\n    let _e58 = ribbonView;\n    return _e58.right.xyz;\n}\n\nfn main_1() {\n    var seg: mat4x4<f32>;\n    var p0: vec3<f32>;\n    var w0: f32;\n    var p1: vec3<f32>;\n    var w1: f32;\n    var t0: vec3<f32>;\n    var a0: f32;\n    var t1: vec3<f32>;\n    var a1: f32;\n    var s: f32;\n    var sideSign: f32;\n    var chord: vec3<f32>;\n    var center: vec3<f32>;\n    var local_1: vec3<f32>;\n    var tangent_2: vec3<f32>;\n    var halfWidth: f32;\n    var opacity: f32;\n    var toViewer_2: vec3<f32>;\n    var across: vec3<f32>;\n    var worldPos_2: vec3<f32>;\n    var clipPos: vec4<f32>;\n    var u: f32;\n\n    let _e24 = instanceModelMatrix();\n    seg = _e24;\n    let _e28 = seg[0];\n    p0 = _e28.xyz;\n    let _e33 = seg[0];\n    w0 = _e33.w;\n    let _e38 = seg[1];\n    p1 = _e38.xyz;\n    let _e43 = seg[1];\n    w1 = _e43.w;\n    let _e48 = seg[2];\n    t0 = _e48.xyz;\n    let _e53 = seg[2];\n    a0 = _e53.w;\n    let _e58 = seg[3];\n    t1 = _e58.xyz;\n    let _e63 = seg[3];\n    a1 = clamp(_e63.w, 0f, 1f);\n    let _e69 = vertexPosition_1;\n    s = clamp(_e69.x, 0f, 1f);\n    let _e75 = vertexPosition_1;\n    sideSign = _e75.y;\n    let _e78 = p1;\n    let _e79 = p0;\n    chord = (_e78 - _e79);\n    let _e82 = p0;\n    let _e83 = p1;\n    let _e84 = s;\n    center = mix(_e82, _e83, vec3(_e84));\n    let _e88 = s;\n    if (_e88 < 0.5f) {\n        let _e91 = t0;\n        local_1 = _e91;\n    } else {\n        let _e92 = t1;\n        local_1 = _e92;\n    }\n    let _e94 = local_1;\n    tangent_2 = _e94;\n    let _e96 = w0;\n    let _e97 = w1;\n    let _e98 = s;\n    halfWidth = mix(_e96, _e97, _e98);\n    let _e101 = a0;\n    let _e102 = a1;\n    let _e103 = s;\n    opacity = mix(_e101, _e102, _e103);\n    let _e106 = center;\n    let _e107 = viewRayAt(_e106);\n    toViewer_2 = _e107;\n    let _e109 = tangent_2;\n    let _e110 = chord;\n    let _e111 = toViewer_2;\n    let _e112 = sideAxis(_e109, _e110, _e111);\n    across = _e112;\n    let _e114 = center;\n    let _e115 = across;\n    let _e116 = sideSign;\n    let _e117 = halfWidth;\n    worldPos_2 = (_e114 + (_e115 * (_e116 * _e117)));\n    let _e122 = camera;\n    let _e124 = worldPos_2;\n    clipPos = (_e122.viewProjection * vec4<f32>(_e124.x, _e124.y, _e124.z, 1f));\n    let _e133 = clipPos;\n    let _e135 = ribbonView;\n    let _e138 = clipPos;\n    let _e143 = clipPos;\n    clipPos.z = clamp((_e133.z - (_e135.eye.w * _e138.w)), 0f, _e143.w);\n    let _e147 = clipPos;\n    gl_Position = _e147;\n    let _e148 = instanceData_1;\n    let _e150 = instanceData_1;\n    let _e152 = s;\n    u = mix(_e148.x, _e150.y, _e152);\n    let _e155 = u;\n    let _e158 = sideSign;\n    fragUv = vec2<f32>(_e155, (0.5f + (0.5f * _e158)));\n    let _e162 = sideSign;\n    fragAcross = _e162;\n    let _e163 = instanceColor_1;\n    let _e164 = _e163.xyz;\n    let _e165 = instanceColor_1;\n    let _e167 = opacity;\n    fragColor = vec4<f32>(_e164.x, _e164.y, _e164.z, (_e165.w * _e167));\n    return;\n}\n\n@vertex \nfn main(@location(0) vertexPosition: vec3<f32>, @location(1) instanceModel0: vec4<f32>, @location(2) instanceModel1: vec4<f32>, @location(3) instanceModel2: vec4<f32>, @location(4) instanceModel3: vec4<f32>, @location(5) instanceColor: vec4<f32>, @location(6) instanceData: vec4<f32>) -> VertexOutput {\n    vertexPosition_1 = vertexPosition;\n    instanceModel0_1 = instanceModel0;\n    instanceModel1_1 = instanceModel1;\n    instanceModel2_1 = instanceModel2;\n    instanceModel3_1 = instanceModel3;\n    instanceColor_1 = instanceColor;\n    instanceData_1 = instanceData;\n    main_1();\n    let _e49 = fragUv;\n    let _e51 = fragAcross;\n    let _e53 = fragColor;\n    let _e55 = gl_Position;\n    return VertexOutput(_e49, _e51, _e53, _e55);\n}\n",
+  "fragment": "struct RibbonLook {\n    albedoColor: vec4<f32>,\n    params: vec4<f32>,\n}\n\nstruct FragmentOutput {\n    @location(0) outColor: vec4<f32>,\n}\n\nvar<private> fragUv_1: vec2<f32>;\nvar<private> fragAcross_1: f32;\nvar<private> fragColor_1: vec4<f32>;\nvar<private> outColor: vec4<f32>;\n@group(1) @binding(0) \nvar albedoTexture: texture_2d<f32>;\n@group(1) @binding(1) \nvar albedoTextureSampler: sampler;\n@group(1) @binding(2) \nvar<uniform> ribbon: RibbonLook;\n\nfn main_1() {\n    var sampled: vec4<f32> = vec4(1f);\n    var edge: f32;\n    var across: f32;\n    var local: f32;\n    var fade: f32;\n    var color: vec4<f32>;\n    var alpha: f32;\n\n    let _e14 = ribbon;\n    if (_e14.params.z > 0.5f) {\n        {\n            let _e19 = fragUv_1;\n            let _e20 = textureSample(albedoTexture, albedoTextureSampler, _e19);\n            sampled = _e20;\n        }\n    }\n    let _e21 = ribbon;\n    edge = clamp(_e21.params.x, 0f, 1f);\n    let _e28 = fragAcross_1;\n    across = abs(_e28);\n    let _e31 = edge;\n    if (_e31 > 0.0001f) {\n        let _e36 = edge;\n        let _e39 = across;\n        local = (1f - smoothstep((1f - _e36), 1f, _e39));\n    } else {\n        local = 1f;\n    }\n    let _e44 = local;\n    fade = _e44;\n    let _e46 = sampled;\n    let _e47 = ribbon;\n    let _e50 = fragColor_1;\n    color = ((_e46 * _e47.albedoColor) * _e50);\n    let _e53 = color;\n    let _e55 = fade;\n    alpha = clamp((_e53.w * _e55), 0f, 1f);\n    let _e61 = alpha;\n    let _e62 = ribbon;\n    if (_e61 < _e62.params.w) {\n        {\n            discard;\n        }\n    }\n    let _e66 = ribbon;\n    if (_e66.params.y > 0.5f) {\n        {\n            let _e71 = color;\n            let _e73 = alpha;\n            let _e74 = (_e71.xyz * _e73);\n            let _e75 = alpha;\n            outColor = vec4<f32>(_e74.x, _e74.y, _e74.z, _e75);\n            return;\n        }\n    } else {\n        {\n            let _e80 = color;\n            let _e81 = _e80.xyz;\n            let _e82 = alpha;\n            outColor = vec4<f32>(_e81.x, _e81.y, _e81.z, _e82);\n            return;\n        }\n    }\n}\n\n@fragment \nfn main(@location(0) fragUv: vec2<f32>, @location(1) fragAcross: f32, @location(2) fragColor: vec4<f32>) -> FragmentOutput {\n    fragUv_1 = fragUv;\n    fragAcross_1 = fragAcross;\n    fragColor_1 = fragColor;\n    main_1();\n    let _e24 = outColor;\n    return FragmentOutput(_e24);\n}\n",
+  "slots": {
+    "CameraMatrices": {
+      "group": 0,
+      "binding": 0,
+      "sizeInBytes": 192,
+      "memberOffsets": {
+        "view": 0,
+        "projection": 64,
+        "viewProjection": 128
+      }
+    },
+    "RibbonView": {
+      "group": 0,
+      "binding": 1,
+      "sizeInBytes": 48,
+      "memberOffsets": {
+        "viewer": 0,
+        "eye": 16,
+        "right": 32
+      }
+    },
+    "RibbonLook": {
+      "group": 1,
+      "binding": 2,
+      "sizeInBytes": 32,
+      "memberOffsets": {
+        "albedoColor": 0,
+        "params": 16
+      }
+    },
+    "albedoTexture": {
+      "group": 1,
+      "binding": 0,
+      "samplerBinding": 1
+    }
+  },
+  "inputs": [
+    {
+      "name": "vertexPosition",
+      "location": 0,
+      "components": 3
+    },
+    {
+      "name": "instanceModel0",
+      "location": 1,
+      "components": 4
+    },
+    {
+      "name": "instanceModel1",
+      "location": 2,
+      "components": 4
+    },
+    {
+      "name": "instanceModel2",
+      "location": 3,
+      "components": 4
+    },
+    {
+      "name": "instanceModel3",
+      "location": 4,
+      "components": 4
+    },
+    {
+      "name": "instanceColor",
+      "location": 5,
+      "components": 4
+    },
+    {
+      "name": "instanceData",
+      "location": 6,
+      "components": 4
+    }
+  ]
+}

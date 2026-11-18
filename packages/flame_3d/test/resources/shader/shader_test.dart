@@ -98,6 +98,7 @@ final class _FakeBackend(final List<_FakeUniformSlot> slots)
     required int width,
     required int height,
     required GpuPixelFormat format,
+    int mipLevelCount = 1,
   }) => throw UnimplementedError();
 
   @override
@@ -110,6 +111,7 @@ final class _FakeBackend(final List<_FakeUniformSlot> slots)
   GpuPipeline createPipeline({
     required GpuShader vertexShader,
     required GpuShader fragmentShader,
+    GpuVertexLayout? vertexLayout,
   }) => throw UnimplementedError();
 
   @override
@@ -135,10 +137,13 @@ class _FakeShader(final List<_FakeUniformSlot> slots) implements GpuShader {
   GpuUniformSlot getUniformSlot(String slot) {
     return slots.firstWhere((candidate) => candidate.name == slot);
   }
+
+  @override
+  List<GpuShaderInput>? get inputs => null;
 }
 
 class _FakeUniformSlot(
-  final String name,
+  @override final String name,
   @override final int sizeInBytes,
   final Map<String, int> offsets,
 ) implements GpuUniformSlot {
@@ -150,9 +155,7 @@ class _RecordingDevice({super.backend}) extends GraphicsDevice {
   final Map<String, Float32List> uniforms = {};
 
   @override
-  void bindUniform(GpuUniformSlot slot, ByteBuffer buffer) {
-    uniforms[(slot as _FakeUniformSlot).name] = Float32List.fromList(
-      buffer.asFloat32List(),
-    );
+  void bindUniformBlock(UniformBlock block) {
+    uniforms[block.slot.name] = Float32List.fromList(block.data);
   }
 }

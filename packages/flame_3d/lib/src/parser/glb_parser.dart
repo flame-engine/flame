@@ -24,27 +24,34 @@ class GlbParser() extends ModelParser {
 
   Future<Glb> parseGlb(String filePath) async {
     final content = await Flame.assets.readBinaryFile(filePath);
+    return parseGlbBytes(content, prefix: ModelParser.prefix(filePath));
+  }
 
+  /// Parses an in-memory `.glb` binary buffer into its header and [GlbChunk]s.
+  Glb parseGlbBytes(Uint8List content, {String prefix = ''}) {
+    if (content.length < 12) {
+      throw FormatException('GLB buffer too short: ${content.length} bytes');
+    }
     var cursor = 0;
     Uint8List read(int bytes) {
       cursor += bytes;
-      return content.sublist(cursor - bytes, cursor);
+      return Uint8List.sublistView(content, cursor - bytes, cursor);
     }
 
     final magic = _parseString(read(4));
     if (magic != 'glTF') {
-      throw Exception('Invalid magic number $magic');
+      throw FormatException('Invalid magic number $magic');
     }
 
     final version = _parseInt(read(4));
     if (version != 2) {
-      throw Exception('Invalid version $version');
+      throw FormatException('Invalid version $version');
     }
 
     final length = _parseInt(read(4));
 
     final chunks = <GlbChunk>[];
-    while (cursor < content.length) {
+    while (cursor + 8 <= content.length) {
       final chunkLength = _parseInt(read(4));
       final chunkType = _parseString(read(4));
       final chunkData = read(chunkLength);
@@ -59,7 +66,7 @@ class GlbParser() extends ModelParser {
     }
 
     return Glb(
-      prefix: ModelParser.prefix(filePath),
+      prefix: prefix,
       version: version,
       length: length,
       chunks: chunks,
@@ -75,7 +82,7 @@ class Glb({
 }) {
   Map<String, Object?> jsonChunk() {
     final chunk = chunks.firstWhere((GlbChunk chunk) => chunk.type == 'JSON');
-    return jsonDecode(_parseString(chunk.data)) as Map<String, Object?>;
+    return jsonDecode(utf8.decode(chunk.data)) as Map<String, Object?>;
   }
 
   Iterable<GlbChunk> binaryChunks() {
@@ -94,7 +101,7 @@ class Glb({
 }
 
 int _parseInt(Uint8List bytes) {
-  final byteData = ByteData.view(bytes.buffer);
+  final byteData = ByteData.sublistView(bytes);
   return ComponentType.unsignedInt.parseData(byteData).toInt();
 }
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/events.dart';
+import 'package:flame/game.dart';
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
@@ -9,6 +10,7 @@ import 'package:flame_3d_example/components/player.dart';
 import 'package:flame_3d_example/components/room_bounds.dart';
 import 'package:flame_3d_example/example_camera_3d.dart';
 import 'package:flame_3d_example/scenarios/game_scenario.dart';
+import 'package:flame_3d_example/scenarios/standalone_scenario.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -17,6 +19,10 @@ class ExampleGame3D()
     with DragCallbacks, ScrollCallbacks, HasKeyboardHandlerComponents {
   late final Player player;
   Msaa _msaa = Msaa.off;
+
+  /// The game of a [StandaloneScenario] that the app shows instead of this
+  /// one, or null to show this one.
+  final ValueNotifier<Game Function()?> standaloneGame = ValueNotifier(null);
 
   this
     : super(
@@ -50,6 +56,12 @@ class ExampleGame3D()
           return KeyEventResult.handled;
         } else if (event.logicalKey == LogicalKeyboardKey.keyO) {
           _msaa = _msaa == Msaa.off ? Msaa.sample4 : Msaa.off;
+          return KeyEventResult.handled;
+        } else if (event.logicalKey == LogicalKeyboardKey.keyH) {
+          GameScenario.scenarios['houses']?.setup(this);
+          return KeyEventResult.handled;
+        } else if (event.logicalKey == LogicalKeyboardKey.keyT) {
+          GameScenario.scenarios['showcase']?.setup(this);
           return KeyEventResult.handled;
         }
       }

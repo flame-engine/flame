@@ -4,17 +4,22 @@ import 'dart:ui';
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
+import 'package:meta/meta.dart';
 
 /// {@template shader}
 /// A shader [Resource] that represents a compiled shader program and the
 /// uniform data that will be bound to it.
 ///
-/// Uniform values are set by string key (`'VertexInfo.model'`,
+/// Uniform values are set by string key (`'Material.albedoColor'`,
 /// `'Lights.positions[0]'`, `'someColor'`) and are automatically packed
 /// into GPU buffers using shader reflection for layout.
 ///
 /// Samplers are auto-detected at compile time via [GpuUniformSlot.sizeInBytes]
 /// returning `null` — no need to declare them separately.
+///
+/// Some uniform blocks are filled by the [RenderContext3D] instead of by the
+/// material, once per render pass (see [RenderContext3D.passUniforms]): a
+/// shader declares them like any other slot and does not set them.
 /// {@endtemplate}
 class Shader._(
   final GpuShader Function(String key) _getShader, {
@@ -41,20 +46,50 @@ class Shader._(
        );
 
   final Map<String, GpuUniformSlot> _slots = {};
-  final Map<String, _SlotBinding> _bindings = {};
+  final Map<String, UniformBlock> _blocks = {};
+  final Map<String, Texture> _textures = {};
   final Map<String, _UniformField> _fields = {};
+
+  /// Incremented every time the shader resource is created, so that state
+  /// derived from its slots can tell when it is stale.
+  @internal
+  int get generation => _generation;
+  int _generation = 0;
+
+  /// State the render context derives from this shader's slots.
+  @internal
+  Object? renderCache;
+
+  /// The resolved slot named [name].
+  ///
+  /// Throws when [name] is not one of the declared [slots].
+  GpuUniformSlot slot(String name) {
+    resource;
+    return _slots[name] ??
+        (throw StateError('Shader "$entryPoint" has no slot "$name"'));
+  }
+
+  /// The uniform block named [name] holding this shader's own values,
+  /// created the first time it is requested.
+  UniformBlock block(String name) {
+    resource;
+    return _blocks[name] ??= UniformBlock(slot(name));
+  }
+
+  /// The texture set for the sampler [name], or `null` when none was set.
+  Texture? texture(String name) => _textures[name];
 
   /// Set a [Texture] at the given [key].
   void setTexture(String key, Texture texture) {
-    final binding = switch (_bindings.putIfAbsent(
-      key,
-      () => _TextureBinding(_slots[key]!, texture),
-    )) {
-      final _TextureBinding binding => binding,
-      _ => throw StateError('Slot "$key" is a uniform block, not a sampler'),
-    };
-
-    binding.resource = texture;
+    resource;
+    final slot = _slots[key];
+    if (slot == null) {
+      throw StateError('Shader "$entryPoint" has no slot "$key"');
+    }
+    if (slot.sizeInBytes != null) {
+      throw StateError('Slot "$key" is a uniform block, not a sampler');
+    }
+    _textures[key] = texture;
   }
 
   /// Set a [Vector2] at the given [key].
@@ -97,15 +132,16 @@ class Shader._(
     return _set(key, _colorBuf);
   }
 
-  /// Bind all uniform data and textures to the [device].
+  /// Bind all uniform blocks and textures this shader has values for to the
+  /// [device].
+  ///
+  /// Unchanged blocks are not uploaded again within a frame.
   void bind(GraphicsDevice device) {
-    for (final binding in _bindings.values) {
-      switch (binding) {
-        case _UniformBinding(:final slot, :final resource):
-          device.bindUniform(slot, resource);
-        case _TextureBinding(:final slot, :final resource):
-          device.bindTexture(slot, resource);
-      }
+    for (final block in _blocks.values) {
+      device.bindUniformBlock(block);
+    }
+    for (final MapEntry(:key, value: texture) in _textures.entries) {
+      device.bindTexture(_slots[key]!, texture);
     }
   }
 
@@ -113,8 +149,11 @@ class Shader._(
   GpuShader createResource() {
     // Always clear up old data to prevent memory leaks.
     _slots.clear();
-    _bindings.clear();
+    _blocks.clear();
+    _textures.clear();
     _fields.clear();
+    _generation++;
+    renderCache = null;
 
     final shader = _getShader(entryPoint);
     for (final name in slots) {
@@ -128,30 +167,33 @@ class Shader._(
   }
 
   _UniformField _resolveField(String key) {
-    final (slot, field, index) = parseKey(key);
+    final (slotName, field, index) = parseKey(key);
+    resource;
+    final slot = _slots[slotName];
+    if (slot == null) {
+      throw StateError('Shader "$entryPoint" has no slot "$slotName"');
+    }
+    if (slot.sizeInBytes == null) {
+      throw StateError('Slot "$key" is a sampler block, not a uniform');
+    }
+    final block = _blocks[slotName] ??= UniformBlock(slot);
 
-    final binding = switch (_bindings.putIfAbsent(
-      slot,
-      () => _UniformBinding(_slots[slot]!),
-    )) {
-      final _UniformBinding binding => binding,
-      _ => throw StateError('Slot "$key" is a sampler block, not a uniform'),
-    };
-
-    return _fields[key] = _UniformField(
-      binding,
-      switch (field) {
-        final field? => binding.memberOffset(field),
-        _ => null,
-      },
-      index,
-    );
+    final int? offset;
+    if (field != null) {
+      offset = block.memberOffset(field);
+      if (offset == null) {
+        throw StateError('Field "$field" not found in uniform struct');
+      }
+    } else {
+      offset = null;
+    }
+    return _fields[key] = _UniformField(block, offset, index);
   }
 
   /// Parse a uniform key into (structName, memberName, arrayIndex).
   ///
   /// Examples:
-  /// - `'VertexInfo.model'` becomes `('VertexInfo', 'model', null)`
+  /// - `'Material.albedoColor'` becomes `('Material', 'albedoColor', null)`
   /// - `'Lights.positions[0]'` becomes `('Lights', 'positions', 0)`
   /// - `'albedoTexture'` becomes `('albedoTexture', null, null)`
   static (String, String?, int?) parseKey(String key) {
@@ -182,65 +224,25 @@ class Shader._(
   }
 }
 
-sealed class _SlotBinding<T>(final GpuUniformSlot slot) {
-  T get resource;
-}
-
-class _UniformBinding(super.slot) extends _SlotBinding<ByteBuffer> {
-  @override
-  ByteBuffer get resource => _data.buffer;
-
-  final Float32List _data = Float32List(
-    slot.sizeInBytes! ~/ Float32List.bytesPerElement,
-  );
-
-  /// The offset of a struct [member] within the buffer, in floats.
-  int memberOffset(String member) {
-    final bytes = slot.getMemberOffsetInBytes(member);
-    if (bytes == null) {
-      throw StateError('Field "$member" not found in uniform struct');
-    }
-    return bytes ~/ Float32List.bytesPerElement;
-  }
-
-  /// Write a struct member (optionally array-indexed) directly into the buffer,
-  /// starting from the member's [baseOffset].
-  void setField(int baseOffset, int? index, Float32List data) {
-    final offset = switch (index) {
-      final i? => baseOffset + i * _std140ArrayStride(data.length),
-      _ => baseOffset,
-    };
-
-    _data.setRange(offset, offset + data.length, data);
-  }
-
-  /// Write raw data for a standalone (non-struct) uniform.
-  void setRaw(Float32List data) {
-    _data.setRange(0, data.length, data);
-  }
-
-  /// Std140 array element stride in floats: round up to 4-float (16-byte)
-  /// boundary.
-  static int _std140ArrayStride(int elementFloats) {
-    return (elementFloats + 3) & ~3;
-  }
-}
-
-class _TextureBinding(super.slot, @override var Texture resource)
-    extends _SlotBinding<Texture>;
-
-/// A uniform key resolved once to the binding and offset it writes to.
+/// A uniform key resolved once to the block and offset it writes to.
 class _UniformField(
-  final _UniformBinding _binding,
+  final UniformBlock _block,
   final int? _memberOffset,
   final int? _index,
 ) {
   void write(Float32List data) {
     switch (_memberOffset) {
       case final offset?:
-        _binding.setField(offset, _index, data);
+        _block.writeAt(
+          switch (_index) {
+            // Std140 array element stride: round up to a 16-byte boundary.
+            final i? => offset + i * ((data.length + 3) & ~3),
+            _ => offset,
+          },
+          data,
+        );
       case null:
-        _binding.setRaw(data);
+        _block.writeAt(0, data);
     }
   }
 }

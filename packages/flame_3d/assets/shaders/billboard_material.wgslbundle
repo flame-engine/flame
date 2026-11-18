@@ -1,0 +1,156 @@
+{
+  "vertex": "struct CameraMatrices {\n    view: mat4x4<f32>,\n    projection: mat4x4<f32>,\n    viewProjection: mat4x4<f32>,\n}\n\nstruct BillboardFrame {\n    camRight: vec4<f32>,\n    camUp: vec4<f32>,\n    camBack: vec4<f32>,\n}\n\nstruct VertexOutput {\n    @location(0) fragPosition: vec3<f32>,\n    @location(1) fragNormal: vec3<f32>,\n    @location(2) fragUv: vec2<f32>,\n    @location(3) fragColor: vec4<f32>,\n    @location(4) fragData: vec4<f32>,\n    @builtin(position) gl_Position: vec4<f32>,\n}\n\nvar<private> vertexPosition_1: vec3<f32>;\nvar<private> vertexTexCoord_1: vec2<f32>;\nvar<private> instanceModel0_1: vec4<f32>;\nvar<private> instanceModel1_1: vec4<f32>;\nvar<private> instanceModel2_1: vec4<f32>;\nvar<private> instanceModel3_1: vec4<f32>;\nvar<private> instanceColor_1: vec4<f32>;\nvar<private> instanceData_1: vec4<f32>;\n@group(0) @binding(0) \nvar<uniform> camera: CameraMatrices;\n@group(0) @binding(1) \nvar<uniform> bFrame: BillboardFrame;\nvar<private> fragPosition: vec3<f32>;\nvar<private> fragNormal: vec3<f32>;\nvar<private> fragUv: vec2<f32>;\nvar<private> fragColor: vec4<f32>;\nvar<private> fragData: vec4<f32>;\nvar<private> gl_Position: vec4<f32>;\n\nfn instanceModelMatrix() -> mat4x4<f32> {\n    var w: f32;\n\n    let _e8 = instanceModel3_1;\n    let _e10 = instanceColor_1;\n    let _e12 = instanceData_1;\n    w = max(_e8.w, min(min(_e10.w, _e12.x), -100000000000000000000000000000000000000f));\n    let _e20 = instanceModel0_1;\n    let _e21 = instanceModel1_1;\n    let _e22 = instanceModel2_1;\n    let _e23 = instanceModel3_1;\n    let _e24 = _e23.xyz;\n    let _e25 = w;\n    let _e29 = vec4<f32>(_e24.x, _e24.y, _e24.z, _e25);\n    return mat4x4<f32>(vec4<f32>(_e20.x, _e20.y, _e20.z, _e20.w), vec4<f32>(_e21.x, _e21.y, _e21.z, _e21.w), vec4<f32>(_e22.x, _e22.y, _e22.z, _e22.w), vec4<f32>(_e29.x, _e29.y, _e29.z, _e29.w));\n}\n\nfn main_1() {\n    var inst: mat4x4<f32>;\n    var center: vec3<f32>;\n    var width: f32;\n    var lockedUp: vec3<f32>;\n    var height: f32;\n    var uvRect: vec4<f32>;\n    var anchorY: f32;\n    var tiltRad: f32;\n    var rollRad: f32;\n    var mode: f32;\n    var right: vec3<f32>;\n    var up: vec3<f32>;\n    var normal: vec3<f32>;\n    var local: vec3<f32>;\n    var axisUp: vec3<f32>;\n    var side: vec3<f32>;\n    var faceN: vec3<f32>;\n    var ct: f32;\n    var st: f32;\n    var localCorner: vec2<f32>;\n    var cr: f32;\n    var sr: f32;\n    var worldPos: vec3<f32>;\n\n    let _e27 = instanceModelMatrix();\n    inst = _e27;\n    let _e31 = inst[0];\n    center = _e31.xyz;\n    let _e36 = inst[0];\n    width = _e36.w;\n    let _e41 = inst[1];\n    lockedUp = _e41.xyz;\n    let _e46 = inst[1];\n    height = _e46.w;\n    let _e51 = inst[2];\n    uvRect = _e51;\n    let _e55 = inst[3];\n    anchorY = _e55.x;\n    let _e60 = inst[3];\n    tiltRad = _e60.y;\n    let _e65 = inst[3];\n    rollRad = _e65.z;\n    let _e70 = inst[3];\n    mode = _e70.w;\n    let _e73 = bFrame;\n    right = _e73.camRight.xyz;\n    let _e77 = bFrame;\n    up = _e77.camUp.xyz;\n    let _e81 = bFrame;\n    normal = _e81.camBack.xyz;\n    let _e85 = mode;\n    if (_e85 > 0.5f) {\n        {\n            let _e88 = lockedUp;\n            if (length(_e88) > 0.00001f) {\n                let _e92 = lockedUp;\n                local = normalize(_e92);\n            } else {\n                let _e94 = up;\n                local = _e94;\n            }\n            let _e96 = local;\n            axisUp = _e96;\n            let _e98 = right;\n            let _e99 = axisUp;\n            let _e100 = right;\n            let _e101 = axisUp;\n            side = (_e98 - (_e99 * dot(_e100, _e101)));\n            let _e106 = side;\n            let _e107 = side;\n            if (dot(_e106, _e107) < 0.00000001f) {\n                {\n                    let _e111 = axisUp;\n                    let _e112 = normal;\n                    side = cross(_e111, _e112);\n                }\n            }\n            let _e114 = side;\n            right = normalize(_e114);\n            let _e116 = right;\n            let _e117 = axisUp;\n            faceN = normalize(cross(_e116, _e117));\n            let _e121 = faceN;\n            let _e122 = normal;\n            if (dot(_e121, _e122) < 0f) {\n                {\n                    let _e126 = faceN;\n                    faceN = -(_e126);\n                }\n            }\n            let _e128 = tiltRad;\n            ct = cos(_e128);\n            let _e131 = tiltRad;\n            st = sin(_e131);\n            let _e134 = axisUp;\n            let _e135 = ct;\n            let _e137 = faceN;\n            let _e138 = st;\n            up = normalize(((_e134 * _e135) - (_e137 * _e138)));\n            let _e142 = right;\n            let _e143 = up;\n            normal = normalize(cross(_e142, _e143));\n        }\n    }\n    let _e146 = vertexPosition_1;\n    let _e148 = vertexPosition_1;\n    let _e150 = anchorY;\n    localCorner = vec2<f32>(_e146.x, (_e148.y - _e150));\n    let _e154 = rollRad;\n    if (abs(_e154) > 0.00001f) {\n        {\n            let _e158 = rollRad;\n            cr = cos(_e158);\n            let _e161 = rollRad;\n            sr = sin(_e161);\n            let _e164 = localCorner;\n            let _e166 = cr;\n            let _e168 = localCorner;\n            let _e170 = sr;\n            let _e173 = localCorner;\n            let _e175 = sr;\n            let _e177 = localCorner;\n            let _e179 = cr;\n            localCorner = vec2<f32>(((_e164.x * _e166) - (_e168.y * _e170)), ((_e173.x * _e175) + (_e177.y * _e179)));\n        }\n    }\n    let _e183 = center;\n    let _e184 = right;\n    let _e185 = localCorner;\n    let _e187 = width;\n    let _e191 = up;\n    let _e192 = localCorner;\n    let _e194 = height;\n    worldPos = ((_e183 + (_e184 * (_e185.x * _e187))) + (_e191 * (_e192.y * _e194)));\n    let _e199 = worldPos;\n    fragPosition = _e199;\n    let _e200 = normal;\n    fragNormal = _e200;\n    let _e201 = uvRect;\n    let _e203 = vertexTexCoord_1;\n    let _e204 = uvRect;\n    fragUv = (_e201.xy + (_e203 * _e204.zw));\n    let _e208 = instanceColor_1;\n    fragColor = _e208;\n    let _e209 = instanceData_1;\n    fragData = _e209;\n    let _e211 = camera;\n    let _e213 = worldPos;\n    gl_Position = (_e211.viewProjection * vec4<f32>(_e213.x, _e213.y, _e213.z, 1f));\n    return;\n}\n\n@vertex \nfn main(@location(0) vertexPosition: vec3<f32>, @location(1) vertexTexCoord: vec2<f32>, @location(2) instanceModel0: vec4<f32>, @location(3) instanceModel1: vec4<f32>, @location(4) instanceModel2: vec4<f32>, @location(5) instanceModel3: vec4<f32>, @location(6) instanceColor: vec4<f32>, @location(7) instanceData: vec4<f32>) -> VertexOutput {\n    vertexPosition_1 = vertexPosition;\n    vertexTexCoord_1 = vertexTexCoord;\n    instanceModel0_1 = instanceModel0;\n    instanceModel1_1 = instanceModel1;\n    instanceModel2_1 = instanceModel2;\n    instanceModel3_1 = instanceModel3;\n    instanceColor_1 = instanceColor;\n    instanceData_1 = instanceData;\n    main_1();\n    let _e57 = fragPosition;\n    let _e59 = fragNormal;\n    let _e61 = fragUv;\n    let _e63 = fragColor;\n    let _e65 = fragData;\n    let _e67 = gl_Position;\n    return VertexOutput(_e57, _e59, _e61, _e63, _e65, _e67);\n}\n",
+  "fragment": "struct BillboardLook {\n    albedoColor: vec4<f32>,\n    params: vec4<f32>,\n}\n\nstruct AmbientLight {\n    color: vec4<f32>,\n    intensity: f32,\n}\n\nstruct Lights {\n    numLights: f32,\n    positions: array<vec3<f32>, 8>,\n    colors: array<vec4<f32>, 8>,\n    intensities: array<vec4<f32>, 8>,\n    ranges: array<vec4<f32>, 8>,\n}\n\nstruct DirectionalLights {\n    numLights: f32,\n    directions: array<vec4<f32>, 4>,\n    colors: array<vec4<f32>, 4>,\n}\n\nstruct SpotLights {\n    numLights: f32,\n    positions: array<vec3<f32>, 4>,\n    directions: array<vec4<f32>, 4>,\n    colors: array<vec4<f32>, 4>,\n    cones: array<vec4<f32>, 4>,\n}\n\nstruct HemisphereLight {\n    skyColor: vec4<f32>,\n    groundColor: vec4<f32>,\n    up: vec3<f32>,\n    intensity: f32,\n}\n\nstruct Camera {\n    view: mat4x4<f32>,\n    projection: mat4x4<f32>,\n    position: vec3<f32>,\n}\n\nstruct Fog {\n    color: vec4<f32>,\n    params: vec4<f32>,\n    height: vec4<f32>,\n}\n\nstruct FragmentOutput {\n    @location(0) outColor: vec4<f32>,\n}\n\nvar<private> fragPosition_1: vec3<f32>;\nvar<private> fragNormal_1: vec3<f32>;\nvar<private> fragUv_1: vec2<f32>;\nvar<private> fragColor_1: vec4<f32>;\nvar<private> fragData_1: vec4<f32>;\nvar<private> outColor: vec4<f32>;\n@group(1) @binding(0) \nvar albedoTexture: texture_2d<f32>;\n@group(1) @binding(1) \nvar albedoTextureSampler: sampler;\n@group(1) @binding(2) \nvar<uniform> bLook: BillboardLook;\n@group(1) @binding(3) \nvar<uniform> ambientLight: AmbientLight;\n@group(1) @binding(4) \nvar<uniform> lights: Lights;\n@group(1) @binding(5) \nvar<uniform> directionalLights: DirectionalLights;\n@group(1) @binding(6) \nvar<uniform> spotLights: SpotLights;\n@group(1) @binding(7) \nvar<uniform> hemisphereLight: HemisphereLight;\n@group(1) @binding(8) \nvar<uniform> camera: Camera;\n@group(1) @binding(9) \nvar<uniform> fog: Fog;\nvar<private> gl_FragCoord_1: vec4<f32>;\n\nfn applyFog(surfaceColor: vec3<f32>, worldPosition: vec3<f32>, viewMatrix: mat4x4<f32>, projectionMatrix: mat4x4<f32>, cameraPosition: vec3<f32>) -> vec3<f32> {\n    var surfaceColor_1: vec3<f32>;\n    var worldPosition_1: vec3<f32>;\n    var viewMatrix_1: mat4x4<f32>;\n    var projectionMatrix_1: mat4x4<f32>;\n    var cameraPosition_1: vec3<f32>;\n    var maxOpacity: f32;\n    var dist: f32;\n    var p: vec4<f32>;\n    var pastStart: f32;\n    var local: f32;\n    var distFactor: f32;\n    var heightFactor: f32 = 1f;\n    var h: vec4<f32>;\n    var elevation: f32;\n    var amount: f32;\n\n    surfaceColor_1 = surfaceColor;\n    worldPosition_1 = worldPosition;\n    viewMatrix_1 = viewMatrix;\n    projectionMatrix_1 = projectionMatrix;\n    cameraPosition_1 = cameraPosition;\n    let _e80 = fog;\n    maxOpacity = _e80.color.w;\n    let _e84 = maxOpacity;\n    if (_e84 <= 0f) {\n        {\n            let _e87 = surfaceColor_1;\n            return _e87;\n        }\n    }\n    let _e93 = projectionMatrix_1[3][3];\n    if (_e93 > 0.5f) {\n        {\n            let _e97 = viewMatrix_1;\n            let _e98 = worldPosition_1;\n            dist = max(0f, -((_e97 * vec4<f32>(_e98.x, _e98.y, _e98.z, 1f)).z));\n        }\n    } else {\n        {\n            let _e108 = worldPosition_1;\n            let _e109 = cameraPosition_1;\n            dist = length((_e108 - _e109));\n        }\n    }\n    let _e112 = fog;\n    p = _e112.params;\n    let _e116 = dist;\n    let _e117 = p;\n    pastStart = max(0f, (_e116 - _e117.x));\n    let _e122 = p;\n    if (_e122.z > 0f) {\n        let _e127 = p;\n        let _e130 = pastStart;\n        local = (1f - exp((-(_e127.z) * _e130)));\n    } else {\n        let _e134 = pastStart;\n        let _e135 = p;\n        local = clamp((_e134 * _e135.y), 0f, 1f);\n    }\n    let _e142 = local;\n    distFactor = _e142;\n    let _e146 = p;\n    if (_e146.w > 0f) {\n        {\n            let _e150 = fog;\n            h = _e150.height;\n            let _e153 = worldPosition_1;\n            let _e154 = h;\n            let _e157 = h;\n            elevation = (dot(_e153, _e154.xyz) - _e157.w);\n            let _e161 = p;\n            let _e165 = elevation;\n            heightFactor = exp((-(_e161.w) * max(0f, _e165)));\n        }\n    }\n    let _e169 = distFactor;\n    let _e170 = heightFactor;\n    let _e175 = maxOpacity;\n    amount = (clamp((_e169 * _e170), 0f, 1f) * _e175);\n    let _e178 = surfaceColor_1;\n    let _e179 = fog;\n    let _e182 = amount;\n    return mix(_e178, _e179.color.xyz, vec3(_e182));\n}\n\nfn bayerDither4x4(fragCoord: vec2<f32>) -> f32 {\n    var fragCoord_1: vec2<f32>;\n    var p_1: vec2<i32>;\n    var bayer: mat4x4<f32> = mat4x4<f32>(vec4<f32>(0f, 12f, 3f, 15f), vec4<f32>(8f, 4f, 11f, 7f), vec4<f32>(2f, 14f, 1f, 13f), vec4<f32>(10f, 6f, 9f, 5f));\n\n    fragCoord_1 = fragCoord;\n    let _e72 = fragCoord_1;\n    let _e73 = floor(_e72);\n    let _e75 = vec2(4f);\n    p_1 = vec2<i32>((_e73 - (floor((_e73 / _e75)) * _e75)));\n    let _e104 = p_1;\n    let _e106 = p_1;\n    let _e110 = bayer[_e106.x][_e104.y];\n    return ((_e110 + 0.5f) * 0.0625f);\n}\n\nfn main_1() {\n    var tex: vec4<f32>;\n    var fade: f32;\n    var alpha: f32;\n    var base: vec3<f32>;\n    var shadeW: f32;\n    var color: vec3<f32>;\n    var n: vec3<f32>;\n    var irr: vec3<f32>;\n    var hemi: f32;\n    var i: i32 = 0i;\n    var d: vec4<f32>;\n    var c: vec4<f32>;\n    var wrapNdotL: f32;\n    var i_1: i32 = 0i;\n    var toL: vec3<f32>;\n    var dist_1: f32;\n    var l: vec3<f32>;\n    var range: f32;\n    var local_1: f32;\n    var atten: f32;\n    var wrapNdotL_1: f32;\n    var i_2: i32 = 0i;\n    var toL_1: vec3<f32>;\n    var dist_2: f32;\n    var l_1: vec3<f32>;\n    var cosT: f32;\n    var spotMask: f32;\n    var range_1: f32;\n    var local_2: f32;\n    var atten_1: f32;\n    var wrapNdotL_2: f32;\n    var local_3: f32;\n    var outAlpha: f32;\n\n    let _e70 = fragUv_1;\n    let _e71 = textureSample(albedoTexture, albedoTextureSampler, _e70);\n    tex = _e71;\n    let _e73 = fragData_1;\n    fade = clamp(_e73.z, 0f, 1f);\n    let _e79 = tex;\n    let _e81 = bLook;\n    let _e85 = fragColor_1;\n    let _e89 = fade;\n    alpha = (((_e79.w * _e81.albedoColor.w) * _e85.w) * (1f - _e89));\n    let _e93 = bLook;\n    let _e98 = alpha;\n    let _e99 = bLook;\n    if ((_e93.params.x > 0f) && (_e98 < _e99.params.x)) {\n        {\n            discard;\n        }\n    }\n    let _e105 = bLook;\n    let _e110 = alpha;\n    let _e111 = gl_FragCoord_1;\n    let _e113 = bayerDither4x4(_e111.xy);\n    if ((_e105.params.w > 0.5f) && (_e110 < _e113)) {\n        {\n            discard;\n        }\n    }\n    let _e116 = tex;\n    let _e118 = bLook;\n    let _e122 = fragColor_1;\n    base = ((_e116.xyz * _e118.albedoColor.xyz) * _e122.xyz);\n    let _e126 = bLook;\n    let _e130 = fragData_1;\n    shadeW = clamp((_e126.params.y * (1f - _e130.y)), 0f, 1f);\n    let _e138 = base;\n    color = _e138;\n    let _e140 = shadeW;\n    if (_e140 > 0f) {\n        {\n            let _e143 = fragNormal_1;\n            n = normalize(_e143);\n            let _e146 = ambientLight;\n            let _e149 = ambientLight;\n            irr = (_e146.color.xyz * _e149.intensity);\n            let _e155 = n;\n            let _e156 = hemisphereLight;\n            hemi = (0.5f + (0.5f * dot(_e155, _e156.up)));\n            let _e162 = irr;\n            let _e163 = hemisphereLight;\n            let _e166 = hemisphereLight;\n            let _e169 = hemi;\n            let _e172 = hemisphereLight;\n            irr = (_e162 + (mix(_e163.groundColor.xyz, _e166.skyColor.xyz, vec3(_e169)) * _e172.intensity));\n            loop {\n                let _e178 = i;\n                let _e179 = directionalLights;\n                if !((_e178 < i32(_e179.numLights))) {\n                    break;\n                }\n                {\n                    let _e187 = i;\n                    let _e190 = directionalLights.directions[_e187];\n                    d = _e190;\n                    let _e192 = i;\n                    let _e195 = directionalLights.colors[_e192];\n                    c = _e195;\n                    let _e199 = n;\n                    let _e200 = d;\n                    wrapNdotL = (0.35f + (0.65f * max(dot(_e199, _e200.xyz), 0f)));\n                    let _e208 = irr;\n                    let _e209 = c;\n                    let _e211 = c;\n                    let _e213 = wrapNdotL;\n                    irr = (_e208 + (_e209.xyz * (_e211.w * _e213)));\n                }\n                continuing {\n                    let _e184 = i;\n                    i = (_e184 + 1i);\n                }\n            }\n            loop {\n                let _e219 = i_1;\n                let _e220 = lights;\n                if !((_e219 < i32(_e220.numLights))) {\n                    break;\n                }\n                {\n                    let _e228 = i_1;\n                    let _e231 = lights.positions[_e228];\n                    let _e232 = fragPosition_1;\n                    toL = (_e231 - _e232);\n                    let _e235 = toL;\n                    dist_1 = max(length(_e235), 0.001f);\n                    let _e240 = toL;\n                    let _e241 = dist_1;\n                    l = (_e240 / vec3(_e241));\n                    let _e245 = i_1;\n                    let _e248 = lights.ranges[_e245];\n                    range = _e248.x;\n                    let _e251 = range;\n                    if (_e251 > 0f) {\n                        let _e255 = dist_1;\n                        let _e256 = range;\n                        local_1 = pow(max((1f - (_e255 / _e256)), 0f), 2f);\n                    } else {\n                        let _e264 = dist_1;\n                        let _e265 = dist_1;\n                        local_1 = (1f / (_e264 * _e265));\n                    }\n                    let _e269 = local_1;\n                    atten = _e269;\n                    let _e273 = n;\n                    let _e274 = l;\n                    wrapNdotL_1 = (0.35f + (0.65f * max(dot(_e273, _e274), 0f)));\n                    let _e281 = irr;\n                    let _e282 = i_1;\n                    let _e285 = lights.colors[_e282];\n                    let _e287 = i_1;\n                    let _e290 = lights.intensities[_e287];\n                    let _e292 = atten;\n                    let _e294 = wrapNdotL_1;\n                    irr = (_e281 + (_e285.xyz * ((_e290.x * _e292) * _e294)));\n                }\n                continuing {\n                    let _e225 = i_1;\n                    i_1 = (_e225 + 1i);\n                }\n            }\n            loop {\n                let _e300 = i_2;\n                let _e301 = spotLights;\n                if !((_e300 < i32(_e301.numLights))) {\n                    break;\n                }\n                {\n                    let _e309 = i_2;\n                    let _e312 = spotLights.positions[_e309];\n                    let _e313 = fragPosition_1;\n                    toL_1 = (_e312 - _e313);\n                    let _e316 = toL_1;\n                    dist_2 = max(length(_e316), 0.001f);\n                    let _e321 = toL_1;\n                    let _e322 = dist_2;\n                    l_1 = (_e321 / vec3(_e322));\n                    let _e326 = l_1;\n                    let _e327 = i_2;\n                    let _e330 = spotLights.directions[_e327];\n                    cosT = dot(_e326, _e330.xyz);\n                    let _e334 = cosT;\n                    let _e335 = i_2;\n                    let _e338 = spotLights.cones[_e335];\n                    let _e341 = i_2;\n                    let _e344 = spotLights.cones[_e341];\n                    spotMask = clamp(((_e334 - _e338.x) * _e344.y), 0f, 1f);\n                    let _e351 = spotMask;\n                    let _e352 = spotMask;\n                    let _e356 = spotMask;\n                    spotMask = ((_e351 * _e352) * (3f - (2f * _e356)));\n                    let _e360 = i_2;\n                    let _e363 = spotLights.cones[_e360];\n                    range_1 = _e363.z;\n                    let _e366 = range_1;\n                    if (_e366 > 0f) {\n                        let _e370 = dist_2;\n                        let _e371 = range_1;\n                        local_2 = pow(max((1f - (_e370 / _e371)), 0f), 2f);\n                    } else {\n                        let _e379 = dist_2;\n                        let _e380 = dist_2;\n                        local_2 = (1f / (_e379 * _e380));\n                    }\n                    let _e384 = local_2;\n                    atten_1 = _e384;\n                    let _e388 = n;\n                    let _e389 = l_1;\n                    wrapNdotL_2 = (0.35f + (0.65f * max(dot(_e388, _e389), 0f)));\n                    let _e396 = irr;\n                    let _e397 = i_2;\n                    let _e400 = spotLights.colors[_e397];\n                    let _e402 = i_2;\n                    let _e405 = spotLights.colors[_e402];\n                    let _e407 = atten_1;\n                    let _e409 = spotMask;\n                    let _e411 = wrapNdotL_2;\n                    irr = (_e396 + (_e400.xyz * (((_e405.w * _e407) * _e409) * _e411)));\n                }\n                continuing {\n                    let _e306 = i_2;\n                    i_2 = (_e306 + 1i);\n                }\n            }\n            let _e415 = base;\n            let _e416 = base;\n            let _e417 = irr;\n            let _e424 = shadeW;\n            color = mix(_e415, (_e416 * clamp(_e417, vec3(0f), vec3(1.6f))), vec3(_e424));\n        }\n    }\n    let _e427 = color;\n    let _e430 = fragData_1;\n    color = (_e427 * (1f + max(0f, _e430.x)));\n    let _e435 = color;\n    let _e436 = fragPosition_1;\n    let _e437 = camera;\n    let _e439 = camera;\n    let _e441 = camera;\n    let _e443 = applyFog(_e435, _e436, _e437.view, _e439.projection, _e441.position);\n    color = _e443;\n    let _e444 = bLook;\n    let _e449 = bLook;\n    if ((_e444.params.x > 0f) || (_e449.params.w > 0.5f)) {\n        local_3 = 1f;\n    } else {\n        let _e456 = alpha;\n        local_3 = _e456;\n    }\n    let _e458 = local_3;\n    outAlpha = _e458;\n    let _e460 = bLook;\n    if (_e460.params.z > 0.5f) {\n        {\n            let _e465 = color;\n            let _e466 = outAlpha;\n            let _e467 = (_e465 * _e466);\n            let _e468 = outAlpha;\n            outColor = vec4<f32>(_e467.x, _e467.y, _e467.z, _e468);\n            return;\n        }\n    } else {\n        {\n            let _e473 = color;\n            let _e474 = outAlpha;\n            outColor = vec4<f32>(_e473.x, _e473.y, _e473.z, _e474);\n            return;\n        }\n    }\n}\n\n@fragment \nfn main(@location(0) fragPosition: vec3<f32>, @location(1) fragNormal: vec3<f32>, @location(2) fragUv: vec2<f32>, @location(3) fragColor: vec4<f32>, @location(4) fragData: vec4<f32>, @builtin(position) gl_FragCoord: vec4<f32>) -> FragmentOutput {\n    fragPosition_1 = fragPosition;\n    fragNormal_1 = fragNormal;\n    fragUv_1 = fragUv;\n    fragColor_1 = fragColor;\n    fragData_1 = fragData;\n    gl_FragCoord_1 = gl_FragCoord;\n    main_1();\n    let _e91 = outColor;\n    return FragmentOutput(_e91);\n}\n",
+  "slots": {
+    "CameraMatrices": {
+      "group": 0,
+      "binding": 0,
+      "sizeInBytes": 192,
+      "memberOffsets": {
+        "view": 0,
+        "projection": 64,
+        "viewProjection": 128
+      }
+    },
+    "BillboardFrame": {
+      "group": 0,
+      "binding": 1,
+      "sizeInBytes": 48,
+      "memberOffsets": {
+        "camRight": 0,
+        "camUp": 16,
+        "camBack": 32
+      }
+    },
+    "BillboardLook": {
+      "group": 1,
+      "binding": 2,
+      "sizeInBytes": 32,
+      "memberOffsets": {
+        "albedoColor": 0,
+        "params": 16
+      }
+    },
+    "AmbientLight": {
+      "group": 1,
+      "binding": 3,
+      "sizeInBytes": 32,
+      "memberOffsets": {
+        "color": 0,
+        "intensity": 16
+      }
+    },
+    "Lights": {
+      "group": 1,
+      "binding": 4,
+      "sizeInBytes": 528,
+      "memberOffsets": {
+        "numLights": 0,
+        "positions": 16,
+        "colors": 144,
+        "intensities": 272,
+        "ranges": 400
+      }
+    },
+    "DirectionalLights": {
+      "group": 1,
+      "binding": 5,
+      "sizeInBytes": 144,
+      "memberOffsets": {
+        "numLights": 0,
+        "directions": 16,
+        "colors": 80
+      }
+    },
+    "SpotLights": {
+      "group": 1,
+      "binding": 6,
+      "sizeInBytes": 272,
+      "memberOffsets": {
+        "numLights": 0,
+        "positions": 16,
+        "directions": 80,
+        "colors": 144,
+        "cones": 208
+      }
+    },
+    "HemisphereLight": {
+      "group": 1,
+      "binding": 7,
+      "sizeInBytes": 48,
+      "memberOffsets": {
+        "skyColor": 0,
+        "groundColor": 16,
+        "up": 32,
+        "intensity": 44
+      }
+    },
+    "Camera": {
+      "group": 1,
+      "binding": 8,
+      "sizeInBytes": 144,
+      "memberOffsets": {
+        "view": 0,
+        "projection": 64,
+        "position": 128
+      }
+    },
+    "Fog": {
+      "group": 1,
+      "binding": 9,
+      "sizeInBytes": 48,
+      "memberOffsets": {
+        "color": 0,
+        "params": 16,
+        "height": 32
+      }
+    },
+    "albedoTexture": {
+      "group": 1,
+      "binding": 0,
+      "samplerBinding": 1
+    }
+  },
+  "inputs": [
+    {
+      "name": "vertexPosition",
+      "location": 0,
+      "components": 3
+    },
+    {
+      "name": "vertexTexCoord",
+      "location": 1,
+      "components": 2
+    },
+    {
+      "name": "instanceModel0",
+      "location": 2,
+      "components": 4
+    },
+    {
+      "name": "instanceModel1",
+      "location": 3,
+      "components": 4
+    },
+    {
+      "name": "instanceModel2",
+      "location": 4,
+      "components": 4
+    },
+    {
+      "name": "instanceModel3",
+      "location": 5,
+      "components": 4
+    },
+    {
+      "name": "instanceColor",
+      "location": 6,
+      "components": 4
+    },
+    {
+      "name": "instanceData",
+      "location": 7,
+      "components": 4
+    }
+  ]
+}

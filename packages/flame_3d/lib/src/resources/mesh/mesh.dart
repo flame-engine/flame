@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
@@ -23,10 +25,28 @@ class Mesh() extends Resource<void> {
 
   int get vertexCount => _surfaces.fold(0, (p, e) => p + e.vertexCount);
 
-  void draw(RenderContext3D context) {
-    for (final (index, surface) in _surfaces.indexed) {
-      context.jointsInfo.setSurface(index);
-      context.drawSurface(surface);
+  /// Records a draw of every surface with the model matrix [transform]
+  /// (defaults to [RenderContext3D.model]), the per-instance [color] and the
+  /// per-instance [instanceData] (zero when `null`), see
+  /// [RenderContext3D.drawSurface].
+  ///
+  /// [jointTransforms] holds, by surface index, the joint matrices of skinned
+  /// surfaces.
+  void draw(
+    RenderContext3D context, {
+    Matrix4? transform,
+    Color color = const Color(0xFFFFFFFF),
+    Vector4? instanceData,
+    Map<int, List<Matrix4>>? jointTransforms,
+  }) {
+    for (var index = 0; index < _surfaces.length; index++) {
+      context.drawSurface(
+        _surfaces[index],
+        transform: transform,
+        color: color,
+        instanceData: instanceData,
+        jointTransforms: jointTransforms?[index],
+      );
     }
   }
 
@@ -76,10 +96,12 @@ class Mesh() extends Resource<void> {
   }
 
   Aabb3 _recomputeAabb3() {
-    var aabb = Aabb3();
+    // Start from a copy: hulling into the first surface's own bounds would
+    // grow them.
+    final aabb = Aabb3();
     for (var i = 0; i < _surfaces.length; i++) {
       if (i == 0) {
-        aabb = _surfaces[i].aabb;
+        aabb.copyFrom(_surfaces[i].aabb);
       } else {
         aabb.hull(_surfaces[i].aabb);
       }

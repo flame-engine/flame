@@ -10,3 +10,4 @@ export 'package:vector_math/vector_math.dart'
         Vector4;
 
 export 'extensions.dart';
+export 'src/core/seeded_rng_3d.dart';

@@ -2,6 +2,8 @@ import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/core.dart';
 import 'package:meta/meta.dart';
 
+/// A [CameraComponent3D] that orbits the [following] point at [distance],
+/// behind it along its [rotation], and always looks at it.
 class ThirdPersonCamera({
   /// The point the camera should follow.
   required var Vector3 following,
@@ -9,9 +11,13 @@ class ThirdPersonCamera({
 
   /// Damping factor for smoothing out rotation and position changes.
   ///
-  /// If the value is `1`, no damping is applied.
+  /// Each update moves the camera `followDamping * dt` of the way from its
+  /// position to the desired one.
   var double followDamping = 1.0,
   super.fovY,
+  super.orthographicHeight,
+  super.near,
+  super.far,
   super.position,
   super.rotation,
   super.up,
@@ -25,21 +31,31 @@ class ThirdPersonCamera({
   /// The distance the camera should maintain from the `following` point.
   double get distance => _distance;
   set distance(double value) => _distance = value.clamp(0.1, double.infinity);
+
   @override
   @mustCallSuper
   void update(double dt) {
+    super.update(dt);
+
     // Compute the desired position based on the rotation and distance.
-    final desiredPosition = following + _getRotatedOffset();
+    _desired
+      ..setValues(0, 0, -1)
+      ..applyQuaternion(rotation)
+      ..normalize()
+      ..scale(-distance)
+      ..add(following);
 
     // Smoothly interpolate the camera's position toward the desired position.
-    position = position + (desiredPosition - position) * (followDamping * dt);
+    final t = followDamping * dt;
+    position.setValues(
+      position.x + (_desired.x - position.x) * t,
+      position.y + (_desired.y - position.y) * t,
+      position.z + (_desired.z - position.z) * t,
+    );
 
     // Always look at the following point.
     target.setFrom(following);
   }
 
-  Vector3 _getRotatedOffset() {
-    final forward = Vector3(0, 0, -1)..applyQuaternion(rotation);
-    return forward.normalized() * -distance;
-  }
+  final Vector3 _desired = Vector3.zero();
 }

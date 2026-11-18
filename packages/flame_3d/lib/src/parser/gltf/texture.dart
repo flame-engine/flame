@@ -10,25 +10,11 @@ import 'package:flame_3d/src/parser/gltf/texture_type.dart';
 
 class Texture({
   required super.root,
-
-  /// The texture's format. Defaults to `6408` (RGBA).
   required final TextureFormat format,
-
-  /// The texture's internal format. Defaults to `6408` (RGBA).
   required final TextureFormat internalFormat,
-
-  /// The reference to the sampler used by this texture.
   required final GltfRef<Sampler>? sampler,
-
-  /// The reference to the image used by this texture.
   required final GltfRef<Image> source,
-
-  /// The target that the WebGL texture should be bound to.
-  ///
-  /// Valid values correspond to WebGL enums: `3553` (TEXTURE_2D).
   required final TextureTarget target,
-
-  /// Texel datatype. Defaults to `5121` (UNSIGNED_BYTE).
   required final TextureType type,
 }) extends GltfNode {
   Texture.parse(
@@ -46,7 +32,18 @@ class Texture({
       );
 
   flame_3d.Texture toFlameTexture() {
-    // TODO(luan): consider other parameters, such as sampler, type, etc
-    return source.get().toFlameTexture();
+    final imgTex = source.get().toFlameTexture();
+    final flameSampler = sampler?.get().toFlameSampler();
+    if (flameSampler == null) {
+      return imgTex;
+    }
+    return flame_3d.ImageTexture(
+      imgTex.sourceData,
+      width: imgTex.width,
+      height: imgTex.height,
+      sampler: flameSampler,
+      mipmaps: imgTex.mipmaps,
+      gpuTexture: imgTex.gpuTexture,
+    );
   }
 }

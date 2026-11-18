@@ -1,0 +1,73 @@
+{
+  "vertex": "struct CameraMatrices {\n    view: mat4x4<f32>,\n    projection: mat4x4<f32>,\n    viewProjection: mat4x4<f32>,\n}\n\nstruct Decal {\n    albedoColor: vec4<f32>,\n    params: vec4<f32>,\n    cutoff: vec4<f32>,\n}\n\nstruct VertexOutput {\n    @location(0) fragTexCoord: vec2<f32>,\n    @location(1) fragLocalUv: vec2<f32>,\n    @location(2) fragColor: vec4<f32>,\n    @builtin(position) gl_Position: vec4<f32>,\n}\n\nvar<private> vertexPosition_1: vec3<f32>;\nvar<private> vertexTexCoord_1: vec2<f32>;\nvar<private> instanceModel0_1: vec4<f32>;\nvar<private> instanceModel1_1: vec4<f32>;\nvar<private> instanceModel2_1: vec4<f32>;\nvar<private> instanceModel3_1: vec4<f32>;\nvar<private> instanceColor_1: vec4<f32>;\nvar<private> instanceData_1: vec4<f32>;\n@group(0) @binding(0) \nvar<uniform> camera: CameraMatrices;\n@group(0) @binding(1) \nvar<uniform> decal: Decal;\nvar<private> fragTexCoord: vec2<f32>;\nvar<private> fragLocalUv: vec2<f32>;\nvar<private> fragColor: vec4<f32>;\nvar<private> gl_Position: vec4<f32>;\n\nfn instanceModelMatrix() -> mat4x4<f32> {\n    var w: f32;\n\n    let _e8 = instanceModel3_1;\n    let _e10 = instanceColor_1;\n    let _e12 = instanceData_1;\n    w = max(_e8.w, min(min(_e10.w, _e12.x), -100000000000000000000000000000000000000f));\n    let _e20 = instanceModel0_1;\n    let _e21 = instanceModel1_1;\n    let _e22 = instanceModel2_1;\n    let _e23 = instanceModel3_1;\n    let _e24 = _e23.xyz;\n    let _e25 = w;\n    let _e29 = vec4<f32>(_e24.x, _e24.y, _e24.z, _e25);\n    return mat4x4<f32>(vec4<f32>(_e20.x, _e20.y, _e20.z, _e20.w), vec4<f32>(_e21.x, _e21.y, _e21.z, _e21.w), vec4<f32>(_e22.x, _e22.y, _e22.z, _e22.w), vec4<f32>(_e29.x, _e29.y, _e29.z, _e29.w));\n}\n\nfn main_1() {\n    var model: mat4x4<f32>;\n    var clipPos: vec4<f32>;\n    var local: vec4<f32>;\n    var uvRect: vec4<f32>;\n\n    let _e25 = instanceModelMatrix();\n    model = _e25;\n    let _e27 = camera;\n    let _e29 = model;\n    let _e30 = vertexPosition_1;\n    clipPos = (_e27.viewProjection * (_e29 * vec4<f32>(_e30.x, _e30.y, _e30.z, 1f)));\n    let _e40 = clipPos;\n    let _e42 = decal;\n    let _e45 = clipPos;\n    let _e50 = clipPos;\n    clipPos.z = clamp((_e40.z - (_e42.params.x * _e45.w)), 0f, _e50.w);\n    let _e54 = clipPos;\n    gl_Position = _e54;\n    let _e55 = instanceData_1;\n    let _e59 = instanceData_1;\n    if ((_e55.z > 0f) && (_e59.w > 0f)) {\n        let _e64 = instanceData_1;\n        local = _e64;\n    } else {\n        local = vec4<f32>(0f, 0f, 1f, 1f);\n    }\n    let _e71 = local;\n    uvRect = _e71;\n    let _e73 = vertexTexCoord_1;\n    fragLocalUv = _e73;\n    let _e74 = uvRect;\n    let _e76 = vertexTexCoord_1;\n    let _e77 = uvRect;\n    fragTexCoord = (_e74.xy + (_e76 * _e77.zw));\n    let _e81 = decal;\n    let _e83 = instanceColor_1;\n    fragColor = (_e81.albedoColor * _e83);\n    return;\n}\n\n@vertex \nfn main(@location(0) vertexPosition: vec3<f32>, @location(1) vertexTexCoord: vec2<f32>, @location(2) instanceModel0: vec4<f32>, @location(3) instanceModel1: vec4<f32>, @location(4) instanceModel2: vec4<f32>, @location(5) instanceModel3: vec4<f32>, @location(6) instanceColor: vec4<f32>, @location(7) instanceData: vec4<f32>) -> VertexOutput {\n    vertexPosition_1 = vertexPosition;\n    vertexTexCoord_1 = vertexTexCoord;\n    instanceModel0_1 = instanceModel0;\n    instanceModel1_1 = instanceModel1;\n    instanceModel2_1 = instanceModel2;\n    instanceModel3_1 = instanceModel3;\n    instanceColor_1 = instanceColor;\n    instanceData_1 = instanceData;\n    main_1();\n    let _e53 = fragTexCoord;\n    let _e55 = fragLocalUv;\n    let _e57 = fragColor;\n    let _e59 = gl_Position;\n    return VertexOutput(_e53, _e55, _e57, _e59);\n}\n",
+  "fragment": "struct Decal {\n    albedoColor: vec4<f32>,\n    params: vec4<f32>,\n    cutoff: vec4<f32>,\n}\n\nstruct FragmentOutput {\n    @location(0) outColor: vec4<f32>,\n}\n\nvar<private> fragTexCoord_1: vec2<f32>;\nvar<private> fragLocalUv_1: vec2<f32>;\nvar<private> fragColor_1: vec4<f32>;\nvar<private> outColor: vec4<f32>;\n@group(1) @binding(0) \nvar albedoTexture: texture_2d<f32>;\n@group(1) @binding(1) \nvar albedoTextureSampler: sampler;\n@group(1) @binding(2) \nvar<uniform> decal: Decal;\n\nfn main_1() {\n    var sampled: vec4<f32> = vec4(1f);\n    var softness: f32;\n    var r: f32;\n    var outerEdge: f32;\n    var outerMask: f32;\n    var innerRadius: f32;\n    var local: f32;\n    var innerMask: f32;\n    var r_1: f32;\n    var color: vec4<f32>;\n    var alpha: f32;\n\n    let _e16 = decal;\n    softness = clamp(_e16.params.y, 0f, 1f);\n    let _e23 = decal;\n    if (_e23.params.w > 0.5f) {\n        {\n            let _e28 = fragLocalUv_1;\n            r = length(((_e28 * 2f) - vec2(1f)));\n            let _e36 = softness;\n            outerEdge = max(_e36, 0.0001f);\n            let _e42 = outerEdge;\n            let _e45 = r;\n            outerMask = (1f - smoothstep((1f - _e42), 1f, _e45));\n            let _e49 = decal;\n            innerRadius = clamp(_e49.params.z, 0f, 0.999f);\n            let _e56 = innerRadius;\n            if (_e56 > 0f) {\n                let _e60 = innerRadius;\n                let _e61 = outerEdge;\n                let _e64 = innerRadius;\n                let _e65 = r;\n                local = smoothstep(max(0f, (_e60 - _e61)), _e64, _e65);\n            } else {\n                local = 1f;\n            }\n            let _e69 = local;\n            innerMask = _e69;\n            let _e72 = outerMask;\n            let _e73 = innerMask;\n            sampled.w = (_e72 * _e73);\n        }\n    } else {\n        {\n            let _e75 = fragTexCoord_1;\n            let _e76 = textureSample(albedoTexture, albedoTextureSampler, _e75);\n            sampled = _e76;\n            let _e77 = softness;\n            if (_e77 > 0f) {\n                {\n                    let _e80 = fragLocalUv_1;\n                    r_1 = length(((_e80 * 2f) - vec2(1f)));\n                    let _e89 = sampled;\n                    let _e93 = softness;\n                    let _e96 = r_1;\n                    sampled.w = (_e89.w * (1f - smoothstep((1f - _e93), 1f, _e96)));\n                }\n            }\n        }\n    }\n    let _e100 = sampled;\n    let _e101 = fragColor_1;\n    color = (_e100 * _e101);\n    let _e104 = color;\n    let _e106 = decal;\n    if (_e104.w < _e106.cutoff.x) {\n        {\n            discard;\n        }\n    }\n    let _e110 = color;\n    alpha = clamp(_e110.w, 0f, 1f);\n    let _e116 = color;\n    let _e118 = alpha;\n    let _e119 = (_e116.xyz * _e118);\n    let _e120 = alpha;\n    outColor = vec4<f32>(_e119.x, _e119.y, _e119.z, _e120);\n    return;\n}\n\n@fragment \nfn main(@location(0) fragTexCoord: vec2<f32>, @location(1) fragLocalUv: vec2<f32>, @location(2) fragColor: vec4<f32>) -> FragmentOutput {\n    fragTexCoord_1 = fragTexCoord;\n    fragLocalUv_1 = fragLocalUv;\n    fragColor_1 = fragColor;\n    main_1();\n    let _e26 = outColor;\n    return FragmentOutput(_e26);\n}\n",
+  "slots": {
+    "CameraMatrices": {
+      "group": 0,
+      "binding": 0,
+      "sizeInBytes": 192,
+      "memberOffsets": {
+        "view": 0,
+        "projection": 64,
+        "viewProjection": 128
+      }
+    },
+    "Decal": {
+      "group": 1,
+      "binding": 2,
+      "sizeInBytes": 48,
+      "memberOffsets": {
+        "albedoColor": 0,
+        "params": 16,
+        "cutoff": 32
+      }
+    },
+    "albedoTexture": {
+      "group": 1,
+      "binding": 0,
+      "samplerBinding": 1
+    }
+  },
+  "inputs": [
+    {
+      "name": "vertexPosition",
+      "location": 0,
+      "components": 3
+    },
+    {
+      "name": "vertexTexCoord",
+      "location": 1,
+      "components": 2
+    },
+    {
+      "name": "instanceModel0",
+      "location": 2,
+      "components": 4
+    },
+    {
+      "name": "instanceModel1",
+      "location": 3,
+      "components": 4
+    },
+    {
+      "name": "instanceModel2",
+      "location": 4,
+      "components": 4
+    },
+    {
+      "name": "instanceModel3",
+      "location": 5,
+      "components": 4
+    },
+    {
+      "name": "instanceColor",
+      "location": 6,
+      "components": 4
+    },
+    {
+      "name": "instanceData",
+      "location": 7,
+      "components": 4
+    }
+  ]
+}

@@ -31,7 +31,7 @@ class Transform3D() extends ChangeNotifier {
   this
     : _recalculate = true,
       _position = NotifyingVector3.zero(),
-      _rotation = NotifyingQuaternion(0, 0, 0, 0),
+      _rotation = NotifyingQuaternion(0, 0, 0, 1),
       _scale = NotifyingVector3.all(1),
       _transformMatrix = Matrix4.zero() {
     _position.addListener(_markAsModified);
@@ -108,8 +108,12 @@ class Transform3D() extends ChangeNotifier {
 
   /// Z coordinate of the translation transform.
   double get z => _position.z;
-  set z(double y) => _position.z = z;
+  set z(double z) => _position.z = z;
 
+  /// The rotation part of the transform, the identity by default.
+  ///
+  /// The returned quaternion can be modified by the user, and the changes
+  /// will be propagated back to the transform matrix.
   NotifyingQuaternion get rotation => _rotation;
   set rotation(Quaternion rotation) => _rotation.setFrom(rotation);
   final NotifyingQuaternion _rotation;
@@ -153,28 +157,48 @@ class Transform3D() extends ChangeNotifier {
     scale.setFrom(other.scale);
   }
 
+  /// Set the [position], [rotation] and [scale] from the affine [matrix].
+  ///
+  /// As with [setFrom], each part notifies its listeners when it is set.
   void setFromMatrix4(Matrix4 matrix) {
-    matrix.decompose(position, rotation, scale);
+    // `Matrix4.decompose` writes the vector storage directly, which bypasses
+    // the notifying setters, so it decomposes into scratch values first.
+    matrix.decompose(
+      _decomposedPosition,
+      _decomposedRotation,
+      _decomposedScale,
+    );
+    position.setFrom(_decomposedPosition);
+    rotation.setFrom(_decomposedRotation);
+    scale.setFrom(_decomposedScale);
   }
+
+  static final Vector3 _decomposedPosition = Vector3.zero();
+  static final Quaternion _decomposedRotation = Quaternion.identity();
+  static final Vector3 _decomposedScale = Vector3.zero();
 
   /// Check whether this transform is equal to [other], up to the given
   /// [tolerance]. Setting tolerance to zero will check for exact equality.
   /// Transforms are considered equal if their rotation angles are the same
-  /// or differ by a multiple of 2π, and if all other transform parameters:
-  /// translation, scale, and offset are the same.
+  /// or differ by a multiple of 2π (a quaternion `q` and its negation `-q`
+  /// describe the same rotation), and if the translation and scale are the
+  /// same.
   ///
   /// The [tolerance] parameter is in absolute units, not relative.
   bool closeTo(Transform3D other, {double tolerance = 1e-10}) {
+    bool rotationCloseTo(double sign) =>
+        (rotation.x - sign * other.rotation.x).abs() <= tolerance &&
+        (rotation.y - sign * other.rotation.y).abs() <= tolerance &&
+        (rotation.z - sign * other.rotation.z).abs() <= tolerance &&
+        (rotation.w - sign * other.rotation.w).abs() <= tolerance;
+
     return (position.x - other.position.x).abs() <= tolerance &&
         (position.y - other.position.y).abs() <= tolerance &&
         (position.z - other.position.z).abs() <= tolerance &&
-        (rotation.x - other.rotation.x).abs() <= tolerance &&
-        (rotation.y - other.rotation.y).abs() <= tolerance &&
-        (rotation.z - other.rotation.z).abs() <= tolerance &&
-        (rotation.w - other.rotation.w).abs() <= tolerance &&
         (scale.x - other.scale.x).abs() <= tolerance &&
         (scale.y - other.scale.y).abs() <= tolerance &&
-        (scale.z - other.scale.z).abs() <= tolerance;
+        (scale.z - other.scale.z).abs() <= tolerance &&
+        (rotationCloseTo(1) || rotationCloseTo(-1));
   }
 
   void _markAsModified() {

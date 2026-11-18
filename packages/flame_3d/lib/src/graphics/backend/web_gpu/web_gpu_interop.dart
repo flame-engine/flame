@@ -155,7 +155,9 @@ extension type GPURenderPassEncoder._(JSObject _) implements JSObject {
     int size,
   );
 
-  external void drawIndexed(int indexCount);
+  external void draw(int vertexCount, [int instanceCount]);
+
+  external void drawIndexed(int indexCount, [int instanceCount]);
 
   external void end();
 }
@@ -187,6 +189,7 @@ extension type GPUTextureDescriptor._(JSObject _) implements JSObject {
     GPUExtent3D size,
     String format,
     int usage,
+    int mipLevelCount,
   });
 }
 
@@ -194,6 +197,7 @@ extension type GPUSamplerDescriptor._(JSObject _) implements JSObject {
   external factory GPUSamplerDescriptor({
     String magFilter,
     String minFilter,
+    String mipmapFilter,
     String addressModeU,
     String addressModeV,
   });
@@ -387,7 +391,7 @@ extension type GPURenderPassDescriptor._(JSObject _) implements JSObject {
 }
 
 extension type GPUImageCopyTexture._(JSObject _) implements JSObject {
-  external factory GPUImageCopyTexture({GPUTexture texture});
+  external factory GPUImageCopyTexture({GPUTexture texture, int mipLevel});
 }
 
 extension type GPUImageDataLayout._(JSObject _) implements JSObject {

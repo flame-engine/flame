@@ -5,16 +5,9 @@ import 'package:flame_3d/src/parser/gltf/gltf_root.dart';
 import 'package:flame_3d/src/parser/gltf/primitive.dart';
 
 /// A set of primitives to be rendered.
-///
-/// Its global transform is defined by a node that references it.
 class Mesh({
   required super.root,
-
-  /// An array of primitives, each defining geometry to be rendered.
   required final List<Primitive> primitives,
-
-  /// Array of weights to be applied to the morph targets.
-  /// The number of array elements **MUST** match the number of morph targets
   required final List<double>? weights,
 }) extends GltfNode {
   Mesh.parse(
@@ -27,11 +20,16 @@ class Mesh({
         weights: Parser.floatList(map, 'weights'),
       );
 
-  // TODO(luan): remove the transform parameter
   flame_3d.Mesh toFlameMesh([Matrix4? transform]) {
     final mesh = flame_3d.Mesh();
+    final initialWeights = weights;
     for (final primitive in primitives) {
-      mesh.addSurface(primitive.toFlameSurface(transform));
+      for (final surface in primitive.toFlameSurfaces(transform)) {
+        if (initialWeights != null && initialWeights.isNotEmpty) {
+          surface.applyMorphWeights(initialWeights);
+        }
+        mesh.addSurface(surface);
+      }
     }
     return mesh;
   }

@@ -1,0 +1,5 @@
+# Procedural two-material gem for ObjParser testing
+newmtl CyanFacet
+Kd 0.22 0.86 0.95
+newmtl GoldFacet
+Kd 0.98 0.78 0.24

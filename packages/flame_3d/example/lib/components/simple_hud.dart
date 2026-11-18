@@ -47,6 +47,7 @@ Camera controls:
 - Toggle MSAA with O
 - Change camera projection with P
 - Zoom in and out with scroll
+- Open the 2D game with embedded 3D houses with H
 ''',
       Vector2.all(8),
     );

@@ -14,10 +14,12 @@ class OcclusionTextureInfo({
   /// occlusion.
   ///
   /// This value affects the final occlusion value as:
-  /// ```'
+  /// ```text
   ///   1.0 + strength * (<sampled occlusion texture value> - 1.0)
   /// ```
   required final double strength,
+  super.extensions,
+  super.extras,
 }) extends TextureInfo {
   OcclusionTextureInfo.parse(
     GltfRoot root,
@@ -27,5 +29,7 @@ class OcclusionTextureInfo({
         index: Parser.ref(root, map, 'index')!,
         texCoord: Parser.integer(map, 'texCoord'),
         strength: Parser.float(map, 'strength') ?? 1.0,
+        extensions: Parser.extensions(map),
+        extras: Parser.extras(map),
       );
 }

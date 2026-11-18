@@ -1,4 +1,5 @@
 import 'package:flame_3d/resources.dart' as flame_3d;
+import 'package:flame_3d/src/parser/gltf/gltf_extensions.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_node.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_ref.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_root.dart';
@@ -22,6 +23,8 @@ class TextureInfo({
   /// A mesh primitive **MUST** have the corresponding texture coordinate
   /// attributes for the material to be applicable to it.
   final int? texCoord,
+  final Map<String, Object?>? extensions,
+  final Object? extras,
 }) extends GltfNode {
   TextureInfo.parse(
     GltfRoot root,
@@ -30,7 +33,18 @@ class TextureInfo({
         root: root,
         index: Parser.ref(root, map, 'index')!,
         texCoord: Parser.integer(map, 'texCoord'),
+        extensions: Parser.extensions(map),
+        extras: Parser.extras(map),
       );
+
+  /// Parsed `KHR_texture_transform` extension if present on this texture slot.
+  KhrTextureTransform? get textureTransform {
+    final ext = extensions?['KHR_texture_transform'];
+    if (ext is Map<String, Object?>) {
+      return KhrTextureTransform.parse(ext);
+    }
+    return null;
+  }
 
   flame_3d.Texture toFlameTexture() {
     return index.get().toFlameTexture();

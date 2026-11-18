@@ -1,3 +1,6 @@
+import 'dart:math' as math;
+import 'dart:typed_data';
+
 import 'package:flame_3d/core.dart';
 import 'package:flame_3d/src/parser/gltf/accessor_type.dart';
 import 'package:flame_3d/src/parser/gltf/buffer_view.dart';
@@ -45,107 +48,97 @@ class RawAccessor({
   required final AccessorType type,
 
   /// Maximum value of each component in this accessor.
-  /// Array elements **MUST** be treated as having the same data type as
-  /// accessor's `componentType`.
-  ///
-  /// Both `min` and `max` arrays have the same length.
-  ///
-  /// The length is determined by the value of the `type` property;
-  /// it can be 1, 2, 3, 4, 9, or 16.
-  ///
-  /// `normalized` property has no effect on array values: they always
-  /// correspond to the actual values stored in the buffer.
-  ///
-  /// When the accessor is sparse, this property **MUST** contain maximum
-  /// values of accessor data with sparse substitution applied.
   required final List<double>? max,
 
   /// Minimum value of each component in this accessor.
-  ///
-  /// Array elements **MUST** be treated as having the same data type as
-  /// accessor's `componentType`.
-  ///
-  /// Both `min` and `max` arrays have the same length.
-  ///
-  /// The length is determined by the value of the `type` property;
-  /// it can be 1, 2, 3, 4, 9, or 16.
-  ///
-  /// `normalized` property has no effect on array values: they always
-  /// correspond to the actual values stored in the buffer.
-  ///
-  /// When the accessor is sparse, this property **MUST** contain minimum
-  /// values of accessor data with sparse substitution applied.
   required final List<double>? min,
 
   /// Sparse storage of elements that deviate from their initialization value.
   required final SparseAccessor? sparse,
 }) extends GltfNode {
+  /// Normalizes a raw integer/float component according to glTF 2.0 section
+  /// 3.6.2.1 & `KHR_mesh_quantization` when [normalized] is `true`.
+  double normalizeComponent(num raw) {
+    final value = raw.toDouble();
+    if (!normalized) {
+      return value;
+    }
+    return switch (componentType) {
+      ComponentType.byte => math.max(value / 127.0, -1.0),
+      ComponentType.unsignedByte => value / 255.0,
+      ComponentType.short => math.max(value / 32767.0, -1.0),
+      ComponentType.unsignedShort => value / 65535.0,
+      ComponentType.unsignedInt || ComponentType.float => value,
+    };
+  }
+
   Iterable<num> data() sync* {
     final buffer = bufferView.get();
     final bytes = buffer.data();
-
-    final byteData = bytes.buffer.asByteData();
-
+    final byteData = ByteData.sublistView(bytes);
     final step = componentType.byteSize;
-    if ((bytes.lengthInBytes - byteOffset) % step != 0) {
-      throw Exception(
-        'Accessor data length ${bytes.lengthInBytes} '
-        'is not a multiple of the stride $step.',
-      );
-    }
-
     for (
       var cursor = byteOffset;
-      cursor < bytes.lengthInBytes;
+      cursor + step <= bytes.lengthInBytes;
       cursor += step
     ) {
       yield componentType.parseData(byteData, cursor: cursor);
     }
   }
 
-  List<T> _typedData<T>(int size, T Function(List<num>) producer) {
+  List<T> _typedData<T>(
+    int size,
+    T Function(List<num>) producer, {
+    required bool applyNormalization,
+  }) {
     _verifyNotSparse();
     _verifyAccessorType(size);
+    if (count == 0) {
+      return <T>[];
+    }
 
     final buffer = bufferView.get();
-    final view = data().toList();
-
-    final int step;
-    final byteStride = buffer.byteStride;
-    if (byteStride != null) {
-      step = byteStride ~/ componentType.byteSize;
-    } else {
-      step = size;
+    final bytes = buffer.data();
+    final byteData = ByteData.sublistView(bytes);
+    final compBytes = componentType.byteSize;
+    final elemBytes = size * compBytes;
+    final strideBytes = buffer.byteStride ?? elemBytes;
+    if (strideBytes <= 0) {
+      throw StateError('Byte stride must be > 0');
     }
-    if (step == 0) {
-      throw Exception('Step cannot be 0');
-    }
-    if (view.length % step != 0) {
-      throw Exception(
-        'Accessor data length ${view.length}'
-        ' is not a multiple of the step $step',
+    final requiredBytes = byteOffset + (count - 1) * strideBytes + elemBytes;
+    if (requiredBytes > bytes.lengthInBytes) {
+      throw RangeError(
+        'Accessor requires $requiredBytes bytes, bufferView has '
+        '${bytes.lengthInBytes}',
       );
     }
 
+    final scratch = List<num>.filled(size, 0);
     final result = <T>[];
-    for (var i = 0; i < view.length; i += step) {
-      result.add(producer(view.sublist(i, i + size)));
-      if (result.length == count) {
-        break;
+    for (var elem = 0; elem < count; elem++) {
+      final base = byteOffset + elem * strideBytes;
+      for (var c = 0; c < size; c++) {
+        final raw = componentType.parseData(
+          byteData,
+          cursor: base + c * compBytes,
+        );
+        scratch[c] = applyNormalization ? normalizeComponent(raw) : raw;
       }
+      result.add(producer(scratch));
     }
     return result;
   }
 
   void _verifyAccessorType(int size) {
     if (type.size != size) {
-      throw Exception('Accessor type mismatch: $type != $size');
+      throw StateError('Accessor type mismatch: $type != $size');
     }
   }
 
   void _verifyNotSparse() {
     if (sparse != null) {
-      throw Exception('Accessor is sparse: not supported yet.');
+      throw UnsupportedError('Accessor is sparse: not supported yet.');
     }
   }
 
@@ -188,7 +181,7 @@ abstract class TypedAccessor<T>({
   void _checkAccessorType(AccessorType expected) {
     final type = rawAccessor.type;
     if (type != expected) {
-      throw Exception('Accessor type mismatch: $type != $expected');
+      throw StateError('Accessor type mismatch: $type != $expected');
     }
   }
 }
@@ -200,7 +193,11 @@ class IntAccessor({
   @override
   List<int> typedData() {
     _checkAccessorType(AccessorType.scalar);
-    return rawAccessor._typedData(1, (list) => list[0].toInt());
+    return rawAccessor._typedData(
+      1,
+      (list) => list[0].toInt(),
+      applyNormalization: false,
+    );
   }
 }
 
@@ -211,7 +208,11 @@ class FloatAccessor({
   @override
   List<double> typedData() {
     _checkAccessorType(AccessorType.scalar);
-    return rawAccessor._typedData(1, (list) => list[0].toDouble());
+    return rawAccessor._typedData(
+      1,
+      (list) => list[0].toDouble(),
+      applyNormalization: true,
+    );
   }
 }
 
@@ -222,10 +223,11 @@ class Vector2Accessor({
   @override
   List<Vector2> typedData() {
     _checkAccessorType(AccessorType.vec2);
-    return rawAccessor._typedData(2, (values) {
-      final doubles = Parser.coerceFloatList(values);
-      return Vector2.array(doubles);
-    });
+    return rawAccessor._typedData(
+      2,
+      (values) => Vector2(values[0].toDouble(), values[1].toDouble()),
+      applyNormalization: true,
+    );
   }
 }
 
@@ -236,10 +238,15 @@ class Vector3Accessor({
   @override
   List<Vector3> typedData() {
     _checkAccessorType(AccessorType.vec3);
-    return rawAccessor._typedData(3, (values) {
-      final doubles = Parser.coerceFloatList(values);
-      return Vector3.array(doubles);
-    });
+    return rawAccessor._typedData(
+      3,
+      (values) => Vector3(
+        values[0].toDouble(),
+        values[1].toDouble(),
+        values[2].toDouble(),
+      ),
+      applyNormalization: true,
+    );
   }
 }
 
@@ -250,10 +257,16 @@ class Vector4Accessor({
   @override
   List<Vector4> typedData() {
     _checkAccessorType(AccessorType.vec4);
-    return rawAccessor._typedData(4, (values) {
-      final doubles = Parser.coerceFloatList(values);
-      return Vector4.array(doubles);
-    });
+    return rawAccessor._typedData(
+      4,
+      (values) => Vector4(
+        values[0].toDouble(),
+        values[1].toDouble(),
+        values[2].toDouble(),
+        values[3].toDouble(),
+      ),
+      applyNormalization: true,
+    );
   }
 }
 
@@ -264,10 +277,16 @@ class QuaternionAccessor({
   @override
   List<Quaternion> typedData() {
     _checkAccessorType(AccessorType.vec4);
-    return rawAccessor._typedData(4, (values) {
-      final doubles = Parser.coerceFloatList(values);
-      return Quaternion(doubles[0], doubles[1], doubles[2], doubles[3]);
-    });
+    return rawAccessor._typedData(
+      4,
+      (values) => Quaternion(
+        values[0].toDouble(),
+        values[1].toDouble(),
+        values[2].toDouble(),
+        values[3].toDouble(),
+      ),
+      applyNormalization: true,
+    );
   }
 }
 
@@ -278,9 +297,10 @@ class Matrix4Accessor({
   @override
   List<Matrix4> typedData() {
     _checkAccessorType(AccessorType.mat4);
-    return rawAccessor._typedData(16, (values) {
-      final doubles = Parser.coerceFloatList(values);
-      return Matrix4.fromList(doubles);
-    });
+    return rawAccessor._typedData(
+      16,
+      (values) => Matrix4.fromList(Parser.coerceFloatList(values)),
+      applyNormalization: true,
+    );
   }
 }

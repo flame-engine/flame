@@ -29,7 +29,7 @@ void main() {
         await game.world.ensureAdd(wall);
 
         expect(camera.frustum.containsVector3(wall.position), isFalse);
-        expect(wall.isVisible(camera), isTrue);
+        expect(wall.isVisible(camera.frustum), isTrue);
       },
     );
 
@@ -40,7 +40,7 @@ void main() {
         final box = _Box(size: Vector3.all(1), position: Vector3(0, 1, -20));
         await game.world.ensureAdd(box);
 
-        expect(box.isVisible(camera), isFalse);
+        expect(box.isVisible(camera.frustum), isFalse);
       },
     );
 
@@ -62,8 +62,8 @@ void main() {
         ]);
 
         // Their local positions are the other way around.
-        expect(inView.isVisible(camera), isTrue);
-        expect(outOfView.isVisible(camera), isFalse);
+        expect(inView.isVisible(camera.frustum), isTrue);
+        expect(outOfView.isVisible(camera.frustum), isFalse);
       },
     );
   });

@@ -37,7 +37,8 @@ class PlaneMesh({
     addSurface(
       Surface(
         vertices: vertices,
-        indices: [0, 1, 2, 2, 3, 0],
+        // Counter-clockwise seen from above, so the front face points up.
+        indices: [0, 2, 1, 2, 0, 3],
         material: material,
       ),
     );

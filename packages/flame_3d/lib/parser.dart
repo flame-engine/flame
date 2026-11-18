@@ -1,1 +1,9 @@
+export 'src/parser/async_model_loader_3d.dart';
+export 'src/parser/glb_parser.dart';
+export 'src/parser/gltf/glb_chunk.dart';
+export 'src/parser/gltf/gltf_extensions.dart';
+export 'src/parser/gltf/gltf_root.dart';
+export 'src/parser/gltf_parser.dart';
 export 'src/parser/model_parser.dart';
+export 'src/parser/obj_parser.dart';
+export 'src/parser/scene_loader_3d.dart';

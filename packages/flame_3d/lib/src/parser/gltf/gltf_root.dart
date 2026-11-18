@@ -9,6 +9,7 @@ import 'package:flame_3d/src/parser/gltf/buffer.dart';
 import 'package:flame_3d/src/parser/gltf/buffer_view.dart';
 import 'package:flame_3d/src/parser/gltf/camera.dart';
 import 'package:flame_3d/src/parser/gltf/glb_chunk.dart';
+import 'package:flame_3d/src/parser/gltf/gltf_extensions.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_node.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_node_with_data.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_ref.dart';
@@ -43,10 +44,14 @@ class GltfRoot._({
   late final List<Sampler> samplers;
   late final List<Image> images;
 
+  late final Map<String, Object?>? extensions;
+  late final Object? extras;
+  late final List<KhrPunctualLight> punctualLights;
+
   late final List<GlbChunk> chunks;
 
   Future<Uint8List> readChunk(GltfRef<Buffer> ref) async {
-    if (chunks.isNotEmpty) {
+    if (chunks.isNotEmpty && ref.index < chunks.length) {
       final chunk = chunks[ref.index];
       return chunk.data;
     }
@@ -56,18 +61,13 @@ class GltfRoot._({
 
   Future<Uint8List> readChunkFrom(String uri) async {
     if (uri.startsWith('data:')) {
-      const prefixes = [
-        'data:application/gltf-buffer;base64,',
-        'data:application/octet-stream;base64,',
-      ];
-      for (final prefix in prefixes) {
-        if (uri.startsWith(prefix)) {
-          return base64Decode(uri.substring(prefix.length));
-        }
+      final commaIdx = uri.indexOf(';base64,');
+      if (commaIdx != -1) {
+        return base64Decode(uri.substring(commaIdx + 8));
       }
-      throw Exception('Unsupported data URI: $uri');
+      throw FormatException('Unsupported data URI: $uri');
     } else {
-      final path = '$_prefix/$uri';
+      final path = _prefix.isEmpty ? uri : '$_prefix/$uri';
       return await Flame.assets.readBinaryFile(path);
     }
   }
@@ -103,8 +103,11 @@ class GltfRoot._({
     required Map<String, dynamic> json,
     required List<GlbChunk> chunks,
   }) async {
-    final root = GltfRoot._(prefix: prefix);
-    root.chunks = chunks;
+    final root = GltfRoot._(prefix: prefix)
+      ..chunks = chunks
+      ..extensions = Parser.extensions(json)
+      ..extras = Parser.extras(json);
+    root.punctualLights = KhrPunctualLight.parseRootLights(root.extensions);
 
     Future<List<T>> parse<T>(
       String key,
@@ -124,7 +127,7 @@ class GltfRoot._({
     root.accessors = await parse('accessors', RawAccessor.parse);
 
     root.scenes = await parse('scenes', Scene.parse);
-    root.scene = Parser.integer(json, 'scene')!;
+    root.scene = Parser.integer(json, 'scene') ?? 0;
 
     root.nodes = await parse('nodes', Node.parse);
     root.cameras = await parse('cameras', Camera.parse);

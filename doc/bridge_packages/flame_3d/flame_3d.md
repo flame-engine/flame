@@ -10,4 +10,9 @@ space, feel free to give it a try and help us improve it!
 ```{toctree}
 Getting Started <getting_started.md>
 Basic Concepts <basic_concepts.md>
+Rendering <rendering.md>
+Materials and Lighting <materials.md>
+Particles <particles.md>
+Shadows <shadows.md>
+Embedding 3D in a 2D Game <embedding.md>
 ```

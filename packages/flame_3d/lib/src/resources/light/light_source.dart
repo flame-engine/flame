@@ -2,10 +2,17 @@ import 'dart:ui' show Color;
 
 import 'package:flame_3d/resources.dart';
 
-/// Describes the properties of a light source.
-/// There are three types of light sources: point, directional, and spot.
-/// Currently only [PointLight] is implemented.
+/// {@template light_source}
+/// Describes the properties of a light source: its [color] and [intensity].
+///
+/// The kinds of light sources are [AmbientLight], [HemisphereLight],
+/// [DirectionalLight] and [PointLight]. Their values may be changed at any
+/// time: the lights of a scene are read once per render pass.
+/// {@endtemplate}
 abstract class LightSource({
-  required final Color color,
-  required final double intensity,
+  /// The color of the light. Its alpha is ignored.
+  required var Color color,
+
+  /// The strength of the light, multiplying its [color].
+  required var double intensity,
 });

@@ -48,21 +48,23 @@ final class QuaternionUtils._() {
     double epsilon = 10e-6,
   }) {
     if (isEqual(q0, q1)) {
-      return q0;
+      return q0.clone();
     }
 
     // clamp the dot product just in case of numerical instability
     final dot = q0.dot(q1).clamp(-1.0, 1.0);
+
+    // q1 and -q1 are the same rotation, take the one on the shortest path.
+    final q1Prime = dot >= 0 ? q1 : q1.scaled(-1);
     if (1 - dot.abs() < epsilon) {
       // The quaternions are very close, so the linear interpolation algorithm
       // will be a good approximation.
       // This will prevent a NaN from the slerp algorithm.
-      return lerp(q0, q1, t).normalized();
+      return lerp(q0, q1Prime, t).normalized();
     }
 
     final angle = acos(dot.abs());
 
-    final q1Prime = dot >= 0 ? q1 : q1.scaled(-1);
     final a = sin((1 - t) * angle);
     final b = sin(t * angle);
 

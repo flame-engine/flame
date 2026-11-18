@@ -1,0 +1,67 @@
+{
+  "vertex": "struct CameraMatrices {\n    view: mat4x4<f32>,\n    projection: mat4x4<f32>,\n    viewProjection: mat4x4<f32>,\n}\n\nstruct Outline {\n    color: vec4<f32>,\n    params: vec4<f32>,\n}\n\nstruct VertexOutput {\n    @location(0) fragColor: vec4<f32>,\n    @builtin(position) gl_Position: vec4<f32>,\n}\n\nvar<private> vertexPosition_1: vec3<f32>;\nvar<private> vertexNormal_1: vec3<f32>;\nvar<private> instanceModel0_1: vec4<f32>;\nvar<private> instanceModel1_1: vec4<f32>;\nvar<private> instanceModel2_1: vec4<f32>;\nvar<private> instanceModel3_1: vec4<f32>;\nvar<private> instanceColor_1: vec4<f32>;\nvar<private> instanceData_1: vec4<f32>;\n@group(0) @binding(0) \nvar<uniform> camera: CameraMatrices;\n@group(0) @binding(1) \nvar<uniform> outline: Outline;\nvar<private> fragColor: vec4<f32>;\nvar<private> gl_Position: vec4<f32>;\n\nfn instanceModelMatrix() -> mat4x4<f32> {\n    var w: f32;\n\n    let _e8 = instanceModel3_1;\n    let _e10 = instanceColor_1;\n    let _e12 = instanceData_1;\n    w = max(_e8.w, min(min(_e10.w, _e12.x), -100000000000000000000000000000000000000f));\n    let _e20 = instanceModel0_1;\n    let _e21 = instanceModel1_1;\n    let _e22 = instanceModel2_1;\n    let _e23 = instanceModel3_1;\n    let _e24 = _e23.xyz;\n    let _e25 = w;\n    let _e29 = vec4<f32>(_e24.x, _e24.y, _e24.z, _e25);\n    return mat4x4<f32>(vec4<f32>(_e20.x, _e20.y, _e20.z, _e20.w), vec4<f32>(_e21.x, _e21.y, _e21.z, _e21.w), vec4<f32>(_e22.x, _e22.y, _e22.z, _e22.w), vec4<f32>(_e29.x, _e29.y, _e29.z, _e29.w));\n}\n\nfn main_1() {\n    var model: mat4x4<f32>;\n    var scale: f32;\n    var thickness: f32;\n    var depthBias: f32;\n    var worldPos: vec3<f32>;\n    var normalMat: mat3x3<f32>;\n    var worldNormal: vec3<f32>;\n    var nLen: f32;\n    var local: vec3<f32>;\n    var clipPos: vec4<f32>;\n    var clipNormal: vec4<f32>;\n    var dir: vec2<f32>;\n    var aspect: f32;\n    var metric: vec2<f32>;\n    var mLen: f32;\n    var unit: vec2<f32>;\n\n    let _e21 = instanceModelMatrix();\n    model = _e21;\n    let _e25 = instanceData_1;\n    scale = max(0f, (1f + _e25.x));\n    let _e30 = outline;\n    let _e33 = scale;\n    thickness = (_e30.params.x * _e33);\n    let _e36 = outline;\n    let _e39 = instanceData_1;\n    depthBias = (_e36.params.y + _e39.y);\n    let _e43 = model;\n    let _e44 = vertexPosition_1;\n    worldPos = (_e43 * vec4<f32>(_e44.x, _e44.y, _e44.z, 1f)).xyz;\n    let _e53 = model;\n    normalMat = mat3x3<f32>(_e53[0].xyz, _e53[1].xyz, _e53[2].xyz);\n    let _e64 = normalMat;\n    let _e65 = vertexNormal_1;\n    worldNormal = (_e64 * _e65);\n    let _e68 = worldNormal;\n    nLen = length(_e68);\n    let _e71 = nLen;\n    if (_e71 > 0.000001f) {\n        let _e74 = worldNormal;\n        let _e75 = nLen;\n        local = (_e74 / vec3(_e75));\n    } else {\n        local = vec3<f32>(0f, 1f, 0f);\n    }\n    let _e83 = local;\n    worldNormal = _e83;\n    let _e85 = outline;\n    if (_e85.params.z > 0.5f) {\n        {\n            let _e90 = camera;\n            let _e92 = worldPos;\n            clipPos = (_e90.viewProjection * vec4<f32>(_e92.x, _e92.y, _e92.z, 1f));\n            let _e99 = camera;\n            let _e101 = worldNormal;\n            clipNormal = (_e99.viewProjection * vec4<f32>(_e101.x, _e101.y, _e101.z, 0f));\n            let _e109 = clipNormal;\n            dir = _e109.xy;\n            let _e112 = outline;\n            aspect = max(_e112.params.w, 0.0001f);\n            let _e118 = dir;\n            let _e120 = aspect;\n            let _e122 = dir;\n            metric = vec2<f32>((_e118.x / _e120), _e122.y);\n            let _e126 = metric;\n            mLen = length(_e126);\n            let _e129 = mLen;\n            if (_e129 > 0.000001f) {\n                {\n                    let _e132 = metric;\n                    let _e133 = mLen;\n                    unit = (_e132 / vec2(_e133));\n                    let _e137 = clipPos;\n                    let _e139 = clipPos;\n                    let _e141 = unit;\n                    let _e143 = aspect;\n                    let _e145 = unit;\n                    let _e148 = thickness;\n                    let _e150 = clipPos;\n                    let _e153 = (_e139.xy + ((vec2<f32>((_e141.x * _e143), _e145.y) * _e148) * _e150.w));\n                    clipPos.x = _e153.x;\n                    clipPos.y = _e153.y;\n                }\n            }\n        }\n    } else {\n        {\n            let _e158 = camera;\n            let _e160 = worldPos;\n            let _e161 = worldNormal;\n            let _e162 = thickness;\n            let _e164 = (_e160 + (_e161 * _e162));\n            clipPos = (_e158.viewProjection * vec4<f32>(_e164.x, _e164.y, _e164.z, 1f));\n        }\n    }\n    let _e172 = clipPos;\n    let _e174 = depthBias;\n    let _e175 = clipPos;\n    let _e180 = clipPos;\n    clipPos.z = clamp((_e172.z + (_e174 * _e175.w)), 0f, _e180.w);\n    let _e184 = clipPos;\n    gl_Position = _e184;\n    let _e185 = outline;\n    let _e187 = instanceColor_1;\n    fragColor = (_e185.color * _e187);\n    return;\n}\n\n@vertex \nfn main(@location(0) vertexPosition: vec3<f32>, @location(1) vertexNormal: vec3<f32>, @location(2) instanceModel0: vec4<f32>, @location(3) instanceModel1: vec4<f32>, @location(4) instanceModel2: vec4<f32>, @location(5) instanceModel3: vec4<f32>, @location(6) instanceColor: vec4<f32>, @location(7) instanceData: vec4<f32>) -> VertexOutput {\n    vertexPosition_1 = vertexPosition;\n    vertexNormal_1 = vertexNormal;\n    instanceModel0_1 = instanceModel0;\n    instanceModel1_1 = instanceModel1;\n    instanceModel2_1 = instanceModel2;\n    instanceModel3_1 = instanceModel3;\n    instanceColor_1 = instanceColor;\n    instanceData_1 = instanceData;\n    main_1();\n    let _e47 = fragColor;\n    let _e49 = gl_Position;\n    return VertexOutput(_e47, _e49);\n}\n",
+  "fragment": "struct FragmentOutput {\n    @location(0) outColor: vec4<f32>,\n}\n\nvar<private> fragColor_1: vec4<f32>;\nvar<private> outColor: vec4<f32>;\n\nfn main_1() {\n    var alpha: f32;\n\n    let _e2 = fragColor_1;\n    alpha = clamp(_e2.w, 0f, 1f);\n    let _e8 = fragColor_1;\n    let _e10 = alpha;\n    let _e11 = (_e8.xyz * _e10);\n    let _e12 = alpha;\n    outColor = vec4<f32>(_e11.x, _e11.y, _e11.z, _e12);\n    return;\n}\n\n@fragment \nfn main(@location(0) fragColor: vec4<f32>) -> FragmentOutput {\n    fragColor_1 = fragColor;\n    main_1();\n    let _e7 = outColor;\n    return FragmentOutput(_e7);\n}\n",
+  "slots": {
+    "CameraMatrices": {
+      "group": 0,
+      "binding": 0,
+      "sizeInBytes": 192,
+      "memberOffsets": {
+        "view": 0,
+        "projection": 64,
+        "viewProjection": 128
+      }
+    },
+    "Outline": {
+      "group": 0,
+      "binding": 1,
+      "sizeInBytes": 32,
+      "memberOffsets": {
+        "color": 0,
+        "params": 16
+      }
+    }
+  },
+  "inputs": [
+    {
+      "name": "vertexPosition",
+      "location": 0,
+      "components": 3
+    },
+    {
+      "name": "vertexNormal",
+      "location": 1,
+      "components": 3
+    },
+    {
+      "name": "instanceModel0",
+      "location": 2,
+      "components": 4
+    },
+    {
+      "name": "instanceModel1",
+      "location": 3,
+      "components": 4
+    },
+    {
+      "name": "instanceModel2",
+      "location": 4,
+      "components": 4
+    },
+    {
+      "name": "instanceModel3",
+      "location": 5,
+      "components": 4
+    },
+    {
+      "name": "instanceColor",
+      "location": 6,
+      "components": 4
+    },
+    {
+      "name": "instanceData",
+      "location": 7,
+      "components": 4
+    }
+  ]
+}

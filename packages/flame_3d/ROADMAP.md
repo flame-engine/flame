@@ -24,9 +24,22 @@ materials.
 ### Abstracting the Flutter GPU into a user-friendly API for 3D
 
 - [x] Abstract the GPU setup into a class that represents the graphics device
-  - [ ] Setup binding logic for meshes, geometry and materials.
+  - [x] Setup binding logic for meshes, geometry and materials.
+  - [x] Bind pipelines, render state and resources only when they change.
+  - [x] Upload data shared by a render pass (camera, lights) once per pass.
+  - [x] Report frame statistics (draw calls, instances, triangles, state changes).
+- [x] Batch draws of the same surface and material into instanced draws.
+  - [x] Sort opaque draws to batch and limit state changes, translucent draws back to front.
+- [x] Give materials their own render state (blending, depth test and writes, culling).
+  - [x] Keep back-face culling right for mirroring cameras and mirrored objects.
+- [x] Real-time shadows from a directional light.
+  - [x] Fit the shadow map to what the camera sees, aligned with its texels.
+  - [x] Soft edges, tinted shadows, and a shadow catcher for 2D ground.
+  - [ ] Cascaded shadow maps for large scenes, and shadows from point lights.
 - [ ] Provide a `Mesh` API
   - [x] Provide `Surface`s that can hold geometric shapes.
+  - [x] Build `Surface`s straight from typed arrays, with custom vertex layouts.
+  - [x] Support 32-bit indices for large surfaces.
   - [x] Provide a `Material` API
     - [x] Define a `Texture` API to be used with the `Material` API
       - [x] Support images as textures

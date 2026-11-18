@@ -5,7 +5,7 @@ in vec4 vertexJoints;
 in vec4 vertexWeights;
 
 uniform JointMatrices {
-  mat4 joints[16];
+  mat4 joints[64];
 } jointMatrices;
 
 mat4 computeSkinMatrix() {

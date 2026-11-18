@@ -11,6 +11,11 @@ import 'package:flutter/foundation.dart';
 /// order to avoid resource leaks.
 ///
 /// Direct modification of this vector's [storage] is not allowed.
+///
+/// Every method of this vector that changes its value notifies. Functions
+/// that write into a vector passed to them as an output argument, such as
+/// `Matrix4.transform3`, `Vector3.crossInto` or `Matrix4.decompose`, bypass
+/// the notification; set the value through this vector's own methods instead.
 /// {@endtemplate}
 class NotifyingVector3.zero() extends Vector3 with ChangeNotifier {
   /// {@macro notifying_vector_3}
@@ -81,6 +86,37 @@ class NotifyingVector3.zero() extends Vector3 with ChangeNotifier {
   @override
   void postmultiply(Matrix3 arg) {
     super.postmultiply(arg);
+    notifyListeners();
+  }
+
+  @override
+  void reflect(Vector3 normal) {
+    super.reflect(normal);
+    notifyListeners();
+  }
+
+  @override
+  void applyProjection(Matrix4 arg) {
+    super.applyProjection(arg);
+    notifyListeners();
+  }
+
+  // Vector3.applyAxisAngle delegates to applyQuaternion, which notifies.
+  @override
+  void applyQuaternion(Quaternion arg) {
+    super.applyQuaternion(arg);
+    notifyListeners();
+  }
+
+  @override
+  void applyMatrix3(Matrix3 arg) {
+    super.applyMatrix3(arg);
+    notifyListeners();
+  }
+
+  @override
+  void applyMatrix4(Matrix4 arg) {
+    super.applyMatrix4(arg);
     notifyListeners();
   }
 
@@ -181,8 +217,68 @@ class NotifyingVector3.zero() extends Vector3 with ChangeNotifier {
   }
 
   @override
+  set xz(Vector2 arg) {
+    super.xz = arg;
+    notifyListeners();
+  }
+
+  @override
   set yx(Vector2 arg) {
     super.yx = arg;
+    notifyListeners();
+  }
+
+  @override
+  set yz(Vector2 arg) {
+    super.yz = arg;
+    notifyListeners();
+  }
+
+  @override
+  set zx(Vector2 arg) {
+    super.zx = arg;
+    notifyListeners();
+  }
+
+  @override
+  set zy(Vector2 arg) {
+    super.zy = arg;
+    notifyListeners();
+  }
+
+  @override
+  set xyz(Vector3 arg) {
+    super.xyz = arg;
+    notifyListeners();
+  }
+
+  @override
+  set xzy(Vector3 arg) {
+    super.xzy = arg;
+    notifyListeners();
+  }
+
+  @override
+  set yxz(Vector3 arg) {
+    super.yxz = arg;
+    notifyListeners();
+  }
+
+  @override
+  set yzx(Vector3 arg) {
+    super.yzx = arg;
+    notifyListeners();
+  }
+
+  @override
+  set zxy(Vector3 arg) {
+    super.zxy = arg;
+    notifyListeners();
+  }
+
+  @override
+  set zyx(Vector3 arg) {
+    super.zyx = arg;
     notifyListeners();
   }
 
@@ -205,5 +301,7 @@ class NotifyingVector3.zero() extends Vector3 with ChangeNotifier {
   }
 
   @override
-  Float32List get storage => super.storage.asUnmodifiableView();
+  Float32List get storage => _unmodifiableStorage;
+  late final Float32List _unmodifiableStorage = super.storage
+      .asUnmodifiableView();
 }

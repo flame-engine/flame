@@ -1,0 +1,85 @@
+{
+  "vertex": "struct JointMatrices {\n    joints: array<mat4x4<f32>, 64>,\n}\n\nstruct CameraMatrices {\n    view: mat4x4<f32>,\n    projection: mat4x4<f32>,\n    viewProjection: mat4x4<f32>,\n}\n\nstruct Outline {\n    color: vec4<f32>,\n    params: vec4<f32>,\n}\n\nstruct VertexOutput {\n    @location(0) fragColor: vec4<f32>,\n    @builtin(position) gl_Position: vec4<f32>,\n}\n\nvar<private> vertexPosition_1: vec3<f32>;\nvar<private> vertexNormal_1: vec3<f32>;\nvar<private> vertexJoints_1: vec4<f32>;\nvar<private> vertexWeights_1: vec4<f32>;\n@group(0) @binding(0) \nvar<uniform> jointMatrices: JointMatrices;\nvar<private> instanceModel0_1: vec4<f32>;\nvar<private> instanceModel1_1: vec4<f32>;\nvar<private> instanceModel2_1: vec4<f32>;\nvar<private> instanceModel3_1: vec4<f32>;\nvar<private> instanceColor_1: vec4<f32>;\nvar<private> instanceData_1: vec4<f32>;\n@group(0) @binding(1) \nvar<uniform> camera: CameraMatrices;\n@group(0) @binding(2) \nvar<uniform> outline: Outline;\nvar<private> fragColor: vec4<f32>;\nvar<private> gl_Position: vec4<f32>;\n\nfn computeSkinMatrix() -> mat4x4<f32> {\n    let _e7 = vertexWeights_1;\n    let _e11 = vertexWeights_1;\n    let _e16 = vertexWeights_1;\n    let _e21 = vertexWeights_1;\n    if ((((_e7.x == 0f) && (_e11.y == 0f)) && (_e16.z == 0f)) && (_e21.w == 0f)) {\n        {\n            return mat4x4<f32>(vec4<f32>(1f, 0f, 0f, 0f), vec4<f32>(0f, 1f, 0f, 0f), vec4<f32>(0f, 0f, 1f, 0f), vec4<f32>(0f, 0f, 0f, 1f));\n        }\n    }\n    let _e33 = vertexWeights_1;\n    let _e35 = vertexJoints_1;\n    let _e40 = jointMatrices.joints[i32(_e35.x)];\n    let _e42 = vertexWeights_1;\n    let _e44 = vertexJoints_1;\n    let _e49 = jointMatrices.joints[i32(_e44.y)];\n    let _e52 = vertexWeights_1;\n    let _e54 = vertexJoints_1;\n    let _e59 = jointMatrices.joints[i32(_e54.z)];\n    let _e62 = vertexWeights_1;\n    let _e64 = vertexJoints_1;\n    let _e69 = jointMatrices.joints[i32(_e64.w)];\n    return ((((_e33.x * _e40) + (_e42.y * _e49)) + (_e52.z * _e59)) + (_e62.w * _e69));\n}\n\nfn instanceModelMatrix() -> mat4x4<f32> {\n    var w: f32;\n\n    let _e13 = instanceModel3_1;\n    let _e15 = instanceColor_1;\n    let _e17 = instanceData_1;\n    w = max(_e13.w, min(min(_e15.w, _e17.x), -100000000000000000000000000000000000000f));\n    let _e25 = instanceModel0_1;\n    let _e26 = instanceModel1_1;\n    let _e27 = instanceModel2_1;\n    let _e28 = instanceModel3_1;\n    let _e29 = _e28.xyz;\n    let _e30 = w;\n    let _e34 = vec4<f32>(_e29.x, _e29.y, _e29.z, _e30);\n    return mat4x4<f32>(vec4<f32>(_e25.x, _e25.y, _e25.z, _e25.w), vec4<f32>(_e26.x, _e26.y, _e26.z, _e26.w), vec4<f32>(_e27.x, _e27.y, _e27.z, _e27.w), vec4<f32>(_e34.x, _e34.y, _e34.z, _e34.w));\n}\n\nfn main_1() {\n    var model: mat4x4<f32>;\n    var combined: mat4x4<f32>;\n    var scale: f32;\n    var thickness: f32;\n    var depthBias: f32;\n    var worldPos: vec3<f32>;\n    var worldNormal: vec3<f32>;\n    var nLen: f32;\n    var local: vec3<f32>;\n    var clipPos: vec4<f32>;\n    var clipNormal: vec4<f32>;\n    var dir: vec2<f32>;\n    var aspect: f32;\n    var metric: vec2<f32>;\n    var mLen: f32;\n    var unit: vec2<f32>;\n\n    let _e26 = instanceModelMatrix();\n    model = _e26;\n    let _e28 = model;\n    let _e29 = computeSkinMatrix();\n    combined = (_e28 * _e29);\n    let _e34 = instanceData_1;\n    scale = max(0f, (1f + _e34.x));\n    let _e39 = outline;\n    let _e42 = scale;\n    thickness = (_e39.params.x * _e42);\n    let _e45 = outline;\n    let _e48 = instanceData_1;\n    depthBias = (_e45.params.y + _e48.y);\n    let _e52 = combined;\n    let _e53 = vertexPosition_1;\n    worldPos = (_e52 * vec4<f32>(_e53.x, _e53.y, _e53.z, 1f)).xyz;\n    let _e62 = combined;\n    let _e72 = vertexNormal_1;\n    worldNormal = (mat3x3<f32>(_e62[0].xyz, _e62[1].xyz, _e62[2].xyz) * _e72);\n    let _e75 = worldNormal;\n    nLen = length(_e75);\n    let _e78 = nLen;\n    if (_e78 > 0.000001f) {\n        let _e81 = worldNormal;\n        let _e82 = nLen;\n        local = (_e81 / vec3(_e82));\n    } else {\n        local = vec3<f32>(0f, 1f, 0f);\n    }\n    let _e90 = local;\n    worldNormal = _e90;\n    let _e92 = outline;\n    if (_e92.params.z > 0.5f) {\n        {\n            let _e97 = camera;\n            let _e99 = worldPos;\n            clipPos = (_e97.viewProjection * vec4<f32>(_e99.x, _e99.y, _e99.z, 1f));\n            let _e106 = camera;\n            let _e108 = worldNormal;\n            clipNormal = (_e106.viewProjection * vec4<f32>(_e108.x, _e108.y, _e108.z, 0f));\n            let _e116 = clipNormal;\n            dir = _e116.xy;\n            let _e119 = outline;\n            aspect = max(_e119.params.w, 0.0001f);\n            let _e125 = dir;\n            let _e127 = aspect;\n            let _e129 = dir;\n            metric = vec2<f32>((_e125.x / _e127), _e129.y);\n            let _e133 = metric;\n            mLen = length(_e133);\n            let _e136 = mLen;\n            if (_e136 > 0.000001f) {\n                {\n                    let _e139 = metric;\n                    let _e140 = mLen;\n                    unit = (_e139 / vec2(_e140));\n                    let _e144 = clipPos;\n                    let _e146 = clipPos;\n                    let _e148 = unit;\n                    let _e150 = aspect;\n                    let _e152 = unit;\n                    let _e155 = thickness;\n                    let _e157 = clipPos;\n                    let _e160 = (_e146.xy + ((vec2<f32>((_e148.x * _e150), _e152.y) * _e155) * _e157.w));\n                    clipPos.x = _e160.x;\n                    clipPos.y = _e160.y;\n                }\n            }\n        }\n    } else {\n        {\n            let _e165 = camera;\n            let _e167 = worldPos;\n            let _e168 = worldNormal;\n            let _e169 = thickness;\n            let _e171 = (_e167 + (_e168 * _e169));\n            clipPos = (_e165.viewProjection * vec4<f32>(_e171.x, _e171.y, _e171.z, 1f));\n        }\n    }\n    let _e179 = clipPos;\n    let _e181 = depthBias;\n    let _e182 = clipPos;\n    let _e187 = clipPos;\n    clipPos.z = clamp((_e179.z + (_e181 * _e182.w)), 0f, _e187.w);\n    let _e191 = clipPos;\n    gl_Position = _e191;\n    let _e192 = outline;\n    let _e194 = instanceColor_1;\n    fragColor = (_e192.color * _e194);\n    return;\n}\n\n@vertex \nfn main(@location(0) vertexPosition: vec3<f32>, @location(1) vertexNormal: vec3<f32>, @location(2) vertexJoints: vec4<f32>, @location(3) vertexWeights: vec4<f32>, @location(4) instanceModel0: vec4<f32>, @location(5) instanceModel1: vec4<f32>, @location(6) instanceModel2: vec4<f32>, @location(7) instanceModel3: vec4<f32>, @location(8) instanceColor: vec4<f32>, @location(9) instanceData: vec4<f32>) -> VertexOutput {\n    vertexPosition_1 = vertexPosition;\n    vertexNormal_1 = vertexNormal;\n    vertexJoints_1 = vertexJoints;\n    vertexWeights_1 = vertexWeights;\n    instanceModel0_1 = instanceModel0;\n    instanceModel1_1 = instanceModel1;\n    instanceModel2_1 = instanceModel2;\n    instanceModel3_1 = instanceModel3;\n    instanceColor_1 = instanceColor;\n    instanceData_1 = instanceData;\n    main_1();\n    let _e58 = fragColor;\n    let _e60 = gl_Position;\n    return VertexOutput(_e58, _e60);\n}\n",
+  "fragment": "struct FragmentOutput {\n    @location(0) outColor: vec4<f32>,\n}\n\nvar<private> fragColor_1: vec4<f32>;\nvar<private> outColor: vec4<f32>;\n\nfn main_1() {\n    var alpha: f32;\n\n    let _e2 = fragColor_1;\n    alpha = clamp(_e2.w, 0f, 1f);\n    let _e8 = fragColor_1;\n    let _e10 = alpha;\n    let _e11 = (_e8.xyz * _e10);\n    let _e12 = alpha;\n    outColor = vec4<f32>(_e11.x, _e11.y, _e11.z, _e12);\n    return;\n}\n\n@fragment \nfn main(@location(0) fragColor: vec4<f32>) -> FragmentOutput {\n    fragColor_1 = fragColor;\n    main_1();\n    let _e7 = outColor;\n    return FragmentOutput(_e7);\n}\n",
+  "slots": {
+    "JointMatrices": {
+      "group": 0,
+      "binding": 0,
+      "sizeInBytes": 4096,
+      "memberOffsets": {
+        "joints": 0
+      }
+    },
+    "CameraMatrices": {
+      "group": 0,
+      "binding": 1,
+      "sizeInBytes": 192,
+      "memberOffsets": {
+        "view": 0,
+        "projection": 64,
+        "viewProjection": 128
+      }
+    },
+    "Outline": {
+      "group": 0,
+      "binding": 2,
+      "sizeInBytes": 32,
+      "memberOffsets": {
+        "color": 0,
+        "params": 16
+      }
+    }
+  },
+  "inputs": [
+    {
+      "name": "vertexPosition",
+      "location": 0,
+      "components": 3
+    },
+    {
+      "name": "vertexNormal",
+      "location": 1,
+      "components": 3
+    },
+    {
+      "name": "vertexJoints",
+      "location": 2,
+      "components": 4
+    },
+    {
+      "name": "vertexWeights",
+      "location": 3,
+      "components": 4
+    },
+    {
+      "name": "instanceModel0",
+      "location": 4,
+      "components": 4
+    },
+    {
+      "name": "instanceModel1",
+      "location": 5,
+      "components": 4
+    },
+    {
+      "name": "instanceModel2",
+      "location": 6,
+      "components": 4
+    },
+    {
+      "name": "instanceModel3",
+      "location": 7,
+      "components": 4
+    },
+    {
+      "name": "instanceColor",
+      "location": 8,
+      "components": 4
+    },
+    {
+      "name": "instanceData",
+      "location": 9,
+      "components": 4
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 import 'package:flame_3d_example/commands/destroy_command.dart';
 import 'package:flame_3d_example/example_game_3d.dart';
 import 'package:flame_3d_example/scenarios/game_scenario.dart';
+import 'package:flame_3d_example/scenarios/standalone_scenario.dart';
 import 'package:flame_console/flame_console.dart';
 
 class SetupCommand() extends FlameConsoleCommand<ExampleGame3D> {
@@ -22,7 +23,9 @@ class SetupCommand() extends FlameConsoleCommand<ExampleGame3D> {
       return ('Unknown scenario: $scenarioName', '');
     }
 
-    DestroyCommand.destroyMatching(game, (_) => true);
+    if (scenario is! StandaloneScenario) {
+      DestroyCommand.destroyMatching(game, (_) => true);
+    }
     scenario.setup(game);
     return (null, 'Scenario $scenarioName has been set up.');
   }

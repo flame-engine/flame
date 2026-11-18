@@ -1,0 +1,33 @@
+{
+  "vertex": "struct VertexOutput {\n    @location(0) fragNdc: vec2<f32>,\n    @builtin(position) gl_Position: vec4<f32>,\n}\n\nvar<private> vertexPosition_1: vec3<f32>;\nvar<private> fragNdc: vec2<f32>;\nvar<private> gl_Position: vec4<f32>;\n\nfn main_1() {\n    let _e2 = vertexPosition_1;\n    fragNdc = _e2.xy;\n    let _e5 = vertexPosition_1;\n    let _e6 = _e5.xy;\n    gl_Position = vec4<f32>(_e6.x, _e6.y, 1f, 1f);\n    return;\n}\n\n@vertex \nfn main(@location(0) vertexPosition: vec3<f32>) -> VertexOutput {\n    vertexPosition_1 = vertexPosition;\n    main_1();\n    let _e7 = fragNdc;\n    let _e9 = gl_Position;\n    return VertexOutput(_e7, _e9);\n}\n",
+  "fragment": "struct Skybox {\n    invViewProjection: mat4x4<f32>,\n    zenithColor: vec4<f32>,\n    horizonColor: vec4<f32>,\n    groundColor: vec4<f32>,\n    sunColor: vec4<f32>,\n    sunDir: vec4<f32>,\n    upAndMode: vec4<f32>,\n    params: vec4<f32>,\n}\n\nstruct FragmentOutput {\n    @location(0) outColor: vec4<f32>,\n}\n\nvar<private> fragNdc_1: vec2<f32>;\nvar<private> outColor: vec4<f32>;\n@group(1) @binding(0) \nvar panoramaTexture: texture_2d<f32>;\n@group(1) @binding(1) \nvar panoramaTextureSampler: sampler;\n@group(1) @binding(2) \nvar<uniform> sky: Skybox;\n\nfn equirectUv(dir: vec3<f32>) -> vec2<f32> {\n    var dir_1: vec3<f32>;\n    var phi: f32;\n    var theta: f32;\n\n    dir_1 = dir;\n    let _e23 = dir_1;\n    let _e25 = dir_1;\n    phi = atan2(_e23.z, _e25.x);\n    let _e29 = dir_1;\n    theta = asin(clamp(_e29.y, -1f, 1f));\n    let _e37 = phi;\n    let _e45 = theta;\n    return vec2<f32>(((_e37 * 0.15915494f) + 0.5f), (0.5f - (_e45 * 0.31830987f)));\n}\n\nfn main_1() {\n    var farWorld: vec4<f32>;\n    var nearWorld: vec4<f32>;\n    var pFar: vec3<f32>;\n    var pNear: vec3<f32>;\n    var dir_2: vec3<f32>;\n    var color: vec3<f32>;\n    var up: vec3<f32>;\n    var elev: f32;\n    var t: f32;\n    var t_1: f32;\n    var sunDot: f32;\n    var cosDisk: f32;\n    var disk: f32;\n    var halo: f32;\n\n    let _e21 = sky;\n    let _e23 = fragNdc_1;\n    farWorld = (_e21.invViewProjection * vec4<f32>(_e23.x, _e23.y, 1f, 1f));\n    let _e31 = sky;\n    let _e33 = fragNdc_1;\n    nearWorld = (_e31.invViewProjection * vec4<f32>(_e33.x, _e33.y, 0f, 1f));\n    let _e41 = farWorld;\n    let _e43 = farWorld;\n    pFar = (_e41.xyz / vec3(max(abs(_e43.w), 0.000001f)));\n    let _e51 = nearWorld;\n    let _e53 = nearWorld;\n    pNear = (_e51.xyz / vec3(max(abs(_e53.w), 0.000001f)));\n    let _e61 = pFar;\n    let _e62 = pNear;\n    dir_2 = normalize((_e61 - _e62));\n    let _e67 = sky;\n    if (_e67.upAndMode.w > 0.5f) {\n        {\n            let _e72 = dir_2;\n            let _e73 = equirectUv(_e72);\n            let _e74 = textureSample(panoramaTexture, panoramaTextureSampler, _e73);\n            color = _e74.xyz;\n        }\n    } else {\n        {\n            let _e76 = sky;\n            up = normalize(_e76.upAndMode.xyz);\n            let _e81 = dir_2;\n            let _e82 = up;\n            elev = clamp(dot(_e81, _e82), -1f, 1f);\n            let _e89 = elev;\n            if (_e89 >= 0f) {\n                {\n                    let _e92 = elev;\n                    let _e93 = sky;\n                    t = pow(_e92, max(_e93.params.x, 0.05f));\n                    let _e100 = sky;\n                    let _e103 = sky;\n                    let _e106 = t;\n                    color = mix(_e100.horizonColor.xyz, _e103.zenithColor.xyz, vec3(_e106));\n                }\n            } else {\n                {\n                    let _e109 = elev;\n                    t_1 = pow(-(_e109), 0.65f);\n                    let _e114 = sky;\n                    let _e117 = sky;\n                    let _e120 = t_1;\n                    color = mix(_e114.horizonColor.xyz, _e117.groundColor.xyz, vec3(_e120));\n                }\n            }\n            let _e123 = dir_2;\n            let _e124 = sky;\n            sunDot = dot(_e123, normalize(_e124.sunDir.xyz));\n            let _e130 = sky;\n            cosDisk = _e130.sunDir.w;\n            let _e134 = cosDisk;\n            let _e137 = cosDisk;\n            let _e140 = sunDot;\n            disk = smoothstep((_e134 - 0.003f), (_e137 + 0.001f), _e140);\n            let _e143 = sunDot;\n            let _e148 = sky;\n            halo = (pow(max(_e143, 0f), 12f) * _e148.params.y);\n            let _e153 = color;\n            let _e154 = sky;\n            let _e157 = sky;\n            let _e161 = disk;\n            let _e162 = halo;\n            color = (_e153 + ((_e154.sunColor.xyz * _e157.sunColor.w) * (_e161 + _e162)));\n        }\n    }\n    let _e166 = color;\n    let _e167 = sky;\n    color = (_e166 * _e167.params.z);\n    let _e171 = color;\n    let _e176 = clamp(_e171, vec3(0f), vec3(1f));\n    outColor = vec4<f32>(_e176.x, _e176.y, _e176.z, 1f);\n    return;\n}\n\n@fragment \nfn main(@location(0) fragNdc: vec2<f32>) -> FragmentOutput {\n    fragNdc_1 = fragNdc;\n    main_1();\n    let _e28 = outColor;\n    return FragmentOutput(_e28);\n}\n",
+  "slots": {
+    "Skybox": {
+      "group": 1,
+      "binding": 2,
+      "sizeInBytes": 176,
+      "memberOffsets": {
+        "invViewProjection": 0,
+        "zenithColor": 64,
+        "horizonColor": 80,
+        "groundColor": 96,
+        "sunColor": 112,
+        "sunDir": 128,
+        "upAndMode": 144,
+        "params": 160
+      }
+    },
+    "panoramaTexture": {
+      "group": 1,
+      "binding": 0,
+      "samplerBinding": 1
+    }
+  },
+  "inputs": [
+    {
+      "name": "vertexPosition",
+      "location": 0,
+      "components": 3
+    }
+  ]
+}
