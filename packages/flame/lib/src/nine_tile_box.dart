@@ -168,14 +168,18 @@ class NineTileBox {
   }
 
   void _draw(Canvas c, Rect dst, Paint paint) {
+    if (dst.isEmpty) {
+      return;
+    }
+
     final src = sprite.src;
-    final isFullImage =
+    final doesSpriteCoverFullImage =
         src.left == 0 &&
         src.top == 0 &&
         src.right == sprite.image.width &&
         src.bottom == sprite.image.height;
 
-    if (isFullImage) {
+    if (doesSpriteCoverFullImage) {
       c.drawImageNine(sprite.image, center, dst, paint);
     } else {
       _drawTiles(c, dst, paint);
@@ -206,19 +210,19 @@ class NineTileBox {
       srcBottom,
     ];
 
-    final dstXs = [
+    final dstXs = _calculateDstPositionsInAxis(
       dst.left,
-      dst.left + center.left,
-      dst.right - (sprite.src.width - center.right),
-      dst.right,
-    ];
+      dst.width,
+      center.left,
+      sprite.src.width - center.right,
+    );
 
-    final dstYs = [
+    final dstYs = _calculateDstPositionsInAxis(
       dst.top,
-      dst.top + center.top,
-      dst.bottom - (sprite.src.height - center.bottom),
-      dst.bottom,
-    ];
+      dst.height,
+      center.top,
+      sprite.src.height - center.bottom,
+    );
 
     for (var row = 0; row < 3; row++) {
       for (var col = 0; col < 3; col++) {
@@ -240,5 +244,26 @@ class NineTileBox {
         );
       }
     }
+  }
+
+  /// Returns the four positions of one axis in destination space.
+  ///
+  /// When [leading] and [trailing] fixed borders do not fit in [length], both
+  /// are scaled down so they meet, leaving no room for the center.
+  static List<double> _calculateDstPositionsInAxis(
+    double start,
+    double length,
+    double leading,
+    double trailing,
+  ) {
+    final sum = leading + trailing;
+    final scale = sum > length ? length / sum : 1.0;
+
+    return [
+      start,
+      start + (leading * scale),
+      start + length - (trailing * scale),
+      start + length,
+    ];
   }
 }
