@@ -34,7 +34,13 @@ class _Painter({
   }
 
   @override
-  bool shouldRepaint(_) => false;
+  bool shouldRepaint(covariant _Painter oldDelegate) {
+    return image != oldDelegate.image ||
+        tileSize != oldDelegate.tileSize ||
+        destTileSize != oldDelegate.destTileSize ||
+        srcPosition != oldDelegate.srcPosition ||
+        srcSize != oldDelegate.srcSize;
+  }
 }
 
 /// A [StatelessWidget] that renders NineTileBox
