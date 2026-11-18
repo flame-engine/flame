@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/nine_tile_box.dart' as non_widget;
 import 'package:flame/src/sprite.dart';
 import 'package:flame/src/widgets/base_future_builder.dart';
@@ -15,12 +16,14 @@ class _Painter({
   required final Image image,
   required final double tileSize,
   required final double destTileSize,
+  final Vector2? srcPosition,
+  final Vector2? srcSize,
 }) extends CustomPainter {
   late final non_widget.NineTileBox _nineTileBox;
 
   this
     : _nineTileBox = non_widget.NineTileBox(
-        Sprite(image),
+        Sprite(image, srcPosition: srcPosition, srcSize: srcSize),
         tileSize: tileSize.toInt(),
         destTileSize: destTileSize.toInt(),
       );
@@ -31,7 +34,13 @@ class _Painter({
   }
 
   @override
-  bool shouldRepaint(_) => false;
+  bool shouldRepaint(covariant _Painter oldDelegate) {
+    return image != oldDelegate.image ||
+        tileSize != oldDelegate.tileSize ||
+        destTileSize != oldDelegate.destTileSize ||
+        srcPosition != oldDelegate.srcPosition ||
+        srcSize != oldDelegate.srcSize;
+  }
 }
 
 /// A [StatelessWidget] that renders NineTileBox
@@ -43,6 +52,13 @@ class NineTileBoxWidget extends StatefulWidget {
 
   /// The size of the tile that will be used to render on the canvas
   final double destTileSize;
+
+  /// The position of the sprite region within the image
+  final Vector2? srcPosition;
+
+  /// The size of the sprite region within the image
+  final Vector2? srcSize;
+
   final double? width;
   final double? height;
 
@@ -60,6 +76,8 @@ class NineTileBoxWidget extends StatefulWidget {
     required Image image,
     required this.tileSize,
     required this.destTileSize,
+    this.srcPosition,
+    this.srcSize,
     this.width,
     this.height,
     this.child,
@@ -83,6 +101,8 @@ class NineTileBoxWidget extends StatefulWidget {
     required String path,
     required this.tileSize,
     required this.destTileSize,
+    this.srcPosition,
+    this.srcSize,
     Images? images,
     this.width,
     this.height,
@@ -131,6 +151,8 @@ class _NineTileBoxWidgetState() extends State<NineTileBoxWidget> {
           image: image,
           tileSize: widget.tileSize,
           destTileSize: widget.destTileSize,
+          srcPosition: widget.srcPosition,
+          srcSize: widget.srcSize,
           width: widget.width,
           height: widget.height,
           padding: widget.padding,
@@ -148,6 +170,8 @@ class const InternalNineTileBox({
   required final Image image,
   required final double tileSize,
   required final double destTileSize,
+  final Vector2? srcPosition,
+  final Vector2? srcSize,
   final Widget? child,
   final double? width,
   final double? height,
@@ -164,6 +188,8 @@ class const InternalNineTileBox({
           image: image,
           tileSize: tileSize,
           destTileSize: destTileSize,
+          srcPosition: srcPosition,
+          srcSize: srcSize,
         ),
         child: Container(
           padding: padding,
