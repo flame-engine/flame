@@ -305,7 +305,7 @@ For a more advanced use case of post processing, check out the
 [Crystal Ball example](https://examples.flame-engine.org/), which demonstrates camera-level post
 processing and chaining multiple effects using `PostProcessSequentialGroup`.
 
-![Crystal Ball Example](../images/crystal_ball.png)
+![Crystal Ball Example](../../images/crystal_ball.png)
 
 Here's how multiple post-processing effects are combined on a camera:
 
