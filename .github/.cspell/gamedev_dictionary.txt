@@ -36,7 +36,9 @@ multitap # support from a device to recognize many taps at the same time
 orientable # can be oriented
 pathfinding # computer algorithm to find the best path through a world or maze
 perlin # Perlin Noise, a type of noise generating algorithm
+pixelates # turns an image into large, visible pixels
 platformers # plural of platformer, a genre of video game
+premultiply # multiplying the color channels by the alpha channel
 quadtree # a tree-based data structure where each node has exactly 4 children
 rasterizing
 respawn # when the player character dies and is brought back after some time and penalties
