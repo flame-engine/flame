@@ -354,8 +354,10 @@ class CameraComponent({
   /// Makes the [viewfinder] follow the given [target].
   ///
   /// The [target] here can be any read-only [PositionProvider]. For example, a
-  /// [PositionComponent] is the most common choice of target. Alternatively,
-  /// you can use [PositionProviderImpl] to construct the target dynamically.
+  /// [PositionComponent] is the most common choice of target, and it's
+  /// followed at its position in the world even when it's a child of another
+  /// [PositionComponent]. Alternatively, you can use [PositionProviderImpl] to
+  /// construct the target dynamically.
   ///
   /// This method adds a [FollowBehavior] to the viewfinder. If there is another
   /// [FollowBehavior] currently applied to the viewfinder, it will be removed
@@ -376,17 +378,16 @@ class CameraComponent({
     bool snap = false,
   }) {
     stop();
-    viewfinder.add(
-      FollowBehavior(
-        target: target,
-        owner: viewfinder,
-        maxSpeed: maxSpeed,
-        horizontalOnly: horizontalOnly,
-        verticalOnly: verticalOnly,
-      ),
+    final followBehavior = FollowBehavior(
+      target: target,
+      owner: viewfinder,
+      maxSpeed: maxSpeed,
+      horizontalOnly: horizontalOnly,
+      verticalOnly: verticalOnly,
     );
+    viewfinder.add(followBehavior);
     if (snap) {
-      viewfinder.position = target.position;
+      viewfinder.position = followBehavior.targetPosition;
     }
   }
 

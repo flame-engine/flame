@@ -3,6 +3,7 @@ import 'package:flame/src/camera/viewport.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/position_component.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math.dart';
 
 /// This behavior will make the [owner] follow the [target].
@@ -17,6 +18,10 @@ import 'package:vector_math/vector_math.dart';
 ///
 /// The flags [horizontalOnly]/[verticalOnly] allow constraining the [owner]'s
 /// movement to the horizontal/vertical directions respectively.
+///
+/// If the [target] is a [PositionComponent], the owner follows it wherever it
+/// is in the component tree, even if it's a child of another
+/// [PositionComponent].
 class FollowBehavior({
   required final ReadOnlyPositionProvider _target,
   var PositionProvider? _owner,
@@ -51,11 +56,36 @@ class FollowBehavior({
     }
   }
 
+  /// The position of the [target] in the coordinate system of the [owner]'s
+  /// position.
+  ///
+  /// The position of a [PositionComponent] is relative to its parent, so if
+  /// the target is a [PositionComponent] with another parent than the owner,
+  /// its absolute position is converted into the owner's coordinate system.
+  /// The position of an owner that isn't a [PositionComponent], such as a
+  /// [Viewfinder], is in world coordinates.
+  @internal
+  Vector2 get targetPosition {
+    final target = _target;
+    if (target is! PositionComponent) {
+      return target.position;
+    }
+    final owner = _owner;
+    if (owner is PositionComponent) {
+      if (owner.parent == target.parent) {
+        return target.position;
+      }
+      return owner.positionOf(owner.absoluteToLocal(target.absolutePosition));
+    }
+    return target.absolutePosition;
+  }
+
   @override
   void update(double dt) {
+    final targetPosition = this.targetPosition;
     _tempDelta.setValues(
-      verticalOnly ? 0 : target.position.x - owner.position.x,
-      horizontalOnly ? 0 : target.position.y - owner.position.y,
+      verticalOnly ? 0 : targetPosition.x - owner.position.x,
+      horizontalOnly ? 0 : targetPosition.y - owner.position.y,
     );
 
     final distance = _tempDelta.length;
