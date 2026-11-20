@@ -64,7 +64,8 @@ class Timer({
     onTick?.call();
     _currentTick += 1;
     if (tickCount != null && _currentTick >= tickCount!) {
-      stop();
+      _current = 0;
+      pause();
     }
   }
 
@@ -81,8 +82,11 @@ class Timer({
   }
 
   /// Reset the timer to 0, but continue running if it currently is running.
+  ///
+  /// This also resets the number of ticks counted towards [tickCount].
   void reset() {
     _current = 0;
+    _currentTick = 0;
   }
 
   ///  Pause the timer (no-op if it is already paused).

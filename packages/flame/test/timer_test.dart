@@ -102,5 +102,51 @@ void main() {
       expect(count, equals(2));
       expect(timer.finished, isTrue);
     });
+
+    test('when tickCount is provided, start ticks the full amount again', () {
+      var count = 0;
+      final timer = Timer(
+        period: 1,
+        repeat: true,
+        tickCount: 2,
+        onTick: () => count++,
+      );
+      timer.update(1.1);
+      timer.update(1.1);
+      expect(count, 2);
+      expect(timer.finished, isTrue);
+      expect(timer.isRunning(), isFalse);
+      expect(timer.current, 0);
+
+      timer.start();
+      expect(timer.finished, isFalse);
+      expect(timer.isRunning(), isTrue);
+      timer.update(1.1);
+      timer.update(1.1);
+      timer.update(1.1);
+      expect(count, 4);
+      expect(timer.finished, isTrue);
+    });
+
+    test('when tickCount is provided, reset also resets the ticks', () {
+      var count = 0;
+      final timer = Timer(
+        period: 1,
+        repeat: true,
+        tickCount: 2,
+        onTick: () => count++,
+      );
+      timer.update(1.1);
+      expect(count, 1);
+
+      timer.reset();
+      timer.update(1.1);
+      expect(count, 2);
+      expect(timer.finished, isFalse);
+      expect(timer.isRunning(), isTrue);
+      timer.update(1.1);
+      expect(count, 3);
+      expect(timer.finished, isTrue);
+    });
   });
 }
