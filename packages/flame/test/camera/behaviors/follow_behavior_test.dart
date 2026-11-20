@@ -266,6 +266,24 @@ void main() {
       );
 
       testWithFlameGame(
+        'follows a target with a different parent at a zero scale',
+        (game) async {
+          final target = PositionComponent(position: Vector2(300, 200))
+            ..addToParent(game);
+          final container = PositionComponent(position: Vector2(100, 50))
+            ..addToParent(game);
+          // A follower that scales in from zero, e.g. with a ScaleEffect.
+          final pursuer = PositionComponent(scale: Vector2.zero())
+            ..add(FollowBehavior(target: target))
+            ..addToParent(container);
+          await game.ready();
+
+          game.update(0.01);
+          expect(pursuer.position, Vector2(200, 150));
+        },
+      );
+
+      testWithFlameGame(
         'follows a nested target with a custom owner',
         (game) async {
           final container = PositionComponent(position: Vector2(100, 50))

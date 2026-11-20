@@ -1,5 +1,6 @@
 import 'package:flame/src/camera/viewfinder.dart';
 import 'package:flame/src/camera/viewport.dart';
+import 'package:flame/src/camera/world.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/position_component.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
@@ -61,9 +62,11 @@ class FollowBehavior({
   ///
   /// The position of a [PositionComponent] is relative to its parent, so if
   /// the target is a [PositionComponent] with another parent than the owner,
-  /// its absolute position is converted into the owner's coordinate system.
-  /// The position of an owner that isn't a [PositionComponent], such as a
-  /// [Viewfinder], is in world coordinates.
+  /// its position is converted into the coordinate system of the owner's
+  /// parent. The position of an owner that isn't a [PositionComponent], such
+  /// as a [Viewfinder], is in the coordinate system of the [World] that the
+  /// target is in, which is rendered without the transforms of the
+  /// components that the world itself is in.
   @internal
   Vector2 get targetPosition {
     final target = _target;
@@ -75,9 +78,24 @@ class FollowBehavior({
       if (owner.parent == target.parent) {
         return target.position;
       }
-      return owner.positionOf(owner.absoluteToLocal(target.absolutePosition));
+      // The owner's parent is used rather than the owner itself, so that the
+      // owner's own transform, e.g. a zero scale, doesn't affect the result.
+      final absolutePosition = target.absolutePosition;
+      return owner.findParent<PositionComponent>()?.absoluteToLocal(
+            absolutePosition,
+          ) ??
+          absolutePosition;
     }
-    return target.absolutePosition;
+    Vector2 position = target.position;
+    for (final ancestor in target.ancestors()) {
+      if (ancestor is World) {
+        break;
+      }
+      if (ancestor is PositionComponent) {
+        position = ancestor.positionOf(position);
+      }
+    }
+    return position;
   }
 
   @override

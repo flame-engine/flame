@@ -129,6 +129,29 @@ void main() {
       expect(camera.viewfinder.position, Vector2(120, 240));
     });
 
+    testWithFlameGame('follow a target in a world within a component', (
+      game,
+    ) async {
+      // The camera renders the world without the transforms of the components
+      // that the world is in, so they don't move the camera either.
+      final container = PositionComponent(position: Vector2(100, 50))
+        ..addToParent(game);
+      final world = World()..addToParent(container);
+      final ship = PositionComponent(position: Vector2(10, 20))
+        ..addToParent(world);
+      final pilot = PositionComponent(position: Vector2(5, 5))
+        ..addToParent(ship);
+      final camera = CameraComponent(world: world)
+        ..follow(ship, snap: true)
+        ..addToParent(game);
+      await game.ready();
+      expect(camera.viewfinder.position, Vector2(10, 20));
+
+      camera.follow(pilot);
+      game.update(0.01);
+      expect(camera.viewfinder.position, Vector2(15, 25));
+    });
+
     testWithFlameGame('moveTo', (game) async {
       final world = World()..addToParent(game);
       final camera = CameraComponent(world: world)..addToParent(game);
