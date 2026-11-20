@@ -27,8 +27,7 @@ class const Pursue(
     }
 
     final explicitTarget = target.position.clone()
-      ..add(parent.velocity)
-      ..multiply(Vector2.all(prediction));
+      ..addScaled(parent.velocity, prediction);
 
     return seek(parent, explicitTarget);
   }
