@@ -215,7 +215,7 @@ void main() {
       expect(timer.finished, isTrue);
     });
 
-    test('when tickCount is provided, stop after the limit unfinishes', () {
+    test('when tickCount is provided, stop resets finished', () {
       final timer = Timer(period: 1, repeat: true, tickCount: 2);
       timer.update(1.1);
       timer.update(1.1);
