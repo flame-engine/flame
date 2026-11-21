@@ -155,6 +155,8 @@ class MyFlameGame extends FlameGame {
 A `Timer` or `TimerComponent` can repeat indefinitely by providing the
 `repeat: true` argument or it can be repeated a certain number of
 times by using the `tickCount` argument together with `repeat: true`.
+Calling `start()` or `reset()` restarts the tick count. `stop()` resets it
+too, so the timer is no longer `finished` afterwards.
 ```
 
 

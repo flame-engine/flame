@@ -148,5 +148,82 @@ void main() {
       expect(count, 3);
       expect(timer.finished, isTrue);
     });
+
+    test('when tickCount is provided, start from onTick ticks again', () {
+      var count = 0;
+      late Timer timer;
+      timer = Timer(
+        period: 1,
+        repeat: true,
+        tickCount: 3,
+        onTick: () {
+          count++;
+          if (count == 3) {
+            timer.start();
+          }
+        },
+      );
+      for (var i = 0; i < 6; i++) {
+        timer.update(1.1);
+      }
+      expect(count, 6);
+      expect(timer.finished, isTrue);
+    });
+
+    test('when tickCount is 1, start from onTick keeps it running', () {
+      var count = 0;
+      late Timer timer;
+      timer = Timer(
+        period: 1,
+        repeat: true,
+        tickCount: 1,
+        onTick: () {
+          count++;
+          if (count == 1) {
+            timer.start();
+          }
+        },
+      );
+      timer.update(1.1);
+      expect(timer.isRunning(), isTrue);
+      expect(timer.finished, isFalse);
+      timer.update(1.1);
+      expect(count, 2);
+      expect(timer.finished, isTrue);
+    });
+
+    test('when tickCount is provided, reset from onTick resets the ticks', () {
+      var count = 0;
+      late Timer timer;
+      timer = Timer(
+        period: 1,
+        repeat: true,
+        tickCount: 2,
+        onTick: () {
+          count++;
+          if (count == 1) {
+            timer.reset();
+          }
+        },
+      );
+      timer.update(1.1);
+      timer.update(1.1);
+      expect(count, 2);
+      expect(timer.finished, isFalse);
+      timer.update(1.1);
+      expect(count, 3);
+      expect(timer.finished, isTrue);
+    });
+
+    test('when tickCount is provided, stop after the limit unfinishes', () {
+      final timer = Timer(period: 1, repeat: true, tickCount: 2);
+      timer.update(1.1);
+      timer.update(1.1);
+      expect(timer.finished, isTrue);
+
+      timer.stop();
+      expect(timer.finished, isFalse);
+      expect(timer.isRunning(), isFalse);
+    });
   });
 }
