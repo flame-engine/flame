@@ -13,6 +13,7 @@ export 'src/flame_test.dart';
 export 'src/flame_test_app.dart';
 export 'src/mock_gesture_events.dart';
 export 'src/mock_image.dart';
+export 'src/mock_keyboard_events.dart';
 export 'src/mock_long_press_events.dart';
 export 'src/mock_mouse_move_event.dart';
 export 'src/mock_scroll_event.dart';
