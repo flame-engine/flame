@@ -141,14 +141,18 @@ class LineSegment(final Vector2 from, final Vector2 to) {
   static final Vector2 _delta21 = Vector2.zero();
   static final Vector2 _delta10 = Vector2.zero();
 
-  /// Whether the given [point] lies in this line segment.
+  /// Whether the given [point] lies in this line segment, within [epsilon] of
+  /// it.
   bool containsPoint(Vector2 point, {double epsilon = 0.01}) {
     final delta = to - from;
     final crossProduct =
         (point.y - from.y) * delta.x - (point.x - from.x) * delta.y;
 
-    // compare versus epsilon for floating point values
-    if (crossProduct.abs() > epsilon) {
+    // The cross product is the distance from the line times the length of the
+    // segment, so compare it with epsilon scaled the same way. A fixed
+    // tolerance rejected the rounding error of 32-bit vectors on long
+    // segments, and missed their intersections.
+    if (crossProduct.abs() > epsilon * delta.length) {
       return false;
     }
 

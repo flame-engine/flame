@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
 import 'package:test/test.dart';
@@ -99,6 +101,52 @@ void main() {
       final lineA = LineSegment(Vector2(-27.5, 2.5), Vector2(-22.5, 2.5));
       final lineB = LineSegment(Vector2(-25, -25), Vector2(-25 + 1 / 18, 25));
       expect(lineA.intersections(lineB), isNotEmpty);
+    });
+
+    test('Long line segments far from the origin should intersect', () {
+      // With 32-bit vectors the intersection point is rounded to about 1e-4
+      // here, which is more than the old tolerance allowed for segments this
+      // long.
+      final lineA = LineSegment(
+        Vector2(-11.9935302734375, 644.5660400390625),
+        Vector2(213.4909210205078, 1324.4595947265625),
+      );
+      final lineB = LineSegment(
+        Vector2(333.929931640625, 876.9893188476562),
+        Vector2(-132.43252563476562, 1092.0362548828125),
+      );
+      expect(lineA.intersections(lineB), hasLength(1));
+      expect(lineB.intersections(lineA), hasLength(1));
+    });
+
+    test('Crossing segments intersect at any length and position', () {
+      final random = Random(1);
+      for (final scale in [10.0, 1000.0, 5000.0]) {
+        for (var i = 0; i < 500; i++) {
+          // two segments that cross at `center`, at least 0.2 rad apart
+          final center = Vector2(
+            random.nextDouble() * scale,
+            random.nextDouble() * scale,
+          );
+          final angleA = random.nextDouble() * pi;
+          final angleB = angleA + 0.2 + random.nextDouble() * (pi - 0.4);
+          final lineA = LineSegment.withLength(
+            start: center - Vector2(cos(angleA), sin(angleA)) * scale / 4,
+            direction: Vector2(cos(angleA), sin(angleA)),
+            length: scale / 2,
+          );
+          final lineB = LineSegment.withLength(
+            start: center - Vector2(cos(angleB), sin(angleB)) * scale / 4,
+            direction: Vector2(cos(angleB), sin(angleB)),
+            length: scale / 2,
+          );
+          expect(
+            lineA.intersections(lineB),
+            hasLength(1),
+            reason: '$lineA and $lineB cross',
+          );
+        }
+      }
     });
 
     group('circleIntersections', () {
