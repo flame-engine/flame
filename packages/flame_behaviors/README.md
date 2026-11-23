@@ -63,4 +63,4 @@ View the [full documentation][flame_behaviors_documentation].
 [very_good_ventures_link]: https://verygood.ventures/?utm_source=github&utm_medium=banner&utm_campaign=CLI
 [flame_package_link]: https://pub.dev/packages/flame
 [flame_behaviors_article]: https://verygood.ventures/blog/build-games-with-flame-behaviors
-[flame_behaviors_documentation]: https://github.com/flame-engine/flame/blob/main/doc/bridge_packages/flame_behaviors/getting-started.md
+[flame_behaviors_documentation]: https://github.com/flame-engine/flame/blob/main/doc/bridge_packages/flame_behaviors/getting_started.md

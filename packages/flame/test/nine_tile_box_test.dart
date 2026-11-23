@@ -8,23 +8,79 @@ import '_resources/load_image.dart';
 
 void main() {
   group('NineTileBox', () {
-    testGolden(
-      'Render with default grid',
-      (game, tester) async {
-        game.add(_MyComponent1());
-      },
-      size: Vector2(300, 200),
-      goldenFile: '_goldens/nine_tile_box_test_1.png',
+    _testGoldenBox(
+      'default constructor',
+      imagePath: _spriteImage,
+      dstSize: Vector2(48, 48),
+      createNineTileBoxOverride: NineTileBox.new,
+      goldenFilePath: '_goldens/nine_tile_box_default.png',
     );
 
-    testGolden(
-      'Render with specified grid',
-      (game, tester) async {
-        game.add(_MyComponent2());
-      },
-      size: Vector2(300, 200),
-      goldenFile: '_goldens/nine_tile_box_test_2.png',
+    _testGoldenBox(
+      'withGrid constructor',
+      imagePath: _spriteImage,
+      dstSize: Vector2(48, 48),
+      createNineTileBoxOverride: (sprite) => NineTileBox.withGrid(
+        sprite,
+        leftWidth: 16,
+        rightWidth: 16,
+        topHeight: 16,
+        bottomHeight: 16,
+      ),
+      goldenFilePath: '_goldens/nine_tile_box_default.png',
     );
+
+    group('Sprite', () {
+      _testGoldenBox(
+        'destination size larger than three tiles',
+        imagePath: _spriteImage,
+        dstSize: Vector2(120, 80),
+        goldenFilePath: '_goldens/nine_tile_box_large.png',
+      );
+
+      _testGoldenBox(
+        'destination size between two and three tiles',
+        imagePath: _spriteImage,
+        dstSize: Vector2(40, 40),
+        goldenFilePath: '_goldens/nine_tile_box_medium.png',
+      );
+
+      _testGoldenBox(
+        'destination size smaller than two tiles',
+        imagePath: _spriteImage,
+        dstSize: Vector2(20, 20),
+        goldenFilePath: '_goldens/nine_tile_box_small.png',
+      );
+    });
+
+    group('Spritesheet', () {
+      _testGoldenBox(
+        'destination size larger than three tiles',
+        imagePath: _spritesheetImage,
+        srcPosition: Vector2(16, 16),
+        srcSize: Vector2(48, 48),
+        dstSize: Vector2(120, 80),
+        goldenFilePath: '_goldens/nine_tile_box_large.png',
+      );
+
+      _testGoldenBox(
+        'destination size between two and three tiles',
+        imagePath: _spritesheetImage,
+        srcPosition: Vector2(16, 16),
+        srcSize: Vector2(48, 48),
+        dstSize: Vector2(40, 40),
+        goldenFilePath: '_goldens/nine_tile_box_medium.png',
+      );
+
+      _testGoldenBox(
+        'destination size smaller than two tiles',
+        imagePath: _spritesheetImage,
+        srcPosition: Vector2(16, 16),
+        srcSize: Vector2(48, 48),
+        dstSize: Vector2(20, 20),
+        goldenFilePath: '_goldens/nine_tile_box_small.png',
+      );
+    });
 
     test('default tile sizes calculated correctly', () async {
       final sprite = Sprite(await loadImage('speech-bubble-1.png'));
@@ -60,44 +116,60 @@ void main() {
   });
 }
 
-class _MyComponent1() extends PositionComponent {
-  this : super(size: Vector2(300, 200));
-  late final Sprite sprite;
-  late final NineTileBox nineTileBox;
-  final bgPaint = Paint()..color = const Color.fromARGB(255, 57, 113, 158);
+const _spriteImage = 'nine-tile-sprite.png';
+const _spritesheetImage = 'nine-tile-spritesheet.png';
+final _boxCanvasSize = Vector2(160, 120);
 
-  @override
-  Future<void> onLoad() async {
-    sprite = Sprite(await loadImage('speech-bubble-1.png'));
-    nineTileBox = NineTileBox(sprite);
-  }
-
-  @override
-  void render(Canvas canvas) {
-    canvas.drawRect(
-      size.toRect(),
-      bgPaint,
-    );
-    nineTileBox.draw(canvas, Vector2(25, 25), Vector2(250, 150));
-  }
+void _testGoldenBox(
+  String description, {
+  required String imagePath,
+  required Vector2 dstSize,
+  required String goldenFilePath,
+  Vector2? srcPosition,
+  Vector2? srcSize,
+  NineTileBox Function(Sprite sprite)? createNineTileBoxOverride,
+}) {
+  testGolden(
+    description,
+    (game, tester) async {
+      game.add(
+        _BoxComponent(
+          imagePath,
+          _boxCanvasSize,
+          dstSize,
+          createNineTileBoxOverride ??
+              (sprite) => NineTileBox(sprite, tileSize: 16),
+          srcPosition: srcPosition,
+          srcSize: srcSize,
+        ),
+      );
+    },
+    size: _boxCanvasSize,
+    goldenFile: goldenFilePath,
+  );
 }
 
-class _MyComponent2() extends PositionComponent {
-  this : super(size: Vector2(300, 200));
-  late final Sprite sprite;
+class _BoxComponent(
+  final String imagePath,
+  final Vector2 canvasSize,
+  final Vector2 dstSize,
+  final NineTileBox Function(Sprite sprite) createBox, {
+  final Vector2? srcPosition,
+  final Vector2? srcSize,
+}) extends PositionComponent {
+  this : super(size: canvasSize);
   late final NineTileBox nineTileBox;
   final bgPaint = Paint()..color = const Color.fromARGB(255, 57, 113, 158);
 
   @override
   Future<void> onLoad() async {
-    sprite = Sprite(await loadImage('speech-bubble-2.png'));
-    nineTileBox = NineTileBox.withGrid(
-      sprite,
-      leftWidth: 31,
-      rightWidth: 5,
-      topHeight: 5,
-      bottomHeight: 21,
+    final sprite = Sprite(
+      await loadImage(imagePath),
+      srcPosition: srcPosition,
+      srcSize: srcSize,
     );
+
+    nineTileBox = createBox(sprite);
   }
 
   @override
@@ -106,6 +178,7 @@ class _MyComponent2() extends PositionComponent {
       size.toRect(),
       bgPaint,
     );
-    nineTileBox.draw(canvas, Vector2(25, 25), Vector2(250, 150));
+
+    nineTileBox.draw(canvas, (size - dstSize) / 2, dstSize);
   }
 }
