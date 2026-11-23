@@ -30,3 +30,6 @@ dev_dependencies:
 
 assets:
   assets/logo_flame.png
+
+pana_workspace:
+  require_wasm: false

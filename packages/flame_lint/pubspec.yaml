@@ -1,6 +1,6 @@
 name: flame_lint
 resolution: workspace
-description: Flame lint package
+description: A strict and satisfying set of lint rules for any Flame, Flutter or Dart project.
 version: 1.5.0-dev.1
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_lint
 funding:

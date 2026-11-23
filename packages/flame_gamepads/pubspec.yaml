@@ -1,6 +1,6 @@
 name: flame_gamepads
 resolution: workspace
-description: Flame bindings to work with gamepads package
+description: Bridge package that adds gamepad input to Flame games, using the gamepads package.
 version: 0.1.3-dev.1
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_gamepads
 funding:
