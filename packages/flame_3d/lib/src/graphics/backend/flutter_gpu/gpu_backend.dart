@@ -85,16 +85,19 @@ base class GpuBackend({gpu.GpuContext? gpuContext}) extends base.GpuBackend {
     return _FlutterGpuShaderLibrary(library, assetName);
   }
 
+  final Map<(gpu.Shader, gpu.Shader), _FlutterGpuPipeline> _pipelines = {};
+
   @override
   GpuPipeline createPipeline({
     required GpuShader vertexShader,
     required GpuShader fragmentShader,
   }) {
-    return _FlutterGpuPipeline(
-      _context.createRenderPipeline(
-        (vertexShader as _FlutterGpuShader).raw,
-        (fragmentShader as _FlutterGpuShader).raw,
-      ),
+    final vertex = (vertexShader as _FlutterGpuShader).raw;
+    final fragment = (fragmentShader as _FlutterGpuShader).raw;
+    return _pipelines.putIfAbsent(
+      (vertex, fragment),
+      () =>
+          _FlutterGpuPipeline(_context.createRenderPipeline(vertex, fragment)),
     );
   }
 
