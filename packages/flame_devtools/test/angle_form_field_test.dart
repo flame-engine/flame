@@ -23,6 +23,13 @@ void main() {
       );
     }
 
+    // A focused field isn't overwritten by a new value, so the field has to
+    // lose focus before the value is read back from the game.
+    Future<void> unfocus(WidgetTester tester) {
+      FocusManager.instance.primaryFocus?.unfocus();
+      return tester.pump();
+    }
+
     String fieldText(WidgetTester tester) {
       return tester.widget<TextField>(find.byType(TextField)).controller!.text;
     }
@@ -60,6 +67,7 @@ void main() {
         await pumpField(tester, radians: 0, onChanged: (v) => reported = v);
 
         await tester.enterText(find.byType(TextField), '30');
+        await unfocus(tester);
         // The game stores the angle in radians and the form reads it back.
         await pumpField(tester, radians: reported!);
 
@@ -76,6 +84,7 @@ void main() {
 
         for (var degrees = -360; degrees <= 360; degrees++) {
           await tester.enterText(find.byType(TextField), '$degrees');
+          await unfocus(tester);
           // The game stores the angle in radians and the form reads it back.
           await pumpField(tester, radians: radians, onChanged: onChanged);
 
