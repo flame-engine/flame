@@ -3,6 +3,9 @@ import 'package:flame/devtools.dart';
 import 'package:flame_devtools/behavior_tree_snapshot.dart';
 
 abstract final class Repository() {
+  /// Whether the extension is connected to a running app.
+  static bool get isConnected => serviceManager.connectedState.value.connected;
+
   static Future<ComponentTreeNode> getComponentTree() async {
     final componentTreeResponse = await serviceManager
         .callServiceExtensionOnMainIsolate(

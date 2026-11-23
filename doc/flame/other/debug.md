@@ -25,6 +25,12 @@ Flame registers when a `FlameGame` is created in debug mode. Other tools can cal
 extensions through the Dart VM Service. The [Flame CLI](cli.md) uses them to take snapshots of a
 running game from the terminal, which is also useful for scripts and AI coding agents.
 
+The component tree and the selected component are kept up to date while the game runs: the selected
+component is refreshed about every 100 ms and the tree about every second. Expanded nodes, the
+selection and the scroll position are kept when the tree is refreshed, and a field that you are
+editing isn't overwritten. The "Live" switch in the header of the tree turns the updates off, and
+the refresh button next to it refreshes the tree once.
+
 If a selected component has a behavior tree, because it uses the `HasBehaviorTree` mixin of
 [flame_behavior_tree](../../bridge_packages/flame_behavior_tree/flame_behavior_tree.md#debugging),
 the extension also shows the tree, with what each of its nodes is doing, and the contents of its
