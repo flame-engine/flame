@@ -1,6 +1,5 @@
 import 'package:animated_tree_view/animated_tree_view.dart';
 import 'package:flame/devtools.dart';
-import 'package:flame_devtools/material.dart';
 import 'package:flame_devtools/repository.dart';
 import 'package:flame_devtools/widgets/component_tree_sync.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,10 +9,9 @@ final selectedTreeNodeProvider = StateProvider<TreeNode<ComponentTreeNode>?>(
   (_) => null,
 );
 
-// This is in a separate provider due to the fact that the tree can't keep
-// track of whether it has been changed or not since the nodes don't implement
-// the == operator and hashCode properly.
-final loadedTreeModelProvider = StateProvider<ComponentTreeModel>(
+/// The model of the component tree, which is updated in place by
+/// [componentTreeLoaderProvider].
+final loadedTreeModelProvider = Provider<ComponentTreeModel>(
   (_) => ComponentTreeModel(),
 );
 
@@ -21,47 +19,33 @@ final loadedTreeModelProvider = StateProvider<ComponentTreeModel>(
 /// by polling the game.
 final liveUpdatesProvider = StateProvider<bool>((_) => true);
 
-final componentTreeLoaderProvider = FutureProvider<void>((ref) async {
-  final previousTreeModel = ref.read(loadedTreeModelProvider);
-  final updatedModel = await ComponentTreeModel.refreshComponentTree(
-    previousTreeModel,
-  );
-  if (updatedModel != null) {
-    ref.read(loadedTreeModelProvider.notifier).state = updatedModel;
-  }
+/// Refreshes the component tree and returns the number of components in it.
+final componentTreeLoaderProvider = FutureProvider<int>((ref) async {
+  final model = ref.read(loadedTreeModelProvider);
+  await model.refresh();
 
   // The nodes are updated in place, so the selected node is still the same
   // node, unless its component was removed from the game; then the selection
   // is cleared.
   final selectedKey = ref.read(selectedTreeNodeProvider)?.key;
-  if (selectedKey != null && previousTreeModel.findNode(selectedKey) == null) {
+  if (selectedKey != null && model.findNode(selectedKey) == null) {
     ref.read(selectedTreeNodeProvider.notifier).state = null;
   }
+  return model.componentCount;
 });
 
-@immutable
-// ignore: prefer_const_constructors_in_immutables
-class ComponentTreeModel({
-  final int componentCount = 0,
-  TreeNode<ComponentTreeNode>? treeRoot,
-}) {
-  final TreeNode<ComponentTreeNode> treeRoot =
-      treeRoot ?? TreeNode<ComponentTreeNode>.root();
+class ComponentTreeModel() {
+  final treeRoot = TreeNode<ComponentTreeNode>.root();
 
-  /// Fetches the component tree and updates the nodes of [previousModel] in
-  /// place, so that expanded nodes stay expanded.
-  ///
-  /// Returns a new model if the number of components changed, or null if it
-  /// didn't. Either way the nodes have been updated.
-  static Future<ComponentTreeModel?> refreshComponentTree(
-    ComponentTreeModel previousModel,
-  ) async {
+  /// The number of components in the tree, as of the last [refresh].
+  int get componentCount => _componentCount;
+  var _componentCount = 0;
+
+  /// Fetches the component tree and updates the nodes in place, so that
+  /// expanded nodes stay expanded.
+  Future<void> refresh() async {
     final node = await Repository.getComponentTree();
-    final count = syncTreeChildren(previousModel.treeRoot, [node]);
-    if (previousModel.componentCount == count) {
-      return null;
-    }
-    return previousModel.copyWith(componentCount: count);
+    _componentCount = syncTreeChildren(treeRoot, [node]);
   }
 
   /// Finds the node with the given [key], which is the id of the component,
@@ -84,14 +68,5 @@ class ComponentTreeModel({
       }
     }
     return null;
-  }
-
-  ComponentTreeModel copyWith({
-    int? componentCount,
-  }) {
-    return ComponentTreeModel(
-      treeRoot: treeRoot,
-      componentCount: componentCount ?? this.componentCount,
-    );
   }
 }

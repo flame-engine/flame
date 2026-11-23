@@ -94,7 +94,7 @@ class const ComponentTreeSection({super.key}) extends ConsumerWidget {
     final loader = ref.watch(componentTreeLoaderProvider);
     final loadedModel = ref.watch(loadedTreeModelProvider);
     final selectedTreeNode = ref.watch(selectedTreeNodeProvider);
-    final componentCount = loadedModel.componentCount;
+    final componentCount = loader.value ?? 0;
 
     return devtools_ui.RoundedOutlinedBorder(
       child: Column(
