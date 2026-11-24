@@ -13,13 +13,14 @@ void main() {
       expect(info.jointTransforms, same(joints));
     });
 
-    test('reuses one empty list for surfaces without joints', () {
-      final info = JointsInfo()..setSurface(0);
-      final first = info.jointTransforms;
-      info.setSurface(2);
+    test('has no joints for a surface without joints', () {
+      final info = JointsInfo()
+        ..jointTransformsPerSurface = {
+          1: [Matrix4.identity()],
+        }
+        ..setSurface(2);
 
-      expect(first, isEmpty);
-      expect(info.jointTransforms, same(first));
+      expect(info.jointTransforms, isEmpty);
     });
   });
 }
