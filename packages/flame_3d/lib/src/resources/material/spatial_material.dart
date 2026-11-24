@@ -84,7 +84,13 @@ class SpatialMaterial({
       ..setFloat('AmbientLight.intensity', ambient.intensity);
 
     // Apply point lights.
-    final points = lights.where((e) => e.source is PointLight);
+    assert(
+      lights.where((e) => e.source is PointLight).length <= _maxPointLights,
+      'SpatialMaterial supports at most $_maxPointLights point lights',
+    );
+    final points = lights
+        .where((e) => e.source is PointLight)
+        .take(_maxPointLights);
 
     // NOTE: using floats because Android GLES does not support integer uniforms
     // Refer to https://github.com/flutter/engine/pull/55329
@@ -116,6 +122,7 @@ class SpatialMaterial({
   }
 
   static const _maxJoints = 16;
+  static const _maxPointLights = 8;
 
   static final _jointKeys = List.generate(
     _maxJoints,
