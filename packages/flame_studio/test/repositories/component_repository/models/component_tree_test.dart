@@ -3,12 +3,12 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('ComponentTree', () {
-    const grandchild = RectangleComponent(name: 'rectangle3');
-    const tree = RectangleComponent(
+    const grandchild = RectangleComponentData(name: 'rectangle3');
+    const tree = RectangleComponentData(
       name: 'Player',
       children: [
-        RectangleComponent(name: 'rectangle1', children: [grandchild]),
-        RectangleComponent(name: 'rectangle2'),
+        RectangleComponentData(name: 'rectangle1', children: [grandchild]),
+        RectangleComponentData(name: 'rectangle2'),
       ],
     );
 
@@ -39,22 +39,22 @@ void main() {
     });
 
     test('addChildAt appends a child to the node at the path', () {
-      const child = RectangleComponent(name: 'rectangle4');
+      const child = RectangleComponentData(name: 'rectangle4');
       final updated = tree.addChildAt(const [1], child);
 
       expect(updated.nodeAt(const [1]).children, equals([child]));
     });
 
     test('addChildAt throws when the node is a hitbox', () {
-      const withHitbox = RectangleComponent(
+      const withHitbox = RectangleComponentData(
         name: 'Player',
-        children: [RectangleHitboxComponent(name: 'rectangleHitbox1')],
+        children: [RectangleHitboxData(name: 'rectangleHitbox1')],
       );
 
       expect(
         () => withHitbox.addChildAt(const [
           0,
-        ], const RectangleComponent(name: 'rectangle1')),
+        ], const RectangleComponentData(name: 'rectangle1')),
         throwsArgumentError,
       );
     });
@@ -76,18 +76,18 @@ void main() {
     test('usedPaletteColors lists the palette colors of every node', () {
       expect(tree.usedPaletteColors, isEmpty);
       expect(
-        const RectangleComponent(
+        const RectangleComponentData(
           name: 'Player',
           paint: ComponentPaint(paletteColor: 'primary'),
           children: [
-            PositionComponent(
+            PositionComponentData(
               name: 'body',
               children: [
-                CircleComponent(
+                CircleComponentData(
                   name: 'eye',
                   paint: ComponentPaint(paletteColor: 'accent'),
                 ),
-                RectangleComponent(
+                RectangleComponentData(
                   name: 'arm',
                   paint: ComponentPaint(paletteColor: 'primary'),
                 ),
@@ -103,18 +103,18 @@ void main() {
       const palette = Palette(
         colors: [PaletteColor(name: 'primary', color: 0xFF0000FF)],
       );
-      final resolved = const RectangleComponent(
+      final resolved = const RectangleComponentData(
         name: 'Player',
         paint: ComponentPaint(color: 0xFF000000, paletteColor: 'primary'),
         children: [
-          PositionComponent(
+          PositionComponentData(
             name: 'body',
             children: [
-              CircleComponent(
+              CircleComponentData(
                 name: 'eye',
                 paint: ComponentPaint(paletteColor: 'primary'),
               ),
-              RectangleComponent(
+              RectangleComponentData(
                 name: 'arm',
                 paint: ComponentPaint(color: 0xFF00FF00),
               ),
@@ -137,9 +137,9 @@ void main() {
         equals('rectangle4'),
       );
       expect(
-        const RectangleComponent(
+        const RectangleComponentData(
           name: 'Player',
-          children: [RectangleComponent(name: 'rectangle2')],
+          children: [RectangleComponentData(name: 'rectangle2')],
         ).uniqueChildName(ComponentType.rectangle),
         equals('rectangle1'),
       );
@@ -147,9 +147,9 @@ void main() {
 
     test('uniqueChildName ignores names that generate the same getter', () {
       expect(
-        const RectangleComponent(
+        const RectangleComponentData(
           name: 'Player',
-          children: [RectangleComponent(name: 'Rectangle1')],
+          children: [RectangleComponentData(name: 'Rectangle1')],
         ).uniqueChildName(ComponentType.rectangle),
         equals('rectangle2'),
       );
@@ -157,7 +157,7 @@ void main() {
 
     test('uniqueChildName skips names whose class is taken', () {
       expect(
-        const RectangleComponent(name: 'Player').uniqueChildName(
+        const RectangleComponentData(name: 'Player').uniqueChildName(
           ComponentType.rectangle,
           takenClassNames: {r'$PlayerRectangle1', r'$PlayerRectangle2'},
         ),
@@ -208,9 +208,9 @@ void main() {
       }
 
       test('accepts the members of other Flame classes', () {
-        const container = PositionComponent(
+        const container = PositionComponentData(
           name: 'Player',
-          children: [RectangleComponent(name: 'rectangle1')],
+          children: [RectangleComponentData(name: 'rectangle1')],
         );
         expect(container.validateChildName(const [0], 'paint'), isNull);
         expect(

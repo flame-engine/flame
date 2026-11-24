@@ -24,44 +24,23 @@ class PostProcessGame() extends FlameGame {
   }
 }
 
-class PixelationPostProcess() extends PostProcess {
+class PixelationPostProcess() extends ShaderPostProcess {
+  this
+    : super(
+        'packages/flutter_shaders/shaders/pixelation.frag',
+        sampleSubtree: true,
+      );
+
+  late final UniformVec2Slot _pixels;
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-
-    _fragmentProgram = await FragmentProgram.fromAsset(
-      'packages/flutter_shaders/shaders/pixelation.frag',
-    );
+    _pixels = shader.getUniformVec2('uPixels');
   }
 
-  late final FragmentProgram _fragmentProgram;
-  late final FragmentShader _fragmentShader = _fragmentProgram.fragmentShader();
-
-  double _time = 0;
-
   @override
-  void update(double dt) {
-    super.update(dt);
-    _time += dt;
-  }
-
-  late final myPaint = Paint()..shader = _fragmentShader;
-
-  @override
-  void postProcess(Vector2 size, Canvas canvas) {
-    final preRenderedSubtree = rasterizeSubtree();
-
-    _fragmentShader.setFloatUniforms((value) {
-      value
-        ..setVector(size / (20 * sin(_time)))
-        ..setVector(size);
-    });
-
-    _fragmentShader.setImageSampler(0, preRenderedSubtree);
-
-    canvas
-      ..save()
-      ..drawRect(Offset.zero & size.toSize(), myPaint)
-      ..restore();
+  void updateUniforms(Vector2 size) {
+    _pixels.setVector(size / (20 * sin(time)));
   }
 }

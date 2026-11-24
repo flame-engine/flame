@@ -1,4 +1,4 @@
-import 'package:flame/components.dart' as flame;
+import 'package:flame/components.dart';
 import 'package:flame_studio/component_editor/widgets/preview/dashed_outline.dart';
 import 'package:flutter/painting.dart';
 
@@ -10,7 +10,7 @@ import 'package:flutter/painting.dart';
 /// The outline only exists in the preview: the generated code uses a plain
 /// `PositionComponent`.
 /// {@endtemplate}
-class PreviewPositionComponent() extends flame.PositionComponent {
+class PreviewPositionComponent() extends PositionComponent {
   /// {@macro preview_position_component}
   this;
 

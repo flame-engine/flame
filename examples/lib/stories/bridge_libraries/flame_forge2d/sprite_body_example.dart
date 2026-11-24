@@ -67,15 +67,15 @@ class SpriteBodyWorld({bool showPieces = false})
   }
 
   @override
-  void onTapDown(TapDownEvent info) {
-    super.onTapDown(info);
+  void onTapDown(TapDownEvent event) {
+    super.onTapDown(event);
     final MapEntry(key: image, value: width) = images.entries.elementAt(
       _taps++ % images.length,
     );
     final sprite = Sprite(gameRef.images.fromCache('assets/images/$image'));
     add(
       ContourBody(
-        info.localPosition,
+        event.localPosition,
         sprite: sprite,
         size: sprite.srcSize..scale(width / sprite.srcSize.x),
         cache: _pieces,

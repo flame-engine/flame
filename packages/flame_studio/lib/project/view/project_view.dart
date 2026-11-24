@@ -5,8 +5,8 @@ import 'package:flame_studio/project/project.dart';
 import 'package:flame_studio/project/widgets/widgets.dart';
 import 'package:flame_studio/project_settings/project_settings.dart';
 import 'package:flame_studio/repositories/repositories.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template project_view}
 /// Lists the components of [project] and lets the user add, edit and
@@ -115,7 +115,10 @@ class const ProjectView({
     );
   }
 
-  Future<void> _editComponent(BuildContext context, Component component) async {
+  Future<void> _editComponent(
+    BuildContext context,
+    ComponentData component,
+  ) async {
     final bloc = context.read<ProjectBloc>();
     await Navigator.of(context)
         .push(ComponentEditorPage.route(project, component));
@@ -124,7 +127,7 @@ class const ProjectView({
 
   Future<void> _deleteComponent(
     BuildContext context,
-    Component component,
+    ComponentData component,
   ) async {
     final bloc = context.read<ProjectBloc>();
     final confirmed = await DeleteComponentDialog.show(context, component);
@@ -142,14 +145,15 @@ class const ProjectView({
 }
 
 class const _Components({
-  required final ValueChanged<Component> onEdit,
-  required final ValueChanged<Component> onDelete,
+  required final ValueChanged<ComponentData> onEdit,
+  required final ValueChanged<ComponentData> onDelete,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final state = context.select<ProjectBloc, (ProjectStatus, List<Component>)>(
-      (bloc) => (bloc.state.status, bloc.state.components),
-    );
+    final state = context
+        .select<ProjectBloc, (ProjectStatus, List<ComponentData>)>(
+          (bloc) => (bloc.state.status, bloc.state.components),
+        );
     final (status, components) = state;
 
     if (components.isEmpty) {

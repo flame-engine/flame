@@ -1,5 +1,5 @@
 import 'package:flame_studio/repositories/repositories.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template recent_project_tile}
 /// A list entry for a recently opened [Project].

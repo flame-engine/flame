@@ -11,8 +11,8 @@ class _MockProjectRepository() extends Mock implements ProjectRepository;
 void main() {
   group(ProjectBloc, () {
     const project = Project(path: '/projects/my_game');
-    const player = RectangleComponent(name: 'Player');
-    const enemy = RectangleComponent(name: 'Enemy');
+    const player = RectangleComponentData(name: 'Player');
+    const enemy = RectangleComponentData(name: 'Enemy');
 
     late ComponentRepository componentRepository;
     late ProjectRepository projectRepository;
@@ -77,7 +77,7 @@ void main() {
               ComponentType.polygon,
               polygonShape: PolygonShape.square,
             ),
-          ).thenAnswer((_) async => const PolygonComponent(name: 'Player'));
+          ).thenAnswer((_) async => const PolygonComponentData(name: 'Player'));
           when(() => componentRepository.getComponents(project.path))
               .thenAnswer((_) async => []);
         },

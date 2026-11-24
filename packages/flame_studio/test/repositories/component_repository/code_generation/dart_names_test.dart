@@ -83,6 +83,10 @@ void main() {
     );
     expect(flameMemberNames(ComponentType.polygon), isNot(contains('radius')));
     expect(
+      flameMemberNames(ComponentType.sprite),
+      containsAll(['sprite', 'autoResize', 'paint', 'size']),
+    );
+    expect(
       flameMemberNames(ComponentType.rectangle),
       containsAll(flameMemberNames(ComponentType.position)),
     );

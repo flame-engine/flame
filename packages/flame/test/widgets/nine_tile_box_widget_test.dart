@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/widgets.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -90,6 +91,29 @@ Future<void> main() async {
         expect(internalWidget.image, packagedImage);
       },
     );
+
+    testWidgets('passes the sprite src position and size to the box', (
+      tester,
+    ) async {
+      final spritesheet = await generateImage(100, 100);
+
+      await tester.pumpWidget(
+        NineTileBoxWidget(
+          image: spritesheet,
+          tileSize: 16,
+          destTileSize: 16,
+          srcPosition: Vector2(16, 16),
+          srcSize: Vector2(48, 48),
+        ),
+      );
+
+      final internalWidget = tester.widget<InternalNineTileBox>(
+        find.byType(InternalNineTileBox),
+      );
+
+      expect(internalWidget.srcPosition, Vector2(16, 16));
+      expect(internalWidget.srcSize, Vector2(48, 48));
+    });
 
     group('when the nine tile box changes', () {
       testWidgets('updates the widget', (tester) async {

@@ -12,6 +12,16 @@ import 'package:meta/meta.dart';
 /// the 4 sides only in the direction in which they are located and expanding
 /// the center in both directions.
 /// That allows you to have non distorted borders.
+///
+/// When [Sprite.src] does not cover the whole [Sprite.image] (for example, a
+/// sprite inside a spritesheet), each tile is drawn with its own
+/// [Canvas.drawImageRect] call.
+///
+/// If the [Paint] used has a
+/// [Paint.filterQuality] other than [FilterQuality.none], the sampling near a
+/// tile's edges can read pixels from the neighboring tiles of the sheet, so
+/// the seams between tiles bleed with those neighbors. This differs from
+/// [Canvas.drawImageNine], which treats the whole [Sprite.image] as the source.
 class NineTileBox {
   static final _whitePaint = BasicPalette.white.paint();
 
@@ -155,21 +165,115 @@ class NineTileBox {
 
   /// Renders this nine box with the dimensions provided by [dst].
   void drawRect(Canvas c, [Rect? dst, Paint? overridePaint]) {
-    c.drawImageNine(
-      sprite.image,
-      center,
-      dst ?? _dst,
-      overridePaint ?? _whitePaint,
-    );
+    _draw(c, dst ?? _dst, overridePaint ?? _whitePaint);
   }
 
   /// Renders this nine box as a rectangle at [position] with size [size].
   void draw(Canvas c, Vector2 position, Vector2 size, [Paint? overridePaint]) {
-    c.drawImageNine(
-      sprite.image,
-      center,
+    _draw(
+      c,
       Rect.fromLTWH(position.x, position.y, size.x, size.y),
       overridePaint ?? _whitePaint,
     );
+  }
+
+  void _draw(Canvas c, Rect dst, Paint paint) {
+    if (dst.isEmpty) {
+      return;
+    }
+
+    final src = sprite.src;
+    final doesSpriteCoverFullImage =
+        src.left == 0 &&
+        src.top == 0 &&
+        src.right == sprite.image.width &&
+        src.bottom == sprite.image.height;
+
+    if (doesSpriteCoverFullImage) {
+      c.drawImageNine(sprite.image, center, dst, paint);
+    } else {
+      _drawTiles(c, dst, paint);
+    }
+  }
+
+  /// Draws the nine tiles of [sprite] stretched to fill [dst].
+  ///
+  /// [Canvas.drawImageNine] is not used because it treats the whole
+  /// [Sprite.image] as the source, ignoring [Sprite.src].
+  void _drawTiles(Canvas c, Rect dst, Paint paint) {
+    final srcLeft = sprite.src.left;
+    final srcTop = sprite.src.top;
+    final srcRight = sprite.src.right;
+    final srcBottom = sprite.src.bottom;
+
+    final srcXs = [
+      srcLeft,
+      center.left + srcLeft,
+      center.right + srcLeft,
+      srcRight,
+    ];
+
+    final srcYs = [
+      srcTop,
+      center.top + srcTop,
+      center.bottom + srcTop,
+      srcBottom,
+    ];
+
+    final dstXs = _calculateDstPositionsInAxis(
+      dst.left,
+      dst.width,
+      center.left,
+      sprite.src.width - center.right,
+    );
+
+    final dstYs = _calculateDstPositionsInAxis(
+      dst.top,
+      dst.height,
+      center.top,
+      sprite.src.height - center.bottom,
+    );
+
+    for (var row = 0; row < 3; row++) {
+      for (var col = 0; col < 3; col++) {
+        c.drawImageRect(
+          sprite.image,
+          Rect.fromLTRB(
+            srcXs[col],
+            srcYs[row],
+            srcXs[col + 1],
+            srcYs[row + 1],
+          ),
+          Rect.fromLTRB(
+            dstXs[col],
+            dstYs[row],
+            dstXs[col + 1],
+            dstYs[row + 1],
+          ),
+          paint,
+        );
+      }
+    }
+  }
+
+  /// Returns the four positions of one axis in destination space.
+  ///
+  /// When [leading] and [trailing] fixed borders do not fit in [length], both
+  /// are scaled down so they meet, leaving no room for the center.
+  static List<double> _calculateDstPositionsInAxis(
+    double start,
+    double length,
+    double leading,
+    double trailing,
+  ) {
+    final sum = leading + trailing;
+    final scale = sum > length ? length / sum : 1.0;
+
+    return [
+      start,
+      start + (leading * scale),
+      start + length - (trailing * scale),
+      start + length,
+    ];
   }
 }

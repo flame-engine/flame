@@ -1,8 +1,8 @@
 import 'package:flame_studio/component_editor/bloc/component_editor_bloc.dart';
 import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template component_tree_panel}
 /// Shows the component being edited and the components inside it as a
@@ -19,7 +19,7 @@ class const ComponentTreePanel({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (component, selectedPath) = context
-        .select<ComponentEditorBloc, (Component, List<int>)>(
+        .select<ComponentEditorBloc, (ComponentData, List<int>)>(
           (bloc) => (bloc.state.component, bloc.state.selectedPath),
         );
     final bloc = context.read<ComponentEditorBloc>();
@@ -111,14 +111,15 @@ class const ComponentTreePanel({super.key}) extends StatelessWidget {
       ComponentType.position => Icons.crop_free,
       ComponentType.circle => Icons.circle_outlined,
       ComponentType.polygon => Icons.pentagon_outlined,
+      ComponentType.sprite => Icons.image_outlined,
       ComponentType.rectangleHitbox => Icons.select_all,
       ComponentType.circleHitbox => Icons.track_changes,
       ComponentType.polygonHitbox => Icons.hexagon_outlined,
     };
   }
 
-  static Iterable<(List<int>, Component)> _flatten(
-    Component node,
+  static Iterable<(List<int>, ComponentData)> _flatten(
+    ComponentData node,
     List<int> path,
   ) sync* {
     yield (path, node);

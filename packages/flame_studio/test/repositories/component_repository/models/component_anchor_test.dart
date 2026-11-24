@@ -7,7 +7,7 @@ void main() {
       expect(ComponentAnchor.topLeft.x, equals(0));
       expect(ComponentAnchor.topLeft.y, equals(0));
       expect(
-        const RectangleComponent(name: 'player').anchor,
+        const RectangleComponentData(name: 'player').anchor,
         equals(ComponentAnchor.topLeft),
       );
     });

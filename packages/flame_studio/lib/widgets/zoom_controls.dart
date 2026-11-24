@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template zoom_controls}
 /// Zoom out and zoom in buttons around the current [zoom], as a

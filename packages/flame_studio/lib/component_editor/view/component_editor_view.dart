@@ -4,9 +4,9 @@ import 'package:flame_studio/component_editor/bloc/component_editor_bloc.dart';
 import 'package:flame_studio/component_editor/widgets/widgets.dart';
 import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flame_studio/widgets/widgets.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template component_editor_view}
 /// Shows the tree of the component being edited on the left, its preview
@@ -82,16 +82,16 @@ class const ComponentEditorView({
                 children: [
                   EditorTopBar(project: project),
                   const Divider(height: 1),
-                  const Expanded(
+                  Expanded(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           width: treePanelWidth,
                           child: ComponentTreePanel(),
                         ),
-                        VerticalDivider(width: 1),
-                        Expanded(
+                        const VerticalDivider(width: 1),
+                        const Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
@@ -101,10 +101,10 @@ class const ComponentEditorView({
                             ],
                           ),
                         ),
-                        VerticalDivider(width: 1),
+                        const VerticalDivider(width: 1),
                         SizedBox(
                           width: propertiesPanelWidth,
-                          child: PropertiesPanel(),
+                          child: PropertiesPanel(project: project),
                         ),
                       ],
                     ),
@@ -132,11 +132,11 @@ class const ComponentEditorView({
     ];
     final rootFix = switch (rootOwner) {
       null => null,
-      Component(:final name, :final generatedClassName)
+      ComponentData(:final name, :final generatedClassName)
           when generatedClassName == rootClass =>
         '"$name" generates the same class, $rootClass: delete one of the '
             'two components.',
-      Component(:final name) =>
+      ComponentData(:final name) =>
         'A child of "$name" generates $rootClass, the class of this '
             'component: rename that child.',
     };

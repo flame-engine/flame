@@ -12,12 +12,12 @@ part 'palette_state.dart';
 /// of the project settings.
 ///
 /// Colors used by a component, including the unsaved changes of the
-/// [Component] being edited, can't be renamed or removed; their value can
+/// [ComponentData] being edited, can't be renamed or removed; their value can
 /// still change.
 /// {@endtemplate}
 class PaletteBloc({
   required final Project _project,
-  required final Component _editedComponent,
+  required final ComponentData _editedComponent,
   required final ComponentRepository _componentRepository,
   required final ProjectRepository _projectRepository,
 }) extends Bloc<PaletteEvent, PaletteState> {

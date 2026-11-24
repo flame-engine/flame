@@ -36,13 +36,25 @@ class const TextBoxConfig({
   /// If false, the box will start with the full necessary size from the
   /// beginning (both width and height).
   final bool growingBox = false,
+
+  /// Defaults to null. If not null, text that would take up more than this
+  /// many lines is cut off after the last allowed line. Must be greater than
+  /// zero.
+  final int? maxLines,
 }) {
+  this
+    : assert(
+        maxLines == null || maxLines > 0,
+        'maxLines must be greater than zero',
+      );
+
   TextBoxConfig copyWith({
     double? maxWidth,
     EdgeInsets? margins,
     double? timePerChar,
     double? dismissDelay,
     bool? growingBox,
+    int? maxLines,
   }) {
     return TextBoxConfig(
       maxWidth: maxWidth ?? this.maxWidth,
@@ -50,6 +62,7 @@ class const TextBoxConfig({
       timePerChar: timePerChar ?? this.timePerChar,
       dismissDelay: dismissDelay ?? this.dismissDelay,
       growingBox: growingBox ?? this.growingBox,
+      maxLines: maxLines ?? this.maxLines,
     );
   }
 }
@@ -81,9 +94,10 @@ class TextBoxComponent<T extends TextRenderer>({
   set boxConfig(TextBoxConfig value) {
     final oldConfig = _boxConfig;
     _boxConfig = value;
-    if (oldConfig.maxWidth != value.maxWidth) {
+    if (oldConfig.maxWidth != value.maxWidth ||
+        oldConfig.maxLines != value.maxLines) {
       // This call is necessary to reflow the text for any change in
-      // TextBoxConfig maxWidth.
+      // TextBoxConfig maxWidth or maxLines.
       updateBounds();
     }
     redraw();
@@ -96,6 +110,7 @@ class TextBoxComponent<T extends TextRenderer>({
   final List<String> lines = [];
   late double _lineHeight;
   late int _totalLines;
+  bool _isTruncated = false;
 
   double _lifeTime = 0.0;
   int? _previousChar;
@@ -178,6 +193,13 @@ class TextBoxComponent<T extends TextRenderer>({
       _updateBoundsWordBased(availableWidth);
     }
 
+    final maxLines = boxConfig.maxLines;
+    _isTruncated = maxLines != null && lines.length > maxLines;
+    if (_isTruncated) {
+      lines.removeRange(maxLines!, lines.length);
+      _totalLines = lines.length;
+    }
+
     size = _recomputeSize();
   }
 
@@ -228,7 +250,8 @@ class TextBoxComponent<T extends TextRenderer>({
     _lineHeight = lineHeight;
   }
 
-  double get totalCharTime => text.length * boxConfig.timePerChar;
+  double get totalCharTime =>
+      (_isTruncated ? _actualTextLength : text.length) * boxConfig.timePerChar;
 
   bool get finished =>
       _lifeTime >= totalCharTime + (boxConfig.dismissDelay ?? 0);

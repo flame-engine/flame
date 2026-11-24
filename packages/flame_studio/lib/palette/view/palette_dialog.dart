@@ -1,7 +1,7 @@
 import 'package:flame_studio/palette/palette.dart';
 import 'package:flame_studio/repositories/repositories.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template palette_dialog}
 /// A dialog to manage the [Palette] of a [Project].
@@ -11,7 +11,7 @@ class const PaletteDialog({
   required final Project project,
 
   /// The component being edited.
-  required final Component component,
+  required final ComponentData component,
   super.key,
 }) extends StatelessWidget {
   /// {@macro palette_dialog}
@@ -24,7 +24,7 @@ class const PaletteDialog({
   static Future<Palette?> show(
     BuildContext context, {
     required Project project,
-    required Component component,
+    required ComponentData component,
   }) {
     return showDialog<Palette>(
       context: context,

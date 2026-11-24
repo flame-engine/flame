@@ -29,9 +29,9 @@ class RevoluteJointWorld()
   }
 
   @override
-  void onTapDown(TapDownEvent info) {
-    super.onTapDown(info);
-    final ball = Ball(info.localPosition);
+  void onTapDown(TapDownEvent event) {
+    super.onTapDown(event);
+    final ball = Ball(event.localPosition);
     add(ball);
     add(CircleShuffler(ball));
   }

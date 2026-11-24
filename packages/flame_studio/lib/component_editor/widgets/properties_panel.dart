@@ -2,8 +2,8 @@ import 'package:flame_studio/component_editor/bloc/component_editor_bloc.dart';
 import 'package:flame_studio/component_editor/widgets/preview/preview_hitboxes.dart';
 import 'package:flame_studio/component_editor/widgets/property_editors/property_editors.dart';
 import 'package:flame_studio/repositories/repositories.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template properties_panel}
 /// Lists an editor for every property of the node selected in the
@@ -14,14 +14,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// the anchor and the angle are only edited on children: the root name is
 /// its file and class name, and the root is placed by whoever uses it.
 /// {@endtemplate}
-class const PropertiesPanel({super.key}) extends StatelessWidget {
+class const PropertiesPanel({
+  /// The project the edited component belongs to.
+  required final Project project,
+  super.key,
+}) extends StatelessWidget {
   /// {@macro properties_panel}
   this;
 
   @override
   Widget build(BuildContext context) {
     final (component, selectedPath, palette) = context
-        .select<ComponentEditorBloc, (Component, List<int>, Palette)>(
+        .select<ComponentEditorBloc, (ComponentData, List<int>, Palette)>(
           (bloc) => (
             bloc.state.selectedNode,
             bloc.state.selectedPath,
@@ -96,6 +100,13 @@ class const PropertiesPanel({super.key}) extends StatelessWidget {
             },
             onChanged: (vertices) =>
                 bloc.add(ComponentEditorVerticesChanged(vertices)),
+          ),
+        if (component case final SpriteBackedComponent spriteBacked)
+          SpriteEditor(
+            project: project,
+            value: spriteBacked.sprite,
+            onChanged: (sprite) =>
+                bloc.add(ComponentEditorSpriteChanged(sprite)),
           ),
         if (component case final PaintedComponent painted)
           PaintEditor(

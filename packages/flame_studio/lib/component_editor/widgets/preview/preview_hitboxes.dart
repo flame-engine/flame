@@ -1,5 +1,5 @@
-import 'package:flame/collisions.dart' as flame;
-import 'package:flame/components.dart' as flame;
+import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
 import 'package:flame_studio/component_editor/widgets/preview/dashed_outline.dart';
 import 'package:flutter/painting.dart';
 
@@ -14,7 +14,7 @@ import 'package:flutter/painting.dart';
 /// The preview game has no collision detection, so these hitboxes never
 /// collide.
 /// {@endtemplate}
-mixin PreviewHitbox on flame.PositionComponent, flame.HasVisibility {
+mixin PreviewHitbox on PositionComponent, HasVisibility {
   /// The color of the outline.
   static const color = Color(0xFFFF9800);
 
@@ -27,12 +27,12 @@ mixin PreviewHitbox on flame.PositionComponent, flame.HasVisibility {
 
 /// {@macro preview_hitbox}
 class PreviewRectangleHitbox()
-    extends flame.RectangleHitbox
-    with flame.HasVisibility, PreviewHitbox {
+    extends RectangleHitbox
+    with HasVisibility, PreviewHitbox {
   /// {@macro preview_hitbox}
   ///
   /// It is given a size, otherwise Flame would make it fill its parent.
-  this : super(size: flame.Vector2.zero());
+  this : super(size: Vector2.zero());
 
   @override
   void render(Canvas canvas) {
@@ -48,8 +48,8 @@ class PreviewRectangleHitbox()
 
 /// {@macro preview_hitbox}
 class PreviewCircleHitbox()
-    extends flame.CircleHitbox
-    with flame.HasVisibility, PreviewHitbox {
+    extends CircleHitbox
+    with HasVisibility, PreviewHitbox {
   /// {@macro preview_hitbox}
   ///
   /// It is given a radius, otherwise Flame would make it fill its parent.
@@ -68,8 +68,8 @@ class PreviewCircleHitbox()
 
 /// {@macro preview_hitbox}
 class PreviewPolygonHitbox(super.vertices)
-    extends flame.PolygonHitbox
-    with flame.HasVisibility, PreviewHitbox {
+    extends PolygonHitbox
+    with HasVisibility, PreviewHitbox {
   /// {@macro preview_hitbox}
   this;
 

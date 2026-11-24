@@ -79,4 +79,4 @@ Markup       <markup.md>
 
 [commands]: commands/commands.md
 [nodes]: nodes.md
-[official documentation]: https://docs.yarnspinner.dev/getting-started/writing-in-yarn
+[official documentation]: https://docs.yarnspinner.dev/write-yarn-scripts/scripting-fundamentals

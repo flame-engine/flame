@@ -57,7 +57,9 @@ three pass.
 - Features: `home` (open project + recent projects), `project` (dashboard:
   list/add/edit/delete components; adding asks for a name and a component
   type), `project_settings` (settings dialog: generated code output path,
-  stored in `<project>/.flame_studio/settings.json`), `palette` (dialog to
+  stored in `<project>/.flame_studio/settings.json`), `sprite_editor` (dialog
+  to pick a project image and select the sprite's region on it — see
+  "Sprites" in [docs/architecture.md](docs/architecture.md)), `palette` (dialog to
   manage the project's named colors, stored in
   `<project>/.flame_studio/palette.json` and generated as `GamePalette` in
   `palette.generated.dart`; paint colors can be picked from it and their
@@ -91,7 +93,11 @@ three pass.
   itself, useful as a container) and `circle` (a Flame `CircleComponent`:
   position, anchor and angle — children only —, radius, and paint; the radius is its own
   `ComponentRadius` property, since Flame circles take a radius, not a
-  size) and the hitboxes `rectangleHitbox`, `circleHitbox` and
+  size), `sprite` (a Flame `SpriteComponent`: position, anchor and angle —
+  children only —, size, and a `ComponentSprite`: an image under the project's
+  `assets/` and the region of it, picked in the sprite editor dialog,
+  `lib/sprite_editor/`; generated with a class that loads it in `onLoad` — see
+  "Sprites" in [docs/architecture.md](docs/architecture.md)) and the hitboxes `rectangleHitbox`, `circleHitbox` and
   `polygonHitbox` (Flame's `RectangleHitbox`, `CircleHitbox` and
   `PolygonHitbox`: their shape's geometry plus a `ComponentCollision` —
   collision type and solid —, no paint; children only, never roots, and
@@ -105,10 +111,12 @@ three pass.
 - `bloc`, `flutter_bloc`, `equatable`, `flame` (**2.0.0-dev** — the
   generated code targets Flame 2; `flame_test` is on the matching 3.0.0-dev),
   `dart_style` (formats the
-  generated code, in `component_repository`), `flex_color_picker`
-  (pinned to 3.x: 4.x depends on the standalone `material_ui` package, whose
-  `MaterialLocalizations` don't match `flutter/material`), `bloc_test`,
-  `flame_test`, `mocktail`, `flame_lint` and `bloc_lint` are dependencies.
+  generated code, in `component_repository`), `material_ui` (import it
+  instead of `flutter/material`, which is deprecated since Flutter 3.50),
+  `flex_color_picker` (4.x, which is built on `material_ui`; mixing it with
+  `flutter/material` widgets breaks, since their `MaterialLocalizations`
+  don't match), `bloc_test`, `flame_test`, `mocktail`, `flame_lint` and
+  `bloc_lint` are dependencies.
 - Toolchain: Flutter stable 3.47 / Dart 3.13. Dart 3.13 lints prefer primary
   constructors (`class const Foo({super.key}) extends Bar {`) — `dart fix --apply`
   handles it.

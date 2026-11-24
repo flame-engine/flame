@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flame_studio/clients/clients.dart';
 import 'package:flame_studio/repositories/repositories.dart';
@@ -49,8 +50,8 @@ void main() {
         expect(
           await repository.getComponents(projectPath),
           equals(const [
-            RectangleComponent(name: 'Enemy'),
-            RectangleComponent(name: 'Player'),
+            RectangleComponentData(name: 'Enemy'),
+            RectangleComponentData(name: 'Player'),
           ]),
         );
       });
@@ -65,7 +66,7 @@ void main() {
 
         expect(
           await repository.getComponents(projectPath),
-          equals(const [RectangleComponent(name: 'Player')]),
+          equals(const [RectangleComponentData(name: 'Player')]),
         );
       });
     });
@@ -84,12 +85,12 @@ void main() {
             'Player',
             ComponentType.rectangle,
           ),
-          equals(const RectangleComponent(name: 'Player')),
+          equals(const RectangleComponentData(name: 'Player')),
         );
         verify(
           () => fileSystem.writeFile(
             fileOf('Player'),
-            jsonEncode(const RectangleComponent(name: 'Player').toJson()),
+            jsonEncode(const RectangleComponentData(name: 'Player').toJson()),
           ),
         ).called(1);
       });
@@ -119,7 +120,7 @@ void main() {
             polygonShape: PolygonShape.square,
           ),
           equals(
-            const PolygonComponent(
+            const PolygonComponentData(
               name: 'Player',
               vertices: ComponentVertices(ComponentVertices.square),
             ),
@@ -170,12 +171,12 @@ void main() {
     });
 
     for (final (name, existing) in [
-      ('AB', const RectangleComponent(name: 'a_b')),
+      ('AB', const RectangleComponentData(name: 'a_b')),
       (
         'player_ship_head',
-        const RectangleComponent(
+        const RectangleComponentData(
           name: 'player_ship',
-          children: [RectangleComponent(name: 'head')],
+          children: [RectangleComponentData(name: 'head')],
         ),
       ),
     ]) {
@@ -209,7 +210,7 @@ void main() {
     group('saveComponent', () {
       test('writes the component file', () async {
         when(() => fileSystem.writeFile(any(), any())).thenAnswer((_) async {});
-        const component = RectangleComponent(
+        const component = RectangleComponentData(
           name: 'Player',
           size: ComponentSize(width: 10, height: 20),
         );
@@ -226,7 +227,7 @@ void main() {
     });
 
     group('writeComponentCode', () {
-      const component = RectangleComponent(name: 'PlayerShip');
+      const component = RectangleComponentData(name: 'PlayerShip');
       const generator = ComponentCodeGenerator();
       final codeFile = p.join(
         projectPath,
@@ -300,7 +301,7 @@ void main() {
           repository.writeComponentCode(
             projectPath,
             'lib/components',
-            const RectangleComponent(name: 'palette'),
+            const RectangleComponentData(name: 'palette'),
           ),
           throwsA(isA<GeneratedFileConflictException>()),
         );
@@ -309,7 +310,7 @@ void main() {
 
       test('references the palette and writes its code when the component '
           'uses it', () async {
-        const painted = RectangleComponent(
+        const painted = RectangleComponentData(
           name: 'PlayerShip',
           paint: ComponentPaint(paletteColor: 'primary'),
         );
@@ -340,6 +341,42 @@ void main() {
             generator.generate(painted, palette: palette),
           ),
         ).called(1);
+      });
+    });
+
+    group('getImages', () {
+      test('returns the sorted asset paths of the image files', () async {
+        when(() => fileSystem.listFiles('/game/assets', recursive: true))
+            .thenAnswer(
+              (_) async => [
+                '/game/assets/images/b.PNG',
+                '/game/assets/audio/song.mp3',
+                '/game/assets/images/ui/a.png',
+                '/game/assets/a.jpg',
+              ],
+            );
+
+        expect(
+          await repository.getImages('/game'),
+          equals([
+            'assets/a.jpg',
+            'assets/images/b.PNG',
+            'assets/images/ui/a.png',
+          ]),
+        );
+      });
+    });
+
+    group('readImage', () {
+      test('reads the file at the asset path', () async {
+        final bytes = Uint8List.fromList([1, 2]);
+        when(() => fileSystem.readFileBytes('/game/assets/images/a.png'))
+            .thenAnswer((_) async => bytes);
+
+        expect(
+          await repository.readImage('/game', 'assets/images/a.png'),
+          equals(bytes),
+        );
       });
     });
 
@@ -435,7 +472,7 @@ void main() {
     });
 
     group('isComponentCodeUpToDate', () {
-      const component = RectangleComponent(name: 'PlayerShip');
+      const component = RectangleComponentData(name: 'PlayerShip');
       const generator = ComponentCodeGenerator();
       final codeFile = p.join(
         projectPath,
@@ -476,7 +513,7 @@ void main() {
     });
 
     group('deleteComponent', () {
-      const component = RectangleComponent(name: 'Player');
+      const component = RectangleComponentData(name: 'Player');
       final codeFile = p.join(projectPath, 'lib/game', 'player.generated.dart');
 
       setUp(() {

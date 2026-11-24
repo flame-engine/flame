@@ -89,7 +89,9 @@ class FlameMarkdown() {
 
   static InlineTextNode _groupInlineChildren(List<InlineTextNode> children) {
     if (children.isEmpty) {
-      throw 'Invalid markdown structure: Found block element with no children';
+      throw Exception(
+        'Invalid markdown structure: Found block element with no children',
+      );
     } else if (children.length == 1) {
       return children.single;
     } else {
@@ -101,8 +103,10 @@ class FlameMarkdown() {
     if (node is T) {
       return node;
     } else {
-      throw 'Invalid markdown structure: '
-          'Expected $T but got ${node.runtimeType}';
+      throw Exception(
+        'Invalid markdown structure: '
+        'Expected $T but got ${node.runtimeType}',
+      );
     }
   }
 }

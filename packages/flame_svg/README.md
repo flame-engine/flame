@@ -25,4 +25,4 @@ Adds support for rendering SVG (using the <a href="https://github.com/dnfield/fl
 
 Package to add SVG rendering support for the Flame Engine.
 
-More [here](https://docs.flame-engine.org/main/images.html#svg).
+More [here](https://docs.flame-engine.org/main/bridge_packages/flame_svg/svg.html).

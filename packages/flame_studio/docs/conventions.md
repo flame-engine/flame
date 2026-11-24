@@ -32,6 +32,8 @@
 - Events are past tense, describing what happened: `ComponentSelected`,
   `PropertyChanged`. Prefix with the feature if ambiguous.
 - Widgets: `<Feature>Page` provides dependencies, `<Feature>View` renders.
+- Models that describe a Flame class are named after it with a `Data` suffix
+  (`SpriteComponentData`, `RectangleHitboxData`), so they don't clash with it.
 
 
 ## Barrel files

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flame_studio/component_editor/component_editor.dart';
@@ -16,15 +17,15 @@ class _MockEditorPreferencesRepository()
 
 void main() {
   setUpAll(
-    () => registerFallbackValue(const RectangleComponent(name: 'Fallback')),
+    () => registerFallbackValue(const RectangleComponentData(name: 'Fallback')),
   );
 
   group(ComponentEditorBloc, () {
     const project = Project(path: '/projects/my_game');
-    const component = RectangleComponent(name: 'Player');
+    const component = RectangleComponentData(name: 'Player');
     const size = ComponentSize(width: 10, height: 20);
     const paint = ComponentPaint(color: 0xFFFF0000, style: PaintStyle.stroke);
-    const edited = RectangleComponent(name: 'Player', size: size);
+    const edited = RectangleComponentData(name: 'Player', size: size);
     const palette = Palette(
       colors: [PaletteColor(name: 'primary', color: 0xFF00FF00)],
     );
@@ -102,7 +103,7 @@ void main() {
           bloc.add(const ComponentEditorAnchorChanged(ComponentAnchor.center)),
       expect: () => const [
         ComponentEditorState(
-          component: RectangleComponent(
+          component: RectangleComponentData(
             name: 'Player',
             anchor: ComponentAnchor.center,
           ),
@@ -119,7 +120,7 @@ void main() {
       ),
       expect: () => const [
         ComponentEditorState(
-          component: RectangleComponent(
+          component: RectangleComponentData(
             name: 'Player',
             angle: ComponentAngle(radians: 1),
           ),
@@ -130,7 +131,7 @@ void main() {
 
     group('ComponentEditorVerticesChanged', () {
       const vertices = ComponentVertices(ComponentVertices.square);
-      const polygon = PolygonComponent(name: 'Player');
+      const polygon = PolygonComponentData(name: 'Player');
 
       blocTest<ComponentEditorBloc, ComponentEditorState>(
         'updates the vertices of a polygon',
@@ -144,7 +145,7 @@ void main() {
         act: (bloc) => bloc.add(const ComponentEditorVerticesChanged(vertices)),
         expect: () => const [
           ComponentEditorState(
-            component: PolygonComponent(name: 'Player', vertices: vertices),
+            component: PolygonComponentData(name: 'Player', vertices: vertices),
             savedComponent: polygon,
           ),
         ],
@@ -160,7 +161,7 @@ void main() {
 
     group('ComponentEditorRadiusChanged', () {
       const radius = ComponentRadius(radius: 10);
-      const circle = CircleComponent(name: 'Player');
+      const circle = CircleComponentData(name: 'Player');
 
       blocTest<ComponentEditorBloc, ComponentEditorState>(
         'updates the radius of a circle',
@@ -174,7 +175,7 @@ void main() {
         act: (bloc) => bloc.add(const ComponentEditorRadiusChanged(radius)),
         expect: () => const [
           ComponentEditorState(
-            component: CircleComponent(name: 'Player', radius: radius),
+            component: CircleComponentData(name: 'Player', radius: radius),
             savedComponent: circle,
           ),
         ],
@@ -194,15 +195,114 @@ void main() {
       act: (bloc) => bloc.add(const ComponentEditorPaintChanged(paint)),
       expect: () => const [
         ComponentEditorState(
-          component: RectangleComponent(name: 'Player', paint: paint),
+          component: RectangleComponentData(name: 'Player', paint: paint),
           savedComponent: component,
         ),
       ],
     );
 
+    group('ComponentEditorSpriteChanged', () {
+      const image = 'assets/images/a.png';
+      const sprite = ComponentSprite(
+        image: image,
+        srcSize: ComponentSize(width: 16, height: 32),
+      );
+      final bytes = Uint8List.fromList([1, 2, 3]);
+
+      ComponentEditorBloc buildSpriteBloc(ComponentData component) {
+        return ComponentEditorBloc(
+          project: project,
+          component: component,
+          componentRepository: componentRepository,
+          projectRepository: projectRepository,
+          editorPreferencesRepository: editorPreferencesRepository,
+        );
+      }
+
+      test('the first image also sets the size, and is loaded', () async {
+        when(() => componentRepository.readImage(project.path, image))
+            .thenAnswer((_) async => bytes);
+        final bloc = buildSpriteBloc(const SpriteComponentData(name: 'Player'))
+          ..add(const ComponentEditorSpriteChanged(sprite));
+        await pumpEventQueue();
+
+        expect(
+          bloc.state.component,
+          equals(
+            const SpriteComponentData(
+              name: 'Player',
+              size: ComponentSize(width: 16, height: 32),
+              sprite: sprite,
+            ),
+          ),
+        );
+        expect(bloc.state.spriteImages, equals({image: bytes}));
+      });
+
+      test('later changes keep the size', () async {
+        when(() => componentRepository.readImage(project.path, image))
+            .thenAnswer((_) async => bytes);
+        const size = ComponentSize(width: 5, height: 5);
+        final bloc = buildSpriteBloc(
+          const SpriteComponentData(
+            name: 'Player',
+            size: size,
+            sprite: ComponentSprite(image: image),
+          ),
+        )..add(const ComponentEditorSpriteChanged(sprite));
+        await pumpEventQueue();
+
+        expect(
+          (bloc.state.component as SpriteComponentData).size,
+          equals(size),
+        );
+      });
+
+      test('an image that cannot be read keeps the sprite', () async {
+        when(() => componentRepository.readImage(project.path, image))
+            .thenThrow(Exception());
+        final bloc = buildSpriteBloc(const SpriteComponentData(name: 'Player'))
+          ..add(const ComponentEditorSpriteChanged(sprite));
+        await pumpEventQueue();
+
+        expect(
+          (bloc.state.component as SpriteComponentData).sprite,
+          equals(sprite),
+        );
+        expect(bloc.state.spriteImages, isEmpty);
+      });
+
+      blocTest<ComponentEditorBloc, ComponentEditorState>(
+        'is ignored by components without a sprite',
+        build: buildBloc,
+        act: (bloc) => bloc.add(const ComponentEditorSpriteChanged(sprite)),
+        expect: () => const <ComponentEditorState>[],
+      );
+
+      test('started loads the images of the tree', () async {
+        when(() => componentRepository.readImage(project.path, image))
+            .thenAnswer((_) async => bytes);
+        when(() => componentRepository.getComponents(project.path))
+            .thenAnswer((_) async => const []);
+        when(
+          () =>
+              componentRepository.isComponentCodeUpToDate(any(), any(), any()),
+        ).thenAnswer((_) async => true);
+        final bloc = buildSpriteBloc(
+          const PositionComponentData(
+            name: 'Player',
+            children: [SpriteComponentData(name: 'head', sprite: sprite)],
+          ),
+        )..add(const ComponentEditorStarted());
+        await pumpEventQueue();
+
+        expect(bloc.state.spriteImages, equals({image: bytes}));
+      });
+    });
+
     group('ComponentEditorCollisionChanged', () {
       const collision = ComponentCollision(isSolid: true);
-      const hitbox = CircleHitboxComponent(name: 'Player');
+      const hitbox = CircleHitboxData(name: 'Player');
 
       blocTest<ComponentEditorBloc, ComponentEditorState>(
         'updates the collision of a hitbox',
@@ -217,10 +317,7 @@ void main() {
             bloc.add(const ComponentEditorCollisionChanged(collision)),
         expect: () => const [
           ComponentEditorState(
-            component: CircleHitboxComponent(
-              name: 'Player',
-              collision: collision,
-            ),
+            component: CircleHitboxData(name: 'Player', collision: collision),
             savedComponent: hitbox,
           ),
         ],
@@ -385,12 +482,12 @@ void main() {
 
     test('rootClassOwner is the other component generating the root '
         'class', () {
-      const aB = RectangleComponent(name: 'a_b');
-      const aBHead = RectangleComponent(name: 'a_b_head');
+      const aB = RectangleComponentData(name: 'a_b');
+      const aBHead = RectangleComponentData(name: 'a_b_head');
       const state = ComponentEditorState(
-        component: RectangleComponent(
+        component: RectangleComponentData(
           name: 'AB',
-          children: [RectangleComponent(name: 'head')],
+          children: [RectangleComponentData(name: 'head')],
         ),
         savedComponent: component,
         takenClassNames: {r'$AB': aB, r'$ABHead': aBHead, r'$X': aB},
@@ -404,13 +501,13 @@ void main() {
     });
 
     group(ComponentEditorStarted, () {
-      const enemy = RectangleComponent(name: 'Enemy');
-      const ship = RectangleComponent(
+      const enemy = RectangleComponentData(name: 'Enemy');
+      const ship = RectangleComponentData(
         name: 'Ship',
-        children: [RectangleComponent(name: 'wing')],
+        children: [RectangleComponentData(name: 'wing')],
       );
 
-      void stubComponents(List<Component> components) {
+      void stubComponents(List<ComponentData> components) {
         when(() => componentRepository.getComponents(project.path))
             .thenAnswer((_) async => components);
       }
@@ -509,7 +606,7 @@ void main() {
       blocTest<ComponentEditorBloc, ComponentEditorState>(
         'reports clashes that already exist',
         setUp: () {
-          stubComponents(const [RectangleComponent(name: 'player_')]);
+          stubComponents(const [RectangleComponentData(name: 'player_')]);
           stubUpToDate(isUpToDate: true);
         },
         build: buildBloc,
@@ -665,8 +762,8 @@ void main() {
     );
 
     group('component tree', () {
-      const child = RectangleComponent(name: 'rectangle1');
-      const tree = RectangleComponent(name: 'Player', children: [child]);
+      const child = RectangleComponentData(name: 'rectangle1');
+      const tree = RectangleComponentData(name: 'Player', children: [child]);
       const treeState = ComponentEditorState(
         component: tree,
         savedComponent: tree,
@@ -705,9 +802,9 @@ void main() {
         'ComponentEditorChildAdded adds no child to a hitbox',
         build: buildBloc,
         seed: () => const ComponentEditorState(
-          component: RectangleComponent(
+          component: RectangleComponentData(
             name: 'Player',
-            children: [RectangleHitboxComponent(name: 'rectangleHitbox1')],
+            children: [RectangleHitboxData(name: 'rectangleHitbox1')],
           ),
           savedComponent: tree,
           selectedPath: [0],
@@ -726,12 +823,12 @@ void main() {
             bloc.add(const ComponentEditorChildAdded(ComponentType.rectangle)),
         expect: () => const [
           ComponentEditorState(
-            component: RectangleComponent(
+            component: RectangleComponentData(
               name: 'Player',
               children: [
-                RectangleComponent(
+                RectangleComponentData(
                   name: 'rectangle1',
-                  children: [RectangleComponent(name: 'rectangle2')],
+                  children: [RectangleComponentData(name: 'rectangle2')],
                 ),
               ],
             ),
@@ -754,7 +851,7 @@ void main() {
           isA<ComponentEditorState>().having(
             (s) => s.selectedNode,
             'selectedNode',
-            const PolygonComponent(
+            const PolygonComponentData(
               name: 'polygon1',
               vertices: ComponentVertices(ComponentVertices.square),
             ),
@@ -769,7 +866,9 @@ void main() {
           component: component,
           savedComponent: component,
           takenClassNames: {
-            r'$PlayerRectangle1': RectangleComponent(name: 'player_rectangle1'),
+            r'$PlayerRectangle1': RectangleComponentData(
+              name: 'player_rectangle1',
+            ),
           },
         ),
         act: (bloc) =>
@@ -790,7 +889,7 @@ void main() {
         act: (bloc) => bloc.add(const ComponentEditorNodeRemoved([0])),
         expect: () => const [
           ComponentEditorState(
-            component: RectangleComponent(name: 'Player'),
+            component: RectangleComponentData(name: 'Player'),
             savedComponent: tree,
           ),
         ],
@@ -815,10 +914,10 @@ void main() {
         skip: 2,
         expect: () => const [
           ComponentEditorState(
-            component: RectangleComponent(
+            component: RectangleComponentData(
               name: 'Player',
               children: [
-                RectangleComponent(
+                RectangleComponentData(
                   name: 'rectangle1',
                   position: ComponentPosition(x: 5),
                   size: size,
@@ -843,7 +942,7 @@ void main() {
     });
 
     group(ComponentEditorSaveRequested, () {
-      const playerHead = RectangleComponent(name: 'player_head');
+      const playerHead = RectangleComponentData(name: 'player_head');
 
       setUp(
         () =>
@@ -948,9 +1047,9 @@ void main() {
         build: buildBloc,
         // The other components were not loaded when the child was named.
         seed: () => const ComponentEditorState(
-          component: RectangleComponent(
+          component: RectangleComponentData(
             name: 'Player',
-            children: [RectangleComponent(name: 'head')],
+            children: [RectangleComponentData(name: 'head')],
           ),
           savedComponent: component,
         ),
@@ -1027,12 +1126,12 @@ void main() {
 
       test('goes back to ready when the clashing child is renamed while '
           'loading', () async {
-        final components = Completer<List<Component>>();
+        final components = Completer<List<ComponentData>>();
         when(() => componentRepository.getComponents(project.path))
             .thenAnswer((_) => components.future);
-        const tree = RectangleComponent(
+        const tree = RectangleComponentData(
           name: 'Player',
-          children: [RectangleComponent(name: 'head')],
+          children: [RectangleComponentData(name: 'head')],
         );
         final bloc = buildBloc()
           ..emit(
@@ -1078,7 +1177,7 @@ void main() {
               .having(
                 (s) => s.component,
                 'component',
-                const RectangleComponent(
+                const RectangleComponentData(
                   name: 'Player',
                   size: size,
                   paint: paint,
@@ -1167,11 +1266,11 @@ void main() {
     });
 
     group(ComponentEditorNameChanged, () {
-      const named = RectangleComponent(
+      const named = RectangleComponentData(
         name: 'Player',
         children: [
-          RectangleComponent(name: 'rectangle1'),
-          RectangleComponent(name: 'rectangle2'),
+          RectangleComponentData(name: 'rectangle1'),
+          RectangleComponentData(name: 'rectangle2'),
         ],
       );
 
@@ -1215,7 +1314,7 @@ void main() {
           savedComponent: named,
           selectedPath: [1],
           takenClassNames: {
-            r'$PlayerHead': RectangleComponent(name: 'player_head'),
+            r'$PlayerHead': RectangleComponentData(name: 'player_head'),
           },
         ),
         act: (bloc) => bloc.add(const ComponentEditorNameChanged('head')),

@@ -3,7 +3,7 @@
 The power of [integral_isolates](https://pub.dev/packages/integral_isolates) neatly packaged in
 [flame_isolate](https://pub.dev/packages/flame_isolate) for your Flame game.
 
-If you've ever used the [compute](https://api.flutter.dev/flutter/foundation/compute-constant.html)
+If you've ever used the [compute](https://api.flutter.dev/flutter/foundation/compute.html)
 function before, you will feel right at home. This mixin allows you to run CPU-intensive code in an
 isolate.
 
@@ -13,7 +13,7 @@ To use it in your game you just need to add `flame_isolate` to your pubspec.yaml
 ## Usage
 
 Just add the mixin `FlameIsolate` to your component and start utilizing the power of an isolate as
-simple as running the [compute](https://api.flutter.dev/flutter/foundation/compute-constant.html)
+simple as running the [compute](https://api.flutter.dev/flutter/foundation/compute.html)
 function.
 
 Example:

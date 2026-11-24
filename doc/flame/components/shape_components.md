@@ -162,6 +162,25 @@ By default, the polygons whose vertices all lie inside of the largest polygon ar
 since the largest one already covers them; the eyes of a face are an example of this. Pass
 `filter: false` to keep every polygon, for example when the inner contours should be hit by rays.
 
+Sampling the path is most of what making a `PathComponent` costs, so when many components of the
+same path are made, like the enemies of a game, its polygons can be made once with
+`path.toPolygons()` and given to each of them as `polygons`; the `polygons` of another component
+work too, given along with its `path`. The path is then not sampled again, and the `sampling`,
+`tolerance` and `filter` arguments are not used, so give them to `toPolygons` instead:
+
+```dart
+void main() {
+  final path = Path()
+    ..addOval(const Rect.fromLTWH(0, 0, 100, 60))
+    ..addRect(const Rect.fromLTWH(200, 0, 50, 50));
+  final polygons = path.toPolygons(sampling: 2);
+
+  final components = [
+    for (var i = 0; i < 10; i++) PathComponent(path: path, polygons: polygons),
+  ];
+}
+```
+
 The `PathHitbox` is the hitbox counterpart of the `PathComponent`, see
 [](../collision_detection.md#pathhitbox).
 

@@ -95,6 +95,6 @@ class ProjectBloc({
     }
   }
 
-  Future<List<Component>> _getComponents() =>
+  Future<List<ComponentData>> _getComponents() =>
       _componentRepository.getComponents(_project.path);
 }

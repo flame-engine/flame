@@ -38,7 +38,7 @@ final class const ProjectComponentCreateRequested(
 /// The user confirmed that [component] should be deleted.
 final class const ProjectComponentDeleteRequested(
   /// The component to delete.
-  final Component component,
+  final ComponentData component,
 ) extends ProjectEvent {
   /// Creates a [ProjectComponentDeleteRequested] event.
   this;

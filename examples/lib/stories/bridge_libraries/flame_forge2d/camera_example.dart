@@ -15,8 +15,8 @@ class CameraExample() extends Forge2DExampleGame {
 
 class CameraExampleWorld() extends DominoExampleWorld {
   @override
-  void onTapDown(TapDownEvent info) {
-    final position = info.localPosition;
+  void onTapDown(TapDownEvent event) {
+    final position = event.localPosition;
     final pizza = Pizza(position);
     add(pizza);
     pizza.mounted.whenComplete(() => gameRef.camera.follow(pizza));

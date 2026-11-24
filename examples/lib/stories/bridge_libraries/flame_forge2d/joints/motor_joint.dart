@@ -44,8 +44,8 @@ class MotorJointWorld() extends Forge2DWorld with TapCallbacks {
   }
 
   @override
-  void onTapDown(TapDownEvent info) {
-    super.onTapDown(info);
+  void onTapDown(TapDownEvent event) {
+    super.onTapDown(event);
     clockWise = !clockWise;
   }
 

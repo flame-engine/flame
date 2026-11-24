@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flame_studio/palette/palette.dart';
 import 'package:flame_studio/repositories/repositories.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
@@ -18,7 +18,7 @@ class _MockPaletteBloc()
 
 void main() {
   const project = Project(path: '/projects/my_game');
-  const component = RectangleComponent(name: 'Player');
+  const component = RectangleComponentData(name: 'Player');
   const primary = PaletteColor(name: 'primary', color: 0xFFFF0000);
   const accent = PaletteColor(name: 'accent', color: 0xFF00FF00);
 

@@ -1,6 +1,6 @@
 import 'package:flame_studio/home/home.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template home_page}
 /// The screen shown when no project is open.
