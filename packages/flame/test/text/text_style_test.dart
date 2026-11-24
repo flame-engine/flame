@@ -80,6 +80,130 @@ void main() {
       );
     });
 
+    group('document style copyWith keeps what other does not set', () {
+      test('text styles', () {
+        final style = DocumentStyle(
+          text: InlineTextStyle(fontSize: 8),
+          boldText: InlineTextStyle(fontWeight: FontWeight.w900),
+          italicText: InlineTextStyle(fontStyle: FontStyle.normal),
+          codeText: InlineTextStyle(fontFamily: 'Courier'),
+          strikethroughText: InlineTextStyle(
+            decoration: TextDecoration.overline,
+          ),
+        );
+        final newStyle = style.copyWith(DocumentStyle(width: 100));
+        expect(newStyle.width, 100);
+        expect(newStyle.text.fontSize, 8);
+        expect(newStyle.boldText.fontWeight, FontWeight.w900);
+        expect(newStyle.italicText.fontStyle, FontStyle.normal);
+        expect(newStyle.codeText.fontFamily, 'Courier');
+        expect(newStyle.strikethroughText.decoration, TextDecoration.overline);
+      });
+
+      test('block styles', () {
+        final block = BlockStyle(
+          margin: const EdgeInsets.all(3),
+          text: InlineTextStyle(fontScale: 3),
+        );
+        final style = DocumentStyle(
+          paragraph: block,
+          header1: block,
+          header2: block,
+          header3: block,
+          header4: block,
+          header5: block,
+          header6: block,
+        );
+        final newStyle = style.copyWith(DocumentStyle(width: 100));
+        for (final copied in [
+          newStyle.paragraph,
+          newStyle.header1,
+          newStyle.header2,
+          newStyle.header3,
+          newStyle.header4,
+          newStyle.header5,
+          newStyle.header6,
+        ]) {
+          expect(copied.margin, const EdgeInsets.all(3));
+          expect(copied.text!.fontScale, 3);
+        }
+      });
+
+      test('padding', () {
+        final style = DocumentStyle(padding: const EdgeInsets.all(16));
+        expect(
+          style.copyWith(DocumentStyle(width: 100)).padding,
+          const EdgeInsets.all(16),
+        );
+        expect(
+          style.copyWith(DocumentStyle(padding: EdgeInsets.zero)).padding,
+          EdgeInsets.zero,
+        );
+      });
+
+      test('custom styles', () {
+        final style = DocumentStyle(
+          customStyles: {
+            'author': InlineTextStyle(fontSize: 12, fontFamily: 'Arial'),
+            'date': InlineTextStyle(fontSize: 10),
+          },
+        );
+        final newStyle = style.copyWith(
+          DocumentStyle(
+            customStyles: {
+              'author': InlineTextStyle(fontSize: 14),
+              'title': InlineTextStyle(fontSize: 20),
+            },
+          ),
+        );
+        expect(newStyle.getCustomStyle('author')!.fontSize, 14);
+        expect(newStyle.getCustomStyle('author')!.fontFamily, 'Arial');
+        expect(newStyle.getCustomStyle('date')!.fontSize, 10);
+        expect(newStyle.getCustomStyle('title')!.fontSize, 20);
+        expect(
+          style
+              .copyWith(DocumentStyle(width: 100))
+              .getCustomStyle('date')!
+              .fontSize,
+          10,
+        );
+      });
+
+      test('background border', () {
+        final style = DocumentStyle(
+          background: BackgroundStyle(
+            color: const Color(0xFF00FF00),
+            borderColor: const Color(0xFFFF0000),
+            borderWidth: 2,
+            borderRadius: 5,
+          ),
+        );
+        final newStyle = style.copyWith(
+          DocumentStyle(
+            background: BackgroundStyle(color: const Color(0xFF0000FF)),
+          ),
+        );
+        final background = newStyle.background!;
+        expect(background.backgroundPaint!.color, const Color(0xFF0000FF));
+        expect(background.borderPaint!.color, const Color(0xFFFF0000));
+        expect(background.borderPaint!.strokeWidth, 2);
+        expect(background.borderWidths, const EdgeInsets.all(2));
+        expect(background.borderRadius, 5);
+
+        final overridden = style.copyWith(
+          DocumentStyle(
+            background: BackgroundStyle(borderWidth: 0, borderRadius: 0),
+          ),
+        );
+        expect(overridden.background!.borderWidths, EdgeInsets.zero);
+        expect(overridden.background!.borderRadius, 0);
+        expect(
+          overridden.background!.backgroundPaint!.color,
+          const Color(0xFF00FF00),
+        );
+      });
+    });
+
     test('styles are cascading', () {
       final style = DocumentStyle(
         width: 600.0,

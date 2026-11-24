@@ -1,11 +1,12 @@
-include: package:flame_lint/analysis_options_with_dcm.yaml
+include:
+  - package:flame_lint/analysis_options_with_dcm.yaml
+  - package:very_good_analysis/analysis_options.yaml
+  - package:bloc_lint/recommended.yaml
 
 analyzer:
   exclude:
     - build/**
-    - android/**
-    - ios/**
-    - web/**
-    - windows/**
-    - macos/**
     - linux/**
+    - macos/**
+    - windows/**
+    - "**/*.g.dart"

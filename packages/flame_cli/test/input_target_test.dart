@@ -1,6 +1,7 @@
 import 'package:args/command_runner.dart';
 import 'package:flame_cli/flame_cli.dart';
 import 'package:test/test.dart';
+import 'package:vm_service/vm_service.dart' show VmService;
 
 class _Command() extends Command<int> {
   @override
@@ -14,6 +15,12 @@ class _Command() extends Command<int> {
 /// with [_response].
 class _FakeConnection(final Map<String, dynamic> _response)
     implements FlameConnection {
+  @override
+  VmService get service => throw UnimplementedError();
+
+  @override
+  String get isolateId => throw UnimplementedError();
+
   final calls = <(String, Map<String, String>?)>[];
 
   @override

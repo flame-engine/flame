@@ -52,6 +52,27 @@ Other useful links:
   Games, Libraries and Articles.
 
 
+## AI coding agents
+
+Flame ships [package skills](https://dart.dev/ai/package-skills) that teach AI coding agents how to
+build a good Flame game and how to use the [flame command](https://pub.dev/packages/flame_cli) to
+create, run, inspect and play it:
+
+- `flame-best-practices`: The rules to follow when building a game with Flame.
+- `flame-cli`: How to use the `flame` command for different tasks.
+
+Agents working on a project that depends on Flame should install them by running this in the
+project directory:
+
+```shell
+dart run skills@ get
+```
+
+It installs the skills of every dependency that ships them, use `dart run skills@ get -p flame` to
+only install the ones from Flame. Run it again after upgrading Flame, so that the skills match the
+new version.
+
+
 ## Help
 
 There is a Flame community on [Blue Fire's Discord server](https://discord.gg/5unKpdQD78) where you

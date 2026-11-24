@@ -32,9 +32,7 @@ class Surface({
     // `TODO`(bdero): This should have an attribute map instead and be fully SoA
     // but vertex attributes in Impeller aren't flexible enough yet.
     // See also https://github.com/flutter/flutter/issues/116168.
-    _vertices = Float32List.fromList(
-      normalizedVertices.fold([], (p, v) => p..addAll(v.storage)),
-    ).buffer;
+    _vertices = _packVertices(normalizedVertices).buffer;
     _vertexCount = normalizedVertices.length;
 
     final positions = Float32List(normalizedVertices.length * 3);
@@ -122,6 +120,15 @@ class Surface({
       Vector3(minX, minY, minZ),
       Vector3(maxX, maxY, maxZ),
     );
+  }
+
+  static Float32List _packVertices(List<Vertex> vertices) {
+    final stride = vertices.isEmpty ? 0 : vertices.first.storage.length;
+    final packed = Float32List(vertices.length * stride);
+    for (var i = 0; i < vertices.length; i++) {
+      packed.setRange(i * stride, (i + 1) * stride, vertices[i].storage);
+    }
+    return packed;
   }
 
   static List<Vertex> _normalize({

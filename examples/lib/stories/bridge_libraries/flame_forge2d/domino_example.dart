@@ -127,8 +127,8 @@ class DominoExampleWorld()
   }
 
   @override
-  void onTapDown(TapDownEvent info) {
-    final position = info.localPosition;
+  void onTapDown(TapDownEvent event) {
+    final position = event.localPosition;
     add(Pizza(position));
   }
 }

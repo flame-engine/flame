@@ -52,8 +52,16 @@ void main() {
         1,
         'Player',
         'Player()',
-        true,
-        [ComponentTreeNode(2, 'Child', 'Child()', false, [])],
+        [
+          ComponentTreeNode(
+            2,
+            'Child',
+            'Child()',
+            [],
+            isPositionComponent: false,
+          ),
+        ],
+        isPositionComponent: true,
         attributes: {
           'priority': 1,
           'position': [1.0, 2.0],

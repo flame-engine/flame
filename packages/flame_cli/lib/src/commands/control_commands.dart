@@ -4,16 +4,46 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/command_categories.dart';
+import 'package:flame_cli/src/commands/flame_command.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
 import 'package:flame_cli/src/json_output.dart';
+import 'package:flame_cli/src/merge/merge.dart';
+import 'package:flame_cli/src/merge/merging_reload.dart';
 import 'package:flame_cli/src/project_files.dart';
 import 'package:flame_cli/src/run_controller.dart';
 import 'package:io/io.dart';
 
-/// Hot reloads the game through `flame run`.
+/// Hot reloads the game through `flame run`, and with `--merge` also applies
+/// the changes of the code that sets up the components, see [mergingReload].
 class ReloadCommand(super.out, super.workingDirectory)
     extends _RunRequestCommand {
-  this : super(request: RunRequest.reload);
+  this : super(request: RunRequest.reload) {
+    argParser
+      ..addFlag(
+        'merge',
+        abbr: 'm',
+        negatable: false,
+        help:
+            'Also apply the changes to constructors and onLoad methods to '
+            'the live components, keeping their state. The game has to have '
+            'a constructor that takes no arguments.',
+      )
+      ..addFlag(
+        'keep-runtime',
+        negatable: false,
+        help:
+            'With --merge, keep a value that changed while the game was '
+            'running when the code changed it too, instead of replacing it '
+            'with the value from the code.',
+      )
+      ..addOption(
+        'uri',
+        abbr: 'u',
+        help:
+            'With --merge, the Dart VM Service URI of the running game. Not '
+            'needed if the game was started with `flame run`.',
+      );
+  }
 
   @override
   String get name => 'reload';
@@ -21,6 +51,81 @@ class ReloadCommand(super.out, super.workingDirectory)
   @override
   String get description =>
       'Hot reload the game, which has to have been started with `flame run`.';
+
+  @override
+  Future<int> run() async {
+    final arguments = argResults!;
+    if (!arguments.flag('merge')) {
+      if (arguments.flag('keep-runtime')) {
+        throw UsageException('--keep-runtime needs --merge.', usage);
+      }
+      return await super.run();
+    }
+    final port = parsePortOption(arguments, usage);
+    final connection = await connectToGame(
+      workingDirectory,
+      uriOption: arguments.option('uri') ?? await _vmServiceUri(port),
+    );
+    try {
+      final MergingReloadResult(:response, :report) = await mergingReload(
+        connection: connection,
+        reload: () => sendRunRequest(workingDirectory, request, port: port),
+        keepRuntime: arguments.flag('keep-runtime'),
+      );
+      if (jsonOutput) {
+        out.writeln(
+          toJsonOutput({...response.toJson(), 'merge': ?report?.toJson()}),
+        );
+      } else {
+        _printResponse(response);
+        if (report != null) {
+          _printReport(report);
+        }
+      }
+      return (response.ok ? ExitCode.success : ExitCode.software).code;
+    } finally {
+      await connection.dispose();
+    }
+  }
+
+  /// The VM Service URI of the game of the `flame run` on [port], since the
+  /// URI that the last `flame run` of the project wrote belongs to another
+  /// game when several were started.
+  Future<String?> _vmServiceUri(int? port) async {
+    if (port == null) {
+      return null;
+    }
+    final response = await sendRunRequest(
+      workingDirectory,
+      RunRequest.status,
+      port: port,
+    );
+    final uri = response.status?.vmServiceUri;
+    if (uri == null) {
+      throw FlameCliException(
+        'The `flame run` on port $port does not know the Dart VM Service URI '
+        'of its game yet, pass it with --uri.',
+        exitCode: ExitCode.unavailable,
+      );
+    }
+    return uri;
+  }
+
+  void _printReport(MergeReport report) {
+    if (report.isEmpty) {
+      out.writeln('The code declares no changes to the components.');
+      return;
+    }
+    for (final (title, lines) in report.sections) {
+      if (lines.isEmpty) {
+        continue;
+      }
+      out.writeln('$title:');
+      for (final line in lines) {
+        out.writeln('  $line');
+      }
+    }
+  }
 }
 
 /// Hot restarts the game through `flame run`.
@@ -71,11 +176,18 @@ abstract class _RunRequestCommand(
       request,
       port: port,
     );
-    final RunResponse(:ok, :message) = response;
     if (jsonOutput) {
       out.writeln(toJsonOutput(response.toJson()));
-      return (ok ? ExitCode.success : ExitCode.software).code;
+    } else {
+      _printResponse(response);
     }
+    return (response.ok ? ExitCode.success : ExitCode.software).code;
+  }
+
+  /// Prints the message of [response], after the output of `flutter run`
+  /// when the request failed.
+  void _printResponse(RunResponse response) {
+    final RunResponse(:ok, :message) = response;
     final output = ok ? const <String>[] : response.output;
     for (final line in output) {
       out.writeln(line);
@@ -83,7 +195,6 @@ abstract class _RunRequestCommand(
     if (output.isEmpty || output.last != message) {
       out.writeln(message);
     }
-    return (ok ? ExitCode.success : ExitCode.software).code;
   }
 }
 

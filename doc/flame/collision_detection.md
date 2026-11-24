@@ -329,6 +329,11 @@ Every polygon takes part in the collision detection, so a path with many contour
 costs accordingly. Keep the `filter` on unless the inner contours matter, and use the highest
 `sampling` that still follows the outline closely enough.
 
+Sampling the outline is also most of what making a `PathHitbox` costs, so when the hitboxes of the
+same outline are made over and over, like the ones of the enemies that a game spawns, make the
+polygons once with `outline.toPolygons(sampling: 2)` and give them to each hitbox as `polygons`, see
+[](components/shape_components.md#pathcomponent).
+
 
 ### Hitboxes from the outline of a sprite
 

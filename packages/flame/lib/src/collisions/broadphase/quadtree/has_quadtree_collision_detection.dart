@@ -28,7 +28,7 @@ mixin HasQuadTreeCollisionDetection<W extends World> on FlameGame<W>
     CollisionDetection<ShapeHitbox, QuadTreeBroadphase> cd,
   ) {
     if (cd is! QuadTreeCollisionDetection) {
-      throw 'Must be QuadTreeCollisionDetection!';
+      throw ArgumentError('Must be QuadTreeCollisionDetection!');
     }
     _collisionDetection = cd;
   }

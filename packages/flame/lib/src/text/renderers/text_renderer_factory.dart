@@ -17,8 +17,10 @@ class TextRendererFactory() {
     if (creator != null) {
       return creator() as T;
     } else {
-      throw 'Unknown implementation of TextRenderer: $T. Please register it '
-          'under [TextRendererFactory.defaultRegistry].';
+      throw ArgumentError(
+        'Unknown implementation of TextRenderer: $T. Please register it '
+        'under [TextRendererFactory.defaultRegistry].',
+      );
     }
   }
 }

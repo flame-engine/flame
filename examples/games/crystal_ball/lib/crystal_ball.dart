@@ -40,7 +40,7 @@ class _CrystalBallWidgetState() extends State<CrystalBallWidget> {
       future: preloadedPrograms,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          throw snapshot.error!;
+          Error.throwWithStackTrace(snapshot.error!, snapshot.stackTrace!);
         }
 
         // Show a loading indicator while the fragment programs are loading

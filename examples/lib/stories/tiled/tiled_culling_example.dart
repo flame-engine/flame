@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:examples/commons/culling_story.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -11,31 +12,35 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart' show KeyEventResult;
 
 class TiledCullingExample({
-  final bool culled = true,
+  bool culled = true,
   final TiledCullingOrientation orientation =
       TiledCullingOrientation.orthogonal,
-}) extends FlameGame with KeyboardEvents {
+  final int chunkSize = tiledCullingChunkSize,
+  @override var double cameraSpeed = 1,
+}) extends FlameGame with KeyboardEvents, CullingControls {
   static const description = '''
 The camera slowly moves over a big Tiled map of 400 x 400 tiles. Press C, or use
 the "Culled" knob, to turn culling on and off. Use the "Orientation" knob to
 change the kind of map: orthogonal, isometric, staggered or hexagonal.
 
 With culling on, the map is split into chunks of 16 x 16 tiles (the `chunkSize`
-of the map), and only the chunks that are in view are drawn. With culling off,
-every tile of the map is drawn on every frame, even though only a few of them
-are on-screen.
+of the map, which the "Chunk size" knob changes), and only the chunks that are
+in view are drawn. With culling off, every tile of the map is drawn on every
+frame, even though only a few of them are on-screen. The "Camera speed" knob
+changes how fast the camera moves.
 
 The "Isometric, tall tiles" map has trees and rocks that are taller than their
 cells, and are painted over the tiles behind them. Chunks would change which
 tile is painted on top, so that map is split into runs instead: pieces of one
-row, of up to 64 tiles, which are drawn in the same order as the tiles.
+row, of up to four times the chunk size (64 tiles by default), which are drawn
+in the same order as the tiles.
 
 The "Map draw time" line is how long the map needs to draw in Dart. It does not
 include the work of the GPU. Compare it, and the frame rate, with culling on and
 off.
   ''';
 
-  late bool _culled = culled;
+  bool _culled = culled;
   late final TimedTiledComponent _culledMap;
   late final TimedTiledComponent _plainMap;
   late final CullingStatusText _statusText;
@@ -45,10 +50,28 @@ off.
   TimedTiledComponent get _currentMap => _culled ? _culledMap : _plainMap;
 
   @override
+  bool get culled => _culled;
+
+  @override
+  set culled(bool value) {
+    if (value == _culled) {
+      return;
+    }
+    if (!isLoaded) {
+      _culled = value;
+      return;
+    }
+    world.remove(_currentMap);
+    _culled = value;
+    world.add(_currentMap);
+    _statusText.culled = value;
+  }
+
+  @override
   Future<void> onLoad() async {
     // The same map twice, so that the key can switch between them instantly.
-    _culledMap = await loadTiledCullingMap(orientation, culled: true);
-    _plainMap = await loadTiledCullingMap(orientation, culled: false);
+    _culledMap = await loadTiledCullingMap(orientation, chunkSize: chunkSize);
+    _plainMap = await loadTiledCullingMap(orientation);
     world.add(_currentMap);
 
     camera.viewport.add(
@@ -88,10 +111,8 @@ off.
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.keyC) {
-      world.remove(_currentMap);
-      _culled = !_culled;
-      world.add(_currentMap);
-      _statusText.culled = _culled;
+      culled = !culled;
+      reportKnob(cullingCulledKnob, culled);
       return KeyEventResult.handled;
     }
     return super.onKeyEvent(event, keysPressed);
@@ -100,7 +121,7 @@ off.
   @override
   void update(double dt) {
     super.update(dt);
-    _time += dt;
+    _time += dt * cameraSpeed;
     final mapSize = _currentMap.size;
     camera.viewfinder.position = Vector2(
       mapSize.x * (0.5 + cos(_time * 0.3) * orientation.path),
@@ -116,8 +137,12 @@ off.
 /// The number of tiles on each side of the map of the culling examples.
 const tiledCullingTiles = 400;
 
-/// The size of the chunks, in tiles, that the culled map is split in.
+/// The size of the chunks, in tiles, that the culled map is split in by
+/// default.
 const tiledCullingChunkSize = 16;
+
+/// The chunk sizes that the "Chunk size" knob offers.
+const tiledCullingChunkSizes = [4, 8, 16, 32, 64];
 
 /// The kinds of map that the culling examples show.
 ///
@@ -174,16 +199,16 @@ enum TiledCullingOrientation(
 /// Loads the map of the culling examples, which is [tiledCullingTiles] tiles
 /// wide and high.
 ///
-/// The map is split in chunks, which are skipped while they are out of view,
-/// when [culled] is true.
+/// The map is split in chunks of [chunkSize] tiles, which are skipped while
+/// they are out of view. It is not split when [chunkSize] is null.
 Future<TimedTiledComponent> loadTiledCullingMap(
   TiledCullingOrientation orientation, {
-  required bool culled,
+  int? chunkSize,
 }) async {
   final map = await RenderableTiledMap.fromFile(
     orientation.file,
     orientation.tileSize,
-    chunkSize: culled ? tiledCullingChunkSize : null,
+    chunkSize: chunkSize,
   );
   return TimedTiledComponent(map);
 }

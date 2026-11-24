@@ -33,7 +33,6 @@ class WaterPostProcess({
       ..setFloatUniforms((value) {
         value
           ..setVector(size)
-          ..setFloat(pixelRatio)
           ..setFloat(uvGround)
           ..setFloat(time);
       })

@@ -22,8 +22,8 @@ class MyWorld() extends World with TapCallbacks, HasCollisionDetection {
   this : super(children: [ScreenHitbox()..debugMode = true]);
 
   @override
-  void onTapDown(TapDownEvent info) {
-    add(MyCollidable(position: info.localPosition));
+  void onTapDown(TapDownEvent event) {
+    add(MyCollidable(position: event.localPosition));
   }
 }
 

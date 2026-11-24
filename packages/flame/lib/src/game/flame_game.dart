@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/src/components/core/component.dart';
+import 'package:flame/src/devtools/connectors/hot_reload_connector.dart';
 import 'package:flame/src/devtools/dev_tools_service.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/game.dart';
@@ -54,7 +55,7 @@ class FlameGame<W extends World>({
       'declares itself to be a singleton',
     );
 
-    if (kDebugMode) {
+    if (kDebugMode && !HotReloadConnector.isBuildingShadow) {
       DevToolsService.initWithGame(this);
     }
 
@@ -62,6 +63,19 @@ class FlameGame<W extends World>({
     add(_camera);
     add(_world);
   }
+
+  /// Whether this game is a copy that `flame reload --merge` builds, to find
+  /// out which components and values the code declares.
+  ///
+  /// Such a copy is loaded and mounted, but it is never shown and never
+  /// updated. Check this in [onLoad] and [onMount] to skip side effects that
+  /// should only happen in the real game, such as playing music.
+  bool get isHotReloadShadow =>
+      _isHotReloadShadow || HotReloadConnector.isBuildingShadow;
+  bool _isHotReloadShadow = false;
+
+  @internal
+  void markAsHotReloadShadow() => _isHotReloadShadow = true;
 
   /// The [World] that the [camera] is rendering.
   /// Inside of this world is where most of your components should be added.

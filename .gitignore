@@ -32,6 +32,9 @@ ios/
 macos/
 windows/
 linux/
+!packages/flame_studio/linux/
+!packages/flame_studio/macos/
+!packages/flame_studio/windows/
 desktop/
 **/build/
 coverage/
@@ -55,6 +58,7 @@ examples/**/.gitignore
 **/example/web
 
 .metadata
+!packages/flame_studio/.metadata
 
 # FVM
 .fvm/
