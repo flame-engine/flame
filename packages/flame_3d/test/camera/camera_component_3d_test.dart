@@ -31,5 +31,11 @@ void main() {
       camera.releaseFrustum();
       expect(camera.frustum.containsVector3(Vector3.zero()), isFalse);
     });
+
+    test('asserts on a release without a matching hold', () {
+      final camera = lookingAtOrigin();
+
+      expect(camera.releaseFrustum, throwsAssertionError);
+    });
   });
 }

@@ -111,7 +111,13 @@ class CameraComponent3D({
 
   /// Releases a hold started with [holdFrustum].
   @internal
-  void releaseFrustum() => _frustumHolds--;
+  void releaseFrustum() {
+    assert(
+      _frustumHolds > 0,
+      'releaseFrustum called without a matching holdFrustum',
+    );
+    _frustumHolds--;
+  }
 
   /// Rotates the camera's yaw and pitch.
   ///
