@@ -50,6 +50,14 @@ abstract final class Repository() {
     return attributes['priority'] as int;
   }
 
+  static Future<String> getComponentLifecycleState({required int id}) async {
+    final infoResponse = await serviceManager.callServiceExtensionOnMainIsolate(
+      'ext.flame_devtools.getComponentInfo',
+      args: {'id': id.toString()},
+    );
+    return infoResponse.json!['lifecycleState'] as String;
+  }
+
   static Future<bool> swapDebugMode({int? id}) async {
     final nextDebugMode = !(await getDebugMode(id: id));
     await serviceManager.callServiceExtensionOnMainIsolate(
