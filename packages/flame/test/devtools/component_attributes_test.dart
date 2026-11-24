@@ -62,12 +62,12 @@ void main() {
 
       expect(playerNode.id, player.hashCode);
       expect(playerNode.attributes['position'], [5.0, 6.0]);
-      expect(playerNode.isTextComponent, isFalse);
+      expect(playerNode.types, isEmpty);
       expect(playerNode.attributes, isNot(contains('text')));
       expect(worldNode.attributes, {'priority': game.world.priority});
     });
 
-    testWithFlameGame('marks a text component', (game) async {
+    testWithFlameGame('reports the types of a text component', (game) async {
       final label = TextComponent(text: 'Score');
       await game.world.ensureAdd(label);
 
@@ -75,9 +75,10 @@ void main() {
       final worldNode = node.children.singleWhere((c) => c.name == 'World');
       final labelNode = worldNode.children.single;
 
-      expect(labelNode.isTextComponent, isTrue);
+      expect(labelNode.types, {DevToolsComponentType.text});
+      expect(labelNode.toJson()['types'], ['text']);
       expect(labelNode.attributes['text'], 'Score');
-      expect(worldNode.isTextComponent, isFalse);
+      expect(worldNode.types, isEmpty);
     });
 
     test('survives a round trip through JSON', () {
@@ -100,16 +101,16 @@ void main() {
           'position': [1.0, 2.0],
           'text': '',
         },
-        isTextComponent: true,
+        types: {DevToolsComponentType.text},
       );
 
       final decoded = ComponentTreeNode.fromJson(node.toJson());
 
       expect(decoded.toJson(), node.toJson());
-      expect(decoded.isTextComponent, isTrue);
+      expect(decoded.types, {DevToolsComponentType.text});
     });
 
-    test('reads JSON without attributes', () {
+    test('reads JSON without attributes and types', () {
       final decoded = ComponentTreeNode.fromJson({
         'id': 1,
         'name': 'Player',
@@ -119,7 +120,7 @@ void main() {
       });
 
       expect(decoded.attributes, isEmpty);
-      expect(decoded.isTextComponent, isFalse);
+      expect(decoded.types, isEmpty);
     });
   });
 }

@@ -246,7 +246,7 @@ class const ComponentSection({super.key}) extends ConsumerWidget {
                                 componentId: node.id,
                               ),
                             ),
-                          if (node.isTextComponent)
+                          if (node.types.contains(DevToolsComponentType.text))
                             TextComponentForm(componentId: node.id),
                           BehaviorTreeSection(
                             id: node.id,

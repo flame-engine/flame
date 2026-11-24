@@ -54,6 +54,13 @@ class ComponentTreeConnector() extends DevToolsConnector {
   }
 }
 
+/// The component types that the devtools extension shows extra fields for,
+/// listed in the `types` of a [ComponentTreeNode].
+enum DevToolsComponentType() {
+  /// A [TextComponent], whose text can be edited.
+  text,
+}
+
 /// This should only be used internally by the devtools extension.
 class ComponentTreeNode(
   final int id,
@@ -62,7 +69,7 @@ class ComponentTreeNode(
   final List<ComponentTreeNode> children, {
   required final bool isPositionComponent,
   final Map<String, dynamic> attributes = const {},
-  final bool isTextComponent = false,
+  final Set<DevToolsComponentType> types = const {},
 }) {
   ComponentTreeNode.fromComponent(Component component)
     : this(
@@ -72,7 +79,9 @@ class ComponentTreeNode(
         component.children.map(ComponentTreeNode.fromComponent).toList(),
         isPositionComponent: component is PositionComponent,
         attributes: componentAttributes(component),
-        isTextComponent: component is TextComponent,
+        types: {
+          if (component is TextComponent) DevToolsComponentType.text,
+        },
       );
 
   ComponentTreeNode.fromJson(Map<String, dynamic> json)
@@ -85,7 +94,10 @@ class ComponentTreeNode(
             .toList(),
         isPositionComponent: json['isPositionComponent'] as bool,
         attributes: (json['attributes'] as Map<String, dynamic>?) ?? const {},
-        isTextComponent: (json['isTextComponent'] as bool?) ?? false,
+        types: {
+          for (final type in (json['types'] as List?) ?? const [])
+            DevToolsComponentType.values.byName(type as String),
+        },
       );
 
   Map<String, dynamic> toJson() {
@@ -94,7 +106,7 @@ class ComponentTreeNode(
       'name': name,
       'toString': toStringText,
       'isPositionComponent': isPositionComponent,
-      'isTextComponent': isTextComponent,
+      'types': [for (final type in types) type.name],
       'attributes': attributes,
       'children': children.map((e) => e.toJson()).toList(),
     };
