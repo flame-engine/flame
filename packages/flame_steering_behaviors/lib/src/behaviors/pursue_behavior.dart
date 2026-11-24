@@ -8,7 +8,7 @@ import 'package:flame_steering_behaviors/flame_steering_behaviors.dart';
 /// {@endtemplate}
 class PursueBehavior<Parent extends Steerable>(
   /// The target to pursue.
-  final PositionComponent target, {
+  final Steerable target, {
 
   /// The range in which the goblin will pursue the player.
   required final double pursueRange,
