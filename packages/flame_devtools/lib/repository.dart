@@ -3,6 +3,9 @@ import 'package:flame/devtools.dart';
 import 'package:flame_devtools/behavior_tree_snapshot.dart';
 
 abstract final class Repository() {
+  /// Whether the extension is connected to a running app.
+  static bool get isConnected => serviceManager.connectedState.value.connected;
+
   static Future<ComponentTreeNode> getComponentTree() async {
     final componentTreeResponse = await serviceManager
         .callServiceExtensionOnMainIsolate(
@@ -68,8 +71,7 @@ abstract final class Repository() {
     return debugModeResponse.json!['debug_mode'] as bool;
   }
 
-  // ignore: avoid_positional_boolean_parameters
-  static Future<bool> setPaused(bool shouldPause) async {
+  static Future<bool> setPaused({required bool shouldPause}) async {
     await serviceManager.callServiceExtensionOnMainIsolate(
       'ext.flame_devtools.setPaused',
       args: {'paused': shouldPause.toString()},
@@ -197,6 +199,7 @@ class PositionComponentAttributes({
   required final double angle,
   required final double scaleX,
   required final double scaleY,
+  required final String anchor,
 }) {
   factory PositionComponentAttributes.fromJson(Map<String, dynamic> json) {
     return PositionComponentAttributes(
@@ -207,6 +210,7 @@ class PositionComponentAttributes({
       angle: (json['angle'] as num).toDouble(),
       scaleX: (json['scaleX'] as num).toDouble(),
       scaleY: (json['scaleY'] as num).toDouble(),
+      anchor: json['anchor'] as String,
     );
   }
 }

@@ -13,6 +13,7 @@ class PathHitbox({
   super.sampling,
   super.tolerance,
   super.filter,
+  super.polygons,
   super.position,
   super.angle,
   super.anchor,
@@ -22,9 +23,12 @@ class PathHitbox({
   /// With this constructor you create a [PathHitbox] from all the closed
   /// contours of the [path].
   ///
-  /// See [PathComponent.new] for the [sampling], [tolerance] and [filter]
-  /// parameters. Fewer vertices make the collision detection cheaper, so use
-  /// the highest sampling that still follows the path closely enough.
+  /// See [PathComponent.new] for the [sampling], [tolerance], [filter] and
+  /// [polygons] parameters. Fewer vertices make the collision detection
+  /// cheaper, so use the highest sampling that still follows the path closely
+  /// enough. Sampling the path is most of what making the hitbox costs, so
+  /// hitboxes of the same path that are made over and over can share their
+  /// [polygons].
   this {
     this.collisionType = collisionType;
   }

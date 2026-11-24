@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flame_studio/component_editor/widgets/widgets.dart';
 import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flame_studio/sprite_editor/sprite_editor.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../helpers/helpers.dart';

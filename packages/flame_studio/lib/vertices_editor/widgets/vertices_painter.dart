@@ -1,6 +1,6 @@
 import 'package:flame_studio/repositories/repositories.dart';
 import 'package:flame_studio/vertices_editor/widgets/vertices_view_transform.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template vertices_painter}
 /// Draws the polygon edited in the vertices editor with its own paint, its

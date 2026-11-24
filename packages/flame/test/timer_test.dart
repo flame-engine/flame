@@ -102,5 +102,128 @@ void main() {
       expect(count, equals(2));
       expect(timer.finished, isTrue);
     });
+
+    test('when tickCount is provided, start ticks the full amount again', () {
+      var count = 0;
+      final timer = Timer(
+        period: 1,
+        repeat: true,
+        tickCount: 2,
+        onTick: () => count++,
+      );
+      timer.update(1.1);
+      timer.update(1.1);
+      expect(count, 2);
+      expect(timer.finished, isTrue);
+      expect(timer.isRunning(), isFalse);
+      expect(timer.current, 0);
+
+      timer.start();
+      expect(timer.finished, isFalse);
+      expect(timer.isRunning(), isTrue);
+      timer.update(1.1);
+      timer.update(1.1);
+      timer.update(1.1);
+      expect(count, 4);
+      expect(timer.finished, isTrue);
+    });
+
+    test('when tickCount is provided, reset also resets the ticks', () {
+      var count = 0;
+      final timer = Timer(
+        period: 1,
+        repeat: true,
+        tickCount: 2,
+        onTick: () => count++,
+      );
+      timer.update(1.1);
+      expect(count, 1);
+
+      timer.reset();
+      timer.update(1.1);
+      expect(count, 2);
+      expect(timer.finished, isFalse);
+      expect(timer.isRunning(), isTrue);
+      timer.update(1.1);
+      expect(count, 3);
+      expect(timer.finished, isTrue);
+    });
+
+    test('when tickCount is provided, start from onTick ticks again', () {
+      var count = 0;
+      late Timer timer;
+      timer = Timer(
+        period: 1,
+        repeat: true,
+        tickCount: 3,
+        onTick: () {
+          count++;
+          if (count == 3) {
+            timer.start();
+          }
+        },
+      );
+      for (var i = 0; i < 6; i++) {
+        timer.update(1.1);
+      }
+      expect(count, 6);
+      expect(timer.finished, isTrue);
+    });
+
+    test('when tickCount is 1, start from onTick keeps it running', () {
+      var count = 0;
+      late Timer timer;
+      timer = Timer(
+        period: 1,
+        repeat: true,
+        tickCount: 1,
+        onTick: () {
+          count++;
+          if (count == 1) {
+            timer.start();
+          }
+        },
+      );
+      timer.update(1.1);
+      expect(timer.isRunning(), isTrue);
+      expect(timer.finished, isFalse);
+      timer.update(1.1);
+      expect(count, 2);
+      expect(timer.finished, isTrue);
+    });
+
+    test('when tickCount is provided, reset from onTick resets the ticks', () {
+      var count = 0;
+      late Timer timer;
+      timer = Timer(
+        period: 1,
+        repeat: true,
+        tickCount: 2,
+        onTick: () {
+          count++;
+          if (count == 1) {
+            timer.reset();
+          }
+        },
+      );
+      timer.update(1.1);
+      timer.update(1.1);
+      expect(count, 2);
+      expect(timer.finished, isFalse);
+      timer.update(1.1);
+      expect(count, 3);
+      expect(timer.finished, isTrue);
+    });
+
+    test('when tickCount is provided, stop resets finished', () {
+      final timer = Timer(period: 1, repeat: true, tickCount: 2);
+      timer.update(1.1);
+      timer.update(1.1);
+      expect(timer.finished, isTrue);
+
+      timer.stop();
+      expect(timer.finished, isFalse);
+      expect(timer.isRunning(), isFalse);
+    });
   });
 }

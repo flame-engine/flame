@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Returns why a name can't be used, or `null` if it can.
 typedef NameValidator = String? Function(String name);

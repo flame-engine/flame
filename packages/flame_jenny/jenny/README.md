@@ -11,4 +11,4 @@ See Jenny's [official documentation site] for more information.
 
 
 [Yarn Spinner]: https://docs.yarnspinner.dev/
-[official documentation site]: https://docs.flame-engine.org/main/other_modules/jenny/index.html
+[official documentation site]: https://docs.flame-engine.org/main/other_modules/jenny/jenny.html

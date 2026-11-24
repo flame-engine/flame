@@ -15,6 +15,11 @@ Path _twoSquares() {
     ..addRect(const Rect.fromLTWH(20, 0, 10, 10));
 }
 
+/// The polygon of the first of [_twoSquares], going counterclockwise.
+List<Vector2> _firstSquare() {
+  return [Vector2(0, 0), Vector2(0, 10), Vector2(10, 10), Vector2(10, 0)];
+}
+
 TestBlock _pathBlock(Vector2 position, {bool isSolid = false}) {
   return TestBlock(position, Vector2(30, 10), addTestHitbox: false)
     ..add(PathHitbox(path: _twoSquares(), isSolid: isSolid));
@@ -35,6 +40,16 @@ void main() {
       );
 
       expect(hitbox.collisionType, CollisionType.passive);
+    });
+
+    test('takes the given polygons', () {
+      final hitbox = PathHitbox(
+        path: _twoSquares(),
+        polygons: [_firstSquare()],
+      );
+
+      expect(hitbox.polygons.single, _firstSquare());
+      expect(hitbox.containsLocalPoint(Vector2(25, 5)), isFalse);
     });
 
     test('can not fill its parent', () {
@@ -106,6 +121,29 @@ void main() {
         expect(circle.collidingWith(block), isTrue);
         expect(block.startCounter, 1);
         expect(circle.startCounter, 1);
+      },
+      'collides only with the polygons it was given': (game) async {
+        final block = TestBlock(
+          Vector2.zero(),
+          Vector2(30, 10),
+          addTestHitbox: false,
+        )..add(PathHitbox(path: _twoSquares(), polygons: [_firstSquare()]));
+        final first = TestBlock(
+          Vector2(5, 5),
+          Vector2.all(10),
+          addTestHitbox: false,
+        )..add(CircleHitbox());
+        final second = TestBlock(
+          Vector2(25, 5),
+          Vector2.all(10),
+          addTestHitbox: false,
+        )..add(CircleHitbox());
+        await game.ensureAddAll([block, first, second]);
+        game.update(0);
+
+        expect(block.collidingWith(first), isTrue);
+        expect(block.collidingWith(second), isFalse);
+        expect(block.startCounter, 1);
       },
       'does not collide with a circle in the gap': (game) async {
         final block = _pathBlock(Vector2.zero());
@@ -218,6 +256,28 @@ void main() {
           Ray2(origin: Vector2(-5, 15), direction: Vector2(1, 0)),
         );
         expect(miss, isNull);
+      },
+      'a ray hits only the polygons it was given': (game) async {
+        final block = TestBlock(
+          Vector2.zero(),
+          Vector2(30, 10),
+          addTestHitbox: false,
+        )..add(PathHitbox(path: _twoSquares(), polygons: [_firstSquare()]));
+        final hitbox = block.firstChild<PathHitbox>()!;
+        await game.ensureAdd(block);
+        game.update(0);
+
+        final fromTheRight = game.collisionDetection.raycast(
+          Ray2(origin: Vector2(35, 5), direction: Vector2(-1, 0)),
+        );
+        expect(fromTheRight?.hitbox, hitbox);
+        expect(fromTheRight?.hitbox?.hitboxParent, block);
+        expect(fromTheRight?.distance, closeTo(25, 0.01));
+
+        final fromTheGap = game.collisionDetection.raycast(
+          Ray2(origin: Vector2(15, 5), direction: Vector2(1, 0)),
+        );
+        expect(fromTheGap, isNull);
       },
     });
   });

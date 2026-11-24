@@ -28,13 +28,18 @@ class BackgroundStyle({
   final double borderRadius = borderRadius ?? 0;
   final EdgeInsets borderWidths = EdgeInsets.all(borderWidth ?? 0);
 
+  // The values as they were passed in, so that [copyWith] only overrides the
+  // ones that were actually set.
+  final double? _rawBorderRadius = borderRadius;
+  final double? _rawBorderWidth = borderWidth;
+
   @override
   BackgroundStyle copyWith(BackgroundStyle other) {
     return BackgroundStyle(
       paint: other.backgroundPaint ?? backgroundPaint,
       borderColor: other.borderPaint?.color ?? borderPaint?.color,
-      borderRadius: other.borderRadius,
-      borderWidth: other.borderWidths.top,
+      borderRadius: other._rawBorderRadius ?? _rawBorderRadius,
+      borderWidth: other._rawBorderWidth ?? _rawBorderWidth,
     );
   }
 }

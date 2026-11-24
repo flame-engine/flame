@@ -4,8 +4,8 @@ import 'package:flame_studio/home/home.dart';
 import 'package:flame_studio/home/widgets/widgets.dart';
 import 'package:flame_studio/project/project.dart';
 import 'package:flame_studio/repositories/repositories.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template home_view}
 /// Shows the open project button and the recent projects.

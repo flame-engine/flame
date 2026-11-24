@@ -125,4 +125,4 @@ flame snapshot --json
 ```
 
 Run `flame --help` for all the commands and options, and see the
-[documentation](https://docs.flame-engine.org/latest/flame/other/cli.html) for more information.
+[documentation](https://docs.flame-engine.org/main/flame/other/cli.html) for more information.
