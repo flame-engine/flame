@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame_steering_behaviors/flame_steering_behaviors.dart';
 
@@ -8,7 +7,7 @@ import 'package:flame_steering_behaviors/flame_steering_behaviors.dart';
 /// {@endtemplate}
 class const Pursue(
   /// The target to pursue.
-  final ReadOnlyPositionProvider target, {
+  final Steerable target, {
 
   /// The maximum prediction time.
   required final double maxPrediction,
@@ -27,8 +26,7 @@ class const Pursue(
     }
 
     final explicitTarget = target.position.clone()
-      ..add(parent.velocity)
-      ..multiply(Vector2.all(prediction));
+      ..addScaled(target.velocity, prediction);
 
     return seek(parent, explicitTarget);
   }
