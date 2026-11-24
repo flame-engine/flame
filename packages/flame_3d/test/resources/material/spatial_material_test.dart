@@ -13,16 +13,12 @@ void main() {
 
       expect(lights[0], 8);
       expect(_color(lights, 0), [1, 0, 0, 1]);
+      expect(_intensity(lights, 0), 1);
       expect(_position(lights, 7), [7, 7, 7]);
     });
 
-    test('ignores point lights beyond the shader limit', () {
-      final lights = _bind(9);
-
-      expect(lights[0], 8);
-      expect(_color(lights, 0), [1, 0, 0, 1]);
-      expect(_intensity(lights, 0), 1);
-      expect(_position(lights, 7), [7, 7, 7]);
+    test('asserts on point lights beyond the shader limit', () {
+      expect(() => _bind(9), throwsAssertionError);
     });
   });
 }

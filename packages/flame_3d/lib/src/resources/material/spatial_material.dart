@@ -84,6 +84,10 @@ class SpatialMaterial({
       ..setFloat('AmbientLight.intensity', ambient.intensity);
 
     // Apply point lights.
+    assert(
+      lights.where((e) => e.source is PointLight).length <= _maxPointLights,
+      'SpatialMaterial supports at most $_maxPointLights point lights',
+    );
     final points = lights
         .where((e) => e.source is PointLight)
         .take(_maxPointLights);
