@@ -6,6 +6,7 @@ import 'package:flame_3d/game.dart';
 import 'package:flame_3d/src/graphics/backend/gpu_backend.dart' as base;
 import 'package:flame_3d/src/graphics/backend/gpu_enums.dart';
 import 'package:flame_3d/src/graphics/backend/gpu_handles.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gpu/gpu.dart' as gpu;
 
@@ -94,6 +95,15 @@ base class GpuBackend({gpu.GpuContext? gpuContext}) extends base.GpuBackend {
   }) {
     final vertex = (vertexShader as _FlutterGpuShader).raw;
     final fragment = (fragmentShader as _FlutterGpuShader).raw;
+    if (kDebugMode) {
+      // A hot-reloaded shader bundle marks its shaders dirty, and flutter_gpu
+      // applies the reload only when a new pipeline is built from them. Drop
+      // the cache so the next request for each shader pair rebuilds its
+      // pipeline.
+      if (vertex.debugIsDirty || fragment.debugIsDirty) {
+        _pipelines.clear();
+      }
+    }
     return _pipelines.putIfAbsent(
       (vertex, fragment),
       () =>
