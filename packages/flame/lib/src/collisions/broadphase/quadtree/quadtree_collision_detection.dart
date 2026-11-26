@@ -55,6 +55,7 @@ class QuadTreeCollisionDetection({
   @override
   void remove(ShapeHitbox item) {
     item.onAabbChanged = null;
+    _scheduledUpdate.remove(item);
     final listenerCollisionType = _listenerCollisionType[item];
     if (listenerCollisionType != null) {
       item.collisionTypeNotifier.removeListener(listenerCollisionType);
