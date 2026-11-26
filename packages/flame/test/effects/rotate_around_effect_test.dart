@@ -58,6 +58,29 @@ void main() {
       expect(component.position, closeToVector(Vector2(0, 0), _epsilon));
     });
 
+    testWithFlameGame('orbits a component at the origin', (game) async {
+      final component = PositionComponent();
+      await game.ensureAdd(component);
+
+      final effect = RotateAroundEffect(
+        pi,
+        center: Vector2(100, 0),
+        EffectController(duration: 1),
+      );
+      component.add(effect);
+
+      game.update(0);
+      expect(component.position, Vector2.zero());
+
+      game.update(0.5);
+      expect(component.angle, closeTo(pi / 2, _epsilon));
+      expect(component.position, closeToVector(Vector2(100, -100), _epsilon));
+
+      game.update(0.5);
+      expect(component.angle, closeTo(pi, _epsilon));
+      expect(component.position, closeToVector(Vector2(200, 0), _epsilon));
+    });
+
     testWithFlameGame('handles infinite rotation', (game) async {
       final component = PositionComponent(position: Vector2(100, 100));
       await game.ensureAdd(component);

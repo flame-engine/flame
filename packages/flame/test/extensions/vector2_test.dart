@@ -202,6 +202,43 @@ void main() {
         v.rotate(0.01, center: v.clone());
         expect(v, Vector2(1, 0));
       });
+
+      test('rotate - the zero vector with a center', () {
+        final position = Vector2.zero();
+        position.rotate(math.pi, center: Vector2(1.0, 0.0));
+        expect(position, closeToVector(Vector2(2.0, 0.0)));
+      });
+
+      test('rotate - the zero vector with a center, quarter turn', () {
+        final position = Vector2.zero();
+        position.rotate(math.pi / 2, center: Vector2(0.0, 1.0));
+        expect(position, closeToVector(Vector2(1.0, 1.0)));
+      });
+
+      test('rotate - the zero vector with the zero vector as center', () {
+        final position = Vector2.zero();
+        position.rotate(math.pi / 2, center: Vector2.zero());
+        expect(position, closeToVector(Vector2.zero()));
+      });
+
+      test('rotate - the zero vector without a center', () {
+        final position = Vector2.zero();
+        position.rotate(math.pi / 2);
+        expect(position, Vector2.zero());
+      });
+
+      test('rotate - angle 0 leaves the vector unchanged', () {
+        final position = Vector2(3.0, -2.0);
+        position.rotate(0);
+        expect(position, Vector2(3.0, -2.0));
+
+        position.rotate(0, center: Vector2(1.0, 1.0));
+        expect(position, Vector2(3.0, -2.0));
+
+        final zero = Vector2.zero();
+        zero.rotate(0, center: Vector2(1.0, 1.0));
+        expect(zero, Vector2.zero());
+      });
     });
 
     group('Scaling', () {
