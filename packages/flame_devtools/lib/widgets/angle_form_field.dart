@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flame_devtools/material.dart';
@@ -9,7 +10,7 @@ import 'package:flame_devtools/widgets/incremental_number_form_field.dart';
 /// what the game uses, so only the UI works with degrees.
 class const AngleFormField({
   required final double radians,
-  required final void Function(double radians) onChanged,
+  required final FutureOr<void> Function(double radians) onChanged,
   super.key,
 }) extends StatelessWidget {
   /// The number of decimals that the angle is shown with, in degrees.
@@ -31,6 +32,7 @@ class const AngleFormField({
     return IncrementalNumberFormField<double>(
       label: 'Degrees',
       initialValue: _toDisplayDegrees(radians),
+      scrubStep: 1,
       onChanged: (degrees) => onChanged(_toRadians(degrees)),
     );
   }

@@ -37,12 +37,14 @@ the extension also shows the tree, with what each of its nodes is doing, and the
 blackboard.
 
 For a selected `PositionComponent`, the extension also shows a form with its position, size, angle,
-scale and anchor. The angle is shown and edited in degrees, while the game keeps using radians. The
-anchor is shown as a 3x3 grid of the nine predefined anchors, from `topLeft` to `bottomRight`, with
-the current one highlighted and its name written next to the grid. Clicking a cell changes the
-anchor of the component in the running game. For a custom anchor, no cell is highlighted and its
-value, for example `Anchor(0.2, 0.3)`, is shown next to the grid; clicking a cell replaces it with
-that predefined anchor.
+scale and anchor. The angle is shown and edited in degrees, while the game keeps using radians.
+Dragging the label of a position, size, angle or scale field to the left or right changes its value
+while you drag, by 1 per logical pixel, or 0.01 for the scale. The anchor is shown as a 3x3 grid of
+the nine predefined anchors, from `topLeft` to `bottomRight`, with the current one highlighted and
+its name written next to the grid. Clicking a cell changes the anchor of the component in the
+running game. For a custom anchor, no cell is highlighted and its value, for example
+`Anchor(0.2, 0.3)`, is shown next to the grid; clicking a cell replaces it with that predefined
+anchor.
 
 
 ### Service extensions

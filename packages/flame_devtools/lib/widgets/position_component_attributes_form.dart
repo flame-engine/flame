@@ -37,26 +37,24 @@ class const PositionComponentAttributesForm({
                   key: Key('x_field_$componentId'),
                   label: 'X',
                   initialValue: attributes.x,
-                  onChanged: (v) {
-                    Repository.setComponentAttribute(
-                      id: componentId,
-                      attribute: 'x',
-                      value: v,
-                    );
-                  },
+                  scrubStep: 1,
+                  onChanged: (v) => Repository.setComponentAttribute(
+                    id: componentId,
+                    attribute: 'x',
+                    value: v,
+                  ),
                 ),
                 const SizedBox(width: 8),
                 IncrementalNumberFormField<double>(
                   key: Key('y_field_$componentId'),
                   label: 'Y',
                   initialValue: attributes.y,
-                  onChanged: (v) {
-                    Repository.setComponentAttribute(
-                      id: componentId,
-                      attribute: 'y',
-                      value: v,
-                    );
-                  },
+                  scrubStep: 1,
+                  onChanged: (v) => Repository.setComponentAttribute(
+                    id: componentId,
+                    attribute: 'y',
+                    value: v,
+                  ),
                 ),
               ],
             ),
@@ -71,26 +69,24 @@ class const PositionComponentAttributesForm({
                   key: Key('width_field_$componentId'),
                   label: 'Width',
                   initialValue: attributes.width,
-                  onChanged: (v) {
-                    Repository.setComponentAttribute(
-                      id: componentId,
-                      attribute: 'width',
-                      value: v,
-                    );
-                  },
+                  scrubStep: 1,
+                  onChanged: (v) => Repository.setComponentAttribute(
+                    id: componentId,
+                    attribute: 'width',
+                    value: v,
+                  ),
                 ),
                 const SizedBox(width: 8),
                 IncrementalNumberFormField<double>(
                   key: Key('height_field_$componentId'),
                   label: 'Height',
                   initialValue: attributes.height,
-                  onChanged: (v) {
-                    Repository.setComponentAttribute(
-                      id: componentId,
-                      attribute: 'height',
-                      value: v,
-                    );
-                  },
+                  scrubStep: 1,
+                  onChanged: (v) => Repository.setComponentAttribute(
+                    id: componentId,
+                    attribute: 'height',
+                    value: v,
+                  ),
                 ),
               ],
             ),
@@ -102,13 +98,11 @@ class const PositionComponentAttributesForm({
             AngleFormField(
               key: Key('angle_field_$componentId'),
               radians: attributes.angle,
-              onChanged: (v) {
-                Repository.setComponentAttribute(
-                  id: componentId,
-                  attribute: 'angle',
-                  value: v,
-                );
-              },
+              onChanged: (v) => Repository.setComponentAttribute(
+                id: componentId,
+                attribute: 'angle',
+                value: v,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
@@ -121,26 +115,24 @@ class const PositionComponentAttributesForm({
                   key: Key('scale_x_field_$componentId'),
                   label: 'X',
                   initialValue: attributes.scaleX,
-                  onChanged: (v) {
-                    Repository.setComponentAttribute(
-                      id: componentId,
-                      attribute: 'scaleX',
-                      value: v,
-                    );
-                  },
+                  scrubStep: 0.01,
+                  onChanged: (v) => Repository.setComponentAttribute(
+                    id: componentId,
+                    attribute: 'scaleX',
+                    value: v,
+                  ),
                 ),
                 const SizedBox(width: 8),
                 IncrementalNumberFormField<double>(
                   key: Key('scale_y_field_$componentId'),
                   label: 'Y',
                   initialValue: attributes.scaleY,
-                  onChanged: (v) {
-                    Repository.setComponentAttribute(
-                      id: componentId,
-                      attribute: 'scaleY',
-                      value: v,
-                    );
-                  },
+                  scrubStep: 0.01,
+                  onChanged: (v) => Repository.setComponentAttribute(
+                    id: componentId,
+                    attribute: 'scaleY',
+                    value: v,
+                  ),
                 ),
               ],
             ),
