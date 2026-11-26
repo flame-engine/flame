@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -709,6 +711,105 @@ void main() {
         expect(block.startCounter, 1);
         expect(block.onCollisionCounter, 1);
         expect(block.endCounter, 0);
+      },
+    );
+  });
+
+  group('minimumDistance(only supported in the QuadTree)', () {
+    HasQuadTreeCollidablesGame createGame() {
+      final game = HasQuadTreeCollidablesGame();
+      game.initializeCollisionDetection(
+        mapDimensions: const Rect.fromLTWH(0, 0, 1000, 1000),
+        minimumDistance: 50,
+      );
+      return game;
+    }
+
+    // What a brute force check reports for two blocks of the same size.
+    bool overlapping(TestBlock a, TestBlock b) {
+      return a.toRect().overlaps(b.toRect());
+    }
+
+    testWithGame<HasQuadTreeCollidablesGame>(
+      'a passive block that moves in range collides',
+      createGame,
+      (game) async {
+        final player = TestBlock(Vector2.zero(), Vector2.all(10));
+        final platform = TestBlock(
+          Vector2.all(500),
+          Vector2.all(10),
+          type: CollisionType.passive,
+        );
+        await game.ensureAddAll([player, platform]);
+        game.update(0);
+        expect(player.collidingWith(platform), overlapping(player, platform));
+        expect(player.startCounter, 0);
+
+        platform.position = Vector2.all(5);
+        game.update(0);
+        expect(overlapping(player, platform), isTrue);
+        expect(player.collidingWith(platform), isTrue);
+        expect(platform.collidingWith(player), isTrue);
+        expect(player.startCounter, 1);
+        expect(platform.startCounter, 1);
+      },
+    );
+
+    testWithGame<HasQuadTreeCollidablesGame>(
+      'a block that moves out of range and back in collides again',
+      createGame,
+      (game) async {
+        final player = TestBlock(Vector2.zero(), Vector2.all(10));
+        final platform = TestBlock(
+          Vector2.all(500),
+          Vector2.all(10),
+          type: CollisionType.passive,
+        );
+        await game.ensureAddAll([player, platform]);
+
+        final positions = [
+          Vector2.all(500),
+          Vector2.all(5),
+          Vector2.all(500),
+          Vector2(8, 3),
+          Vector2(300, 3),
+          Vector2(5, 5),
+        ];
+        for (final position in positions) {
+          platform.position = position;
+          game.update(0);
+          final expected = overlapping(player, platform);
+          expect(player.collidingWith(platform), expected, reason: '$position');
+          expect(platform.collidingWith(player), expected, reason: '$position');
+        }
+        expect(player.startCounter, 3);
+        expect(player.endCounter, 2);
+      },
+    );
+
+    testWithGame<HasQuadTreeCollidablesGame>(
+      'two active blocks that both move agree with a brute force check',
+      createGame,
+      (game) async {
+        final a = TestBlock(Vector2(400, 400), Vector2.all(10));
+        final b = TestBlock(Vector2(600, 600), Vector2.all(10));
+        await game.ensureAddAll([a, b]);
+
+        final steps = [
+          [Vector2(400, 400), Vector2(600, 600)],
+          [Vector2(10, 10), Vector2(15, 15)],
+          [Vector2(10, 10), Vector2(700, 20)],
+          [Vector2(800, 800), Vector2(805, 805)],
+          [Vector2(100, 100), Vector2(102, 98)],
+        ];
+        for (final step in steps) {
+          a.position = step[0];
+          b.position = step[1];
+          game.update(0);
+          final expected = overlapping(a, b);
+          expect(a.collidingWith(b), expected, reason: '$step');
+          expect(b.collidingWith(a), expected, reason: '$step');
+        }
       },
     );
   });
