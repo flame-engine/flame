@@ -886,6 +886,72 @@ void main() {
     });
   });
 
+  group('Circle intersections in every direction', () {
+    CircleComponent circleAt(Vector2 center, double radius) {
+      return CircleComponent(
+        radius: radius,
+        position: center,
+        anchor: Anchor.center,
+      );
+    }
+
+    void expectOnBothCircles(
+      List<Vector2> points,
+      CircleComponent a,
+      CircleComponent b,
+    ) {
+      for (final point in points) {
+        expect(point.distanceTo(a.absoluteCenter), closeTo(a.radius, 1e-4));
+        expect(point.distanceTo(b.absoluteCenter), closeTo(b.radius, 1e-4));
+      }
+    }
+
+    final offsets = {
+      'right': Vector2(3, 0),
+      'left': Vector2(-3, 0),
+      'down': Vector2(0, 3),
+      'up': Vector2(0, -3),
+      'down-right': Vector2(2, 2),
+      'up-left': Vector2(-2, -2),
+      'up-right': Vector2(2, -2),
+      'down-left': Vector2(-2, 2),
+    };
+
+    for (final entry in offsets.entries) {
+      test('two crossing circles, second one ${entry.key}', () {
+        final a = circleAt(Vector2(10, 20), 2);
+        final b = circleAt(Vector2(10, 20) + entry.value, 2);
+        final points = geometry.intersections(a, b).toList();
+        expect(points.length, 2);
+        expectOnBothCircles(points, a, b);
+        expect(points[0].distanceTo(points[1]), greaterThan(0.1));
+      });
+    }
+
+    test('two externally tangent circles touch in one point', () {
+      final a = circleAt(Vector2(10, 20), 2);
+      final b = circleAt(Vector2(13, 24), 3);
+      final points = geometry.intersections(a, b).toList();
+      expect(points.length, 1);
+      expectOnBothCircles(points, a, b);
+    });
+
+    test('anti-diagonal centers cross where the circles cross', () {
+      final a = circleAt(Vector2.zero(), 1);
+      final b = circleAt(Vector2(1, -1), 1);
+      final points = geometry.intersections(a, b).toList();
+      expect(points.length, 2);
+      expect(
+        points.any((v) => v.distanceTo(Vector2(1, 0)) < 0.000001),
+        true,
+      );
+      expect(
+        points.any((v) => v.distanceTo(Vector2(0, -1)) < 0.000001),
+        true,
+      );
+    });
+  });
+
   group('Circle-Polygon intersections tests', () {
     test('simple circle-polygon intersection', () {
       final circle = CircleComponent(
