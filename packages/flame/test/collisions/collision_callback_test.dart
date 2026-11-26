@@ -650,6 +650,31 @@ void main() {
       expect(player.startCounter, 2);
       expect(player.endCounter, 1);
     },
+    'a hitbox that moves and is removed in the same tick stops colliding':
+        (game) async {
+          final blockA = TestBlock(Vector2.zero(), Vector2.all(10));
+          final blockB = TestBlock(Vector2.all(5), Vector2.all(10));
+          await game.ensureAddAll([blockA, blockB]);
+          game.update(0);
+          expect(blockA.collidingWith(blockB), isTrue);
+          expect(blockA.startCounter, 1);
+          expect(blockA.endCounter, 0);
+
+          blockB.position = Vector2.all(6);
+          blockB.removeFromParent();
+          game.update(0);
+          game.update(0);
+
+          expect(blockA.collidingWith(blockB), isFalse);
+          expect(blockA.activeCollisions, isEmpty);
+          expect(blockA.endCounter, 1);
+
+          final callbacksSoFar = blockA.onCollisionCounter;
+          game.update(0);
+          expect(blockA.onCollisionCounter, callbacksSoFar);
+          expect(blockA.startCounter, 1);
+          expect(blockA.endCounter, 1);
+        },
   });
 
   group('ComponentTypeCheck(only supported in the QuadTree)', () {
