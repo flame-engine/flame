@@ -3,6 +3,7 @@ import 'package:devtools_app_shared/ui.dart' as devtools_ui;
 import 'package:flame/devtools.dart';
 import 'package:flame_devtools/material.dart';
 import 'package:flame_devtools/poller.dart';
+import 'package:flame_devtools/providers/component_lifecycle_state_provider.dart';
 import 'package:flame_devtools/providers/component_priority_provider.dart';
 import 'package:flame_devtools/providers/position_component_attributes_provider.dart';
 import 'package:flame_devtools/repository.dart';
@@ -52,6 +53,7 @@ class _ComponentTreeState() extends ConsumerState<ComponentTree> {
     }
     await Future.wait([
       ref.refresh(componentPriorityProvider(node.id).future),
+      ref.refresh(componentLifecycleStateProvider(node.id).future),
       if (node.isPositionComponent)
         ref.refresh(positionComponentAttributesProvider(node.id).future),
     ]);
@@ -233,6 +235,10 @@ class const ComponentSection({super.key}) extends ConsumerWidget {
                             ],
                           ),
                           Text('Type: ${node.name}', style: textStyle),
+                          Text(
+                            'State: ${ref.watch(componentLifecycleStateProvider(node.id)).valueOrNull ?? '…'}',
+                            style: textStyle,
+                          ),
                           Text(
                             'Children: ${node.children.length}',
                             style: textStyle,

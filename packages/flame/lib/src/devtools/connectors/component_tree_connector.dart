@@ -46,12 +46,22 @@ class ComponentTreeConnector() extends DevToolsConnector {
             'parent': component.parent?.hashCode,
             'childCount': component.children.length,
             'debugMode': component.debugMode,
+            'lifecycleState': lifecycleState(component),
             'attributes': componentAttributes(component),
           }),
         );
       },
     );
   }
+}
+
+/// Returns a human readable description of where [component] is in its
+/// lifecycle, reported to the devtools extension.
+String lifecycleState(Component component) {
+  if (component.isRemoving) return 'Removing';
+  if (component.isMounted) return 'Mounted';
+  if (component.isLoaded) return 'Loaded';
+  return component.isLoading ? 'Loading' : 'Detached';
 }
 
 /// This should only be used internally by the devtools extension.
