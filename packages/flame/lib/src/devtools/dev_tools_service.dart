@@ -10,6 +10,7 @@ import 'package:flame/src/devtools/connectors/image_cache_connector.dart';
 import 'package:flame/src/devtools/connectors/input_connector.dart';
 import 'package:flame/src/devtools/connectors/overlay_navigation_connector.dart';
 import 'package:flame/src/devtools/connectors/position_component_attributes_connector.dart';
+import 'package:flame/src/devtools/connectors/text_component_connector.dart';
 import 'package:flame/src/devtools/dev_tools_connector.dart';
 
 /// When [DevToolsService] is initialized by the [FlameGame] it will call
@@ -46,6 +47,7 @@ class DevToolsService._() {
     ComponentSnapshotConnector(),
     GameSnapshotConnector(),
     PositionComponentAttributesConnector(),
+    TextComponentConnector(),
     OverlayNavigationConnector(),
     InputConnector(),
     ImageCacheConnector(),
