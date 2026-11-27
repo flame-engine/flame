@@ -10,6 +10,8 @@ class ImageTexture(super.source, {required super.width, required super.height})
   /// Create a [ImageTexture] from the given [image].
   static Future<ImageTexture> create(Image image) async {
     final Image(:toByteData, :width, :height) = image;
-    return ImageTexture((await toByteData())!, width: width, height: height);
+    // Straight alpha: the shaders premultiply only what they blend.
+    final bytes = await toByteData(format: ImageByteFormat.rawStraightRgba);
+    return ImageTexture(bytes!, width: width, height: height);
   }
 }

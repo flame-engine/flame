@@ -22,12 +22,6 @@ class GraphicsDevice({
   /// The GPU backend this device records its rendering commands through.
   final GpuBackend backend = backend ?? GpuBackend.instance;
 
-  /// Blend state applied to each render pass.
-  BlendState blendState = BlendState.alphaBlend;
-
-  /// Depth/stencil state applied to each render pass.
-  DepthStencilState depthStencilState = DepthStencilState.standard;
-
   late GpuFrame _frame;
   late GpuRenderPass _renderPass;
   late GpuRenderTarget _renderTarget;
@@ -69,9 +63,9 @@ class GraphicsDevice({
 
   /// Begin a render pass at the given [size].
   ///
-  /// Uses the current [blendState] and [depthStencilState]. After [beginPass]
-  /// is called, resources can be bound. Call [endPass] to finalize the pass
-  /// and obtain the rendered [Image].
+  /// The pass starts with [BlendState.opaque] and
+  /// [DepthStencilState.standard], see [setPassState]. Call [endPass] to
+  /// finalize the pass and obtain the rendered [Image].
   ///
   /// The graphics device can be used to bind resources like [Mesh]s,
   /// [Material]s and [Texture]s. Once you have executed all your bindings you
@@ -80,11 +74,14 @@ class GraphicsDevice({
   /// Supported values for [msaaSampleCount] are `1` or `4`.
   void beginPass(Size size, {int msaaSampleCount = 1}) {
     _renderTarget = _acquireRenderTarget(size, msaaSampleCount);
-    _renderPass = _frame.beginRenderPass(
-      _renderTarget,
-      blend: blendState,
-      depthStencil: depthStencilState,
-    );
+    _renderPass = _frame.beginRenderPass(_renderTarget);
+  }
+
+  /// Change the blend and depth state for the next draws in this pass.
+  void setPassState(BlendState blend, DepthStencilState depthStencil) {
+    _renderPass
+      ..setBlendState(blend)
+      ..setDepthStencilState(depthStencil);
   }
 
   /// Submit the render pass to the GPU and return the rendered [Image].

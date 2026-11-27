@@ -1,5 +1,5 @@
 import 'package:flame_3d/components.dart';
-import 'package:flame_3d/game.dart';
+import 'package:flame_3d/core.dart';
 import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
 
@@ -22,9 +22,7 @@ class MeshComponent({
   Aabb3? computeLocalAabb() => mesh.aabb;
 
   @override
-  void draw(covariant RenderContext3D context) {
-    context
-      ..model.setFrom(worldTransformMatrix)
-      ..drawMesh(mesh);
+  void submit(RenderContext3D context) {
+    context.submitMesh(mesh, worldTransformMatrix);
   }
 }

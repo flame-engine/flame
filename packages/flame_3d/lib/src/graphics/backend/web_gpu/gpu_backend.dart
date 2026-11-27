@@ -320,6 +320,14 @@ GPUColorTargetState _colorTarget(BlendState blend) {
         alpha: component('one', 'one'),
       ),
     ),
+    // Keep the destination: used for depth-only writes.
+    BlendState.noColor => GPUColorTargetState(
+      format: _canvasFormat,
+      blend: GPUBlendState(
+        color: component('zero', 'one'),
+        alpha: component('zero', 'one'),
+      ),
+    ),
   };
 }
 
@@ -532,11 +540,7 @@ class _WebGpuFrame(final GpuBackend _backend) implements base.GpuFrame {
   }
 
   @override
-  base.GpuRenderPass beginRenderPass(
-    GpuRenderTarget target, {
-    required BlendState blend,
-    required DepthStencilState depthStencil,
-  }) {
+  base.GpuRenderPass beginRenderPass(GpuRenderTarget target) {
     final renderTarget = target as _WebGpuRenderTarget;
     final encoder = _backend._device.createCommandEncoder();
     final pass = encoder.beginRenderPass(
@@ -560,8 +564,8 @@ class _WebGpuFrame(final GpuBackend _backend) implements base.GpuFrame {
     return _WebGpuRenderPass(
       _backend,
       this,
-      blend,
-      depthStencil,
+      BlendState.opaque,
+      DepthStencilState.standard,
       encoder,
       pass,
     );
@@ -576,8 +580,8 @@ class _WebGpuFrame(final GpuBackend _backend) implements base.GpuFrame {
 class _WebGpuRenderPass(
   final GpuBackend _backend,
   final _WebGpuFrame _frame,
-  final BlendState _blend,
-  final DepthStencilState _depthStencil,
+  var BlendState _blend,
+  var DepthStencilState _depthStencil,
   final GPUCommandEncoder _encoder,
   final GPURenderPassEncoder _pass,
 ) implements base.GpuRenderPass {
@@ -592,6 +596,15 @@ class _WebGpuRenderPass(
   final Map<int, GPUTextureView> _textures = {};
 
   static int _key(int group, int binding) => (group << 16) | binding;
+
+  // WebGPU bakes blend and depth state into the pipeline, so a state change
+  // takes effect at the next [bindPipeline].
+  @override
+  void setBlendState(BlendState blend) => _blend = blend;
+
+  @override
+  void setDepthStencilState(DepthStencilState depthStencil) =>
+      _depthStencil = depthStencil;
 
   @override
   void bindPipeline(GpuPipeline pipeline, CullMode cullMode) {

@@ -212,10 +212,10 @@ class _Box({super.position}) extends Object3D {
       Aabb3.minMax(Vector3.all(-0.5), Vector3.all(0.5));
 
   @override
-  void draw(RenderContext context) {}
+  void submit(RenderContext3D context) {}
 }
 
 class _Empty({super.position}) extends Object3D {
   @override
-  void draw(RenderContext context) {}
+  void submit(RenderContext3D context) {}
 }

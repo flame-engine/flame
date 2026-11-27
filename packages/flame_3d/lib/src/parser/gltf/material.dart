@@ -1,4 +1,5 @@
 import 'package:flame_3d/core.dart';
+import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart' as flame_3d;
 import 'package:flame_3d/src/parser/gltf/alpha_mode.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_node.dart';
@@ -55,6 +56,9 @@ class Material({
   /// interpretation of the alpha value of the base color.
   required final AlphaMode alphaMode,
 
+  /// The alpha threshold when [alphaMode] is [AlphaMode.mask].
+  required final double alphaCutoff,
+
   /// Specifies whether the material is double sided. When this value is false,
   /// back-face culling is enabled.
   /// When this value is true, back-face culling is disabled and double-sided
@@ -96,10 +100,26 @@ class Material({
         emissiveFactor:
             Parser.vector3(root, map, 'emissiveFactor') ?? Vector3.all(0),
         alphaMode: AlphaMode.parse(map, 'alphaMode') ?? AlphaMode.opaque,
+        alphaCutoff: Parser.float(map, 'alphaCutoff') ?? 0.5,
         doubleSided: Parser.boolean(map, 'doubleSided') ?? false,
       );
 
   flame_3d.Material? toFlameMaterial() {
-    return pbrMetallicRoughness?.toFlameSpatialMaterial();
+    final material = pbrMetallicRoughness?.toFlameSpatialMaterial();
+    if (material == null) {
+      return null;
+    }
+
+    material
+      ..transparency = _toRuntimeTransparency(alphaMode)
+      ..alphaScissorThreshold = alphaCutoff
+      ..cullMode = doubleSided ? CullMode.none : CullMode.backFace;
+    return material;
   }
 }
+
+flame_3d.Transparency _toRuntimeTransparency(AlphaMode mode) => switch (mode) {
+  AlphaMode.opaque => flame_3d.Transparency.disabled,
+  AlphaMode.mask => flame_3d.Transparency.alphaScissor,
+  AlphaMode.blend => flame_3d.Transparency.alpha,
+};

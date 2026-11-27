@@ -83,13 +83,9 @@ abstract base class GpuBackend() {
 /// Owns the transient uniform storage shared across the frame's render passes.
 /// Obtain one via [GpuBackend.beginFrame] and finalize it with [end].
 abstract interface class GpuFrame() {
-  /// Begins a render pass that draws into [target] using [blend] and
-  /// [depthStencil] state.
-  GpuRenderPass beginRenderPass(
-    GpuRenderTarget target, {
-    required BlendState blend,
-    required DepthStencilState depthStencil,
-  });
+  /// Begins a render pass that draws into [target], with
+  /// [BlendState.opaque] and [DepthStencilState.standard].
+  GpuRenderPass beginRenderPass(GpuRenderTarget target);
 
   /// Finalizes the frame, releasing its transient storage.
   void end();
@@ -99,6 +95,12 @@ abstract interface class GpuFrame() {
 ///
 /// Obtain one via [GpuFrame.beginRenderPass] and submit it with [submit].
 abstract interface class GpuRenderPass() {
+  /// Sets the color blending state for subsequent draws.
+  void setBlendState(BlendState blend);
+
+  /// Sets the depth/stencil behavior for subsequent draws.
+  void setDepthStencilState(DepthStencilState depthStencil);
+
   /// Binds the render [pipeline] and applies [cullMode].
   void bindPipeline(GpuPipeline pipeline, CullMode cullMode);
 

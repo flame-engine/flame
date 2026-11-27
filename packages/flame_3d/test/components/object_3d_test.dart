@@ -79,5 +79,5 @@ class _Box({required this.size, super.position}) extends Object3D {
       Aabb3.centerAndHalfExtents(Vector3.zero(), size / 2);
 
   @override
-  void draw(RenderContext context) {}
+  void submit(RenderContext3D context) {}
 }

@@ -9,6 +9,10 @@ class SpatialMaterial({
   Texture? albedoTexture,
   var double metallic = 0.8,
   var double roughness = 0.6,
+  super.transparency,
+  super.alphaScissorThreshold,
+  super.alphaHashScale,
+  super.renderPriority,
 }) extends Material {
   this
     : super(
@@ -65,7 +69,13 @@ class SpatialMaterial({
       ..setTexture('albedoTexture', albedoTexture)
       ..setColor('Material.albedoColor', albedoColor)
       ..setFloat('Material.metallic', metallic)
-      ..setFloat('Material.roughness', roughness);
+      ..setFloat('Material.roughness', roughness)
+      ..setFloat(
+        'Material.alphaScissorThreshold',
+        activeAlphaScissorThreshold(context.passKind),
+      )
+      ..setFloat('Material.alphaHashScale', activeAlphaHashScale)
+      ..setFloat('Material.alphaBlend', isBlended ? 1 : 0);
   }
 
   void _bindCamera(RenderContext3D context) {

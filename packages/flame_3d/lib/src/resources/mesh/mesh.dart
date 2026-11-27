@@ -1,5 +1,4 @@
 import 'package:flame_3d/game.dart';
-import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
 
 /// {@template mesh}
@@ -22,13 +21,6 @@ class Mesh() extends Resource<void> {
   Aabb3 get aabb => _aabb ??= _recomputeAabb3();
 
   int get vertexCount => _surfaces.fold(0, (p, e) => p + e.vertexCount);
-
-  void draw(RenderContext3D context) {
-    for (final (index, surface) in _surfaces.indexed) {
-      context.jointsInfo.setSurface(index);
-      context.drawSurface(surface);
-    }
-  }
 
   @override
   void createResource() {}
