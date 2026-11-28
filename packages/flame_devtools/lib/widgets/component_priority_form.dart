@@ -20,13 +20,11 @@ class const ComponentPriorityForm({
           key: Key('priority_field_$componentId'),
           label: 'Priority',
           initialValue: priority,
-          onChanged: (v) {
-            Repository.setComponentAttribute(
-              id: componentId,
-              attribute: 'priority',
-              value: v,
-            );
-          },
+          onChanged: (v) => Repository.setComponentAttribute(
+            id: componentId,
+            attribute: 'priority',
+            value: v,
+          ),
         );
       },
     );
