@@ -106,7 +106,7 @@ class QuadTreeBroadphase({
 
   void updateTransform(ShapeHitbox item) {
     tree.remove(item, keepOldPosition: true);
-    _cacheCenterOfHitbox(item);
+    _cachedCenters[item] = item.aabb.center;
     tree.add(item);
   }
 
