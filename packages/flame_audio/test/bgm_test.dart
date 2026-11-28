@@ -110,5 +110,15 @@ void main() {
         expect(bgm.isPlaying, isTrue);
       },
     );
+
+    test('play whose resume fails leaves isPlaying false', () async {
+      when(() => player.resume()).thenThrow(Exception('resume failed'));
+      final playing = bgm.play('song.mp3');
+      await untilSourceIsLoading(1);
+      pendingSources.single.complete();
+
+      await expectLater(playing, throwsException);
+      expect(bgm.isPlaying, isFalse);
+    });
   });
 }

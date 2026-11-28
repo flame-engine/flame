@@ -81,7 +81,14 @@ class Bgm({AudioCache? audioCache}) extends WidgetsBindingObserver {
       return;
     }
     isPlaying = true;
-    await audioPlayer.resume();
+    try {
+      await audioPlayer.resume();
+    } catch (_) {
+      if (playId == _playId) {
+        isPlaying = false;
+      }
+      rethrow;
+    }
   }
 
   /// Stops the currently playing background music track (if any), including
