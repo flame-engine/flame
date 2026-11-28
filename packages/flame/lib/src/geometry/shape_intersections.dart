@@ -307,10 +307,10 @@ class CircleCircleIntersections()
           (shapeB.absoluteCenter - shapeA.absoluteCenter) * lengthA / distance;
       final delta = Vector2(
         lengthB *
-            (shapeB.absoluteCenter.y - shapeA.absoluteCenter.y).abs() /
+            (shapeB.absoluteCenter.y - shapeA.absoluteCenter.y) /
             distance,
         -lengthB *
-            (shapeB.absoluteCenter.x - shapeA.absoluteCenter.x).abs() /
+            (shapeB.absoluteCenter.x - shapeA.absoluteCenter.x) /
             distance,
       );
       final intersectionA = centerPoint + delta;
