@@ -80,5 +80,5 @@ class _ObjectGroup({
   this : super(children: children);
 
   @override
-  void draw(RenderContext context) {}
+  void submit(RenderContext3D context) {}
 }

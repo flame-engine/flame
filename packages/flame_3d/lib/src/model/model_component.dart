@@ -21,7 +21,7 @@ class ModelComponent({
   Aabb3? computeLocalAabb() => model.aabb;
 
   @override
-  void draw(covariant RenderContext3D context) {
+  void submit(RenderContext3D context) {
     final nodes = model.processNodes(_animation);
     for (final MapEntry(key: index, value: node) in nodes.entries) {
       if (_hiddenNodes.contains(index)) {
@@ -30,12 +30,11 @@ class ModelComponent({
 
       final mesh = node.node.mesh;
       if (mesh != null) {
-        context
-          ..jointsInfo.jointTransformsPerSurface = node.jointTransforms
-          ..model.setFrom(
-            worldTransformMatrix.multiplied(node.combinedTransform),
-          )
-          ..drawMesh(mesh);
+        context.submitMesh(
+          mesh,
+          worldTransformMatrix.multiplied(node.combinedTransform),
+          jointsPerSurface: node.jointTransforms,
+        );
       }
     }
   }

@@ -45,6 +45,9 @@ enum BlendState() {
 
   /// Additive blending: `color = src * 1 + dst * 1`.
   additive,
+
+  /// No color write: `color = src * 0 + dst * 1`. Used for depth-only draws.
+  noColor,
 }
 
 /// Depth buffer behavior for a render pass.

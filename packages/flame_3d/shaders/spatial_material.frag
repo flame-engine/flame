@@ -1,5 +1,7 @@
 #version 460 core
 
+#include <flame_3d/alpha_discard.glsl>
+
 // implementation based on https://learnopengl.com/PBR/Lighting
 
 #define MAX_LIGHTS 8
@@ -9,6 +11,7 @@
 in vec2 fragTexCoord;
 in vec4 fragColor;
 in vec3 fragPosition;
+in vec3 fragObjectPosition;
 smooth in vec3 fragNormal;
 
 out vec4 outColor;
@@ -21,6 +24,9 @@ uniform Material {
   vec4 albedoColor;
   float metallic;
   float roughness;
+  float alphaScissorThreshold;
+  float alphaHashScale;
+  float alphaBlend;
 } material;
 
 // light info
@@ -117,8 +123,18 @@ void main() {
   vec3 normal = normalize(fragNormal);
   vec3 viewDir = normalize(camera.position - fragPosition);
 
-  vec3 baseColor = material.albedoColor.rgb;
-  baseColor *= texture(albedoTexture, fragTexCoord).rgb;
+  vec4 albedo =
+    texture(albedoTexture, fragTexCoord) * material.albedoColor * fragColor;
+  float alpha = albedo.a;
+
+  alphaDiscard(
+    alpha,
+    fragObjectPosition,
+    material.alphaScissorThreshold,
+    material.alphaHashScale
+  );
+
+  vec3 baseColor = albedo.rgb;
 
   vec3 f0 = vec3(0.04);
   vec3 diffuse = mix(f0, baseColor, material.metallic);
@@ -143,5 +159,8 @@ void main() {
   color = color / (color + vec3(1.0));
   color = pow(color, vec3(1.0 / 2.2));
 
-  outColor = vec4(color, 1.0);
+  // Blended output is premultiplied, opaque output ignores alpha.
+  outColor = material.alphaBlend > 0.0
+    ? vec4(color * alpha, alpha)
+    : vec4(color, 1.0);
 }
