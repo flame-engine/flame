@@ -23,6 +23,10 @@ class Bgm({AudioCache? audioCache}) extends WidgetsBindingObserver {
   /// Whether [Bgm] is playing or not.
   bool isPlaying = false;
 
+  /// Counts the calls to [play] and [stop], so that a [play] that is still
+  /// loading knows when it has been replaced or stopped.
+  int _playId = 0;
+
   /// Registers a [WidgetsBinding] observer.
   ///
   /// This must be called for auto-pause and resume to work properly.
@@ -60,23 +64,37 @@ class Bgm({AudioCache? audioCache}) extends WidgetsBindingObserver {
   /// where `0` means off and `1` means max.
   ///
   /// It is safe to call this function even when a current BGM track is
-  /// playing.
+  /// playing. If [stop] or [play] is called before the track has loaded, this
+  /// track does not start.
   Future<void> play(
     String fileName, {
     double volume = 1,
     String? package,
   }) async {
+    final playId = ++_playId;
     await audioPlayer.release();
     await audioPlayer.setReleaseMode(ReleaseMode.loop);
     await audioPlayer.setVolume(volume);
     final path = package == null ? fileName : 'packages/$package/$fileName';
     await audioPlayer.setSource(AssetSource(path));
-    await audioPlayer.resume();
+    if (playId != _playId) {
+      return;
+    }
     isPlaying = true;
+    try {
+      await audioPlayer.resume();
+    } catch (_) {
+      if (playId == _playId) {
+        isPlaying = false;
+      }
+      rethrow;
+    }
   }
 
-  /// Stops the currently playing background music track (if any).
+  /// Stops the currently playing background music track (if any), including
+  /// one that [play] is still loading.
   Future<void> stop() async {
+    _playId++;
     isPlaying = false;
     await audioPlayer.stop();
   }
