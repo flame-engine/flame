@@ -19,6 +19,10 @@ class UnlitMaterial({
   /// The material's base color, multiplied with [albedoTexture].
   var Color albedoColor = const Color(0xFFFFFFFF),
   Texture? albedoTexture,
+  super.transparency,
+  super.alphaScissorThreshold,
+  super.alphaHashScale,
+  super.renderPriority,
 }) extends Material {
   /// {@macro unlit_material}
   this
@@ -56,7 +60,13 @@ class UnlitMaterial({
 
     fragmentShader
       ..setTexture('albedoTexture', albedoTexture)
-      ..setColor('Material.albedoColor', albedoColor);
+      ..setColor('Material.albedoColor', albedoColor)
+      ..setFloat(
+        'Material.alphaScissorThreshold',
+        activeAlphaScissorThreshold(context.passKind),
+      )
+      ..setFloat('Material.alphaHashScale', activeAlphaHashScale)
+      ..setFloat('Material.alphaBlend', isBlended ? 1 : 0);
   }
 
   static const _maxJoints = 16;

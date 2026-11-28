@@ -10,6 +10,7 @@ in vec3 vertexNormal;
 out vec2 fragTexCoord;
 out vec4 fragColor;
 out vec3 fragPosition;
+out vec3 fragObjectPosition;
 out vec3 fragNormal;
 
 uniform VertexInfo {
@@ -36,4 +37,7 @@ void main() {
   // Calculate the world-space position and normal
   fragPosition = vec3(vertex_info.model * vec4(position, 1.0));
   fragNormal = mat3(transpose(inverse(vertex_info.model))) * normal;
+
+  // Bind-pose object-space position, used for hashed-alpha stability.
+  fragObjectPosition = vertexPosition;
 }

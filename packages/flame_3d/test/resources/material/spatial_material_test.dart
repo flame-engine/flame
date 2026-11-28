@@ -96,7 +96,17 @@ class _Slot(final String name) implements GpuUniformSlot {
   static const _layouts = <String, (int, Map<String, int>)>{
     'VertexInfo': (192, {'model': 0, 'view': 64, 'projection': 128}),
     'JointMatrices': (1024, {'joints': 0}),
-    'Material': (32, {'albedoColor': 0, 'metallic': 16, 'roughness': 20}),
+    'Material': (
+      48,
+      {
+        'albedoColor': 0,
+        'metallic': 16,
+        'roughness': 20,
+        'alphaScissorThreshold': 24,
+        'alphaHashScale': 28,
+        'alphaBlend': 32,
+      },
+    ),
     'AmbientLight': (32, {'color': 0, 'intensity': 16}),
     'Lights': (
       400,

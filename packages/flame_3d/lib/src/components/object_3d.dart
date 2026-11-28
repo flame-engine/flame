@@ -57,11 +57,13 @@ abstract class Object3D({
     _ancestorFullyInside = wasAncestorFullyInside;
 
     if (cullResult == CullResult.inside || isVisible(camera!)) {
-      worldRef.context.submitDraw(this, worldTransformMatrix);
+      submit(worldRef.context);
     }
   }
 
-  void draw(RenderContext context);
+  /// Queue this object for drawing, for example with
+  /// [RenderContext3D.submitMesh].
+  void submit(RenderContext3D context);
 
   /// Whether this component itself should be drawn when its [aabb] is not
   /// fully inside the [camera]'s frustum.

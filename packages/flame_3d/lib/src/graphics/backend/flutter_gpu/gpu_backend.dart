@@ -257,55 +257,18 @@ class const _FlutterGpuRenderTarget(
 class const _FlutterGpuFrame(final GpuBackend _backend)
     implements base.GpuFrame {
   @override
-  base.GpuRenderPass beginRenderPass(
-    GpuRenderTarget target, {
-    required BlendState blend,
-    required DepthStencilState depthStencil,
-  }) {
+  base.GpuRenderPass beginRenderPass(GpuRenderTarget target) {
     final commandBuffer = _backend._context.createCommandBuffer();
-    final renderPass =
-        commandBuffer.createRenderPass((target as _FlutterGpuRenderTarget).raw)
-          ..setWindingOrder(gpu.WindingOrder.counterClockwise)
-          ..setColorBlendEnable(blend != BlendState.opaque)
-          ..setColorBlendEquation(_blendEquation(blend))
-          ..setDepthWriteEnable(depthStencil == DepthStencilState.standard)
-          ..setDepthCompareOperation(_depthCompare(depthStencil));
-    return _FlutterGpuRenderPass(_backend, commandBuffer, renderPass);
+    final renderPass = commandBuffer.createRenderPass(
+      (target as _FlutterGpuRenderTarget).raw,
+    )..setWindingOrder(gpu.WindingOrder.counterClockwise);
+    return _FlutterGpuRenderPass(_backend, commandBuffer, renderPass)
+      ..setBlendState(BlendState.opaque)
+      ..setDepthStencilState(DepthStencilState.standard);
   }
 
   @override
   void end() => _backend._hostBuffer.reset();
-
-  static gpu.ColorBlendEquation _blendEquation(BlendState blend) {
-    return switch (blend) {
-      BlendState.opaque => gpu.ColorBlendEquation(
-        sourceColorBlendFactor: gpu.BlendFactor.one,
-        destinationColorBlendFactor: gpu.BlendFactor.zero,
-        sourceAlphaBlendFactor: gpu.BlendFactor.one,
-        destinationAlphaBlendFactor: gpu.BlendFactor.zero,
-      ),
-      BlendState.alphaBlend => gpu.ColorBlendEquation(
-        sourceColorBlendFactor: gpu.BlendFactor.one,
-        destinationColorBlendFactor: gpu.BlendFactor.oneMinusSourceAlpha,
-        sourceAlphaBlendFactor: gpu.BlendFactor.one,
-        destinationAlphaBlendFactor: gpu.BlendFactor.oneMinusSourceAlpha,
-      ),
-      BlendState.additive => gpu.ColorBlendEquation(
-        sourceColorBlendFactor: gpu.BlendFactor.one,
-        destinationColorBlendFactor: gpu.BlendFactor.one,
-        sourceAlphaBlendFactor: gpu.BlendFactor.one,
-        destinationAlphaBlendFactor: gpu.BlendFactor.one,
-      ),
-    };
-  }
-
-  static gpu.CompareFunction _depthCompare(DepthStencilState state) {
-    return switch (state) {
-      DepthStencilState.standard => gpu.CompareFunction.less,
-      DepthStencilState.depthRead => gpu.CompareFunction.lessEqual,
-      DepthStencilState.none => gpu.CompareFunction.always,
-    };
-  }
 }
 
 class _FlutterGpuRenderPass(
@@ -317,6 +280,20 @@ class _FlutterGpuRenderPass(
   // bind time, so they are recorded here until [draw] is called.
   int _vertexCount = 0;
   int? _indexCount;
+
+  @override
+  void setBlendState(BlendState blend) {
+    _renderPass
+      ..setColorBlendEnable(blend != BlendState.opaque)
+      ..setColorBlendEquation(_blendEquation(blend));
+  }
+
+  @override
+  void setDepthStencilState(DepthStencilState depthStencil) {
+    _renderPass
+      ..setDepthWriteEnable(depthStencil == DepthStencilState.standard)
+      ..setDepthCompareOperation(_depthCompare(depthStencil));
+  }
 
   @override
   void bindPipeline(GpuPipeline pipeline, CullMode cullMode) {
@@ -389,5 +366,42 @@ class _FlutterGpuRenderPass(
       offsetInBytes: view.offsetInBytes,
       lengthInBytes: view.lengthInBytes,
     );
+  }
+
+  static gpu.ColorBlendEquation _blendEquation(BlendState blend) {
+    return switch (blend) {
+      BlendState.opaque => gpu.ColorBlendEquation(
+        sourceColorBlendFactor: gpu.BlendFactor.one,
+        destinationColorBlendFactor: gpu.BlendFactor.zero,
+        sourceAlphaBlendFactor: gpu.BlendFactor.one,
+        destinationAlphaBlendFactor: gpu.BlendFactor.zero,
+      ),
+      BlendState.alphaBlend => gpu.ColorBlendEquation(
+        sourceColorBlendFactor: gpu.BlendFactor.one,
+        destinationColorBlendFactor: gpu.BlendFactor.oneMinusSourceAlpha,
+        sourceAlphaBlendFactor: gpu.BlendFactor.one,
+        destinationAlphaBlendFactor: gpu.BlendFactor.oneMinusSourceAlpha,
+      ),
+      BlendState.additive => gpu.ColorBlendEquation(
+        sourceColorBlendFactor: gpu.BlendFactor.one,
+        destinationColorBlendFactor: gpu.BlendFactor.one,
+        sourceAlphaBlendFactor: gpu.BlendFactor.one,
+        destinationAlphaBlendFactor: gpu.BlendFactor.one,
+      ),
+      BlendState.noColor => gpu.ColorBlendEquation(
+        sourceColorBlendFactor: gpu.BlendFactor.zero,
+        destinationColorBlendFactor: gpu.BlendFactor.one,
+        sourceAlphaBlendFactor: gpu.BlendFactor.zero,
+        destinationAlphaBlendFactor: gpu.BlendFactor.one,
+      ),
+    };
+  }
+
+  static gpu.CompareFunction _depthCompare(DepthStencilState state) {
+    return switch (state) {
+      DepthStencilState.standard => gpu.CompareFunction.less,
+      DepthStencilState.depthRead => gpu.CompareFunction.lessEqual,
+      DepthStencilState.none => gpu.CompareFunction.always,
+    };
   }
 }
